@@ -1,0 +1,3 @@
+?package(asciiville):needs="text" section="Applications/Misc" \
+  title="asciiville" longtitle="Ascii Art and Utilities" \
+  command="/usr/bin/asciiville -f -q -t" hints="Ascii"

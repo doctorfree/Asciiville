@@ -1,0 +1,193 @@
+#!/bin/bash
+#
+# Usage: ./Install [package names]
+#   If no package names are specified then all currently
+#   supported packages will be installed
+#
+# Versions of apt prior to 1.1 do not support install by Debian filename
+# You should probably be running a more recent version of apt
+# On these early versions, install with the following:
+#
+# sudo dpkg -i "${PKG}"
+# sudo apt-get install -f
+
+SRC_NAME="Asciiville"
+PKG_NAMES="Asciiville"
+APT_NAMES="asciiville"
+SRC="${HOME}/src"
+DEB_ARCH=all
+RPM_ARCH=noarch
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
+
+PKG_AVAILABLE=
+PKG_SELECTED=
+
+[ -f "${SRC}/${SRC_NAME}/VERSION" ] || {
+  echo "Missing VERSION file: ${SRC}/${SRC_NAME}/VERSION"
+  echo "Exiting"
+  exit 1
+}
+
+. "${SRC}/${SRC_NAME}/VERSION"
+PKG_VER=${VERSION}
+PKG_REL=${RELEASE}
+
+get_available_packages() {
+  for pkgs in ${SRC}/${SRC_NAME}/releases/${PKG_VER}/*.${SUF}
+  do
+    [ "${pkgs}" == "${SRC}/${SRC_NAME}/releases/${PKG_VER}/*.${SUF}" ] || {
+      for pkg in ${pkgs}
+      do
+        pkgname=`basename ${pkg} | sed -e "s/_${PKG_VER}-${PKG_REL}.${ARCH}.${SUF}//"` 
+        PKG_AVAILABLE="${PKG_AVAILABLE} ${pkgname}"
+      done
+    }
+  done
+  PKG_AVAILABLE=`echo $PKG_AVAILABLE | sed -e "s/^ //"`
+}
+
+install_selected() {
+  for pkg in ${PKG_AVAILABLE}
+  do
+    while true
+    do
+      read -p "Install ${pkg} ? ('Y'/'N'): " yn
+      case $yn in
+          [Yy]*)
+              PKG_SELECTED="${PKG_SELECTED} $pkg"
+              break
+              ;;
+          [Nn]*)
+              break
+              ;;
+          * )
+              echo "Please answer yes or no."
+              ;;
+      esac
+    done
+  done
+  PKG_SELECTED=`echo $PKG_SELECTED | sed -e "s/^ //"`
+}
+
+plat=`uname -s`
+if [ "$plat" == "Darwin" ]
+then
+  ./macInstall
+else
+  debian=
+  have_apt=`type -p apt`
+  have_dpkg=`type -p dpkg`
+  have_rpm=`type -p rpm`
+  have_yum=`type -p yum`
+  [ -f /etc/os-release ] && . /etc/os-release
+  [ "${ID_LIKE}" == "debian" ] && debian=1
+  [ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
+
+  SUF=deb
+  ARCH=${DEB_ARCH}
+  [ "${debian}" ] || {
+    SUF=rpm
+    ARCH=${RPM_ARCH}
+  }
+
+  get_available_packages
+
+  [ "$PKG_AVAILABLE}" ] || {
+    echo "No packages for version ${PKG_VER} are currently available. Exiting."
+    exit 1
+  }
+
+  [ "$1" ] && {
+    # If invoked with -i argument, present a menu of options to select from
+    if [ "$1" == "-i" ]
+    then
+      shift
+      PKG_NAMES="$*"
+      [ "${PKG_AVAILABLE}" ] && {
+        echo "Currently available Asciiville packages:"
+        echo ""
+        for avaipkg in ${PKG_AVAILABLE}
+        do
+          echo "$avaipkg"
+        done
+        echo ""
+      }
+      while true
+      do
+        PS3="${BOLD}Please enter your desire (numeric or text): ${NORMAL}"
+        options=("Install All" "Install Selected" "Quit")
+        select opt in "${options[@]}"
+        do
+          case "$opt,$REPLY" in
+              "Install All",*|*,"Install All")
+                  PKG_NAMES="${PKG_AVAILABLE}"
+                  break 2
+                  ;;
+              "Install Selected",*|*,"Install Selected")
+                  install_selected
+                  PKG_NAMES="${PKG_SELECTED}"
+                  break 2
+                  ;;
+              "Quit",*|*,"Quit"|"quit",*|*,"quit")
+                  printf "\nExiting\n"
+                  exit 0
+                  ;;
+          esac
+        done
+      done
+    else
+      PKG_NAMES="$*"
+    fi
+  }
+
+  [ "${PKG_NAMES}" ] || {
+    echo "No valid Package names specified. Exiting."
+    exit 1
+  }
+
+  for PKG_NAME in ${PKG_NAMES}
+  do
+    PKG="${SRC}/${SRC_NAME}/releases/${PKG_VER}/${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.${SUF}"
+    [ -f "${PKG}" ] || {
+      echo "${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.${SUF} not found."
+      for pkgs in ${SRC}/${SRC_NAME}/releases/*/${PKG_NAME}_*.${SUF}
+      do
+        [ "${pkgs}" == "${SRC}/${SRC_NAME}/releases/*/${PKG_NAME}_*.${SUF}" ] || {
+          echo "Found existing packages:"
+          echo "${pkgs}"
+        }
+      done
+      echo ""
+      continue
+    }
+
+    echo "Installing ${PKG}"
+    if [ "${debian}" ]
+    then
+      if [ "${have_apt}" ]
+      then
+        sudo apt install "${PKG}"
+      else
+        if [ "${have_dpkg}" ]
+        then
+          sudo dpkg -i "${PKG}"
+        else
+          echo "Cannot locate either apt or dpkg to install. Skipping."
+        fi
+      fi
+    else
+      if [ "${have_yum}" ]
+      then
+        sudo yum localinstall "${PKG}"
+      else
+        if [ "${have_rpm}" ]
+        then
+          sudo rpm -i "${PKG}"
+        else
+          echo "Cannot locate either yum or rpm to install. Skipping."
+        fi
+      fi
+    fi
+  done
+fi

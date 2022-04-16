@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=asciiville
+Comment=Ascii Art and Utilities
+Keywords=Terminal
+Terminal=true
+TryExec=asciiville
+Exec=asciiville
+Icon=mpd
+Type=Application
+StartupNotify=false
+Categories=ConsoleOnly;

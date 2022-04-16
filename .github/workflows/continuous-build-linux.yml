@@ -8,11 +8,11 @@ on:
     tags-ignore:
       - '*.*'
     paths:
-      - 'src/**'
-      - '!src/osx/**'
-      - '!src/freebsd/**'
-      - 'include/**'
-      - 'Makefile'
+      - 'btop/src/**'
+      - '!btop/src/osx/**'
+      - '!btop/src/freebsd/**'
+      - 'btop/include/**'
+      - 'btop/Makefile'
       - '.github/workflows/continuous-build.yml'
 
 jobs:
@@ -90,14 +90,17 @@ jobs:
 
       - name: Build
         run: make STATIC=true STRIP=true
+        working-directory: ./btop
 
       - name: Make executable
         run: chmod +x bin/*
+        working-directory: ./btop
 
       - name: Set up directories
         run: |
           mkdir .artifacts
           mkdir .package
+        working-directory: ./btop
 
       - name: Create binary atrifacts
         run: |
@@ -105,9 +108,11 @@ jobs:
           GIT_HASH=$(git rev-parse --short "${{ github.sha }}")
           FILENAME=btop-${TOOLCHAIN/linux-musl/}-$GIT_HASH
           cp bin/btop .artifacts/$FILENAME
+        working-directory: ./btop
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name: btop-${{ matrix.toolchain }}
           path: '.artifacts/**'
+        working-directory: ./btop

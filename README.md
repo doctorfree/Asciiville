@@ -1,797 +1,665 @@
-# ![btop++](Img/logo.png)
-
-<a href="https://repology.org/project/btop/versions">
-    <img src="https://repology.org/badge/vertical-allrepos/btop.svg" alt="Packaging status" align="right">
-</a>
-
-![Linux](https://img.shields.io/badge/-Linux-grey?logo=linux)
-![OSX](https://img.shields.io/badge/-OSX-black?logo=apple)
-![FreeBSD](https://img.shields.io/badge/-FreeBSD-red?logo=freebsd)
-![Usage](https://img.shields.io/badge/Usage-System%20resource%20monitor-yellow)
-![c++20](https://img.shields.io/badge/cpp-c%2B%2B20-green)
-![latest_release](https://img.shields.io/github/v/tag/aristocratos/btop?label=release)
-[![Donate](https://img.shields.io/badge/-Donate-yellow?logo=paypal)](https://paypal.me/aristocratos)
-[![Sponsor](https://img.shields.io/badge/-Sponsor-red?logo=github)](https://github.com/sponsors/aristocratos)
-[![Coffee](https://img.shields.io/badge/-Buy%20me%20a%20Coffee-grey?logo=Ko-fi)](https://ko-fi.com/aristocratos)
-[![btop](https://snapcraft.io/btop/badge.svg)](https://snapcraft.io/btop)
-[![Continuous Build Linux](https://github.com/aristocratos/btop/actions/workflows/continuous-build-linux.yml/badge.svg)](https://github.com/aristocratos/btop/actions/workflows/continuous-build-linux.yml)
-[![Continuous Build MacOS](https://github.com/aristocratos/btop/actions/workflows/continuous-build-macos.yml/badge.svg)](https://github.com/aristocratos/btop/actions/workflows/continuous-build-macos.yml)
-
-## Index
-
-* [News](#news)
-* [Documents](#documents)
-* [Description](#description)
-* [Features](#features)
-* [Themes](#themes)
-* [Support and funding](#support-and-funding)
-* [Prerequisites](#prerequisites) (Read this if you are having issues!)
-* [Screenshots](#screenshots)
-* [Keybindings](#help-menu)
-* [Installation Linux/OSX](#installation)
-* [Compilation Linux](#compilation-linux)
-* [Compilation OSX](#compilation-osx)
-* [Compilation FreeBSD](#compilation-freebsd)
-* [Installing the snap](#installing-the-snap)
-* [Configurability](#configurability)
-* [License](#license)
-
-## News
-
-##### 16 January 2022
-
-Release v1.2.0 with FreeBSD support. No release binaries for FreeBSD provided as of yet.
-
-Again a big thanks to [@joske](https://github.com/joske) for his porting efforts!
-
-Since compatibility with Linux, MacOS and FreeBSD are done, the focus going forward will be on new features like GPU monitoring.
-
-##### 13 November 2021
-
-Release v1.1.0 with OSX support. Binaries in [continuous-build-macos](https://github.com/aristocratos/btop/actions/workflows/continuous-build-macos.yml) are only x86 for now.
-Macos binaries + installer are included for both x86 and ARM64 (Apple Silicon) in the releases.
-
-Big thank you to [@joske](https://github.com/joske) who wrote the vast majority of the implementation!
-
-<details>
-<summary>More...</summary>
-
-##### 30 October 2021
-
-Work on the OSX and FreeBSD branches, both initiated and mostly worked on by [@joske](https://github.com/joske), will likely be completed in the coming weeks.
-The OSX branch has some memory leaks that needs to be sorted out and both have some issues with the processes cpu usage calculation and other smaller issues that needs fixing.
-
-If you want to help out, test for bugs/fix bugs or just try out the branches:
-
-**OSX**
-```bash
-# Install and use Homebrew or MacPorts package managers for easy dependency installation
-brew install coreutils make gcc@11
-git clone https://github.com/aristocratos/btop.git
-cd btop
-git checkout OSX
-gmake
-```
-
-**FreeBSD**
-```bash
-sudo pkg install gmake gcc11 coreutils git
-git clone https://github.com/aristocratos/btop.git
-cd btop
-git checkout freebsd
-gmake
-```
-
-Note that GNU make (`gmake`) is recommended but not required for OSX but it is required on FreeBSD.
-
-
-##### 6 October 2021
-
-OsX development have been started by [@joske](https://github.com/joske), big thanks :)
-See branch [OSX](https://github.com/aristocratos/btop/tree/OSX) for current progress.
-
-##### 18 September 2021
-
-The Linux version of btop++ is complete. Released as version 1.0.0
-
-I will be providing statically compiled binaries for a range of architectures in every release for those having problems compiling.
-
-For compilation GCC 10 is required, GCC 11 preferred.
-
-Please report any bugs to the [Issues](https://github.com/aristocratos/btop/issues/new?assignees=aristocratos&labels=bug&template=bug_report.md&title=%5BBUG%5D) page.
-
-The development plan right now:
-
-* 1.1.0 Mac OsX support
-* 1.2.0 FreeBSD support
-* 1.3.0 Support for GPU monitoring
-* 1.X.0 Other platforms and features...
-
-Windows support is not in the plans as of now, but if anyone else wants to take it on, I will try to help.
-
-##### 5 May 2021
-
-This project is gonna take some time until it has complete feature parity with bpytop, since all system information gathering will have to be written from scratch without any external libraries.
-And will need some help in the form of code contributions to get complete support for BSD and OSX.
-
-</details>
-
-## Documents
-
-**[CHANGELOG.md](CHANGELOG.md)**
-
-**[CONTRIBUTING.md](CONTRIBUTING.md)**
-
-**[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)**
-
-## Description
-
-Resource monitor that shows usage and stats for processor, memory, disks, network and processes.
-
-C++ version and continuation of [bashtop](https://github.com/aristocratos/bashtop) and [bpytop](https://github.com/aristocratos/bpytop).
-
-## Features
-
-* Easy to use, with a game inspired menu system.
-* Full mouse support, all buttons with a highlighted key is clickable and mouse scroll works in process list and menu boxes.
-* Fast and responsive UI with UP, DOWN keys process selection.
-* Function for showing detailed stats for selected process.
-* Ability to filter processes.
-* Easy switching between sorting options.
-* Tree view of processes.
-* Send any signal to selected process.
-* UI menu for changing all config file options.
-* Auto scaling graph for network usage.
-* Shows IO activity and speeds for disks
-* Battery meter
-* Selectable symbols for the graphs
-* Custom presets
-* And more...
-
-## Themes
-
-Btop++ uses the same theme files as bpytop and bashtop (some color values missing in bashtop themes) .
-
-See [themes](https://github.com/aristocratos/btop/tree/master/themes) folder for available themes.
-
-The `make install` command places the default themes in `[$PREFIX or /usr/local]/share/btop/themes`.
-User created themes should be placed in `$XDG_CONFIG_HOME/btop/themes` or `$HOME/.config/btop/themes`.
-
-Let me know if you want to contribute with new themes.
-
-## Support and funding
-
-You can sponsor this project through github, see [my sponsors page](https://github.com/sponsors/aristocratos) for options.
-
-Or donate through [paypal](https://paypal.me/aristocratos) or [ko-fi](https://ko-fi.com/aristocratos).
-
-Any support is greatly appreciated!
-
-## Prerequisites
-
-For best experience, a terminal with support for:
-
-* 24-bit truecolor ([See list of terminals with truecolor support](https://gist.github.com/XVilka/8346728))
-* 256-color terminals are supported through 24-bit to 256-color conversion when setting "truecolor" to False in the options or with "-lc/--low-color" arguments.
-* 16 color TTY mode will be activated if a real tty device is detected. Can be forced with "-t/--tty_on" arguments.
-* Wide characters (Are sometimes problematic in web-based terminals)
-
-Also needs a UTF8 locale and a font that covers:
-
-* Unicode Block “Braille Patterns” U+2800 - U+28FF (Not needed in TTY mode or with graphs set to type: block or tty.)
-* Unicode Block “Geometric Shapes” U+25A0 - U+25FF
-* Unicode Block "Box Drawing" and "Block Elements" U+2500 - U+259F
-
-### **Notice (Text rendering issues)**
-
-* If you are having problems with the characters in the graphs not looking like they do in the screenshots, it's likely a problem with your systems configured fallback font not having support for braille characters.
-
-* See [Terminess Powerline](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Terminus/terminus-ttf-4.40.1) for an example of a font that includes the braille symbols.
-
-* See comments by @sgleizes [link](https://github.com/aristocratos/bpytop/issues/100#issuecomment-684036827) and @XenHat [link](https://github.com/aristocratos/bpytop/issues/100#issuecomment-691585587) in issue #100 for possible solutions.
-
-* If text are misaligned and you are using Konsole or Yakuake, turning off "Bi-Directional text rendering" is a possible fix.
-
-* Characters clipping in to each other or text/border misalignments is not bugs caused by btop, but most likely a fontconfig or terminal problem where the braille characters making up the graphs aren't rendered correctly.
-
-* Look to the creators of the terminal emulator you use to fix these issues if the previous mentioned fixes don't work for you.
-
-## Screenshots
-
-#### Main UI showing details for a selected process
-
-![Screenshot 1](Img/normal.png)
-
-#### Main UI in TTY mode
-
-![Screenshot 2](Img/tty.png)
-
-#### Main UI with custom options
-
-![Screenshot 3](Img/alt.png)
-
-#### Main-menu
-
-![Screenshot 3](Img/main-menu.png)
-
-#### Options-menu
-
-![Screenshot 4](Img/options-menu.png)
-
-#### Help-menu
-
-![Screenshot 5](Img/help-menu.png)
+# MusicPlayerPlus
+
+The MusicPlayerPlus project provides integration and extension of several
+audio packages designed to stream and play music. MusicPlayerPlus interacts
+with the Music Player Daemon (MPD). Outputs from the MPD streaming audio server
+are used as MusicPlayerPlus inputs for playback and visualization. In addition,
+MusicPlayerPlus components are used to manage, control, and update MPD.
+
+## Table of contents
+
+1. [Overview](#overview)
+    1. [MusicPlayerPlus Commands](#musicplayerplus-commands)
+    1. [Main mpcplus MPD client features](#main-mpcplus-mpd-client-features)
+1. [Quickstart](#quickstart)
+1. [Requirements](#requirements)
+1. [Installation](#installation)
+    1. [Debian package installation](#debian-package-installation)
+    1. [RPM Package installation](#rpm-package-installation)
+1. [Post Installation Configuration](#post-installation-configuration)
+    1. [MPD Server Configuration](#mpd-server-configuration)
+    1. [Client Configuration](#client-configuration)
+    1. [Start MPD](#start-mpd)
+    1. [Initialize Music Database](#initialize-music-database)
+    1. [Terminal Emulator Profiles](#terminal-emulator-profiles)
+    1. [Gnome Terminal Emulator Profile](#gnome-terminal-emulator-profile)
+    1. [Tilix Terminal Emulator Profiles](#tilix-terminal-emulator-profiles)
+1. [Documentation](#documentation)
+    1. [README for mpcplus MPD client](#readme-for-mpcplus-mpd-client)
+    1. [Man Pages](#man-pages)
+    1. [Usage](#usage)
+    1. [Example client invocations](#example-client-invocations)
+    1. [Adding Album Cover Art](#adding-album-cover-art)
+1. [Removal](#removal)
+1. [Troubleshooting](#troubleshooting)
+1. [Screenshots](#screenshots)
+1. [Videos](#videos)
+
+## Overview
+
+MusicPlayerPlus integrations and extensions are primarily aimed at the
+character based terminal user. They enable an easy to use seamlessly
+integrated control of audio streaming, playing, and visualization in
+a lightweight character based environment.
+
+Audio streaming is provided by the Music Player Daemon (MPD).
+At the core of MusicPlayerPlus is the `mpplus` command which acts as
+a front-end for a variety of terminal and/or `tmux` sessions.
+
+The `mpplus` command can be used to invoke:
+
+* The lightweight character based MPD client, `mpcplus`
+* One or more terminal emulators running an MPD client and visualizer
+* A tmux session
+* A spectrum visualizer
+* Any MPD client the user wishes to run
+* One of several asciimatics animations optionally accompanied by audio
+
+Integration is provided for:
+
+* [mpd](https://www.musicpd.org/), the Music Player Daemon
+* [mpcplus](mpcplus/README.md), character based Music Player Plus MPD client
+* [cantata](https://github.com/CDrummond/cantata), graphical MPD client
+* [cava](https://github.com/karlstav/cava), an audio spectrum visualizer
+* [mplayer](http://mplayerhq.hu/design7/info.html), a media player
+* [asciimatics](https://github.com/peterbrittain/asciimatics) - automatically display a variety of character based animation effects
+* [asciinema](https://asciinema.org/) - automatically create ascii character based video clips
+* [tmux](https://github.com/tmux/tmux/wiki), a terminal multiplexer
+* Enhanced key bindings for extended control of terminal windows
+* Several terminal emulators
+    * xfce4-terminal
+    * gnome-terminal
+    * tilix
+    * cool-retro-term
+
+### MusicPlayerPlus Commands
+
+MusicPlayerPlus adds the following commands to your system:
+
+* **mpplus** : primary user interface, invokes an MPD client, spectrum visualizer, and more
+* **mpcplus** : Featureful NCurses MPD client, compiled with spectrum visualizer
+* **mpcinit** : one-time initializaton of a user's mpcplus configuration
+* **mpcplus-tmux** : runs mpcplus, a visualizer, and displays album art in a tmux session
+* **mppsplash** : fun ascii art screens using ASCIImatics animations. Ascii art commands:
+    * **asciijulia** : ASCIImatics animated zoom on a Julia Set
+    * **asciiplasma** : ASCIImatics animated plasma graphic
+    * **asciimpplus** : ASCIImatics animated MusicPlayerPlus splash screen
+* **raise_cava** : raises the cava spectrum visualizer window
+* **set_term_trans** : sets an xfce4-terminal window's transparency level
+* **download_cover_art** : automatically downloads cover album art for your entire music directory
+
+Additional detail and info can be found in the
+[MusicPlayerPlus Wiki](https://github.com/doctorfree/MusicPlayerPlus/wiki).
+
+### Main mpcplus MPD client features
+
+* tag editor
+* playlist editor
+* easy to use search engine
+* media library
+* integration with external spectrum visualizer
+* ability to fetch song lyrics from a variety of sources
+* ability to fetch artist info from last.fm
+* new display mode
+* alternative user interface
+* ability to browse and add files from outside of MPD music directory
+* cute trick to add album cover art in character display using tmux
+
+## Quickstart
+
+* Install the latest Debian or RPM format installation package from the [MusicPlayerPlus Releases](https://github.com/doctorfree/MusicPlayerPlus/releases) page
+* Edit `/etc/mpd.conf` and set the `music_directory` entry to the location of your music library (must be done with `sudo`, e.g. `sudo vi /etc/mpd.conf`)
+* Run the `mpcinit` command (must be done as your normal user, no need for `sudo`)
+* Verify the `mpd` service is running and if not then start it:
+    * `systemctl status mpd`
+    * `sudo systemctl start mpd`
+* Update the MPD client database:
+    * `mpplus` then type `u`
+* Play music with `mpplus`
+    * See the [online mpcpluskeys cheat sheet](https://github.com/doctorfree/MusicPlayerPlus/wiki/mpcpluskeys.1) or `man mpcpluskeys` for help navigating the `mpplus` windows
+    * See the [online mpplus man page](https://github.com/doctorfree/MusicPlayerPlus/wiki/mpplus.1) or `man mpplus` for different ways to invoke the `mpplus` command
+
+## Requirements
+
+MusicPlayerPlus can be installed on Debian or RPM based Linux systems.
+It requires:
+
+* [MPD Music Player Daemon](https://www.musicpd.org/)
+* [Cava](https://github.com/karlstav/cava)
+* [Boost library](https://www.boost.org/)
+* [NCurses library](http://www.gnu.org/software/ncurses/ncurses.html)
+* [Readline library](https://tiswww.case.edu/php/chet/readline/rltop.html)
+* [Curl library](https://curl.haxx.se/)
+* [Bash](https://en.wikipedia.org/wiki/Bash_(Unix_shell))
+
+These dependencies will all be automatically installed if not present
+when MusicPlayerPlus is installed using the Debian or RPM packaging.
 
 ## Installation
 
-**Binaries for Linux are statically compiled with musl and works on kernel 2.6.39 and newer**
+MusicPlayerPlus v1.0.0 and later can be installed on Linux systems using
+either the Debian packaging format or the Red Hat Package Manager (RPM).
 
-1. **Download btop-(VERSION)-(ARCH)-(PLATFORM).tbz from [latest release](https://github.com/aristocratos/btop/releases/latest) and unpack to a new folder**
+### Debian package installation
 
-   **Notice! Use x86_64 for 64-bit x86 systems, i486 and i686 are 32-bit!**
+Many Linux distributions, most notably Ubuntu and its derivatives, use the
+Debian packaging system.
 
-2. **Install (from created folder)**
+To tell if a Linux system is Debian based it is usually sufficient to
+check for the existence of the file `/etc/debian_version` and/or examine the
+contents of the file `/etc/os-release`.
 
-   * **Run install.sh or:**
+To install on a Debian based Linux system, download the latest Debian format
+package from the
+[MusicPlayerPlus Releases](https://github.com/doctorfree/MusicPlayerPlus/releases).
 
-   ``` bash
-   # use "make install PREFIX=/target/dir" to set target, default: /usr/local
-   # only use "sudo" when installing to a NON user owned directory
-   sudo make install
-   ```
+Install the MusicPlayerPlus package by executing the command
 
-3. **(Optional) Set suid bit to make btop always run as root (or other user)**
-
-   Enables signal sending to any process without starting with `sudo` and can prevent /proc read permissions problems on some systems.
-
-   * **Run setuid.sh or:**
-
-   ``` bash
-   # run after make install and use same PREFIX if any was used at install
-   # set SU_USER and SU_GROUP to select user and group, default is root:root
-   sudo make setuid
-   ```
-
-* **Uninstall**
-
-  * **Run uninstall.sh or:**
-
-   ``` bash
-   sudo make uninstall
-   ```
-
-* **Show help**
-
-   ```bash
-   make help
-   ```
-
-**Binary release (from native os repo)**
-
-* **openSUSE**
-  * **Tumbleweed:**
-    ```bash
-    sudo zypper in btop
-    ```
-  * For all other versions, see [openSUSE Software: btop](https://software.opensuse.org/package/btop)
-
-
-**Binary release on Homebrew (macOS (x86_64 & ARM64) / Linux (x86_64))**
-
-* **[Homebrew](https://formulae.brew.sh/formula/btop)**
-  ```bash
-  brew install btop
-  ```
-
-## Compilation Linux
-
-   Needs GCC 10 or higher, (GCC 11 or above strongly recommended for better CPU efficiency in the compiled binary).
-
-   The makefile also needs GNU coreutils and `sed` (should already be installed on any modern distribution).
-
-   For a `cmake` based build alternative see the [fork](https://github.com/jan-guenter/btop/tree/main) by @jan-guenter
-
-1. **Install dependencies (example for Ubuntu 21.04 Hirsute)**
-
-   Use gcc-10 g++-10 if gcc-11 isn't available
-
-   ``` bash
-   sudo apt install coreutils sed git build-essential gcc-11 g++-11
-   ```
-
-2. **Clone repository**
-
-   ``` bash
-   git clone https://github.com/aristocratos/btop.git
-   cd btop
-   ```
-
-3. **Compile**
-
-   Append `STATIC=true` to `make` command for static compilation.
-
-   Notice! If using LDAP Authentication, usernames will show as UID number for LDAP users if compiling statically with glibc.
-
-   Append `QUIET=true` for less verbose output.
-
-   Append `STRIP=true` to force stripping of debug symbols (adds `-s` linker flag).
-
-   Append `ARCH=<architecture>` to manually set the target architecture.
-   If omitted the makefile uses the machine triple (output of `-dumpmachine` compiler parameter) to detect the target system.
-
-   Use `ADDFLAGS` variable for appending flags to both compiler and linker.
-
-   For example: `ADDFLAGS=-march=native` might give a performance boost if compiling only for your own system.
-
-   If `g++` is linked to an older version of gcc on your system specify the correct version by appending `CXX=g++-10` or `CXX=g++-11`.
-
-   ``` bash
-   make
-   ```
-
-4. **Install**
-
-   Append `PREFIX=/target/dir` to set target, default: `/usr/local`
-
-   Notice! Only use "sudo" when installing to a NON user owned directory.
-
-   ``` bash
-   sudo make install
-   ```
-
-5. **(Optional) Set suid bit to make btop always run as root (or other user)**
-
-   No need for `sudo` to enable signal sending to any process and to prevent /proc read permissions problems on some systems.
-
-   Run after make install and use same PREFIX if any was used at install.
-
-   Set `SU_USER` and `SU_GROUP` to select user and group, default is `root` and `root`
-
-   ``` bash
-   sudo make setuid
-   ```
-
-* **Uninstall**
-
-   ``` bash
-   sudo make uninstall
-   ```
-
-* **Remove any object files from source dir**
-
-   ```bash
-   make clean
-   ```
-
-* **Remove all object files, binaries and created directories in source dir**
-
-   ```bash
-   make distclean
-   ```
-
-* **Show help**
-
-   ```bash
-   make help
-   ```
-
-## Compilation OSX
-
-   Needs GCC 10 or higher, (GCC 11 or above strongly recommended for better CPU efficiency in the compiled binary).
-
-   The makefile also needs GNU coreutils and `sed`.
-
-   Install and use Homebrew or MacPorts package managers for easy dependency installation
-
-1. **Install dependencies (example for Homebrew)**
-
-   ``` bash
-   brew install coreutils make gcc@11
-   ```
-
-2. **Clone repository**
-
-   ``` bash
-   git clone https://github.com/aristocratos/btop.git
-   cd btop
-   ```
-
-3. **Compile**
-
-   Append `STATIC=true` to `make` command for static compilation (only libgcc and libstdc++ will be static!).
-
-   Append `QUIET=true` for less verbose output.
-
-   Append `STRIP=true` to force stripping of debug symbols (adds `-s` linker flag).
-
-   Append `ARCH=<architecture>` to manually set the target architecture.
-   If omitted the makefile uses the machine triple (output of `-dumpmachine` compiler parameter) to detect the target system.
-
-   Use `ADDFLAGS` variable for appending flags to both compiler and linker.
-
-   For example: `ADDFLAGS=-march=native` might give a performance boost if compiling only for your own system.
-
-   ``` bash
-   gmake
-   ```
-
-4. **Install**
-
-   Append `PREFIX=/target/dir` to set target, default: `/usr/local`
-
-   Notice! Only use "sudo" when installing to a NON user owned directory.
-
-   ``` bash
-   sudo gmake install
-   ```
-
-5. **(Recommended) Set suid bit to make btop always run as root (or other user)**
-
-   No need for `sudo` to see information for non user owned processes and to enable signal sending to any process.
-
-   Run after make install and use same PREFIX if any was used at install.
-
-   Set `SU_USER` and `SU_GROUP` to select user and group, default is `root` and `wheel`
-
-   ``` bash
-   sudo gmake setuid
-   ```
-
-* **Uninstall**
-
-   ``` bash
-   sudo gmake uninstall
-   ```
-
-* **Remove any object files from source dir**
-
-   ```bash
-   gmake clean
-   ```
-
-* **Remove all object files, binaries and created directories in source dir**
-
-   ```bash
-   gmake distclean
-   ```
-
-* **Show help**
-
-   ```bash
-   gmake help
-   ```
-
-## Compilation FreeBSD
-
-   Needs GCC 10 or higher, (GCC 11 or above strongly recommended for better CPU efficiency in the compiled binary).
-
-   Note that GNU make (`gmake`) is required to compile on FreeBSD.
-
-1. **Install dependencies**
-
-   ``` bash
-   sudo pkg install gmake gcc11 coreutils git
-   ```
-
-2. **Clone repository**
-
-   ``` bash
-   git clone https://github.com/aristocratos/btop.git
-   cd btop
-   ```
-
-3. **Compile**
-
-   Append `STATIC=true` to `make` command for static compilation.
-
-   Append `QUIET=true` for less verbose output.
-
-   Append `STRIP=true` to force stripping of debug symbols (adds `-s` linker flag).
-
-   Append `ARCH=<architecture>` to manually set the target architecture.
-   If omitted the makefile uses the machine triple (output of `-dumpmachine` compiler parameter) to detect the target system.
-
-   Use `ADDFLAGS` variable for appending flags to both compiler and linker.
-
-   For example: `ADDFLAGS=-march=native` might give a performance boost if compiling only for your own system.
-
-   ``` bash
-   gmake
-   ```
-
-4. **Install**
-
-   Append `PREFIX=/target/dir` to set target, default: `/usr/local`
-
-   Notice! Only use "sudo" when installing to a NON user owned directory.
-
-   ``` bash
-   sudo gmake install
-   ```
-
-5. **(Recommended) Set suid bit to make btop always run as root (or other user)**
-
-   No need for `sudo` to see information for non user owned processes and to enable signal sending to any process.
-
-   Run after make install and use same PREFIX if any was used at install.
-
-   Set `SU_USER` and `SU_GROUP` to select user and group, default is `root` and `wheel`
-
-   ``` bash
-   sudo gmake setuid
-   ```
-
-* **Uninstall**
-
-   ``` bash
-   sudo gmake uninstall
-   ```
-
-* **Remove any object files from source dir**
-
-   ```bash
-   gmake clean
-   ```
-
-* **Remove all object files, binaries and created directories in source dir**
-
-   ```bash
-   gmake distclean
-   ```
-
-* **Show help**
-
-   ```bash
-   gmake help
-   ```
-
-## Installing the snap
-[![btop](https://snapcraft.io/btop/badge.svg)](https://snapcraft.io/btop)
-
- * **Install the snap**
-
-    ```bash
-    sudo snap install btop
-    ```
- * **Install the latest snap from the edge channel**
-   ```
-   sudo snap install btop --edge
-   ```
-
- * **Connect the interface**
-
-    ```bash
-	sudo snap connect btop:removable-media
-	```
-
-
-## Configurability
-
-All options changeable from within UI.
-Config and log files stored in `$XDG_CONFIG_HOME/btop` or `$HOME/.config/btop` folder
-
-#### btop.conf: (auto generated if not found)
-
-```bash
-#? Config file for btop v. 1.2.2
-
-#* Name of a btop++/bpytop/bashtop formatted ".theme" file, "Default" and "TTY" for builtin themes.
-#* Themes should be placed in "../share/btop/themes" relative to binary or "$HOME/.config/btop/themes"
-color_theme = "Default"
-
-#* If the theme set background should be shown, set to False if you want terminal background transparency.
-theme_background = True
-
-#* Sets if 24-bit truecolor should be used, will convert 24-bit colors to 256 color (6x6x6 color cube) if false.
-truecolor = True
-
-#* Set to true to force tty mode regardless if a real tty has been detected or not.
-#* Will force 16-color mode and TTY theme, set all graph symbols to "tty" and swap out other non tty friendly symbols.
-force_tty = False
-
-#* Define presets for the layout of the boxes. Preset 0 is always all boxes shown with default settings. Max 9 presets.
-#* Format: "box_name:P:G,box_name:P:G" P=(0 or 1) for alternate positions, G=graph symbol to use for box.
-#* Use withespace " " as separator between different presets.
-#* Example: "cpu:0:default,mem:0:tty,proc:1:default cpu:0:braille,proc:0:tty"
-presets = "cpu:1:default,proc:0:default cpu:0:default,mem:0:default,net:0:default cpu:0:block,net:0:tty"
-
-#* Set to True to enable "h,j,k,l,g,G" keys for directional control in lists.
-#* Conflicting keys for h:"help" and k:"kill" is accessible while holding shift.
-vim_keys = False
-
-#* Rounded corners on boxes, is ignored if TTY mode is ON.
-rounded_corners = True
-
-#* Default symbols to use for graph creation, "braille", "block" or "tty".
-#* "braille" offers the highest resolution but might not be included in all fonts.
-#* "block" has half the resolution of braille but uses more common characters.
-#* "tty" uses only 3 different symbols but will work with most fonts and should work in a real TTY.
-#* Note that "tty" only has half the horizontal resolution of the other two, so will show a shorter historical view.
-graph_symbol = "braille"
-
-# Graph symbol to use for graphs in cpu box, "default", "braille", "block" or "tty".
-graph_symbol_cpu = "default"
-
-# Graph symbol to use for graphs in cpu box, "default", "braille", "block" or "tty".
-graph_symbol_mem = "default"
-
-# Graph symbol to use for graphs in cpu box, "default", "braille", "block" or "tty".
-graph_symbol_net = "default"
-
-# Graph symbol to use for graphs in cpu box, "default", "braille", "block" or "tty".
-graph_symbol_proc = "default"
-
-#* Manually set which boxes to show. Available values are "cpu mem net proc", separate values with whitespace.
-shown_boxes = "proc cpu mem net"
-
-#* Update time in milliseconds, recommended 2000 ms or above for better sample times for graphs.
-update_ms = 1500
-
-#* Processes sorting, "pid" "program" "arguments" "threads" "user" "memory" "cpu lazy" "cpu responsive",
-#* "cpu lazy" sorts top process over time (easier to follow), "cpu responsive" updates top process directly.
-proc_sorting = "cpu lazy"
-
-#* Reverse sorting order, True or False.
-proc_reversed = False
-
-#* Show processes as a tree.
-proc_tree = False
-
-#* Use the cpu graph colors in the process list.
-proc_colors = True
-
-#* Use a darkening gradient in the process list.
-proc_gradient = True
-
-#* If process cpu usage should be of the core it's running on or usage of the total available cpu power.
-proc_per_core = True
-
-#* Show process memory as bytes instead of percent.
-proc_mem_bytes = True
-
-#* Use /proc/[pid]/smaps for memory information in the process info box (very slow but more accurate)
-proc_info_smaps = False
-
-#* Show proc box on left side of screen instead of right.
-proc_left = False
-
-#* Sets the CPU stat shown in upper half of the CPU graph, "total" is always available.
-#* Select from a list of detected attributes from the options menu.
-cpu_graph_upper = "total"
-
-#* Sets the CPU stat shown in lower half of the CPU graph, "total" is always available.
-#* Select from a list of detected attributes from the options menu.
-cpu_graph_lower = "total"
-
-#* Toggles if the lower CPU graph should be inverted.
-cpu_invert_lower = True
-
-#* Set to True to completely disable the lower CPU graph.
-cpu_single_graph = False
-
-#* Show cpu box at bottom of screen instead of top.
-cpu_bottom = False
-
-#* Shows the system uptime in the CPU box.
-show_uptime = True
-
-#* Show cpu temperature.
-check_temp = True
-
-#* Which sensor to use for cpu temperature, use options menu to select from list of available sensors.
-cpu_sensor = "Auto"
-
-#* Show temperatures for cpu cores also if check_temp is True and sensors has been found.
-show_coretemp = True
-
-#* Set a custom mapping between core and coretemp, can be needed on certain cpus to get correct temperature for correct core.
-#* Use lm-sensors or similar to see which cores are reporting temperatures on your machine.
-#* Format "x:y" x=core with wrong temp, y=core with correct temp, use space as separator between multiple entries.
-#* Example: "4:0 5:1 6:3"
-cpu_core_map = ""
-
-#* Which temperature scale to use, available values: "celsius", "fahrenheit", "kelvin" and "rankine".
-temp_scale = "celsius"
-
-#* Use base 10 for bits/bytes sizes, KB = 1000 instead of KiB = 1024.
-base_10_sizes = False
-
-#* Show CPU frequency.
-show_cpu_freq = True
-
-#* Draw a clock at top of screen, formatting according to strftime, empty string to disable.
-#* Special formatting: /host = hostname | /user = username | /uptime = system uptime
-clock_format = "%H:%M"
-
-#* Update main ui in background when menus are showing, set this to false if the menus is flickering too much for comfort.
-background_update = True
-
-#* Custom cpu model name, empty string to disable.
-custom_cpu_name = ""
-
-#* Optional filter for shown disks, should be full path of a mountpoint, separate multiple values with whitespace " ".
-#* Begin line with "exclude=" to change to exclude filter, otherwise defaults to "most include" filter. Example: disks_filter="exclude=/boot /home/user".
-disks_filter = "exclude=/boot"
-
-#* Show graphs instead of meters for memory values.
-mem_graphs = True
-
-#* Show mem box below net box instead of above.
-mem_below_net = False
-
-#* If swap memory should be shown in memory box.
-show_swap = True
-
-#* Show swap as a disk, ignores show_swap value above, inserts itself after first disk.
-swap_disk = True
-
-#* If mem box should be split to also show disks info.
-show_disks = True
-
-#* Filter out non physical disks. Set this to False to include network disks, RAM disks and similar.
-only_physical = True
-
-#* Read disks list from /etc/fstab. This also disables only_physical.
-use_fstab = False
-
-#* Set to true to show available disk space for privileged users.
-disk_free_priv = False
-
-#* Toggles if io activity % (disk busy time) should be shown in regular disk usage view.
-show_io_stat = True
-
-#* Toggles io mode for disks, showing big graphs for disk read/write speeds.
-io_mode = False
-
-#* Set to True to show combined read/write io graphs in io mode.
-io_graph_combined = False
-
-#* Set the top speed for the io graphs in MiB/s (100 by default), use format "mountpoint:speed" separate disks with whitespace " ".
-#* Example: "/mnt/media:100 /:20 /boot:1".
-io_graph_speeds = ""
-
-#* Set fixed values for network graphs in Mebibits. Is only used if net_auto is also set to False.
-net_download = 100
-
-net_upload = 100
-
-#* Use network graphs auto rescaling mode, ignores any values set above and rescales down to 10 Kibibytes at the lowest.
-net_auto = True
-
-#* Sync the auto scaling for download and upload to whichever currently has the highest scale.
-net_sync = False
-
-#* Starts with the Network Interface specified here.
-net_iface = "br0"
-
-#* Show battery stats in top right if battery is present.
-show_battery = True
-
-#* Which battery to use if multiple are present. "Auto" for auto detection.
-selected_battery = "Auto"
-
-#* Set loglevel for "~/.config/btop/btop.log" levels are: "ERROR" "WARNING" "INFO" "DEBUG".
-#* The level set includes all lower levels, i.e. "DEBUG" will show all logging info.
-log_level = "DEBUG"
+```console
+sudo apt install ./MusicPlayerPlus_<version>-<release>.amd64.deb
+```
+or
+```console
+sudo dpkg -i ./MusicPlayerPlus_<version>-<release>.amd64.deb
 ```
 
-#### Command line options
+**NOTE:** In some cases you may see a warning message when installing the
+Debian package. The message:
 
-```text
-usage: btop [-h] [-v] [-/+t] [-p <id>] [--utf-force] [--debug]
+Repository is broken: musicplayerplus:amd64 (= <version-<release>) has no Size information
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -v, --version         show version info and exit
-  -lc, --low-color      disable truecolor, converts 24-bit colors to 256-color
-  -t, --tty_on          force (ON) tty mode, max 16 colors and tty friendly graph symbols
-  +t, --tty_off         force (OFF) tty mode
-  -p, --preset <id>     start with preset, integer value between 0-9
-  --utf-force           force start even if no UTF-8 locale was detected
-  --debug               start in DEBUG mode: shows microsecond timer for information collect
-                        and screen draw functions and sets loglevel to DEBUG
+can safely be ignored. This is an issue with the Debian packaging system
+and has no effect on the installation.
+
+### RPM Package installation
+
+Red Hat Linux, SUSE Linux, and their derivatives use the RPM packaging
+format. RPM based Linux distributions include Fedora, AlmaLinux, CentOS,
+openSUSE, OpenMandriva, Mandrake Linux, Red Hat Linux, and Oracle Linux.
+
+To install on an RPM based Linux system, download the latest RPM format
+package from the
+[MusicPlayerPlus Releases](https://github.com/doctorfree/MusicPlayerPlus/releases).
+
+Install the MusicPlayerPlus package by executing the command
+
+```console
+sudo yum localinstall ./MusicPlayerPlus_<version>-<release>.x86_64.rpm
+```
+or
+```console
+sudo rpm -i ./MusicPlayerPlus_<version>-<release>.x86_64.rpm
 ```
 
-## LICENSE
+## Post Installation Configuration
+After installing MusicPlayerPlus there are several recommended
+configuration steps. If not already configured, the MPD server
+will need to know where to locate your music library. This can
+be configured by editing the MPD configuration file `/etc/mpd.conf`.
+In addition, it is recommended to setup custom profiles in some
+of the terminal emulators to enhance the spectrum visualization.
 
-[Apache License 2.0](LICENSE)
+Minimal post installation configuration required is the configuration of
+your music directory in `/etc/mpd.conf` and execution of the command `mpcinit`.
+
+### MPD Server Configuration
+Edit `/etc/mpd.conf`, uncomment the `music_directory` entry and
+set the value to the location of your music library. For example,
+
+```
+music_directory		"/u/audio/Music"
+```
+
+Adjust the `audio_output` settings in `mpd.conf`. MPD must have at least
+one `audio_output` configured and in order to use the spectrum visualizer
+as configured by default it is necessary to configure a second `audio_output`
+in MPD.
+
+A FIFO `audio_output` is used as a data source for the Cava spectrum visualizer.
+To configure this output, add the following to `/etc/mpd.conf`:
+
+```
+audio_output {
+    type            "fifo"
+    name            "Visualizer feed"
+    path            "/tmp/mpd.fifo"
+    format          "44100:16:2"
+}
+```
+
+An example ALSA `audio_output` configuration in `/etc/mpd.conf`:
+
+```
+audio_output {
+	type		"alsa"
+	name		"My ALSA Device"
+    buffer_time "50000"   # (50ms); default is 500000 microseconds (0.5s)
+#	device		"hw:0,0"	# optional
+#	mixer_type      "hardware"      # optional
+#	mixer_device	"default"	# optional
+#	mixer_control	"PCM"		# optional
+#	mixer_index	"0"		# optional
+}
+```
+
+Or, to use PulseAudio:
+
+```
+audio_output {  
+    type  "pulse"  
+    name  "pulse audio"
+    device         "pulse" 
+    mixer_type      "hardware" 
+}  
+```
+
+MPD is a powerful and flexible music player server with many configuration
+options. Additional MPD configuration may be desired. See the
+[MPD User's Manual](https://mpd.readthedocs.io/en/stable/user.html)
+
+### Client Configuration
+After configuring the MPD music_directory in `/etc/mpd.conf`, initialize
+the `mpcplus` client configuration by executing the command:
+
+```
+mpcinit
+```
+
+Examine the generated `mpcplus` configuration in `~/.config/mpcplus/config`
+and `~/.config/mpcplus/bindings` and make any desired changes.
+
+While the MPD Server configuration changes above are system-wide,
+the Client configuration performed by `mpcinit` is per-user.
+Each user needs to perform this step as well as the creation of
+terminal profiles described below.
+
+### Start MPD
+
+If this is a fresh installation of MPD, start mpd by executing the command:
+
+`sudo systemctl start mpd`
+
+If you want MPD to start automatically on subsequent reboots, run:
+
+`sudo systemctl enable mpd`
+
+And if you want MPD to start automatically when a client tries to connect:
+
+`sudo systemctl enable mpd.socket`
+
+### Initialize Music Database
+To initialize the music database, after configuring MPD as described above,
+launch an MPD client and update the database. The `mpcplus` MPD client can
+be used for this or the standard `mpc` MPD client can be used.
+
+After launching the MPD client make sure the MPD client window has focus
+and type `u`. This should trigger a database update. If your music library
+is large this process can take several minutes to complete. Once the music
+database has been updated you should see the songs, albums, and playlists
+in your music library appear in the MPD client view.
+
+### Terminal Emulator Profiles
+The Cava spectrum visualizer looks better when the font used by the
+terminal emulator in which it is running is a small sized font. Some
+terminal emulators rely on a profile from which they draw much of
+their configuration. Profiles are used in MusicPlayerPlus to provide
+an enhanced visual presentation. To configure terminal emulator profiles
+launch the desired terminal emulator and create a new profile in the
+Preferences dialog.
+
+There are three terminal profiles in two terminal emulators used by
+MusicPlayerPlus. The `gnome-terminal` emulator has a single profile
+called "SmallFont" and the `tilix` terminal emulator has two profiles
+called "Cava" and "MusicPlayer". To create these profiles:
+
+### Gnome Terminal Emulator Profile
+Launch `gnome-terminal`, click the `...` three dots in the Title Bar
+and then click `Preferences` in the dropdown menu. This will bring up
+a Preferences dialog window. Next to the `Profiles` entry on the left,
+click the `+` plus sign to add a new profile. Name the profile "SmallFont".
+
+Under `Profiles` on the left side of the Preferences window, click on
+your new profile "SmallFont". In the `Text` tab of the "SmallFont" profile,
+check `Custom font` and select a font. Set the size of the font to 8 or
+smaller. A very small font size, say 1, may cause performance issues on
+large visualizer windows.
+
+While still in the "SmallFont" profile configuration dialog, click the
+`Colors` tab. Check `Use transparent background` and adjust the slider
+to halfway full. You may need to revisit this dialog to adjust the
+transparency level to suit your display and preference.
+
+I also disable the scroll bar in the `Scrolling` tab by unchecking
+`Show scrollbar` but this is optional. Scrolling is not likely to be
+needed in the spectrum visualizer window.
+
+### Tilix Terminal Emulator Profiles
+Launch `tilix`, click the `...` three dots in the Title Bar
+and then click `Preferences` in the dropdown menu. This will bring up
+a Preferences dialog window. At the lower left of the left pane,
+click the `+` plus sign to add a new profile. Name the profile "Cava".
+
+In the `General` tab of the "Cava" profile, check `Custom font` and
+select a font. Set the size of the font to 8 or smaller. A very small
+font size, say 1, may cause performance issues on large visualizer windows.
+
+While still in the "Cava" profile configuration dialog, click the
+`Colors` tab. Adjust the `Transparency` slider to halfway full.
+You may need to revisit this dialog to adjust the transparency level
+to suit your display and preference.
+
+I also disable the scroll bar in the `Scrolling` tab by unchecking
+`Show scrollbar` but this is optional. Scrolling is not likely to be
+needed in the spectrum visualizer window.
+
+Tilix is also used as the MPD client window for character based clients.
+An additional terminal profile is needed for this. Repeat the process
+described above to create the `Cava` tilix profile only this time create
+a new profile named `MusicPlayer`. The `MusicPlayer` tilix profile creation
+is exactly the same as the `Cava` profile creation but the name of the
+profile is different and the size of the font is different. Name the new
+profile `MusicPlayer` and set the font size to something like 32. You may
+need to adjust the font size subsequently. On my system, a music player
+client window with font size 32 aligns nicely with a spectrum visualizer
+window with font size 8. This will vary depending on your display device.
+
+Also set the transparency level for the `MusicPlayer` profile just as you
+did for the `Cava` profile, somewhere around half transparent in the `Color`
+tab of the profile config dialog.
+
+## Documentation
+
+All MusicPlayerPlus commands have manual pages. Execute `man <command-name>`
+to view the manual page for a command. The `mpplus` frontend is the primary
+user interface for MusicPlayerPlus and the manual page for `mpplus` can be
+viewed with the command `man mpplus`. Most commands also have
+help/usage messages that can be viewed with the **-u** argument option,
+e.g. `mpplus -u`.
+
+### README for mpcplus MPD client
+- [**mpcplus/README.md**](mpcplus/README.md) - Introduction to the mpcplus MPD client
+
+### Man Pages
+
+- [**mpplus**](markdown/mpplus.1.md) : Primary MusicPlayerPlus user interface
+- [**asciijulia**](markdown/asciijulia.1.md) : asciimatics animation of a Julia Set
+- [**asciimpplus**](markdown/asciimpplus.1.md) : asciimatics animation of MusicPlayerPlus intro
+- [**asciiplasma**](markdown/asciiplasma.1.md) : asciimatics animation with Plasma effect
+- [**mpcinit**](markdown/mpcinit.1.md) : MusicPlayerPlus initialization
+- [**mpcplus-tmux**](markdown/mpcplus-tmux.1.md) : MusicPlayerPlus in a tmux session
+- [**mpcplus**](markdown/mpcplus.1.md) : MusicPlayerPlus MPD client
+- [**mpcpluskeys**](markdown/mpcpluskeys.1.md) : Cheat sheet for `mpcplus` MPD client navigation
+- [**mppsplash-tmux**](markdown/mppsplash-tmux.1.md) : MusicPlayerPlus asciimatics animations in a tmux session
+- [**mppsplash**](markdown/mppsplash.1.md) : MusicPlayerPlus asciimatics animations
+
+### Usage
+
+The usage messages for `mpplus`, `mpcplus`, and `cava` provide a brief
+summary of the command line options:
+
+```
+Usage: mpplus [-A] [-a] [-b] [-c] [-C client] [-D] [-d music_directory]
+		[-f] [-h] [-i] [-jJ] [-k] [-m]
+		[-M alsaconf|enable|disable|restart|start|stop|status]
+		[-n num] [-N] [-p] [-P script] [-q]
+		[-r] [-R] [-s song] [-S] [-t] [-T] [-u]
+MPCplus/Visualizer options:
+	-A indicates display album cover art (implies tmux session)
+	-c indicates use cantata MPD client rather than mpcplus
+	-C 'client' indicates use 'client' MPD client rather than mpcplus
+	-f indicates fullscreen display
+	-i indicates start mpplus in interactive mode
+	-h indicates half-height for cava window (with -f only)
+	-P script specifies the ASCIImatics script to run in visualizer pane
+	-q indicates quarter-height for cava window (with -f only)
+	-r indicates use retro terminal emulator
+	-t indicates use tilix terminal emulator
+ASCIImatics animation options:
+	-a indicates play audio during ASCIImatics display
+	-b indicates use backup audio during ASCIImatics display
+	-j indicates use Julia Set scenes in ASCIImatics display
+	-J indicates Julia Set with several runs using different parameters
+	-m indicates use MusicPlayerPlus scenes in ASCIImatics display
+	-n num specifies the number of times to cycle ASCIImatics scenes
+	-N indicates use alternate comments in Plasma ASCIImatics scenes
+	-p indicates use Plasma scenes in ASCIImatics display
+	-s song specifies a song to accompany an ASCIImatics animation
+		'song' can be the full pathname to an audio file or a
+		relative pathname to an audio file in the MPD music library
+		or /home/ronnie/Music/
+	-S indicates display ASCIImatics splash animation
+General options:
+	-D indicates download album cover art
+	-d 'music_directory' specifies the music directory to use for
+		downloaded album cover art (without this option -D will use
+		the 'music_directory' setting in '/etc/mpd.conf'
+	-k indicates kill MusicPlayerPlus tmux sessions and ASCIImatics scripts
+	-M 'action' can be used to control the Music Player Daemon (MPD)
+	    or configure the ALSA sound system
+		MPD actions will be applied to both the MPD service
+		and the MPD socket service while ALSA configuration
+		will update the ALSA configuration in '/etc/asound.conf'
+	-R indicates record tmux session with asciinema
+	-T indicates use a tmux session for either ASCIImatics or mpcplus
+	-u displays this usage message and exits
+```
+
+```
+Usage: mpcplus [options]...
+Options:
+  -h [ --host ] HOST (=localhost)       connect to server at host
+  -p [ --port ] PORT (=6600)            connect to server at port
+  --current-song [=FORMAT(={{{(%l) }{{%a - }%t}}|{%f}})]
+                                        print current song using given format 
+                                        and exit
+  -c [ --config ] PATH (=~/.config/mpcplus/config AND ~/.mpcplus/config)
+                                        specify configuration file(s)
+  --ignore-config-errors                ignore unknown and invalid options in 
+                                        configuration files
+  --test-lyrics-fetchers                check if lyrics fetchers work
+  -b [ --bindings ] PATH (=~/.config/mpcplus/bindings AND ~/.mpcplus/bindings)
+                                        specify bindings file(s)
+  -s [ --screen ] SCREEN                specify the startup screen
+  -S [ --slave-screen ] SCREEN          specify the startup slave screen
+  -? [ --help ]                         show help message
+  -v [ --version ]                      display version information
+  -q [ --quiet ]                        suppress logs and excess output
+```
+
+The mpcplus MPD client has an extensive set of key bindings that allow
+quick and easy control of MPD, searches, lyrics display, client navigation,
+and much more via the keyboard. View the
+[**mpcpluskeys man page**](markdown/mpcpluskeys.1.md) with the command
+`man mpcpluskeys`.
+
+```
+Usage: mppsplash [-A] [-a] [-b] [-C] [-c num] [-d] [-jJ] [-m] [-p] [-s song] [-u]
+Where:
+	-A indicates use all effects
+	-a indicates play audio during ASCIImatics display
+	-b indicates use backup audio during ASCIImatics display
+	-C indicates use alternate comments in Plasma effect
+	-c num specifies the number of times to cycle
+	-d indicates enable debug mode
+	-j indicates use Julia Set effect
+	-J indicates Julia Set with several runs using different parameters
+	-m indicates use MusicPlayerPlus effect
+	-p indicates use Plasma effect
+	-s song specifies the audio file to play as accompaniment
+		'song' can be the full pathname to an audio file or a relative
+		pathname to an audio file in the MPD music library or
+		$HOME/Music/
+	-u displays this usage message and exits
+```
+
+```
+Usage : cava [options]
+Visualize audio input in terminal. 
+
+Options:
+    -p          path to config file
+    -v          print version
+
+Keys:
+        Up        Increase sensitivity
+        Down      Decrease sensitivity
+        Left      Decrease number of bars
+        Right     Increase number of bars
+        r         Reload config
+        c         Reload colors only
+        f         Cycle foreground color
+        b         Cycle background color
+        q         Quit
+
+All options are specified in a config file. See `/home/username/.config/cava/`
+```
+
+### Example client invocations
+The `mpplus` command is intended to serve as the primary interface to invoke
+the `mpcplus` MPD client and `cava` spectrum visualizer. The `mpplus` command
+utilizes several different terminal emulators and can also be used to invoke
+any specified MPD client. Some example invocations of `mpplus` follow.
+
+Open the mpcplus client and cava visualizer in fullscreen mode. The client
+will open in the xfce4-terminal emulator and the visualizer in gnome-terminal:
+
+`mpplus -f`
+
+Open the mpcplus client and cava visualizer in fullscreen mode using the
+tilix terminal emulator and displaying the visualizer using quarter-height:
+
+`mpplus -f -q -t`
+
+Open the cantata MPD graphical client and cava visualizer:
+
+`mpplus -c`
+
+Open the mpcplus client in the cool-retro-term terminal and cava visualizer
+in gnome-terminal:
+
+`mpplus -r`
+
+The mpcplus MPD client can be opened directly without using mpplus.
+Similarly, the cava spectrum visualizer can be opened directly without mpplus.
+
+`mpcplus` # In one terminal window
+
+`cava`    # In another terminal window
+
+To test the mpcplus lyrics fetchers:
+
+`mpcplus --test-lyrics-fetchers`
+
+### Adding Album Cover Art
+The `mpcplus` MPD client is a character based application. As such, it is
+difficult to display graphical images. However, this limitation can be
+overcome using `tmux` and additional tools. In this way we can add album
+cover art to MusicPlayerPlus when using the character based `mpcplus` client.
+
+See [Adding album art to MusicPlayerPlus](with-cover-art/README.md) to get
+started integrating album art in MusicPlayerPlus.
+
+An album cover art downloader is included in MusicPlayerPlus. To download
+cover art for all of the albums in your MPD music directory, run the command:
+
+```
+download_cover_art
+```
+
+or, alternately,
+
+```
+mpplus -d
+```
+
+Cover art for each album is saved as the file `cover.jpg` in the album folder.
+Existing cover art is preserved.
+
+## Removal
+
+On Debian based Linux systems where the MusicPlayerPlus package was installed
+using the MusicPlayerPlus Debian format package, remove the MusicPlayerPlus
+package by executing the command:
+
+```console
+    sudo apt remove musicplayerplus
+```
+or
+```console
+    sudo dpkg -r musicplayerplus
+```
+
+On RPM based Linux systems where the MusicPlayerPlus package was installed
+using the MusicPlayerPlus RPM format package, remove the MusicPlayerPlus
+package by executing the command:
+
+```console
+    sudo yum remove MusicPlayerPlus
+```
+or
+```console
+    sudo rpm -e MusicPlayerPlus
+```
+
+The MusicPlayerPlus package can be removed by executing the "Uninstall"
+script in the MusicPlayerPlus source directory:
+
+```console
+    git clone git@github.com:doctorfree/MusicPlayerPlus.git
+    cd MusicPlayerPlus
+    ./Uninstall
+```
+
+## Troubleshooting
+Many problems encountered with MusicPlayerPlus often resolve to problems with
+the underlying Linux audio configuration. As a first step in troubleshooting,
+verify the audio subsystem is functioning properly. Most systems use either
+ALSA or PulseAudio and there are numerous audio test guides available.
+
+MusicPlayerPlus includes a convenience script to test the ALSA audio subsystem.
+The command `alsa_audio_test` can be run to test your ALSA audio setup.
+If successful you will hear the test output of the `aplay` command.
+To view a `alsa_audio_test` usage message and current ALSA configuration
+settings, run the command `alsa_audio_test -u`
+
+Another source of problems to investigate is the Music Player Daemon (MPD).
+This is the music streaming server that MusicPlayerPlus connects to. MPD
+is run as a system service that runs automatically. You can check the status
+of the MPD service by running the command `systemctl status mpd`. You can
+restart the MPD service with `sudo systemctl restart mpd`. If the issue is
+not resolved by a restart or reboot, check the MPD log file at
+`/var/log/mpd/mpd.log` looking for recent failures and exceptions.
+
+It may be the case that the root of a problem is a missing dependency.
+MusicPlayerPlus should have installed any missing dependencies but one
+may have been overlooked, improperly installed, or subsequently removed.
+If the system logs or error output indicates something was "not found"
+then check for its existence. On Debian based systems there is a nice
+repository package index maintained. If a command was not found, it is
+often possible to simply type that command at a shell prompt and the
+Debian packaging system will be searched for any packages that contain
+a command with that name. If a likely looking package is returned, the
+problem may be solved by installing that package.
+
+Finally, see the Troubleshooting section of the
+[MusicPlayerPlus Wiki](https://github.com/doctorfree/MusicPlayerPlus/wiki).
+for additional troubleshooting techniques and commonly resolved issues.
+
+If an issue cannot be resolved and all troubleshooting efforts have
+failed, open an issue at
+[MusicPlayerPlus issues](https://github.com/doctorfree/MusicPlayerPlus/issues).
+Even if you do manage to resolve an issue, it may still be helpful to
+report the issue at https://github.com/doctorfree/MusicPlayerPlus/issues
+so that a fix may be incorporated in the next release.
+
+## Screenshots
+
+<p float="left">
+  <img src="screenshots/asciiville-btop.png" style="width:800px;height:600px;">
+  <img src="screenshots/asciiville-retro.png" style="width:800px;height:600px;">
+</p>
+
+## Videos
+
+- [![MusicPlayerPlus Intro](https://i.imgur.com/UH2A21h.png)](https://www.youtube.com/watch?v=r7XLA9tO45Q "MusicPlayerPlus ASCIImatics Intro")
+- [![MusicPlayerPlus Demo](https://i.imgur.com/ZntE1sH.jpg)](https://www.youtube.com/watch?v=y2yaHm04ELM "MusicPlayerPlus Demo")

@@ -3,13 +3,13 @@ name: Bug report
 about: Create a report to help us improve
 title: "[BUG]"
 labels: bug
-assignees: aristocratos
+assignees: doctorfree
 
 ---
 
 **Read the README.md and search for similar issues before posting a bug report!**
 
-Any bug that can be solved by just reading the [prerequisites](https://github.com/aristocratos/btop#prerequisites) section of the README will likely be ignored.
+Any bug that can be solved by just reading the [prerequisites](https://github.com/doctorfree/Asciiville/btop#prerequisites) section of the README will likely be ignored.
 
 **Describe the bug**
 

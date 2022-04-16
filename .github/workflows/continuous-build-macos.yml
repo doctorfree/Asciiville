@@ -7,11 +7,11 @@ on:
     tags-ignore:
       - '*.*'
     paths:
-      - 'src/**'
-      - '!src/linux/**'
-      - '!src/freebsd/**'
-      - 'include/**'
-      - 'Makefile'
+      - 'btop/src/**'
+      - '!btop/src/linux/**'
+      - '!btop/src/freebsd/**'
+      - 'btop/include/**'
+      - 'btop/Makefile'
       - '.github/workflows/*'
 
 jobs:
@@ -27,8 +27,10 @@ jobs:
           GIT_HASH=$(git rev-parse --short "$GITHUB_SHA")
           mv bin/btop bin/btop-x86_64-BigSur-$GIT_HASH
           ls -alh bin
+        working-directory: ./btop
 
       - uses: actions/upload-artifact@v2
         with:
           name: btop-x86_64-macos-BigSur
           path: 'bin/*'
+        working-directory: ./btop
