@@ -1,7 +1,7 @@
 Name: Asciiville
 Version:    %{_version}
 Release:    %{_release}
-BuildArch:  noarch
+BuildArch:  x86_64
 Requires: tilix, xfce4-terminal, cool-retro-term, gnome-terminal, tmux, mplayer
 URL:        https://github.com/doctorfree/Asciiville
 Vendor:     Doctorwhen's Bodacious Laboratory

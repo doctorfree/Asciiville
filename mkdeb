@@ -6,7 +6,7 @@ DEBFULLNAME="Ronald Record"
 DEBEMAIL="ronaldrecord@gmail.com"
 DESTDIR="usr"
 SRC=${HOME}/src
-ARCH=all
+ARCH=amd64
 SUDO=sudo
 GCI=
 

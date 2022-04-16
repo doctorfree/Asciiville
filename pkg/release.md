@@ -8,12 +8,12 @@ Changes in this release include:
 ## Installation
 Install the package on Debian based systems by executing the command
 ```bash
-sudo apt install ./Asciiville_1.0.0-1.all.deb
+sudo apt install ./Asciiville_1.0.0-1.amd64.deb
 ```
 
 Install the package on RPM based systems by executing the command
 ```bash
-sudo yum localinstall ./Asciiville-1.0.0-1.noarch.rpm
+sudo yum localinstall ./Asciiville-1.0.0-1.x86_64.rpm
 ```
 
 ## Configuration

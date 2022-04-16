@@ -15,8 +15,8 @@ SRC_NAME="Asciiville"
 PKG_NAMES="Asciiville"
 APT_NAMES="asciiville"
 SRC="${HOME}/src"
-DEB_ARCH=all
-RPM_ARCH=noarch
+DEB_ARCH=amd64
+RPM_ARCH=x86_64
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 
