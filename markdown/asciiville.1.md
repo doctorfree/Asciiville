@@ -161,12 +161,12 @@ otherwise using ASCIIVILLE and for a DISCLAIMER OF ALL WARRANTIES.
 # BUGS
 Submit bug reports online at:
 
-https://github.com/doctorfree/MusicPlayerPlus/issues
+https://github.com/doctorfree/Asciiville/issues
 
 # SEE ALSO
 **mppsplash**(1), **mpcplus**(1), **mpcpluskeys**(1), **cava**(1)
 
 Full documentation and sources at:
 
-https://github.com/doctorfree/MusicPlayerPlus
+https://github.com/doctorfree/Asciiville
 

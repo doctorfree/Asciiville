@@ -5,7 +5,15 @@
 # Fork of Repo: https://github.com/aristocratos/btop
 #
 # Build Dependencies:
-#   coreutils git make tar zstd
+# On Ubuntu 20.04
+#   sudo apt update -y
+#   sudo apt upgrade -y
+#   sudo apt install coreutils git make tar zstd
+#   sudo apt install -y build-essential
+#   sudo apt install -y gcc-10 g++-10 cpp-10
+#   sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 \
+#                            --slave /usr/bin/g++ g++ /usr/bin/g++-10 \
+#                            --slave /usr/bin/gcov gcov /usr/bin/gcov-10
 #
 # Usage: ./build-btop.sh [-i]
 # Where -i indicates install btop after compiling
