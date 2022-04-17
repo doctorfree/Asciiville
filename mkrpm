@@ -33,6 +33,18 @@ OUT_DIR="dist/${PKG_NAME}_${PKG_VER}"
 
 cd "${SRC}/${SRC_NAME}"
 
+# Build btop
+if [ -x build-btop.sh ]
+then
+  ./build-btop.sh -v
+else
+  cd btop
+  make distclean
+  make STATIC=true STRIP=true
+  chmod +x bin/btop
+  cd ..
+fi
+
 ${SUDO} rm -rf dist
 mkdir dist
 
@@ -53,6 +65,7 @@ do
 done
 
 ${SUDO} cp -a bin ${OUT_DIR}/${DESTDIR}/bin
+${SUDO} cp btop/bin/btop ${OUT_DIR}/${DESTDIR}/bin/btop
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
 ${SUDO} cp copyright ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
