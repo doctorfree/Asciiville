@@ -5,7 +5,7 @@
 #     The `asciiville` command can be used to invoke:
 #
 #     * The lightweight character based system monitor, `btop`
-#     * One or more terminal emulators running a system monitor
+#     * One or more terminal emulators running a specified command
 #     * A tmux session
 #     * Character based ASCII art
 #     * Any character based client the user wishes to run
@@ -21,18 +21,18 @@ PLEASE="Please enter your"
 
 usage() {
   printf "\nUsage: asciiville [-a] [-b] [-c client]"
-  printf "\n\t\t[-f] [-h] [-i] [-jJ] [-k] [-m]"
-  printf "\n\t\t[-n num] [-N] [-p] [-P script] [-q]"
-  printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-u]"
-  printf "\nMPCplus/Visualizer options:"
+  printf "\n\t\t[-f] [-g] [-i] [-jJ] [-k] [-m]"
+  printf "\n\t\t[-n num] [-N] [-p] [-P script]"
+  printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-u]"
+  printf "\nTerminal/Command options:"
   printf "\n\t-c 'command' indicates use 'command' rather than btop"
   printf "\n\t-f indicates fullscreen display"
+  printf "\n\t-g indicates use gnome terminal emulator"
   printf "\n\t-i indicates start asciiville in interactive mode"
-  printf "\n\t-h indicates half-height for cava window (with -f only)"
   printf "\n\t-P script specifies the ASCIImatics script to run in visualizer pane"
-  printf "\n\t-q indicates quarter-height for cava window (with -f only)"
   printf "\n\t-r indicates use retro terminal emulator"
   printf "\n\t-t indicates use tilix terminal emulator"
+  printf "\n\t-x indicates use xfce4 terminal emulator"
   printf "\nASCIImatics animation options:"
   printf "\n\t-a indicates play audio during ASCIImatics display"
   printf "\n\t-b indicates use backup audio during ASCIImatics display"
@@ -81,30 +81,30 @@ kill_tmux_sessions() {
 
 make_it_so() {
   # Fullscreen tmux sessions and ASCIImatics Animations
-  [ "${SPLASH}" ] || [ "${TMUX_MPC}" ] && FULLSCREEN=1
+  [ "${SPLASH}" ] || [ "${TMUX_ASC}" ] && FULLSCREEN=1
 
   # Set the command to use based on command line switches (-S, -T)
-  MPCOMM="${COMMAND}"
+  AVCOMM="${COMMAND}"
   if [ "${SPLASH}" ]
   then
     if [ "${TMUX_SPLASH}" ]
     then
-      MPCOMM="${ASCSPLASH_TMUX}"
+      AVCOMM="${ASCSPLASH_TMUX}"
     else
-      MPCOMM="${ASCSPLASH}"
+      AVCOMM="${ASCSPLASH}"
     fi
   else
-    [ "${TMUX_MPC}" ] && MPCOMM="${COMMAND_TMUX}"
+    [ "${TMUX_ASC}" ] && AVCOMM="${COMMAND_TMUX}"
   fi
 
-  # Begin MPD client startup section
+  # Begin terminal command startup section
   if [ "${RETRO}" ]
   then
     if [ "${FULLSCREEN}" ]
     then
-      cool-retro-term --fullscreen -e "${MPCOMM}" 2> /dev/null
+      cool-retro-term --fullscreen -e "${AVCOMM}" 2> /dev/null &
     else
-      cool-retro-term -e "${MPCOMM}" 2> /dev/null
+      cool-retro-term -e "${AVCOMM}" 2> /dev/null &
     fi
   else
     if [ "${FULLSCREEN}" ]
@@ -115,15 +115,23 @@ make_it_so() {
               --full-screen \
               --window-style=borderless \
               --profile=MusicPlayer \
-              --command="${MPCOMM}" 2> /dev/null
+              --command="${AVCOMM}" 2> /dev/null &
       else
-        xfce4-terminal --title "${MTITLE}" \
+        if [ "${XFCE4}" ]
+        then
+          xfce4-terminal --title "${MTITLE}" \
               --icon=audio-player \
               --hide-menubar \
               --hide-toolbar \
               --hide-scrollbar \
               --fullscreen \
-              --command="${MPCOMM}"
+              --command="${AVCOMM}" &
+        else
+          gnome-terminal -t "${MTITLE}" \
+              --hide-menubar \
+              --full-screen \
+              -- ${AVCOMM} &
+        fi
       fi
     else
       if [ "${TILIX}" ]
@@ -132,19 +140,26 @@ make_it_so() {
               --window-style=borderless \
               --geometry=90x20+150+25 \
               --profile=MusicPlayer \
-              --command="${MPCOMM}" 2> /dev/null
+              --command="${AVCOMM}" 2> /dev/null &
       else
-        xfce4-terminal --title "${MTITLE}" \
+        if [ "${XFCE4}" ]
+        then
+          xfce4-terminal --title "${MTITLE}" \
             --icon=audio-player \
             --hide-menubar \
             --hide-toolbar \
             --hide-scrollbar \
             --geometry 90x20+150+25 \
-            --command="${MPCOMM}"
+            --command="${AVCOMM}" &
+        else
+          gnome-terminal -t "${MTITLE}" \
+              --hide-menubar \
+              -- ${AVCOMM} &
+        fi
       fi
     fi
   fi
-  # End MPD client startup section
+  # End terminal command startup section
 }
 
 show_ascii_menu() {
@@ -281,7 +296,9 @@ show_main_menu() {
     fi
     skip_it_so=
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
-    options=("XFCE4 Terminal Emulator")
+    options=()
+    [ "${have_xfce4}" ] && options+=("XFCE4 Terminal Emulator")
+    [ "${have_gnome}" ] && options+=("Gnome Terminal Emulator")
     [ "${have_retro}" ] && options+=("Retro Terminal Emulator")
     [ "${have_tilix}" ] && options+=("Tilix Terminal Emulator")
     options+=("ASCIImatics Animations" "Kill Tmux Sessions")
@@ -293,16 +310,34 @@ show_main_menu() {
       case "$opt,$REPLY" in
           "XFCE4 Terminal Emulator",*|*,"XFCE4 Terminal Emulator")
               COMMAND="btop"
+              XFCE4=1
+              TILIX=
+              GNOME=
+              RETRO=
+              break
+              ;;
+          "Gnome Terminal Emulator",*|*,"Gnome Terminal Emulator")
+              COMMAND="btop"
+              GNOME=1
+              XFCE4=
+              TILIX=
+              RETRO=
               break
               ;;
           "Retro Terminal Emulator",*|*,"Retro Terminal Emulator")
               COMMAND="btop"
               RETRO=1
+              GNOME=
+              XFCE4=
+              TILIX=
               break
               ;;
           "Tilix Terminal Emulator",*|*,"Tilix Terminal Emulator")
               COMMAND="btop"
               TILIX=1
+              RETRO=
+              GNOME=
+              XFCE4=
               break
               ;;
           "ASCIImatics Animations",*|*,"ASCIImatics Animations")
@@ -377,16 +412,14 @@ init_vars() {
 
   AUDIO=
   FULLSCREEN=
-  HALFHEIGHT=
   INTERACTIVE=
-  QRTRHEIGHT=
   RECORD=
   RETRO=
   SPLASH=
   GNOME=
   TILIX=
   XFCE4=
-  TMUX_MPC=
+  TMUX_ASC=
   TMUX_SPLASH=
   USAGE=
 }
@@ -398,7 +431,7 @@ have_tilix=`type -p tilix`
 have_nema=`type -p asciinema`
 have_xfce4=`type -p xfce4-terminal`
 have_gnome=`type -p gnome-terminal`
-while getopts "abc:fhijJkmn:NpP:qrRSs:tTu" flag; do
+while getopts "abc:fgijJkmn:NpP:rRSs:tTxu" flag; do
   case $flag in
     a)
       AUDIO=1
@@ -430,8 +463,36 @@ while getopts "abc:fhijJkmn:NpP:qrRSs:tTu" flag; do
     f)
       FULLSCREEN=1
       ;;
-    h)
-      HALFHEIGHT=1
+    g)
+      GNOME=1
+      [ "${have_gnome}" ] || {
+        GNOME=
+        echo "Option '-g' indicates use gnome terminal emulator."
+        echo "However, gnome-terminal is not installed or not in your path."
+        echo "You can install gnome-terminal using apt or dnf as follows:"
+        printf "\n\n\tsudo apt install gnome-terminal\nor"
+        printf "\n\tsudo dnf install gnome-terminal\n\n"
+        if [ "${have_xfce4}" ]
+        then
+          XFCE4=1
+          echo "Proceeding with xfce4-terminal"
+        else
+          if [ "${have_tilix}" ]
+          then
+            TILIX=1
+            echo "Proceeding with tilix terminal"
+          else
+            if [ "${have_retro}" ]
+            then
+              RETRO=1
+              echo "Proceeding with cool-retro-term"
+            else
+              echo "Cannot find a terminal emulator I like. Exiting."
+              exit 1
+            fi
+          fi
+        fi
+      }
       ;;
     i)
       INTERACTIVE=1
@@ -467,9 +528,6 @@ while getopts "abc:fhijJkmn:NpP:qrRSs:tTu" flag; do
     P)
       COMMAND_TMUX="${COMMAND_TMUX} -p ${OPTARG}"
       ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l ${OPTARG}"
-      ;;
-    q)
-      QRTRHEIGHT=1
       ;;
     r)
       [ "${have_retro}" ] || {
@@ -533,6 +591,37 @@ while getopts "abc:fhijJkmn:NpP:qrRSs:tTu" flag; do
     T)
       TMUX=1
       ;;
+    x)
+      XFCE4=1
+      [ "${have_xfce4}" ] || {
+        XFCE4=
+        echo "Option '-x' indicates use xfce4 terminal emulator."
+        echo "However, xfce4-terminal is not installed or not in your path."
+        echo "You can install xfce4-terminal using apt or dnf as follows:"
+        printf "\n\n\tsudo apt install xfce4-terminal\nor"
+        printf "\n\tsudo dnf install xfce4-terminal\n\n"
+        if [ "${have_tilix}" ]
+        then
+          TILIX=1
+          echo "Proceeding with tilix terminal"
+        else
+          if [ "${have_gnome}" ]
+          then
+            GNOME=1
+            echo "Proceeding with gnome-terminal"
+          else
+            if [ "${have_retro}" ]
+            then
+              RETRO=1
+              echo "Proceeding with cool-retro-term"
+            else
+              echo "Cannot find a terminal emulator I like. Exiting."
+              exit 1
+            fi
+          fi
+        fi
+      }
+      ;;
     u)
       USAGE=1
       ;;
@@ -547,61 +636,51 @@ done
   then
     TMUX_SPLASH=1
   else
-    TMUX_MPC=1
+    TMUX_ASC=1
   fi
 }
 
-[ "${TILIX}" ] || {
-  [ "${RETRO}" ] || {
-    [ "${have_xfce4}" ] || {
-      echo "No option '-t' or '-r' indicates use xfce4-terminal"
-      echo "terminal emulator. However, xfce4-terminal is either"
-      echo "not installed or not in your path."
-      echo "You can install xfce4-terminal using apt or dnf as follows:"
-      printf "\n\n\tsudo apt install xfce4-terminal\nor"
-      printf "\n\tsudo dnf install xfce4-terminal\n\n"
-      [ "${have_tilix}" ] || usage
-      echo "Alternately, invoke asciiville with the '-t' option to use tilix."
-      echo "Continuing with tilix as the terminal emulator."
+# Figure out which terminal emulator to use
+[ "${TILIX}" ] || [ "${RETRO}" ] || [ "${GNOME}" ] || [ "${XFCE4}" ] || {
+  if [ "${have_xfce4}" ]
+  then
+    XFCE4=1
+  else
+    if [ "${have_tilix}" ]
+    then
       TILIX=1
-    }
-  }
-  [ "${TILIX}" ] || {
-    [ "${have_gnome}" ] || {
-      echo "No option '-t' indicates use gnome-terminal terminal emulator."
-      echo "However, gnome-terminal is not installed or not in your path."
-      echo "You can install gnome-terminal using apt or dnf as follows:"
-      printf "\n\n\tsudo apt install gnome-terminal\nor"
-      printf "\n\tsudo dnf install gnome-terminal\n\n"
-      [ "${have_tilix}" ] || usage
-      echo "Alternately, invoke asciiville with the '-t' option to use tilix."
-      echo "Continuing with tilix as the terminal emulator."
-      TILIX=1
-    }
-  }
+    else
+      if [ "${have_gnome}" ]
+      then
+        GNOME=1
+      else
+        if [ "${have_retro}" ]
+        then
+          RETRO=1
+        else
+          echo "Cannot find a terminal emulator I like. Exiting."
+          exit 1
+        fi
+      fi
+    fi
+  fi
 }
 
-[ "${HALFHEIGHT}" ] && [ "${QRTRHEIGHT}" ] && {
-  [ "${FULLSCREEN}" ] && {
-    echo "Only one of '-h' and '-q' should be specified"
-    echo "Quarter-height overrides half-height. Using quarter-height."
-    HALFHEIGHT=
-  }
-}
-[ "${HALFHEIGHT}" ] && {
-  [ "${FULLSCREEN}" ] || {
-    echo "Height settings only apply when in fullscreen mode."
-    echo "Ignoring '-h' half-height option."
-    HALFHEIGHT=
-  }
-}
-[ "${QRTRHEIGHT}" ] && {
-  [ "${FULLSCREEN}" ] || {
-    echo "Height settings only apply when in fullscreen mode."
-    echo "Ignoring '-q' quarter-height option."
-    QRTRHEIGHT=
-  }
-}
+# Make sure only one terminal is selected
+if [ "${XFCE4}" ]
+then
+  TILIX=
+  GNOME=
+  RETRO=
+else
+  if [ "${TILIX}" ]
+  then
+    GNOME=
+    RETRO=
+  else
+    [ "${GNOME}" ] && RETRO=
+  fi
+fi
 
 [ "${USAGE}" ] && usage
 
