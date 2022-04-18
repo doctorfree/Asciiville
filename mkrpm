@@ -81,13 +81,6 @@ ${SUDO} cp -a music "${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/music"
 ${SUDO} cp -a man/man1 ${OUT_DIR}/${DESTDIR}/share/man/man1
 ${SUDO} cp -a share/menu "${OUT_DIR}/${DESTDIR}/share/menu"
 
-[ -f .gitignore ] && {
-    while read ignore
-    do
-        ${SUDO} rm -f ${OUT_DIR}/${DESTDIR}/${ignore}
-    done < .gitignore
-}
-
 ${SUDO} chmod 644 ${OUT_DIR}/${DESTDIR}/share/man/*/*
 ${SUDO} chmod 644 ${OUT_DIR}/${DESTDIR}/share/menu/*
 ${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/bin/* \
