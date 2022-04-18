@@ -60,7 +60,7 @@ Asciiville adds the following commands to your system:
 
 * **asciiville** : primary user interface, invokes terminal emulators, ascii animations, system monitors, and more
 * **btop** : character based system monitor
-* **btopinit** : one-time initializaton of a user's btop configuration
+* **ascinit** : one-time initializaton of a user's Asciiville configuration
 * **btop-tmux** : runs btop in a tmux session
 * **asciisplash** : fun ascii art screens using ASCIImatics animations. Ascii art commands:
     * **asciijulia** : ASCIImatics animated zoom on a Julia Set
@@ -92,7 +92,7 @@ Additional detail and info can be found in the
 ## Quickstart
 
 * Install the latest Debian or RPM format installation package from the [Asciiville Releases](https://github.com/doctorfree/Asciiville/releases) page
-* Run the `btopinit` command (must be done as your normal user, no need for `sudo`)
+* Run the `ascinit` command (must be done as your normal user, no need for `sudo`)
 * See the [online asciiville man page](https://github.com/doctorfree/Asciiville/wiki/asciiville.1) or `man asciiville` for different ways to invoke the `asciiville` command
 
 ## Requirements
