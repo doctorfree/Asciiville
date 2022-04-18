@@ -2,4 +2,4 @@
 
 sudo rm -rf dist releases
 cd btop
-make clean
+make distclean
