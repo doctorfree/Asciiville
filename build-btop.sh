@@ -19,8 +19,9 @@
 # Where -i indicates install btop after compiling
 
 usage() {
-    printf "\nUsage: ./build-btop.sh [-aCiv] [-p prefix] [-u]"
+    printf "\nUsage: ./build-btop.sh [-i] [-p prefix] [-u]"
     printf "\nWhere:"
+    printf "\n\t-i indicates install"
     printf "\n\t-p prefix specifies installation prefix (default /usr)"
     printf "\n\t-u displays this usage message and exits\n"
     printf "\nNo arguments: configure with prefix=/usr, build\n"

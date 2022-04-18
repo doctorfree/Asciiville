@@ -36,7 +36,7 @@ cd "${SRC}/${SRC_NAME}"
 # Build btop
 if [ -x build-btop.sh ]
 then
-  ./build-btop.sh -v
+  ./build-btop.sh
 else
   cd btop
   make distclean
