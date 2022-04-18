@@ -1,0 +1,194 @@
+#!/usr/bin/env python3
+#
+# Animate a zoom bounce on a Julia Set using ASCII characters
+# Written by Ronald Record <ronaldrecord@gmail.com>
+#
+# Usage: asciijulia [-c int] [-i] [-x float -y float]
+# Where -c int specifies how many times to cycle the zoom/bounce before exit
+#              without any -c argument the cycling continues until 'q' press
+#       -i show an info pane with starting coordinates
+#       -x float -y float specify the real coordinates of the complex number
+#                     used as starting point for the Julia Set calculation.
+#                     Default value for this is [-0.8, 0.156]
+#
+# Interesting zooms occur with these example invocations:
+#     asciijulia -x 0.687 -y 0.312
+#     asciijulia -x 0.54 -y 0.54
+#     asciijulia -x 0.6 -y 0.55
+#     asciijulia -x 0.0 -y 0.8
+#     asciijulia -x -0.4 -y -0.59
+
+from asciimatics.effects import Julia, Print, Stars
+from asciimatics.renderers import FigletText, Rainbow
+from asciimatics.scene import Scene
+from asciimatics.screen import Screen
+from asciimatics.exceptions import ResizeScreenError
+import os
+import signal, tempfile
+import subprocess
+import sys
+import time
+import argparse
+
+def asciijulia(screen, c):
+    scenes = []
+    center = (screen.width // 2, screen.height // 2)
+
+    if showinfo:
+        if c is None:
+            cstr = "( -0.8 , 0.156i )"
+        else:
+            cstr = "( " + str(c[0]) + " , " + str(c[1]) + "i )"
+
+        effects = [
+            Print(
+                screen,
+                Rainbow(screen, FigletText("Julia Set")),
+                center[1] - 8,
+                speed=1,
+                start_frame=10),
+            Print(
+                screen,
+                Rainbow(screen, FigletText("Complex Value")),
+                center[1] - 3,
+                speed=1,
+                start_frame=10),
+            Print(
+                screen,
+                Rainbow(screen, FigletText(cstr)),
+                center[1] + 3,
+                speed=1,
+                start_frame=10),
+            Stars(screen, (screen.width + screen.height) // 2)
+        ]
+        scenes.append(Scene(effects, 200))
+
+    effects = [
+        Julia(screen, c, stop_frame=numcycles),
+    ]
+    scenes.append(Scene(effects, numcycles))
+
+    if cycle is None:
+        screen.play(scenes, stop_on_resize=True)
+    else:
+        screen.play(scenes, stop_on_resize=True, repeat=False)
+
+
+if __name__ == "__main__":
+
+    def handler(signal_number, frame):
+        if debug:
+            print("In signal handler with\nsignal number = " + str(signal_number))
+            print("frame = " + str(frame))
+
+        if song is not None:
+            if debug:
+                print("Opening FIFO " + fifo + " in signal handler")
+            with open(fifo, "w") as mp_fifo:
+                if debug:
+                    print("Fading volume in signal handler")
+                for vol in range(80, 0, -5):
+                    print("volume " + str(vol) + " 1", flush=True, file=mp_fifo)
+                    time.sleep(0.1)
+                if debug:
+                    print("Stopping mplayer in signal handler")
+                print("stop", flush=True, file=mp_fifo)
+                if debug:
+                    print("Resetting volume in signal handler")
+                print("volume 80 1", flush=True, file=mp_fifo)
+                if debug:
+                    print("Exiting mplayer in signal handler")
+                print("quit", flush=True, file=mp_fifo)
+            os.remove(fifo)
+        if debug:
+            print("Removing mplayer FIFO in signal handler")
+        os.rmdir(tmpdir)
+        sys.exit(0)
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-a", "--audio", help="audio file to play during effects")
+    parser.add_argument("-c", "--cycle", help="number of times to cycle back through effects")
+    parser.add_argument("-d", "--debug", default=False, action='store_true', help="Output hopefully useful debugging statements")
+    parser.add_argument("-i", "--info", default=False, action='store_true', help="show an info pane with starting coordinates")
+    parser.add_argument("-x", "--xvalue", help="starting x value of 'c' for the Julia set")
+    parser.add_argument("-y", "--yvalue", help="starting y value of 'c' for the Julia set")
+    args = parser.parse_args()
+
+    if args.audio:
+        song = args.audio
+    else:
+        song = None
+    if args.cycle:
+        numcycles = int(args.cycle)
+        cycle = True
+    else:
+        numcycles = 0
+        cycle = None
+    if args.debug:
+        debug = True
+    else:
+        debug = False
+    if args.info:
+        showinfo = True
+    else:
+        showinfo = False
+
+    c = None
+    if args.xvalue:
+      if args.yvalue:
+        c = [float(args.xvalue.replace('\U00002013', '-')),
+             float(args.yvalue.replace('\U00002013', '-'))]
+
+    play_song = None
+    tmpdir = tempfile.mkdtemp()
+    fifo = os.path.join(tmpdir, 'mplayer.fifo')
+    signal.signal(signal.SIGINT, handler)
+    if song is not None:
+        if debug:
+            print("Using mplayer FIFO " + fifo)
+        os.mkfifo(fifo)
+        if debug:
+            print("MPlayer starting: mplayer -novideo -volume 80 -really-quiet -nolirc -slave -input file=" + fifo + " " + song)
+
+        play_song = subprocess.Popen(
+            ["mplayer", "-novideo", "-volume", "80", "-really-quiet", "-nolirc", "-slave", "-input", "file=" + fifo, song],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.STDOUT)
+
+    while True:
+        try:
+            Screen.wrapper(asciijulia, arguments=[c])
+
+            if song is not None:
+                with open(fifo, "w") as mp_fifo:
+                    if debug:
+                        print("Fading volume")
+                    for vol in range(80, 0, -5):
+                        print("volume " + str(vol) + " 1",
+                                flush=True, file=mp_fifo)
+                        time.sleep(0.1)
+                    if debug:
+                        print("Stopping mplayer")
+                    print("stop", flush=True, file=mp_fifo)
+                    if debug:
+                        print("Resetting volume")
+                    print("volume 80 1", flush=True, file=mp_fifo)
+                    if debug:
+                        print("Exiting mplayer")
+                    print("quit", flush=True, file=mp_fifo)
+                os.remove(fifo)
+
+            if debug:
+                print("Removing mplayer FIFO")
+            os.rmdir(tmpdir)
+
+            if play_song is not None:
+                song_status = play_song.poll()
+                if song_status is None:
+                    if debug:
+                        print("Killing mplayer")
+                    os.kill(play_song.pid, signal.SIGTERM)
+
+            sys.exit(0)
+        except ResizeScreenError:
+            pass

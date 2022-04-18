@@ -46,9 +46,8 @@ stage/
 *.out
 *.app
 
-build
-bin
-btop
+btop/build
+btop/bin
 .*/
 
 GTAGS

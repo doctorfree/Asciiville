@@ -1,0 +1,191 @@
+#!/bin/bash
+#
+# mppsplash - display Asciiville splash screens using ASCIImatics
+#
+MUSEDIR=/usr/share/doc/asciiville/music
+SONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
+PLASMA_SONG="${MUSEDIR}/Chronos.mp3"
+ALTSONG="${MUSEDIR}/Kevin_MacLeod_-_Also_Sprach_Zarathustra.ogg"
+
+usage() {
+  printf "\nUsage: mppsplash [-A] [-a] [-b] [-C] [-c num] [-d] [-jJ] "
+  printf "[-m] [-p] [-s song] [-u]"
+  printf "\nWhere:"
+  printf "\n\t-A indicates use all effects"
+  printf "\n\t-a indicates play audio during ASCIImatics display"
+  printf "\n\t-b indicates use backup audio during ASCIImatics display"
+  printf "\n\t-C indicates use alternate comments in Plasma effect"
+  printf "\n\t-c num specifies the number of times to cycle"
+  printf "\n\t-d indicates enable debug mode"
+  printf "\n\t-j indicates use Julia Set effect"
+  printf "\n\t-J indicates Julia Set with several runs using different parameters"
+  printf "\n\t-m indicates use MusicPlayerPlus effect"
+  printf "\n\t-p indicates use Plasma effect"
+  printf "\n\t-s song specifies the audio file to play as accompaniment"
+  printf "\n\t\t'song' can be the full pathname to an audio file or a relative"
+  printf "\n\t\tpathname to an audio file in the MPD music library or"
+  printf "\n\t\t$HOME/Music/"
+  printf "\n\t-u displays this usage message and exits\n"
+  printf "\nDefault audio: ${SONG}"
+  printf "\nWithout any options the MusicPlayerPlus effect will repeat"
+  printf "\nType 'man mppsplash' for more detailed usage info\n"
+  exit 1
+}
+
+set_cycles() {
+  case $1 in
+    julia)
+      if [ "${debug}" ]
+      then
+        usecycle=$(( 100*$2 ))
+      else
+        usecycle=$(( 1000*$2 ))
+      fi
+      ;;
+    plasma)
+      if [ "${debug}" ]
+      then
+        usecycle=$(( 1*$2 ))
+      else
+        usecycle=$(( 8*$2 ))
+      fi
+      ;;
+    *)
+      usecycle=$2
+      ;;
+  esac
+}
+
+all=
+audio=
+custom_audio=
+cycle=
+debug=
+longjulia=
+script="mpplus"
+switch_comments=
+while getopts "AabCc:djJmps:u" flag; do
+  case $flag in
+      A)
+        all=1
+        ;;
+      b)
+        audio=1
+        TMPSONG=${SONG}
+        SONG=${ALTSONG}
+        ALTSONG=${TMPSONG}
+        ;;
+      a)
+        audio=1
+        ;;
+      C)
+        switch_comments=1
+        ;;
+      c)
+        cycle="-c ${OPTARG}"
+        ;;
+      d)
+        debug="--debug"
+        ;;
+      j)
+        script="julia"
+        ;;
+      J)
+        script="julia"
+        longjulia=1
+        script_args="-i"
+        ;;
+      m)
+        script="mpplus"
+        ;;
+      p)
+        script="plasma"
+        script_args="-t"
+        ;;
+      s)
+        audio=1
+        custom_audio=1
+        if [ -f "${OPTARG}" ]
+        then
+          SONG="${OPTARG}"
+        else
+          if [ -f "${MUSEDIR}/${OPTARG}" ]
+          then
+            SONG="${MUSEDIR}/${OPTARG}"
+          else
+            if [ -f "${HOME}/Music/${OPTARG}" ]
+            then
+              SONG="${HOME}/Music/${OPTARG}"
+            else
+              mpd_music=`grep ^music_directory /etc/mpd.conf`
+              [ "${mpd_music}" ] || mpd_music=`grep \#music_directory /etc/mpd.conf`
+              mpd_music=`echo ${mpd_music} | awk ' { print $2 } ' | sed -e "s/\"//g"`
+              if [ -f "${mpd_music}/${OPTARG}" ]
+              then
+                SONG="${mpd_music}/${OPTARG}"
+              else
+                custom_audio=
+                echo "Cannot locate ${OPTARG}"
+                echo "Using default song: ${SONG}"
+              fi
+            fi
+          fi
+        fi
+        ;;
+      u)
+        usage
+        ;;
+  esac
+done
+shift $(( OPTIND - 1 ))
+
+[ "${all}" ] && script_args=
+[ "${switch_comments}" ] && script_args=
+[ "${script}" == "plasma" ] || [ "${longjulia}" ] || script_args=
+script_args="$* ${debug} ${script_args}"
+
+[ "${audio}" ] && {
+  [ "${script}" == "plasma" ] && {
+    [ "${custom_audio}" ] || SONG="${PLASMA_SONG}"
+  }
+  if [ -f "${SONG}" ]
+  then
+    script_args="${script_args} -a ${SONG}"
+  else
+    if [ -f "${ALTSONG}" ]
+    then
+      script_args="${script_args} -a ${ALTSONG}"
+    fi
+  fi
+}
+
+usecycle=1
+if [ "${all}" ]
+then
+  [ "${cycle}" ] || cycle="-c 1"
+  numcycles=`echo ${cycle} | awk ' { print $2 } '`
+  for script in julia mpplus plasma
+  do
+    set_cycles ${script} ${numcycles}
+    ascii${script} -c ${usecycle} ${script_args}
+  done
+else
+  if [ "${cycle}" ]
+  then
+    numcycles=`echo ${cycle} | awk ' { print $2 } '`
+    set_cycles ${script} ${numcycles}
+    if [ "${script}" == "julia" ] && [ "${longjulia}" ]
+    then
+      ascii${script} -c ${usecycle} ${script_args} -x -0.4 -y -0.59
+      ascii${script} -c ${usecycle} ${script_args} -x 0.687 -y 0.312
+      ascii${script} -c ${usecycle} ${script_args}
+      ascii${script} -c ${usecycle} ${script_args} -x 0.54 -y 0.54
+      ascii${script} -c ${usecycle} ${script_args} -x 0.6 -y 0.55
+      ascii${script} -c ${usecycle} ${script_args} -x 0.0 -y 0.8
+    else
+      ascii${script} -c ${usecycle} ${script_args}
+    fi
+  else
+    ascii${script} ${script_args}
+  fi
+fi

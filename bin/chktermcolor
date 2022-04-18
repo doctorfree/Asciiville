@@ -1,0 +1,49 @@
+#!/bin/bash
+#
+# chktermcolor - checks a terminal's color support
+#
+# There exists common confusion about terminal colors.
+# This is what we have right now:
+#
+#   Plain ASCII
+#   ANSI escape codes: 16 color codes with bold/italic and background
+#   256 color palette: 216 colors + 16 ANSI + 24 gray (colors are 24-bit)
+#   24-bit truecolor: "888" colors (aka 16 million)
+#
+#   printf "\x1b[${bg};2;${red};${green};${blue}m\n"
+#
+# The 256-color palette is configured at start and is a 666-cube of colors,
+# each of them defined as a 24-bit (888 RGB) color.
+#
+# This means that current support can only display 256 different colors
+# in the terminal while "truecolor" means that you can display 16 million
+# different colors at the same time.
+#
+# Truecolor escape codes do not use a color palette.
+# They just specify the color directly.
+#
+# This is a good test case:
+#
+#   printf "\x1b[38;2;255;100;0mTRUECOLOR\x1b[0m\n"
+#
+# See:
+# https://raw.githubusercontent.com/JohnMorales/dotfiles/master/colors/24-bit-color.sh
+# http://github.com/robertknight/konsole/tree/master/tests/color-spaces.pl
+# https://git.gnome.org/browse/vte/tree/perf/img.sh
+#
+# Run the chktermcolor in a terminal window to check its color support
+#
+
+awk 'BEGIN{
+    s="/\\/\\/\\/\\/\\"; s=s s s s s s s s;
+    for (colnum = 0; colnum<77; colnum++) {
+        r = 255-(colnum*255/76);
+        g = (colnum*510/76);
+        b = (colnum*255/76);
+        if (g>255) g = 510-g;
+        printf "\033[48;2;%d;%d;%dm", r,g,b;
+        printf "\033[38;2;%d;%d;%dm", 255-r,255-g,255-b;
+        printf "%s\033[0m", substr(s,colnum+1,1);
+    }
+    printf "\n";
+}'

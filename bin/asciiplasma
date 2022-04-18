@@ -1,0 +1,189 @@
+#!/usr/bin/env python3
+
+from random import choice
+from asciimatics.renderers import Plasma, Rainbow, FigletText
+from asciimatics.scene import Scene
+from asciimatics.screen import Screen
+from asciimatics.effects import Print
+from asciimatics.exceptions import ResizeScreenError
+import os, tempfile
+import signal
+import subprocess
+import sys
+import time
+import argparse
+
+
+class MusicPlayerPlusScene(Scene):
+ 
+    def __init__(self, screen):
+        self._screen = screen
+        effects = [
+            Print(screen,
+                  Plasma(screen.height, screen.width, screen.colours),
+                  0,
+                  speed=1,
+                  transparent=False),
+        ]
+        super(MusicPlayerPlusScene, self).__init__(effects, 200, clear=False)
+
+    def _add_mpcplus_comment(self):
+        msg = FigletText(choice(comments), font)
+        self._effects.append(
+            Print(self._screen,
+                  msg,
+                  (self._screen.height // 2) - 4,
+                  x=(self._screen.width - msg.max_width) // 2 + 1,
+                  colour=Screen.COLOUR_BLACK,
+                  stop_frame=80,
+                  speed=1))
+        self._effects.append(
+            Print(self._screen,
+                  Rainbow(self._screen, msg),
+                  (self._screen.height // 2) - 4,
+                  x=(self._screen.width - msg.max_width) // 2,
+                  colour=Screen.COLOUR_BLACK,
+                  stop_frame=80,
+                  speed=1))
+
+    def reset(self, old_scene=None, screen=None):
+        super(MusicPlayerPlusScene, self).reset(old_scene, screen)
+
+        # Make sure that we only have the initial Effect
+        # and add a new comment
+        self._effects = [self._effects[0]]
+        self._add_mpcplus_comment()
+
+def mpplus(screen, cycle=None):
+    if cycle is None:
+        screen.play([MusicPlayerPlusScene(screen)], stop_on_resize=True)
+    else:
+        numplays=0
+        while numplays < cycle:
+            screen.play([MusicPlayerPlusScene(screen)], stop_on_resize=True, repeat=False)
+            numplays += 1
+
+
+if __name__ == "__main__":
+
+    def handler(signal_number, frame):
+        if debug:
+            print("In signal handler with\nsignal number = " + str(signal_number))
+            print("frame = " + str(frame))
+        with open(fifo, "w") as mp_fifo:
+            for vol in range(80, 0, -5):
+                print("volume " + str(vol) + " 1",
+                        flush=True, file=mp_fifo)
+                time.sleep(0.1)
+            print("stop", flush=True, file=mp_fifo)
+            print("volume 80 1", flush=True, file=mp_fifo)
+            print("quit", flush=True, file=mp_fifo)
+        os.remove(fifo)
+        os.rmdir(tmpdir)
+        sys.exit(0)
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-a", "--audio", help="audio file to play during effects")
+    parser.add_argument("-c", "--cycle", help="number of times to cycle back through effects")
+    parser.add_argument("-d", "--debug", default=False, action='store_true', help="Output hopefully useful debugging statements")
+    parser.add_argument("-f", "--font", help="Font for FigletText, default 'banner3'")
+    parser.add_argument('-t', "--text", default=False, action='store_true', help="Use alternate set of comments")
+    args = parser.parse_args()
+    cycle = 0
+
+    if args.audio:
+        song = args.audio
+    else:
+        song = None
+    if args.cycle:
+        numcycles = int(args.cycle)
+    else:
+        numcycles = None
+    if args.debug:
+        debug = True
+    else:
+        debug = False
+    if args.font:
+        font = args.font
+    else:
+        font = "banner3"
+    if args.text:
+        comments = [
+            "Far out!",
+            "Groovy",
+            "Excellent",
+            "Heavy",
+            "Right on!",
+            "Cool",
+            "Epic!",
+            "Dude!"
+        ]
+    else:
+        comments = [
+            "MusicPlayer",
+            "MusicServer",
+            "Visualizer!",
+            "Asciimatics",
+            "Terminals!",
+            "Cool",
+            "Retro",
+            "Album Art"
+        ]
+
+    play_song = None
+    tmpdir = tempfile.mkdtemp()
+    fifo = os.path.join(tmpdir, 'mplayer.fifo')
+    signal.signal(signal.SIGINT, handler)
+
+    if song is not None:
+        if debug:
+            print("Using mplayer FIFO " + fifo)
+        os.mkfifo(fifo)
+        if debug:
+            print("MPlayer starting: mplayer -novideo -volume 80 -really-quiet -nolirc -slave -input file=" + fifo + " " + song)
+        play_song = subprocess.Popen(
+            ["mplayer", "-novideo", "-volume", "80", "-really-quiet",
+                        "-nolirc", "-slave", "-input", "file=" + fifo, song],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.STDOUT)
+
+    while True:
+        try:
+            Screen.wrapper(mpplus, arguments=[numcycles])
+
+            if song is not None:
+                with open(fifo, "w") as mp_fifo:
+                    if debug:
+                        print("Fading volume")
+                    for vol in range(80, 0, -5):
+                        print("volume " + str(vol) + " 1",
+                                flush=True, file=mp_fifo)
+                        time.sleep(0.1)
+                    if debug:
+                        print("Stopping mplayer")
+                    print("stop", flush=True, file=mp_fifo)
+                    if debug:
+                        print("Resetting volume")
+                    print("volume 80 1", flush=True, file=mp_fifo)
+                    if debug:
+                        print("Quiting mplayer")
+                    print("quit", flush=True, file=mp_fifo)
+                if debug:
+                    print("Removing FIFO " + fifo)
+                os.remove(fifo)
+
+            if debug:
+                print("Removing temp directory " + tmpdir)
+            os.rmdir(tmpdir)
+
+            if play_song is not None:
+                song_status = play_song.poll()
+                if song_status is None:
+                    if debug:
+                        print("Killing mplayer")
+                    os.kill(play_song.pid, signal.SIGTERM)
+
+            sys.exit(0)
+        except ResizeScreenError:
+            pass
+

@@ -1,0 +1,130 @@
+#!/bin/bash
+#
+# set_term_trans - set the XFCE4 terminal window transparency
+#
+# Run with no arguments to get the current transparency setting
+# Run with a numeric argument between 0.0 and 1.0 to set the transparency
+# Run with an argument of "more" or "less" to increase or decrease transparency
+
+RC="${HOME}/.config/xfce4/terminal/terminalrc"
+BD="BackgroundDarkness"
+BM="BackgroundMode"
+TB="TERMINAL_BACKGROUND_TRANSPARENT"
+
+is_number() {
+    num=$1
+
+    echo "${num}" | grep "^[0-9]*[.][0-9]*$" > /dev/null
+    val=`echo $?`
+    [ ${val} -eq 0 ] || {
+        echo "${num}" | grep "^[0-9]*$" > /dev/null
+        val=`echo $?`
+        [ ${val} -eq 0 ] || {
+            echo "New transparency level ${num} is not a number"
+            echo "Transparency level must be a number between 0.0 and 1.0"
+            echo "Exiting"
+            exit 1
+        }
+    }
+}
+
+check_val() {
+    number=$1
+
+    if [ $(echo " ${number} > 1.0" | bc) -eq 1 ] ||
+       [ $(echo " ${number} < 0.0" | bc) -eq 1 ]
+    then
+        echo "New transparency level ${number} is out of range"
+        echo "Transparency level must be between 0.0 and 1.0"
+        echo "Exiting"
+        exit 1
+    fi
+}
+
+set_darkness() {
+    darkness=`grep ${BD} ${RC} | awk -F '=' ' { print $2 } '`
+    [ "${darkness}" == "$1" ] || {
+        newdark=$1
+        cat ${RC} | sed -e "s/${BD}=.*/${BD}=${newdark}/" > /tmp/darkness$$
+        cp /tmp/darkness$$ ${RC}
+        rm -f /tmp/darkness$$
+    }
+}
+
+set_mode() {
+    mode=`grep ${BM} ${RC} | awk -F '=' ' { print $2 } '`
+    [ "${mode}" == "${TB}" ] || {
+        cat ${RC} | sed -e "s/${BM}=.*/${BM}=${TB}/" > /tmp/mode$$
+        cp /tmp/mode$$ ${RC}
+        rm -f /tmp/mode$$
+    }
+}
+
+[ -f ${RC} ] || {
+    echo "Cannot find ${RC}"
+    echo "Exiting without changing transparency"
+    exit 1
+}
+
+if grep ${BM} ${RC} > /dev/null
+then
+    if [ $# -eq 0 ]
+    then
+        grep ${BM} ${RC}
+    else
+        set_mode
+    fi
+else
+    if [ $# -eq 0 ]
+    then
+        echo "No ${BM} setting"
+    else
+        echo "${BM}=${TB}" >> ${RC}
+    fi
+fi
+
+if grep ${BD} ${RC} > /dev/null
+then
+    if [ $# -eq 0 ]
+    then
+        grep ${BD} ${RC}
+    else
+        oldval=`grep ${BD} ${RC} | awk -F '=' ' { print $2 } '`
+        if [ "$1" == "more" ]
+        then
+            newval=`echo "0.1 ${oldval}" | awk '{printf "%f", $1 + $2}'`
+            [ $(echo " ${newval} > 1.0" | bc) -eq 1 ] && {
+                newval=`echo "1.0" | awk '{printf "%f", $1}'`
+            }
+        elif [ "$1" == "less" ]
+        then
+            newval=`echo "0.1 ${oldval}" | awk '{printf "%f", $2 - $1}'`
+            [ $(echo " ${newval} < 0.0" | bc) -eq 1 ] && {
+                newval=`echo "0.0" | awk '{printf "%f", $1}'`
+            }
+        else
+            is_number $1
+            newval=`echo "$1" | awk '{printf "%f", $1}'`
+        fi
+        check_val ${newval}
+        [ "${oldval}" == "${newval}" ] || set_darkness ${newval}
+    fi
+else
+    if [ $# -eq 0 ]
+    then
+        echo "No ${BD} setting"
+    else
+        if [ "$1" == "more" ]
+        then
+            newval=`echo "0.9" | awk '{printf "%f", $1}'`
+        elif [ "$1" == "less" ]
+        then
+            newval=`echo "0.5" | awk '{printf "%f", $1}'`
+        else
+            is_number $1
+            newval=`echo "$1" | awk '{printf "%f", $1}'`
+        fi
+        check_val ${newval}
+        echo "${BD}=${newval}" >> ${RC}
+    fi
+fi

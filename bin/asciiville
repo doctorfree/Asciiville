@@ -1,0 +1,610 @@
+#!/bin/bash
+#
+# asciiville - front-end for a variety of terminal and/or `tmux` sessions.
+#
+#     The `asciiville` command can be used to invoke:
+#
+#     * The lightweight character based system monitor, `btop`
+#     * One or more terminal emulators running a system monitor
+#     * A tmux session
+#     * Character based ASCII art
+#     * Any character based client the user wishes to run
+#     * One of several asciimatics animations optionally accompanied by audio
+#
+# Written by Ronald Joe Record <ronaldrecord@gmail.com>
+# April, 2022
+#
+
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
+PLEASE="Please enter your"
+
+usage() {
+  printf "\nUsage: asciiville [-a] [-b] [-c client]"
+  printf "\n\t\t[-f] [-h] [-i] [-jJ] [-k] [-m]"
+  printf "\n\t\t[-n num] [-N] [-p] [-P script] [-q]"
+  printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-u]"
+  printf "\nMPCplus/Visualizer options:"
+  printf "\n\t-c 'command' indicates use 'command' rather than btop"
+  printf "\n\t-f indicates fullscreen display"
+  printf "\n\t-i indicates start asciiville in interactive mode"
+  printf "\n\t-h indicates half-height for cava window (with -f only)"
+  printf "\n\t-P script specifies the ASCIImatics script to run in visualizer pane"
+  printf "\n\t-q indicates quarter-height for cava window (with -f only)"
+  printf "\n\t-r indicates use retro terminal emulator"
+  printf "\n\t-t indicates use tilix terminal emulator"
+  printf "\nASCIImatics animation options:"
+  printf "\n\t-a indicates play audio during ASCIImatics display"
+  printf "\n\t-b indicates use backup audio during ASCIImatics display"
+  printf "\n\t-j indicates use Julia Set scenes in ASCIImatics display"
+  printf "\n\t-J indicates Julia Set with several runs using different parameters"
+  printf "\n\t-m indicates use MusicPlayerPlus scenes in ASCIImatics display"
+  printf "\n\t-n num specifies the number of times to cycle ASCIImatics scenes"
+  printf "\n\t-N indicates use alternate comments in Plasma ASCIImatics scenes"
+  printf "\n\t-p indicates use Plasma scenes in ASCIImatics display"
+  printf "\n\t-s song specifies a song to accompany an ASCIImatics animation"
+  printf "\n\t\t'song' can be the full pathname to an audio file or a"
+  printf "\n\t\trelative pathname to an audio file in the MPD music library"
+  printf "\n\t\tor $HOME/Music/"
+  printf "\n\t-S indicates display ASCIImatics splash animation"
+  printf "\nGeneral options:"
+  printf "\n\t-k indicates kill Asciiville tmux sessions and ASCIImatics scripts"
+  printf "\n\t-R indicates record tmux session with asciinema"
+  printf "\n\t-T indicates use a tmux session for either ASCIImatics or btop"
+  printf "\n\t-u displays this usage message and exits\n"
+  printf "\nType 'man asciiville' for detailed usage info on asciiville"
+  printf "\nType 'man btop' for detailed usage info on the btop system monitor"
+  printf "\nType 'man asciisplash' for detailed usage info on the asciisplash command\n"
+  exit 1
+}
+
+kill_tmux_sessions() {
+  SESSIONS="asciiville asciisplash"
+  for session in ${SESSIONS}
+  do
+    ps -ef | grep tmux | grep ${session} > /dev/null && {
+      tmux kill-session -t ${session}
+    }
+  done
+  ASCIIS="asciijulia asciimpplus asciiplasma"
+  for ascii in ${ASCIIS}
+  do
+    ps -ef | grep -v grep | grep ${ascii} > /dev/null && {
+      ps -ef | grep -v grep | grep ${ascii} | while IFS= read -r line
+      do
+        pid=`echo "$line" | awk ' { print $2 } '`
+        kill ${pid}
+      done 
+    }
+  done
+}
+
+make_it_so() {
+  # Fullscreen tmux sessions and ASCIImatics Animations
+  [ "${SPLASH}" ] || [ "${TMUX_MPC}" ] && FULLSCREEN=1
+
+  # Set the command to use based on command line switches (-S, -T)
+  MPCOMM="${COMMAND}"
+  if [ "${SPLASH}" ]
+  then
+    if [ "${TMUX_SPLASH}" ]
+    then
+      MPCOMM="${ASCSPLASH_TMUX}"
+    else
+      MPCOMM="${ASCSPLASH}"
+    fi
+  else
+    [ "${TMUX_MPC}" ] && MPCOMM="${COMMAND_TMUX}"
+  fi
+
+  # Begin MPD client startup section
+  if [ "${RETRO}" ]
+  then
+    if [ "${FULLSCREEN}" ]
+    then
+      cool-retro-term --fullscreen -e "${MPCOMM}" 2> /dev/null
+    else
+      cool-retro-term -e "${MPCOMM}" 2> /dev/null
+    fi
+  else
+    if [ "${FULLSCREEN}" ]
+    then
+      if [ "${TILIX}" ]
+      then
+        tilix --title="${MTITLE}" \
+              --full-screen \
+              --window-style=borderless \
+              --profile=MusicPlayer \
+              --command="${MPCOMM}" 2> /dev/null
+      else
+        xfce4-terminal --title "${MTITLE}" \
+              --icon=audio-player \
+              --hide-menubar \
+              --hide-toolbar \
+              --hide-scrollbar \
+              --fullscreen \
+              --command="${MPCOMM}"
+      fi
+    else
+      if [ "${TILIX}" ]
+      then
+        tilix --title="${MTITLE}" \
+              --window-style=borderless \
+              --geometry=90x20+150+25 \
+              --profile=MusicPlayer \
+              --command="${MPCOMM}" 2> /dev/null
+      else
+        xfce4-terminal --title "${MTITLE}" \
+            --icon=audio-player \
+            --hide-menubar \
+            --hide-toolbar \
+            --hide-scrollbar \
+            --geometry 90x20+150+25 \
+            --command="${MPCOMM}"
+      fi
+    fi
+  fi
+  # End MPD client startup section
+}
+
+show_ascii_menu() {
+  while true
+  do
+    SPLASH=1
+    if [ "${AUDIO}" ]
+    then
+      audiostat="ON"
+    else
+      audiostat="OFF"
+    fi
+    if [ "${RECORD}" ]
+    then
+      recordstat="ON"
+    else
+      recordstat="OFF"
+    fi
+    if [ "${TMUX}" ]
+    then
+      usetmux="ON"
+    else
+      usetmux="OFF"
+    fi
+    skip_it_so=
+    PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
+    options=("Julia Set ASCIImatics Animation" "MPPlus ASCIImatics Animation" "Plasma ASCIImatics Animation" "Toggle Audio (${audiostat})")
+    [ "${have_nema}" ] && options+=("Toggle Record Tmux Session (${recordstat})")
+    options+=("Toggle Use Tmux (${usetmux})" "Main menu" "Quit")
+    select opt in "${options[@]}"
+    do
+      case "$opt,$REPLY" in
+          "Main menu",*|*,"Main menu"|"Back",*|*,"Back"|"back",*|*,"back")
+              printf "Returning\n\n"
+              init_vars
+              break 2
+              ;;
+          "Julia Set ASCIImatics Animation",*|*,"Julia Set ASCIImatics Animation")
+              ASCSPLASH="${ASCSPLASH} -j"
+              ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l julia"
+              break
+              ;;
+          "MPPlus ASCIImatics Animation",*|*,"MPPlus ASCIImatics Animation")
+              ASCSPLASH="${ASCSPLASH} -m"
+              ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l mpplus"
+              break
+              ;;
+          "Plasma ASCIImatics Animation",*|*,"Plasma ASCIImatics Animation")
+              ASCSPLASH="${ASCSPLASH} -p"
+              ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l plasma"
+              break
+              ;;
+          "Toggle Audio"*,*|*,"Toggle Audio"*)
+              if [ "${AUDIO}" ]
+              then
+                AUDIO=
+              else
+                AUDIO=1
+              fi
+              if [ "${AUDIO}" ]
+              then
+                ASCSPLASH="${ASCSPLASH} -a"
+                ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
+              else
+                ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s/ -a//"`
+                ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s/ -a//"`
+              fi
+              skip_it_so=1
+              break
+              ;;
+          "Toggle Record Tmux Session"*,*|*,"Toggle Record Tmux Session"*)
+              if [ "${RECORD}" ]
+              then
+                RECORD=
+              else
+                RECORD=1
+                TMUX=1
+              fi
+              if [ "${RECORD}" ]
+              then
+                ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -R"
+              else
+                ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s/ -R//"`
+              fi
+              skip_it_so=1
+              break
+              ;;
+          "Toggle Use Tmux"*,*|*,"Toggle Use Tmux"*)
+              if [ "${TMUX}" ]
+              then
+                TMUX=
+                RECORD=
+              else
+                TMUX=1
+              fi
+              skip_it_so=1
+              break
+              ;;
+          "Quit",*|*,"Quit"|"quit",*|*,"quit")
+              printf "\nExiting\n"
+              exit 0
+              ;;
+      esac
+      REPLY=
+    done
+    [ "${skip_it_so}" ] || {
+      make_it_so
+      init_vars
+    }
+  done
+  init_vars
+}
+
+show_main_menu() {
+  while true
+  do
+    if [ "${FULLSCREEN}" ]
+    then
+      fullstat="ON"
+    else
+      fullstat="OFF"
+    fi
+    if [ "${RECORD}" ]
+    then
+      recordstat="ON"
+    else
+      recordstat="OFF"
+    fi
+    if [ "${TMUX}" ]
+    then
+      usetmux="ON"
+    else
+      usetmux="OFF"
+    fi
+    skip_it_so=
+    PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
+    options=("XFCE4 Terminal Emulator")
+    [ "${have_retro}" ] && options+=("Retro Terminal Emulator")
+    [ "${have_tilix}" ] && options+=("Tilix Terminal Emulator")
+    options+=("ASCIImatics Animations" "Kill Tmux Sessions")
+    options+=("Toggle Use Tmux (${usetmux})")
+    [ "${have_nema}" ] && options+=("Toggle Record Tmux Session (${recordstat})")
+    options+=("Toggle Fullscreen (${fullstat})" "Quit")
+    select opt in "${options[@]}"
+    do
+      case "$opt,$REPLY" in
+          "XFCE4 Terminal Emulator",*|*,"XFCE4 Terminal Emulator")
+              COMMAND="btop"
+              break
+              ;;
+          "Retro Terminal Emulator",*|*,"Retro Terminal Emulator")
+              COMMAND="btop"
+              RETRO=1
+              break
+              ;;
+          "Tilix Terminal Emulator",*|*,"Tilix Terminal Emulator")
+              COMMAND="btop"
+              TILIX=1
+              break
+              ;;
+          "ASCIImatics Animations",*|*,"ASCIImatics Animations")
+              show_ascii_menu
+              skip_it_so=1
+              break
+              ;;
+          "Kill Tmux Sessions",*|*,"Kill Tmux Sessions")
+              kill_tmux_sessions
+              skip_it_so=1
+              break
+              ;;
+          "Toggle Use Tmux"*,*|*,"Toggle Use Tmux"*)
+              if [ "${TMUX}" ]
+              then
+                TMUX=
+                RECORD=
+              else
+                TMUX=1
+              fi
+              skip_it_so=1
+              break
+              ;;
+          "Toggle Record Tmux Session"*,*|*,"Toggle Record Tmux Session"*)
+              if [ "${RECORD}" ]
+              then
+                RECORD=
+              else
+                RECORD=1
+                TMUX=1
+              fi
+              if [ "${RECORD}" ]
+              then
+                COMMAND_TMUX="${COMMAND_TMUX} -r"
+              else
+                COMMAND_TMUX=`echo ${COMMAND_TMUX} | sed -e "s/ -r//"`
+              fi
+              skip_it_so=1
+              break
+              ;;
+          "Toggle Fullscreen"*,*|*,"Toggle Fullscreen"*)
+              if [ "${FULLSCREEN}" ]
+              then
+                FULLSCREEN=
+              else
+                FULLSCREEN=1
+              fi
+              skip_it_so=1
+              break
+              ;;
+          "Quit",*|*,"Quit"|"quit",*|*,"quit")
+              printf "\nExiting\n"
+              exit 0
+              ;;
+      esac
+      REPLY=
+    done
+    [ "${skip_it_so}" ] || {
+      make_it_so
+      init_vars
+    }
+  done
+}
+
+init_vars() {
+  VTITLE="Spectrum Visualizer"
+  MTITLE="Terminal Emulator"
+  COMMAND="btop"
+  COMMAND_TMUX="btop-tmux"
+  ASCSPLASH="asciisplash"
+  ASCSPLASH_TMUX="asciisplash-tmux"
+
+  AUDIO=
+  FULLSCREEN=
+  HALFHEIGHT=
+  INTERACTIVE=
+  QRTRHEIGHT=
+  RECORD=
+  RETRO=
+  SPLASH=
+  GNOME=
+  TILIX=
+  XFCE4=
+  TMUX_MPC=
+  TMUX_SPLASH=
+  USAGE=
+}
+
+init_vars
+have_btop=`type -p btop`
+have_retro=`type -p cool-retro-term`
+have_tilix=`type -p tilix`
+have_nema=`type -p asciinema`
+have_xfce4=`type -p xfce4-terminal`
+have_gnome=`type -p gnome-terminal`
+while getopts "abc:fhijJkmn:NpP:qrRSs:tTu" flag; do
+  case $flag in
+    a)
+      AUDIO=1
+      ASCSPLASH="${ASCSPLASH} -a"
+      ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
+      ;;
+    b)
+      ASCSPLASH="${ASCSPLASH} -b"
+      ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -b"
+      ;;
+    c)
+      COMMAND="${OPTARG}"
+      type -p "${COMMAND}" > /dev/null || {
+        echo "Option '-c' indicates use ${COMMAND}."
+        echo "However, ${COMMAND} is not installed or not in your path."
+        echo "You may be able to install ${COMMAND} using apt or dnf as follows:"
+        printf "\n\n\tsudo apt install ${COMMAND}\nor"
+        printf "\n\tsudo dnf install ${COMMAND}\n\n"
+        if [ "${have_btop}" ]
+        then
+          echo "Continuing, using btop rather than ${COMMAND}."
+          COMMAND=btop
+        else
+          echo "Continuing, using asciiplasma rather than ${COMMAND}."
+          COMMAND=asciiplasma
+        fi
+      }
+      ;;
+    f)
+      FULLSCREEN=1
+      ;;
+    h)
+      HALFHEIGHT=1
+      ;;
+    i)
+      INTERACTIVE=1
+      ;;
+    k)
+      kill_tmux_sessions
+      exit 0
+      ;;
+    j)
+      ASCSPLASH="${ASCSPLASH} -j"
+      ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l julia"
+      ;;
+    J)
+      ASCSPLASH="${ASCSPLASH} -J"
+      ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -J"
+      ;;
+    m)
+      ASCSPLASH="${ASCSPLASH} -m"
+      ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l mpplus"
+      ;;
+    n)
+      ASCSPLASH="${ASCSPLASH} -c ${OPTARG}"
+      ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -c ${OPTARG}"
+      ;;
+    N)
+      ASCSPLASH="${ASCSPLASH} -C"
+      ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -t"
+      ;;
+    p)
+      ASCSPLASH="${ASCSPLASH} -p"
+      ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l plasma"
+      ;;
+    P)
+      COMMAND_TMUX="${COMMAND_TMUX} -p ${OPTARG}"
+      ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l ${OPTARG}"
+      ;;
+    q)
+      QRTRHEIGHT=1
+      ;;
+    r)
+      [ "${have_retro}" ] || {
+        echo "Option '-r' indicates use cool-retro-term terminal emulator."
+        echo "However, cool-retro-term is not installed or not in your path."
+        echo "You can install cool-retro-term using apt or dnf as follows:"
+        printf "\n\n\tsudo apt install cool-retro-term\nor"
+        printf "\n\tsudo dnf install cool-retro-term\n\n"
+        echo "Exiting"
+        exit 1
+      }
+      RETRO=1
+      [ "${have_tilix}" ] && TILIX=1
+      ;;
+    R)
+      [ "${have_nema}" ] && {
+        RECORD=1
+        TMUX=1
+        COMMAND_TMUX="${COMMAND_TMUX} -r"
+        ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -R"
+      }
+      ;;
+    S)
+      SPLASH=1
+      ;;
+    s)
+      ASCSPLASH="${ASCSPLASH} -s ${OPTARG}"
+      ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -s ${OPTARG}"
+      ;;
+    t)
+      TILIX=1
+      [ "${have_tilix}" ] || {
+        TILIX=
+        echo "Option '-t' indicates use tilix terminal emulator."
+        echo "However, tilix is not installed or not in your path."
+        echo "You can install tilix using apt or dnf as follows:"
+        printf "\n\n\tsudo apt install tilix\nor"
+        printf "\n\tsudo dnf install tilix\n\n"
+        if [ "${have_xfce4}" ]
+        then
+          XFCE4=1
+          echo "Proceeding with xfce4-terminal"
+        else
+          if [ "${have_gnome}" ]
+          then
+            GNOME=1
+            echo "Proceeding with gnome-terminal"
+          else
+            if [ "${have_retro}" ]
+            then
+              RETRO=1
+              echo "Proceeding with cool-retro-term"
+            else
+              echo "Cannot find a terminal emulator I like. Exiting."
+              exit 1
+            fi
+          fi
+        fi
+      }
+      ;;
+    T)
+      TMUX=1
+      ;;
+    u)
+      USAGE=1
+      ;;
+    esac
+done
+
+# The -T option says use tmux, -S says do asciimatics
+# If we have both then do asciimatics in tmux
+# If just the -T then do command in tmux
+[ "${TMUX}" ] && {
+  if [ "${SPLASH}" ]
+  then
+    TMUX_SPLASH=1
+  else
+    TMUX_MPC=1
+  fi
+}
+
+[ "${TILIX}" ] || {
+  [ "${RETRO}" ] || {
+    [ "${have_xfce4}" ] || {
+      echo "No option '-t' or '-r' indicates use xfce4-terminal"
+      echo "terminal emulator. However, xfce4-terminal is either"
+      echo "not installed or not in your path."
+      echo "You can install xfce4-terminal using apt or dnf as follows:"
+      printf "\n\n\tsudo apt install xfce4-terminal\nor"
+      printf "\n\tsudo dnf install xfce4-terminal\n\n"
+      [ "${have_tilix}" ] || usage
+      echo "Alternately, invoke asciiville with the '-t' option to use tilix."
+      echo "Continuing with tilix as the terminal emulator."
+      TILIX=1
+    }
+  }
+  [ "${TILIX}" ] || {
+    [ "${have_gnome}" ] || {
+      echo "No option '-t' indicates use gnome-terminal terminal emulator."
+      echo "However, gnome-terminal is not installed or not in your path."
+      echo "You can install gnome-terminal using apt or dnf as follows:"
+      printf "\n\n\tsudo apt install gnome-terminal\nor"
+      printf "\n\tsudo dnf install gnome-terminal\n\n"
+      [ "${have_tilix}" ] || usage
+      echo "Alternately, invoke asciiville with the '-t' option to use tilix."
+      echo "Continuing with tilix as the terminal emulator."
+      TILIX=1
+    }
+  }
+}
+
+[ "${HALFHEIGHT}" ] && [ "${QRTRHEIGHT}" ] && {
+  [ "${FULLSCREEN}" ] && {
+    echo "Only one of '-h' and '-q' should be specified"
+    echo "Quarter-height overrides half-height. Using quarter-height."
+    HALFHEIGHT=
+  }
+}
+[ "${HALFHEIGHT}" ] && {
+  [ "${FULLSCREEN}" ] || {
+    echo "Height settings only apply when in fullscreen mode."
+    echo "Ignoring '-h' half-height option."
+    HALFHEIGHT=
+  }
+}
+[ "${QRTRHEIGHT}" ] && {
+  [ "${FULLSCREEN}" ] || {
+    echo "Height settings only apply when in fullscreen mode."
+    echo "Ignoring '-q' quarter-height option."
+    QRTRHEIGHT=
+  }
+}
+
+[ "${USAGE}" ] && usage
+
+[ "${INTERACTIVE}" ] && show_main_menu
+
+make_it_so

@@ -1,0 +1,66 @@
+#!/bin/bash
+#
+# ascinit - initialize Asciiville configuration files
+#
+# Setup default tmux configuration for this user
+# Install required pip modules if not already installed
+CONFDIR=/usr/share/doc/asciiville
+
+# Setup default tmux configuration for this user unless
+# terminal-overrides has already been set
+[ -f ${CONFDIR}/tmux.conf ] && {
+  if [ -f ${HOME}/.tmux.conf ]
+  then
+    grep terminal-overrides ${HOME}/.tmux.conf > /dev/null || {
+      cat ${CONFDIR}/tmux.conf >> ${HOME}/.tmux.conf
+    }
+  else
+    cat ${CONFDIR}/tmux.conf >> ${HOME}/.tmux.conf
+  fi
+}
+
+have_pip=`type -p pip`
+[ "${have_pip}" ] || {
+  plat=`uname -s`
+  if [ "$plat" == "Darwin" ]
+  then
+    python3 -m ensurepip --upgrade
+  else
+    debian=
+    [ -f /etc/os-release ] && . /etc/os-release
+    [ "${ID_LIKE}" == "debian" ] && debian=1
+    [ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
+
+    if [ "${debian}" ]
+    then
+      sudo apt install python3-pip
+    else
+      sudo yum install python3-pip
+    fi
+  fi
+}
+
+pip list | grep asciimatics > /dev/null || python3 -m pip install asciimatics
+
+printf "\nAsciiville Initialization Complete\n"
+printf "\nVisit the Asciiville Wiki at:"
+printf "\n\thttps://github.com/doctorfree/Asciiville/wiki\n"
+
+type -p asciisplash > /dev/null && {
+  while true
+  do
+    read -p "View an ASCII animation ? (y/n) " yn
+    case $yn in
+      [Yy]* )
+              asciisplash -c 1 -a
+              break
+              ;;
+      [Nn]* )
+              printf "\nExiting.\n"
+              exit 0
+              ;;
+          * ) echo "Please answer yes or no."
+              ;;
+    esac
+  done
+}

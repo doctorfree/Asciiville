@@ -1,0 +1,63 @@
+#!/bin/bash
+#
+# btop-tmux - display btop in a tmux session
+
+SESSION=btop
+
+usage() {
+  printf "\nUsage: btop-tmux [-r] [-u]"
+  printf "\nWhere:"
+  printf "\n\t-r indicates record tmux session with asciinema"
+  printf "\n\t-u displays this usage message and exits\n"
+  if [ "${RECORD}" ]
+  then
+    printf "\n\trecording enabled"
+  else
+    printf "\n\trecording disabled"
+  fi
+  printf "\n"
+  exit 1
+}
+
+RECORD=
+USAGE=
+while getopts "ru" flag; do
+    case $flag in
+        r)
+          have_nema=`type -p asciinema`
+          [ "${have_nema}" ] && RECORD=1
+          ;;
+        u)
+          USAGE=1
+          ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+[ "${USAGE}" ] && usage
+
+tmux new-session -d -x "$(tput cols)" -y "$(tput lines)" -s ${SESSION}
+tmux set -g status off
+
+tmux send-keys "stty -echo" C-m
+tmux send-keys "tput civis -- invisible" C-m
+tmux send-keys "export PS1=''" C-m
+tmux send-keys "clear" C-m
+
+tmux select-pane -t 0
+
+tmux send-keys "btop; tmux kill-session -t ${SESSION}" C-m
+
+if [ "${RECORD}" ]
+then
+  tmux d
+  VID_DIR=$HOME/Videos
+  [ -d ${VID_DIR} ] || mkdir ${VID_DIR}
+  REC_DIR=${VID_DIR}/asciinema
+  [ -d ${REC_DIR} ] || mkdir ${REC_DIR}
+  echo "Recording this ${SESSION} session with asciinema"
+  asciinema rec --command "tmux attach -t ${SESSION}" \
+                ${REC_DIR}/${SESSION}-$(date +%F--%H%M).cast
+else
+  tmux a #
+fi
