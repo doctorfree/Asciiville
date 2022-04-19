@@ -39,6 +39,7 @@ The `asciiville` command can be used to invoke:
 * The lightweight character based file manager, `ranger`
 * One or more terminal emulators running a command
 * A tmux session
+* The AAlib BB demo running in a tmux session
 * Character based ASCII art
 * Any character based client the user wishes to run
 * One of several asciimatics animations optionally accompanied by audio
@@ -68,6 +69,7 @@ Asciiville adds the following commands to your system:
 * **btop** : character based system monitor
 * **ascinit** : one-time initializaton of a user's Asciiville configuration
 * **btop-tmux** : runs btop in a tmux session
+* **bb-tmux** : runs aalib bb demo in a tmux session
 * **asciisplash** : fun ascii art screens using ASCIImatics animations. Ascii art commands:
     * **asciijulia** : ASCIImatics animated zoom on a Julia Set
     * **asciiplasma** : ASCIImatics animated plasma graphic

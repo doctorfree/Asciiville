@@ -24,6 +24,15 @@ PLEASE="Please enter your"
 COMMAND=btop
 MTITLE="Btop++ System Monitor"
 
+if [ `echo $PATH | grep -c /usr/local/bin` -ne "1" ]
+then
+  export PATH="$PATH:/usr/local/bin"
+fi
+if [ `echo $PATH | grep -c /usr/games` -ne "1" ]
+then
+  export PATH="$PATH:/usr/games"
+fi
+
 usage() {
   printf "\nUsage: asciiville [-a] [-b] [-c client] [-f] [-g] [-i]"
   printf "\n\t\t[-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]"
@@ -176,21 +185,21 @@ show_ascii_menu() {
     SPLASH=1
     if [ "${AUDIO}" ]
     then
-      audiostat="ON"
+      audiostat="YES"
     else
-      audiostat="OFF"
+      audiostat="NO"
     fi
     if [ "${RECORD}" ]
     then
-      recordstat="ON"
+      recordstat="YES"
     else
-      recordstat="OFF"
+      recordstat="NO"
     fi
     if [ "${TMUX}" ]
     then
-      usetmux="ON"
+      usetmux="YES"
     else
-      usetmux="OFF"
+      usetmux="NO"
     fi
     skip_it_so=
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
@@ -198,9 +207,9 @@ show_ascii_menu() {
     [ "${have_julia}" ] && options+=("Julia Set ASCIImatics Animation")
     [ "${have_mpplus}" ] && options+=("MPPlus ASCIImatics Animation")
     [ "${have_plasma}" ] && options+=("Plasma ASCIImatics Animation")
-    options+=("Toggle Audio (${audiostat})")
-    [ "${have_nema}" ] && options+=("Toggle Record Tmux Session (${recordstat})")
-    options+=("Toggle Use Tmux (${usetmux})" "Main menu" "Quit")
+    options+=("Audio (${audiostat})")
+    [ "${have_nema}" ] && options+=("Record Tmux Session (${recordstat})")
+    options+=("Use Tmux (${usetmux})" "Main menu" "Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
@@ -224,7 +233,7 @@ show_ascii_menu() {
               ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l plasma"
               break
               ;;
-          "Toggle Audio"*,*|*,"Toggle Audio"*)
+          "Audio"*,*|*,"Audio"*)
               if [ "${AUDIO}" ]
               then
                 AUDIO=
@@ -242,7 +251,7 @@ show_ascii_menu() {
               skip_it_so=1
               break
               ;;
-          "Toggle Record Tmux Session"*,*|*,"Toggle Record Tmux Session"*)
+          "Record Tmux Session"*,*|*,"Record Tmux Session"*)
               if [ "${RECORD}" ]
               then
                 RECORD=
@@ -259,7 +268,7 @@ show_ascii_menu() {
               skip_it_so=1
               break
               ;;
-          "Toggle Use Tmux"*,*|*,"Toggle Use Tmux"*)
+          "Use Tmux"*,*|*,"Use Tmux"*)
               if [ "${TMUX}" ]
               then
                 TMUX=
@@ -290,64 +299,71 @@ show_main_menu() {
   do
     if [ "${FULLSCREEN}" ]
     then
-      fullstat="ON"
+      fullstat="YES"
     else
-      fullstat="OFF"
+      fullstat="NO"
     fi
     if [ "${RECORD}" ]
     then
-      recordstat="ON"
+      recordstat="YES"
     else
-      recordstat="OFF"
+      recordstat="NO"
     fi
     if [ "${TMUX}" ]
     then
-      usetmux="ON"
+      usetmux="YES"
     else
-      usetmux="OFF"
+      usetmux="NO"
     fi
     case "${COMMAND}" in
       btop)
-        use_btop="ON"
-        use_lynx="OFF"
-        use_mutt="OFF"
-        use_ranger="OFF"
+        use_btop="YES"
+        use_lynx="NO"
+        use_mutt="NO"
+        use_ranger="NO"
         ;;
       lynx)
-        use_btop="OFF"
-        use_lynx="ON"
-        use_mutt="OFF"
-        use_ranger="OFF"
+        use_btop="NO"
+        use_lynx="YES"
+        use_mutt="NO"
+        use_ranger="NO"
         ;;
       neomutt)
-        use_btop="OFF"
-        use_lynx="OFF"
-        use_mutt="ON"
-        use_ranger="OFF"
+        use_btop="NO"
+        use_lynx="NO"
+        use_mutt="YES"
+        use_ranger="NO"
         ;;
       ranger)
-        use_btop="OFF"
-        use_lynx="OFF"
-        use_mutt="OFF"
-        use_ranger="ON"
+        use_btop="NO"
+        use_lynx="NO"
+        use_mutt="NO"
+        use_ranger="YES"
         ;;
     esac
     skip_it_so=
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
-    [ "${have_xfce4}" ] && options+=("XFCE4 Terminal Emulator")
-    [ "${have_gnome}" ] && options+=("Gnome Terminal Emulator")
-    [ "${have_retro}" ] && options+=("Retro Terminal Emulator")
-    [ "${have_tilix}" ] && options+=("Tilix Terminal Emulator")
-    [ "${have_btop}" ] && options+=("Use btop System Monitor (${use_btop})")
-    [ "${have_lynx}" ] && options+=("Use lynx Web Browser (${use_lynx})")
-    [ "${have_mutt}" ] && options+=("Use neomutt Mail Client (${use_mutt})")
-    [ "${have_ranger}" ] && options+=("Use ranger File Manager (${use_ranger})")
+    [ "${have_xfce4}" ] && options+=("Run XFCE4 Terminal")
+    [ "${have_gnome}" ] && options+=("Run Gnome Terminal")
+    [ "${have_retro}" ] && options+=("Run Retro Terminal")
+    [ "${have_tilix}" ] && options+=("Run Tilix Terminal")
+    options+=("Use Tmux (${usetmux})")
+    [ "${have_nema}" ] && options+=("Record Tmux Session (${recordstat})")
+    options+=("Fullscreen (${fullstat})")
+    [ "${have_btop}" ] && options+=("Use Btop System Monitor (${use_btop})")
+    [ "${have_gdu}" ] && options+=("Use Disk Usage Analyzer")
+    [ "${have_lynx}" ] && options+=("Use Lynx Web Browser (${use_lynx})")
+    [ "${have_mutt}" ] && options+=("Use NeoMutt Mail Client (${use_mutt})")
+    [ "${have_ranger}" ] && options+=("Use Ranger File Manager (${use_ranger})")
     [ "${have_splash}" ] && options+=("ASCIImatics Animations")
+    [ "${have_bb}" ] && {
+      [ "$DISPLAY" = "" ] || options+=("Run AAlib Demo (X11 mode)")
+    }
+    [ "${have_bb}" ] && options+=("Run AAlib Demo (Curses mode)")
     options+=("Kill Tmux Sessions")
-    options+=("Toggle Use Tmux (${usetmux})")
-    [ "${have_nema}" ] && options+=("Toggle Record Tmux Session (${recordstat})")
-    options+=("Toggle Fullscreen (${fullstat})" "Quit")
+    [ "${have_speed}" ] && options+=("Run Speed Test")
+    options+=("Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
@@ -379,27 +395,51 @@ show_main_menu() {
               XFCE4=
               break
               ;;
-          "Use btop System Monitor"*,*|*,"Use btop System Monitor"*)
+          "Use Btop System Monitor"*,*|*,"Use Btop System Monitor"*)
               COMMAND=btop
               MTITLE="Btop++ System Monitor"
               skip_it_so=1
               break
               ;;
-          "Use lynx Web Browser"*,*|*,"Use lynx Web Browser"*)
+          "Use Disk Usage Analyzer",*|*,"Use Disk Usage Analyzer")
+              COMMAND=gdu
+              MTITLE="Disk Usage Analyzer"
+              skip_it_so=1
+              break
+              ;;
+          "Use Lynx Web Browser"*,*|*,"Use Lynx Web Browser"*)
               COMMAND=lynx
               MTITLE="Lynx Web Browser"
               skip_it_so=1
               break
               ;;
-          "Use neomutt Mail Client"*,*|*,"Use neomutt Mail Client"*)
+          "Use NeoMutt Mail Client"*,*|*,"Use NeoMutt Mail Client"*)
               COMMAND=neomutt
               MTITLE="NeoMutt Mail Client"
               skip_it_so=1
               break
               ;;
-          "Use ranger File Manager"*,*|*,"Use ranger File Manager"*)
+          "Use Ranger File Manager"*,*|*,"Use Ranger File Manager"*)
               COMMAND=ranger
               MTITLE="Ranger File Manager"
+              skip_it_so=1
+              break
+              ;;
+          "Run AAlib Demo (Curses mode)",*|*,"Run AAlib Demo (Curses mode)")
+              SAVED_DISPLAY="${DISPLAY}"
+              export DISPLAY=""
+              bb-tmux
+              skip_it_so=1
+              export DISPLAY="${SAVED_DISPLAY}"
+              break
+              ;;
+          "Run AAlib Demo (X11 mode)",*|*,"Run AAlib Demo (X11 mode)")
+              bb-tmux
+              skip_it_so=1
+              break
+              ;;
+          "Run Speed Test",*|*,"Run Speed Test")
+              speedtest-cli
               skip_it_so=1
               break
               ;;
@@ -413,7 +453,7 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "Toggle Use Tmux"*,*|*,"Toggle Use Tmux"*)
+          "Use Tmux"*,*|*,"Use Tmux"*)
               if [ "${TMUX}" ]
               then
                 TMUX=
@@ -424,7 +464,7 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "Toggle Record Tmux Session"*,*|*,"Toggle Record Tmux Session"*)
+          "Record Tmux Session"*,*|*,"Record Tmux Session"*)
               if [ "${RECORD}" ]
               then
                 RECORD=
@@ -441,7 +481,7 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "Toggle Fullscreen"*,*|*,"Toggle Fullscreen"*)
+          "Fullscreen"*,*|*,"Fullscreen"*)
               if [ "${FULLSCREEN}" ]
               then
                 FULLSCREEN=
@@ -492,6 +532,9 @@ have_julia=`type -p asciijulia`
 have_plasma=`type -p asciiplasma`
 have_mpplus=`type -p asciimpplus`
 have_nema=`type -p asciinema`
+have_bb=`type -p bb-tmux`
+have_gdu=`type -p gdu`
+have_speed=`type -p speedtest-cli`
 have_splash=`type -p asciisplash`
 have_xfce4=`type -p xfce4-terminal`
 have_gnome=`type -p gnome-terminal`

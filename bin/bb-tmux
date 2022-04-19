@@ -1,0 +1,71 @@
+#!/bin/bash
+#
+# bb-tmux - display bb in a tmux session
+
+SESSION=bb
+
+usage() {
+  printf "\nUsage: bb-tmux [-r] [-u]"
+  printf "\nWhere:"
+  printf "\n\t-r indicates record tmux session with asciinema"
+  printf "\n\t-u displays this usage message and exits\n"
+  if [ "${RECORD}" ]
+  then
+    printf "\n\trecording enabled"
+  else
+    printf "\n\trecording disabled"
+  fi
+  printf "\n"
+  exit 1
+}
+
+RECORD=
+USAGE=
+while getopts "ru" flag; do
+    case $flag in
+        r)
+          have_nema=`type -p asciinema`
+          [ "${have_nema}" ] && RECORD=1
+          ;;
+        u)
+          USAGE=1
+          ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+[ "${USAGE}" ] && usage
+
+tmux new-session -d -x "$(tput cols)" -y "$(tput lines)" -s ${SESSION}
+tmux set -g status off
+
+tmux send-keys "stty -echo" C-m
+tmux send-keys "tput civis -- invisible" C-m
+tmux send-keys "export PS1=''" C-m
+tmux send-keys "clear" C-m
+
+tmux select-pane -t 0
+
+if [ "${DISPLAY}" == "" ]
+then
+  echo "Using curses driver"
+  tmux send-keys "bb -driver curses -kbddriver stdin; tmux kill-session -t ${SESSION}" C-m
+else
+  echo "Using X11 driver"
+  tmux send-keys "bb -width 240 -height 80 -kbddriver stdin; tmux kill-session -t ${SESSION}" C-m
+fi
+tmux send-keys "echo 'n'" C-m
+
+if [ "${RECORD}" ]
+then
+  tmux d
+  VID_DIR=$HOME/Videos
+  [ -d ${VID_DIR} ] || mkdir ${VID_DIR}
+  REC_DIR=${VID_DIR}/asciinema
+  [ -d ${REC_DIR} ] || mkdir ${REC_DIR}
+  echo "Recording this ${SESSION} session with asciinema"
+  asciinema rec --command "tmux attach -t ${SESSION}" \
+                ${REC_DIR}/${SESSION}-$(date +%F--%H%M).cast
+else
+  tmux a #
+fi

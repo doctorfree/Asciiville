@@ -69,7 +69,7 @@ Version: ${PKG_VER}-${PKG_REL}
 Section: misc
 Priority: optional
 Architecture: ${ARCH}
-Depends: tilix (>= 1.9.1), xfce4-terminal (>= 0.8.9.1), cool-retro-term (>= 1.1.1), tmux, mplayer, lynx, neomutt, ranger, jq, asciinema
+Depends: tilix (>= 1.9.1), xfce4-terminal (>= 0.8.9.1), cool-retro-term (>= 1.1.1), tmux, mplayer, lynx, neomutt, ranger, jq, asciinema, speedtest-cli, caca-utils, aalib, bb, aview
 Maintainer: ${DEBFULLNAME} <${DEBEMAIL}>
 Installed-Size: 29000
 Build-Depends: debhelper (>= 11)
