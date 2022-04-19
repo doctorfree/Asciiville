@@ -67,7 +67,7 @@ Submit bug reports online at:
 https://github.com/doctorfree/Asciiville/issues
 
 # SEE ALSO
-**mpcplus**(1), **mpcpluskeys**(1)
+**asciimpplus**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1), **asciiville**(1)
 
 Full documentation and sources at:
 

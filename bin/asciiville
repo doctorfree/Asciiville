@@ -5,6 +5,9 @@
 #     The `asciiville` command can be used to invoke:
 #
 #     * The lightweight character based system monitor, `btop`
+#     * The lightweight character based web browser, `lynx`
+#     * The lightweight character based mail client, `neomutt`
+#     * The lightweight character based file manager, `ranger`
 #     * One or more terminal emulators running a specified command
 #     * A tmux session
 #     * Character based ASCII art
@@ -18,21 +21,25 @@
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 PLEASE="Please enter your"
+COMMAND=btop
+MTITLE="Btop++ System Monitor"
 
 usage() {
-  printf "\nUsage: asciiville [-a] [-b] [-c client]"
-  printf "\n\t\t[-f] [-g] [-i] [-jJ] [-k] [-m]"
-  printf "\n\t\t[-n num] [-N] [-p] [-P script]"
-  printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-u]"
+  printf "\nUsage: asciiville [-a] [-b] [-c client] [-f] [-g] [-i]"
+  printf "\n\t\t[-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]"
+  printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]"
   printf "\nTerminal/Command options:"
-  printf "\n\t-c 'command' indicates use 'command' rather than btop"
+  printf "\n\t-c 'command' indicates use 'command'"
   printf "\n\t-f indicates fullscreen display"
   printf "\n\t-g indicates use gnome terminal emulator"
   printf "\n\t-i indicates start asciiville in interactive mode"
+  printf "\n\t-l indicates use lynx as the default command"
   printf "\n\t-P script specifies the ASCIImatics script to run in visualizer pane"
   printf "\n\t-r indicates use retro terminal emulator"
   printf "\n\t-t indicates use tilix terminal emulator"
   printf "\n\t-x indicates use xfce4 terminal emulator"
+  printf "\n\t-y indicates use ranger as the default command"
+  printf "\n\t-z indicates use neomutt as the default command"
   printf "\nASCIImatics animation options:"
   printf "\n\t-a indicates play audio during ASCIImatics display"
   printf "\n\t-b indicates use backup audio during ASCIImatics display"
@@ -50,7 +57,7 @@ usage() {
   printf "\nGeneral options:"
   printf "\n\t-k indicates kill Asciiville tmux sessions and ASCIImatics scripts"
   printf "\n\t-R indicates record tmux session with asciinema"
-  printf "\n\t-T indicates use a tmux session for either ASCIImatics or btop"
+  printf "\n\t-T indicates use a tmux session for either ASCIImatics or command"
   printf "\n\t-u displays this usage message and exits\n"
   printf "\nType 'man asciiville' for detailed usage info on asciiville"
   printf "\nType 'man btop' for detailed usage info on the btop system monitor"
@@ -138,7 +145,7 @@ make_it_so() {
       then
         tilix --title="${MTITLE}" \
               --window-style=borderless \
-              --geometry=90x20+150+25 \
+              --geometry=90x24+150+25 \
               --profile=MusicPlayer \
               --command="${AVCOMM}" 2> /dev/null &
       else
@@ -149,11 +156,12 @@ make_it_so() {
             --hide-menubar \
             --hide-toolbar \
             --hide-scrollbar \
-            --geometry 90x20+150+25 \
+            --geometry 90x24+150+25 \
             --command="${AVCOMM}" &
         else
           gnome-terminal -t "${MTITLE}" \
               --hide-menubar \
+              --geometry 90x24+150+25 \
               -- ${AVCOMM} &
         fi
       fi
@@ -186,7 +194,11 @@ show_ascii_menu() {
     fi
     skip_it_so=
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
-    options=("Julia Set ASCIImatics Animation" "MPPlus ASCIImatics Animation" "Plasma ASCIImatics Animation" "Toggle Audio (${audiostat})")
+    options=()
+    [ "${have_julia}" ] && options+=("Julia Set ASCIImatics Animation")
+    [ "${have_mpplus}" ] && options+=("MPPlus ASCIImatics Animation")
+    [ "${have_plasma}" ] && options+=("Plasma ASCIImatics Animation")
+    options+=("Toggle Audio (${audiostat})")
     [ "${have_nema}" ] && options+=("Toggle Record Tmux Session (${recordstat})")
     options+=("Toggle Use Tmux (${usetmux})" "Main menu" "Quit")
     select opt in "${options[@]}"
@@ -294,6 +306,32 @@ show_main_menu() {
     else
       usetmux="OFF"
     fi
+    case "${COMMAND}" in
+      btop)
+        use_btop="ON"
+        use_lynx="OFF"
+        use_mutt="OFF"
+        use_ranger="OFF"
+        ;;
+      lynx)
+        use_btop="OFF"
+        use_lynx="ON"
+        use_mutt="OFF"
+        use_ranger="OFF"
+        ;;
+      neomutt)
+        use_btop="OFF"
+        use_lynx="OFF"
+        use_mutt="ON"
+        use_ranger="OFF"
+        ;;
+      ranger)
+        use_btop="OFF"
+        use_lynx="OFF"
+        use_mutt="OFF"
+        use_ranger="ON"
+        ;;
+    esac
     skip_it_so=
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
@@ -301,7 +339,12 @@ show_main_menu() {
     [ "${have_gnome}" ] && options+=("Gnome Terminal Emulator")
     [ "${have_retro}" ] && options+=("Retro Terminal Emulator")
     [ "${have_tilix}" ] && options+=("Tilix Terminal Emulator")
-    options+=("ASCIImatics Animations" "Kill Tmux Sessions")
+    [ "${have_btop}" ] && options+=("Use btop System Monitor (${use_btop})")
+    [ "${have_lynx}" ] && options+=("Use lynx Web Browser (${use_lynx})")
+    [ "${have_mutt}" ] && options+=("Use neomutt Mail Client (${use_mutt})")
+    [ "${have_ranger}" ] && options+=("Use ranger File Manager (${use_ranger})")
+    [ "${have_splash}" ] && options+=("ASCIImatics Animations")
+    options+=("Kill Tmux Sessions")
     options+=("Toggle Use Tmux (${usetmux})")
     [ "${have_nema}" ] && options+=("Toggle Record Tmux Session (${recordstat})")
     options+=("Toggle Fullscreen (${fullstat})" "Quit")
@@ -309,7 +352,6 @@ show_main_menu() {
     do
       case "$opt,$REPLY" in
           "XFCE4 Terminal Emulator",*|*,"XFCE4 Terminal Emulator")
-              COMMAND="btop"
               XFCE4=1
               TILIX=
               GNOME=
@@ -317,7 +359,6 @@ show_main_menu() {
               break
               ;;
           "Gnome Terminal Emulator",*|*,"Gnome Terminal Emulator")
-              COMMAND="btop"
               GNOME=1
               XFCE4=
               TILIX=
@@ -325,7 +366,6 @@ show_main_menu() {
               break
               ;;
           "Retro Terminal Emulator",*|*,"Retro Terminal Emulator")
-              COMMAND="btop"
               RETRO=1
               GNOME=
               XFCE4=
@@ -333,11 +373,34 @@ show_main_menu() {
               break
               ;;
           "Tilix Terminal Emulator",*|*,"Tilix Terminal Emulator")
-              COMMAND="btop"
               TILIX=1
               RETRO=
               GNOME=
               XFCE4=
+              break
+              ;;
+          "Use btop System Monitor"*,*|*,"Use btop System Monitor"*)
+              COMMAND=btop
+              MTITLE="Btop++ System Monitor"
+              skip_it_so=1
+              break
+              ;;
+          "Use lynx Web Browser"*,*|*,"Use lynx Web Browser"*)
+              COMMAND=lynx
+              MTITLE="Lynx Web Browser"
+              skip_it_so=1
+              break
+              ;;
+          "Use neomutt Mail Client"*,*|*,"Use neomutt Mail Client"*)
+              COMMAND=neomutt
+              MTITLE="NeoMutt Mail Client"
+              skip_it_so=1
+              break
+              ;;
+          "Use ranger File Manager"*,*|*,"Use ranger File Manager"*)
+              COMMAND=ranger
+              MTITLE="Ranger File Manager"
+              skip_it_so=1
               break
               ;;
           "ASCIImatics Animations",*|*,"ASCIImatics Animations")
@@ -404,8 +467,6 @@ show_main_menu() {
 
 init_vars() {
   VTITLE="Spectrum Visualizer"
-  MTITLE="Terminal Emulator"
-  COMMAND="btop"
   COMMAND_TMUX="btop-tmux"
   ASCSPLASH="asciisplash"
   ASCSPLASH_TMUX="asciisplash-tmux"
@@ -414,11 +475,7 @@ init_vars() {
   FULLSCREEN=
   INTERACTIVE=
   RECORD=
-  RETRO=
   SPLASH=
-  GNOME=
-  TILIX=
-  XFCE4=
   TMUX_ASC=
   TMUX_SPLASH=
   USAGE=
@@ -426,12 +483,19 @@ init_vars() {
 
 init_vars
 have_btop=`type -p btop`
+have_lynx=`type -p lynx`
+have_mutt=`type -p neomutt`
+have_ranger=`type -p ranger`
 have_retro=`type -p cool-retro-term`
 have_tilix=`type -p tilix`
+have_julia=`type -p asciijulia`
+have_plasma=`type -p asciiplasma`
+have_mpplus=`type -p asciimpplus`
 have_nema=`type -p asciinema`
+have_splash=`type -p asciisplash`
 have_xfce4=`type -p xfce4-terminal`
 have_gnome=`type -p gnome-terminal`
-while getopts "abc:fgijJkmn:NpP:rRSs:tTxu" flag; do
+while getopts "abc:fgijJklmn:NpP:rRSs:tTxyzu" flag; do
   case $flag in
     a)
       AUDIO=1
@@ -444,6 +508,7 @@ while getopts "abc:fgijJkmn:NpP:rRSs:tTxu" flag; do
       ;;
     c)
       COMMAND="${OPTARG}"
+      MTITLE="Asciiville ${COMMAND}"
       type -p "${COMMAND}" > /dev/null || {
         echo "Option '-c' indicates use ${COMMAND}."
         echo "However, ${COMMAND} is not installed or not in your path."
@@ -454,9 +519,18 @@ while getopts "abc:fgijJkmn:NpP:rRSs:tTxu" flag; do
         then
           echo "Continuing, using btop rather than ${COMMAND}."
           COMMAND=btop
+          MTITLE="Btop++ System Monitor"
         else
-          echo "Continuing, using asciiplasma rather than ${COMMAND}."
-          COMMAND=asciiplasma
+          if [ "${have_lynx}" ]
+          then
+            echo "Continuing, using lynx rather than ${COMMAND}."
+            COMMAND=lynx
+            MTITLE="Lynx Web Browser"
+          else
+            echo "Continuing, using asciiplasma rather than ${COMMAND}."
+            COMMAND=asciiplasma
+            MTITLE="ASCIImatics Plasma"
+          fi
         fi
       }
       ;;
@@ -497,10 +571,6 @@ while getopts "abc:fgijJkmn:NpP:rRSs:tTxu" flag; do
     i)
       INTERACTIVE=1
       ;;
-    k)
-      kill_tmux_sessions
-      exit 0
-      ;;
     j)
       ASCSPLASH="${ASCSPLASH} -j"
       ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l julia"
@@ -508,6 +578,38 @@ while getopts "abc:fgijJkmn:NpP:rRSs:tTxu" flag; do
     J)
       ASCSPLASH="${ASCSPLASH} -J"
       ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -J"
+      ;;
+    k)
+      kill_tmux_sessions
+      exit 0
+      ;;
+    l)
+      COMMAND=lynx
+      MTITLE="Lynx Web Browser"
+      [ "${have_lynx}" ] || {
+        echo "Option '-l' indicates use lynx as the default command."
+        echo "However, lynx is not installed or not in your path."
+        echo "You may be able to install lynx using apt or dnf as follows:"
+        printf "\n\n\tsudo apt install lynx\nor"
+        printf "\n\tsudo dnf install lynx\n\n"
+        if [ "${have_btop}" ]
+        then
+          echo "Continuing, using btop rather than ${COMMAND}."
+          COMMAND=btop
+          MTITLE="Btop++ System Monitor"
+        else
+          if [ "${have_ranger}" ]
+          then
+            echo "Continuing, using ranger rather than ${COMMAND}."
+            COMMAND=ranger
+            MTITLE="Ranger File Manager"
+          else
+            echo "Continuing, using asciiplasma rather than ${COMMAND}."
+            COMMAND=asciiplasma
+            MTITLE="ASCIImatics Plasma"
+          fi
+        fi
+      }
       ;;
     m)
       ASCSPLASH="${ASCSPLASH} -m"
@@ -618,6 +720,62 @@ while getopts "abc:fgijJkmn:NpP:rRSs:tTxu" flag; do
               echo "Cannot find a terminal emulator I like. Exiting."
               exit 1
             fi
+          fi
+        fi
+      }
+      ;;
+    y)
+      COMMAND=ranger
+      MTITLE="Ranger File Manager"
+      [ "${have_ranger}" ] || {
+        echo "Option '-y' indicates use ranger as the default command."
+        echo "However, ranger is not installed or not in your path."
+        echo "You may be able to install ranger using apt or dnf as follows:"
+        printf "\n\n\tsudo apt install ranger\nor"
+        printf "\n\tsudo dnf install ranger\n\n"
+        if [ "${have_btop}" ]
+        then
+          echo "Continuing, using btop rather than ${COMMAND}."
+          COMMAND=btop
+          MTITLE="Btop++ System Monitor"
+        else
+          if [ "${have_lynx}" ]
+          then
+            echo "Continuing, using lynx rather than ${COMMAND}."
+            COMMAND=lynx
+            MTITLE="Lynx Web Browser"
+          else
+            echo "Continuing, using asciiplasma rather than ${COMMAND}."
+            COMMAND=asciiplasma
+            MTITLE="ASCIImatics Plasma"
+          fi
+        fi
+      }
+      ;;
+    z)
+      COMMAND=neomutt
+      MTITLE="NeoMutt Mail Client"
+      [ "${have_mutt}" ] || {
+        echo "Option '-z' indicates use neomutt as the default command."
+        echo "However, neomutt is not installed or not in your path."
+        echo "You may be able to install neomutt using apt or dnf as follows:"
+        printf "\n\n\tsudo apt install neomutt\nor"
+        printf "\n\tsudo dnf install neomutt\n\n"
+        if [ "${have_btop}" ]
+        then
+          echo "Continuing, using btop rather than ${COMMAND}."
+          COMMAND=btop
+          MTITLE="Btop++ System Monitor"
+        else
+          if [ "${have_lynx}" ]
+          then
+            echo "Continuing, using lynx rather than ${COMMAND}."
+            COMMAND=lynx
+            MTITLE="Lynx Web Browser"
+          else
+            echo "Continuing, using asciiplasma rather than ${COMMAND}."
+            COMMAND=asciiplasma
+            MTITLE="ASCIImatics Plasma"
           fi
         fi
       }

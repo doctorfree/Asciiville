@@ -18,36 +18,25 @@
 .hy
 .SH NAME
 .PP
-asciiville - Launch an MPD music player client and cava spectrum
-visualizer
+asciiville - Launch a terminal emulator and specified character based
+command, ascii art, asciimatics animation, and more
 .SH SYNOPSIS
 .PP
-\f[B]asciiville\f[R] [-A] [-a] [-b] [-c] [-C client] [-D] [-d
-music_directory] [-f] [-h] [-i] [-jJ] [-k] [-m] [-M
-enable|disable|start|stop|restart|status] [-n num] [-N] [-p] [-P script]
-[-q] [-r] [-R] [-S] [-t] [-T] [-u]
+\f[B]asciiville\f[R] [-a] [-b] [-c client] [-f] [-g] [-i] [-jJ] [-k]
+[-l] [-m] [-n num] [-N] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t]
+[-T] [-x] [-y] [-z] [-u]
 .SH DESCRIPTION
 .PP
-The \f[I]asciiville\f[R] command acts as a front-end for launching the
-mpcplus music player client and cava spectrum visualizer in various
-terminal emulators and window placements.
-It can be used to display these utilities juxtaposed in separate windows
-or fullscreen overlayed with transparency.
-Alternately, asciiville can launch the cantata MPD client or any
-specified MPD client along with the cava spectrum visualizer.
+The \f[I]asciiville\f[R] command acts as a front-end for launching
+character based utilities and ascii art in various terminal emulators.
+Asciiville can be used to launch any specified character based command.
 Command line options also support running the \f[I]asciiville\f[R]
-windows in a tmux session and recording that session using
+window in a tmux session and recording that session using
 \f[I]asciinema\f[R].
 .PP
-The \f[I]asciiville\f[R] command can be used to control the
-\f[I]mpd\f[R] and \f[I]mpd.socket\f[R] system services when invoked with
-the \f[V]-M action\f[R] command line option.
-The Music Player Daemon (MPD) can be started, stopped, enabled,
-disabled, restarted, and status queried.
-.PP
 The \f[I]asciiville\f[R] command can also act as a front-end to the
-\f[I]mppsplash\f[R] and \f[I]mppsplash-tmux\f[R] commands when invoked
-with the \f[V]-S\f[R] and \f[V]-T\f[R] command line options.
+\f[I]asciisplash\f[R] and \f[I]asciisplash-tmux\f[R] commands when
+invoked with the \f[V]-S\f[R] and \f[V]-T\f[R] command line options.
 .PP
 When invoked with the \f[V]-i\f[R] option, \f[V]asciiville\f[R] presents
 a selection menu and operates in interactive mode.
@@ -57,34 +46,40 @@ Previously started tmux sessions and asciimatics scripts can be quickly
 and easily killed by executing the \f[V]asciiville -k\f[R] command.
 .SH COMMAND LINE OPTIONS
 .PP
-\f[I]MPCplus/Visualizer options:\f[R]
+\f[I]Terminal/Command options:\f[R]
 .TP
-\f[B]-A\f[R]
-indicates display album cover art (implies tmux session)
-.TP
-\f[B]-c\f[R]
-indicates use cantata MPD client rather than mpcplus
-.TP
-\f[B]-C \[aq]client\[aq]\f[R]
-indicates use \[aq]client\[aq] MPD client rather than mpcplus
+\f[B]-c \[aq]command\[aq]\f[R]
+indicates use \[aq]command\[aq]
 .TP
 \f[B]-f\f[R]
 indicates fullscreen display
 .TP
-\f[B]-h\f[R]
-indicates half-height for cava window (with -f only)
+\f[B]-g\f[R]
+indicates use gnome terminal emulator
+.TP
+\f[B]-i\f[R]
+indicates start asciiville in interactive mode
+.TP
+\f[B]-l\f[R]
+indicates use lynx as the default command
 .TP
 \f[B]-P script\f[R]
 specifies the ASCIImatics script to run in visualizer pane
-.TP
-\f[B]-q\f[R]
-indicates quarter-height for cava window (with -f only)
 .TP
 \f[B]-r\f[R]
 indicates use retro terminal emulator
 .TP
 \f[B]-t\f[R]
 indicates use tilix terminal emulator
+.TP
+\f[B]-x\f[R]
+indicates use xfce4 terminal emulator
+.TP
+\f[B]-y\f[R]
+indicates use ranger as the default command
+.TP
+\f[B]-z\f[R]
+indicates use neomutt as the default command
 .PP
 \f[I]ASCIImatics animation options:\f[R]
 .TP
@@ -120,86 +115,50 @@ indicates display ASCIImatics splash animation
 .PP
 \f[I]General options:\f[R]
 .TP
-\f[B]-D\f[R]
-indicates download album cover art
-.TP
-\f[B]-d \[aq]music_directory\[aq]\f[R]
-specifies the music directory to use for downloaded album cover art
-(without this option -D will use the \f[V]music_directory\f[R] setting
-in \f[V]/etc/mpd.conf\f[R]
-.TP
-\f[B]-i\f[R]
-indicates interactive mode with selection menus
-.TP
 \f[B]-k\f[R]
-indicates kill MusicPlayerPlus tmux sessions and ASCIImatics scripts
-.TP
-\f[B]-M \[aq]enable|disable|start|stop|restart|status\[aq]\f[R]
-Enable, disable, start, stop, restart, or get the status of the MPD and
-MPD socket system services
+indicates kill Asciiville tmux sessions and ASCIImatics scripts
 .TP
 \f[B]-R\f[R]
 indicates record tmux session with asciinema
 .TP
 \f[B]-T\f[R]
-indicates use a tmux session for either ASCIImatics or mpcplus
+indicates use a tmux session for either ASCIImatics or command
 .TP
 \f[B]-u\f[R]
 Displays this usage message and exits
 .SH EXAMPLES
 .TP
 \f[B]asciiville\f[R]
-Launches \f[V]mpcplus\f[R] music player client running in xfce4 terminal
-emulator with cava spectrum visualizer running in a gnome-terminal
-terminal emulator window.
+Launches \f[V]btop\f[R] system monitor running in a gnome-terminal
+emulator window.
 .TP
 \f[B]asciiville -i\f[R]
 Launches \f[V]asciiville\f[R] in interactive mode with menu selections
 controlling actions rather than command line arguments
 .TP
-\f[B]asciiville -r\f[R]
-Launches \f[V]mpcplus\f[R] music player client running in
-cool-retro-term terminal emulator with cava spectrum visualizer running
-in a gnome-terminal terminal emulator window.
+\f[B]asciiville -r -y\f[R]
+Launches \f[V]ranger\f[R] file manager running in cool-retro-term
+terminal emulator.
 .TP
-\f[B]asciiville -c\f[R]
-Launches \f[V]cantata\f[R] music player client running in a separate
-window with cava spectrum visualizer running in a gnome-terminal
-terminal emulator window.
+\f[B]asciiville -c cmus -g\f[R]
+Launches the \f[V]cmus\f[R] music player client running in a
+gnome-terminal emulator window.
 .TP
-\f[B]asciiville -C cmus\f[R]
-Launches the \f[V]cmus\f[R] music player client with cava spectrum
-visualizer running in a gnome-terminal terminal emulator window.
+\f[B]asciiville -f -t -z\f[R]
+Launches \f[V]neomutt\f[R] mail client in fullscreen mode running in a
+tilix terminal emulator window.
 .TP
-\f[B]asciiville -C mcg\f[R]
-Launches the CoverGrid music player client (\f[V]mcg\f[R]) running in a
-separate window with cava spectrum visualizer running in a
-gnome-terminal terminal emulator window.
-.TP
-\f[B]asciiville -f -q -t\f[R]
-Launches \f[V]mpcplus\f[R] music player client in fullscreen mode with
-cava spectrum visualizer in quarter-screen mode, both running in a tilix
-terminal emulator window.
-.TP
-\f[B]asciiville -a -T\f[R]
-Launches \f[V]mpcplus\f[R] music player client and visualizer running in
-a tmux session displaying album cover art.
-.TP
-\f[B]asciiville -M stop\f[R]
-Stops the Music Player Daemon service and the associated MPD socket
-service
+\f[B]asciiville -l -T -x\f[R]
+Launches \f[V]lynx\f[R] web browser running in a tmux session in an
+xfce4-terminal window.
 .TP
 \f[B]asciiville -R -T\f[R]
-Creates an asciinema recording of \f[V]mpcplus\f[R] music player client
-and visualizer running in a tmux session
+Creates an asciinema recording of \f[V]btop\f[R] system monitor running
+in a tmux session
 .TP
 \f[B]asciiville -S -j -a\f[R]
-Launch \f[V]mppsplash\f[R] displaying the Julia Set asciimatics
+Launch \f[V]asciisplash\f[R] displaying the Julia Set asciimatics
 animation with audio
-.TP
-\f[B]asciiville -d\f[R]
-Download album cover art for any albums in the music library that do not
-already have cover art
 .SH AUTHORS
 .PP
 Written by Ronald Record <github@ronrecord.com>
@@ -216,8 +175,9 @@ Submit bug reports online at:
 <https://github.com/doctorfree/Asciiville/issues>
 .SH SEE ALSO
 .PP
-\f[B]mppsplash\f[R](1), \f[B]mpcplus\f[R](1), \f[B]mpcpluskeys\f[R](1),
-\f[B]cava\f[R](1)
+\f[B]asciijulia\f[R](1), \f[B]asciimpplus\f[R](1),
+\f[B]asciiplasma\f[R](1), \f[B]asciisplash\f[R](1),
+\f[B]asciisplash-tmux\f[R](1)
 .PP
 Full documentation and sources at:
 .PP

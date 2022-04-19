@@ -1,0 +1,38 @@
+Usage: asciiville [-a] [-b] [-c client] [-f] [-g] [-i]
+		[-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]
+		[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]
+Terminal/Command options:
+	-c 'command' indicates use 'command'
+	-f indicates fullscreen display
+	-g indicates use gnome terminal emulator
+	-i indicates start asciiville in interactive mode
+	-l indicates use lynx as the default command
+	-P script specifies the ASCIImatics script to run in visualizer pane
+	-r indicates use retro terminal emulator
+	-t indicates use tilix terminal emulator
+	-x indicates use xfce4 terminal emulator
+	-y indicates use ranger as the default command
+	-z indicates use neomutt as the default command
+ASCIImatics animation options:
+	-a indicates play audio during ASCIImatics display
+	-b indicates use backup audio during ASCIImatics display
+	-j indicates use Julia Set scenes in ASCIImatics display
+	-J indicates Julia Set with several runs using different parameters
+	-m indicates use MusicPlayerPlus scenes in ASCIImatics display
+	-n num specifies the number of times to cycle ASCIImatics scenes
+	-N indicates use alternate comments in Plasma ASCIImatics scenes
+	-p indicates use Plasma scenes in ASCIImatics display
+	-s song specifies a song to accompany an ASCIImatics animation
+		'song' can be the full pathname to an audio file or a
+		relative pathname to an audio file in the MPD music library
+		or /home/ronnie/Music/
+	-S indicates display ASCIImatics splash animation
+General options:
+	-k indicates kill Asciiville tmux sessions and ASCIImatics scripts
+	-R indicates record tmux session with asciinema
+	-T indicates use a tmux session for either ASCIImatics or command
+	-u displays this usage message and exits
+
+Type 'man asciiville' for detailed usage info on asciiville
+Type 'man btop' for detailed usage info on the btop system monitor
+Type 'man asciisplash' for detailed usage info on the asciisplash command

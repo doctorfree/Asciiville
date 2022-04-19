@@ -34,7 +34,10 @@ a front-end for a variety of terminal and/or `tmux` sessions.
 The `asciiville` command can be used to invoke:
 
 * The lightweight character based system monitor, `btop`
-* One or more terminal emulators running a system monitor
+* The lightweight character based web browser, `lynx`
+* The lightweight character based mail client, `neomutt`
+* The lightweight character based file manager, `ranger`
+* One or more terminal emulators running a command
 * A tmux session
 * Character based ASCII art
 * Any character based client the user wishes to run
@@ -43,6 +46,9 @@ The `asciiville` command can be used to invoke:
 Integration is provided for:
 
 * [btop](btop/README.md), character based system monitor
+* [lynx](https://lynx.invisible-island.net/), character based web browser
+* [neomutt](https://neomutt.org/), character based mail client
+* [ranger](https://ranger.github.io/), character based file manager
 * [mplayer](http://mplayerhq.hu/design7/info.html), a media player
 * [asciimatics](https://github.com/peterbrittain/asciimatics) - automatically display a variety of character based animation effects
 * [asciinema](https://asciinema.org/) - automatically create ascii character based video clips
@@ -58,7 +64,7 @@ Integration is provided for:
 
 Asciiville adds the following commands to your system:
 
-* **asciiville** : primary user interface, invokes terminal emulators, ascii animations, system monitors, and more
+* **asciiville** : primary user interface, invokes terminal emulators, ascii animations, system monitor, mail client, file manager, web browser, and more
 * **btop** : character based system monitor
 * **ascinit** : one-time initializaton of a user's Asciiville configuration
 * **btop-tmux** : runs btop in a tmux session
@@ -104,6 +110,11 @@ It requires:
 * xfce4-terminal (>= 0.8.9.1)
 * cool-retro-term (>= 1.1.1)
 * tmux
+* asciimatics
+* asciinema
+* lynx
+* neomutt
+* ranger
 * mplayer
 
 These dependencies will all be automatically installed if not present
@@ -187,7 +198,44 @@ The usage message for `asciiville` provides a brief
 summary of the command line options:
 
 ```
-Usage: asciiville ...
+Usage: asciiville [-a] [-b] [-c client] [-f] [-g] [-i]
+		[-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]
+		[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]
+Terminal/Command options:
+	-c 'command' indicates use 'command'
+	-f indicates fullscreen display
+	-g indicates use gnome terminal emulator
+	-i indicates start asciiville in interactive mode
+	-l indicates use lynx as the default command
+	-P script specifies the ASCIImatics script to run in visualizer pane
+	-r indicates use retro terminal emulator
+	-t indicates use tilix terminal emulator
+	-x indicates use xfce4 terminal emulator
+	-y indicates use ranger as the default command
+	-z indicates use neomutt as the default command
+ASCIImatics animation options:
+	-a indicates play audio during ASCIImatics display
+	-b indicates use backup audio during ASCIImatics display
+	-j indicates use Julia Set scenes in ASCIImatics display
+	-J indicates Julia Set with several runs using different parameters
+	-m indicates use MusicPlayerPlus scenes in ASCIImatics display
+	-n num specifies the number of times to cycle ASCIImatics scenes
+	-N indicates use alternate comments in Plasma ASCIImatics scenes
+	-p indicates use Plasma scenes in ASCIImatics display
+	-s song specifies a song to accompany an ASCIImatics animation
+		'song' can be the full pathname to an audio file or a
+		relative pathname to an audio file in the MPD music library
+		or /home/ronnie/Music/
+	-S indicates display ASCIImatics splash animation
+General options:
+	-k indicates kill Asciiville tmux sessions and ASCIImatics scripts
+	-R indicates record tmux session with asciinema
+	-T indicates use a tmux session for either ASCIImatics or command
+	-u displays this usage message and exits
+
+Type 'man asciiville' for detailed usage info on asciiville
+Type 'man btop' for detailed usage info on the btop system monitor
+Type 'man asciisplash' for detailed usage info on the asciisplash command
 ```
 
 ```

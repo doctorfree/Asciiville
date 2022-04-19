@@ -95,7 +95,7 @@ Submit bug reports online at:
 https://github.com/doctorfree/Asciiville/issues
 
 # SEE ALSO
-**asciiville**(1)
+**asciijulia**(1), **asciimpplus**(1), **asciiplasma**(1), **asciisplash-tmux**(1), **asciiville**(1)
 
 Full documentation and sources at:
 
