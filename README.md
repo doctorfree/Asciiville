@@ -71,6 +71,7 @@ Asciiville adds the following commands to your system:
 * **btop-tmux** : runs btop in a tmux session
 * **bb-tmux** : runs aalib bb demo in a tmux session
 * **asciisplash** : fun ascii art screens using ASCIImatics animations. Ascii art commands:
+    * **asciiart** : ASCIImatics animated art images
     * **asciijulia** : ASCIImatics animated zoom on a Julia Set
     * **asciiplasma** : ASCIImatics animated plasma graphic
     * **asciimpplus** : ASCIImatics animated Music Player Plus splash screen
@@ -185,6 +186,7 @@ e.g. `asciiville -u`.
 ### Man Pages
 
 - [**asciiville**](markdown/asciiville.1.md) : Primary Asciiville user interface
+- [**asciiart**](markdown/asciiart.1.md) : asciimatics animation of art images
 - [**asciijulia**](markdown/asciijulia.1.md) : asciimatics animation of a Julia Set
 - [**asciimpplus**](markdown/asciimpplus.1.md) : asciimatics animation of Asciiville intro
 - [**asciiplasma**](markdown/asciiplasma.1.md) : asciimatics animation with Plasma effect
