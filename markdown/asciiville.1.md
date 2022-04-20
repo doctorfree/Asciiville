@@ -9,7 +9,7 @@ date: April 16, 2022
 asciiville - Launch a terminal emulator and specified character based command, ascii art, asciimatics animation, and more
 
 # SYNOPSIS
-**asciiville** [-a] [-b] [-c client] [-f] [-g] [-i]
+**asciiville** [-a] [-A] [-b] [-c command] [-f] [-g] [-i] [-I]
 		[-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]
 		[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]
 
@@ -27,80 +27,86 @@ Occasionally a tmux session or asciimatics script will hang. Previously started 
 *Terminal/Command options:*
 
 **-c 'command'**
-: indicates use 'command'
+: Indicates run 'command' in selected terminal window. If *command* is one of the special keywords (*search*, *speed*, *twitter*) then perform a web search, speed test, or run the command line twitter client.
 
 **-f**
-: indicates fullscreen display
+: Indicates fullscreen display
 
 **-g**
-: indicates use gnome terminal emulator
+: Indicates use gnome terminal emulator
 
 **-i**
-: indicates start asciiville in interactive mode
+: Indicates start asciiville in interactive mode
+
+**-I**
+: Indicates display system info
 
 **-l**
-: indicates use lynx as the default command
+: Indicates use lynx as the default command
 
 **-P script**
-: specifies the ASCIImatics script to run in visualizer pane
+: Specifies the ASCIImatics script to run
 
 **-r**
-: indicates use retro terminal emulator
+: Indicates use retro terminal emulator
 
 **-t**
-: indicates use tilix terminal emulator
+: Indicates use tilix terminal emulator
 
 **-x**
-: indicates use xfce4 terminal emulator
+: Indicates use xfce4 terminal emulator
 
 **-y**
-: indicates use ranger as the default command
+: Indicates use ranger as the default command
 
 **-z**
-: indicates use neomutt as the default command
+: Indicates use neomutt as the default command
 
 *ASCIImatics animation options:*
 
 **-a**
-: indicates play audio during ASCIImatics display
+: Indicates play audio during ASCIImatics display
+
+**-A**
+: Indicates use Asciiville scenes in ASCIImatics display
 
 **-b**
-: indicates use backup audio during ASCIImatics display
+: Indicates use backup audio during ASCIImatics display
 
 **-j**
-: indicates use Julia Set scenes in ASCIImatics display
+: Indicates use Julia Set scenes in ASCIImatics display
 
 **-J**
-: indicates Julia Set with several runs using different parameters
+: Indicates Julia Set with several runs using different parameters
 
 **-m**
-: indicates use MusicPlayerPlus scenes in ASCIImatics display
+: Indicates use MusicPlayerPlus scenes in ASCIImatics display
 
 **-n num**
-: specifies the number of times to cycle ASCIImatics scenes
+: Specifies the number of times to cycle ASCIImatics scenes
 
 **-N**
-: indicates use alternate comments in Plasma ASCIImatics scenes
+: Indicates use alternate comments in Plasma ASCIImatics scenes
 
 **-p**
-: indicates use Plasma scenes in ASCIImatics display
+: Indicates use Plasma scenes in ASCIImatics display
 
 **-s song**
-: specifies a song to accompany an ASCIImatics animation
+: Specifies a song to accompany an ASCIImatics animation
 
 **-S**
-: indicates display ASCIImatics splash animation
+: Indicates display ASCIImatics splash animation
 
 *General options:*
 
 **-k**
-: indicates kill Asciiville tmux sessions and ASCIImatics scripts
+: Indicates kill Asciiville tmux sessions and ASCIImatics scripts
 
 **-R**
-: indicates record tmux session with asciinema
+: Indicates record tmux session with asciinema
 
 **-T**
-: indicates use a tmux session for either ASCIImatics or command
+: Indicates use a tmux session for either ASCIImatics or command
 
 **-u**
 : Displays this usage message and exits
@@ -114,6 +120,12 @@ Occasionally a tmux session or asciimatics script will hang. Previously started 
 
 **asciiville -r -y**
 : Launches `ranger` file manager running in cool-retro-term terminal emulator. 
+
+**asciiville -c search**
+: Launches the `ddgr` command line web search in the current terminal window. 
+
+**asciiville -c twitter**
+: Launches the `rainbowstream` command line Twitter client in the current terminal window. 
 
 **asciiville -c cmus -g**
 : Launches the `cmus` music player client running in a gnome-terminal emulator window. 
@@ -145,7 +157,7 @@ Submit bug reports online at:
 https://github.com/doctorfree/Asciiville/issues
 
 # SEE ALSO
-**asciijulia**(1), **asciimpplus**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1)
+**asciiart**(1), **asciijulia**(1), **asciimpplus**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1)
 
 Full documentation and sources at:
 

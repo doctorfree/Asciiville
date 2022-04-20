@@ -111,6 +111,8 @@ Additional detail and info can be found in the
 
 * Install the latest Debian or RPM format installation package from the [Asciiville Releases](https://github.com/doctorfree/Asciiville/releases) page
 * Run the `ascinit` command (must be done as your normal user, no need for `sudo`)
+* Initialize the command line Twitter client by invoking the `rainbowstream` command and authorizing the app to access your Twitter account
+* Execute the `asciiville` command in interactive menu mode by running `asciiville -i`
 * See the [online asciiville man page](https://github.com/doctorfree/Asciiville/wiki/asciiville.1) or `man asciiville` for different ways to invoke the `asciiville` command
 
 ## Requirements
@@ -211,14 +213,19 @@ The usage message for `asciiville` provides a brief
 summary of the command line options:
 
 ```
-Usage: asciiville [-a] [-b] [-c client] [-f] [-g] [-i]
-		[-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]
+Usage: asciiville [-a] [-A] [-b] [-c command] [-f] [-g] [-i]
+		[-I] [-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]
 		[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]
+
 Terminal/Command options:
 	-c 'command' indicates use 'command'
+		If 'command' is keyword 'search' then a web search is performed
+		If 'command' is keyword 'speed' then a speed test is performed
+		If 'command' is keyword 'twitter' then a Twitter client is run
 	-f indicates fullscreen display
 	-g indicates use gnome terminal emulator
 	-i indicates start asciiville in interactive mode
+	-I indicates display system info
 	-l indicates use lynx as the default command
 	-P script specifies the ASCIImatics script to run in visualizer pane
 	-r indicates use retro terminal emulator
@@ -226,7 +233,9 @@ Terminal/Command options:
 	-x indicates use xfce4 terminal emulator
 	-y indicates use ranger as the default command
 	-z indicates use neomutt as the default command
+
 ASCIImatics animation options:
+	-A indicates use Art Images scenes in ASCIImatics display
 	-a indicates play audio during ASCIImatics display
 	-b indicates use backup audio during ASCIImatics display
 	-j indicates use Julia Set scenes in ASCIImatics display
@@ -240,15 +249,12 @@ ASCIImatics animation options:
 		relative pathname to an audio file in the MPD music library
 		or /home/ronnie/Music/
 	-S indicates display ASCIImatics splash animation
+
 General options:
 	-k indicates kill Asciiville tmux sessions and ASCIImatics scripts
 	-R indicates record tmux session with asciinema
 	-T indicates use a tmux session for either ASCIImatics or command
 	-u displays this usage message and exits
-
-Type 'man asciiville' for detailed usage info on asciiville
-Type 'man btop' for detailed usage info on the btop system monitor
-Type 'man asciisplash' for detailed usage info on the asciisplash command
 ```
 
 ```
