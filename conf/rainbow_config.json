@@ -46,7 +46,7 @@
     "ONLY_LIST" : [],
     "IGNORE_LIST" : [],
     // Autocomplete history file name
-    "HISTORY_FILENAME" : "~/.rainbowstream.hist",
+    "HISTORY_FILENAME" : "~/.rainbow_hist",
     // Image margin
     "IMAGE_SHIFT" : 2,
     // Image max height

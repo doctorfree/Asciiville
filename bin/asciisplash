@@ -43,7 +43,7 @@ set_cycles() {
         usecycle=$(( 1000*$2 ))
       fi
       ;;
-    art|plasma)
+    plasma)
       if [ "${debug}" ]
       then
         usecycle=$(( 1*$2 ))

@@ -248,10 +248,10 @@ def _mpplus(screen):
                          start_frame=100))
     scenes.append(Scene(effects, 300))
 
-    if numcycles is None:
-        screen.play(scenes, stop_on_resize=True)
-    else:
+    numplays=0
+    while numplays < numcycles:
         screen.play(scenes, stop_on_resize=True, repeat=False)
+        numplays += 1
 
 
 if __name__ == "__main__":
@@ -296,7 +296,7 @@ if __name__ == "__main__":
     if args.cycle:
         numcycles = args.cycle
     else:
-        numcycles = None
+        numcycles = 1
     if args.debug:
         debug = True
     else:
