@@ -12,6 +12,7 @@ CONFDIR=/usr/share/doc/asciiville
     [ -d ${HOME}/.config ] || mkdir -p ${HOME}/.config
     [ -d ${HOME}/.config/ranger ] || mkdir -p ${HOME}/.config/ranger
     cp ${CONFDIR}/rifle.conf ${HOME}/.config/ranger/rifle.conf
+  }
 }
 
 # Setup default tmux configuration for this user unless
