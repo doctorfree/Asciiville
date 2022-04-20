@@ -1,0 +1,72 @@
+{
+    //Time in seconds between each automatic poll. Most Twitter accounts have a limit of 15 requests each 15 minutes. If in doubt, set it to 90 or more. 
+    "POLLING_TIME" : 90,
+    // Turn to 'true' in order to disable extended tweets display (legacy mode)
+    "DISABLE_EXTENDED_TWEETS" : false,
+    // After 120 minutes, the stream will automatically hangup
+    "HEARTBEAT_TIMEOUT" : 120,
+    // Image on term
+    "IMAGE_ON_TERM" : true,
+    // Resize image to fit on terminal view
+    "IMAGE_RESIZE_TO_FIT" : true,
+    // Themes
+    "THEME" : "monokai",
+    // Ascii Art
+    "ASCII_ART" : true,
+    // Hide promt when receive a tweet
+    "HIDE_PROMPT" : true,
+    // Prefix
+    "PREFIX" : "#owner#place#me#keyword",
+    // 'search': search type ('mixed','recent','popular')
+    "SEARCH_TYPE" : "mixed",
+    // 'search': search max result, number over 100 will fallback to 100
+    "SEARCH_MAX_RECORD" : 5,
+    // 'home': default number of home's tweets
+    "HOME_TWEET_NUM" : 5,
+    // 'allrt': default number of retweets
+    "RETWEETS_SHOW_NUM" : 5,
+    // 'conversation': max tweet in a thread
+    "CONVERSATION_MAX" : 30,
+    // 'quote' format
+    "QUOTE_FORMAT" : "#comment https://twitter.com/#owner/status/#tid",
+    // 'thread' meta format
+    "THREAD_META_LEFT" : "(#id) #clock",
+    "THREAD_META_RIGHT" : "#clock (#id)",
+    // 'thread' frame's minimum width
+    "THREAD_MIN_WIDTH" : 20,
+    // 'Notification' format
+    "NOTIFY_FORMAT" : "  #source_user #notify #clock",
+    // 'inbox','sent': default number of direct message
+    "MESSAGES_DISPLAY" : 5,
+    // 'trend': max trending topics
+    "TREND_MAX" : 10,
+    // List home timeline max
+    "LIST_MAX" : 5,
+    // 'switch': Filter and Ignore list ex: ['@fat','@mdo']
+    "ONLY_LIST" : [],
+    "IGNORE_LIST" : [],
+    // Autocomplete history file name
+    "HISTORY_FILENAME" : "completer.hist",
+    // Image margin
+    "IMAGE_SHIFT" : 2,
+    // Image max height
+    "IMAGE_MAX_HEIGHT" : 90,
+    // Seconds to wait before displaying another tweet, will drop all tweets while waiting.
+    "STREAM_DELAY" : 0,
+    // Stream config
+    "USER_DOMAIN" : "userstream.twitter.com",
+    "PUBLIC_DOMAIN" : "stream.twitter.com",
+    "SITE_DOMAIN" : "sitestream.twitter.com",
+    // Format
+    "FORMAT": {
+        "TWEET": {
+            "CLOCK_FORMAT" : "%Y/%m/%d %H:%M:%S",
+            "DISPLAY" : "\n  #name #nick #clock \n  \u267A:#rt_count \u2665:#fa_count id:#id via #client #fav\n  #tweet"
+        },
+        "MESSAGE": {
+            "CLOCK_FORMAT" : "%Y/%m/%d %H:%M:%S",
+            "DISPLAY" : "\n  #sender_name #sender_nick #to #recipient_name #recipient_nick :\n  #clock message_id:#id\n  #message"
+        }
+    },
+    "POCKET_SUPPORT": false
+}

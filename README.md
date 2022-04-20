@@ -39,20 +39,27 @@ The `asciiville` command can be used to invoke:
 * The lightweight character based file manager, `ranger`
 * One or more terminal emulators running a command
 * A tmux session
+* A command line web search
+* Command line character based Twitter client
+* A network download/upload speed test
 * The AAlib BB demo running in a tmux session
 * Character based ASCII art
+* Display system info
 * Any character based client the user wishes to run
 * One of several asciimatics animations optionally accompanied by audio
 
 Integration is provided for:
 
 * [btop](btop/README.md), character based system monitor
+* [ddgr](ddgr/README.md), command line web search
 * [lynx](https://lynx.invisible-island.net/), character based web browser
 * [neomutt](https://neomutt.org/), character based mail client
 * [ranger](https://ranger.github.io/), character based file manager
 * [mplayer](http://mplayerhq.hu/design7/info.html), a media player
 * [asciimatics](https://github.com/peterbrittain/asciimatics) - automatically display a variety of character based animation effects
 * [asciinema](https://asciinema.org/) - automatically create ascii character based video clips
+* [rainbowstream](https://github.com/orakaro/rainbowstream) - command line character based Twitter client
+    * See [the rainbowstream usage manual](https://rainbowstream.readthedocs.io/en/latest/#usage) to get started
 * [tmux](https://github.com/tmux/tmux/wiki), a terminal multiplexer
 * Enhanced key bindings for extended control of terminal windows
 * Several terminal emulators
@@ -76,6 +83,8 @@ Asciiville adds the following commands to your system:
     * **asciiplasma** : ASCIImatics animated plasma graphic
     * **asciimpplus** : ASCIImatics animated Music Player Plus splash screen
 * **chktermcolor** : checks if a terminal has 24-bit true color support
+* **ddgr** : command line web search
+* **rainbowstream** : command line Twitter client
 * **set_xfce_trans** : sets an xfce4-terminal window's transparency level
 
 Additional detail and info can be found in the

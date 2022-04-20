@@ -13,6 +13,7 @@
 #     * A network upload/download speed test
 #     * A web search
 #     * Character based ASCII art
+#     * Command line character based Twitter client
 #     * Display system info
 #     * Any character based client the user wishes to run
 #     * One of several asciimatics animations optionally accompanied by audio
@@ -44,6 +45,7 @@ usage() {
   printf "\n\t-c 'command' indicates use 'command'"
   printf "\n\t\tIf 'command' is keyword 'search' then a web search is performed"
   printf "\n\t\tIf 'command' is keyword 'speed' then a speed test is performed"
+  printf "\n\t\tIf 'command' is keyword 'twitter' then a Twitter client is run"
   printf "\n\t-f indicates fullscreen display"
   printf "\n\t-g indicates use gnome terminal emulator"
   printf "\n\t-i indicates start asciiville in interactive mode"
@@ -381,6 +383,7 @@ show_main_menu() {
     }
     [ "${have_bb}" ] && options+=("Run AAlib Demo (Curses mode)")
     [ "${have_speed}" ] && options+=("Run Speed Test")
+    [ "${have_rainbow}" ] && options+=("Run Twitter Client")
     [ "${have_ddgr}" ] && options+=("Search the Web")
     [ "${have_neo}" ] && options+=("Show System Info")
     [ "${have_btop}" ] && options+=("Use Btop System Monitor    [${use_btop}]")
@@ -468,6 +471,13 @@ show_main_menu() {
               ;;
           "Run Speed Test",*|*,"Run Speed Test")
               speedtest-cli
+              skip_it_so=1
+              break
+              ;;
+          "Run Twitter Client",*|*,"Run Twitter Client")
+              # For 24-bit color image support, run with the '-p24' option
+              # rainbowstream -p24
+              rainbowstream
               skip_it_so=1
               break
               ;;
@@ -582,6 +592,7 @@ have_ddgr=`type -p ddgr`
 have_gdu=`type -p gdu`
 have_neo=`type -p neofetch`
 have_lol=`type -p lolcat`
+have_rainbow=`type -p rainbowstream`
 have_speed=`type -p speedtest-cli`
 have_splash=`type -p asciisplash`
 have_xfce4=`type -p xfce4-terminal`
@@ -611,32 +622,37 @@ while getopts "Aabc:fgiIjJklmn:NpP:rRSs:tTxyzu" flag; do
         then
           [ "${have_speed}" ] && speedtest-cli
         else
-          FIRST=`echo ${COMMAND} | awk ' { print $1 } '`
-          MTITLE="Asciiville ${COMMAND}"
-          type -p "${FIRST}" > /dev/null || {
-            echo "Option '-c' indicates use ${FIRST}."
-            echo "However, ${FIRST} is not installed or not in your path."
-            echo "You may be able to install ${FIRST} using apt or dnf:"
-            printf "\n\n\tsudo apt install ${FIRST}\nor"
-            printf "\n\tsudo dnf install ${FIRST}\n\n"
-            if [ "${have_btop}" ]
-            then
-              echo "Continuing, using btop rather than ${COMMAND}."
-              COMMAND=btop
-              MTITLE="Btop++ System Monitor"
-            else
-              if [ "${have_lynx}" ]
+          if [ "${COMMAND}" == "twitter" ]
+          then
+            [ "${have_rainbow}" ] && rainbowstream
+          else
+            FIRST=`echo ${COMMAND} | awk ' { print $1 } '`
+            MTITLE="Asciiville ${COMMAND}"
+            type -p "${FIRST}" > /dev/null || {
+              echo "Option '-c' indicates use ${FIRST}."
+              echo "However, ${FIRST} is not installed or not in your path."
+              echo "You may be able to install ${FIRST} using apt or dnf:"
+              printf "\n\n\tsudo apt install ${FIRST}\nor"
+              printf "\n\tsudo dnf install ${FIRST}\n\n"
+              if [ "${have_btop}" ]
               then
-                echo "Continuing, using lynx rather than ${COMMAND}."
-                COMMAND=lynx
-                MTITLE="Lynx Web Browser"
+                echo "Continuing, using btop rather than ${COMMAND}."
+                COMMAND=btop
+                MTITLE="Btop++ System Monitor"
               else
-                echo "Continuing, using asciiplasma rather than ${COMMAND}."
-                COMMAND=asciiplasma
-                MTITLE="ASCIImatics Plasma"
+                if [ "${have_lynx}" ]
+                then
+                  echo "Continuing, using lynx rather than ${COMMAND}."
+                  COMMAND=lynx
+                  MTITLE="Lynx Web Browser"
+                else
+                  echo "Continuing, using asciiplasma rather than ${COMMAND}."
+                  COMMAND=asciiplasma
+                  MTITLE="ASCIImatics Plasma"
+                fi
               fi
-            fi
-          }
+            }
+          fi
         fi
       fi
       ;;

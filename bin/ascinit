@@ -5,6 +5,8 @@
 # Setup default tmux configuration for this user
 # Install required pip modules if not already installed
 CONFDIR=/usr/share/doc/asciiville
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
 
 # Setup default rifle configuration for this user unless one exists
 [ -f ${CONFDIR}/rifle.conf ] && {
@@ -12,6 +14,13 @@ CONFDIR=/usr/share/doc/asciiville
     [ -d ${HOME}/.config ] || mkdir -p ${HOME}/.config
     [ -d ${HOME}/.config/ranger ] || mkdir -p ${HOME}/.config/ranger
     cp ${CONFDIR}/rifle.conf ${HOME}/.config/ranger/rifle.conf
+  }
+}
+
+# Setup default rainbowstream configuration for this user unless one exists
+[ -f ${CONFDIR}/rainbow_config.json ] && {
+  [ -f ${HOME}/.rainbow_config.json ] || {
+    cp ${CONFDIR}/rainbow_config.json ${HOME}/.rainbow_config.json
   }
 }
 
@@ -50,26 +59,31 @@ have_pip=`type -p pip`
 }
 
 pip list | grep asciimatics > /dev/null || python3 -m pip install asciimatics
+pip list | grep rainbowstream > /dev/null || python3 -m pip install rainbowstream
 
-printf "\nAsciiville Initialization Complete\n"
+printf "\n${BOLD}Asciiville Initialization Complete${NORMAL}\n"
+printf "\nAuthorize the Rainbow Stream app at Twitter"
+printf "\nby running the ${BOLD}'rainbowstream'${NORMAL} command\n"
 printf "\nVisit the Asciiville Wiki at:"
-printf "\n\thttps://github.com/doctorfree/Asciiville/wiki\n"
+printf "\n\t${BOLD}https://github.com/doctorfree/Asciiville/wiki${NORMAL}\n"
 
-type -p asciisplash > /dev/null && {
-  while true
-  do
-    read -p "View an ASCII animation ? (y/n) " yn
-    case $yn in
-      [Yy]* )
+[ "$1" == "-n" ] || {
+  type -p asciisplash > /dev/null && {
+    while true
+    do
+      read -p "View an ASCII animation ? (y/n) " yn
+      case $yn in
+        [Yy]* )
               asciisplash -c 1 -a -i
               break
               ;;
-      [Nn]* )
+        [Nn]* )
               printf "\nExiting.\n"
               exit 0
               ;;
-          * ) echo "Please answer yes or no."
+            * ) echo "Please answer yes or no."
               ;;
-    esac
-  done
+      esac
+    done
+  }
 }
