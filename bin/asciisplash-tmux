@@ -115,6 +115,9 @@ while getopts "abc:dl:r:Rs:tu" flag; do
 done
 shift $(( OPTIND - 1 ))
 [ "${AUDIO}" ] && {
+  [ "${PYLEFT}" == "art" ] && {
+    [ "${custom_audio}" ] || SONG="${PLASMA_SONG}"
+  }
   [ "${PYLEFT}" == "plasma" ] && {
     [ "${custom_audio}" ] || SONG="${PLASMA_SONG}"
   }
@@ -132,6 +135,8 @@ script_args="${script_args} ${CYCLE}"
 
 if [ "${DUDE}" ]
 then
+  [ "${PYLEFT}" == "art" ] && left_script_args="${left_script_args} -i -C"
+  [ "${PYRIGHT}" == "art" ] && right_script_args="${right_script_args} -i -C"
   [ "${PYLEFT}" == "mpplus" ] && left_script_args="${left_script_args} -m -C"
   [ "${PYRIGHT}" == "mpplus" ] && right_script_args="${right_script_args} -m -C"
   [ "${PYLEFT}" == "plasma" ] && left_script_args="${left_script_args} -p -C"
@@ -139,6 +144,8 @@ then
   [ "${PYLEFT}" == "julia" ] && left_script_args="${left_script_args} -j -C"
   [ "${PYRIGHT}" == "julia" ] && right_script_args="${right_script_args} -j -C"
 else
+  [ "${PYLEFT}" == "art" ] && left_script_args="${left_script_args} -i"
+  [ "${PYRIGHT}" == "art" ] && right_script_args="${right_script_args} -i"
   [ "${PYLEFT}" == "mpplus" ] && left_script_args="${left_script_args} -m"
   [ "${PYRIGHT}" == "mpplus" ] && right_script_args="${right_script_args} -m"
   [ "${PYLEFT}" == "plasma" ] && left_script_args="${left_script_args} -p"

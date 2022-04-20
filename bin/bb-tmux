@@ -3,10 +3,12 @@
 # bb-tmux - display bb in a tmux session
 
 SESSION=bb
+SONG=/usr/share/doc/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav"
 
 usage() {
-  printf "\nUsage: bb-tmux [-r] [-u]"
+  printf "\nUsage: bb-tmux [-a] [-r] [-u]"
   printf "\nWhere:"
+  printf "\n\t-a indicates play audio along with bb demo"
   printf "\n\t-r indicates record tmux session with asciinema"
   printf "\n\t-u displays this usage message and exits\n"
   if [ "${RECORD}" ]
@@ -19,10 +21,17 @@ usage() {
   exit 1
 }
 
+AUDIO=
 RECORD=
 USAGE=
-while getopts "ru" flag; do
+while getopts "aru" flag; do
     case $flag in
+        a)
+          [ -f "${SONG}" ] && {
+            have_mplayer=`type -p mplayer`
+            [ "${have_mplayer}" ] && AUDIO=1
+          }
+          ;;
         r)
           have_nema=`type -p asciinema`
           [ "${have_nema}" ] && RECORD=1
@@ -49,12 +58,31 @@ tmux select-pane -t 0
 if [ "${DISPLAY}" == "" ]
 then
   echo "Using curses driver"
-  tmux send-keys "bb -driver curses -kbddriver stdin; tmux kill-session -t ${SESSION}" C-m
+  if [ "${AUDIO}" ]
+  then
+    tmux send-keys "bb -driver curses -kbddriver stdin; echo 'stop' > ${FIFO}; echo 'quit' > ${FIFO}; rm -f ${FIFO}; tmux kill-session -t ${SESSION}" C-m
+  else
+    tmux send-keys "bb -driver curses -kbddriver stdin; tmux kill-session -t ${SESSION}" C-m
+  fi
 else
   echo "Using X11 driver"
-  tmux send-keys "bb -width 240 -height 80 -kbddriver stdin; tmux kill-session -t ${SESSION}" C-m
+  if [ "${AUDIO}" ]
+  then
+    tmux send-keys "bb -width 240 -height 80 -kbddriver stdin; echo 'stop' > ${FIFO}; echo 'quit' > ${FIFO}; rm -f ${FIFO}; tmux kill-session -t ${SESSION}" C-m
+  else
+    tmux send-keys "bb -width 240 -height 80 -kbddriver stdin; tmux kill-session -t ${SESSION}" C-m
+  fi
 fi
 tmux send-keys "echo 'n'" C-m
+
+[ "${AUDIO}" ] && {
+  FIFO="/tmp/bbdemo$$"
+  rm -f ${FIFO}
+  mkfifo ${FIFO}
+  mplayer -novideo -volume 80 -really-quiet -nolirc \
+          -slave -input file=${FIFO} "${SONG}" > /dev/null 2>&1 $
+# tmux set-hook -g session-closed "echo 'stop' > ${FIFO}; echo 'quit' > ${FIFO}; rm -f ${FIFO}"
+}
 
 if [ "${RECORD}" ]
 then

@@ -34,7 +34,7 @@ then
 fi
 
 usage() {
-  printf "\nUsage: asciiville [-a] [-b] [-c client] [-f] [-g] [-i]"
+  printf "\nUsage: asciiville [-a] [-A] [-b] [-c client] [-f] [-g] [-i]"
   printf "\n\t\t[-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]"
   printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]"
   printf "\nTerminal/Command options:"
@@ -50,6 +50,7 @@ usage() {
   printf "\n\t-y indicates use ranger as the default command"
   printf "\n\t-z indicates use neomutt as the default command"
   printf "\nASCIImatics animation options:"
+  printf "\n\t-A indicates use Art Images scenes in ASCIImatics display"
   printf "\n\t-a indicates play audio during ASCIImatics display"
   printf "\n\t-b indicates use backup audio during ASCIImatics display"
   printf "\n\t-j indicates use Julia Set scenes in ASCIImatics display"
@@ -82,7 +83,7 @@ kill_tmux_sessions() {
       tmux kill-session -t ${session}
     }
   done
-  ASCIIS="asciijulia asciimpplus asciiplasma"
+  ASCIIS="asciiart asciijulia asciimpplus asciiplasma"
   for ascii in ${ASCIIS}
   do
     ps -ef | grep -v grep | grep ${ascii} > /dev/null && {
@@ -204,12 +205,13 @@ show_ascii_menu() {
     skip_it_so=
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
+    [ "${have_art}" ] && options+=("Art Images ASCIImatics Animation")
     [ "${have_julia}" ] && options+=("Julia Set ASCIImatics Animation")
     [ "${have_mpplus}" ] && options+=("MPPlus ASCIImatics Animation")
     [ "${have_plasma}" ] && options+=("Plasma ASCIImatics Animation")
-    options+=("Audio (${audiostat})")
-    [ "${have_nema}" ] && options+=("Record Tmux Session (${recordstat})")
-    options+=("Use Tmux (${usetmux})" "Main menu" "Quit")
+    options+=("Audio [${audiostat}]")
+    [ "${have_nema}" ] && options+=("Record Tmux Session [${recordstat}]")
+    options+=("Use Tmux [${usetmux}]" "Main menu" "Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
@@ -217,6 +219,11 @@ show_ascii_menu() {
               printf "Returning\n\n"
               init_vars
               break 2
+              ;;
+          "Art Images ASCIImatics Animation",*|*,"Art Images ASCIImatics Animation")
+              ASCSPLASH="${ASCSPLASH} -i"
+              ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l art"
+              break
               ;;
           "Julia Set ASCIImatics Animation",*|*,"Julia Set ASCIImatics Animation")
               ASCSPLASH="${ASCSPLASH} -j"
@@ -318,24 +325,35 @@ show_main_menu() {
     case "${COMMAND}" in
       btop)
         use_btop="YES"
+        use_gdu="NO"
+        use_lynx="NO"
+        use_mutt="NO"
+        use_ranger="NO"
+        ;;
+      gdu)
+        use_btop="NO"
+        use_gdu="YES"
         use_lynx="NO"
         use_mutt="NO"
         use_ranger="NO"
         ;;
       lynx)
         use_btop="NO"
+        use_gdu="NO"
         use_lynx="YES"
         use_mutt="NO"
         use_ranger="NO"
         ;;
       neomutt)
         use_btop="NO"
+        use_gdu="NO"
         use_lynx="NO"
         use_mutt="YES"
         use_ranger="NO"
         ;;
       ranger)
         use_btop="NO"
+        use_gdu="NO"
         use_lynx="NO"
         use_mutt="NO"
         use_ranger="YES"
@@ -348,14 +366,11 @@ show_main_menu() {
     [ "${have_gnome}" ] && options+=("Run Gnome Terminal")
     [ "${have_retro}" ] && options+=("Run Retro Terminal")
     [ "${have_tilix}" ] && options+=("Run Tilix Terminal")
-    options+=("Use Tmux (${usetmux})")
-    [ "${have_nema}" ] && options+=("Record Tmux Session (${recordstat})")
-    options+=("Fullscreen (${fullstat})")
-    [ "${have_btop}" ] && options+=("Use Btop System Monitor (${use_btop})")
-    [ "${have_gdu}" ] && options+=("Use Disk Usage Analyzer")
-    [ "${have_lynx}" ] && options+=("Use Lynx Web Browser (${use_lynx})")
-    [ "${have_mutt}" ] && options+=("Use NeoMutt Mail Client (${use_mutt})")
-    [ "${have_ranger}" ] && options+=("Use Ranger File Manager (${use_ranger})")
+    [ "${have_btop}" ] && options+=("Use Btop System Monitor [${use_btop}]")
+    [ "${have_gdu}" ] && options+=("Use Disk Usage Analyzer [${use_gdu}]")
+    [ "${have_lynx}" ] && options+=("Use  Lynx  Web  Browser [${use_lynx}]")
+    [ "${have_mutt}" ] && options+=("Use NeoMutt Mail Client [${use_mutt}]")
+    [ "${have_ranger}" ] && options+=("Use Ranger File Manager [${use_ranger}]")
     [ "${have_splash}" ] && options+=("ASCIImatics Animations")
     [ "${have_bb}" ] && {
       [ "$DISPLAY" = "" ] || options+=("Run AAlib Demo (X11 mode)")
@@ -363,6 +378,9 @@ show_main_menu() {
     [ "${have_bb}" ] && options+=("Run AAlib Demo (Curses mode)")
     options+=("Kill Tmux Sessions")
     [ "${have_speed}" ] && options+=("Run Speed Test")
+    options+=("Use Tmux [${usetmux}]")
+    [ "${have_nema}" ] && options+=("Record Tmux Session [${recordstat}]")
+    options+=("Fullscreen Terminal Window [${fullstat}]")
     options+=("Quit")
     select opt in "${options[@]}"
     do
@@ -481,7 +499,7 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "Fullscreen"*,*|*,"Fullscreen"*)
+          "Fullscreen Terminal Window"*,*|*,"Fullscreen Terminal Window"*)
               if [ "${FULLSCREEN}" ]
               then
                 FULLSCREEN=
@@ -528,6 +546,7 @@ have_mutt=`type -p neomutt`
 have_ranger=`type -p ranger`
 have_retro=`type -p cool-retro-term`
 have_tilix=`type -p tilix`
+have_art=`type -p asciiart`
 have_julia=`type -p asciijulia`
 have_plasma=`type -p asciiplasma`
 have_mpplus=`type -p asciimpplus`
@@ -538,8 +557,12 @@ have_speed=`type -p speedtest-cli`
 have_splash=`type -p asciisplash`
 have_xfce4=`type -p xfce4-terminal`
 have_gnome=`type -p gnome-terminal`
-while getopts "abc:fgijJklmn:NpP:rRSs:tTxyzu" flag; do
+while getopts "Aabc:fgijJklmn:NpP:rRSs:tTxyzu" flag; do
   case $flag in
+    A)
+      ASCSPLASH="${ASCSPLASH} -i"
+      ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l art"
+      ;;
     a)
       AUDIO=1
       ASCSPLASH="${ASCSPLASH} -a"

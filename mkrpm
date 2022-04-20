@@ -76,6 +76,7 @@ ${SUDO} cp CHANGELOG.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} gzip -9 ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/CHANGELOG.md
 
+${SUDO} cp -a art "${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/art"
 ${SUDO} cp -a music "${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/music"
 
 ${SUDO} cp -a man/man1 ${OUT_DIR}/${DESTDIR}/share/man/man1

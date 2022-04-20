@@ -13,6 +13,7 @@ For example, the man page output for the `asciiville` command would be found at
 ## Contents
 
 - [**asciiville.1.md**](asciiville.1.md) - Markdown input for auto-generation of the asciiville man page
+- [**asciiart.1.md**](asciiart.1.md) - Markdown input for auto-generation of the asciiart man page
 - [**asciijulia.1.md**](asciijulia.1.md) - Markdown input for auto-generation of the asciijulia man page
 - [**asciiplasma.1.md**](asciiplasma.1.md) - Markdown input for auto-generation of the asciiplasma man page
 - [**asciisplash.1.md**](asciisplash.1.md) - Markdown input for auto-generation of the asciisplash man page
