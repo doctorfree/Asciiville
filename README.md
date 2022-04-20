@@ -45,6 +45,8 @@ The `asciiville` command can be used to invoke:
 * The AAlib BB demo running in a tmux session
 * Character based ASCII art
 * Display system info
+* Display the Phase of the Moon
+* Display a weather report
 * Any character based client the user wishes to run
 * One of several asciimatics animations optionally accompanied by audio
 
@@ -61,6 +63,7 @@ Integration is provided for:
 * [rainbowstream](https://github.com/orakaro/rainbowstream) - command line character based Twitter client
     * See [the rainbowstream usage manual](https://rainbowstream.readthedocs.io/en/latest/#usage) to get started
 * [tmux](https://github.com/tmux/tmux/wiki), a terminal multiplexer
+* [wttr.in](https://github.com/chubin/wttr.in), console-oriented weather report
 * Enhanced key bindings for extended control of terminal windows
 * Several terminal emulators
     * xfce4-terminal
@@ -219,9 +222,12 @@ Usage: asciiville [-a] [-A] [-b] [-c command] [-f] [-g] [-i]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
+		If 'command' is keyword 'moon' then display the phase of the Moon
 		If 'command' is keyword 'search' then a web search is performed
 		If 'command' is keyword 'speed' then a speed test is performed
 		If 'command' is keyword 'twitter' then a Twitter client is run
+		If 'command' is keyword 'weather' then display a weather report
+		Otherwise, 'command' will be executed in a terminal window
 	-f indicates fullscreen display
 	-g indicates use gnome terminal emulator
 	-i indicates start asciiville in interactive mode

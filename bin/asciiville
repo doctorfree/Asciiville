@@ -40,12 +40,15 @@ fi
 usage() {
   printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-f] [-g] [-i]"
   printf "\n\t\t[-I] [-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]"
-  printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]"
+  printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]\n"
   printf "\nTerminal/Command options:"
   printf "\n\t-c 'command' indicates use 'command'"
+  printf "\n\t\tIf 'command' is keyword 'moon' then display the phase of the Moon"
   printf "\n\t\tIf 'command' is keyword 'search' then a web search is performed"
   printf "\n\t\tIf 'command' is keyword 'speed' then a speed test is performed"
   printf "\n\t\tIf 'command' is keyword 'twitter' then a Twitter client is run"
+  printf "\n\t\tIf 'command' is keyword 'weather' then display a weather report"
+  printf "\n\t\tOtherwise, 'command' will be executed in a terminal window"
   printf "\n\t-f indicates fullscreen display"
   printf "\n\t-g indicates use gnome terminal emulator"
   printf "\n\t-i indicates start asciiville in interactive mode"
@@ -56,7 +59,7 @@ usage() {
   printf "\n\t-t indicates use tilix terminal emulator"
   printf "\n\t-x indicates use xfce4 terminal emulator"
   printf "\n\t-y indicates use ranger as the default command"
-  printf "\n\t-z indicates use neomutt as the default command"
+  printf "\n\t-z indicates use neomutt as the default command\n"
   printf "\nASCIImatics animation options:"
   printf "\n\t-A indicates use Art Images scenes in ASCIImatics display"
   printf "\n\t-a indicates play audio during ASCIImatics display"
@@ -71,7 +74,7 @@ usage() {
   printf "\n\t\t'song' can be the full pathname to an audio file or a"
   printf "\n\t\trelative pathname to an audio file in the MPD music library"
   printf "\n\t\tor $HOME/Music/"
-  printf "\n\t-S indicates display ASCIImatics splash animation"
+  printf "\n\t-S indicates display ASCIImatics splash animation\n"
   printf "\nGeneral options:"
   printf "\n\t-k indicates kill Asciiville tmux sessions and ASCIImatics scripts"
   printf "\n\t-R indicates record tmux session with asciinema"
@@ -386,6 +389,8 @@ show_main_menu() {
     [ "${have_rainbow}" ] && options+=("Run Twitter Client")
     [ "${have_ddgr}" ] && options+=("Search the Web")
     [ "${have_neo}" ] && options+=("Show System Info")
+    [ "${have_curl}" ] && options+=("Phase of the Moon")
+    [ "${have_curl}" ] && options+=("Weather Report")
     [ "${have_btop}" ] && options+=("Use Btop System Monitor    [${use_btop}]")
     [ "${have_gdu}" ] && options+=("Use Disk Usage Analyzer    [${use_gdu}]")
     [ "${have_lynx}" ] && options+=("Use  Lynx  Web  Browser    [${use_lynx}]")
@@ -466,6 +471,16 @@ show_main_menu() {
               ;;
           "Run AAlib Demo (X11 mode)",*|*,"Run AAlib Demo (X11 mode)")
               bb-tmux
+              skip_it_so=1
+              break
+              ;;
+          "Phase of the Moon",*|*,"Phase of the Moon")
+              curl wttr.in?format=v2
+              skip_it_so=1
+              break
+              ;;
+          "Weather Report",*|*,"Weather Report")
+              curl wttr.in?format=v2
               skip_it_so=1
               break
               ;;
@@ -588,6 +603,7 @@ have_plasma=`type -p asciiplasma`
 have_mpplus=`type -p asciimpplus`
 have_nema=`type -p asciinema`
 have_bb=`type -p bb-tmux`
+have_curl=`type -p curl`
 have_ddgr=`type -p ddgr`
 have_gdu=`type -p gdu`
 have_neo=`type -p neofetch`
@@ -614,47 +630,57 @@ while getopts "Aabc:fgiIjJklmn:NpP:rRSs:tTxyzu" flag; do
       ;;
     c)
       COMMAND="${OPTARG}"
-      if [ "${COMMAND}" == "search" ]
-      then
-        [ "${have_ddgr}" ] && ddgr
-      else
-        if [ "${COMMAND}" == "speed" ]
-        then
+      case "${COMMAND}" in
+      moon|Moon)
+          [ "${have_curl}" ] && curl wttr.in/Moon
+          break
+          ;;
+      search|Search)
+          [ "${have_ddgr}" ] && ddgr
+          break
+          ;;
+      speed|Speed)
           [ "${have_speed}" ] && speedtest-cli
-        else
-          if [ "${COMMAND}" == "twitter" ]
-          then
-            [ "${have_rainbow}" ] && rainbowstream
-          else
-            FIRST=`echo ${COMMAND} | awk ' { print $1 } '`
-            MTITLE="Asciiville ${COMMAND}"
-            type -p "${FIRST}" > /dev/null || {
-              echo "Option '-c' indicates use ${FIRST}."
-              echo "However, ${FIRST} is not installed or not in your path."
-              echo "You may be able to install ${FIRST} using apt or dnf:"
-              printf "\n\n\tsudo apt install ${FIRST}\nor"
-              printf "\n\tsudo dnf install ${FIRST}\n\n"
-              if [ "${have_btop}" ]
+          break
+          ;;
+      twitter|Twitter)
+          [ "${have_rainbow}" ] && rainbowstream
+          break
+          ;;
+      weather|Weather)
+          break
+          [ "${have_curl}" ] && curl wttr.in?format=v2
+          ;;
+      *)
+          FIRST=`echo ${COMMAND} | awk ' { print $1 } '`
+          MTITLE="Asciiville ${COMMAND}"
+          type -p "${FIRST}" > /dev/null || {
+            echo "Option '-c' indicates use ${FIRST}."
+            echo "However, ${FIRST} is not installed or not in your path."
+            echo "You may be able to install ${FIRST} using apt or dnf:"
+            printf "\n\n\tsudo apt install ${FIRST}\nor"
+            printf "\n\tsudo dnf install ${FIRST}\n\n"
+            if [ "${have_btop}" ]
+            then
+              echo "Continuing, using btop rather than ${COMMAND}."
+              COMMAND=btop
+              MTITLE="Btop++ System Monitor"
+            else
+              if [ "${have_lynx}" ]
               then
-                echo "Continuing, using btop rather than ${COMMAND}."
-                COMMAND=btop
-                MTITLE="Btop++ System Monitor"
+                echo "Continuing, using lynx rather than ${COMMAND}."
+                COMMAND=lynx
+                MTITLE="Lynx Web Browser"
               else
-                if [ "${have_lynx}" ]
-                then
-                  echo "Continuing, using lynx rather than ${COMMAND}."
-                  COMMAND=lynx
-                  MTITLE="Lynx Web Browser"
-                else
-                  echo "Continuing, using asciiplasma rather than ${COMMAND}."
-                  COMMAND=asciiplasma
-                  MTITLE="ASCIImatics Plasma"
-                fi
+                echo "Continuing, using asciiplasma rather than ${COMMAND}."
+                COMMAND=asciiplasma
+                MTITLE="ASCIImatics Plasma"
               fi
-            }
-          fi
-        fi
-      fi
+            fi
+          }
+          break
+          ;;
+      esac
       ;;
     f)
       FULLSCREEN=1

@@ -1,12 +1,16 @@
+
 Usage: asciiville [-a] [-A] [-b] [-c command] [-f] [-g] [-i]
 		[-I] [-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]
 		[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
+		If 'command' is keyword 'moon' then display the phase of the Moon
 		If 'command' is keyword 'search' then a web search is performed
 		If 'command' is keyword 'speed' then a speed test is performed
 		If 'command' is keyword 'twitter' then a Twitter client is run
+		If 'command' is keyword 'weather' then display a weather report
+		Otherwise, 'command' will be executed in a terminal window
 	-f indicates fullscreen display
 	-g indicates use gnome terminal emulator
 	-i indicates start asciiville in interactive mode

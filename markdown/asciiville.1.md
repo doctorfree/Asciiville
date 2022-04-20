@@ -27,7 +27,7 @@ Occasionally a tmux session or asciimatics script will hang. Previously started 
 *Terminal/Command options:*
 
 **-c 'command'**
-: Indicates run 'command' in selected terminal window. If *command* is one of the special keywords (*search*, *speed*, *twitter*) then perform a web search, speed test, or run the command line twitter client.
+: Indicates run 'command' in selected terminal window. If *command* is one of the special keywords (*moon*, *search*, *speed*, *twitter*, *weather*) then display the phase of the Moon, perform a web search, perform a speed test, run the command line twitter client, or display a weather report.
 
 **-f**
 : Indicates fullscreen display
@@ -121,11 +121,17 @@ Occasionally a tmux session or asciimatics script will hang. Previously started 
 **asciiville -r -y**
 : Launches `ranger` file manager running in cool-retro-term terminal emulator. 
 
+**asciiville -c moon**
+: Displays the Phase of the Moon using `wttr.in`. 
+
 **asciiville -c search**
 : Launches the `ddgr` command line web search in the current terminal window. 
 
 **asciiville -c twitter**
 : Launches the `rainbowstream` command line Twitter client in the current terminal window. 
+
+**asciiville -c weather**
+: Displays a weather report for your IP address location using `wttr.in`. 
 
 **asciiville -c cmus -g**
 : Launches the `cmus` music player client running in a gnome-terminal emulator window. 
