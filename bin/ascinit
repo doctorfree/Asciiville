@@ -6,6 +6,14 @@
 # Install required pip modules if not already installed
 CONFDIR=/usr/share/doc/asciiville
 
+# Setup default rifle configuration for this user unless one exists
+[ -f ${CONFDIR}/rifle.conf ] && {
+  [ -f ${HOME}/.config/ranger/rifle.conf ] || {
+    [ -d ${HOME}/.config ] || mkdir -p ${HOME}/.config
+    [ -d ${HOME}/.config/ranger ] || mkdir -p ${HOME}/.config/ranger
+    cp ${CONFDIR}/rifle.conf ${HOME}/.config/ranger/rifle.conf
+}
+
 # Setup default tmux configuration for this user unless
 # terminal-overrides has already been set
 [ -f ${CONFDIR}/tmux.conf ] && {
@@ -52,7 +60,7 @@ type -p asciisplash > /dev/null && {
     read -p "View an ASCII animation ? (y/n) " yn
     case $yn in
       [Yy]* )
-              asciisplash -c 1 -a
+              asciisplash -c 1 -a -i
               break
               ;;
       [Nn]* )

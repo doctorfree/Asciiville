@@ -35,13 +35,14 @@ fi
 
 usage() {
   printf "\nUsage: asciiville [-a] [-A] [-b] [-c client] [-f] [-g] [-i]"
-  printf "\n\t\t[-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]"
+  printf "\n\t\t[-I] [-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]"
   printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]"
   printf "\nTerminal/Command options:"
   printf "\n\t-c 'command' indicates use 'command'"
   printf "\n\t-f indicates fullscreen display"
   printf "\n\t-g indicates use gnome terminal emulator"
   printf "\n\t-i indicates start asciiville in interactive mode"
+  printf "\n\t-I indicates display system info"
   printf "\n\t-l indicates use lynx as the default command"
   printf "\n\t-P script specifies the ASCIImatics script to run in visualizer pane"
   printf "\n\t-r indicates use retro terminal emulator"
@@ -322,6 +323,8 @@ show_main_menu() {
     else
       usetmux="NO"
     fi
+    [ "${COMMAND}" ] || COMMAND=btop
+    show_comm=`echo ${COMMAND} | awk ' { print $1 } '`
     case "${COMMAND}" in
       btop)
         use_btop="YES"
@@ -330,7 +333,7 @@ show_main_menu() {
         use_mutt="NO"
         use_ranger="NO"
         ;;
-      gdu)
+      gdu*)
         use_btop="NO"
         use_gdu="YES"
         use_lynx="NO"
@@ -362,51 +365,52 @@ show_main_menu() {
     skip_it_so=
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
-    [ "${have_xfce4}" ] && options+=("Run XFCE4 Terminal")
-    [ "${have_gnome}" ] && options+=("Run Gnome Terminal")
-    [ "${have_retro}" ] && options+=("Run Retro Terminal")
-    [ "${have_tilix}" ] && options+=("Run Tilix Terminal")
-    [ "${have_btop}" ] && options+=("Use Btop System Monitor [${use_btop}]")
-    [ "${have_gdu}" ] && options+=("Use Disk Usage Analyzer [${use_gdu}]")
-    [ "${have_lynx}" ] && options+=("Use  Lynx  Web  Browser [${use_lynx}]")
-    [ "${have_mutt}" ] && options+=("Use NeoMutt Mail Client [${use_mutt}]")
-    [ "${have_ranger}" ] && options+=("Use Ranger File Manager [${use_ranger}]")
     [ "${have_splash}" ] && options+=("ASCIImatics Animations")
+    options+=("Kill Tmux Sessions")
+    [ "${have_xfce4}" ] && options+=("Run ${show_comm} in XFCE4 Terminal")
+    [ "${have_gnome}" ] && options+=("Run ${show_comm} in Gnome Terminal")
+    [ "${have_retro}" ] && options+=("Run ${show_comm} in Retro Terminal")
+    [ "${have_tilix}" ] && options+=("Run ${show_comm} in Tilix Terminal")
     [ "${have_bb}" ] && {
       [ "$DISPLAY" = "" ] || options+=("Run AAlib Demo (X11 mode)")
     }
     [ "${have_bb}" ] && options+=("Run AAlib Demo (Curses mode)")
-    options+=("Kill Tmux Sessions")
     [ "${have_speed}" ] && options+=("Run Speed Test")
-    options+=("Use Tmux [${usetmux}]")
-    [ "${have_nema}" ] && options+=("Record Tmux Session [${recordstat}]")
+    [ "${have_neo}" ] && options+=("Show System Info")
+    [ "${have_btop}" ] && options+=("Use Btop System Monitor    [${use_btop}]")
+    [ "${have_gdu}" ] && options+=("Use Disk Usage Analyzer    [${use_gdu}]")
+    [ "${have_lynx}" ] && options+=("Use  Lynx  Web  Browser    [${use_lynx}]")
+    [ "${have_mutt}" ] && options+=("Use NeoMutt Mail Client    [${use_mutt}]")
+    [ "${have_ranger}" ] && options+=("Use Ranger File Manager    [${use_ranger}]")
+    options+=("Use Tmux                   [${usetmux}]")
+    [ "${have_nema}" ] && options+=("Record Tmux Session        [${recordstat}]")
     options+=("Fullscreen Terminal Window [${fullstat}]")
     options+=("Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
-          "XFCE4 Terminal Emulator",*|*,"XFCE4 Terminal Emulator")
+          "Run ${show_comm} in XFCE4 Terminal",*|*,"Run ${show_comm} in XFCE4 Terminal")
               XFCE4=1
               TILIX=
               GNOME=
               RETRO=
               break
               ;;
-          "Gnome Terminal Emulator",*|*,"Gnome Terminal Emulator")
+          "Run ${show_comm} in Gnome Terminal",*|*,"Run ${show_comm} in Gnome Terminal")
               GNOME=1
               XFCE4=
               TILIX=
               RETRO=
               break
               ;;
-          "Retro Terminal Emulator",*|*,"Retro Terminal Emulator")
+          "Run ${show_comm} in Retro Terminal",*|*,"Run ${show_comm} in Retro Terminal")
               RETRO=1
               GNOME=
               XFCE4=
               TILIX=
               break
               ;;
-          "Tilix Terminal Emulator",*|*,"Tilix Terminal Emulator")
+          "Run ${show_comm} in Tilix Terminal",*|*,"Run ${show_comm} in Tilix Terminal")
               TILIX=1
               RETRO=
               GNOME=
@@ -419,13 +423,13 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "Use Disk Usage Analyzer",*|*,"Use Disk Usage Analyzer")
-              COMMAND=gdu
+          "Use Disk Usage Analyzer"*,*|*,"Use Disk Usage Analyzer"*)
+              COMMAND="gdu ${HOME}"
               MTITLE="Disk Usage Analyzer"
               skip_it_so=1
               break
               ;;
-          "Use Lynx Web Browser"*,*|*,"Use Lynx Web Browser"*)
+          "Use  Lynx  Web  Browser"*,*|*,"Use  Lynx  Web  Browser"*)
               COMMAND=lynx
               MTITLE="Lynx Web Browser"
               skip_it_so=1
@@ -458,6 +462,17 @@ show_main_menu() {
               ;;
           "Run Speed Test",*|*,"Run Speed Test")
               speedtest-cli
+              skip_it_so=1
+              break
+              ;;
+          "Show System Info",*|*,"Show System Info")
+              if [ "${have_lol}" ]
+              then
+                neofetch | lolcat
+              else
+                neofetch
+              fi
+              read -p "Press Enter to continue" answer
               skip_it_so=1
               break
               ;;
@@ -553,11 +568,13 @@ have_mpplus=`type -p asciimpplus`
 have_nema=`type -p asciinema`
 have_bb=`type -p bb-tmux`
 have_gdu=`type -p gdu`
+have_neo=`type -p neofetch`
+have_lol=`type -p lolcat`
 have_speed=`type -p speedtest-cli`
 have_splash=`type -p asciisplash`
 have_xfce4=`type -p xfce4-terminal`
 have_gnome=`type -p gnome-terminal`
-while getopts "Aabc:fgijJklmn:NpP:rRSs:tTxyzu" flag; do
+while getopts "Aabc:fgiIjJklmn:NpP:rRSs:tTxyzu" flag; do
   case $flag in
     A)
       ASCSPLASH="${ASCSPLASH} -i"
@@ -574,13 +591,14 @@ while getopts "Aabc:fgijJklmn:NpP:rRSs:tTxyzu" flag; do
       ;;
     c)
       COMMAND="${OPTARG}"
+      FIRST=`echo ${COMMAND} | awk ' { print $1 } '`
       MTITLE="Asciiville ${COMMAND}"
-      type -p "${COMMAND}" > /dev/null || {
-        echo "Option '-c' indicates use ${COMMAND}."
-        echo "However, ${COMMAND} is not installed or not in your path."
-        echo "You may be able to install ${COMMAND} using apt or dnf as follows:"
-        printf "\n\n\tsudo apt install ${COMMAND}\nor"
-        printf "\n\tsudo dnf install ${COMMAND}\n\n"
+      type -p "${FIRST}" > /dev/null || {
+        echo "Option '-c' indicates use ${FIRST}."
+        echo "However, ${FIRST} is not installed or not in your path."
+        echo "You may be able to install ${FIRST} using apt or dnf as follows:"
+        printf "\n\n\tsudo apt install ${FIRST}\nor"
+        printf "\n\tsudo dnf install ${FIRST}\n\n"
         if [ "${have_btop}" ]
         then
           echo "Continuing, using btop rather than ${COMMAND}."
@@ -636,6 +654,18 @@ while getopts "Aabc:fgijJklmn:NpP:rRSs:tTxyzu" flag; do
       ;;
     i)
       INTERACTIVE=1
+      ;;
+    I)
+      [ "${have_neo}" ] && {
+        MTITLE="Asciiville NeoFetch"
+        if [ "${have_lol}" ]
+        then
+          neofetch | lolcat
+        else
+          neofetch
+        fi
+        read -p "Press Enter to continue" answer
+      }
       ;;
     j)
       ASCSPLASH="${ASCSPLASH} -j"

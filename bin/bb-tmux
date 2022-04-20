@@ -3,7 +3,7 @@
 # bb-tmux - display bb in a tmux session
 
 SESSION=bb
-SONG=/usr/share/doc/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav"
+SONG="/usr/share/doc/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav"
 
 usage() {
   printf "\nUsage: bb-tmux [-a] [-r] [-u]"
@@ -81,7 +81,6 @@ tmux send-keys "echo 'n'" C-m
   mkfifo ${FIFO}
   mplayer -novideo -volume 80 -really-quiet -nolirc \
           -slave -input file=${FIFO} "${SONG}" > /dev/null 2>&1 $
-# tmux set-hook -g session-closed "echo 'stop' > ${FIFO}; echo 'quit' > ${FIFO}; rm -f ${FIFO}"
 }
 
 if [ "${RECORD}" ]
