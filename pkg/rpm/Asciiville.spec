@@ -23,6 +23,7 @@ cp -a %{_sourcedir}/usr %{buildroot}/usr
 %pre
 
 %post
+export PATH=${PATH}:/usr/local/bin
 python3 -m pip install asciimatics
 python3 -m pip install rainbowstream
 
