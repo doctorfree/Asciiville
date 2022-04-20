@@ -68,8 +68,8 @@ ${SUDO} cp -a bin ${OUT_DIR}/${DESTDIR}/bin
 ${SUDO} cp btop/bin/btop ${OUT_DIR}/${DESTDIR}/bin/btop
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
-${SUDO} cp tmux.conf ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
-${SUDO} cp rifle.conf ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
+${SUDO} cp conf/tmux.conf ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
+${SUDO} cp conf/rifle.conf ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp copyright ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp NOTICE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
