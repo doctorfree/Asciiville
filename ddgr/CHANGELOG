@@ -1,0 +1,112 @@
+ddgr v2.0
+2022-03-05
+
+- Display results in reversed order (`--rev`, `--reverse`)
+- Support Python v3.10 (dropped v3.6)
+
+-------------------------------------------------------------------------------
+
+ddgr v1.9
+2020-07-26
+
+- Fix breakage due to changes required in POST method
+- Support wayland native copier `wl-copy` for url copy
+- Unblock GUI browsers on WSL
+- Update auto-generated package list
+- Skip broken Arch Linux packaging (https://github.com/BytePackager issue #204)
+
+-------------------------------------------------------------------------------
+
+ddgr v1.8.1
+2020-04-10
+
+- Bump version
+- Update docs
+
+-------------------------------------------------------------------------------
+
+ddgr v1.8
+2020-04-08
+
+What's in?
+- Ignore instant results in JSON output
+- Support year in duration
+- Support Python 3.8
+
+-------------------------------------------------------------------------------
+
+ddgr v1.7
+2019-09-03
+
+What's in?
+- Use setproctitle to set process name
+- Monkeypatch textwrap for CJK wide characters
+- Fix write to GNU Screen paste buffer
+- Refresh current page on URL expansion toggle
+- Smarter colorization and better support for native terminals on Windows
+- Handle bangs in the form g!
+
+-------------------------------------------------------------------------------
+
+ddgr v1.6
+2018-11-16
+
+What's in?
+- User interface revamped
+- DDG instant answers
+- Haiku OS clipboard support
+- Packaging preparation for PyPI
+
+-------------------------------------------------------------------------------
+
+ddgr v1.5
+2018-09-10
+
+What's in?
+- Support xclip as a clipboard utility on *nix
+- Support GNU Screen and tmux as clipboard fallback
+- Support Termux clipboard on Android
+
+-------------------------------------------------------------------------------
+
+ddgr v1.4
+2018-04-05
+
+What's in?
+- Copy URL at omniprompt
+- Check default stdout encoding at start
+- New environment variable DISABLE_PROMPT_COLOR
+
+-------------------------------------------------------------------------------
+
+ddgr v1.2
+2017-12-08
+
+What's in?
+- Remove Pyhton3 'requests' library dependency
+- Remove Python 3.3 (EOL) support
+- Fix zsh completion script issue
+
+-------------------------------------------------------------------------------
+
+ddgr v1.1
+2017-11-29
+
+What's in?
+- Option `--num` to specify the number of results to show per page
+- Omniprompt key `x` to toggle URL expansion on-the-fly.
+- Option `-t` to limit search by time
+- Option `--gui-browser` to open bangs directly in GUI browser
+- Retrieve next index parameters from fetched data
+- Custom user agent for ddgr
+
+-------------------------------------------------------------------------------
+
+ddgr v1.0
+2017-11-05
+
+What's in?
+- This is the first release of `ddgr`. For a list of features visit:
+  https://github.com/jarun/ddgr#features
+
+-------------------------------------------------------------------------------

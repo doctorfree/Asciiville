@@ -10,7 +10,10 @@
 #     * The lightweight character based file manager, `ranger`
 #     * One or more terminal emulators running a specified command
 #     * A tmux session
+#     * A network upload/download speed test
+#     * A web search
 #     * Character based ASCII art
+#     * Display system info
 #     * Any character based client the user wishes to run
 #     * One of several asciimatics animations optionally accompanied by audio
 #
@@ -34,11 +37,13 @@ then
 fi
 
 usage() {
-  printf "\nUsage: asciiville [-a] [-A] [-b] [-c client] [-f] [-g] [-i]"
+  printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-f] [-g] [-i]"
   printf "\n\t\t[-I] [-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]"
   printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]"
   printf "\nTerminal/Command options:"
   printf "\n\t-c 'command' indicates use 'command'"
+  printf "\n\t\tIf 'command' is keyword 'search' then a web search is performed"
+  printf "\n\t\tIf 'command' is keyword 'speed' then a speed test is performed"
   printf "\n\t-f indicates fullscreen display"
   printf "\n\t-g indicates use gnome terminal emulator"
   printf "\n\t-i indicates start asciiville in interactive mode"
@@ -376,6 +381,7 @@ show_main_menu() {
     }
     [ "${have_bb}" ] && options+=("Run AAlib Demo (Curses mode)")
     [ "${have_speed}" ] && options+=("Run Speed Test")
+    [ "${have_ddgr}" ] && options+=("Search the Web")
     [ "${have_neo}" ] && options+=("Show System Info")
     [ "${have_btop}" ] && options+=("Use Btop System Monitor    [${use_btop}]")
     [ "${have_gdu}" ] && options+=("Use Disk Usage Analyzer    [${use_gdu}]")
@@ -462,6 +468,11 @@ show_main_menu() {
               ;;
           "Run Speed Test",*|*,"Run Speed Test")
               speedtest-cli
+              skip_it_so=1
+              break
+              ;;
+          "Search the Web",*|*,"Search the Web")
+              ddgr
               skip_it_so=1
               break
               ;;
@@ -567,6 +578,7 @@ have_plasma=`type -p asciiplasma`
 have_mpplus=`type -p asciimpplus`
 have_nema=`type -p asciinema`
 have_bb=`type -p bb-tmux`
+have_ddgr=`type -p ddgr`
 have_gdu=`type -p gdu`
 have_neo=`type -p neofetch`
 have_lol=`type -p lolcat`
@@ -591,32 +603,42 @@ while getopts "Aabc:fgiIjJklmn:NpP:rRSs:tTxyzu" flag; do
       ;;
     c)
       COMMAND="${OPTARG}"
-      FIRST=`echo ${COMMAND} | awk ' { print $1 } '`
-      MTITLE="Asciiville ${COMMAND}"
-      type -p "${FIRST}" > /dev/null || {
-        echo "Option '-c' indicates use ${FIRST}."
-        echo "However, ${FIRST} is not installed or not in your path."
-        echo "You may be able to install ${FIRST} using apt or dnf as follows:"
-        printf "\n\n\tsudo apt install ${FIRST}\nor"
-        printf "\n\tsudo dnf install ${FIRST}\n\n"
-        if [ "${have_btop}" ]
+      if [ "${COMMAND}" == "search" ]
+      then
+        [ "${have_ddgr}" ] && ddgr
+      else
+        if [ "${COMMAND}" == "speed" ]
         then
-          echo "Continuing, using btop rather than ${COMMAND}."
-          COMMAND=btop
-          MTITLE="Btop++ System Monitor"
+          [ "${have_speed}" ] && speedtest-cli
         else
-          if [ "${have_lynx}" ]
-          then
-            echo "Continuing, using lynx rather than ${COMMAND}."
-            COMMAND=lynx
-            MTITLE="Lynx Web Browser"
-          else
-            echo "Continuing, using asciiplasma rather than ${COMMAND}."
-            COMMAND=asciiplasma
-            MTITLE="ASCIImatics Plasma"
-          fi
+          FIRST=`echo ${COMMAND} | awk ' { print $1 } '`
+          MTITLE="Asciiville ${COMMAND}"
+          type -p "${FIRST}" > /dev/null || {
+            echo "Option '-c' indicates use ${FIRST}."
+            echo "However, ${FIRST} is not installed or not in your path."
+            echo "You may be able to install ${FIRST} using apt or dnf:"
+            printf "\n\n\tsudo apt install ${FIRST}\nor"
+            printf "\n\tsudo dnf install ${FIRST}\n\n"
+            if [ "${have_btop}" ]
+            then
+              echo "Continuing, using btop rather than ${COMMAND}."
+              COMMAND=btop
+              MTITLE="Btop++ System Monitor"
+            else
+              if [ "${have_lynx}" ]
+              then
+                echo "Continuing, using lynx rather than ${COMMAND}."
+                COMMAND=lynx
+                MTITLE="Lynx Web Browser"
+              else
+                echo "Continuing, using asciiplasma rather than ${COMMAND}."
+                COMMAND=asciiplasma
+                MTITLE="ASCIImatics Plasma"
+              fi
+            fi
+          }
         fi
-      }
+      fi
       ;;
     f)
       FULLSCREEN=1

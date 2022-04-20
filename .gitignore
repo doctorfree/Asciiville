@@ -48,7 +48,13 @@ stage/
 
 btop/build
 btop/bin
+btop/btop
 .*/
+
+ducker/build/
+ducker/dist/
+ducker/*.bak
+ducker/ddgr.py
 
 GTAGS
 GRTAGS
