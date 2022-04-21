@@ -35,14 +35,14 @@ The `asciiville` command can be used to invoke:
 
 * The lightweight character based system monitor, `btop`
 * The lightweight character based web browser, `lynx`
-* The lightweight character based mail client, `neomutt`
+* The lightweight character based mail client, `neomutt` or `mutt`
 * The lightweight character based file manager, `ranger`
 * One or more terminal emulators running a command
 * A tmux session
 * A command line web search
 * Command line character based Twitter client
 * A network download/upload speed test
-* The AAlib BB demo running in a tmux session
+* The AAlib BB demo running in a tmux session (Debian based systems only)
 * Character based ASCII art
 * Display system info
 * Display the Phase of the Moon
@@ -130,7 +130,7 @@ It requires:
 * asciimatics
 * asciinema
 * lynx
-* neomutt
+* neomutt/mutt
 * ranger
 * mplayer
 
@@ -238,7 +238,7 @@ Terminal/Command options:
 	-t indicates use tilix terminal emulator
 	-x indicates use xfce4 terminal emulator
 	-y indicates use ranger as the default command
-	-z indicates use neomutt as the default command
+	-z indicates use neomutt/mutt as the default command
 
 ASCIImatics animation options:
 	-A indicates use Art Images scenes in ASCIImatics display

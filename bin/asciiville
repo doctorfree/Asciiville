@@ -59,7 +59,7 @@ usage() {
   printf "\n\t-t indicates use tilix terminal emulator"
   printf "\n\t-x indicates use xfce4 terminal emulator"
   printf "\n\t-y indicates use ranger as the default command"
-  printf "\n\t-z indicates use neomutt as the default command\n"
+  printf "\n\t-z indicates use neomutt/mutt as the default command\n"
   printf "\nASCIImatics animation options:"
   printf "\n\t-A indicates use Art Images scenes in ASCIImatics display"
   printf "\n\t-a indicates play audio during ASCIImatics display"
@@ -357,7 +357,7 @@ show_main_menu() {
         use_mutt="NO"
         use_ranger="NO"
         ;;
-      neomutt)
+      mutt|neomutt)
         use_btop="NO"
         use_gdu="NO"
         use_lynx="NO"
@@ -394,7 +394,12 @@ show_main_menu() {
     [ "${have_btop}" ] && options+=("Use Btop System Monitor    [${use_btop}]")
     [ "${have_gdu}" ] && options+=("Use Disk Usage Analyzer    [${use_gdu}]")
     [ "${have_lynx}" ] && options+=("Use  Lynx  Web  Browser    [${use_lynx}]")
-    [ "${have_mutt}" ] && options+=("Use NeoMutt Mail Client    [${use_mutt}]")
+    if [ "${have_neomutt}" ]
+    then
+      options+=("Use NeoMutt Mail Client    [${use_mutt}]")
+    else
+      [ "${have_mutt}" ] && options+=("Use Mutt Mail Client       [${use_mutt}]")
+    fi
     [ "${have_ranger}" ] && options+=("Use Ranger File Manager    [${use_ranger}]")
     options+=("Use Tmux                   [${usetmux}]")
     [ "${have_nema}" ] && options+=("Record Tmux Session        [${recordstat}]")
@@ -446,6 +451,12 @@ show_main_menu() {
           "Use  Lynx  Web  Browser"*,*|*,"Use  Lynx  Web  Browser"*)
               COMMAND=lynx
               MTITLE="Lynx Web Browser"
+              skip_it_so=1
+              break
+              ;;
+          "Use Mutt Mail Client"*,*|*,"Use Mutt Mail Client"*)
+              COMMAND=mutt
+              MTITLE="Mutt Mail Client"
               skip_it_so=1
               break
               ;;
@@ -593,7 +604,8 @@ init_vars() {
 init_vars
 have_btop=`type -p btop`
 have_lynx=`type -p lynx`
-have_mutt=`type -p neomutt`
+have_neomutt=`type -p neomutt`
+have_mutt=`type -p mutt`
 have_ranger=`type -p ranger`
 have_retro=`type -p cool-retro-term`
 have_tilix=`type -p tilix`
@@ -915,27 +927,33 @@ while getopts "Aabc:fgiIjJklmn:NpP:rRSs:tTxyzu" flag; do
     z)
       COMMAND=neomutt
       MTITLE="NeoMutt Mail Client"
-      [ "${have_mutt}" ] || {
-        echo "Option '-z' indicates use neomutt as the default command."
-        echo "However, neomutt is not installed or not in your path."
-        echo "You may be able to install neomutt using apt or dnf as follows:"
-        printf "\n\n\tsudo apt install neomutt\nor"
-        printf "\n\tsudo dnf install neomutt\n\n"
-        if [ "${have_btop}" ]
+      [ "${have_neomutt}" ] || {
+        if [ "${have_mutt}" ]
         then
-          echo "Continuing, using btop rather than ${COMMAND}."
-          COMMAND=btop
-          MTITLE="Btop++ System Monitor"
+          COMMAND=mutt
+          MTITLE="Mutt Mail Client"
         else
-          if [ "${have_lynx}" ]
+          echo "Option '-z' indicates use neomutt as the default command."
+          echo "However, neomutt is not installed or not in your path."
+          echo "You may be able to install neomutt using apt or dnf as follows:"
+          printf "\n\n\tsudo apt install neomutt\nor"
+          printf "\n\tsudo dnf install neomutt\n\n"
+          if [ "${have_btop}" ]
           then
-            echo "Continuing, using lynx rather than ${COMMAND}."
-            COMMAND=lynx
-            MTITLE="Lynx Web Browser"
+            echo "Continuing, using btop rather than ${COMMAND}."
+            COMMAND=btop
+            MTITLE="Btop++ System Monitor"
           else
-            echo "Continuing, using asciiplasma rather than ${COMMAND}."
-            COMMAND=asciiplasma
-            MTITLE="ASCIImatics Plasma"
+            if [ "${have_lynx}" ]
+            then
+              echo "Continuing, using lynx rather than ${COMMAND}."
+              COMMAND=lynx
+              MTITLE="Lynx Web Browser"
+            else
+              echo "Continuing, using asciiplasma rather than ${COMMAND}."
+              COMMAND=asciiplasma
+              MTITLE="ASCIImatics Plasma"
+            fi
           fi
         fi
       }
