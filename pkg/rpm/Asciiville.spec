@@ -42,12 +42,13 @@ fi
 lol_inst=`type -p lolcat`
 if [ ! "${lol_inst}" ]
 then
-  zip_inst=`type -p unzip`
   gem_inst=`type -p gem`
   if [ "${gem_inst}" ]
   then
+    wget_inst=`type -p wget`
     if [ "${wget_inst}" ]
     then
+      zip_inst=`type -p unzip`
       if [ "${zip_inst}" ]
       then
         wget --quiet https://github.com/busyloop/lolcat/archive/master.zip
