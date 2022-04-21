@@ -10,7 +10,7 @@ asciiville - Launch a terminal emulator and specified character based command, a
 
 # SYNOPSIS
 **asciiville** [-a] [-A] [-b] [-c command] [-f] [-g] [-i] [-I]
-		[-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]
+		[-jJ] [-k] [-l] [-m] [-M] [-n num] [-N] [-p] [-P script]
 		[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]
 
 # DESCRIPTION
@@ -20,7 +20,7 @@ The *asciiville* command can also act as a front-end to the *asciisplash* and *a
 
 When invoked with the `-i` option, `asciiville` presents a selection menu and operates in interactive mode.
 
-Occasionally a tmux session or asciimatics script will hang. Previously started tmux sessions and asciimatics scripts can be quickly and easily killed by executing the `asciiville -k` command.
+Previously started tmux sessions and asciimatics scripts can be quickly and easily terminated by executing the `asciiville -k` command.
 
 # COMMAND LINE OPTIONS
 
@@ -82,6 +82,9 @@ Occasionally a tmux session or asciimatics script will hang. Previously started 
 **-m**
 : Indicates use MusicPlayerPlus scenes in ASCIImatics display
 
+**-M**
+: Indicates use the MusicPlayerPlus `mpcplus` music player client
+
 **-n num**
 : Specifies the number of times to cycle ASCIImatics scenes
 
@@ -120,6 +123,9 @@ Occasionally a tmux session or asciimatics script will hang. Previously started 
 
 **asciiville -r -y**
 : Launches `ranger` file manager running in cool-retro-term terminal emulator. 
+
+**asciiville -M -t**
+: Launches `mpcplus` music player running in Tilix terminal emulator. 
 
 **asciiville -c maps**
 : Displays a zoomable map of the world using `mapscii`. 

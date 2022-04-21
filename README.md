@@ -24,18 +24,19 @@ of components used to display ASCII art, animations, and utilities.
 ## Overview
 
 Asciiville integrations and extensions are aimed at the character
-based terminal user. They enable an easy to use seamlessly
+based terminal user. They enable easy to use seamlessly
 integrated control of a variety of ASCII art, animation, and
 utilities in a lightweight character based environment.
 
 At the core of Asciiville is the `asciiville` command which acts as
-a front-end for a variety of terminal and/or `tmux` sessions.
+a front-end for a variety of terminal commands and `tmux` sessions.
 
 The `asciiville` command can be used to invoke:
 
 * The lightweight character based system monitor, `btop`
 * The lightweight character based web browser, `lynx` or `w3m`
 * The lightweight character based mail client, `neomutt` or `mutt`
+* The lightweight character based music player, `mpcplus`
 * The lightweight character based file manager, `ranger`
 * One or more terminal emulators running a command
 * A tmux session
@@ -59,6 +60,7 @@ Integration is provided for:
 * [w3m](http://w3m.sourceforge.net/), another character based web browser
 * [neomutt](https://neomutt.org/), character based mail client
 * [ranger](https://ranger.github.io/), character based file manager
+* [mpcplus](https://github.com/doctorfree/MusicPlayerPlus/blob/master/mpcplus/README.md), featureful ncurses based Music Player client
 * [mplayer](http://mplayerhq.hu/design7/info.html), a media player
 * [asciimatics](https://github.com/peterbrittain/asciimatics) - automatically display a variety of character based animation effects
 * [asciinema](https://asciinema.org/) - automatically create ascii character based video clips
@@ -90,6 +92,7 @@ Asciiville adds the following commands to your system:
     * **asciimpplus** : ASCIImatics animated Music Player Plus splash screen
 * **chktermcolor** : checks if a terminal has 24-bit true color support
 * **ddgr** : command line web search
+* **mapscii** : character based zoomable map of the world
 * **rainbowstream** : command line Twitter client
 * **set_xfce_trans** : sets an xfce4-terminal window's transparency level
 
@@ -124,7 +127,8 @@ Additional detail and info can be found in the
 ## Requirements
 
 Asciiville can be installed on Debian or RPM based Linux systems.
-It requires:
+All of the following dependencies/requirements are automatically
+installed if needed when using the Debian or RPM format package install.
 
 * tilix (>= 1.9.1)
 * xfce4-terminal (>= 0.8.9.1)
@@ -137,12 +141,9 @@ It requires:
 * ranger
 * mplayer
 
-These dependencies will all be automatically installed if not present
-when Asciiville is installed using the Debian or RPM packaging.
-
 ## Installation
 
-Asciiville v1.0.0 and later can be installed on Linux systems using
+Asciiville v1.3.0 and later can be installed on Linux systems using
 either the Debian packaging format or the Red Hat Package Manager (RPM).
 
 ### Debian package installation
@@ -220,7 +221,7 @@ summary of the command line options:
 
 ```
 Usage: asciiville [-a] [-A] [-b] [-c command] [-f] [-g] [-i]
-		[-I] [-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]
+		[-I] [-jJ] [-k] [-l] [-m] [-M] [-n num] [-N] [-p] [-P script]
 		[-r] [-R] [-s song] [-S] [-t] [-T] [-w] [-x] [-y] [-z] [-u]
 
 Terminal/Command options:
@@ -252,6 +253,7 @@ ASCIImatics animation options:
 	-j indicates use Julia Set scenes in ASCIImatics display
 	-J indicates Julia Set with several runs using different parameters
 	-m indicates use MusicPlayerPlus scenes in ASCIImatics display
+	-M indicates use MusicPlayerPlus MPD client as default command
 	-n num specifies the number of times to cycle ASCIImatics scenes
 	-N indicates use alternate comments in Plasma ASCIImatics scenes
 	-p indicates use Plasma scenes in ASCIImatics display

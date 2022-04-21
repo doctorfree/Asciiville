@@ -23,8 +23,8 @@ command, ascii art, asciimatics animation, and more
 .SH SYNOPSIS
 .PP
 \f[B]asciiville\f[R] [-a] [-A] [-b] [-c command] [-f] [-g] [-i] [-I]
-[-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script] [-r] [-R] [-s song]
-[-S] [-t] [-T] [-x] [-y] [-z] [-u]
+[-jJ] [-k] [-l] [-m] [-M] [-n num] [-N] [-p] [-P script] [-r] [-R] [-s
+song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]
 .SH DESCRIPTION
 .PP
 The \f[I]asciiville\f[R] command acts as a front-end for launching
@@ -41,9 +41,8 @@ invoked with the \f[V]-S\f[R] and \f[V]-T\f[R] command line options.
 When invoked with the \f[V]-i\f[R] option, \f[V]asciiville\f[R] presents
 a selection menu and operates in interactive mode.
 .PP
-Occasionally a tmux session or asciimatics script will hang.
 Previously started tmux sessions and asciimatics scripts can be quickly
-and easily killed by executing the \f[V]asciiville -k\f[R] command.
+and easily terminated by executing the \f[V]asciiville -k\f[R] command.
 .SH COMMAND LINE OPTIONS
 .PP
 \f[I]Terminal/Command options:\f[R]
@@ -109,6 +108,9 @@ Indicates Julia Set with several runs using different parameters
 \f[B]-m\f[R]
 Indicates use MusicPlayerPlus scenes in ASCIImatics display
 .TP
+\f[B]-M\f[R]
+Indicates use the MusicPlayerPlus \f[V]mpcplus\f[R] music player client
+.TP
 \f[B]-n num\f[R]
 Specifies the number of times to cycle ASCIImatics scenes
 .TP
@@ -150,6 +152,10 @@ controlling actions rather than command line arguments
 \f[B]asciiville -r -y\f[R]
 Launches \f[V]ranger\f[R] file manager running in cool-retro-term
 terminal emulator.
+.TP
+\f[B]asciiville -M -t\f[R]
+Launches \f[V]mpcplus\f[R] music player running in Tilix terminal
+emulator.
 .TP
 \f[B]asciiville -c maps\f[R]
 Displays a zoomable map of the world using \f[V]mapscii\f[R].

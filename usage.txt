@@ -1,6 +1,5 @@
-
 Usage: asciiville [-a] [-A] [-b] [-c command] [-f] [-g] [-i]
-		[-I] [-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]
+		[-I] [-jJ] [-k] [-l] [-m] [-M] [-n num] [-N] [-p] [-P script]
 		[-r] [-R] [-s song] [-S] [-t] [-T] [-w] [-x] [-y] [-z] [-u]
 
 Terminal/Command options:
@@ -32,6 +31,7 @@ ASCIImatics animation options:
 	-j indicates use Julia Set scenes in ASCIImatics display
 	-J indicates Julia Set with several runs using different parameters
 	-m indicates use MusicPlayerPlus scenes in ASCIImatics display
+	-M indicates use MusicPlayerPlus MPD client as default command
 	-n num specifies the number of times to cycle ASCIImatics scenes
 	-N indicates use alternate comments in Plasma ASCIImatics scenes
 	-p indicates use Plasma scenes in ASCIImatics display

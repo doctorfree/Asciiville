@@ -42,7 +42,7 @@ fi
 
 usage() {
   printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-f] [-g] [-i]"
-  printf "\n\t\t[-I] [-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]"
+  printf "\n\t\t[-I] [-jJ] [-k] [-l] [-m] [-M] [-n num] [-N] [-p] [-P script]"
   printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-w] [-x] [-y] [-z] [-u]\n"
   printf "\nTerminal/Command options:"
   printf "\n\t-c 'command' indicates use 'command'"
@@ -72,6 +72,7 @@ usage() {
   printf "\n\t-j indicates use Julia Set scenes in ASCIImatics display"
   printf "\n\t-J indicates Julia Set with several runs using different parameters"
   printf "\n\t-m indicates use MusicPlayerPlus scenes in ASCIImatics display"
+  printf "\n\t-M indicates use MusicPlayerPlus MPD client as default command"
   printf "\n\t-n num specifies the number of times to cycle ASCIImatics scenes"
   printf "\n\t-N indicates use alternate comments in Plasma ASCIImatics scenes"
   printf "\n\t-p indicates use Plasma scenes in ASCIImatics display"
@@ -361,6 +362,7 @@ show_main_menu() {
         use_btop="YES"
         use_gdu="NO"
         use_lynx="NO"
+        use_mpp="NO"
         use_mutt="NO"
         use_ranger="NO"
         use_w3m="NO"
@@ -369,6 +371,7 @@ show_main_menu() {
         use_btop="NO"
         use_gdu="YES"
         use_lynx="NO"
+        use_mpp="NO"
         use_mutt="NO"
         use_ranger="NO"
         use_w3m="NO"
@@ -377,6 +380,16 @@ show_main_menu() {
         use_btop="NO"
         use_gdu="NO"
         use_lynx="YES"
+        use_mpp="NO"
+        use_mutt="NO"
+        use_ranger="NO"
+        use_w3m="NO"
+        ;;
+      mpcplus)
+        use_btop="NO"
+        use_gdu="NO"
+        use_lynx="NO"
+        use_mpp="YES"
         use_mutt="NO"
         use_ranger="NO"
         use_w3m="NO"
@@ -385,6 +398,7 @@ show_main_menu() {
         use_btop="NO"
         use_gdu="NO"
         use_lynx="NO"
+        use_mpp="NO"
         use_mutt="YES"
         use_ranger="NO"
         use_w3m="NO"
@@ -393,6 +407,7 @@ show_main_menu() {
         use_btop="NO"
         use_gdu="NO"
         use_lynx="NO"
+        use_mpp="NO"
         use_mutt="NO"
         use_ranger="YES"
         use_w3m="NO"
@@ -401,6 +416,7 @@ show_main_menu() {
         use_btop="NO"
         use_gdu="NO"
         use_lynx="NO"
+        use_mpp="NO"
         use_mutt="NO"
         use_ranger="NO"
         use_w3m="YES"
@@ -423,6 +439,7 @@ show_main_menu() {
     options+=("Kill Tmux Sessions")
     [ "${have_ddgr}" ] && options+=("Search the Web")
     [ "${have_mapscii}" ] && options+=("Show Map")
+    [ "${have_mpplus}" ] && options+=("Show MusicPlayerPlus Menu")
     [ "${have_neo}" ] && options+=("Show System Info")
     [ "${have_curl}" ] && options+=("Phase of the Moon")
     [ "${have_curl}" ] && options+=("Weather Report")
@@ -430,6 +447,7 @@ show_main_menu() {
     [ "${have_gdu}" ] && options+=("Use Disk Usage Analyzer    [${use_gdu}]")
     [ "${have_lynx}" ] && options+=("Use  Lynx  Web  Browser    [${use_lynx}]")
     [ "${have_w3m}" ] && options+=("Use  W3M   Web  Browser    [${use_w3m}]")
+    [ "${have_mpcplus}" ] && options+=("Use Music Player Plus      [${use_mpp}]")
     if [ "${have_neomutt}" ]
     then
       options+=("Use NeoMutt Mail Client    [${use_mutt}]")
@@ -583,6 +601,12 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
+          "Use Music Player Plus"*,*|*,"Use Music Player Plus"*)
+              COMMAND=mpcplus
+              MTITLE="Music Player Plus MPD Client"
+              skip_it_so=1
+              break
+              ;;
           "Use Mutt Mail Client"*,*|*,"Use Mutt Mail Client"*)
               COMMAND=mutt
               MTITLE="Mutt Mail Client"
@@ -646,13 +670,18 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
+          "Show MusicPlayerPlus Menu",*|*,"Show MusicPlayerPlus Menu")
+              mpplus -i
+              skip_it_so=1
+              break
+              ;;
           "Show System Info",*|*,"Show System Info")
-              if [ "${have_lol}" ]
-              then
-                neofetch | lolcat
-              else
+              # if [ "${have_lol}" ]
+              # then
+              #   neofetch | lolcat
+              # else
                 neofetch
-              fi
+              # fi
               read -p "Press Enter to continue" answer
               skip_it_so=1
               break
@@ -752,8 +781,10 @@ have_curl=`type -p curl`
 have_ddgr=`type -p ddgr`
 have_gdu=`type -p gdu`
 have_mapscii=`type -p mapscii`
+have_mpcplus=`type -p mpcplus`
+have_mpplus=`type -p mpplus`
 have_neo=`type -p neofetch`
-have_lol=`type -p lolcat`
+# have_lol=`type -p lolcat`
 have_rainbow=`type -p rainbowstream`
 have_speed=`type -p speedtest-cli`
 have_splash=`type -p asciisplash`
@@ -780,7 +811,7 @@ else
   fi
 fi
 
-while getopts "Aabc:fgiIjJklmn:NpP:rRSs:tTwxyzu" flag; do
+while getopts "Aabc:fgiIjJklmMn:NpP:rRSs:tTwxyzu" flag; do
   case $flag in
     A)
       ASCSPLASH="${ASCSPLASH} -i"
@@ -892,13 +923,12 @@ while getopts "Aabc:fgiIjJklmn:NpP:rRSs:tTwxyzu" flag; do
       ;;
     I)
       [ "${have_neo}" ] && {
-        MTITLE="Asciiville NeoFetch"
-        if [ "${have_lol}" ]
-        then
-          neofetch | lolcat
-        else
+        # if [ "${have_lol}" ]
+        # then
+        #   neofetch | lolcat
+        # else
           neofetch
-        fi
+        # fi
         read -p "Press Enter to continue" answer
       }
       ;;
@@ -952,6 +982,34 @@ while getopts "Aabc:fgiIjJklmn:NpP:rRSs:tTwxyzu" flag; do
     m)
       ASCSPLASH="${ASCSPLASH} -m"
       ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l mpplus"
+      ;;
+    M)
+      COMMAND=mpcplus
+      MTITLE="Music Player Plus MPD Client"
+      [ "${have_mpcplus}" ] || {
+        echo "Option '-M' indicates use mpcplus as the default command."
+        echo "However, mpcplus is not installed or not in your path."
+        echo "You may be able to install mpcplus using apt or dnf as follows:"
+        printf "\n\n\tsudo apt install MusicPlayerPlus\nor"
+        printf "\n\tsudo dnf install MusicPlayerPlus\n\n"
+        if [ "${have_btop}" ]
+        then
+          echo "Continuing, using btop rather than ${COMMAND}."
+          COMMAND=btop
+          MTITLE="Btop++ System Monitor"
+        else
+          if [ "${have_ranger}" ]
+          then
+            echo "Continuing, using ranger rather than ${COMMAND}."
+            COMMAND=ranger
+            MTITLE="Ranger File Manager"
+          else
+            echo "Continuing, using asciiplasma rather than ${COMMAND}."
+            COMMAND=asciiplasma
+            MTITLE="ASCIImatics Plasma"
+          fi
+        fi
+      }
       ;;
     n)
       ASCSPLASH="${ASCSPLASH} -c ${OPTARG}"
