@@ -486,7 +486,7 @@ show_main_menu() {
               break
               ;;
           "Phase of the Moon",*|*,"Phase of the Moon")
-              curl wttr.in?format=v2
+              curl wttr.in/Moon
               skip_it_so=1
               break
               ;;
