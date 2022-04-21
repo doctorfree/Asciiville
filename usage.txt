@@ -1,10 +1,11 @@
 
 Usage: asciiville [-a] [-A] [-b] [-c command] [-f] [-g] [-i]
 		[-I] [-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]
-		[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]
+		[-r] [-R] [-s song] [-S] [-t] [-T] [-w] [-x] [-y] [-z] [-u]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
+		If 'command' is keyword 'maps' then display a map using mapscii
 		If 'command' is keyword 'moon' then display the phase of the Moon
 		If 'command' is keyword 'search' then a web search is performed
 		If 'command' is keyword 'speed' then a speed test is performed
@@ -15,13 +16,14 @@ Terminal/Command options:
 	-g indicates use gnome terminal emulator
 	-i indicates start asciiville in interactive mode
 	-I indicates display system info
-	-l indicates use lynx as the default command
+	-l indicates use lynx web browser as the default command
 	-P script specifies the ASCIImatics script to run in visualizer pane
 	-r indicates use retro terminal emulator
 	-t indicates use tilix terminal emulator
+	-w indicates use w3m web browser as the default command
 	-x indicates use xfce4 terminal emulator
 	-y indicates use ranger as the default command
-	-z indicates use neomutt as the default command
+	-z indicates use neomutt/mutt as the default command
 
 ASCIImatics animation options:
 	-A indicates use Art Images scenes in ASCIImatics display

@@ -34,12 +34,13 @@ a front-end for a variety of terminal and/or `tmux` sessions.
 The `asciiville` command can be used to invoke:
 
 * The lightweight character based system monitor, `btop`
-* The lightweight character based web browser, `lynx`
+* The lightweight character based web browser, `lynx` or `w3m`
 * The lightweight character based mail client, `neomutt` or `mutt`
 * The lightweight character based file manager, `ranger`
 * One or more terminal emulators running a command
 * A tmux session
 * A command line web search
+* A zoomable map of the world
 * Command line character based Twitter client
 * A network download/upload speed test
 * The AAlib BB demo running in a tmux session (Debian based systems only)
@@ -55,6 +56,7 @@ Integration is provided for:
 * [btop](btop/README.md), character based system monitor
 * [ddgr](ddgr/README.md), command line web search
 * [lynx](https://lynx.invisible-island.net/), character based web browser
+* [w3m](http://w3m.sourceforge.net/), another character based web browser
 * [neomutt](https://neomutt.org/), character based mail client
 * [ranger](https://ranger.github.io/), character based file manager
 * [mplayer](http://mplayerhq.hu/design7/info.html), a media player
@@ -62,6 +64,7 @@ Integration is provided for:
 * [asciinema](https://asciinema.org/) - automatically create ascii character based video clips
 * [rainbowstream](https://github.com/orakaro/rainbowstream) - command line character based Twitter client
     * See [the rainbowstream usage manual](https://rainbowstream.readthedocs.io/en/latest/#usage) to get started
+* [mapscii](https://github.com/rastapasta/mapscii#readme), zoomable map of the world
 * [tmux](https://github.com/tmux/tmux/wiki), a terminal multiplexer
 * [wttr.in](https://github.com/chubin/wttr.in), console-oriented weather report
 * Enhanced key bindings for extended control of terminal windows
@@ -218,10 +221,11 @@ summary of the command line options:
 ```
 Usage: asciiville [-a] [-A] [-b] [-c command] [-f] [-g] [-i]
 		[-I] [-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]
-		[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]
+		[-r] [-R] [-s song] [-S] [-t] [-T] [-w] [-x] [-y] [-z] [-u]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
+		If 'command' is keyword 'maps' then display a map using mapscii
 		If 'command' is keyword 'moon' then display the phase of the Moon
 		If 'command' is keyword 'search' then a web search is performed
 		If 'command' is keyword 'speed' then a speed test is performed
@@ -232,10 +236,11 @@ Terminal/Command options:
 	-g indicates use gnome terminal emulator
 	-i indicates start asciiville in interactive mode
 	-I indicates display system info
-	-l indicates use lynx as the default command
+	-l indicates use lynx web browser as the default command
 	-P script specifies the ASCIImatics script to run in visualizer pane
 	-r indicates use retro terminal emulator
 	-t indicates use tilix terminal emulator
+	-w indicates use w3m web browser as the default command
 	-x indicates use xfce4 terminal emulator
 	-y indicates use ranger as the default command
 	-z indicates use neomutt/mutt as the default command

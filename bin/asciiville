@@ -6,6 +6,7 @@
 #
 #     * The lightweight character based system monitor, `btop`
 #     * The lightweight character based web browser, `lynx`
+#     * The lightweight character based web browser, `w3m`
 #     * The lightweight character based mail client, `neomutt`
 #     * The lightweight character based file manager, `ranger`
 #     * One or more terminal emulators running a specified command
@@ -13,6 +14,7 @@
 #     * A network upload/download speed test
 #     * A web search
 #     * Character based ASCII art
+#     * Character based maps
 #     * Command line character based Twitter client
 #     * Display system info
 #     * Any character based client the user wishes to run
@@ -26,6 +28,7 @@ BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 PLEASE="Please enter your"
 COMMAND=btop
+WEB_HOME="https://github.com/doctorfree/Asciiville#readme"
 MTITLE="Btop++ System Monitor"
 
 if [ `echo $PATH | grep -c /usr/local/bin` -ne "1" ]
@@ -40,9 +43,10 @@ fi
 usage() {
   printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-f] [-g] [-i]"
   printf "\n\t\t[-I] [-jJ] [-k] [-l] [-m] [-n num] [-N] [-p] [-P script]"
-  printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]\n"
+  printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-w] [-x] [-y] [-z] [-u]\n"
   printf "\nTerminal/Command options:"
   printf "\n\t-c 'command' indicates use 'command'"
+  printf "\n\t\tIf 'command' is keyword 'maps' then display a map using mapscii"
   printf "\n\t\tIf 'command' is keyword 'moon' then display the phase of the Moon"
   printf "\n\t\tIf 'command' is keyword 'search' then a web search is performed"
   printf "\n\t\tIf 'command' is keyword 'speed' then a speed test is performed"
@@ -53,10 +57,11 @@ usage() {
   printf "\n\t-g indicates use gnome terminal emulator"
   printf "\n\t-i indicates start asciiville in interactive mode"
   printf "\n\t-I indicates display system info"
-  printf "\n\t-l indicates use lynx as the default command"
+  printf "\n\t-l indicates use lynx web browser as the default command"
   printf "\n\t-P script specifies the ASCIImatics script to run in visualizer pane"
   printf "\n\t-r indicates use retro terminal emulator"
   printf "\n\t-t indicates use tilix terminal emulator"
+  printf "\n\t-w indicates use w3m web browser as the default command"
   printf "\n\t-x indicates use xfce4 terminal emulator"
   printf "\n\t-y indicates use ranger as the default command"
   printf "\n\t-z indicates use neomutt/mutt as the default command\n"
@@ -333,6 +338,22 @@ show_main_menu() {
     else
       usetmux="NO"
     fi
+    if [ "${BROWSER}" == "w3m" ]
+    then
+      default_browser="W3M"
+    else
+      if [ "${BROWSER}" == "lynx" ]
+      then
+        default_browser="Lynx"
+      else
+        if [ "${BROWSER}" ]
+        then
+          default_browser="${BROWSER}"
+        else
+          default_browser="None"
+        fi
+      fi
+    fi
     [ "${COMMAND}" ] || COMMAND=btop
     show_comm=`echo ${COMMAND} | awk ' { print $1 } '`
     case "${COMMAND}" in
@@ -342,6 +363,7 @@ show_main_menu() {
         use_lynx="NO"
         use_mutt="NO"
         use_ranger="NO"
+        use_w3m="NO"
         ;;
       gdu*)
         use_btop="NO"
@@ -349,13 +371,15 @@ show_main_menu() {
         use_lynx="NO"
         use_mutt="NO"
         use_ranger="NO"
+        use_w3m="NO"
         ;;
-      lynx)
+      lynx*)
         use_btop="NO"
         use_gdu="NO"
         use_lynx="YES"
         use_mutt="NO"
         use_ranger="NO"
+        use_w3m="NO"
         ;;
       mutt|neomutt)
         use_btop="NO"
@@ -363,6 +387,7 @@ show_main_menu() {
         use_lynx="NO"
         use_mutt="YES"
         use_ranger="NO"
+        use_w3m="NO"
         ;;
       ranger)
         use_btop="NO"
@@ -370,13 +395,20 @@ show_main_menu() {
         use_lynx="NO"
         use_mutt="NO"
         use_ranger="YES"
+        use_w3m="NO"
+        ;;
+      w3m*)
+        use_btop="NO"
+        use_gdu="NO"
+        use_lynx="NO"
+        use_mutt="NO"
+        use_ranger="NO"
+        use_w3m="YES"
         ;;
     esac
     skip_it_so=
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
-    [ "${have_splash}" ] && options+=("ASCIImatics Animations")
-    options+=("Kill Tmux Sessions")
     [ "${have_xfce4}" ] && options+=("Run ${show_comm} in XFCE4 Terminal")
     [ "${have_gnome}" ] && options+=("Run ${show_comm} in Gnome Terminal")
     [ "${have_retro}" ] && options+=("Run ${show_comm} in Retro Terminal")
@@ -387,13 +419,17 @@ show_main_menu() {
     [ "${have_bb}" ] && options+=("Run AAlib Demo (Curses mode)")
     [ "${have_speed}" ] && options+=("Run Speed Test")
     [ "${have_rainbow}" ] && options+=("Run Twitter Client")
+    [ "${have_splash}" ] && options+=("ASCIImatics Animations")
+    options+=("Kill Tmux Sessions")
     [ "${have_ddgr}" ] && options+=("Search the Web")
+    [ "${have_mapscii}" ] && options+=("Show Map")
     [ "${have_neo}" ] && options+=("Show System Info")
     [ "${have_curl}" ] && options+=("Phase of the Moon")
     [ "${have_curl}" ] && options+=("Weather Report")
     [ "${have_btop}" ] && options+=("Use Btop System Monitor    [${use_btop}]")
     [ "${have_gdu}" ] && options+=("Use Disk Usage Analyzer    [${use_gdu}]")
     [ "${have_lynx}" ] && options+=("Use  Lynx  Web  Browser    [${use_lynx}]")
+    [ "${have_w3m}" ] && options+=("Use  W3M   Web  Browser    [${use_w3m}]")
     if [ "${have_neomutt}" ]
     then
       options+=("Use NeoMutt Mail Client    [${use_mutt}]")
@@ -404,6 +440,7 @@ show_main_menu() {
     options+=("Use Tmux                   [${usetmux}]")
     [ "${have_nema}" ] && options+=("Record Tmux Session        [${recordstat}]")
     options+=("Fullscreen Terminal Window [${fullstat}]")
+    options+=("Default Web Browser [${default_browser}]")
     options+=("Quit")
     select opt in "${options[@]}"
     do
@@ -448,9 +485,101 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
+          "Default Web Browser"*,*|*,"Default Web Browser"*)
+              if [ "${default_browser}" == "W3M" ]
+              then
+                if [ "${have_lynx}" ]
+                then
+                  export BROWSER=lynx
+                  default_browser="Lynx"
+                else
+                  if [ "${SAVED_BROWSER}" ]
+                  then
+                    export BROWSER="${SAVED_BROWSER}"
+                    default_browser="${BROWSER}"
+                  else
+                    export BROWSER=
+                    default_browser="None"
+                  fi
+                fi
+              else
+                if [ "${default_browser}" == "Lynx" ]
+                then
+                  if [ "${SAVED_BROWSER}" ]
+                  then
+                    export BROWSER="${SAVED_BROWSER}"
+                    default_browser="${BROWSER}"
+                  else
+                    export BROWSER=
+                    default_browser="None"
+                  fi
+                else
+                  if [ "${default_browser}" == "None" ]
+                  then
+                    if [ "${have_w3m}" ]
+                    then
+                      export BROWSER=w3m
+                      default_browser="W3M"
+                    else
+                      if [ "${have_lynx}" ]
+                      then
+                        export BROWSER=lynx
+                        default_browser="Lynx"
+                      else
+                        if [ "${SAVED_BROWSER}" ]
+                        then
+                          export BROWSER="${SAVED_BROWSER}"
+                          default_browser="${BROWSER}"
+                        else
+                          export BROWSER=
+                          default_browser="None"
+                        fi
+                      fi
+                    fi
+                  else
+                    if [ "${BROWSER}" ]
+                    then
+                      export BROWSER=
+                      default_browser="None"
+                    else
+                      if [ "${have_w3m}" ]
+                      then
+                        export BROWSER=w3m
+                        default_browser="W3M"
+                      else
+                        if [ "${have_lynx}" ]
+                        then
+                          export BROWSER=lynx
+                          default_browser="Lynx"
+                        else
+                          if [ "${SAVED_BROWSER}" ]
+                          then
+                            export BROWSER="${SAVED_BROWSER}"
+                            default_browser="${BROWSER}"
+                          else
+                            export BROWSER=
+                            default_browser="None"
+                          fi
+                        fi
+                      fi
+                    fi
+                  fi
+                fi
+              fi
+              skip_it_so=1
+              break
+              ;;
           "Use  Lynx  Web  Browser"*,*|*,"Use  Lynx  Web  Browser"*)
-              COMMAND=lynx
+              COMMAND="lynx ${WEB_HOME}"
               MTITLE="Lynx Web Browser"
+              export BROWSER=lynx
+              skip_it_so=1
+              break
+              ;;
+          "Use  W3M   Web  Browser"*,*|*,"Use  W3M   Web  Browser"*)
+              COMMAND="w3m -v ${WEB_HOME}"
+              MTITLE="W3M Web Browser"
+              export BROWSER=w3m
               skip_it_so=1
               break
               ;;
@@ -486,12 +615,12 @@ show_main_menu() {
               break
               ;;
           "Phase of the Moon",*|*,"Phase of the Moon")
-              curl wttr.in/Moon
+              curl wttr.in/Moon 2> /dev/null | sed '$ d'
               skip_it_so=1
               break
               ;;
           "Weather Report",*|*,"Weather Report")
-              curl wttr.in?format=v2
+              curl wttr.in?format=v2 2> /dev/null | sed '$ d'
               skip_it_so=1
               break
               ;;
@@ -509,6 +638,11 @@ show_main_menu() {
               ;;
           "Search the Web",*|*,"Search the Web")
               ddgr
+              skip_it_so=1
+              break
+              ;;
+          "Show Map",*|*,"Show Map")
+              mapscii
               skip_it_so=1
               break
               ;;
@@ -603,7 +737,6 @@ init_vars() {
 
 init_vars
 have_btop=`type -p btop`
-have_lynx=`type -p lynx`
 have_neomutt=`type -p neomutt`
 have_mutt=`type -p mutt`
 have_ranger=`type -p ranger`
@@ -618,6 +751,7 @@ have_bb=`type -p bb-tmux`
 have_curl=`type -p curl`
 have_ddgr=`type -p ddgr`
 have_gdu=`type -p gdu`
+have_mapscii=`type -p mapscii`
 have_neo=`type -p neofetch`
 have_lol=`type -p lolcat`
 have_rainbow=`type -p rainbowstream`
@@ -625,7 +759,28 @@ have_speed=`type -p speedtest-cli`
 have_splash=`type -p asciisplash`
 have_xfce4=`type -p xfce4-terminal`
 have_gnome=`type -p gnome-terminal`
-while getopts "Aabc:fgiIjJklmn:NpP:rRSs:tTxyzu" flag; do
+have_lynx=`type -p lynx`
+have_w3m=`type -p w3m`
+
+SAVED_BROWSER=
+if [ "${BROWSER}" ]
+then
+  [ "${BROWSER}" == "w3m" ] || [ "${BROWSER}" == "lynx" ] || {
+    # The user set a custom BROWSER env var
+    SAVED_BROWSER="${BROWSER}"
+  }
+else
+  if [ "${have_lynx}" ]
+  then
+    [ "${BROWSER}" ] || export BROWSER=lynx
+  else
+    [ "${have_w3m}" ] && {
+      [ "${BROWSER}" ] || export BROWSER=w3m
+    }
+  fi
+fi
+
+while getopts "Aabc:fgiIjJklmn:NpP:rRSs:tTwxyzu" flag; do
   case $flag in
     A)
       ASCSPLASH="${ASCSPLASH} -i"
@@ -643,8 +798,12 @@ while getopts "Aabc:fgiIjJklmn:NpP:rRSs:tTxyzu" flag; do
     c)
       COMMAND="${OPTARG}"
       case "${COMMAND}" in
+      maps|Maps)
+          [ "${have_mapscii}" ] && mapscii
+          break
+          ;;
       moon|Moon)
-          [ "${have_curl}" ] && curl wttr.in/Moon
+          [ "${have_curl}" ] && curl wttr.in/Moon 2> /dev/null | sed '$ d'
           break
           ;;
       search|Search)
@@ -661,7 +820,7 @@ while getopts "Aabc:fgiIjJklmn:NpP:rRSs:tTxyzu" flag; do
           ;;
       weather|Weather)
           break
-          [ "${have_curl}" ] && curl wttr.in?format=v2
+          [ "${have_curl}" ] && curl wttr.in?format=v2 2> /dev/null | sed '$ d'
           ;;
       *)
           FIRST=`echo ${COMMAND} | awk ' { print $1 } '`
@@ -681,7 +840,7 @@ while getopts "Aabc:fgiIjJklmn:NpP:rRSs:tTxyzu" flag; do
               if [ "${have_lynx}" ]
               then
                 echo "Continuing, using lynx rather than ${COMMAND}."
-                COMMAND=lynx
+                COMMAND="lynx ${WEB_HOME}"
                 MTITLE="Lynx Web Browser"
               else
                 echo "Continuing, using asciiplasma rather than ${COMMAND}."
@@ -756,7 +915,7 @@ while getopts "Aabc:fgiIjJklmn:NpP:rRSs:tTxyzu" flag; do
       exit 0
       ;;
     l)
-      COMMAND=lynx
+      COMMAND="lynx ${WEB_HOME}"
       MTITLE="Lynx Web Browser"
       [ "${have_lynx}" ] || {
         echo "Option '-l' indicates use lynx as the default command."
@@ -764,21 +923,28 @@ while getopts "Aabc:fgiIjJklmn:NpP:rRSs:tTxyzu" flag; do
         echo "You may be able to install lynx using apt or dnf as follows:"
         printf "\n\n\tsudo apt install lynx\nor"
         printf "\n\tsudo dnf install lynx\n\n"
-        if [ "${have_btop}" ]
+        if [ "${have_w3m}" ]
         then
-          echo "Continuing, using btop rather than ${COMMAND}."
-          COMMAND=btop
-          MTITLE="Btop++ System Monitor"
+          echo "Continuing, using w3m rather than lynx."
+          COMMAND="w3m -v ${WEB_HOME}"
+          MTITLE="W3M Web Browser"
         else
-          if [ "${have_ranger}" ]
+          if [ "${have_btop}" ]
           then
-            echo "Continuing, using ranger rather than ${COMMAND}."
-            COMMAND=ranger
-            MTITLE="Ranger File Manager"
+            echo "Continuing, using btop rather than ${COMMAND}."
+            COMMAND=btop
+            MTITLE="Btop++ System Monitor"
           else
-            echo "Continuing, using asciiplasma rather than ${COMMAND}."
-            COMMAND=asciiplasma
-            MTITLE="ASCIImatics Plasma"
+            if [ "${have_ranger}" ]
+            then
+              echo "Continuing, using ranger rather than ${COMMAND}."
+              COMMAND=ranger
+              MTITLE="Ranger File Manager"
+            else
+              echo "Continuing, using asciiplasma rather than ${COMMAND}."
+              COMMAND=asciiplasma
+              MTITLE="ASCIImatics Plasma"
+            fi
           fi
         fi
       }
@@ -865,6 +1031,41 @@ while getopts "Aabc:fgiIjJklmn:NpP:rRSs:tTxyzu" flag; do
     T)
       TMUX=1
       ;;
+    w)
+      COMMAND="w3m -v ${WEB_HOME}"
+      MTITLE="W3M Web Browser"
+      [ "${have_w3m}" ] || {
+        echo "Option '-w' indicates use w3m as the default command."
+        echo "However, w3m is not installed or not in your path."
+        echo "You may be able to install w3m using apt or dnf as follows:"
+        printf "\n\n\tsudo apt install w3m\nor"
+        printf "\n\tsudo dnf install w3m\n\n"
+        if [ "${have_lynx}" ]
+        then
+          echo "Continuing, using lynx rather than w3m."
+          COMMAND="lynx ${WEB_HOME}"
+          MTITLE="Lynx Web Browser"
+        else
+          if [ "${have_btop}" ]
+          then
+            echo "Continuing, using btop rather than ${COMMAND}."
+            COMMAND=btop
+            MTITLE="Btop++ System Monitor"
+          else
+            if [ "${have_ranger}" ]
+            then
+              echo "Continuing, using ranger rather than ${COMMAND}."
+              COMMAND=ranger
+              MTITLE="Ranger File Manager"
+            else
+              echo "Continuing, using asciiplasma rather than ${COMMAND}."
+              COMMAND=asciiplasma
+              MTITLE="ASCIImatics Plasma"
+            fi
+          fi
+        fi
+      }
+      ;;
     x)
       XFCE4=1
       [ "${have_xfce4}" ] || {
@@ -947,7 +1148,7 @@ while getopts "Aabc:fgiIjJklmn:NpP:rRSs:tTxyzu" flag; do
             if [ "${have_lynx}" ]
             then
               echo "Continuing, using lynx rather than ${COMMAND}."
-              COMMAND=lynx
+              COMMAND="lynx ${WEB_HOME}"
               MTITLE="Lynx Web Browser"
             else
               echo "Continuing, using asciiplasma rather than ${COMMAND}."

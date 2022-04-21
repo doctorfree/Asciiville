@@ -27,7 +27,7 @@ Occasionally a tmux session or asciimatics script will hang. Previously started 
 *Terminal/Command options:*
 
 **-c 'command'**
-: Indicates run 'command' in selected terminal window. If *command* is one of the special keywords (*moon*, *search*, *speed*, *twitter*, *weather*) then display the phase of the Moon, perform a web search, perform a speed test, run the command line twitter client, or display a weather report.
+: Indicates run 'command' in selected terminal window. If *command* is one of the special keywords (*maps*, *moon*, *search*, *speed*, *twitter*, *weather*) then display a map, the phase of the Moon, perform a web search, perform a speed test, run the command line twitter client, or display a weather report.
 
 **-f**
 : Indicates fullscreen display
@@ -121,6 +121,9 @@ Occasionally a tmux session or asciimatics script will hang. Previously started 
 **asciiville -r -y**
 : Launches `ranger` file manager running in cool-retro-term terminal emulator. 
 
+**asciiville -c maps**
+: Displays a zoomable map of the world using `mapscii`. 
+
 **asciiville -c moon**
 : Displays the Phase of the Moon using `wttr.in`. 
 
@@ -163,7 +166,7 @@ Submit bug reports online at:
 https://github.com/doctorfree/Asciiville/issues
 
 # SEE ALSO
-**asciiart**(1), **asciijulia**(1), **asciimpplus**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1)
+**asciiart**(1), **asciijulia**(1), **asciimpplus**(1), **asciinema**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1), **ddgr**(1), **lynx**(1), **neomutt**(1), **ranger**(1)
 
 Full documentation and sources at:
 

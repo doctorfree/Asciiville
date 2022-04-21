@@ -24,8 +24,20 @@ cp -a %{_sourcedir}/usr %{buildroot}/usr
 
 %post
 export PATH=${PATH}:/usr/local/bin
-python3 -m pip install asciimatics
-python3 -m pip install rainbowstream
+python3_inst=`type -p python3`
+if [ "${python3_inst}" ]
+then
+    PYTHON="python3"
+else
+    PYTHON="python"
+fi
+${PYTHON} -m pip install asciimatics
+${PYTHON} -m pip install rainbowstream
+npm_inst=`type -p npm`
+if [ "${npm_inst}" ]
+then
+    npm install -g mapscii
+fi
 
 %preun
 
