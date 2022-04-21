@@ -18,7 +18,9 @@ The *asciiville* command acts as a front-end for launching character based utili
 
 The *asciiville* command can also act as a front-end to the *asciisplash* and *asciisplash-tmux* commands when invoked with the `-S` and `-T` command line options.
 
-When invoked with the `-i` option, `asciiville` presents a selection menu and operates in interactive mode.
+When invoked with the `-i` option, `asciiville` presents a selection menu and operates in interactive mode. Included in the wide variety of options available in the Asciiville interactive menus are selections to display the *MusicPlayerPlus* and *RoonCommandLine* interactive menus.
+
+The interactive menu interface provides three types of menu options. Some menu selections trigger the execution of a command. These are usually menu entries beginning with *Run*. Other menu selections are used to set the command that would be run when a terminal emulator is selected. These are usually menu entries beginning with *Use*. Finally, some menu selections can be used to toggle preferences like *Fullscreen*, *Use Tmux*, and *Record Tmux Session*. Once a command has been selected with the *Use* menu entry and desired options are set then the command can be executed by selecting one of the terminal emulators (menu entries beginning with *Run <command> in <terminal name> Terminal*).
 
 Previously started tmux sessions and asciimatics scripts can be quickly and easily terminated by executing the `asciiville -k` command.
 

@@ -49,6 +49,7 @@ The `asciiville` command can be used to invoke:
 * Display system info
 * Display the Phase of the Moon
 * Display a weather report
+* Display the MusicPlayerPlus or RoonCommandLine interactive menus
 * Any character based client the user wishes to run
 * One of several asciimatics animations optionally accompanied by audio
 
@@ -75,6 +76,8 @@ Integration is provided for:
     * gnome-terminal
     * tilix
     * cool-retro-term
+* [MusicPlayerPlus](https://github.com/doctorfree/MusicPlayerPlus#readme), character based suite of commands to manage music server and player
+* [RoonCommandLine](https://github.com/doctorfree/RoonCommandLine#readme), command line control of the Roon audio system over a local network
 
 ### Asciiville Commands
 
@@ -98,23 +101,6 @@ Asciiville adds the following commands to your system:
 
 Additional detail and info can be found in the
 [Asciiville Wiki](https://github.com/doctorfree/Asciiville/wiki).
-
-### Main btop system monitor features
-
-* Easy to use, with a game inspired menu system.
-* Full mouse support, all buttons with a highlighted key is clickable and mouse scroll works in process list and menu boxes.
-* Fast and responsive UI with UP, DOWN keys process selection.
-* Function for showing detailed stats for selected process.
-* Ability to filter processes.
-* Easy switching between sorting options.
-* Tree view of processes.
-* Send any signal to selected process.
-* UI menu for changing all config file options.
-* Auto scaling graph for network usage.
-* Shows IO activity and speeds for disks
-* Battery meter
-* Selectable symbols for the graphs
-* Custom presets
 
 ## Quickstart
 

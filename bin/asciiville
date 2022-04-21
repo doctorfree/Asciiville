@@ -5,18 +5,18 @@
 #     The `asciiville` command can be used to invoke:
 #
 #     * The lightweight character based system monitor, `btop`
-#     * The lightweight character based web browser, `lynx`
-#     * The lightweight character based web browser, `w3m`
-#     * The lightweight character based mail client, `neomutt`
+#     * The lightweight character based web browser, `lynx` or `w3m`
+#     * The lightweight character based mail client, `neomutt` or `mutt`
 #     * The lightweight character based file manager, `ranger`
 #     * One or more terminal emulators running a specified command
 #     * A tmux session
 #     * A network upload/download speed test
 #     * A web search
 #     * Character based ASCII art
-#     * Character based maps
+#     * Character based world map
 #     * Command line character based Twitter client
 #     * Display system info
+#     * MusicPlayerPlus or RoonCommandLine menus
 #     * Any character based client the user wishes to run
 #     * One of several asciimatics animations optionally accompanied by audio
 #
@@ -223,12 +223,12 @@ show_ascii_menu() {
     skip_it_so=
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
-    [ "${have_art}" ] && options+=("Art Images ASCIImatics Animation")
-    [ "${have_julia}" ] && options+=("Julia Set ASCIImatics Animation")
-    [ "${have_mpplus}" ] && options+=("MPPlus ASCIImatics Animation")
-    [ "${have_plasma}" ] && options+=("Plasma ASCIImatics Animation")
+    [ "${have_asciiart}" ] && options+=("Art Images ASCIImatics Animation")
+    [ "${have_asciijulia}" ] && options+=("Julia Set ASCIImatics Animation")
+    [ "${have_asciimpplus}" ] && options+=("MPPlus ASCIImatics Animation")
+    [ "${have_asciiplasma}" ] && options+=("Plasma ASCIImatics Animation")
     options+=("Audio [${audiostat}]")
-    [ "${have_nema}" ] && options+=("Record Tmux Session [${recordstat}]")
+    [ "${have_asciinema}" ] && options+=("Record Tmux Session [${recordstat}]")
     options+=("Use Tmux [${usetmux}]" "Main menu" "Quit")
     select opt in "${options[@]}"
     do
@@ -439,8 +439,9 @@ show_main_menu() {
     [ "${have_splash}" ] && options+=("ASCIImatics Animations")
     options+=("Kill Tmux Sessions")
     [ "${have_ddgr}" ] && options+=("Search the Web")
-    [ "${have_mapscii}" ] && options+=("Show Map")
+    [ "${have_mapscii}" ] && options+=("Show Mapscii World Map")
     [ "${have_mpplus}" ] && options+=("Show MusicPlayerPlus Menu")
+    [ "${have_roon}" ] && options+=("Show RoonCommandLine Menu")
     [ "${have_neo}" ] && options+=("Show System Info")
     [ "${have_curl}" ] && options+=("Phase of the Moon")
     [ "${have_curl}" ] && options+=("Weather Report")
@@ -458,7 +459,7 @@ show_main_menu() {
     fi
     [ "${have_ranger}" ] && options+=("Use Ranger File Manager    [${use_ranger}]")
     options+=("Use Tmux                   [${usetmux}]")
-    [ "${have_nema}" ] && options+=("Record Tmux Session        [${recordstat}]")
+    [ "${have_asciinema}" ] && options+=("Record Tmux Session        [${recordstat}]")
     options+=("Fullscreen Terminal Window [${fullstat}]")
     options+=("Default Web Browser [${default_browser}]")
     options+=("Quit")
@@ -679,13 +680,18 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "Show Map",*|*,"Show Map")
+          "Show Mapscii World Map",*|*,"Show Mapscii World Map")
               mapscii
               skip_it_so=1
               break
               ;;
           "Show MusicPlayerPlus Menu",*|*,"Show MusicPlayerPlus Menu")
               mpplus -i
+              skip_it_so=1
+              break
+              ;;
+          "Show RoonCommandLine Menu",*|*,"Show RoonCommandLine Menu")
+              roon
               skip_it_so=1
               break
               ;;
@@ -785,11 +791,11 @@ have_mutt=`type -p mutt`
 have_ranger=`type -p ranger`
 have_retro=`type -p cool-retro-term`
 have_tilix=`type -p tilix`
-have_art=`type -p asciiart`
-have_julia=`type -p asciijulia`
-have_plasma=`type -p asciiplasma`
-have_mpplus=`type -p asciimpplus`
-have_nema=`type -p asciinema`
+have_asciiart=`type -p asciiart`
+have_asciijulia=`type -p asciijulia`
+have_asciiplasma=`type -p asciiplasma`
+have_asciimpplus=`type -p asciimpplus`
+have_asciinema=`type -p asciinema`
 have_bb=`type -p bb-tmux`
 have_curl=`type -p curl`
 have_ddgr=`type -p ddgr`
@@ -800,6 +806,7 @@ have_mpplus=`type -p mpplus`
 have_neo=`type -p neofetch`
 have_lolcat=`type -p lolcat`
 have_rainbow=`type -p rainbowstream`
+have_roon=`type -p roon`
 have_speed=`type -p speedtest-cli`
 have_splash=`type -p asciisplash`
 have_xfce4=`type -p xfce4-terminal`
@@ -1063,7 +1070,7 @@ while getopts "Aabc:fgiIjJklLmMn:NpP:rRSs:tTwxyzu" flag; do
       [ "${have_tilix}" ] && TILIX=1
       ;;
     R)
-      [ "${have_nema}" ] && {
+      [ "${have_asciinema}" ] && {
         RECORD=1
         TMUX=1
         COMMAND_TMUX="${COMMAND_TMUX} -r"
