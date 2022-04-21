@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-# Asciiville-1.0.0r1 (2022-04-20)
+# Asciiville-1.3.0r1 (2022-04-20)
 
 Initial release with support for:
 
