@@ -41,8 +41,8 @@ then
 fi
 
 usage() {
-  printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-f] [-g] [-i]"
-  printf "\n\t\t[-I] [-jJ] [-k] [-l] [-m] [-M] [-n num] [-N] [-p] [-P script]"
+  printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-f] [-g] [-i] [-I]"
+  printf "\n\t\t[-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script]"
   printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-w] [-x] [-y] [-z] [-u]\n"
   printf "\nTerminal/Command options:"
   printf "\n\t-c 'command' indicates use 'command'"
@@ -58,6 +58,7 @@ usage() {
   printf "\n\t-i indicates start asciiville in interactive mode"
   printf "\n\t-I indicates display system info"
   printf "\n\t-l indicates use lynx web browser as the default command"
+  printf "\n\t-L indicates use lolcat coloring where appropriate"
   printf "\n\t-P script specifies the ASCIImatics script to run in visualizer pane"
   printf "\n\t-r indicates use retro terminal emulator"
   printf "\n\t-t indicates use tilix terminal emulator"
@@ -447,6 +448,7 @@ show_main_menu() {
     [ "${have_gdu}" ] && options+=("Use Disk Usage Analyzer    [${use_gdu}]")
     [ "${have_lynx}" ] && options+=("Use  Lynx  Web  Browser    [${use_lynx}]")
     [ "${have_w3m}" ] && options+=("Use  W3M   Web  Browser    [${use_w3m}]")
+    [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring        [${use_lol}]")
     [ "${have_mpcplus}" ] && options+=("Use Music Player Plus      [${use_mpp}]")
     if [ "${have_neomutt}" ]
     then
@@ -601,6 +603,18 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
+          "Use Lolcat Coloring"*,*|*,"Use Lolcat Coloring"*)
+              if [ "${use_lolcat}" ]
+              then
+                use_lolcat=
+                use_lol="NO"
+              else
+                use_lolcat=1
+                use_lol="YES"
+              fi
+              skip_it_so=1
+              break
+              ;;
           "Use Music Player Plus"*,*|*,"Use Music Player Plus"*)
               COMMAND=mpcplus
               MTITLE="Music Player Plus MPD Client"
@@ -676,12 +690,12 @@ show_main_menu() {
               break
               ;;
           "Show System Info",*|*,"Show System Info")
-              # if [ "${have_lol}" ]
-              # then
-              #   neofetch | lolcat
-              # else
+              if [ "${use_lolcat}" ]
+              then
+                neofetch | lolcat
+              else
                 neofetch
-              # fi
+              fi
               read -p "Press Enter to continue" answer
               skip_it_so=1
               break
@@ -784,7 +798,7 @@ have_mapscii=`type -p mapscii`
 have_mpcplus=`type -p mpcplus`
 have_mpplus=`type -p mpplus`
 have_neo=`type -p neofetch`
-# have_lol=`type -p lolcat`
+have_lolcat=`type -p lolcat`
 have_rainbow=`type -p rainbowstream`
 have_speed=`type -p speedtest-cli`
 have_splash=`type -p asciisplash`
@@ -792,6 +806,8 @@ have_xfce4=`type -p xfce4-terminal`
 have_gnome=`type -p gnome-terminal`
 have_lynx=`type -p lynx`
 have_w3m=`type -p w3m`
+use_lolcat=
+use_lol="NO"
 
 SAVED_BROWSER=
 if [ "${BROWSER}" ]
@@ -811,7 +827,7 @@ else
   fi
 fi
 
-while getopts "Aabc:fgiIjJklmMn:NpP:rRSs:tTwxyzu" flag; do
+while getopts "Aabc:fgiIjJklLmMn:NpP:rRSs:tTwxyzu" flag; do
   case $flag in
     A)
       ASCSPLASH="${ASCSPLASH} -i"
@@ -923,12 +939,12 @@ while getopts "Aabc:fgiIjJklmMn:NpP:rRSs:tTwxyzu" flag; do
       ;;
     I)
       [ "${have_neo}" ] && {
-        # if [ "${have_lol}" ]
-        # then
-        #   neofetch | lolcat
-        # else
+        if [ "${use_lolcat}" ]
+        then
+          neofetch | lolcat
+        else
           neofetch
-        # fi
+        fi
         read -p "Press Enter to continue" answer
       }
       ;;
@@ -977,6 +993,12 @@ while getopts "Aabc:fgiIjJklmMn:NpP:rRSs:tTwxyzu" flag; do
             fi
           fi
         fi
+      }
+      ;;
+    L)
+      [ "${have_lolcat}" ] && {
+        use_lolcat=1
+        use_lol="YES"
       }
       ;;
     m)

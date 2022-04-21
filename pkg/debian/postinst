@@ -19,22 +19,45 @@ set -e
 
 
 case "$1" in
-    configure)
-        export PATH=${PATH}:/usr/local/bin
-        python3_inst=`type -p python3`
-        if [ "${python3_inst}" ]
+  configure)
+    export PATH=${PATH}:/usr/local/bin
+    python3_inst=`type -p python3`
+    if [ "${python3_inst}" ]
+    then
+      PYTHON="python3"
+    else
+      PYTHON="python"
+    fi
+    ${PYTHON} -m pip install asciimatics
+    ${PYTHON} -m pip install rainbowstream
+    npm_inst=`type -p npm`
+    if [ "${npm_inst}" ]
+    then
+      npm install -g mapscii
+    fi
+
+    lol_inst=`type -p lolcat`
+    if [ ! "${lol_inst}" ]
+    then
+      zip_inst=`type -p unzip`
+      gem_inst=`type -p gem`
+      if [ "${gem_inst}" ]
+      then
+        if [ "${wget_inst}" ]
         then
-            PYTHON="python3"
-        else
-            PYTHON="python"
+          if [ "${zip_inst}" ]
+          then
+            wget --quiet https://github.com/busyloop/lolcat/archive/master.zip
+            unzip -qq master.zip
+            cd lolcat-master/bin
+            gem install lolcat
+            cd ../..
+            rm -f master.zip
+            rm -rf lolcat-master
+          fi
         fi
-        ${PYTHON} -m pip install asciimatics
-        ${PYTHON} -m pip install rainbowstream
-        npm_inst=`type -p npm`
-        if [ "${npm_inst}" ]
-        then
-            npm install -g mapscii
-        fi
+      fi
+    fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

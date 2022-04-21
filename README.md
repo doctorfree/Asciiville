@@ -220,8 +220,8 @@ The usage message for `asciiville` provides a brief
 summary of the command line options:
 
 ```
-Usage: asciiville [-a] [-A] [-b] [-c command] [-f] [-g] [-i]
-		[-I] [-jJ] [-k] [-l] [-m] [-M] [-n num] [-N] [-p] [-P script]
+Usage: asciiville [-a] [-A] [-b] [-c command] [-f] [-g] [-i] [-I]
+		[-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script]
 		[-r] [-R] [-s song] [-S] [-t] [-T] [-w] [-x] [-y] [-z] [-u]
 
 Terminal/Command options:
@@ -238,6 +238,7 @@ Terminal/Command options:
 	-i indicates start asciiville in interactive mode
 	-I indicates display system info
 	-l indicates use lynx web browser as the default command
+	-L indicates use lolcat coloring where appropriate
 	-P script specifies the ASCIImatics script to run in visualizer pane
 	-r indicates use retro terminal emulator
 	-t indicates use tilix terminal emulator

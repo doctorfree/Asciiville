@@ -10,7 +10,7 @@ asciiville - Launch a terminal emulator and specified character based command, a
 
 # SYNOPSIS
 **asciiville** [-a] [-A] [-b] [-c command] [-f] [-g] [-i] [-I]
-		[-jJ] [-k] [-l] [-m] [-M] [-n num] [-N] [-p] [-P script]
+		[-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script]
 		[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]
 
 # DESCRIPTION
@@ -43,6 +43,9 @@ Previously started tmux sessions and asciimatics scripts can be quickly and easi
 
 **-l**
 : Indicates use lynx as the default command
+
+**-L**
+: Indicates use lolcat coloring where appropriate
 
 **-P script**
 : Specifies the ASCIImatics script to run
