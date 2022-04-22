@@ -40,6 +40,7 @@ The `asciiville` command can be used to invoke:
 * The lightweight character based mail client, `neomutt` or `mutt`
 * The lightweight character based music player, `mpcplus`
 * The lightweight character based file manager, `ranger`
+* The lightweight character based disk usage analyzer, `gdu`
 * One or more terminal emulators running a command
 * A tmux session
 * A command line web search
@@ -63,6 +64,7 @@ Integration is provided for:
 * [w3m](http://w3m.sourceforge.net/), another character based web browser
 * [neomutt](https://neomutt.org/), character based mail client
 * [ranger](https://ranger.github.io/), character based file manager
+* [gdu](https://github.com/dundee/gdu#readme), character based disk usage analyzer
 * [mpcplus](https://github.com/doctorfree/MusicPlayerPlus/blob/master/mpcplus/README.md), featureful ncurses based Music Player client
 * [mplayer](http://mplayerhq.hu/design7/info.html), a media player
 * [asciimatics](https://github.com/peterbrittain/asciimatics) - automatically display a variety of character based animation effects
@@ -127,6 +129,7 @@ installed if needed when using the Debian or RPM format package install.
 * lynx
 * neomutt/mutt
 * ranger
+* gdu
 * mplayer
 
 ## Installation
@@ -227,9 +230,9 @@ The usage message for `asciiville` provides a brief
 summary of the command line options:
 
 ```
-Usage: asciiville [-a] [-A] [-b] [-c command] [-f] [-g] [-i] [-I]
+Usage: asciiville [-a] [-A] [-b] [-c command] [-d] [-f] [-g] [-i] [-I]
 		[-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script]
-		[-r] [-R] [-s song] [-S] [-t] [-T] [-w] [-x] [-y] [-z] [-u]
+		[-r] [-R] [-s song] [-S] [-t] [-T] [-w] [-x] [-X] [-y] [-z] [-u]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
@@ -240,6 +243,7 @@ Terminal/Command options:
 		If 'command' is keyword 'twitter' then a Twitter client is run
 		If 'command' is keyword 'weather' then display a weather report
 		Otherwise, 'command' will be executed in a terminal window
+	-d indicates use disk usage analyzer as default command
 	-f indicates fullscreen display
 	-g indicates use gnome terminal emulator
 	-i indicates start asciiville in interactive mode
@@ -251,6 +255,7 @@ Terminal/Command options:
 	-t indicates use tilix terminal emulator
 	-w indicates use w3m web browser as the default command
 	-x indicates use xfce4 terminal emulator
+	-X indicates run command in current terminal window
 	-y indicates use ranger as the default command
 	-z indicates use neomutt/mutt as the default command
 

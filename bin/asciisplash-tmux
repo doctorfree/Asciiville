@@ -24,7 +24,7 @@ usage() {
   printf "\n\t\tor $HOME/Music/"
   printf "\n\t-t indicates use original plasma effect comments"
   printf "\n\t-u displays this usage message and exits\n"
-  printf "\nDefaults: single pane, left pane plasma, right pane julia, recording disabled"
+  printf "\nDefaults: single pane, left pane art, right pane julia, recording disabled"
   printf "\nThis run:"
   printf "\n\tPrimary pane = ${PYLEFT}"
   [ "${DUAL}" ] && printf "\n\tSecondary pane = ${PYRIGHT}"
@@ -46,7 +46,7 @@ DUAL=
 DUDE=
 KILLME=
 RECORD=
-PYLEFT=plasma
+PYLEFT=art
 PYRIGHT=julia
 USAGE=
 while getopts "abc:dl:r:Rs:tu" flag; do

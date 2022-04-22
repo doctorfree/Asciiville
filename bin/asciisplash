@@ -63,7 +63,7 @@ custom_audio=
 cycle=
 debug=
 longjulia=
-script="mpplus"
+script="art"
 switch_comments=
 while getopts "AabCc:dijJmps:u" flag; do
   case $flag in

@@ -45,9 +45,9 @@ then
 fi
 
 usage() {
-  printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-f] [-g] [-i] [-I]"
+  printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-d] [-f] [-g] [-i] [-I]"
   printf "\n\t\t[-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script]"
-  printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-w] [-x] [-y] [-z] [-u]\n"
+  printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-w] [-x] [-X] [-y] [-z] [-u]\n"
   printf "\nTerminal/Command options:"
   printf "\n\t-c 'command' indicates use 'command'"
   printf "\n\t\tIf 'command' is keyword 'maps' then display a map using mapscii"
@@ -57,6 +57,7 @@ usage() {
   printf "\n\t\tIf 'command' is keyword 'twitter' then a Twitter client is run"
   printf "\n\t\tIf 'command' is keyword 'weather' then display a weather report"
   printf "\n\t\tOtherwise, 'command' will be executed in a terminal window"
+  printf "\n\t-d indicates use disk usage analyzer as default command"
   printf "\n\t-f indicates fullscreen display"
   printf "\n\t-g indicates use gnome terminal emulator"
   printf "\n\t-i indicates start asciiville in interactive mode"
@@ -68,6 +69,7 @@ usage() {
   printf "\n\t-t indicates use tilix terminal emulator"
   printf "\n\t-w indicates use w3m web browser as the default command"
   printf "\n\t-x indicates use xfce4 terminal emulator"
+  printf "\n\t-X indicates run command in current terminal window"
   printf "\n\t-y indicates use ranger as the default command"
   printf "\n\t-z indicates use neomutt/mutt as the default command\n"
   printf "\nASCIImatics animation options:"
@@ -118,6 +120,43 @@ kill_tmux_sessions() {
   done
 }
 
+not_in_path() {
+  echo "Option \'$2\' indicates use $1 as the default command."
+  echo "However, $1 is not installed or not in your path."
+  echo "You may be able to install $1 using apt or dnf as follows:"
+  printf "\n\n\tsudo apt install $1\nor"
+  printf "\n\tsudo dnf install $1\n\n"
+}
+
+select_alt_term() {
+  if [ "${have_gnome}" ]
+  then
+    GNOME=1
+    echo "Proceeding with gnome-terminal"
+  else
+    if [ "${have_xfce4}" ]
+    then
+      XFCE4=1
+      echo "Proceeding with xfce4-terminal"
+    else
+      if [ "${have_tilix}" ]
+      then
+        TILIX=1
+        echo "Proceeding with tilix terminal"
+      else
+        if [ "${have_retro}" ]
+        then
+          RETRO=1
+          echo "Proceeding with cool-retro-term"
+        else
+          echo "Cannot find a terminal emulator I like. Disabling terminal use."
+          use_term=
+        fi
+      fi
+    fi
+  fi
+}
+
 make_it_so() {
   # Fullscreen tmux sessions and ASCIImatics Animations
   [ "${SPLASH}" ] || [ "${TMUX_ASC}" ] && FULLSCREEN=1
@@ -136,70 +175,80 @@ make_it_so() {
     [ "${TMUX_ASC}" ] && AVCOMM="${COMMAND_TMUX}"
   fi
 
-  # Begin terminal command startup section
-  if [ "${RETRO}" ]
+  if [ "${use_term}" ]
   then
-    if [ "${FULLSCREEN}" ]
+    # Begin terminal command startup section
+    if [ "${CURRENT}" ]
     then
-      cool-retro-term --fullscreen -e "${AVCOMM}" 2> /dev/null &
+      ${AVCOMM}
     else
-      cool-retro-term -e "${AVCOMM}" 2> /dev/null &
+      if [ "${RETRO}" ]
+      then
+        if [ "${FULLSCREEN}" ]
+        then
+          cool-retro-term --fullscreen -e "${AVCOMM}" 2> /dev/null &
+        else
+          cool-retro-term -e "${AVCOMM}" 2> /dev/null &
+        fi
+      else
+        if [ "${FULLSCREEN}" ]
+        then
+          if [ "${TILIX}" ]
+          then
+            tilix --title="${MTITLE}" \
+                  --full-screen \
+                  --window-style=borderless \
+                  --profile=MusicPlayer \
+                  --command="${AVCOMM}" 2> /dev/null &
+          else
+            if [ "${XFCE4}" ]
+            then
+              xfce4-terminal --title "${MTITLE}" \
+                  --icon=audio-player \
+                  --hide-menubar \
+                  --hide-toolbar \
+                  --hide-scrollbar \
+                  --fullscreen \
+                  --command="${AVCOMM}" &
+            else
+              gnome-terminal -t "${MTITLE}" \
+                  --hide-menubar \
+                  --full-screen \
+                  -- ${AVCOMM} &
+            fi
+          fi
+        else
+          if [ "${TILIX}" ]
+          then
+            tilix --title="${MTITLE}" \
+                  --window-style=borderless \
+                  --geometry=90x24+150+25 \
+                  --profile=MusicPlayer \
+                  --command="${AVCOMM}" 2> /dev/null &
+          else
+            if [ "${XFCE4}" ]
+            then
+              xfce4-terminal --title "${MTITLE}" \
+                --icon=audio-player \
+                --hide-menubar \
+                --hide-toolbar \
+                --hide-scrollbar \
+                --geometry 90x24+150+25 \
+                --command="${AVCOMM}" &
+            else
+              gnome-terminal -t "${MTITLE}" \
+                  --hide-menubar \
+                  --geometry 90x24+150+25 \
+                  -- ${AVCOMM} &
+            fi
+          fi
+        fi
+      fi
     fi
+    # End terminal command startup section
   else
-    if [ "${FULLSCREEN}" ]
-    then
-      if [ "${TILIX}" ]
-      then
-        tilix --title="${MTITLE}" \
-              --full-screen \
-              --window-style=borderless \
-              --profile=MusicPlayer \
-              --command="${AVCOMM}" 2> /dev/null &
-      else
-        if [ "${XFCE4}" ]
-        then
-          xfce4-terminal --title "${MTITLE}" \
-              --icon=audio-player \
-              --hide-menubar \
-              --hide-toolbar \
-              --hide-scrollbar \
-              --fullscreen \
-              --command="${AVCOMM}" &
-        else
-          gnome-terminal -t "${MTITLE}" \
-              --hide-menubar \
-              --full-screen \
-              -- ${AVCOMM} &
-        fi
-      fi
-    else
-      if [ "${TILIX}" ]
-      then
-        tilix --title="${MTITLE}" \
-              --window-style=borderless \
-              --geometry=90x24+150+25 \
-              --profile=MusicPlayer \
-              --command="${AVCOMM}" 2> /dev/null &
-      else
-        if [ "${XFCE4}" ]
-        then
-          xfce4-terminal --title "${MTITLE}" \
-            --icon=audio-player \
-            --hide-menubar \
-            --hide-toolbar \
-            --hide-scrollbar \
-            --geometry 90x24+150+25 \
-            --command="${AVCOMM}" &
-        else
-          gnome-terminal -t "${MTITLE}" \
-              --hide-menubar \
-              --geometry 90x24+150+25 \
-              -- ${AVCOMM} &
-        fi
-      fi
-    fi
+    ${AVCOMM}
   fi
-  # End terminal command startup section
 }
 
 select_font() {
@@ -502,10 +551,14 @@ show_main_menu() {
     }
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
-    [ "${have_xfce4}" ] && options+=("Run ${show_comm} in XFCE4 Terminal")
-    [ "${have_gnome}" ] && options+=("Run ${show_comm} in Gnome Terminal")
-    [ "${have_retro}" ] && options+=("Run ${show_comm} in Retro Terminal")
-    [ "${have_tilix}" ] && options+=("Run ${show_comm} in Tilix Terminal")
+    if [ "${use_term}" ]
+    then
+      [ "${have_gnome}" ] && options+=("Run ${show_comm} in Gnome Terminal")
+      [ "${have_retro}" ] && options+=("Run ${show_comm} in Retro Terminal")
+      [ "${have_tilix}" ] && options+=("Run ${show_comm} in Tilix Terminal")
+      [ "${have_xfce4}" ] && options+=("Run ${show_comm} in XFCE4 Terminal")
+    fi
+    options+=("Run ${show_comm} in current window")
     [ "${have_bb}" ] && {
       [ "$DISPLAY" = "" ] || options+=("Run AAlib Demo (X11 mode)")
     }
@@ -547,6 +600,7 @@ show_main_menu() {
               TILIX=
               GNOME=
               RETRO=
+              CURRENT=
               break
               ;;
           "Run ${show_comm} in Gnome Terminal",*|*,"Run ${show_comm} in Gnome Terminal")
@@ -554,6 +608,7 @@ show_main_menu() {
               XFCE4=
               TILIX=
               RETRO=
+              CURRENT=
               break
               ;;
           "Run ${show_comm} in Retro Terminal",*|*,"Run ${show_comm} in Retro Terminal")
@@ -561,10 +616,20 @@ show_main_menu() {
               GNOME=
               XFCE4=
               TILIX=
+              CURRENT=
               break
               ;;
           "Run ${show_comm} in Tilix Terminal",*|*,"Run ${show_comm} in Tilix Terminal")
               TILIX=1
+              RETRO=
+              GNOME=
+              XFCE4=
+              CURRENT=
+              break
+              ;;
+          "Run ${show_comm} in current window",*|*,"Run ${show_comm} in current window")
+              CURRENT=1
+              TILIX=
               RETRO=
               GNOME=
               XFCE4=
@@ -867,7 +932,6 @@ init_vars() {
   SPLASH=
   TMUX_ASC=
   TMUX_SPLASH=
-  USAGE=
 }
 
 init_vars
@@ -887,6 +951,7 @@ have_curl=`type -p curl`
 have_ddgr=`type -p ddgr`
 have_figlet=`type -p figlet`
 have_gdu=`type -p gdu`
+have_ncdu=`type -p ncdu`
 have_mapscii=`type -p mapscii`
 have_mpcplus=`type -p mpcplus`
 have_mpplus=`type -p mpplus`
@@ -935,7 +1000,8 @@ else
   fi
 fi
 
-while getopts "Aabc:fgiIjJklLmMn:NpP:rRSs:tTwxyzu" flag; do
+use_term=1
+while getopts "Aabc:dfgiIjJklLmMn:NpP:rRSs:tTwxXyzu" flag; do
   case $flag in
     A)
       ASCSPLASH="${ASCSPLASH} -i"
@@ -981,11 +1047,7 @@ while getopts "Aabc:fgiIjJklLmMn:NpP:rRSs:tTwxyzu" flag; do
           FIRST=`echo ${COMMAND} | awk ' { print $1 } '`
           MTITLE="Asciiville ${COMMAND}"
           type -p "${FIRST}" > /dev/null || {
-            echo "Option '-c' indicates use ${FIRST}."
-            echo "However, ${FIRST} is not installed or not in your path."
-            echo "You may be able to install ${FIRST} using apt or dnf:"
-            printf "\n\n\tsudo apt install ${FIRST}\nor"
-            printf "\n\tsudo dnf install ${FIRST}\n\n"
+            not_in_path ${FIRST} -c
             if [ "${have_btop}" ]
             then
               echo "Continuing, using btop rather than ${COMMAND}."
@@ -1008,6 +1070,36 @@ while getopts "Aabc:fgiIjJklLmMn:NpP:rRSs:tTwxyzu" flag; do
           ;;
       esac
       ;;
+    d)
+      COMMAND="gdu ${HOME}"
+      MTITLE="Disk Usage Analyzer"
+      [ "${have_gdu}" ] || {
+        not_in_path gdu -d
+        if [ "${have_ncdu}" ]
+        then
+          echo "Continuing, using ncdu rather than gdu."
+          COMMAND="ncdu ${HOME}"
+        else
+          if [ "${have_btop}" ]
+          then
+            echo "Continuing, using btop rather than ${COMMAND}."
+            COMMAND=btop
+            MTITLE="Btop++ System Monitor"
+          else
+            if [ "${have_ranger}" ]
+            then
+              echo "Continuing, using ranger rather than ${COMMAND}."
+              COMMAND=ranger
+              MTITLE="Ranger File Manager"
+            else
+              echo "Continuing, using asciiplasma rather than ${COMMAND}."
+              COMMAND=asciiplasma
+              MTITLE="ASCIImatics Plasma"
+            fi
+          fi
+        fi
+      }
+      ;;
     f)
       FULLSCREEN=1
       ;;
@@ -1015,31 +1107,8 @@ while getopts "Aabc:fgiIjJklLmMn:NpP:rRSs:tTwxyzu" flag; do
       GNOME=1
       [ "${have_gnome}" ] || {
         GNOME=
-        echo "Option '-g' indicates use gnome terminal emulator."
-        echo "However, gnome-terminal is not installed or not in your path."
-        echo "You can install gnome-terminal using apt or dnf as follows:"
-        printf "\n\n\tsudo apt install gnome-terminal\nor"
-        printf "\n\tsudo dnf install gnome-terminal\n\n"
-        if [ "${have_xfce4}" ]
-        then
-          XFCE4=1
-          echo "Proceeding with xfce4-terminal"
-        else
-          if [ "${have_tilix}" ]
-          then
-            TILIX=1
-            echo "Proceeding with tilix terminal"
-          else
-            if [ "${have_retro}" ]
-            then
-              RETRO=1
-              echo "Proceeding with cool-retro-term"
-            else
-              echo "Cannot find a terminal emulator I like. Exiting."
-              exit 1
-            fi
-          fi
-        fi
+        not_in_path gnome-terminal -g
+        select_alt_term
       }
       ;;
     i)
@@ -1072,11 +1141,7 @@ while getopts "Aabc:fgiIjJklLmMn:NpP:rRSs:tTwxyzu" flag; do
       COMMAND="lynx ${WEB_HOME}"
       MTITLE="Lynx Web Browser"
       [ "${have_lynx}" ] || {
-        echo "Option '-l' indicates use lynx as the default command."
-        echo "However, lynx is not installed or not in your path."
-        echo "You may be able to install lynx using apt or dnf as follows:"
-        printf "\n\n\tsudo apt install lynx\nor"
-        printf "\n\tsudo dnf install lynx\n\n"
+        not_in_path lynx -l
         if [ "${have_w3m}" ]
         then
           echo "Continuing, using w3m rather than lynx."
@@ -1117,11 +1182,7 @@ while getopts "Aabc:fgiIjJklLmMn:NpP:rRSs:tTwxyzu" flag; do
       COMMAND=mpcplus
       MTITLE="Music Player Plus MPD Client"
       [ "${have_mpcplus}" ] || {
-        echo "Option '-M' indicates use mpcplus as the default command."
-        echo "However, mpcplus is not installed or not in your path."
-        echo "You may be able to install mpcplus using apt or dnf as follows:"
-        printf "\n\n\tsudo apt install MusicPlayerPlus\nor"
-        printf "\n\tsudo dnf install MusicPlayerPlus\n\n"
+        not_in_path mpcplus -M
         if [ "${have_btop}" ]
         then
           echo "Continuing, using btop rather than ${COMMAND}."
@@ -1158,17 +1219,11 @@ while getopts "Aabc:fgiIjJklLmMn:NpP:rRSs:tTwxyzu" flag; do
       ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l ${OPTARG}"
       ;;
     r)
-      [ "${have_retro}" ] || {
-        echo "Option '-r' indicates use cool-retro-term terminal emulator."
-        echo "However, cool-retro-term is not installed or not in your path."
-        echo "You can install cool-retro-term using apt or dnf as follows:"
-        printf "\n\n\tsudo apt install cool-retro-term\nor"
-        printf "\n\tsudo dnf install cool-retro-term\n\n"
-        echo "Exiting"
-        exit 1
-      }
       RETRO=1
-      [ "${have_tilix}" ] && TILIX=1
+      [ "${have_retro}" ] || {
+        not_in_path cool-retro-term -r
+        select_alt_term
+      }
       ;;
     R)
       [ "${have_asciinema}" ] && {
@@ -1189,31 +1244,8 @@ while getopts "Aabc:fgiIjJklLmMn:NpP:rRSs:tTwxyzu" flag; do
       TILIX=1
       [ "${have_tilix}" ] || {
         TILIX=
-        echo "Option '-t' indicates use tilix terminal emulator."
-        echo "However, tilix is not installed or not in your path."
-        echo "You can install tilix using apt or dnf as follows:"
-        printf "\n\n\tsudo apt install tilix\nor"
-        printf "\n\tsudo dnf install tilix\n\n"
-        if [ "${have_xfce4}" ]
-        then
-          XFCE4=1
-          echo "Proceeding with xfce4-terminal"
-        else
-          if [ "${have_gnome}" ]
-          then
-            GNOME=1
-            echo "Proceeding with gnome-terminal"
-          else
-            if [ "${have_retro}" ]
-            then
-              RETRO=1
-              echo "Proceeding with cool-retro-term"
-            else
-              echo "Cannot find a terminal emulator I like. Exiting."
-              exit 1
-            fi
-          fi
-        fi
+        not_in_path tilix -t
+        select_alt_term
       }
       ;;
     T)
@@ -1223,11 +1255,7 @@ while getopts "Aabc:fgiIjJklLmMn:NpP:rRSs:tTwxyzu" flag; do
       COMMAND="w3m -v ${WEB_HOME}"
       MTITLE="W3M Web Browser"
       [ "${have_w3m}" ] || {
-        echo "Option '-w' indicates use w3m as the default command."
-        echo "However, w3m is not installed or not in your path."
-        echo "You may be able to install w3m using apt or dnf as follows:"
-        printf "\n\n\tsudo apt install w3m\nor"
-        printf "\n\tsudo dnf install w3m\n\n"
+        not_in_path w3m -w
         if [ "${have_lynx}" ]
         then
           echo "Continuing, using lynx rather than w3m."
@@ -1254,46 +1282,22 @@ while getopts "Aabc:fgiIjJklLmMn:NpP:rRSs:tTwxyzu" flag; do
         fi
       }
       ;;
+    X)
+      use_term=
+      ;;
     x)
       XFCE4=1
       [ "${have_xfce4}" ] || {
         XFCE4=
-        echo "Option '-x' indicates use xfce4 terminal emulator."
-        echo "However, xfce4-terminal is not installed or not in your path."
-        echo "You can install xfce4-terminal using apt or dnf as follows:"
-        printf "\n\n\tsudo apt install xfce4-terminal\nor"
-        printf "\n\tsudo dnf install xfce4-terminal\n\n"
-        if [ "${have_tilix}" ]
-        then
-          TILIX=1
-          echo "Proceeding with tilix terminal"
-        else
-          if [ "${have_gnome}" ]
-          then
-            GNOME=1
-            echo "Proceeding with gnome-terminal"
-          else
-            if [ "${have_retro}" ]
-            then
-              RETRO=1
-              echo "Proceeding with cool-retro-term"
-            else
-              echo "Cannot find a terminal emulator I like. Exiting."
-              exit 1
-            fi
-          fi
-        fi
+        not_in_path xfce4-terminal -x
+        select_alt_term
       }
       ;;
     y)
       COMMAND=ranger
       MTITLE="Ranger File Manager"
       [ "${have_ranger}" ] || {
-        echo "Option '-y' indicates use ranger as the default command."
-        echo "However, ranger is not installed or not in your path."
-        echo "You may be able to install ranger using apt or dnf as follows:"
-        printf "\n\n\tsudo apt install ranger\nor"
-        printf "\n\tsudo dnf install ranger\n\n"
+        not_in_path ranger -y
         if [ "${have_btop}" ]
         then
           echo "Continuing, using btop rather than ${COMMAND}."
@@ -1322,11 +1326,7 @@ while getopts "Aabc:fgiIjJklLmMn:NpP:rRSs:tTwxyzu" flag; do
           COMMAND=mutt
           MTITLE="Mutt Mail Client"
         else
-          echo "Option '-z' indicates use neomutt as the default command."
-          echo "However, neomutt is not installed or not in your path."
-          echo "You may be able to install neomutt using apt or dnf as follows:"
-          printf "\n\n\tsudo apt install neomutt\nor"
-          printf "\n\tsudo dnf install neomutt\n\n"
+          not_in_path neomutt -z
           if [ "${have_btop}" ]
           then
             echo "Continuing, using btop rather than ${COMMAND}."
@@ -1348,7 +1348,7 @@ while getopts "Aabc:fgiIjJklLmMn:NpP:rRSs:tTwxyzu" flag; do
       }
       ;;
     u)
-      USAGE=1
+      usage
       ;;
     esac
 done
@@ -1367,28 +1367,7 @@ done
 
 # Figure out which terminal emulator to use
 [ "${TILIX}" ] || [ "${RETRO}" ] || [ "${GNOME}" ] || [ "${XFCE4}" ] || {
-  if [ "${have_xfce4}" ]
-  then
-    XFCE4=1
-  else
-    if [ "${have_tilix}" ]
-    then
-      TILIX=1
-    else
-      if [ "${have_gnome}" ]
-      then
-        GNOME=1
-      else
-        if [ "${have_retro}" ]
-        then
-          RETRO=1
-        else
-          echo "Cannot find a terminal emulator I like. Exiting."
-          exit 1
-        fi
-      fi
-    fi
-  fi
+  select_alt_term
 }
 
 # Make sure only one terminal is selected
@@ -1406,8 +1385,6 @@ else
     [ "${GNOME}" ] && RETRO=
   fi
 fi
-
-[ "${USAGE}" ] && usage
 
 [ "${INTERACTIVE}" ] && show_main_menu
 

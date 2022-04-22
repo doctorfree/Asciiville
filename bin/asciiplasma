@@ -70,7 +70,7 @@ if __name__ == "__main__":
         if debug:
             print("In signal handler with\nsignal number = " + str(signal_number))
             print("frame = " + str(frame))
-        with open(fifo, "w") as mp_fifo:
+        if mp_fifo is not None:
             for vol in range(80, 0, -5):
                 print("volume " + str(vol) + " 1",
                         flush=True, file=mp_fifo)
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     if args.cycle:
         numcycles = int(args.cycle)
     else:
-        numcycles = None
+        numcycles = 1
     if args.debug:
         debug = True
     else:
@@ -131,6 +131,7 @@ if __name__ == "__main__":
         ]
 
     play_song = None
+    mp_fifo = None
     tmpdir = tempfile.mkdtemp()
     fifo = os.path.join(tmpdir, 'mplayer.fifo')
     signal.signal(signal.SIGINT, handler)
@@ -139,20 +140,32 @@ if __name__ == "__main__":
         if debug:
             print("Using mplayer FIFO " + fifo)
         os.mkfifo(fifo)
-        if debug:
-            print("MPlayer starting: mplayer -novideo -volume 80 -really-quiet -nolirc -slave -input file=" + fifo + " " + song)
-        play_song = subprocess.Popen(
-            ["mplayer", "-novideo", "-volume", "80", "-really-quiet",
-                        "-nolirc", "-slave", "-input", "file=" + fifo, song],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.STDOUT)
+        if numcycles > 1 :
+            if debug:
+                print("MPlayer starting: mplayer -novideo -loop 0 -volume 80 -really-quiet -nolirc -slave -input file=" + fifo + " " + song)
+            play_song = subprocess.Popen(
+                ["mplayer", "-novideo", "-loop", "0", "-volume", "80",
+                 "-really-quiet", "-nolirc", "-slave", "-input",
+                 "file=" + fifo, song],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.STDOUT)
+        else:
+            if debug:
+                print("MPlayer starting: mplayer -novideo -idle -volume 80 -really-quiet -nolirc -slave -input file=" + fifo + " " + song)
+            play_song = subprocess.Popen(
+                ["mplayer", "-novideo", "-idle", "-volume", "80",
+                 "-really-quiet", "-nolirc", "-slave", "-input",
+                 "file=" + fifo, song],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.STDOUT)
+        mp_fifo = open(fifo, "w")
 
     while True:
         try:
             Screen.wrapper(mpplus, arguments=[numcycles])
 
             if song is not None:
-                with open(fifo, "w") as mp_fifo:
+                if mp_fifo is not None:
                     if debug:
                         print("Fading volume")
                     for vol in range(80, 0, -5):

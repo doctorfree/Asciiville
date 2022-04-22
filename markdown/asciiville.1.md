@@ -9,9 +9,9 @@ date: April 16, 2022
 asciiville - Launch a terminal emulator and specified character based command, ascii art, asciimatics animation, and more
 
 # SYNOPSIS
-**asciiville** [-a] [-A] [-b] [-c command] [-f] [-g] [-i] [-I]
+**asciiville** [-a] [-A] [-b] [-c command] [-d] [-f] [-g] [-i] [-I]
 		[-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script]
-		[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-y] [-z] [-u]
+		[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-X] [-y] [-z] [-u]
 
 # DESCRIPTION
 The *asciiville* command acts as a front-end for launching character based utilities and ascii art in various terminal emulators. Asciiville can be used to launch any specified character based command. Command line options also support running the *asciiville* window in a tmux session and recording that session using *asciinema*.
@@ -30,6 +30,9 @@ Previously started tmux sessions and asciimatics scripts can be quickly and easi
 
 **-c 'command'**
 : Indicates run 'command' in selected terminal window. If *command* is one of the special keywords (*maps*, *moon*, *search*, *speed*, *twitter*, *weather*) then display a map, the phase of the Moon, perform a web search, perform a speed test, run the command line twitter client, or display a weather report.
+
+**-d**
+: Indicates use disk usage analyzer as command
 
 **-f**
 : Indicates fullscreen display
@@ -60,6 +63,9 @@ Previously started tmux sessions and asciimatics scripts can be quickly and easi
 
 **-x**
 : Indicates use xfce4 terminal emulator
+
+**-X**
+: Indicates use current terminal emulator window
 
 **-y**
 : Indicates use ranger as the default command

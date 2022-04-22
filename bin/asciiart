@@ -22,7 +22,7 @@ from random import randint, choice
 from pyfiglet import Figlet
 import argparse
 
-def art(screen):
+def asciiville(screen):
     scenes = []
     art = "/usr/share/doc/asciiville/art/"
     center = (screen.width // 2, screen.height // 2)
@@ -49,6 +49,13 @@ def art(screen):
               speed=1),
     ]
     scenes.append(Scene(effects, 100))
+
+    effects = [
+        Print(screen, ImageFile(art + "globe.gif", screen.height - 2, colours=screen.colours),
+              0,
+              stop_frame=150)
+    ]
+    scenes.append(Scene(effects))
 
     effects = [
         BannerText(
@@ -79,13 +86,6 @@ def art(screen):
     scenes.append(Scene(effects))
 
     effects = [
-        Print(screen, ImageFile(art + "globe.gif", screen.height - 2, colours=screen.colours),
-              0,
-              stop_frame=250)
-    ]
-    scenes.append(Scene(effects))
-
-    effects = [
         BannerText(
             screen,
             Rainbow(screen, FigletText(
@@ -95,17 +95,6 @@ def art(screen):
         Stars(screen, screen.width)
     ]
     scenes.append(Scene(effects))
-
-#   effects = [
-#       Print(screen,
-#             ColourImageFile(screen, art + "color_globe.gif", screen.height-2,
-#                             uni=screen.unicode_aware,
-#                             dither=screen.unicode_aware),
-#             0,
-#             stop_frame=400),
-#       Stars(screen, (screen.width + screen.height) // 2, start_frame=200, stop_frame=400)
-#   ]
-#   scenes.append(Scene(effects))
 
     effects = [
         BannerText(
@@ -176,20 +165,20 @@ def art(screen):
 
     effects = [
         Print(screen,
-                         Rainbow(screen, FigletText("Command Line")),
-                         center[1] - 10,
-                         speed=1,
-                         stop_frame=150),
+              Rainbow(screen, FigletText("Command Line")),
+                      center[1] - 10,
+                      speed=1,
+                      stop_frame=150),
         Print(screen,
-                         Rainbow(screen, FigletText("Twitter")),
-                         center[1] - 2,
-                         speed=1,
-                         stop_frame=150),
+              Rainbow(screen, FigletText("Twitter")),
+                      center[1] - 2,
+                      speed=1,
+                      stop_frame=150),
         Print(screen,
-                         Rainbow(screen, FigletText("Client")),
-                         center[1] + 6,
-                         speed=1,
-                         stop_frame=150),
+              Rainbow(screen, FigletText("Client")),
+                      center[1] + 6,
+                      speed=1,
+                      stop_frame=150),
         Stars(screen, screen.width)
     ]
     scenes.append(Scene(effects))
@@ -208,26 +197,111 @@ def art(screen):
             Screen.COLOUR_GREEN),
         Mirage(
             screen,
-            FigletText("Ronald Joe Record"),
+            FigletText("Doctor When"),
             screen.height + 16,
             Screen.COLOUR_GREEN)
     ]
     scenes.append(Scene(effects, (screen.height + 24) * 3))
 
     effects = [
-        Cycle(
-            screen,
-            FigletText("Asciiville"),
-            center[1] - 8,
-            stop_frame=200),
-        Cycle(
-            screen,
-            FigletText("Rocks!"),
-            center[1] + 3,
-            stop_frame=200),
-        Stars(screen, (screen.width + screen.height) // 2, stop_frame=200)
+        Print(screen,
+              Rainbow(screen, FigletText("Character Commands", "small")),
+                      center[1] - 12,
+                      speed=1,
+                      stop_frame=100),
+        Print(screen,
+              Rainbow(screen, FigletText("Phase of the Moon", "small")),
+                      center[1] - 6,
+                      speed=1,
+                      stop_frame=100),
+        Print(screen,
+              Rainbow(screen, FigletText("Weather Report", "small")),
+                      center[1],
+                      speed=1,
+                      stop_frame=100),
+        Print(screen,
+              Rainbow(screen, FigletText("Mapscii World Map", "small")),
+                      center[1] + 6,
+                      speed=1,
+                      stop_frame=100),
+        Stars(screen, screen.width)
     ]
-    scenes.append(Scene(effects, 200))
+    scenes.append(Scene(effects, (screen.height + 24) * 3))
+
+    effects = [
+        Print(screen,
+              Rainbow(screen, FigletText("Disk Use Analyzer", "small")),
+                      center[1] - 12,
+                      speed=1,
+                      stop_frame=100),
+        Print(screen,
+              Rainbow(screen, FigletText("Web Browser/Search", "small")),
+                      center[1] - 6,
+                      speed=1,
+                      stop_frame=100),
+        Print(screen,
+              Rainbow(screen, FigletText("Lolcat Coloring", "small")),
+                      center[1],
+                      speed=1,
+                      stop_frame=100),
+        Print(screen,
+              Rainbow(screen, FigletText("Music Player Plus", "small")),
+                      center[1] + 6,
+                      speed=1,
+                      stop_frame=100),
+        Stars(screen, screen.width)
+    ]
+    scenes.append(Scene(effects, (screen.height + 24) * 3))
+
+    effects = [
+        Print(screen,
+              Rainbow(screen, FigletText("Cool Retro Terminal", "small")),
+                      center[1] - 12,
+                      speed=1,
+                      stop_frame=100),
+        Print(screen,
+              Rainbow(screen, FigletText("Network Speed Test", "small")),
+                      center[1] - 6,
+                      speed=1,
+                      stop_frame=100),
+        Print(screen,
+              Rainbow(screen, FigletText("Mutt Mail Client", "small")),
+                      center[1],
+                      speed=1,
+                      stop_frame=100),
+        Print(screen,
+              Rainbow(screen, FigletText("Music/Roon Menus", "small")),
+                      center[1] + 6,
+                      speed=1,
+                      stop_frame=100),
+        Stars(screen, screen.width)
+    ]
+    scenes.append(Scene(effects, (screen.height + 24) * 3))
+
+    effects = [
+        Print(screen,
+              Rainbow(screen, FigletText("Use Tmux", "small")),
+                      center[1] - 12,
+                      speed=1,
+                      stop_frame=100),
+        Print(screen,
+              Rainbow(screen, FigletText("Kill Tmux Sessions", "small")),
+                      center[1] - 6,
+                      speed=1,
+                      stop_frame=100),
+        Print(screen,
+              Rainbow(screen, FigletText("Record Tmux Session", "small")),
+                      center[1],
+                      speed=1,
+                      stop_frame=100),
+        Print(screen,
+              Rainbow(screen, FigletText("Show System Info", "small")),
+                      center[1] + 6,
+                      speed=1,
+                      stop_frame=100),
+        Stars(screen, screen.width)
+    ]
+    scenes.append(Scene(effects, (screen.height + 24) * 3))
 
     effects = [
         Stars(screen, screen.width)
@@ -274,7 +348,7 @@ if __name__ == "__main__":
         if debug:
             print("In signal handler with\nsignal number = " + str(signal_number))
             print("frame = " + str(frame))
-        with open(fifo, "w") as mp_fifo:
+        if mp_fifo is not None:
             for vol in range(80, 0, -5):
                 print("volume " + str(vol) + " 1",
                         flush=True, file=mp_fifo)
@@ -315,24 +389,43 @@ if __name__ == "__main__":
     fifo = os.path.join(tmpdir, 'mplayer.fifo')
     signal.signal(signal.SIGINT, handler)
 
+    mp_fifo = None
     if song is not None:
         if debug:
             print("Using mplayer FIFO " + fifo)
         os.mkfifo(fifo)
-        if debug:
-            print("MPlayer starting: mplayer -novideo -volume 80 -really-quiet -nolirc -slave -input file=" + fifo + " " + song)
-        play_song = subprocess.Popen(
-            ["mplayer", "-novideo", "-volume", "80", "-really-quiet",
-                        "-nolirc", "-slave", "-input", "file=" + fifo, song],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.STDOUT)
+        if numcycles > 1 :
+            if debug:
+                print("MPlayer starting: mplayer -novideo -loop 0 -volume 80 -really-quiet -nolirc -slave -input file=" + fifo + " " + song)
+            play_song = subprocess.Popen(
+                ["mplayer", "-novideo", "-loop", "0", "-volume", "80",
+                 "-really-quiet", "-nolirc", "-slave", "-input",
+                 "file=" + fifo, song],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.STDOUT)
+        else:
+            if debug:
+                print("MPlayer starting: mplayer -novideo -idle -volume 80 -really-quiet -nolirc -slave -input file=" + fifo + " " + song)
+            play_song = subprocess.Popen(
+                ["mplayer", "-novideo", "-idle", "-volume", "80",
+                 "-really-quiet", "-nolirc", "-slave", "-input",
+                 "file=" + fifo, song],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.STDOUT)
+        mp_fifo = open(fifo, "w")
 
     while True:
         try:
-            Screen.wrapper(art)
+            if debug:
+                print("Calling Screen.wrapper")
+            Screen.wrapper(asciiville)
+            if debug:
+                print("Back from Screen.wrapper")
 
             if song is not None:
-                with open(fifo, "w") as mp_fifo:
+                if debug:
+                    print("Song is not None")
+                if mp_fifo is not None:
                     if debug:
                         print("Fading volume")
                     for vol in range(80, 0, -5):
