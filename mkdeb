@@ -17,6 +17,8 @@ dpkg=`type -p dpkg-deb`
     echo "Exiting"
     exit 1
 }
+dpkg_arch=`dpkg --print-architecture`
+[ "${dpkg_arch}" == "${ARCH}" ] || ARCH=${dpkg_arch}
 
 [ -f "${SRC}/${SRC_NAME}/VERSION" ] || {
   [ -f "/builds/doctorfree/${SRC_NAME}/VERSION" ] || {

@@ -2,9 +2,9 @@
 # postinst script for rooncommandline
 #
 # see: dh_installdeb(1)
-
-set -e
-
+#
+# set -e
+#
 # summary of how this script can be called:
 #        * <postinst> `configure' <most-recently-configured-version>
 #        * <old-postinst> `abort-upgrade' <new version>
@@ -16,7 +16,6 @@ set -e
 #          <conflicting-package> <version>
 # for details, see https://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
-
 
 case "$1" in
   configure)

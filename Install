@@ -84,12 +84,18 @@ else
   [ "${ID_LIKE}" == "debian" ] && debian=1
   [ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
 
-  SUF=deb
-  ARCH=${DEB_ARCH}
-  [ "${debian}" ] || {
+  if [ "${debian}" ]
+  then
+    SUF=deb
+    [ "${have_dpkg}" ] && {
+      dpkg_arch=`dpkg --print-architecture`
+      [ "${dpkg_arch}" == "${DEB_ARCH}" ] || DEB_ARCH=${dpkg_arch}
+    }
+    ARCH=${DEB_ARCH}
+  else
     SUF=rpm
     ARCH=${RPM_ARCH}
-  }
+  fi
 
   get_available_packages
 
