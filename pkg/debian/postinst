@@ -20,7 +20,7 @@ set -e
 
 case "$1" in
   configure)
-    export PATH=${PATH}:/usr/local/bin
+    export PATH=${PATH}:/usr/local/bin:/snap/bin
     python3_inst=`type -p python3`
     if [ "${python3_inst}" ]
     then

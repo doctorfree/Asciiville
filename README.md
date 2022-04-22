@@ -14,12 +14,14 @@ of components used to display ASCII art, animations, and utilities.
 1. [Installation](#installation)
     1. [Debian package installation](#debian-package-installation)
     1. [RPM Package installation](#rpm-package-installation)
+    1. [BB AAlib Demo](#bb-aalib-demo)
 1. [Documentation](#documentation)
     1. [Btop++ README](#btop++-readme)
     1. [Man Pages](#man-pages)
     1. [Usage](#usage)
     1. [Example invocations](#example-invocations)
 1. [Removal](#removal)
+1. [Screenshots](#screenshots)
 
 ## Overview
 
@@ -175,6 +177,25 @@ or
 sudo rpm -i ./Asciiville_<version>-<release>.x86_64.rpm
 ```
 
+### BB AAlib Demo
+
+The BB AAlib Demo is not included in some distributions' default RPM
+repositories. Because of that, it is not included as a dependency in
+RPM installs. However, the `asciiville` command will utilize the BB Demo
+if it is installed. To activate this feature it may be necessary to
+manually install the `bb` package. This may entail enabling a third-party
+repository. For example, on Fedora Linux, to install `bb`:
+
+* Add RPM Fusion repositories to your system
+* Download latest rpmsphere-release rpm from
+    * https://github.com/rpmsphere/noarch/tree/master/r
+* Install rpmsphere-release rpm:
+    * `sudo rpm -Uvh rpmsphere-release*rpm`
+* Install bb rpm package:
+    * `sudo dnf install bb`
+
+The BB AAlib Demo is not required. It's just a fun demo.
+
 ## Documentation
 
 All Asciiville commands have manual pages. Execute `man <command-name>`
@@ -277,7 +298,7 @@ Where:
 	-u displays this usage message and exits
 ```
 
-### Example client invocations
+### Example invocations
 The `asciiville` command is intended to serve as the primary interface to invoke
 the `btop` system monitor and `cava` spectrum visualizer. The `asciiville` command
 utilizes several different terminal emulators and can also be used to invoke
@@ -347,3 +368,18 @@ script in the Asciiville source directory:
     cd Asciiville
     ./Uninstall
 ```
+
+## Screenshots
+
+<p float="left">
+Asciiville Main Menu<br/>
+  <img src="screenshots/Asciiville-Welcome.png" style="width:800px;height:600px;">
+  <img src="screenshots/Asciiville-MainMenu.png" style="width:800px;height:600px;">
+</p>
+<p float="left">
+Asciiville Sub-Menus: Asciimatics Animations, MusicPlayerPlus, and RoonCommandLine<br/>
+  <img src="screenshots/Asciiville-Animation.png" style="width:800px;height:600px;">
+  <img src="screenshots/Asciiville-Music.png" style="width:800px;height:600px;">
+  <img src="screenshots/Asciiville-Roon.png" style="width:800px;height:600px;">
+</p>
+
