@@ -160,6 +160,16 @@ or
 sudo dpkg -i ./Asciiville_<version>-<release>.amd64.deb
 ```
 
+or, on a Raspberry Pi:
+
+```console
+sudo apt install ./Asciiville_<version>-<release>.armhf.deb
+```
+or
+```console
+sudo dpkg -i ./Asciiville_<version>-<release>.armhf.deb
+```
+
 ### RPM Package installation
 
 Red Hat Linux, SUSE Linux, and their derivatives use the RPM packaging
