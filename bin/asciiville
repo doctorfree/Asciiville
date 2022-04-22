@@ -28,6 +28,10 @@ BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 PLEASE="Please enter your"
 COMMAND=btop
+FIG_FONTS="/usr/share/figlet-fonts"
+HOME_FIG_FONTS="${HOME}/src/Asciiville/share/figlet-fonts"
+FIG_TEXT="Asciiville"
+USE_FONT="Standard"
 WEB_HOME="https://github.com/doctorfree/Asciiville#readme"
 MTITLE="Btop++ System Monitor"
 
@@ -198,6 +202,70 @@ make_it_so() {
   # End terminal command startup section
 }
 
+select_font() {
+  # Array with font names
+  fonts=("3d" "ANSI Shadow" "Bolger" "sblood" "Slant" "Shadow" "Speed" "Varsity" "Calvin S" "miniwi")
+  smallfonts=("Calvin S" "miniwi")
+
+  # Seed random generator
+  RANDOM=$$$(date +%s)
+
+  USE_FONT=${fonts[ $RANDOM % ${#fonts[@]} ]}
+  [ -r "${FIG_FONTS}/${USE_FONT}.flf" ] || USE_FONT="Standard"
+
+  goBig=
+  for font in "${smallfonts[@]}"
+  do
+    [[ "${USE_FONT}" == "$font" ]] && {
+      goBig=1
+      break
+    }
+  done
+
+  case "$1" in
+    Asciimatics)
+      if [ "${goBig}" ]
+      then
+        FIG_TEXT="Asciimatics Animations"
+      else
+        FIG_TEXT="Animation"
+      fi
+      ;;
+    Asciiville)
+      if [ "${goBig}" ]
+      then
+        FIG_TEXT="Welcome to Asciiville"
+      else
+        FIG_TEXT="Asciiville"
+      fi
+      ;;
+    MusicPlayer)
+      if [ "${goBig}" ]
+      then
+        FIG_TEXT="MusicPlayerPlus"
+      else
+        FIG_TEXT="Music"
+      fi
+      ;;
+    Roon)
+      if [ "${goBig}" ]
+      then
+        FIG_TEXT="RoonCommandLine"
+      else
+        FIG_TEXT="Roon"
+      fi
+      ;;
+    *)
+      if [ "${goBig}" ]
+      then
+        FIG_TEXT="Welcome to Asciiville"
+      else
+        FIG_TEXT="Asciiville"
+      fi
+      ;;
+  esac
+}
+
 show_ascii_menu() {
   while true
   do
@@ -221,6 +289,10 @@ show_ascii_menu() {
       usetmux="NO"
     fi
     skip_it_so=
+    [ "${use_figlet}" ] && {
+      select_font Asciimatics
+      figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+    }
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
     [ "${have_asciiart}" ] && options+=("Art Images ASCIImatics Animation")
@@ -234,7 +306,7 @@ show_ascii_menu() {
     do
       case "$opt,$REPLY" in
           "Main menu",*|*,"Main menu"|"Back",*|*,"Back"|"back",*|*,"back")
-              printf "Returning\n\n"
+              clear
               init_vars
               break 2
               ;;
@@ -424,6 +496,10 @@ show_main_menu() {
         ;;
     esac
     skip_it_so=
+    [ "${use_figlet}" ] && {
+      select_font Asciiville
+      figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+    }
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
     [ "${have_xfce4}" ] && options+=("Run ${show_comm} in XFCE4 Terminal")
@@ -686,12 +762,22 @@ show_main_menu() {
               break
               ;;
           "Show MusicPlayerPlus Menu",*|*,"Show MusicPlayerPlus Menu")
+              [ "${use_figlet}" ] && {
+                select_font MusicPlayer
+                figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+              }
               mpplus -i
+              clear
               skip_it_so=1
               break
               ;;
           "Show RoonCommandLine Menu",*|*,"Show RoonCommandLine Menu")
+              [ "${use_figlet}" ] && {
+                select_font Roon
+                figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+              }
               roon
+              clear
               skip_it_so=1
               break
               ;;
@@ -799,6 +885,7 @@ have_asciinema=`type -p asciinema`
 have_bb=`type -p bb-tmux`
 have_curl=`type -p curl`
 have_ddgr=`type -p ddgr`
+have_figlet=`type -p figlet`
 have_gdu=`type -p gdu`
 have_mapscii=`type -p mapscii`
 have_mpcplus=`type -p mpcplus`
@@ -815,6 +902,20 @@ have_lynx=`type -p lynx`
 have_w3m=`type -p w3m`
 use_lolcat=
 use_lol="NO"
+if [ "${have_figlet}" ]
+then
+  use_figlet=1
+  [ -d "${FIG_FONTS}" ] || {
+    if [ -d "${HOME_FIG_FONTS}" ]
+    then
+      FIG_FONTS="${HOME_FIG_FONTS}"
+    else
+      use_figlet=
+    fi
+  }
+else
+  use_figlet=
+fi
 
 SAVED_BROWSER=
 if [ "${BROWSER}" ]
