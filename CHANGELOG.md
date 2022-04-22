@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+# Asciiville-1.3.1r1 (2022-04-22)
+
+* MusicPlayerPlus and RoonCommandLine menu integration
+* Support for w3m, mapscii, and setting default browser
+* Add Figlet Fonts and use Figlet Text for menu headers
+* Lolcat install during postinstall
+
 # Asciiville-1.3.0r1 (2022-04-20)
 
 Initial release with support for:
@@ -23,6 +30,26 @@ Initial release with support for:
 * Any character based client the user wishes to run
 * One of several asciimatics animations optionally accompanied by audio
 
+Thu Apr 21 18:12:30 2022 -0700 7df65d3 :
+   Add Figlet Fonts and use Figlet Text as menu headers
+Thu Apr 21 14:31:21 2022 -0700 fb95860 :
+   Added RoonCommandLine menu integration
+Thu Apr 21 13:30:09 2022 -0700 658469f :
+   Fix test for wget in postinst
+Thu Apr 21 13:18:29 2022 -0700 81d5325 :
+   Lolcat install during postinstall, lolcat use toggle switches and menu
+Thu Apr 21 12:05:29 2022 -0700 a84a623 :
+   Added integration of mpcplus client and MusicPlayerPlus menus
+Thu Apr 21 11:20:41 2022 -0700 d15efda :
+   Add support for w3m, mapscii, and setting default browser
+Wed Apr 20 18:34:10 2022 -0700 bba4f84 :
+   Correct Moon url
+Wed Apr 20 18:32:10 2022 -0700 fa0a01e :
+   Initial release is v1.3.0r1
+Wed Apr 20 17:09:37 2022 -0700 1b5faa7 :
+   Relax required rpm packages, use mutt if neomutt unavailable
+Wed Apr 20 16:24:54 2022 -0700 d24b11d :
+   Update changelog and release notes in preparation for initial release
 Wed Apr 20 16:04:18 2022 -0700 acf196a :
    Add 'moon' and 'weather' special command keywords, use wttr.in for these
 Wed Apr 20 14:46:07 2022 -0700 e19ac22 :

@@ -1,14 +1,21 @@
-This is the initial release of Asciiville
+This release includes support for:
+
+* MusicPlayerPlus and RoonCommandLine menu integration
+* Support for w3m, mapscii, and setting default browser
+* Add Figlet Fonts and use Figlet Text for menu headers
+* Lolcat install during postinstall
 
 Supported features include:
 
 * The lightweight character based system monitor, `btop`
-* The lightweight character based web browser, `lynx`
+* The lightweight character based web browser, `lynx` or `w3m`
 * The lightweight character based mail client, `neomutt` or `mutt`
 * The lightweight character based file manager, `ranger`
+* The lightweight character based music player, `mpcplus`
 * One or more terminal emulators running a command
 * A tmux session
 * A command line web search
+* A zoomable map of the world
 * Command line character based Twitter client
 * A network download/upload speed test
 * The AAlib BB demo running in a tmux session (Debian based systems only)
@@ -16,18 +23,19 @@ Supported features include:
 * Display system info
 * Display the Phase of the Moon
 * Display a weather report
+* Display the MusicPlayerPlus or RoonCommandLine interactive menus
 * Any character based client the user wishes to run
 * Several asciimatics animations optionally accompanied by audio
 
 ## Installation
 Install the package on Debian based systems by executing the command
 ```bash
-sudo apt install ./Asciiville_1.3.0-1.amd64.deb
+sudo apt install ./Asciiville_1.3.1-1.amd64.deb
 ```
 
 Install the package on RPM based systems by executing the command
 ```bash
-sudo yum localinstall ./Asciiville-1.3.0-1.x86_64.rpm
+sudo yum localinstall ./Asciiville-1.3.1-1.x86_64.rpm
 ```
 
 ## Configuration
