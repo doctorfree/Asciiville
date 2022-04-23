@@ -20,6 +20,7 @@ of components used to display ASCII art, animations, and utilities.
     1. [Man Pages](#man-pages)
     1. [Usage](#usage)
     1. [Example invocations](#example-invocations)
+1. [Figlet fonts](#figlet-fonts)
 1. [Removal](#removal)
 1. [Screenshots](#screenshots)
 
@@ -348,6 +349,25 @@ Similarly, the cava spectrum visualizer can be opened directly without asciivill
 To test the btop lyrics fetchers:
 
 `btop --test-lyrics-fetchers`
+
+## Figlet fonts
+
+Asciiville installs many new Figlet Fonts in addition to those installed
+by the `pyfiglet` Python package. These fonts are used by the `asciimatics`
+Python package. To view a complete list of the installed `pyfiglet` fonts,
+run the command `pyfiglet -l`. To see an example rendering of each of the
+installed `pyfiglet` fonts including those installed by `Asciiville`,
+run the command `show_figlet_fonts`. There are many fonts so you may wish
+to redirect the output of the show_figlet_fonts command for use with an
+editor or pager:
+
+```console
+show_figlet_fonts > figlet-fonts-examples.txt
+less figlet-fonts-examples.txt
+```
+
+For an example of how to use the Figlet Fonts in an asciimatics animation,
+see `/usr/bin/asciiart`.
 
 ## Removal
 

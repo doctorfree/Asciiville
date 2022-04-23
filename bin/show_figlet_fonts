@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# show_figlet_fonts
+#    Display an example of each of the installed pyfiglet Figlet fonts
+#
+# This can be a large number of fonts. To capture this display for viewing
+# in an editor or pager, redirect stdout to a file. For example:
+#
+#    $ show_figlet_fonts > figlet_fonts_examples.txt
+#    $ less figlet_fonts_examples.txt
+
+for FONTS in `pyfiglet -l`
+do
+  echo $FONTS
+  pyfiglet $FONTS -f $FONTS
+done

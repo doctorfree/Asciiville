@@ -61,34 +61,6 @@ def asciiville(screen):
         BannerText(
             screen,
             Rainbow(screen, FigletText(
-                "Welcome to Asciiville!", font='slant')),
-            center[1] - 3,
-            Screen.COLOUR_GREEN)
-    ]
-    for _ in range(20):
-        fireworks = [
-            (PalmFirework, 25, 30),
-            (PalmFirework, 25, 30),
-            (StarFirework, 25, 35),
-            (StarFirework, 25, 35),
-            (StarFirework, 25, 35),
-            (RingFirework, 20, 30),
-            (SerpentFirework, 30, 35),
-        ]
-        firework, start, stop = choice(fireworks)
-        effects.insert(
-            1,
-            firework(screen,
-                     randint(0, screen.width),
-                     randint(screen.height // 8, screen.height * 3 // 4),
-                     randint(start, stop),
-                     start_frame=randint(0, 250)))
-    scenes.append(Scene(effects))
-
-    effects = [
-        BannerText(
-            screen,
-            Rainbow(screen, FigletText(
                 "ASCIImatics and ASCIInema Integration", font='slant')),
             center[1] - 3,
             Screen.COLOUR_GREEN),
@@ -113,24 +85,24 @@ def asciiville(screen):
             Rainbow(screen, FigletText("Command Line")),
             center[1] - 5,
             Screen.COLOUR_GREEN,
-            stop_frame=200),
+            stop_frame=150),
         Mirage(
             screen,
             Rainbow(screen, FigletText("Web Search")),
             center[1] + 2,
             Screen.COLOUR_GREEN,
-            stop_frame=200),
+            stop_frame=150),
         Wipe(screen, start_frame=150),
         Cycle(
             screen,
             Rainbow(screen, FigletText("Command Line")),
             center[1] - 5,
-            start_frame=200),
+            start_frame=170),
         Cycle(
             screen,
             Rainbow(screen, FigletText("Web Search")),
             center[1] + 2,
-            start_frame=200)
+            start_frame=170)
     ]
     for _ in range(20):
         fireworks = [
@@ -164,27 +136,27 @@ def asciiville(screen):
     scenes.append(Scene(effects))
 
     effects = [
-        Print(screen,
+        Mirage(screen,
               Rainbow(screen, FigletText("Command Line")),
                       center[1] - 10,
-                      speed=1,
-                      stop_frame=150),
-        Print(screen,
+                      Screen.COLOUR_GREEN,
+                      stop_frame=200),
+        Mirage(screen,
               Rainbow(screen, FigletText("Twitter")),
                       center[1] - 2,
-                      speed=1,
-                      stop_frame=150),
-        Print(screen,
+                      Screen.COLOUR_GREEN,
+                      stop_frame=200),
+        Mirage(screen,
               Rainbow(screen, FigletText("Client")),
                       center[1] + 6,
-                      speed=1,
-                      stop_frame=150),
-        Stars(screen, screen.width)
+                      Screen.COLOUR_GREEN,
+                      stop_frame=200),
+        Stars(screen, screen.width, stop_frame=150),
+        Scroll(screen, 3, start_frame=150)
     ]
     scenes.append(Scene(effects))
 
     effects = [
-        Scroll(screen, 3),
         Mirage(
             screen,
             FigletText("Conceived and"),
@@ -199,107 +171,128 @@ def asciiville(screen):
             screen,
             FigletText("Doctor When"),
             screen.height + 16,
-            Screen.COLOUR_GREEN)
+            Screen.COLOUR_GREEN),
+        Scroll(screen, 3)
     ]
     scenes.append(Scene(effects, (screen.height + 24) * 3))
 
     effects = [
-        Print(screen,
+        Mirage(screen,
               Rainbow(screen, FigletText("Character Commands", "small")),
                       center[1] - 12,
-                      speed=1,
-                      stop_frame=100),
-        Print(screen,
+                      Screen.COLOUR_GREEN,
+                      stop_frame=200),
+        Mirage(screen,
               Rainbow(screen, FigletText("Phase of the Moon", "small")),
                       center[1] - 6,
-                      speed=1,
-                      stop_frame=100),
-        Print(screen,
+                      Screen.COLOUR_GREEN,
+                      start_frame=30,
+                      stop_frame=200),
+        Mirage(screen,
               Rainbow(screen, FigletText("Weather Report", "small")),
                       center[1],
-                      speed=1,
-                      stop_frame=100),
-        Print(screen,
+                      Screen.COLOUR_GREEN,
+                      start_frame=60,
+                      stop_frame=200),
+        Mirage(screen,
               Rainbow(screen, FigletText("Mapscii World Map", "small")),
                       center[1] + 6,
-                      speed=1,
-                      stop_frame=100),
-        Stars(screen, screen.width)
+                      Screen.COLOUR_GREEN,
+                      start_frame=90,
+                      stop_frame=200),
+        Wipe(screen, start_frame=200),
+        Stars(screen, screen.width, stop_frame=120),
+        Scroll(screen, 3, start_frame=120)
     ]
     scenes.append(Scene(effects, (screen.height + 24) * 3))
 
     effects = [
-        Print(screen,
+        Mirage(screen,
               Rainbow(screen, FigletText("Disk Use Analyzer", "small")),
                       center[1] - 12,
-                      speed=1,
-                      stop_frame=100),
-        Print(screen,
+                      Screen.COLOUR_GREEN,
+                      stop_frame=200),
+        Mirage(screen,
               Rainbow(screen, FigletText("Web Browser/Search", "small")),
                       center[1] - 6,
-                      speed=1,
-                      stop_frame=100),
-        Print(screen,
+                      Screen.COLOUR_GREEN,
+                      start_frame=30,
+                      stop_frame=200),
+        Mirage(screen,
               Rainbow(screen, FigletText("Lolcat Coloring", "small")),
                       center[1],
-                      speed=1,
-                      stop_frame=100),
-        Print(screen,
+                      Screen.COLOUR_GREEN,
+                      start_frame=60,
+                      stop_frame=200),
+        Mirage(screen,
               Rainbow(screen, FigletText("Music Player Plus", "small")),
                       center[1] + 6,
-                      speed=1,
-                      stop_frame=100),
-        Stars(screen, screen.width)
+                      Screen.COLOUR_GREEN,
+                      start_frame=90,
+                      stop_frame=200),
+        Wipe(screen, start_frame=200),
+        Stars(screen, screen.width, stop_frame=120),
+        Scroll(screen, 3, start_frame=120)
     ]
     scenes.append(Scene(effects, (screen.height + 24) * 3))
 
     effects = [
-        Print(screen,
+        Mirage(screen,
               Rainbow(screen, FigletText("Cool Retro Terminal", "small")),
                       center[1] - 12,
-                      speed=1,
-                      stop_frame=100),
-        Print(screen,
+                      Screen.COLOUR_GREEN,
+                      stop_frame=200),
+        Mirage(screen,
               Rainbow(screen, FigletText("Network Speed Test", "small")),
                       center[1] - 6,
-                      speed=1,
-                      stop_frame=100),
-        Print(screen,
+                      Screen.COLOUR_GREEN,
+                      start_frame=30,
+                      stop_frame=200),
+        Mirage(screen,
               Rainbow(screen, FigletText("Mutt Mail Client", "small")),
                       center[1],
-                      speed=1,
-                      stop_frame=100),
-        Print(screen,
+                      Screen.COLOUR_GREEN,
+                      start_frame=60,
+                      stop_frame=200),
+        Mirage(screen,
               Rainbow(screen, FigletText("Music/Roon Menus", "small")),
                       center[1] + 6,
-                      speed=1,
-                      stop_frame=100),
-        Stars(screen, screen.width)
+                      Screen.COLOUR_GREEN,
+                      start_frame=90,
+                      stop_frame=200),
+        Wipe(screen, start_frame=200),
+        Stars(screen, screen.width, stop_frame=120),
+        Scroll(screen, 3, start_frame=120)
     ]
     scenes.append(Scene(effects, (screen.height + 24) * 3))
 
     effects = [
-        Print(screen,
+        Mirage(screen,
               Rainbow(screen, FigletText("Use Tmux", "small")),
                       center[1] - 12,
-                      speed=1,
-                      stop_frame=100),
-        Print(screen,
+                      Screen.COLOUR_GREEN,
+                      stop_frame=200),
+        Mirage(screen,
               Rainbow(screen, FigletText("Kill Tmux Sessions", "small")),
                       center[1] - 6,
-                      speed=1,
-                      stop_frame=100),
-        Print(screen,
+                      Screen.COLOUR_GREEN,
+                      start_frame=30,
+                      stop_frame=200),
+        Mirage(screen,
               Rainbow(screen, FigletText("Record Tmux Session", "small")),
                       center[1],
-                      speed=1,
-                      stop_frame=100),
-        Print(screen,
+                      Screen.COLOUR_GREEN,
+                      start_frame=60,
+                      stop_frame=200),
+        Mirage(screen,
               Rainbow(screen, FigletText("Show System Info", "small")),
                       center[1] + 6,
-                      speed=1,
-                      stop_frame=100),
-        Stars(screen, screen.width)
+                      Screen.COLOUR_GREEN,
+                      start_frame=90,
+                      stop_frame=200),
+        Wipe(screen, start_frame=200),
+        Stars(screen, screen.width, stop_frame=120),
+        Scroll(screen, 3, start_frame=120)
     ]
     scenes.append(Scene(effects, (screen.height + 24) * 3))
 
