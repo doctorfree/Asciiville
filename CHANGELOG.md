@@ -2,8 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-# Asciiville-1.3.1r1 (2022-04-22)
+# Asciiville-1.3.1r1 (2022-04-24)
 
+* Install Asciiville Figlet Fonts in pyfiglet during postinstall
+* Add `show_figlet_fonts` command
+* Create armhf architecture Debian format package for Raspberry Pi installs
+* Add -d option to indicate use of disk usage analyzer
+* Add -X option to indicate use of current terminal window
+* Fixup exit from asciimatics scripts
 * MusicPlayerPlus and RoonCommandLine menu integration
 * Support for w3m, mapscii, and setting default browser
 * Add Figlet Fonts and use Figlet Text for menu headers

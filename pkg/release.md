@@ -1,5 +1,11 @@
 This release includes support for:
 
+* Install Asciiville Figlet Fonts in pyfiglet during postinstall
+* Add `show_figlet_fonts` command
+* Create armhf architecture Debian format package for Raspberry Pi installs
+* Add -d option to indicate use of disk usage analyzer
+* Add -X option to indicate use of current terminal window
+* Fixup exit from asciimatics scripts
 * MusicPlayerPlus and RoonCommandLine menu integration
 * Support for w3m, mapscii, and setting default browser
 * Add Figlet Fonts and use Figlet Text for menu headers
