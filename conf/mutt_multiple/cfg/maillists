@@ -1,0 +1,7 @@
+# list: used to mark a list as known. Mutt uses that as a list. Here you aren't subscribed.
+# subscribe: mark as known and use other things as you are subscribed to the list.
+# usage: list/subscribe mail_address(usually a part of mail address)
+
+## this is regex? yes!
+subscribe addr_maillistpart
+subscribe addr_anothermaillistpart

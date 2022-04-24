@@ -1,0 +1,77 @@
+set realname = "Your Name"
+# list of my mail address
+alternates "^(user@gmail.com|user@cruzio.com)$"
+
+# show mutt version at the start
+push <show-version>
+
+set charset = "utf-8"
+set send_charset = "utf-8"
+
+set header_cache = "~/.mutt/cache/headers"
+set message_cachedir = "~/.mutt/cache/bodies"
+set certificate_file = "~/.mutt/certificates"
+
+# this prevents Mutt from endlessly asking when you quit:
+#     "Move read messages to ~/mbox? ([no]/yes):"
+set move = no
+
+# If you start mutt and several new messages are in your inbox and you close
+# mutt before you have read them, then those messages will get flagged as old
+# (by default). The behavior can be controlled via the mark_old configuration variable.
+set mark_old = no
+
+set include = yes
+set quit = yes
+set arrow_cursor = no
+set delete = yes
+set user_agent = yes
+
+set abort_nosubject = yes
+
+# check for unread, flagged, and total message counts
+set mail_check_stats = yes
+# 60 secs
+set mail_check_stats_interval = 60
+
+set sort = threads
+set sort_aux = last-date-received
+
+# personal variables, starts with my_
+# to display variable value on mutt:
+# type : set ?variable_name
+set my_test = "hihi"
+
+set hdr_format = "%4C %Z %{%b %d} %-15.15n (%4l) %s"
+
+set ssl_starttls = yes
+set ssl_force_tls = yes
+
+## IMAP connections
+# Allow Mutt to open a new IMAP connection automatically.
+unset imap_passive
+# Keep the IMAP connection alive by polling intermittently (time in seconds).
+set imap_keepalive = 60
+# How often to check for new mail (time in seconds).
+set mail_check = 120
+# Do not automatically poll subscribed mailboxes for new mail
+set imap_check_subscribed = no
+
+## spell
+set my_ptbr_spell = "/usr/bin/aspell -c --mode=email --lang=pt_BR"
+set my_enus_spell = "/usr/bin/aspell -c --mode=email --lang=en_US"
+# default spell
+set ispell = $my_ptbr_spell
+
+## bookmarks in mutt
+set alias_file = ~/.mutt/cfg/aliases
+set sort_alias = alias
+set reverse_alias = yes
+source ~/.mutt/cfg/aliases
+
+## view special formats
+set mailcap_path = ~/.mutt/mailcap
+# order to display in multitype mail
+alternative_order text/plain text/enriched text/html
+auto_view text/html
+auto_view application/pdf

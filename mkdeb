@@ -83,7 +83,7 @@ Version: ${PKG_VER}-${PKG_REL}
 Section: misc
 Priority: optional
 Architecture: ${ARCH}
-Depends: python3, python3-pip, tilix (>= 1.9.1), xfce4-terminal (>= 0.8.9.1), cool-retro-term (>= 1.1.1), tmux, mplayer, lynx, neomutt, ranger, jq, asciinema, speedtest-cli, caca-utils, libaa-bin, libaa1, bb, neofetch, figlet, ruby
+Depends: python3, python3-pip, tilix (>= 1.9.1), xfce4-terminal (>= 0.8.9.1), cool-retro-term (>= 1.1.1), tmux, mplayer, lynx, w3m, mutt, ranger, jq, asciinema, speedtest-cli, caca-utils, libaa-bin, libaa1, bb, neofetch, figlet, ruby, feh, libreoffice, zathura
 Maintainer: ${DEBFULLNAME} <${DEBEMAIL}>
 Installed-Size: 89000
 Build-Depends: debhelper (>= 11)
@@ -112,6 +112,8 @@ ${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
 ${SUDO} cp ddgr/ddgr ${OUT_DIR}/${DESTDIR}/bin/ddgr
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
+${SUDO} cp -a conf/mutt ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/mutt
+${SUDO} cp -a conf/mutt_multiple ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/mutt_multiple
 ${SUDO} cp conf/tmux.conf ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp conf/rifle.conf ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp conf/rainbow_config.json ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}

@@ -1,0 +1,327 @@
+#!/bin/sh
+#
+#     mutt.octet.filter - Octet filter for use with the mutt autoview facility
+#     Copyright (C) 1997,1998,1999,2000,2001,2002,2003 David A Pearson
+#   
+#     This program is free software; you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation; either version 2 of the license, or 
+#     (at your option) any later version.
+#     
+#     This program is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+#    
+#     You should have received a copy of the GNU General Public License
+#     along with this program; if not, write to the Free Software
+#     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+
+# This script file is a pretty brain-dead, last resort, "works for me"
+# utility that will attempt to make sense of any octet-stream data
+# that is received as part of an email and act as a filter for use
+# with mutt's auto_view ability.
+#
+# Here is how I use it. In my ~/.mutt_mailcap (use your filename of
+# choice) I have the following entry:
+#
+# application/octet-stream; mutt.octet.filter %s; copiousoutput
+#
+# All you then need to do is add a line like:
+#
+# auto_view application/octet-stream 
+#
+# to your ~/.muttrc (use your filename of choice).
+#
+# In it's current state the script isn't perfect, it's your typical
+# "works for me" type of script and is offered in the hope that it
+# maybe handy and that you can do something with it.
+#
+# All comments/flames/feedback can be directed to:
+#
+#               davep@davep.org
+#
+# See <URL:http://www.davep.org/mutt/> for the latest version of this file.
+
+# $Log: mutt.octet.filter,v $
+# Revision 1.15  2003/09/19 09:47:20  davep
+# Added DecodeFileName, submitted by Jan Bredereke.
+#
+# Revision 1.14  2003/08/08 08:39:01  davep
+# Added support for .asc and .rar files.
+#
+# Revision 1.13  2002/10/21 08:28:05  davep
+# Improved ShowImage so that it won't barf on file types that aren't known by
+# anytopnm.
+#
+# Revision 1.12  2002/07/23 15:47:17  davep
+# Added code for showing LaTeX files, Debian packages and various Image files,
+# submitted by Michael Shigorin.
+#
+# Revision 1.11  2002/06/19 09:44:07  davep
+# Documentation changes.
+#
+# Revision 1.10  2002/06/19 09:43:39  davep
+# Changed ShowMSWord() to use antiword instead of catdoc.
+#
+# Revision 1.9  2001/10/03 08:13:58  davep
+# Added a couple of lines to capture and not display PCX files. This was
+# suggested by Jeff Abrahamson. It seems that Lotus Notes has a habit of
+# including PCX images as octet-streams.
+#
+# Revision 1.8  2001/08/13 23:39:36  davep
+# Jeff Abrahamson suggested adding ShowTXT and using that as a abstraction
+# layer over `cat'.
+#
+# Revision 1.7  2000/08/31 09:13:29  davep
+# Added patch from Aaron Schrab that makes the "data" match in ShowMISC()
+# greedier.
+#
+# Revision 1.6  2000/05/10 13:34:19  davep
+# Added patch from Aaron Schrab for handling RPM files.
+#
+# Revision 1.5  2000/02/28 15:28:13  davep
+# Added support for .tar.bz2 files (thanks to Dirk Pirschel for that).
+#
+# Revision 1.4  1999/08/02 12:39:27  davep
+# Minor nit-fix.
+#
+# Revision 1.3  1999/04/13 17:17:03  davep
+# Added support for displaying .o files.
+#
+# Revision 1.2  1999/01/27 17:35:25  davep
+# Added handling for .bz2 files (thanks to Lars Hecking for that).
+# Added handling of MSWord documents (requires catdoc).
+#
+# Revision 1.1  1998/10/14 16:00:25  davep
+# Initial revision
+#
+
+ShowTAR()
+{
+    tar tvvf "$1" 2> /dev/null
+}
+
+ShowTGZ()
+{
+    tar tzvvf "$1" 2> /dev/null
+}
+
+ShowTBZ()
+{
+    bzip2 -dc "$1" | tar -tvv -f- 2> /dev/null
+}
+
+ShowGZIP()
+{
+    gzip -dc "$1" 2> /dev/null
+}
+
+ShowBZIP()
+{
+    bzip2 -dc "$1" 2> /dev/null
+}
+
+ShowZIP()
+{
+    unzip -l "$1" 2> /dev/null
+}
+
+ShowARJ()
+{
+    unarj l "$1" 2> /dev/null
+}
+
+ShowRAR()
+{
+    unrar l "$1" 2> /dev/null
+}
+
+ShowEXE()
+{
+    echo $(basename "$1"): DOS/Windows executable
+}
+
+ShowOBJ()
+{
+    echo $(basename "$1"): DOS/Windows object file
+}
+
+ShowLIB()
+{
+    echo $(basename "$1"): MS-DOS program library
+}
+
+ShowNG()
+{
+    echo $(basename "$1"): Norton Guide Database
+}
+
+ShowVCard()
+{
+    cat "$1" | mutt.vcard.filter
+}
+
+ShowTIF()
+{
+    tiffinfo "$1"
+}
+
+ShowMSWord()
+{
+    antiword "$1"
+}
+
+ShowObject()
+{
+    nm "$1"
+}
+
+ShowRPM()
+{
+    rpm -qip "$1"
+}
+
+ShowDEB()
+{
+    dpkg --info "$1"
+    dpkg --contents "$1"
+}
+
+ShowTXT()
+{
+    echo "[-- Statistics (lines words chars): "$(wc "$1")" --]"
+    echo
+    cat -v "$1"
+}
+
+ShowImage()
+{
+    if anytopnm "$1" > /dev/null 2>&1
+    then
+        (anytopnm "$1" | pnmscale -xysize 240 120 | ppmtopgm | pgmtopbm | pbmtoascii -2x4) 2>&1
+    else
+        echo "$(basename $1) is not a supported image type"
+    fi
+}
+
+ShowLaTeX()
+{
+    dir=`mktemp -td mailtex_XXXXXXXX`
+    ln -s "$1" $dir/index.tex
+    # TODO: fix latex preamble if absent? -- mike@altlinux.com
+    latex2html -ascii_mode -noinfo -split 0 -verbosity 0 -noshow_init -dir $dir "$dir/index.tex" > /dev/null
+    lynx -dump $dir/index.html
+    rm -rf $dir
+}
+
+ShowData()
+{
+    echo $(basename "$1"): unprintable data
+}
+
+DisplayFileType()
+{
+    echo "[-- $(basename $0) file type: \"$1\" --]"
+    echo
+}
+
+ShowFileType()
+{
+    FILE_TYPE=$(echo $(file "$1" 2> /dev/null) | cut -d' ' -f 2-)
+    DisplayFileType "$FILE_TYPE"
+}
+
+DecodeFileName()
+{
+    # remove character set encodings:
+    # mutt translates "=?ISO-8859-1?Q?x=E4y.doc?="
+    # to "__ISO-8859-1_Q_x_E4y.doc__", we
+    # translate it to "x_E4y.doc"
+    echo "$1" | sed -e 's/__[^_]*_Q_\(.*\)__/\1/g'
+}
+
+ShowMISC()
+{
+    FILE_TYPE=$(file -z "$1" 2> /dev/null)
+
+    if [ $? -gt 0 ]
+    then
+	FILE_TYPE=$(file "$1" 2> /dev/null)
+    fi
+
+    FILE_TYPE=$(echo "$FILE_TYPE" | cut -d' ' -f 2-)
+
+    DisplayFileType "$FILE_TYPE"
+
+    case "$FILE_TYPE" in
+	*tar*archive*gzip* ) ShowTGZ   "$1";;
+	*tar*archive*      ) ShowTAR   "$1";;
+	*gzip*             ) ShowGZIP  "$1";;
+	*ARJ*archive*data* ) ShowARJ   "$1.";; # "." gets round bug in unarj.
+	*zip*archive*file* ) ShowZIP   "$1";;
+	*DOS*executable*   ) ShowEXE   "$1";;
+	*ascii*text*       ) ShowTXT   "$1";;
+	*c*program*text*   ) ShowTXT   "$1";;
+	*8086*reloc*Micro* ) ShowOBJ   "$1";;
+	*MS-DOS*prog*lib*  ) ShowLIB   "$1";;
+        *LaTeX*text        ) ShowLaTeX "$1";;
+	*data*             ) ShowData  "$1";;
+	*                  ) ShowTXT   "$1";;
+    esac
+}
+
+if [ "$1" = "" ]
+then
+    echo "syntax: $(basename '$0') file"
+else
+    case $(DecodeFileName "$1") in
+	*.tar )     ShowFileType "$1"; ShowTAR    "$1";;
+	*.tgz )     ShowFileType "$1"; ShowTGZ    "$1";;
+	*.tar.gz )  ShowFileType "$1"; ShowTGZ    "$1";;
+	*.tar.Z )   ShowFileType "$1"; ShowTGZ    "$1";;
+	*.tar.z )   ShowFileType "$1"; ShowTGZ    "$1";;
+        *.tbz2 )    ShowFileType "$1"; ShowTBZ    "$1";;
+        *.tar.bz2 ) ShowFileType "$1"; ShowTBZ    "$1";;
+	*.Z )       ShowFileType "$1"; ShowGZIP   "$1";;
+	*.z )       ShowFileType "$1"; ShowGZIP   "$1";;
+	*.gz )      ShowFileType "$1"; ShowGZIP   "$1";;
+        *.bz2 )     ShowFileType "$1"; ShowBZIP   "$1";;
+	*.zip )     ShowFileType "$1"; ShowZIP    "$1";;
+	*.ZIP )     ShowFileType "$1"; ShowZIP    "$1";;
+	*.arj )     ShowFileType "$1"; ShowARJ    "$1";;
+	*.ARJ )     ShowFileType "$1"; ShowARJ    "$1";;
+        *.rar )     ShowFileType "$1"; ShowRAR    "$1";;
+        *.RAR )     ShowFileType "$1"; ShowRAR    "$1";;
+	*.log )     ShowFileType "$1"; ShowTXT    "$1";;
+	*.LOG )     ShowFileType "$1"; ShowTXT    "$1";;
+	*.obj )     ShowFileType "$1"; ShowOBJ    "$1";;
+	*.OBJ )     ShowFileType "$1"; ShowOBJ    "$1";;
+	*.lib )     ShowFileType "$1"; ShowLIB    "$1";;
+	*.LIB )     ShowFileType "$1"; ShowLIB    "$1";;
+	*.NG )      ShowFileType "$1"; ShowNG     "$1";;
+	*.ng )      ShowFileType "$1"; ShowNG     "$1";;
+	*.vcf )     ShowFileType "$1"; ShowVCard  "$1";;
+	*.tif )     ShowFileType "$1"; ShowTIF    "$1";;
+	*.TIF )     ShowFileType "$1"; ShowTIF    "$1";;
+        *.doc )     ShowFileType "$1"; ShowMSWord "$1";;
+        *.DOC )     ShowFileType "$1"; ShowMSWord "$1";;
+        *.o )       ShowFileType "$1"; ShowObject "$1";;
+        *.rpm )     ShowFileType "$1"; ShowRPM    "$1";;
+        *.deb )     ShowFileType "$1"; ShowDEB    "$1";;
+        *.tex )     ShowFileType "$1"; ShowLaTeX  "$1";;
+        *.TEX )     ShowFileType "$1"; ShowLaTeX  "$1";;
+        *.pcx )     ShowFileType "$1"; ShowImage  "$1";;
+        *.PCX )     ShowFileType "$1"; ShowImage  "$1";;
+        *.jpg )     ShowFileType "$1"; ShowImage  "$1";;
+        *.JPG )     ShowFileType "$1"; ShowImage  "$1";;
+        *.gif )     ShowFileType "$1"; ShowImage  "$1";;
+        *.GIF )     ShowFileType "$1"; ShowImage  "$1";;
+        *.png )     ShowFileType "$1"; ShowImage  "$1";;
+        *.PNG )     ShowFileType "$1"; ShowImage  "$1";;
+        *.asc )     ShowFileType "$1"; ShowTXT    "$1";;
+        *.ASC )     ShowFileType "$1"; ShowTXT    "$1";;
+	* )         ShowMISC "$1";;
+    esac
+fi

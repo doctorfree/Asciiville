@@ -1,0 +1,7 @@
+# note: always keep the last /, because + and other shortcuts can use folder variable
+set folder = "imaps://mail.cruzio.com/"
+set spoolfile = "+INBOX"
+set trash = "+Trash"
+set postponed = "+Drafts"
+set record = "+Sent"
+

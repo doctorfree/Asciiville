@@ -1,0 +1,39 @@
+# hook = execute a command before an operation
+# hooks can match more than one? and why account-hook .
+#    . No, they match only one.
+#    . The dot is used to create a default when not match on other hooks.
+#    . Is a nice ideia to use dot with unset in cases on when not match, like imap_user/pass.
+
+
+##### account-hook
+# account-hook should only be used to set
+# connection-related settings such as passwords or tunnel commands.
+account-hook . 'unset imap_user; unset imap_pass'
+account-hook imaps://imap.gmail.com/ 'set imap_user = "user@gmail.com"; set imap_pass = "`~/shell-script/get-pass.sh imap user@gmail.com`"'
+account-hook imaps://mail.cruzio.com/ 'set imap_user = "user"; set imap_pass = "`~/shell-script/get-pass.sh imap user@cruzio.com`"'
+
+
+##### folder-hook
+folder-hook imaps://imap.gmail.com/ 'source ~/.mutt/cfg/coreimapfolders_gmail; set from="user@gmail.com"'
+folder-hook imaps://mail.cruzio.com/ 'source ~/.mutt/cfg/coreimapfolders_cruzio; set from="user@cruzio.com"'
+
+
+##### send-hook, executed after edit the message in editor
+##### send2-hook, executed every time that the message/headers is changed
+# ~h message header
+# ~s subject
+# -C to/cc
+# hostname is used only for Message-ID
+send2-hook . 'unset smtp_url; unset imap_pass; unset hostname'
+send2-hook ~h'user@gmail.com' 'set smtp_url = "smtps://user@smtp.gmail.com"; set smtp_pass = "`~/shell-script/get-pass.sh smtp user@gmail.com`"; source ~/.mutt/cfg/coreimapfolders_gmail; set hostname=gmail.com'
+send2-hook ~h'user@cruzio.com' 'set smtp_url = "smtp://user@mail.cruzio.com:587"; set smtp_pass = "`~/shell-script/get-pass.sh smtp user@cruzio.com`"; source ~/.mutt/cfg/coreimapfolders_cruzio; set hostname=cruzio.com'
+
+
+##### address to use in from when reply
+reply-hook . 'unset from'
+reply-hook ~C'user@gmail.com' my_hdr from: user@gmail.com
+reply-hook ~C'user@cruzio.com' my_hdr from: user@cruzio.com
+reply-hook ~C'debian-' my_hdr from: user@cruzio.com
+# people and address to use
+reply-hook ~h'peopleaddress1' my_hdr from: user@cruzio.com
+reply-hook ~h'peopleaddress2' my_hdr from: user@cruzio.com

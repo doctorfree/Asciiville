@@ -1,0 +1,17 @@
+# from https://gitlab.com/muttmua/mutt/-/wikis/ConfigTricks
+macro compose v "<edit-from>^Uidentity\_<tab>" "Select from"
+
+#macro compose y "<ispell><send-message>" 'Spell and send message'
+# set and run pt_BR spell
+macro compose i '<enter-command>set ispell=$my_ptbr_spell<enter><ispell>'
+# set and run en_US spell
+macro compose I '<enter-command>set ispell=$my_enus_spell<enter><ispell>'
+
+# based on https://github.com/redondos/mutt/blob/master/.mutt/sourced/macros
+macro index ,r '<tag-pattern>.<enter><tag-prefix-cond><clear-flag>N\
+<untag-pattern>.<enter><sidebar-next><sidebar-open>' "mark all read"
+
+# save messages
+macro index \Cs '<save-message>imaps://imap.gmail.com/saved_messages<enter>'
+
+macro index d '<delete-message><previous-undeleted><next-new-then-unread>'

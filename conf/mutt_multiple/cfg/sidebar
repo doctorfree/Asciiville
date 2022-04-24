@@ -1,0 +1,5 @@
+# Should the Sidebar be shown?
+set sidebar_visible = yes
+
+set sidebar_format = '%B%?F? [%F]?%* %?N?%N/?%S'
+set sidebar_short_path = yes

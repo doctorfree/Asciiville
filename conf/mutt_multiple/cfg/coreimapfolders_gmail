@@ -1,0 +1,8 @@
+# note: always keep the last /, because + and other shortcuts can use folder variable
+set folder = "imaps://imap.gmail.com/"
+set spoolfile = +INBOX
+set trash = "+[Gmail]/Trash"
+set postponed = "+[Gmail]/Drafts"
+# if set this duplicate the sent mails on GMail
+#set record = "+[Gmail]/Sent Mail"
+unset record

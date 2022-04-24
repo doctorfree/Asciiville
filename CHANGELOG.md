@@ -17,6 +17,8 @@ All notable changes to this project will be documented in this file.
 * Support for w3m, mapscii, and setting default browser
 * Add Figlet Fonts and use Figlet Text for menu headers
 * Lolcat install during postinstall
+* Removed support for neomutt, just use Mutt
+* Added semi-auto-configuration of Mutt
 
 # Asciiville-1.3.0r1 (2022-04-20)
 

@@ -6,7 +6,7 @@
 #
 #     * The lightweight character based system monitor, `btop`
 #     * The lightweight character based web browser, `lynx` or `w3m`
-#     * The lightweight character based mail client, `neomutt` or `mutt`
+#     * The lightweight character based mail client, `mutt`
 #     * The lightweight character based file manager, `ranger`
 #     * One or more terminal emulators running a specified command
 #     * A tmux session
@@ -71,8 +71,8 @@ usage() {
   printf "\n\t-w indicates use w3m web browser as the default command"
   printf "\n\t-x indicates use xfce4 terminal emulator"
   printf "\n\t-X indicates run command in current terminal window"
-  printf "\n\t-y indicates use ranger as the default command"
-  printf "\n\t-z indicates use neomutt/mutt as the default command\n"
+  printf "\n\t-y indicates use ranger file manager as the default command"
+  printf "\n\t-z indicates use mutt email client as the default command\n"
   printf "\nASCIImatics animation options:"
   printf "\n\t-A indicates use Art Images scenes in ASCIImatics display"
   printf "\n\t-a indicates play audio during ASCIImatics display"
@@ -600,7 +600,7 @@ show_main_menu() {
     [ "${have_mpcplus}" ] && options+=("Use Music Player Plus      [${use_mpp}]")
     if [ "${have_cbftp}" ]
     then
-      options+=("Use Cbftp FTP Client    [${use_ftp}]")
+      options+=("Use Cbftp FTP Client       [${use_ftp}]")
     else
       [ "${have_ncftp}" ] && options+=("Use Ncftp FTP Client       [${use_ftp}]")
     fi
@@ -1394,7 +1394,7 @@ while getopts "Aabc:dfFgiIjJklLmMn:NpP:rRSs:tTwxXyzu" flag; do
           COMMAND=mutt
           MTITLE="Mutt Mail Client"
         else
-          not_in_path neomutt -z
+          not_in_path mutt -z
           if [ "${have_btop}" ]
           then
             echo "Continuing, using btop rather than ${COMMAND}."

@@ -1,0 +1,745 @@
+################################################################
+#          Telsa's over-long .muttrc.                          #
+#                                                              #
+# If you have a 1.0 version of mutt, you want the sister file  #
+# this one. Make an intelligent guess at the filename :)       #
+#                                                              #
+# This all started when I wanted to switch colours off when    #
+# reading email. I read the documentation, and got completely  #
+# sidetracked with all the _other_ things I could do instead!  #
+#                                                              #
+# Mutt has a set of internal defaults for each variable,       #
+# option, and thing you can tinker with. When you start it up, #
+# it will first apply all of those. Then it will look for a    #
+# file on the computer called "Muttrc", which has a set of     #
+# default settings for everyone on the system. This usually    #
+# lives in /etc/Muttrc. It applies those settings.             #
+#                                                              #
+# And _then_ it looks in the home directory of the user in     #
+# question for a file called ".muttrc". If this exists, it     #
+# applies the settings in that, too.                           #
+#                                                              #
+# So the place to put your personal ones is in that .muttrc in #
+# your home directory, because it's the last one that mutt     #
+# checks, so those defaults will stick.                        #
+#                                                              #
+# Your personal .muttrc does not need to mention every         #
+# setting. (Mine certainly doesn't.) It only needs to mention  #
+# the ones which are different from the default Muttrc. This   #
+# makes starting out very easy. If there is one single thing   #
+# you don't like in the main one, just set that one single     #
+# thing in your .muttrc and forget about all the others. :)    #
+#                                                              #
+# However, if you're going to make a lot of changes, then a    #
+# useful thing to do is to copy the Muttrc and call the copy   #
+# '.muttrc' and put it in your home directory. That way, you   #
+# can just tweak that one easily. That's what I did, anyway,   #
+# and it worked for me.                                        #
+#                                                              #
+# -Don't- edit the default Muttrc unless you know what you're  #
+# doing. Stick to playing with your own personal one until     #
+# you have something you know works. If the personal one goes  #
+# wrong, you can just delete it, and then mutt will use the    #
+# settings in the Muttrc and all is well.                      #
+#                                                              #
+# Thanks to: the mutt manual writers, the mutt-users mailing   #
+# list, Tom Gilbert, Georg Griev, Dick Porter, Fairlight and   #
+# Mikko Hänninen for patience under much questioning, (from    #
+# everything from 'is a mailbox the same as a folder?' to 'why #
+# is this pattern not being evaluated?'). Thanks also to the   #
+# rpm specfile writer who carefully included exactly how to    #
+# make PGP work with mutt even if you had the US version. And  #
+# thanks to the people who put their muttrcs on the web. You   #
+# may recognise a lot of this one...                           # 
+#                                                              #
+# Feel free to peruse, borrow and alter this for your own use. #
+# If it breaks something, I won't be too surprised; if it      #
+# works, I'll be delighted.                                    #
+#                                                              #
+# Comments and criticisms and corrections and spellchecks are  #
+# all welcome (spam is not, however): send 'em to              #
+# hobbit@aloss.ukuu.org.uk.                                    #
+#                                           -- Telsa           #
+################################################################
+
+################################################################
+# A basic convention for almost any ordinary file in your      #
+# home directory whose name begins with a dot and ends with    #
+# 'rc' is that anything with a # mark at the start of the line #
+# is a comment and to be ignored. If you look at files that    #
+# fit those criteria, the only exception you're likely to find #
+# is that sometimes you'll see "#!/bin/sh" at the very top.    #
+#                                                              #
+# Sorry, there would have to be an exception, wouldn't there?  #
+#                                                              #
+# Anyway, anything with hash marks at the start won't get run. #
+# This is handy for documenting things, or for temporarily     #
+# removing a command without having to write down what it      #
+# looked like in case you want to put it back in.              #
+#                                                              #
+# You will find lots of such comments in this file :)          #
+################################################################
+
+################################################################
+# I am assuming that you have access to the mutt manual, which #
+# comes with mutt. This is not the manual produced by typing   #
+# 'man mutt' or 'man muttrc' (which arrived in mutt-1.2x and   #
+# is great) but the longer document which explains in gory     #
+# detail every setting. Sometimes I shall just say "the list   #
+# of options is in there".                                     #
+#                                                              #
+# On my old (Red Hat Linux) system, it lived in the mutt       #
+# directory in /usr/doc/ Newer versions of RH and Debian are   #
+# moving to the new standard: /usr/share/doc/ .  Try both.     #
+#                                                              #
+# If you don't have it on your system, then you can find the   #
+# online manual at the mutt website: http://www.mutt.org, and  #
+# follow the links under 'Documentation'.                      #
+################################################################
+
+################################################################
+# Very first command: "ignore"                                 #
+#                                                              #
+# Email arrives with lots of headers, many of which are really #
+# boring unless you're fascinated by the routes email travels  #
+# or the exact technical name for the character set that the   #
+# email is using. Most people ignore at least some; most mail  #
+# programs do the ignoring for you. Mutt lets you choose.      #
+#                                                              #
+# Remember that Mutt has already looked at and applied         #
+# settings from another file before it reads your personal     #
+# .muttrc. That file has already told mutt to ignore stuff. If #
+# you want to change that, you have to tell mutt to forget     #
+# about the earlier file's 'ignore' commands first, before     #
+# applying your commands. There is a useful pattern-matching   #
+# character for this: a * sign matches 'everything'. So this   #
+# is unignore the lot (to get round the fact that mutt may     #
+# already have ignored things because of the first file),      #
+# and then ignore only the ones on the 'ignore' line.          #
+#                                                              #
+################################################################
+ 
+unignore .*
+ignore Resent-Cc Resent-Date MBOX-Line References In-Reply-To Resent-Message-ID Resent-From X-Loop Resent-Sender Precedence 
+
+################################################################
+# The global Muttrc has as a comment for the next command:     #
+#                                                              #
+# "Imitate the old search-body function"                       #
+#                                                              #
+# Mutt used to have a one-key command to search message bodies #
+# but now it's a whole three: "/", followed by "~b". This is   #
+# a macro binding escape-b to that combination when you hit it #
+# in the pager.                                                #
+#                                                              #
+# Note that you don't need to keep this in your .muttrc,       #
+# because it's already defined in the global one. It will only #
+# be different if you choose to rebind escape-b to something   #
+# else.                                                        #
+################################################################
+
+macro index \eb '/~b ' 'search in message bodies'
+
+#############################
+# simulate the old url menu #
+#############################
+
+###############################################################
+# Again, from the default muttrc. It's another macro. When in #
+# either the index or the pager (ie, reading a message), you  #
+# can hit ^B and the urlview program will be invoked.         #
+# (Normally, you'd have to hit the | symbol and then type     #
+# urlview and hit return.) Note: old Red Hat systems (6.0)    #
+# didn't require you to have urlview installed, and so if you #
+# don't have anything happen, then this might be why :)       #
+###############################################################
+
+macro index \cb |urlview\n 'call urlview to extract URLs out of a message'
+macro pager \cb |urlview\n 'call urlview to extract URLs out of a message'
+
+###############################################################
+# To get -out- of urlview, btw, when you've finished looking  #
+# at a web page, hit 'q' to get out of Lynx, 'y' to tell it   #
+# that yes, you really mean it, 'q' to get out of urlview,    #
+# and any key to get back to the mutt page you were on.       #
+###############################################################
+
+###############################################################
+# Show documentation when pressing F1                         #
+#                                                             #
+# This is already in the standard global Muttrc. I think it's #
+# a _bad_ idea to put this into your personal .muttrc too.    #
+#                                                             #
+# That's because when a new version of mutt is installed,     #
+# part of the install process updates the global Muttrc with  #
+# the new home for the documentation. (The exact numbers at   #
+# the end of the filename differ with each version.) But it   #
+# will not update people's personal files. Because they're    #
+# read in order, if you don't keep your personal one up to    #
+# date, you can end up with mutt reading the global file,     #
+# knowing where the documentation is; then reading your local #
+# one and resetting where it thinks the documentation is to   #
+# somewhere that is now out of date and doesn't exist. So if  #
+# you're copying the global one over as a starting point,     #
+# take these lines out of your personal one, or put # marks   #
+# at the start so mutt thinks these lines are comments and    #
+# ignores them. Like this:                                    #
+###############################################################
+
+# macro generic <f1> "!less /usr/share/doc/mutt-1.2.5i/manual.txt\n" "Show Mutt documentation"
+# macro index   <f1> "!less /usr/share/doc/mutt-1.2.5i/manual.txt\n" "Show Mutt documentation"
+# macro pager   <f1> "!less /usr/share/doc/mutt-1.2.5i/manual.txt\n" "Show Mutt documentation"
+
+###############################################################
+# Mailboxes                                                   #
+#                                                             #
+# These don't _need_ to be full pathnames, but I never got    #
+# round to changing them :)                                   #
+#                                                             #
+# Well, a slight update to that. I tried changing some of the #
+# full pathnames to '=foldername' and mutt stopped telling me #
+# when I had new mail in them. I'm not sure that's supposed   #
+# to happen...                                                #
+#                                                             #
+# The mailboxes line (or lines) tell mutt where to check for  #
+# new mail arriving. (To produce the "New mail in:" message   #
+# that mutt shows when you're reading other mail.)            #
+#                                                             #
+# Note that mutt is -not- responsible for sorting mail into   #
+# these places. For that, you need procmail or something.     #
+# Mutt only knows that these are places where it should look  #
+# to see if there's new mail arriving. You can find my        #
+# procmailrc(s) in the same directory as this one.            #
+#                                                             #
+# Also note that mutt is not what controls the "You have new  #
+# mail" messages that you get when you're doing other things  #
+# at the command line. That is controlled by the shell. (For  #
+# bash users, you can tell your shell where where to look     #
+# with the MAILPATH variable, described in 'man bash'.)       # 
+###############################################################
+
+mailboxes /var/spool/mail/hobbit 
+mailboxes /home/hobbit/Mail/IN.cvs-commits /home/hobbit/Mail/IN.gnome-list 
+mailboxes /home/hobbit/Mail/IN.gnome-devel-list
+mailboxes /home/hobbit/Mail/IN.gnome-doc-list /home/hobbit/Mail/IN.linuxchix 
+mailboxes /home/hobbit/Mail/IN.mutt-users 
+mailboxes /home/hobbit/Mail/IN.procmail /home/hobbit/Mail/IN.rh-announce 
+mailboxes /home/hobbit/Mail/IN.testing /home/hobbit/Mail/IN.wm-user
+mailboxes IN.wwlug IN.swlug
+
+################################################################
+# Lists: 'lists' and 'subscribe'                               #
+#                                                              #
+# If you are not on any mailing lists, you can ignore this     #
+# variable and its explanation completely and skip ahead.      #
+#                                                              #
+#                                                              #
+#       'lists' changed. See belonw                            #
+#                                                              #
+# 'lists' used to mean "This is a list I know about and I an   #
+# subscribed to". Now it only means half of that: "this is a   #
+# list I know about". To add "...and I am subscribed to it",   #
+# you want "subscribe".                                        #
+#                                                              #
+# It (and 'subscribe') is still entirely different from the    #
+# mailboxes variable; and the names must be what the lists     #
+# in question call themselves, not what you call them in your  #
+# procmail rules or something.                                 #
+#                                                              #
+################################################################
+
+# Mailing lists I want mutt to know about...
+lists mutt-users procmail wm-user
+
+# Lists I'm actually subscribed to: 
+subscribe gnome-devel-list gnome-list gnome-doc-list 
+subscribe grrltalk issues southwales westwales
+
+
+################################################################
+# Lots of variables.                                           #
+#                                                              #
+# If you are looking at the default Muttrc you'll see a few(!) #
+# other things which I have either commented out or deleted.   #
+# They're in the default one already, so I don't need them all #
+# in here as well.                                             #
+#                                                              #
+# There are explanations of them all in the manual, mostly in  #
+# section 6. I haven't pasted all of that into here, although  #
+# I've added in a few comments of my own about some of them.   #
+# I have, though, included the ones I have changed, and why I  #
+# think my choices are better!                                 #
+#                                                              #
+# If something's in quotes, it usually means you can put your  #
+# preferred version (like the filename) in there instead. A    #
+# lot of the options, though, are called 'quad-options': a     #
+# wonderful concept which mutt seems to have started and I     #
+# wish other programs did the same! As well as 'yes' and 'no', #
+# there's also 'ask-yes' and 'ask-no'. The first two just do   #
+# it automatically; the second pair give you the option, but   #
+# assume either yes or no if you don't tell it something       #
+# different.                                                   #
+#                                                              #
+# There's an interesting twist to these options. As well as    #
+# setting them like this, and having them affect things all    #
+# through mail-reading, you can set these options to vary      #
+# according to folder. I like this, and I have included the    #
+# ones I use after this section. But first, the ones for all   #
+# folders...                                                   #
+################################################################
+
+################################################################
+# Where to put aliases. Since mutt doesn't automatically look  #
+# for it, if you change it from .muttrc you will need to put   #
+# 	source aliasfilename                                   #
+# after it at the start of a new line.                         #
+################################################################
+set alias_file="~/.muttrc"
+
+################################################################
+# When arrow_cursor is set, only an arrow shows your cursor,   #
+# rather than the entire line being highlighted. This is       #
+# faster on slower links. And besides, I find the entire line  #
+# being bright rather garish. So...                            #
+################################################################
+set arrow_cursor
+
+################################################################
+# If set you get prompted for Cc's: people to send copies to.  #
+################################################################
+set askcc
+
+################################################################
+# The string to precede quoted text in replies.                #
+# The default is: set attribution="On %d, %n wrote:"           #
+# %d is the date of the quoted message. %n is the author.      #
+################################################################
+set attribution="On %d or thereabouts, %n wrote:"
+
+################################################################
+# unset auto_tag is the default. I had it as set auto_tag, but #
+# found that if I had a bunch of tagged messages and deleted   #
+# one, it deleted the lot. This is not always what I wanted :) #
+################################################################
+unset auto_tag
+
+################################################################
+# set beep means you get a beep with an error. If you have     #
+# your terminal set up to flash instead of beeping, this can   #
+# be quite horrendous!                                         #
+################################################################
+unset beep
+
+################################################################
+# confirmappend and confirmcreate are both set by the global   #
+# Muttrc.                                                      #
+#                                                              # 
+# confirmcreate is very handy for catching typos so I like it. #
+# confirmappend is just a pain :) So out it goes:              #
+################################################################
+unset confirmappend
+
+################################################################
+# set copy=yes                                                 #
+# Make a copy of all email you send? This is the default, but  #
+# if you're short on diskspace you might want to unset it.     #
+################################################################
+set copy=yes
+
+################################################################
+# set date_format="!%a, %b %d, %Y at %I:%M:%S%p %Z"            #
+# The way the date is displayed in the index. It uses a set    #
+# of variables you can find in the manual page for strftime:   #
+# type 'man strftime' and boggle. Yes, you can decide to have  #
+# all messages labelled with how many seconds it has been      #
+# since 1970, if you're really bored. But it's probably much   #
+# more useful to leave this one as the default.                #
+################################################################
+
+################################################################
+# set editor=""                                                #
+# Defaults to VISUAL, EDITOR, or vi (yuk!)                     #
+# VISUAL and EDITOR are set in your shell.                     #
+# And joe is my favourite editor. (Wordstar-like, apparently.) #
+################################################################
+set editor=joe
+
+################################################################
+# set forward_format="[%a: %s]"                                #
+# This results in a Subject line of a long email address and   #
+# then the old subject. Some people (me :)) dislike this. So   #
+# of course you can change it to something which keeps just    #
+# the Subject line and puts "Fwd: " before it:                 #
+################################################################
+set forward_format="Fwd: %s"
+
+################################################################
+# set indent_string="> "                                       #
+# Note that it's a very bad idea to change this. If you don't  #
+# know why, then you _don't_ want to change it. It's a netwide #
+# convention. People use this pattern when they want to        #
+# highlight quoted text, for example.                          #
+################################################################
+
+################################################################
+# set index_format="%4C %Z %{%b %d} %-15.15L (%4l) %s"         #
+# The explanation for this is... um. Complicated. See the      #
+# manual :)                                                    #
+#                                                              #
+# I don't like it because the capital L means that the list    #
+# name is displayed rather than the sender's name. I sort my   #
+# lists into folders anyway, so I don't need that. So, I'd     #
+# normally change the L to an F to get the sender's name:      #
+#                                                              #
+# set index_format="%4C %Z %{%b %d} %-15.15F (%4l) %s"         #
+#                                                              #
+# ...except that this is a variable that I want differently in #
+# different folders. See below for the folder hooks. (Quite a  #
+# bit below, yes..)                                            #
+################################################################
+
+################################################################
+# set mailcap_path=""                                          #
+# Where to look for mailcap to know how to display MIME stuff  #
+# mutt can't do. Mutt has a list of good guesses, so you       #
+# shouldn't need to fill this in. If you want to change how    #
+# mutt reacts to particular sorts of message, then the file    #
+# that gets read here is what you want to change.              #
+################################################################
+
+################################################################
+# set mark_old                                                 #
+# Makes mutt assume that if I quit without reading new         #
+# messages, they should be marked as old. I hated this with    #
+# elm, so this is the first thing I ever changed.              #                 
+################################################################
+unset mark_old
+
+################################################################
+# set mbox="~/mbox"                                            #
+# Nono, not in my home directory, thank you. Btw, the + means  #
+# 'this file lives in my mail directory'. An = sign means the  #
+# same thing, but "set mbox==received" looks silly.            #
+################################################################
+set mbox=+received               
+
+################################################################
+# set mbox_type="mbox"                                         #
+# I think I'll leave that alone, yes.                          #
+################################################################
+
+################################################################
+# You get used to the pager in mutt, but you could change it   #
+# and read everything with 'more' or 'less' by putting the     #
+# pathname in here.                                            #
+################################################################
+set pager="builtin"
+
+################################################################
+# unset pager_context                                          #
+# Number of lines carried over when new screenful of text.     #
+################################################################
+set pager_context=1
+
+################################################################
+# set postponed="~/postponed" This is where postponed stuff    #
+# goes. I really dislike having loads of files in my home      #
+# directory, so I put everything I can elsewhere.              #
+################################################################
+set postponed="~/Mail/postponed"
+
+################################################################
+# Oh, the excitement: a choice of printers. But this is        #
+# probably _not_ what most people want as their default        #
+# printer. Be warned!                                          #
+################################################################
+set print_command="lpr -P lp0"
+
+################################################################
+# set quit=yes                                                 #
+# Really quit? I hit this by mistake all the time, so..        #
+################################################################
+set quit=ask-yes
+
+################################################################
+# set record=""                                                #
+# Where copies of what you send go. Default is nowhere, which  #
+# is a bit silly, because the default for whether copies are   #
+# made is yes, they are. So you want somewhere to put them.    #
+################################################################
+set record="=sent"
+
+################################################################
+# set save_empty                                               #
+# If unset, removes empty mail folders. If you have a -lot- of #
+# folders, saving empty folder names makes the file browser    #
+# way too big. So...                                           #
+################################################################
+unset save_empty
+
+################################################################
+# set smileys="(>From )|(:[-^]?[][)(><}{|/DP])"                #
+# Mutt's -strangest- option! Some people like to highlight     #
+# quoted text. Other people use :> as smileys. This option is  #
+# here to let you try to separate out the quotes from the      #
+# smileys. If you don't understand the regular expression,     #
+# rest assured you're not alone...                             #
+################################################################
+
+################################################################
+# set sort=date-sent                                           #
+# You could do this, or sort by date-received, or by threads,  #
+# or by from, mailbox-order, score, size, subject, or who it's #
+# to. Threads is -really- good for mailing lists. Because I    #
+# want different folders to be sorted differently, see below   #
+# where the folder-hooks are.                                  #
+################################################################
+
+################################################################
+# set to_chars="+TCF"                                          #
+# How to highlight mail to you. I dislike these. I know they   #
+# are to me: that's why they're in my mailbox! So off they go. #
+# Note that the 'default' which I have quoted is wrong: it     #
+# should have five characters, not four. This is now fixed,    #
+# but older /etc/Muttrc files may still have that. The manual  #
+# tells you what five groupings these are.                     #
+################################################################
+set to_chars="     "
+
+################################################################
+# IMAP: don't use it, so no clue.                              #
+################################################################
+
+################################################################
+# PGP: (GnuPG for me)                                          #
+#                                                              #
+# PGP seems to Just Work in its GnuPG incarnation. I did not   #
+# touch the config file. It just arrived working by default.   #
+# Hooray.                                                      #
+################################################################
+
+################################################################
+# Colours                                                      #
+#                                                              #
+# A note here for those who start mutt in X and get a set of   #
+# defaults that bear no resemblance to what they have in any   #
+# file. Type 'mutt -v' or 'mutt --version' and you'll get a    #
+# list of things. Does it say mutt [ncurses] or mutt [slang]?  #
+# It will be one or the other. If it's slang, here's what I    #
+# had to do in order to get my normal backgrounds to show      #
+# through: if you are using bash as a shell (probably, if you  #
+# are using Linux; I think it's pretty standard there) then    #
+# type this at your prompt; then start mutt and look. If it    #
+# worked, then put the two lines into your .bash_profile.      #
+#                                                              #
+#		COLORFGBG="default;default"                    #
+#		export COLORFGBG                               #
+#                                                              #
+# Please don't ask me for an explanation or I'll cry.          #
+#                                                              #
+# I first noticed this when in X. Whether it's necessary for   #
+# just reading at the console, I don't know. It doesn't hurt,  #
+# certainly.                                                   #
+#                                                              #
+# And finally, I found how to turn all the colours off. Just   #
+# comment out all the lurid stuff from /etc/Muttrc. I need to  #
+# find how to remove them when you don't have access to that   #
+# file, I know...                                              #
+################################################################
+
+################################################################
+# Folder-hooks: or options which vary with folder.             #
+#                                                              #
+# For some of the options above, I want things to vary by      #
+# folder. Mutt is very flexible like this. You can have all    #
+# sorts of hooks: save-hooks, send-hooks, and folder-hooks. I  #
+# don't use the first two (yet), but these folder-hooks might  #
+# give you some ideas.                                         #
+#                                                              #
+# Some basics:                                                 #
+#       . means every folder                                   #
+#       = or + in front of a name means it's a mail folder     #
+#    which is in your MAILDIR -- your mail directory. This is  #
+#    probably ~/Mail.                                          #
+#                                                              #
+# Mutt goes through them in order, applying them successively. #
+# So for each folder-hook you define, have a default. If you   #
+# don't have a default for a folder, mutt will just apply the  #
+# folder-hooks it was last using. This can be... unfortunate.  #
+# That's where (and why) the . becomes very handy: you can set #
+# it to something innocuous and safe.                          #
+################################################################
+
+################################################################
+# First folder-hook: sorting mail in different folders. What   #
+# order do you want your email in? Threading is fantastic      #
+# for lists: it's absolutely the best option, IMO. If folder-  #
+# hooks didn't exist, and I had to choose one option for all   #
+# folders, I'd use threading. But I don't really like it for   #
+# some other folders. Luckily, folder-hooks do exist...        #
+#                                                              #
+# So first the default. Out of the long list of mailboxes I    #
+# defined at the top of the file, I want the majority of them  #
+# threaded. So that sounds like the best default for me:       #
+################################################################
+
+folder-hook . set sort=threads
+
+################################################################
+# Now the exceptions:                                          #
+#                                                              #
+# For personal email, I want to see what's arrived in what     #
+# order in one folder, and I want to see when I sent things in #
+# the other. So those two are easy and we'll get those out of  #
+# the way first. (By the way, the sent folder isn't in the     #
+# mailbox line because I don't want mutt to tell me about new  #
+# mail in it.)                                                 #
+################################################################
+
+folder-hook /var/spool/mail/hobbit set sort=date-received
+folder-hook =sent set sort=date-sent
+
+################################################################
+# Now I have a mailbox which is more complicated. In the       #
+# IN.cvs-commits mailbox, many many messages arrive constantly #
+# and I am only interested in messages about five or six       #
+# things. Luckily, those things are mentioned in the subject   #
+# line. So I score by subject contents, assigning 1 to things  #
+# I'm interested in, and nothing to things I'm not bothered    #
+# about. Then I sort this mailbox by score, and the things I   #
+# want to know about are at the top.                           #
+#                                                              #
+# If instead of adding 1 to "good" subjects, I subtracted 1    #
+# from the other subjects, I believe Mutt won't show those     #
+# with negative numbers. I haven't tried.                      #
+#                                                              #
+# Sorting by score relies on using a special set of patterns   #
+# which can be found in section 4.2 of the manual. Be warned,  #
+# however, that three of those are not used: ~b, ~B and ~h.    #
+# This is to be considered a feature: it increases speed :)    #
+#                                                              #
+# For the curious with no manual (how?) ~e matches the sender  #
+# field and ~s matches the subject. You put the twiddle and    #
+# what it should match in single quotes, and put the score to  #
+# assign to that after it. Then it all goes into double        #
+# quotes.                                                      #
+################################################################
+
+folder-hook IN.cvs-commits set sort=score
+folder-hook IN.cvs-commits "unscore .*"
+folder-hook IN.cvs-commits "score '~s gnome-core' 1"
+folder-hook IN.cvs-commits "score '~s gnome-libs' 1"
+folder-hook IN.cvs-commits "score '~s gnome-docu' 1"
+folder-hook IN.cvs-commits "score '~s desktop-docs' 1"
+folder-hook IN.cvs-commits "score '~s white-papers' 1"
+folder-hook IN.cvs-commits "score '~s crescendo' 1"
+
+################################################################
+# It's also possible to score by other things. For example,    #
+# when I am subscribed to two lists called "junk-not" and      #
+# "junk", I have them in the same mailbox. One has an extra    #
+# header. So I use:                                            #
+#                                                              #
+# folder-hook IN.junk set sort=score                           #
+# folder-hook IN.junk "unscore .*"                             #
+# folder-hook IN.junk "score '~e junk-not' 1"                  #
+#                  ...for those.                               #
+################################################################
+
+################################################################
+# Altering the index appearance in different folders           #
+#                                                              #
+# This is the index_format from earlier in the file. In the    #
+# manual, you'll find the syntax and all the complicated       #
+# patterns you can use under the description of index_format   #
+# in section 6.                                                #
+#                                                              #
+# Here's the default:                                          #
+# index_format= "%4C %Z %{%b %d} %-15.15L (%4l) %s"            #
+#                                                              #
+# My pattern-matching is appalling, and I have never been able #
+# to work out all of this. However, I can guess, based on how  #
+# it appears when I start mutt.                                #
+#                                                              #
+# For people like me who have their list-email in different    #
+# folders, it's unnecessary to see the list name as the sender #
+# of the message. I am more likely to want to see the name of  #
+# the sender. So I substituted the capital L for a capital F   #
+# and that works fine for me. So that's my idea of the default #
+# folder-hook.                                                 #
+#                                                              #
+# For the lists sorted by score (=IN.cvs-commits and =IN.junk) #
+# I want to have the score displayed, too, on the left of the  #
+# display.                                                     #
+#                                                              #
+# Because of the way mutt processes quote marks, the folder-   #
+# hooks need extra quote marks around them that the standard   #
+# variable doesn't need.                                       #
+#                                                              #
+# So, after all that explanation, spot the differences!        #
+# I've left the Muttrc default in, commented out, for          #
+# comparison.                                                  #
+################################################################
+
+# default is   set index_format="%4C %Z %{%b %d} %-15.15L (%4l) %s"
+folder-hook . 'set index_format="%4C %Z %{%b %d} %-15.15F (%4l) %s"'
+folder-hook IN.junk 'set index_format="%2N %2C %Z %{%b %d} %-15.15F (%4l) %s"'
+folder-hook IN.cvs-commits 'set index_format="%2N %2C %Z %{%b %d} %-15.15F (%4l) %s"'
+
+################################################################
+# Saving accoring to folder-hooks.                             #
+#                                                              #
+# There is a _much_ better way to do this if you want to save  #
+# stuff based on which person sent it. It's the save-hook      #
+# itself. Because I tend to save things depending on what      #
+# _folder_ it's in, I use a folder-hook.                       #
+#                                                              #
+# Again, there's a default catch-all at the top (the dot)      #
+#                                                              #
+# The folder-hooks are very simplistic: the * matches          #
+# everything in the folder!                                    #
+#                                                              #
+################################################################
+
+folder-hook . save-hook .* =received
+folder-hook IN.cvs-commits save-hook .* =cvs-commits
+folder-hook IN.gnome-list save-hook .* =gnome-list
+folder-hook IN.gnome-doc-list save-hook .* =gnome-doc-list
+folder-hook IN.linuxchix save-hook .* =linuxchix
+folder-hook IN.mutt-users save-hook .* =mutt-users
+folder-hook IN.testing save-hook .* =testing
+folder-hook IN.wm-user save-hook .* =wm-user
+
+################################################################
+# I could have used this instead for the mailing lists:        #
+# save-hook ~l =%B                                             #
+# This matches anything coming from a list (~l) and saves it   #
+# to a folder called whatever the mailing list was called.     #
+# But I didn't because I'm bad at pattern-matching and my way  #
+# is more legible to me when I look at it.                     #
+################################################################
+
+
+################################################################
+# The end.                                                     #
+#                                                              #
+# What, you're still reading? No, really, it's finished. I     #
+# don't know any more. :)                                      #
+#                                                              #
+# If you are curious about the folders and how email ended up  #
+# there, then you might want to have a look at my procmailrc,  #
+# which is what splits email up into folders for me. It is not #
+# mutt's job. Mutt just deals with the email once it hits the  #
+# folders.                                                     #
+#                                                              #
+# I hope you learned something, even if it was only that some  #
+# people (like me, perhaps?) have most peculiar methods of     #
+# dealing with their email. Have fun, borrow, rewrite, and     #
+# please don't blame me if you do strange and wonderful things #
+# to how mutt displays your email. Unlike a .procmailrc, this  #
+# is a fairly safe file to experiment with. You really have to #
+# -try- to end up doing bad things to your email with mutt;    #
+# whereas procmail has that capacity as a sort of intrinsic    #
+# property...                                                  #
+#                                          -- Telsa            #
+################################################################

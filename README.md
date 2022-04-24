@@ -38,7 +38,7 @@ The `asciiville` command can be used to invoke:
 
 * The lightweight character based system monitor, `btop`
 * The lightweight character based web browser, `lynx` or `w3m`
-* The lightweight character based mail client, `neomutt` or `mutt`
+* The lightweight character based mail client, `mutt`
 * The lightweight character based music player, `mpcplus`
 * The lightweight character based file manager, `ranger`
 * The lightweight character based disk usage analyzer, `gdu`
@@ -63,7 +63,7 @@ Integration is provided for:
 * [ddgr](ddgr/README.md), command line web search
 * [lynx](https://lynx.invisible-island.net/), character based web browser
 * [w3m](http://w3m.sourceforge.net/), another character based web browser
-* [neomutt](https://neomutt.org/), character based mail client
+* [mutt](http://www.mutt.org/), character based email client
 * [ranger](https://ranger.github.io/), character based file manager
 * [gdu](https://github.com/dundee/gdu#readme), character based disk usage analyzer
 * [mpcplus](https://github.com/doctorfree/MusicPlayerPlus/blob/master/mpcplus/README.md), featureful ncurses based Music Player client
@@ -128,7 +128,7 @@ installed if needed when using the Debian or RPM format package install.
 * asciimatics
 * asciinema
 * lynx
-* neomutt/mutt
+* mutt
 * ranger
 * gdu
 * mplayer
@@ -273,7 +273,7 @@ Terminal/Command options:
 	-x indicates use xfce4 terminal emulator
 	-X indicates run command in current terminal window
 	-y indicates use ranger as the default command
-	-z indicates use neomutt/mutt as the default command
+	-z indicates use mutt as the default command
 
 ASCIImatics animation options:
 	-A indicates use Art Images scenes in ASCIImatics display

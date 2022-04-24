@@ -1,0 +1,16 @@
+## some keys based on Emacs usage
+# alt key = \e
+
+bind index G imap-fetch-mail
+
+bind index,pager \Cp previous-undeleted
+bind index,pager \Cn next-undeleted
+bind index,pager \ep previous-thread
+bind index,pager \en next-thread
+bind index,pager \ev previous-page
+bind index,pager \Cv next-page
+
+bind index,pager <Left> sidebar-toggle-visible
+bind index,pager <Right> sidebar-open
+bind index,pager <Up> sidebar-prev
+bind index,pager <Down> sidebar-next

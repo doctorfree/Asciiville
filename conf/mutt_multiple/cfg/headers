@@ -1,0 +1,29 @@
+set edit_headers = yes
+
+# ignore all
+ignore *
+
+# un-ignore these
+unignore From:
+unignore To:
+unignore Reply-To:
+unignore Mail-Followup-To:
+unignore Subject:
+unignore Date:
+unignore Organization:
+unignore Newsgroups:
+unignore CC:
+unignore BCC:
+unignore Message-ID:
+unignore X-Mailer:
+unignore User-Agent:
+unignore X-Junked-Because:
+unignore X-SpamProbe:
+unignore X-Virus-hagbard:
+unignore Return-Receipt-To:
+unignore Disposition-Notification-To:
+unignore X-Disposition-Sent:
+unignore X-Priority:
+unignore X-URL:
+
+hdr_order From: Subject: To: CC: BCC: Reply-To: Mail-Followup-To: Date: Organization: User-Agent: X-Mailer:

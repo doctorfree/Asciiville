@@ -8,6 +8,44 @@ CONFDIR=/usr/share/doc/asciiville
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 
+# Mutt configuration user setup
+[ -f ${CONFDIR}/mutt/muttrc ] && {
+  [ -d ${HOME}/.mutt ] || {
+    mkdir ${HOME}/.mutt
+    chmod 750 ${HOME}/.mutt
+  }
+  [ -d ${HOME}/.mutt/cache ] || {
+    mkdir ${HOME}/.mutt/cache
+    chmod 750 ${HOME}/.mutt/cache
+  }
+  [ -d ${HOME}/.mutt/cache/headers ] || {
+    mkdir ${HOME}/.mutt/cache/headers
+    chmod 750 ${HOME}/.mutt/cache/headers
+  }
+  [ -d ${HOME}/.mutt/cache/bodies ] || {
+    mkdir ${HOME}/.mutt/cache/bodies
+    chmod 750 ${HOME}/.mutt/cache/bodies
+  }
+  [ -f ${HOME}/.mutt/certificates ] || {
+    touch ${HOME}/.mutt/certificates
+    chmod 640 ${HOME}/.mutt/certificates
+  }
+  [ -f ${HOME}/.mutt/muttrc ] || {
+    cp ${CONFDIR}/mutt/muttrc ${HOME}/.mutt/muttrc
+    chmod 600 ${HOME}/.mutt/muttrc
+    echo "A basic ${HOME}/.mutt/muttrc Mutt email client configuration"
+    echo "has been created for you. The default configuration can be used"
+    echo "as a template to create a GMail IMAP Mutt email account."
+    echo "Edit ${HOME}/.mutt/muttrc and add your GMail credentials."
+    echo ""
+    echo "Several more extensive Mutt configurations are included in Asciiville."
+    echo "See the folders ${CONFDIR}/mutt/ and ${CONFDIR}/mutt_multiple/"
+    echo ""
+    echo "A good starting point for the new Mutt user is the Mutt Wiki at:"
+    echo "https://gitlab.com/muttmua/mutt/-/wikis/home"
+  }
+}
+
 # Setup default rifle configuration for this user unless one exists
 [ -f ${CONFDIR}/rifle.conf ] && {
   [ -f ${HOME}/.config/ranger/rifle.conf ] || {

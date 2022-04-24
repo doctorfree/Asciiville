@@ -1,0 +1,19 @@
+## config for mutt >= 1.13.5
+
+source ~/.mutt/cfg/general
+
+source ~/.mutt/cfg/hooks
+
+source ~/.mutt/cfg/gpg
+
+source ~/.mutt/cfg/maillists
+
+source ~/.mutt/cfg/mailboxes
+
+source ~/.mutt/cfg/headers
+
+source ~/.mutt/cfg/sidebar
+
+source ~/.mutt/cfg/keybindings
+
+source ~/.mutt/cfg/macros

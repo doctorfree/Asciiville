@@ -1,0 +1,13 @@
+# mailboxes: folders that can receive mail and will be periodic checked.
+# IMPORTANT: must be after set spoolfile and folder variables if you use !/=/+ in names.
+# ! = your $spoolfile (incoming) mailbox
+# = or + your $folder directory
+# for more check '10. Mailbox Shortcuts' in manual.txt
+
+source ~/.mutt/cfg/coreimapfolders_cruzio
+mailboxes -label INBOX_cruzio !
+
+source ~/.mutt/cfg/coreimapfolders_gmail
+mailboxes !
+mailboxes +somefolder
+mailboxes +anotherfolder

@@ -13,12 +13,14 @@ This release includes support for:
 * Support for w3m, mapscii, and setting default browser
 * Add Figlet Fonts and use Figlet Text for menu headers
 * Lolcat install during postinstall
+* Removed support for neomutt, just use Mutt
+* Added semi-auto-configuration of Mutt
 
 Supported features include:
 
 * The lightweight character based system monitor, `btop`
 * The lightweight character based web browser, `lynx` or `w3m`
-* The lightweight character based mail client, `neomutt` or `mutt`
+* The lightweight character based mail client, `mutt`
 * The lightweight character based file manager, `ranger`
 * The lightweight character based music player, `mpcplus`
 * One or more terminal emulators running a command

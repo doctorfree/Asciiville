@@ -68,10 +68,10 @@ Previously started tmux sessions and asciimatics scripts can be quickly and easi
 : Indicates use current terminal emulator window
 
 **-y**
-: Indicates use ranger as the default command
+: Indicates use ranger file manager as the default command
 
 **-z**
-: Indicates use neomutt as the default command
+: Indicates use mutt email client as the default command
 
 *ASCIImatics animation options:*
 
@@ -157,7 +157,7 @@ Previously started tmux sessions and asciimatics scripts can be quickly and easi
 : Launches the `cmus` music player client running in a gnome-terminal emulator window. 
 
 **asciiville -f -t -z**
-: Launches `neomutt` mail client in fullscreen mode running in a tilix terminal emulator window. 
+: Launches `mutt` mail client in fullscreen mode running in a tilix terminal emulator window. 
 
 **asciiville -l -T -x**
 : Launches `lynx` web browser running in a tmux session in an xfce4-terminal window. 
@@ -183,7 +183,7 @@ Submit bug reports online at:
 https://github.com/doctorfree/Asciiville/issues
 
 # SEE ALSO
-**asciiart**(1), **asciijulia**(1), **asciimpplus**(1), **asciinema**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1), **ddgr**(1), **lynx**(1), **neomutt**(1), **ranger**(1)
+**asciiart**(1), **asciijulia**(1), **asciimpplus**(1), **asciinema**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1), **ddgr**(1), **lynx**(1), **mutt**(1), **ranger**(1)
 
 Full documentation and sources at:
 

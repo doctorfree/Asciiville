@@ -1,0 +1,17 @@
+set from = "username@gmail.com"
+set realname = "First Last"
+# IMAP settings
+set imap_user = "username@gmail.com"
+set imap_pass = "<mailbox password>"
+# SMTP settings
+set smtp_url = "smtps://username@smtp.gmail.com"
+set smtp_pass = "<mailbox password>"
+# Remote Gmail folders
+set folder = "imaps://imap.gmail.com/"
+set spoolfile = "+INBOX"
+set postponed = "+[Gmail]/Drafts"
+set record = "+[Gmail]/Sent Mail"
+set trash = "+[Gmail]/Trash"
+# Vim spell checking (enable in Vim with :set spell)
+set editor="vim -c 'set spell spelllang=en'"
+
