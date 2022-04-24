@@ -3,3 +3,5 @@
 sudo rm -rf dist releases
 cd btop
 make distclean
+cd ../cbftp
+make clean

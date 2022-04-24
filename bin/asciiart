@@ -44,8 +44,8 @@ def asciiville(screen):
         Print(screen,
               FigletText("Asciiville", "banner"),
               screen.height - 9,
-              colour=Screen.COLOUR_WHITE,
-              bg=Screen.COLOUR_WHITE,
+              colour=Screen.COLOUR_YELLOW,
+              bg=Screen.COLOUR_YELLOW,
               speed=1),
     ]
     scenes.append(Scene(effects, 100))
