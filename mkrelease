@@ -43,7 +43,7 @@ shift $(( OPTIND - 1 ))
 ANNO="Asciiville Version ${VERSION} Release ${RELEASE}"
 gittag v${VERSION}r${RELEASE} ${ANNO}
 
-echo "Copy RPM to releases/${VERSION}"
+echo "Copy Fedora RPM and Raspberry Pi Debian package to releases/${VERSION}"
 
 read -p "Press Enter to continue" answer
 
