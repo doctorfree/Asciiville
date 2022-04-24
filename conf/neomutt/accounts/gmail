@@ -1,0 +1,55 @@
+set imap_user="youraccount@gmail.com"
+# set imap_pass=`/usr/bin/security find-generic-password -w -a 'youraccount@gmail.com' -s 'Gmail'`
+# If Google 2FA Authentication is enabled, create an App password for Mutt
+# See https://security.google.com/settings/security/apppasswords
+set imap_pass=<yourpassword>
+
+set folder=imaps://imap.gmail.com/
+set spoolfile=+INBOX
+set record="+[Gmail]/Sent Mail"
+set postponed="+[Gmail]/Drafts"
+
+# https://www.neomutt.org/guide/reference search sleep_time for additional info
+set sleep_time=0 # be faster
+set beep=no # no beep sound
+# set editor="/Applications/MacVim.app/Contents/MacOS/Vim -c 'set tw=74' -c 'set wrap'"
+set editor="/usr/bin/vim -c 'set tw=74' -c 'set wrap'"
+auto_view text/html
+set sort=reverse-date   # default sorting by date
+# When sorting by threads, this variable controls how threads are sorted
+# in relation to other threads, and how the branches of the thread trees are sorted.
+set sort_aux=last-date-received
+# Index page format. Default "%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s"
+set index_format="%4C %Z %{%b %d %R} %-15.15L (%?l?%4l&%4c?) %s"
+
+
+set sidebar_visible
+set sidebar_format="%B%?F? [%F]?%* %?N?%N/?%S"
+set mail_check_stats
+
+# You can use any gmail imap mailboxes
+mailboxes =INBOX =[Gmail]/Sent\ Mail =[Gmail]/Drafts =[Gmail]/Spam =[Gmail]/Trash
+
+# Vim like binds
+bind attach,index,pager \CD next-page
+bind attach,index,pager \CU previous-page
+bind pager g top
+bind pager G bottom
+bind index gg noop
+bind attach,index g first-entry
+bind attach,index G last-entry
+
+# Sidebar binds
+bind index,pager \CP sidebar-prev                 # Ctrl-n to select next folder
+bind index,pager \CN sidebar-next                 # Ctrl-p to select previous folder
+bind index,pager \CI sidebar-open                 # Ctrl-o to open selected folder
+bind index,pager \CB sidebar-toggle-visible       # Ctrl-b to toggle visibility of the sidebar
+
+set realname="Firstname Lastname"
+set from="youraccount@gmail.com"
+
+#set smtp_url="smtps://youraccount@gmail.com@smtp.gmail.com:587"
+set smtp_url="smtps://youraccount@gmail.com@smtp.gmail.com:465"
+# set smtp_pass=`/usr/bin/security find-generic-password -w -a 'youraccount@gmail.com' -s 'Gmail'`
+set smtp_pass=<yourpassword>
+set smtp_authenticators="gssapi:login"
