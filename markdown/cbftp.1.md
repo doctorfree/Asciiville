@@ -60,6 +60,139 @@ edit site screen, browse screen, etc. The available views can be considered
 as a stack - after you've entered a new view, leaving it will normally take
 you back to where you came from.
 
+# KEY MAPPING
+
+```
+C-c             Quit/Exit program
+Left/Right      Refresh After Changes
+
+=== CBFTP MAIN
+A               Add site
+G               Global settings
+l               Event log
+t               transfers
+r               All races (aka All Spread Jobs)
+j               All transferjobs
+U               toggle Udp
+c               Browse local
+i               General info
+s               sections
+S               Snake
+Esc             back to browsing
+Tab             split browse
+Right/b         browse site (BROWSING aka connect to ftp server)
+w               raw command
+E               Edit site
+C               Copy site
+D               Delete site
+q               quick jump
+L               Login all slots
+0-9             Browse to section
+Down            Next option
+Up              Previous option
+
+=== SITE OPTIONS (A/E)
+Enter           Modify
+Down            Next option
+Up              Previous option
+d               done, save changes
+c               cancel, undo changes
+s               sections
+S               Skiplist
+
+=== BROWSING (Right/b)
+Tab             switch side
+Esc             Cancel
+c               close
+Up/Down         Navigate
+Enter/Right     open dir
+Backspace/Left  return
+r               spread
+v               view file
+D               Download
+b               bind to section
+s               sort
+w               raw command
+W               Wipe
+Delete          Delete
+n               nuke
+m               make directory
+P               Toggle seParators
+q               quick jump
+f               Toggle filter
+F               Regex Filter
+l               view cwd log
+Space           Hard select
+^Up/^Down       Soft select
+A               Select All
+0-9             Browse to section
+
+=== GLOBAL SETTINGS (G)
+Enter           Modify
+Down            Next option
+Up              Previous option
+d               done
+c               cancel
+S               Skiplist
+
+=== EVENT LOG (l)
+PgUp            Scroll Up
+Pgdn            Scroll Down
+ESC/Enter       Return
+f               Toggle filtering
+
+=== TRANSFERS (t)
+Esc/c           Return
+Up/Down         Navigate
+Enter           Details
+f               toggle filtering
+B               ABort transfer
+
+=== ALL SPREAD JOBS (r)
+Esc/c                       Return
+Enter                       Details
+Up/Down/PgUp/Pgdn/Home/End  Navigate
+r                           reset job
+R                           Hard Reset job
+B                           ABort job
+t                           transfer for job
+z                           Abort job and delete own files on incomplete sites
+
+=== ALL TRANSFER JOBS (j)
+Esc/c           Return
+Enter           Details
+Up/Down         Navigate
+B               ABort job
+t               transfers for job
+
+=== LOCAL BROWSING (c)
+Tab             switch side
+Up/Down         Navigate
+Enter/Right     open dir
+s               sort
+Backspace/Left  return
+Esc             Cancel
+c               close
+q               quick jump
+f               Toggle filter
+F               Regex Filter
+Space           Hard select
+^Up/^Down       Soft select
+A               Select All
+
+=== SECTIONS (s)
+A               Add section
+Enter/E         Details
+Esc/c/d         Return
+Up/Down         Navigate
+Delete          Delete section
+
+=== SNAKE Game (S)
+Arrows          steer
+r               reset
+Esc/c           Close
+```
+
 # BROWSING
 
 After adding a site, you can browse it by selecting it and pressing b
@@ -793,4 +926,3 @@ https://github.com/doctorfree/Asciiville/issues
 Full documentation and sources at:
 
 https://github.com/doctorfree/Asciiville
-
