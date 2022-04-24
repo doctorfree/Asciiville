@@ -10,8 +10,13 @@ set from = "username@gmail.com"
 set realname = "First Last"
 # IMAP settings
 set imap_user = "username@gmail.com"
+#
 # If Google 2FA Authentication is enabled, create an App password for Mutt
 # See https://security.google.com/settings/security/apppasswords
+#
+# To use an encrypted password with Mutt, follow the guide at:
+# https://www.xmodulo.com/mutt-email-client-encrypted-passwords.html
+#
 set imap_pass = "<mailbox password>"
 # SMTP settings
 set smtp_url = "smtps://username@smtp.gmail.com"

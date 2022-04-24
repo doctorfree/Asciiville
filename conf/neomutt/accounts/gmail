@@ -1,8 +1,15 @@
 set imap_user="youraccount@gmail.com"
-# set imap_pass=`/usr/bin/security find-generic-password -w -a 'youraccount@gmail.com' -s 'Gmail'`
+#
 # If Google 2FA Authentication is enabled, create an App password for Mutt
 # See https://security.google.com/settings/security/apppasswords
+#
+# To use an encrypted password with Mutt, follow the guide at:
+# https://www.xmodulo.com/mutt-email-client-encrypted-passwords.html
+#
 set imap_pass=<yourpassword>
+#
+# On Mac OS X, /usr/bin/security can be used
+# set imap_pass=`/usr/bin/security find-generic-password -w -a 'youraccount@gmail.com' -s 'Gmail'`
 
 set folder=imaps://imap.gmail.com/
 set spoolfile=+INBOX
