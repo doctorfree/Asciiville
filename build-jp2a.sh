@@ -44,10 +44,10 @@ shift $(( OPTIND - 1 ))
 
 cd ${PROJ}
 [ -f src/jp2a ] || {
+    prefix="--prefix=/usr"
+    [ "${PREFIX}" ] && prefix="--prefix=${PREFIX}"
     autoreconf -vi
-#   ./configure --with-jpeg-prefix=/usr/local \
-#               --with-curl-config=`which curl-config`
-    ./configure
+    ./configure ${prefix} --enable-curl --enable-termlib
     make -j
 }
 
