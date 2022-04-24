@@ -5,8 +5,11 @@ All notable changes to this project will be documented in this file.
 # Asciiville-1.3.1r1 (2022-04-24)
 
 * Create armhf architecture Debian format package for Raspberry Pi installs
+* With no arguments asciiville brings up a menu
+* Add Mutt configuration to `ascinit`
 * Install Asciiville Figlet Fonts in pyfiglet during postinstall
 * Add `cbftp` FTP client and support for `ncftp`
+* Create cbftp man page
 * Add `show_figlet_fonts` command
 * Add -d option to indicate use of disk usage analyzer
 * Add -f option to indicate use of FTP client
@@ -41,6 +44,28 @@ Initial release with support for:
 * Any character based client the user wishes to run
 * One of several asciimatics animations optionally accompanied by audio
 
+Sun Apr 24 13:12:48 2022 -0700 4c1d3e9 :
+   Only ignore the btop Makefile, not cbftp or ddgr
+Sun Apr 24 12:34:51 2022 -0700 8550f2d :
+   Prompt for both RPM and Raspberry Pi Debian packages during release
+Sun Apr 24 12:32:16 2022 -0700 3c0ec6b :
+   Add Configuration and Build sections to README, use dnf rather than yum on RPM systems
+Sun Apr 24 11:06:24 2022 -0700 c2f1a5d :
+   Add comment with pointer to guide for using encrypted passwords
+Sun Apr 24 10:46:34 2022 -0700 1dddfb9 :
+   With no arguments asciiville brings up a menu, improve default Mutt configuration
+Sun Apr 24 09:48:51 2022 -0700 23563ee :
+   Add neomutt configuration template to doc folder
+Sun Apr 24 08:34:59 2022 -0700 af4ebfd :
+   Add Mutt configuration, prefer Mutt over NeoMutt
+Sat Apr 23 20:14:46 2022 -0700 ec65d1e :
+   Add keyboard mapping section to cbftp man page
+Sat Apr 23 20:09:10 2022 -0700 1655428 :
+   Color text in fire, clean cbftp
+Sat Apr 23 19:44:41 2022 -0700 d4bfefa :
+   Quiet zip
+Sat Apr 23 19:39:50 2022 -0700 a03567c :
+   Update Size, don't compile if already built, update changelog and release notes with cbftp
 Sat Apr 23 19:15:58 2022 -0700 18c7250 :
    Add cbftp FTP client and support for ncftp if cbftp not installed
 Sat Apr 23 17:13:26 2022 -0700 2e88ddd :

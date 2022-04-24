@@ -1,8 +1,11 @@
 This release includes support for:
 
 * Create armhf architecture Debian format package for Raspberry Pi installs
+* With no arguments asciiville brings up a menu
+* Add Mutt configuration to `ascinit`
 * Install Asciiville Figlet Fonts in pyfiglet during postinstall
 * Add `cbftp` FTP client and support for `ncftp`
+* Create cbftp man page
 * Add `show_figlet_fonts` command
 * Add -d option to indicate use of disk usage analyzer
 * Add -f option to indicate use of FTP client
