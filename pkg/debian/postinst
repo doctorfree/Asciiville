@@ -70,7 +70,7 @@ case "$1" in
         if [ -d ${FIGLET_DIR} ]
         then
           cd ${FIGLET_DIR}
-          zip ${FIGLET_ZIP} *.flf
+          zip -q ${FIGLET_ZIP} *.flf
           pyfiglet -L ${FIGLET_ZIP}
           rm -f ${FIGLET_ZIP}
         fi

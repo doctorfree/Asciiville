@@ -48,8 +48,8 @@ then
     wget_inst=`type -p wget`
     if [ "${wget_inst}" ]
     then
-      zip_inst=`type -p unzip`
-      if [ "${zip_inst}" ]
+      unzip_inst=`type -p unzip`
+      if [ "${unzip_inst}" ]
       then
         wget --quiet https://github.com/busyloop/lolcat/archive/master.zip
         unzip -qq master.zip
@@ -95,7 +95,7 @@ then
     if [ -d ${FIGLET_DIR} ]
     then
       cd ${FIGLET_DIR}
-      zip ${FIGLET_ZIP} *.flf
+      zip -q ${FIGLET_ZIP} *.flf
       pyfiglet -L ${FIGLET_ZIP}
       rm -f ${FIGLET_ZIP}
     fi
