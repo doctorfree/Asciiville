@@ -70,130 +70,124 @@ install_selected() {
   PKG_SELECTED=`echo $PKG_SELECTED | sed -e "s/^ //"`
 }
 
-plat=`uname -s`
-if [ "$plat" == "Darwin" ]
+debian=
+have_apt=`type -p apt`
+have_dpkg=`type -p dpkg`
+have_rpm=`type -p rpm`
+have_dnf=`type -p dnf`
+[ -f /etc/os-release ] && . /etc/os-release
+[ "${ID_LIKE}" == "debian" ] && debian=1
+[ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
+
+if [ "${debian}" ]
 then
-  ./macInstall
+  SUF=deb
+  [ "${have_dpkg}" ] && {
+    dpkg_arch=`dpkg --print-architecture`
+    [ "${dpkg_arch}" == "${DEB_ARCH}" ] || DEB_ARCH=${dpkg_arch}
+  }
+  ARCH=${DEB_ARCH}
 else
-  debian=
-  have_apt=`type -p apt`
-  have_dpkg=`type -p dpkg`
-  have_rpm=`type -p rpm`
-  have_yum=`type -p yum`
-  [ -f /etc/os-release ] && . /etc/os-release
-  [ "${ID_LIKE}" == "debian" ] && debian=1
-  [ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
+  SUF=rpm
+  ARCH=${RPM_ARCH}
+fi
 
-  if [ "${debian}" ]
+get_available_packages
+
+[ "$PKG_AVAILABLE}" ] || {
+  echo "No packages for version ${PKG_VER} are currently available. Exiting."
+  exit 1
+}
+
+[ "$1" ] && {
+  # If invoked with -i argument, present a menu of options to select from
+  if [ "$1" == "-i" ]
   then
-    SUF=deb
-    [ "${have_dpkg}" ] && {
-      dpkg_arch=`dpkg --print-architecture`
-      [ "${dpkg_arch}" == "${DEB_ARCH}" ] || DEB_ARCH=${dpkg_arch}
-    }
-    ARCH=${DEB_ARCH}
-  else
-    SUF=rpm
-    ARCH=${RPM_ARCH}
-  fi
-
-  get_available_packages
-
-  [ "$PKG_AVAILABLE}" ] || {
-    echo "No packages for version ${PKG_VER} are currently available. Exiting."
-    exit 1
-  }
-
-  [ "$1" ] && {
-    # If invoked with -i argument, present a menu of options to select from
-    if [ "$1" == "-i" ]
-    then
-      shift
-      PKG_NAMES="$*"
-      [ "${PKG_AVAILABLE}" ] && {
-        echo "Currently available Asciiville packages:"
-        echo ""
-        for avaipkg in ${PKG_AVAILABLE}
-        do
-          echo "$avaipkg"
-        done
-        echo ""
-      }
-      while true
+    shift
+    PKG_NAMES="$*"
+    [ "${PKG_AVAILABLE}" ] && {
+      echo "Currently available Asciiville packages:"
+      echo ""
+      for avaipkg in ${PKG_AVAILABLE}
       do
-        PS3="${BOLD}Please enter your desire (numeric or text): ${NORMAL}"
-        options=("Install All" "Install Selected" "Quit")
-        select opt in "${options[@]}"
-        do
-          case "$opt,$REPLY" in
-              "Install All",*|*,"Install All")
-                  PKG_NAMES="${PKG_AVAILABLE}"
-                  break 2
-                  ;;
-              "Install Selected",*|*,"Install Selected")
-                  install_selected
-                  PKG_NAMES="${PKG_SELECTED}"
-                  break 2
-                  ;;
-              "Quit",*|*,"Quit"|"quit",*|*,"quit")
-                  printf "\nExiting\n"
-                  exit 0
-                  ;;
-          esac
-        done
-      done
-    else
-      PKG_NAMES="$*"
-    fi
-  }
-
-  [ "${PKG_NAMES}" ] || {
-    echo "No valid Package names specified. Exiting."
-    exit 1
-  }
-
-  for PKG_NAME in ${PKG_NAMES}
-  do
-    PKG="${SRC}/${SRC_NAME}/releases/${PKG_VER}/${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.${SUF}"
-    [ -f "${PKG}" ] || {
-      echo "${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.${SUF} not found."
-      for pkgs in ${SRC}/${SRC_NAME}/releases/*/${PKG_NAME}_*.${SUF}
-      do
-        [ "${pkgs}" == "${SRC}/${SRC_NAME}/releases/*/${PKG_NAME}_*.${SUF}" ] || {
-          echo "Found existing packages:"
-          echo "${pkgs}"
-        }
+        echo "$avaipkg"
       done
       echo ""
-      continue
     }
+    while true
+    do
+      PS3="${BOLD}Please enter your desire (numeric or text): ${NORMAL}"
+      options=("Install All" "Install Selected" "Quit")
+      select opt in "${options[@]}"
+      do
+        case "$opt,$REPLY" in
+            "Install All",*|*,"Install All")
+                PKG_NAMES="${PKG_AVAILABLE}"
+                break 2
+                ;;
+            "Install Selected",*|*,"Install Selected")
+                install_selected
+                PKG_NAMES="${PKG_SELECTED}"
+                break 2
+                ;;
+            "Quit",*|*,"Quit"|"quit",*|*,"quit")
+                printf "\nExiting\n"
+                exit 0
+                ;;
+        esac
+      done
+    done
+  else
+    PKG_NAMES="$*"
+  fi
+}
 
-    echo "Installing ${PKG}"
-    if [ "${debian}" ]
+[ "${PKG_NAMES}" ] || {
+  echo "No valid Package names specified. Exiting."
+  exit 1
+}
+
+for PKG_NAME in ${PKG_NAMES}
+do
+  PKG="${SRC}/${SRC_NAME}/releases/${PKG_VER}/${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.${SUF}"
+  [ -f "${PKG}" ] || {
+    echo "${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.${SUF} not found."
+    for pkgs in ${SRC}/${SRC_NAME}/releases/*/${PKG_NAME}_*.${SUF}
+    do
+      [ "${pkgs}" == "${SRC}/${SRC_NAME}/releases/*/${PKG_NAME}_*.${SUF}" ] || {
+        echo "Found existing packages:"
+        echo "${pkgs}"
+      }
+    done
+    echo ""
+    continue
+  }
+
+  echo "Installing ${PKG}"
+  if [ "${debian}" ]
+  then
+    if [ "${have_apt}" ]
     then
-      if [ "${have_apt}" ]
-      then
-        sudo apt install "${PKG}"
-      else
-        if [ "${have_dpkg}" ]
-        then
-          sudo dpkg -i "${PKG}"
-        else
-          echo "Cannot locate either apt or dpkg to install. Skipping."
-        fi
-      fi
+      sudo apt install "${PKG}"
     else
-      if [ "${have_yum}" ]
+      if [ "${have_dpkg}" ]
       then
-        sudo yum localinstall "${PKG}"
+        sudo dpkg -i "${PKG}"
       else
-        if [ "${have_rpm}" ]
-        then
-          sudo rpm -i "${PKG}"
-        else
-          echo "Cannot locate either yum or rpm to install. Skipping."
-        fi
+        echo "Cannot locate either apt or dpkg to install. Skipping."
       fi
     fi
-  done
-fi
+  else
+    if [ "${have_dnf}" ]
+    then
+      sudo dnf localinstall "${PKG}"
+    else
+      if [ "${have_rpm}" ]
+      then
+        sudo rpm -i "${PKG}"
+      else
+        echo "Cannot locate either dnf or rpm to install. Skipping."
+      fi
+    fi
+  fi
+done

@@ -96,7 +96,7 @@ have_pip=`type -p pip`
     then
       sudo apt install python3-pip
     else
-      sudo yum install python3-pip
+      sudo dnf install python3-pip
     fi
   fi
 }

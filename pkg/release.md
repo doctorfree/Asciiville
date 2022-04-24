@@ -52,7 +52,7 @@ sudo apt install ./Asciiville_1.3.1-1.armhf.deb
 
 Install the package on RPM based systems by executing the command
 ```bash
-sudo yum localinstall ./Asciiville-1.3.1-1.x86_64.rpm
+sudo dnf localinstall ./Asciiville-1.3.1-1.x86_64.rpm
 ```
 
 ## Configuration
@@ -82,5 +82,5 @@ sudo apt remove asciiville
 Removal of the package on RPM based systems can be accomplished by issuing the command:
 
 ```bash
-sudo yum remove Asciiville
+sudo dnf remove Asciiville
 ```

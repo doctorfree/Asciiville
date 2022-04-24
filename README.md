@@ -15,12 +15,14 @@ of components used to display ASCII art, animations, and utilities.
     1. [Debian package installation](#debian-package-installation)
     1. [RPM Package installation](#rpm-package-installation)
     1. [BB AAlib Demo](#bb-aalib-demo)
+1. [Configuration files](#configuration-files)
 1. [Documentation](#documentation)
     1. [Btop++ README](#btop++-readme)
     1. [Man Pages](#man-pages)
     1. [Usage](#usage)
     1. [Example invocations](#example-invocations)
 1. [Figlet fonts](#figlet-fonts)
+1. [Build](#build)
 1. [Removal](#removal)
 1. [Screenshots](#screenshots)
 
@@ -137,6 +139,13 @@ installed if needed when using the Debian or RPM format package install.
 
 Asciiville v1.3.0 and later can be installed on Linux systems using
 either the Debian packaging format or the Red Hat Package Manager (RPM).
+Currently tested platforms include Ubuntu Linux 20.04, Fedora Linux 35,
+and Raspbian Linux Bullseye. Installation packages are provided for
+the `amd64` and `armhf` architectures in Debian packaging format and the
+`x86_64` architecture in Red Hat package manager (RPM) format.
+
+See the [Build](#build) section below to compile and build a package on
+an Linux platform other than those for which packages are provided.
 
 ### Debian package installation
 
@@ -184,7 +193,7 @@ package from the
 Install the Asciiville package by executing the command
 
 ```console
-sudo yum localinstall ./Asciiville_<version>-<release>.x86_64.rpm
+sudo dnf localinstall ./Asciiville_<version>-<release>.x86_64.rpm
 ```
 or
 ```console
@@ -210,6 +219,29 @@ repository. For example, on Fedora Linux, to install `bb`:
 
 The BB AAlib Demo is not required. It's just a fun demo.
 
+## Configuration files
+
+Asciiville creates several default configuration files for utilities
+included in the distribution. Examine these files to further customize
+each program. The default configuration generated when running the
+`ascinit` command should suffice and may be satisfactory.
+
+Generated configuration files include:
+
+* `$HOME/.config/btop/btop.conf` : Btop++ system monitor
+* `$HOME/.mutt/muttrc` : Mutt email client
+* `$HOME/.mutt/colors` : Mutt email client color palette
+* `$HOME/.config/neofetch/config.conf` : NeoFetch system info script
+* `$HOME/.rainbow_config.json` : Rainbowstream Twitter client
+* `$HOME/.config/ranger/rifle.conf` : Rifle, Ranger's file opener
+* `$HOME/.tmux.conf` : Tmux terminal multiplexer
+
+These override or extend the settings in the utilities' global configuration
+files, typically installed in `/etc/`. For example, the global configuration
+for the Ranger File Manager can be found in `/etc/ranger/config/`. The Lynx
+web browser configuration is in `/etc/lynx/`, and the W3M web browser is
+configured in `/etc/w3m/`.
+
 ## Documentation
 
 All Asciiville commands have manual pages. Execute `man <command-name>`
@@ -224,6 +256,7 @@ e.g. `asciiville -u`.
 
 ### Cbftp README
 - [**cbftp/README**](cbftp/README) - Introduction to the cbftp FTP client
+- [**Video on Cbftp**](https://youtu.be/dOIwg9nMF10) - Video introduction to the cbftp FTP client
 
 ### Man Pages
 
@@ -363,6 +396,51 @@ less figlet-fonts-examples.txt
 For an example of how to use the Figlet Fonts in an asciimatics animation,
 see `/usr/bin/asciiart`.
 
+## Build
+
+To compile and build a Debian or RPM format package on a Linux architecture
+for which a package is not provided, an appropriate development environment
+must be installed.
+
+On a Debian based system:
+
+```console
+sudo apt update -y
+sudo apt upgrade -y
+sudo apt install build-essential coreutils git make tar zstd make g++ \
+    libssl-dev libncursesw5-dev gcc-10 g++-10 cpp-10
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 \
+    --slave /usr/bin/g++ g++ /usr/bin/g++-10 \
+    --slave /usr/bin/gcov gcov /usr/bin/gcov-10
+```
+
+On an RPM based system:
+
+```console
+sudo dnf update
+sudo dnf groupinstall "Development Tools" "Development Libraries"
+```
+
+Each platform may differ in package names, versions, and installation command.
+It may require some iterations of this process to get all required development
+packages installed.
+
+Once you have an appropriate development environment setup, retrieve the
+`Asciiville` source, compile the included utilities, and create an installation
+package:
+
+```console
+git clone https://github.com/doctorfree/Asciiville
+cd Asciiville
+```
+
+On Debian based systems, run the command `./mkdeb` in the `Asciiville` directory.
+
+On RPM based systems, run the command `./mkrpm` in the `Asciiville` directory.
+
+A successful compilation and packaging will produce distribution/installation
+files in `./releases/<version>/`.
+
 ## Removal
 
 On Debian based Linux systems where the Asciiville package was installed
@@ -382,7 +460,7 @@ using the Asciiville RPM format package, remove the Asciiville
 package by executing the command:
 
 ```console
-    sudo yum remove Asciiville
+    sudo dnf remove Asciiville
 ```
 or
 ```console

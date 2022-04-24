@@ -9,7 +9,7 @@ else
   have_apt=`type -p apt`
   have_dpkg=`type -p dpkg`
   have_rpm=`type -p rpm`
-  have_yum=`type -p yum`
+  have_dnf=`type -p dnf`
   [ -f /etc/os-release ] && . /etc/os-release
   [ "${ID_LIKE}" == "debian" ] && debian=1
   [ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
@@ -31,15 +31,15 @@ else
       fi
     fi
   else
-    if [ "${have_yum}" ]
+    if [ "${have_dnf}" ]
     then
-      sudo yum remove "${PKG}"
+      sudo dnf remove "${PKG}"
     else
       if [ "${have_rpm}" ]
       then
         sudo rpm -e "${PKG}"
       else
-        echo "Cannot locate either yum or rpm to remove. Skipping."
+        echo "Cannot locate either dnf or rpm to remove. Skipping."
       fi
     fi
   fi

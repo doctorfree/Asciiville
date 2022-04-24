@@ -126,10 +126,10 @@ echo "Building ${PKG_NAME}_${PKG_VER} rpm package"
 
 have_rpm=`type -p rpmbuild`
 [ "${have_rpm}" ] || {
-  have_yum=`type -p yum`
-  if [ "${have_yum}" ]
+  have_dnf=`type -p dnf`
+  if [ "${have_dnf}" ]
   then
-    ${SUDO} yum install rpm-build
+    ${SUDO} dnf install rpm-build
   else
     ${SUDO} apt-get update
     export DEBIAN_FRONTEND=noninteractive
