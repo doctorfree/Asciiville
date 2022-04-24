@@ -222,6 +222,9 @@ e.g. `asciiville -u`.
 ### Btop++ README
 - [**btop/README.md**](btop/README.md) - Introduction to the btop system monitor
 
+### Cbftp README
+- [**cbftp/README**](cbftp/README) - Introduction to the cbftp FTP client
+
 ### Man Pages
 
 - [**asciiville**](markdown/asciiville.1.md) : Primary Asciiville user interface
@@ -232,6 +235,7 @@ e.g. `asciiville -u`.
 - [**mpcinit**](markdown/mpcinit.1.md) : Asciiville initialization
 - [**btop-tmux**](markdown/btop-tmux.1.md) : Asciiville in a tmux session
 - [**btop**](markdown/btop.1.md) : Asciiville system monitor
+- [**cbftp**](markdown/cbftp.1.md) : Asciiville FTP client
 - [**asciisplash-tmux**](markdown/asciisplash-tmux.1.md) : Asciiville asciimatics animations in a tmux session
 - [**asciisplash**](markdown/asciisplash.1.md) : Asciiville asciimatics animations
 
@@ -241,7 +245,7 @@ The usage message for `asciiville` provides a brief
 summary of the command line options:
 
 ```
-Usage: asciiville [-a] [-A] [-b] [-c command] [-d] [-f] [-g] [-i] [-I]
+Usage: asciiville [-a] [-A] [-b] [-c command] [-d] [-f] [-F] [-g] [-i] [-I]
 		[-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script]
 		[-r] [-R] [-s song] [-S] [-t] [-T] [-w] [-x] [-X] [-y] [-z] [-u]
 
@@ -255,7 +259,8 @@ Terminal/Command options:
 		If 'command' is keyword 'weather' then display a weather report
 		Otherwise, 'command' will be executed in a terminal window
 	-d indicates use disk usage analyzer as default command
-	-f indicates fullscreen display
+	-f indicates use cbftp/ncftp as the default command
+	-F indicates fullscreen display
 	-g indicates use gnome terminal emulator
 	-i indicates start asciiville in interactive mode
 	-I indicates display system info
@@ -315,36 +320,23 @@ Where:
 ```
 
 ### Example invocations
-The `asciiville` command is intended to serve as the primary interface to invoke
-the `btop` system monitor and `cava` spectrum visualizer. The `asciiville` command
-utilizes several different terminal emulators and can also be used to invoke
-any specified system monitor. Some example invocations of `asciiville` follow.
 
-Open the btop client and cava visualizer in fullscreen mode. The client
-will open in the xfce4-terminal emulator and the visualizer in gnome-terminal:
+The `asciiville` command is intended to serve as the primary interface to
+invoke commands. The `asciiville` command utilizes several different terminal
+emulators and can also be used to invoke any specified command. Some example
+invocations of `asciiville` follow.
 
-`asciiville -f`
+Open the btop client in fullscreen mode:
 
-Open the btop client and cava visualizer in fullscreen mode using the
-tilix terminal emulator and displaying the visualizer using quarter-height:
+`asciiville -F`
 
-`asciiville -f -q -t`
+Open the btop client in fullscreen mode using the tilix terminal emulator
 
-Open the cantata MPD graphical client and cava visualizer:
+`asciiville -F -t`
 
-`asciiville -c`
-
-Open the btop client in the cool-retro-term terminal and cava visualizer
-in gnome-terminal:
+Open the btop client in the cool-retro-term terminal:
 
 `asciiville -r`
-
-The btop system monitor can be opened directly without using asciiville.
-Similarly, the cava spectrum visualizer can be opened directly without asciiville.
-
-`btop` # In one terminal window
-
-`cava`    # In another terminal window
 
 To test the btop lyrics fetchers:
 

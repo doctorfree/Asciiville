@@ -18,3 +18,4 @@ For example, the man page output for the `asciiville` command would be found at
 - [**asciiplasma.1.md**](asciiplasma.1.md) - Markdown input for auto-generation of the asciiplasma man page
 - [**asciisplash.1.md**](asciisplash.1.md) - Markdown input for auto-generation of the asciisplash man page
 - [**asciisplash-tmux.1.md**](asciisplash-tmux.1.md) - Markdown input for auto-generation of the asciisplash-tmux man page
+- [**cbftp.1.md**](cbftp.1.md) - Markdown input for auto-generation of the cbftp man page

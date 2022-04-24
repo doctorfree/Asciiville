@@ -45,7 +45,7 @@ then
 fi
 
 usage() {
-  printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-d] [-f] [-g] [-i] [-I]"
+  printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-d] [-f] [-F] [-g] [-i] [-I]"
   printf "\n\t\t[-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script]"
   printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-w] [-x] [-X] [-y] [-z] [-u]\n"
   printf "\nTerminal/Command options:"
@@ -58,7 +58,8 @@ usage() {
   printf "\n\t\tIf 'command' is keyword 'weather' then display a weather report"
   printf "\n\t\tOtherwise, 'command' will be executed in a terminal window"
   printf "\n\t-d indicates use disk usage analyzer as default command"
-  printf "\n\t-f indicates fullscreen display"
+  printf "\n\t-f indicates use cbftp/ncftp as the default command"
+  printf "\n\t-F indicates fullscreen display"
   printf "\n\t-g indicates use gnome terminal emulator"
   printf "\n\t-i indicates start asciiville in interactive mode"
   printf "\n\t-I indicates display system info"
@@ -486,6 +487,17 @@ show_main_menu() {
         use_lynx="NO"
         use_mpp="NO"
         use_mutt="NO"
+        use_ftp="NO"
+        use_ranger="NO"
+        use_w3m="NO"
+        ;;
+      cbftp|ncftp)
+        use_btop="NO"
+        use_gdu="NO"
+        use_lynx="NO"
+        use_mpp="NO"
+        use_mutt="NO"
+        use_ftp="YES"
         use_ranger="NO"
         use_w3m="NO"
         ;;
@@ -495,6 +507,7 @@ show_main_menu() {
         use_lynx="NO"
         use_mpp="NO"
         use_mutt="NO"
+        use_ftp="NO"
         use_ranger="NO"
         use_w3m="NO"
         ;;
@@ -504,6 +517,7 @@ show_main_menu() {
         use_lynx="YES"
         use_mpp="NO"
         use_mutt="NO"
+        use_ftp="NO"
         use_ranger="NO"
         use_w3m="NO"
         ;;
@@ -513,6 +527,7 @@ show_main_menu() {
         use_lynx="NO"
         use_mpp="YES"
         use_mutt="NO"
+        use_ftp="NO"
         use_ranger="NO"
         use_w3m="NO"
         ;;
@@ -522,6 +537,7 @@ show_main_menu() {
         use_lynx="NO"
         use_mpp="NO"
         use_mutt="YES"
+        use_ftp="NO"
         use_ranger="NO"
         use_w3m="NO"
         ;;
@@ -531,6 +547,7 @@ show_main_menu() {
         use_lynx="NO"
         use_mpp="NO"
         use_mutt="NO"
+        use_ftp="NO"
         use_ranger="YES"
         use_w3m="NO"
         ;;
@@ -540,6 +557,7 @@ show_main_menu() {
         use_lynx="NO"
         use_mpp="NO"
         use_mutt="NO"
+        use_ftp="NO"
         use_ranger="NO"
         use_w3m="YES"
         ;;
@@ -580,6 +598,12 @@ show_main_menu() {
     [ "${have_w3m}" ] && options+=("Use  W3M   Web  Browser    [${use_w3m}]")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring        [${use_lol}]")
     [ "${have_mpcplus}" ] && options+=("Use Music Player Plus      [${use_mpp}]")
+    if [ "${have_cbftp}" ]
+    then
+      options+=("Use Cbftp FTP Client    [${use_ftp}]")
+    else
+      [ "${have_ncftp}" ] && options+=("Use Ncftp FTP Client       [${use_ftp}]")
+    fi
     if [ "${have_neomutt}" ]
     then
       options+=("Use NeoMutt Mail Client    [${use_mutt}]")
@@ -760,6 +784,18 @@ show_main_menu() {
           "Use Music Player Plus"*,*|*,"Use Music Player Plus"*)
               COMMAND=mpcplus
               MTITLE="Music Player Plus MPD Client"
+              skip_it_so=1
+              break
+              ;;
+          "Use Cbftp FTP Client"*,*|*,"Use Cbftp FTP Client"*)
+              COMMAND=cbftp
+              MTITLE="Cbftp FTP Client"
+              skip_it_so=1
+              break
+              ;;
+          "Use Ncftp FTP Client"*,*|*,"Use Ncftp FTP Client"*)
+              COMMAND=ncftp
+              MTITLE="Ncftp FTP Client"
               skip_it_so=1
               break
               ;;
@@ -956,6 +992,8 @@ have_mapscii=`type -p mapscii`
 have_mpcplus=`type -p mpcplus`
 have_mpplus=`type -p mpplus`
 have_neo=`type -p neofetch`
+have_cbftp=`type -p cbftp`
+have_ncftp=`type -p ncftp`
 have_lolcat=`type -p lolcat`
 have_rainbow=`type -p rainbowstream`
 have_roon=`type -p roon`
@@ -1001,7 +1039,7 @@ else
 fi
 
 use_term=1
-while getopts "Aabc:dfgiIjJklLmMn:NpP:rRSs:tTwxXyzu" flag; do
+while getopts "Aabc:dfFgiIjJklLmMn:NpP:rRSs:tTwxXyzu" flag; do
   case $flag in
     A)
       ASCSPLASH="${ASCSPLASH} -i"
@@ -1101,6 +1139,36 @@ while getopts "Aabc:dfgiIjJklLmMn:NpP:rRSs:tTwxXyzu" flag; do
       }
       ;;
     f)
+      COMMAND=cbftp
+      MTITLE="Cbftp FTP Client"
+      [ "${have_cbftp}" ] || {
+        if [ "${have_ncftp}" ]
+        then
+          COMMAND=ncftp
+          MTITLE="Ncftp FTP Client"
+        else
+          not_in_path cbftp -f
+          if [ "${have_btop}" ]
+          then
+            echo "Continuing, using btop rather than ${COMMAND}."
+            COMMAND=btop
+            MTITLE="Btop++ System Monitor"
+          else
+            if [ "${have_lynx}" ]
+            then
+              echo "Continuing, using lynx rather than ${COMMAND}."
+              COMMAND="lynx ${WEB_HOME}"
+              MTITLE="Lynx Web Browser"
+            else
+              echo "Continuing, using asciiplasma rather than ${COMMAND}."
+              COMMAND=asciiplasma
+              MTITLE="ASCIImatics Plasma"
+            fi
+          fi
+        fi
+      }
+      ;;
+    F)
       FULLSCREEN=1
       ;;
     g)

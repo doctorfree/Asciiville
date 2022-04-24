@@ -1,4 +1,4 @@
-Usage: asciiville [-a] [-A] [-b] [-c command] [-d] [-f] [-g] [-i] [-I]
+Usage: asciiville [-a] [-A] [-b] [-c command] [-d] [-f] [-F] [-g] [-i] [-I]
 		[-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script]
 		[-r] [-R] [-s song] [-S] [-t] [-T] [-w] [-x] [-X] [-y] [-z] [-u]
 
@@ -12,7 +12,8 @@ Terminal/Command options:
 		If 'command' is keyword 'weather' then display a weather report
 		Otherwise, 'command' will be executed in a terminal window
 	-d indicates use disk usage analyzer as default command
-	-f indicates fullscreen display
+	-f indicates use cbftp/ncftp as the default command
+	-F indicates fullscreen display
 	-g indicates use gnome terminal emulator
 	-i indicates start asciiville in interactive mode
 	-I indicates display system info
