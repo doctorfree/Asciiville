@@ -1,3 +1,11 @@
+# vim: filetype=muttrc
+#
+# Basic Mutt GMail Configuration
+#
+# See /usr/share/doc/asciiville/mutt/ and
+#     /usr/share/doc/asciiville/mutt_multiple/
+# for more complex Mutt configuration examples
+#
 set from = "username@gmail.com"
 set realname = "First Last"
 # IMAP settings
@@ -16,4 +24,9 @@ set record = "+[Gmail]/Sent Mail"
 set trash = "+[Gmail]/Trash"
 # Vim spell checking (enable in Vim with :set spell)
 set editor="vim -c 'set spell spelllang=en'"
-
+# Header Cache, Message Cache, Certificates File
+set header_cache = "~/.mutt/cache/headers"
+set message_cachedir = "~/.mutt/cache/bodies"
+set certificate_file = "~/.mutt/certificates"
+# Custom Mutt Color Settings
+source ~/.mutt/colors

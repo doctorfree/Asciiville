@@ -94,9 +94,14 @@ usage() {
   printf "\n\t-R indicates record tmux session with asciinema"
   printf "\n\t-T indicates use a tmux session for either ASCIImatics or command"
   printf "\n\t-u displays this usage message and exits\n"
-  printf "\nType 'man asciiville' for detailed usage info on asciiville"
-  printf "\nType 'man btop' for detailed usage info on the btop system monitor"
-  printf "\nType 'man asciisplash' for detailed usage info on the asciisplash command\n"
+  printf "\nInvoked without any arguments, 'asciiville' will display a menu\n"
+  printf "\nType 'man asciiville' for detailed usage info on Asciiville"
+  printf "\nType 'man asciisplash' for detailed usage info on Asciisplash"
+  printf "\nType 'man btop' for detailed usage info on the Btop system monitor"
+  printf "\nType 'man lynx' for detailed usage info on the Lynx web browser"
+  printf "\nType 'man mutt' for detailed usage info on the Mutt email client"
+  printf "\nType 'man cbftp' for detailed usage info on the Cbftp FTP client"
+  printf "\nType 'man ranger' for detailed usage info on the Ranger file manager\n"
   exit 1
 }
 
@@ -133,22 +138,18 @@ select_alt_term() {
   if [ "${have_gnome}" ]
   then
     GNOME=1
-    echo "Proceeding with gnome-terminal"
   else
     if [ "${have_xfce4}" ]
     then
       XFCE4=1
-      echo "Proceeding with xfce4-terminal"
     else
       if [ "${have_tilix}" ]
       then
         TILIX=1
-        echo "Proceeding with tilix terminal"
       else
         if [ "${have_retro}" ]
         then
           RETRO=1
-          echo "Proceeding with cool-retro-term"
         else
           echo "Cannot find a terminal emulator I like. Disabling terminal use."
           use_term=
@@ -971,6 +972,8 @@ init_vars() {
 }
 
 init_vars
+# Without any arguments, bring up interactive dialog menu
+[ $# -eq 0 ] && INTERACTIVE=1
 have_btop=`type -p btop`
 have_neomutt=`type -p neomutt`
 have_mutt=`type -p mutt`

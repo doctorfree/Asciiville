@@ -25,8 +25,8 @@ Terminal/Command options:
 	-w indicates use w3m web browser as the default command
 	-x indicates use xfce4 terminal emulator
 	-X indicates run command in current terminal window
-	-y indicates use ranger as the default command
-	-z indicates use mutt as the default command
+	-y indicates use ranger file manager as the default command
+	-z indicates use mutt email client as the default command
 
 ASCIImatics animation options:
 	-A indicates use Art Images scenes in ASCIImatics display
@@ -50,3 +50,5 @@ General options:
 	-R indicates record tmux session with asciinema
 	-T indicates use a tmux session for either ASCIImatics or command
 	-u displays this usage message and exits
+
+Invoked without any arguments, 'asciiville' will display a menu

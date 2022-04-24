@@ -45,6 +45,10 @@ NORMAL=$(tput sgr0)
     echo "A good starting point for the new Mutt user is the Mutt Wiki at:"
     echo "https://gitlab.com/muttmua/mutt/-/wikis/home"
   }
+  [ -f ${HOME}/.mutt/colors ] || {
+    cp ${CONFDIR}/mutt/colors ${HOME}/.mutt/colors
+    chmod 640 ${HOME}/.mutt/colors
+  }
 }
 
 # Setup default rifle configuration for this user unless one exists

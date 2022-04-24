@@ -6,12 +6,15 @@ footer: asciiville 1.0.0
 date: April 16, 2022
 ---
 # NAME
-asciiville - Launch a terminal emulator and specified character based command, ascii art, asciimatics animation, and more
+asciiville - Launch a terminal emulator and specified character based command, ascii art, asciimatics animation, character based Email/FTP/File/Web clients,
+and much more
 
 # SYNOPSIS
 **asciiville** [-a] [-A] [-b] [-c command] [-d] [-f] [-g] [-i] [-I]
 		[-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script]
 		[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-X] [-y] [-z] [-u]
+
+Invoked without any arguments or with the `-i` argument, `asciiville` displays an interactive dialog menu.
 
 # DESCRIPTION
 The *asciiville* command acts as a front-end for launching character based utilities and ascii art in various terminal emulators. Asciiville can be used to launch any specified character based command. Command line options also support running the *asciiville* window in a tmux session and recording that session using *asciinema*.
