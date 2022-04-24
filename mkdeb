@@ -70,6 +70,20 @@ else
   cd ..
 fi
 
+# Build jp2a
+if [ -x build-jp2a.sh ]
+then
+  ./build-jp2a.sh
+else
+  cd jp2a
+  autoreconf -vi
+  ./configure --prefix=/usr --enable-curl --enable-termlib
+  make clean
+  make -j
+  chmod +x src/jp2a
+  cd ..
+fi
+
 ${SUDO} rm -rf dist
 mkdir dist
 
@@ -110,6 +124,7 @@ ${SUDO} cp -a bin ${OUT_DIR}/${DESTDIR}/bin
 ${SUDO} cp btop/bin/btop ${OUT_DIR}/${DESTDIR}/bin/btop
 ${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
 ${SUDO} cp ddgr/ddgr ${OUT_DIR}/${DESTDIR}/bin/ddgr
+${SUDO} cp jp2a/src/jp2a ${OUT_DIR}/${DESTDIR}/bin/jp2a
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
 ${SUDO} cp -a conf/mutt ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/mutt
@@ -135,6 +150,7 @@ ${SUDO} cp -a music "${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/music"
 
 ${SUDO} cp -a man/man1 ${OUT_DIR}/${DESTDIR}/share/man/man1
 ${SUDO} cp ddgr/ddgr.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
+${SUDO} cp jp2a/man/jp2a.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
 ${SUDO} cp -a share/menu "${OUT_DIR}/${DESTDIR}/share/menu"
 ${SUDO} cp -a share/figlet-fonts "${OUT_DIR}/${DESTDIR}/share/figlet-fonts"
 

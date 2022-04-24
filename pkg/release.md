@@ -5,6 +5,7 @@ This release includes support for:
 * Add Mutt configuration to `ascinit`
 * Install Asciiville Figlet Fonts in pyfiglet during postinstall
 * Add `cbftp` FTP client and support for `ncftp`
+* Add `jp2a` image to ascii converter
 * Create cbftp man page
 * Add `show_figlet_fonts` command
 * Add -d option to indicate use of disk usage analyzer

@@ -41,6 +41,7 @@ The `asciiville` command can be used to invoke:
 * The lightweight character based system monitor, `btop`
 * The lightweight character based web browser, `lynx` or `w3m`
 * The lightweight character based mail client, `mutt`
+* The lightweight character based FTP client, `cbftp`
 * The lightweight character based music player, `mpcplus`
 * The lightweight character based file manager, `ranger`
 * The lightweight character based disk usage analyzer, `gdu`
@@ -51,7 +52,7 @@ The `asciiville` command can be used to invoke:
 * Command line character based Twitter client
 * A network download/upload speed test
 * The AAlib BB demo running in a tmux session (Debian based systems only)
-* Character based ASCII art
+* Character based ASCII art and image to ascii conversion utility `jp2a`
 * Display system info
 * Display the Phase of the Moon
 * Display a weather report
@@ -62,6 +63,7 @@ The `asciiville` command can be used to invoke:
 Integration is provided for:
 
 * [btop](btop/README.md), character based system monitor
+* [cbftp](cbftp/README), character based FTP client
 * [ddgr](ddgr/README.md), command line web search
 * [lynx](https://lynx.invisible-island.net/), character based web browser
 * [w3m](http://w3m.sourceforge.net/), another character based web browser
@@ -92,6 +94,7 @@ Asciiville adds the following commands to your system:
 
 * **asciiville** : primary user interface, invokes terminal emulators, ascii animations, system monitor, mail client, file manager, web browser, and more
 * **btop** : character based system monitor
+* **cbftp** : character based FTP client
 * **ascinit** : one-time initializaton of a user's Asciiville configuration
 * **btop-tmux** : runs btop in a tmux session
 * **bb-tmux** : runs aalib bb demo in a tmux session
@@ -102,6 +105,7 @@ Asciiville adds the following commands to your system:
     * **asciimpplus** : ASCIImatics animated Music Player Plus splash screen
 * **chktermcolor** : checks if a terminal has 24-bit true color support
 * **ddgr** : command line web search
+* **jp2a** : image to ascii conversion utility
 * **mapscii** : character based zoomable map of the world
 * **rainbowstream** : command line Twitter client
 * **set_xfce_trans** : sets an xfce4-terminal window's transparency level
