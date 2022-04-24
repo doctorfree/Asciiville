@@ -36,6 +36,20 @@ Initial release with support for:
 * Any character based client the user wishes to run
 * One of several asciimatics animations optionally accompanied by audio
 
+Sat Apr 23 17:12:17 2022 -0700 4442512 :
+   Update changelog and release notes for 1.3.1r1
+Sat Apr 23 16:55:19 2022 -0700 81b092e :
+   Install Asciiville Figlet Fonts in pyfiglet during postinstall, add show_figlet_fonts command, update asciiart demo
+Fri Apr 22 16:59:39 2022 -0700 ef86ec9 :
+   Add armhf architecture install to README and release notes
+Fri Apr 22 16:56:26 2022 -0700 46db759 :
+   Build/package/install on Raspberry Pi
+Fri Apr 22 15:36:30 2022 -0700 62c1e41 :
+   Add -d and -X options to indicate use of disk usage analyzer and current terminal window, fixup exit from asciimatics scripts
+Thu Apr 21 20:52:17 2022 -0700 fc63d3e :
+   Add screenshots
+Thu Apr 21 18:33:56 2022 -0700 fb188f4 :
+   Version bump, changelog and release notes updated
 Thu Apr 21 18:12:30 2022 -0700 7df65d3 :
    Add Figlet Fonts and use Figlet Text as menu headers
 Thu Apr 21 14:31:21 2022 -0700 fb95860 :
