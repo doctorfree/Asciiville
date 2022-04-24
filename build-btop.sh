@@ -55,7 +55,7 @@ shift $(( OPTIND - 1 ))
 
 cd ${PROJ}
 
-make STATIC=true STRIP=true
+[ -f bin/btop ] || make STATIC=true STRIP=true
 chmod +x bin/btop
 
 [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install

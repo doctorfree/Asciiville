@@ -49,6 +49,7 @@ stage/
 btop/build
 btop/bin
 btop/btop
+cbftp/bin
 .*/
 
 ducker/build/

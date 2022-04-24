@@ -4,11 +4,14 @@ All notable changes to this project will be documented in this file.
 
 # Asciiville-1.3.1r1 (2022-04-24)
 
-* Install Asciiville Figlet Fonts in pyfiglet during postinstall
-* Add `show_figlet_fonts` command
 * Create armhf architecture Debian format package for Raspberry Pi installs
+* Install Asciiville Figlet Fonts in pyfiglet during postinstall
+* Add `cbftp` FTP client and support for `ncftp`
+* Add `show_figlet_fonts` command
 * Add -d option to indicate use of disk usage analyzer
+* Add -f option to indicate use of FTP client
 * Add -X option to indicate use of current terminal window
+* Change -f to -F option to indicate fullscreen terminal window
 * Fixup exit from asciimatics scripts
 * MusicPlayerPlus and RoonCommandLine menu integration
 * Support for w3m, mapscii, and setting default browser
@@ -36,6 +39,10 @@ Initial release with support for:
 * Any character based client the user wishes to run
 * One of several asciimatics animations optionally accompanied by audio
 
+Sat Apr 23 19:15:58 2022 -0700 18c7250 :
+   Add cbftp FTP client and support for ncftp if cbftp not installed
+Sat Apr 23 17:13:26 2022 -0700 2e88ddd :
+   update changelog
 Sat Apr 23 17:12:17 2022 -0700 4442512 :
    Update changelog and release notes for 1.3.1r1
 Sat Apr 23 16:55:19 2022 -0700 81b092e :

@@ -50,7 +50,7 @@ shift $(( OPTIND - 1 ))
 
 cd ${PROJ}
 
-make
+[ -f bin/cbftp ] || make
 chmod +x bin/*
 
 [ "${INSTALL}" ] && {

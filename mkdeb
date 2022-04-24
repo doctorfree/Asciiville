@@ -85,7 +85,7 @@ Priority: optional
 Architecture: ${ARCH}
 Depends: python3, python3-pip, tilix (>= 1.9.1), xfce4-terminal (>= 0.8.9.1), cool-retro-term (>= 1.1.1), tmux, mplayer, lynx, neomutt, ranger, jq, asciinema, speedtest-cli, caca-utils, libaa-bin, libaa1, bb, neofetch, figlet, ruby
 Maintainer: ${DEBFULLNAME} <${DEBEMAIL}>
-Installed-Size: 38000
+Installed-Size: 89000
 Build-Depends: debhelper (>= 11)
 Suggests: desktop-file-utils
 Homepage: https://github.com/doctorfree/Asciiville
