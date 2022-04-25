@@ -476,7 +476,7 @@ The Asciiville package can be removed by executing the "Uninstall"
 script in the Asciiville source directory:
 
 ```console
-    git clone git@github.com:doctorfree/Asciiville.git
+    git clone https://github.com/doctorfree/Asciiville
     cd Asciiville
     ./Uninstall
 ```
