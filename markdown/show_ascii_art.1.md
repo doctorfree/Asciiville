@@ -9,7 +9,7 @@ date: April 24, 2022
 show_ascii_art - display ascii art
 
 # SYNOPSIS
-**show_ascii_art** [-a art] [-A art_dir] [-b] [-c] [-C charset] [-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-i image] [-l] [-L] [-n tabs] [-o] [-q] [-r] [-S] [-u] [-t first_text] [-T second_text] [-h height] [-w width]
+**show_ascii_art** [-a art] [-A art_dir] [-b] [-c] [-C depth] [-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g] [-i image] [-l] [-L] [-n tabs] [-o] [-p palette] [-q] [-r] [-S] [-u] [-t first_text] [-T second_text] [-h height] [-w width]
 
 # DESCRIPTION
 The *show_ascii_art* command displays one of the ascii art images included in
@@ -32,19 +32,12 @@ the fonts used to display accompanying text, and the text to display.
 **-c**
 : when generating ascii art use ANSI colors
 
-**-C 'charset'**
-: specifies which character set to use for ascii art
+**-C 'depth'**
+: specifies the color depth
 
-    'charset' can be one of 'def', 'long', 'rev', 'longrev'
+    'depth' can be '4' (for ANSI), '8' (for 256 color palette)
 
-    'def' is the default set, 'long' a long set,
-
-    'rev' reverses default, 'longrev' reverses long
-
-    Any other argument to '-C' will be taken as the character set
-
-**-l**
-: use lolcat coloring
+    or '24' (for truecolor or 24-bit color)
 
 **-d 'font_dir'**
 : specifies the path to the figlet fonts
@@ -58,8 +51,14 @@ the fonts used to display accompanying text, and the text to display.
 **-F 'large_font'**
 : specifies the figlet font to use for large text
 
+**-g**
+: convert image to grayscale
+
 **-i 'image'**
 : specifies an image file to convert to ascii art
+
+**-l**
+: use lolcat coloring
 
 **-L**
 : lists the ascii art in the 'art_dir' and exits
@@ -69,6 +68,17 @@ the fonts used to display accompanying text, and the text to display.
 
 **-o**
 : indicates overwrite any existing ascii art when saving
+
+**-p 'palette'**
+: specifies which character set to use for ascii art
+
+    'palette' can be one of 'def', 'long', 'rev', 'longrev'
+
+    'def' is the default set, 'long' a long set,
+
+    'rev' reverses default, 'longrev' reverses long
+
+    Any other argument to '-C' will be taken as the character set
 
 **-q**
 : don't display text, just the ascii art
@@ -100,8 +110,8 @@ If only one of 'width' and 'height' is provided, calculate the other from image 
 **show_ascii_art**
 : Without options show_ascii_art will display an ascii art image and "Welcome to Asciiville" text using Figlet fonts.
 
-**show_ascii_art -i $HOME/Pictures/selfie.png**
-: Converts the image file `$HOME/Pictures/selfie.png` to JPEG format using the ImageMagick *convert* utility then generates ascii art from the JPEG file using the Asciiville *jp2a* utility and displays it along with figlet text.
+**show_ascii_art -i $HOME/Pictures/selfie.gif**
+: Converts the GIF image file `$HOME/Pictures/selfie.gif` to JPEG format using the ImageMagick *convert* utility then generates ascii art from the JPEG file using the Asciiville *jp2a* utility and displays it along with figlet text.
 
 **show_ascii_art -i $HOME/Pictures/profile.jpg -h 20 -r**
 : Generates a 20 line ascii art from the JPEG image `$HOME/Pictures/profile.jpg` preserving aspect ratio using the Asciiville *jp2a* utility and displays it along with figlet text using randomly selected fonts.

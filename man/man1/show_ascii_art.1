@@ -21,10 +21,10 @@
 show_ascii_art - display ascii art
 .SH SYNOPSIS
 .PP
-\f[B]show_ascii_art\f[R] [-a art] [-A art_dir] [-b] [-c] [-C charset]
-[-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-i image]
-[-l] [-L] [-n tabs] [-o] [-q] [-r] [-S] [-u] [-t first_text] [-T
-second_text] [-h height] [-w width]
+\f[B]show_ascii_art\f[R] [-a art] [-A art_dir] [-b] [-c] [-C depth] [-d
+font_dir] [-D seconds] [-F large_font] [-f small_font] [-g] [-i image]
+[-l] [-L] [-n tabs] [-o] [-p palette] [-q] [-r] [-S] [-u] [-t
+first_text] [-T second_text] [-h height] [-w width]
 .SH DESCRIPTION
 .PP
 The \f[I]show_ascii_art\f[R] command displays one of the ascii art
@@ -48,18 +48,13 @@ when generating ascii art use a border
 \f[B]-c\f[R]
 when generating ascii art use ANSI colors
 .TP
-\f[B]-C \[aq]charset\[aq]\f[R]
-specifies which character set to use for ascii art
+\f[B]-C \[aq]depth\[aq]\f[R]
+specifies the color depth
 .RS
-\[aq]charset\[aq] can be one of \[aq]def\[aq], \[aq]long\[aq],
-\[aq]rev\[aq], \[aq]longrev\[aq]
-\[aq]def\[aq] is the default set, \[aq]long\[aq] a long set,
-\[aq]rev\[aq] reverses default, \[aq]longrev\[aq] reverses long
-Any other argument to \[aq]-C\[aq] will be taken as the character set
+\[aq]depth\[aq] can be \[aq]4\[aq] (for ANSI), \[aq]8\[aq] (for 256
+color palette)
+or \[aq]24\[aq] (for truecolor or 24-bit color)
 .RE
-.TP
-\f[B]-l\f[R]
-use lolcat coloring
 .TP
 \f[B]-d \[aq]font_dir\[aq]\f[R]
 specifies the path to the figlet fonts
@@ -73,8 +68,14 @@ specifies the figlet font to use for small text
 \f[B]-F \[aq]large_font\[aq]\f[R]
 specifies the figlet font to use for large text
 .TP
+\f[B]-g\f[R]
+convert image to grayscale
+.TP
 \f[B]-i \[aq]image\[aq]\f[R]
 specifies an image file to convert to ascii art
+.TP
+\f[B]-l\f[R]
+use lolcat coloring
 .TP
 \f[B]-L\f[R]
 lists the ascii art in the \[aq]art_dir\[aq] and exits
@@ -84,6 +85,16 @@ specifies the number of tabs to indent image display
 .TP
 \f[B]-o\f[R]
 indicates overwrite any existing ascii art when saving
+.TP
+\f[B]-p \[aq]palette\[aq]\f[R]
+specifies which character set to use for ascii art
+.RS
+\[aq]palette\[aq] can be one of \[aq]def\[aq], \[aq]long\[aq],
+\[aq]rev\[aq], \[aq]longrev\[aq]
+\[aq]def\[aq] is the default set, \[aq]long\[aq] a long set,
+\[aq]rev\[aq] reverses default, \[aq]longrev\[aq] reverses long
+Any other argument to \[aq]-C\[aq] will be taken as the character set
+.RE
 .TP
 \f[B]-q\f[R]
 don\[aq]t display text, just the ascii art
@@ -117,8 +128,8 @@ displays this usage message and exits
 Without options show_ascii_art will display an ascii art image and
 \[dq]Welcome to Asciiville\[dq] text using Figlet fonts.
 .TP
-\f[B]show_ascii_art -i $HOME/Pictures/selfie.png\f[R]
-Converts the image file \f[V]$HOME/Pictures/selfie.png\f[R] to JPEG
+\f[B]show_ascii_art -i $HOME/Pictures/selfie.gif\f[R]
+Converts the GIF image file \f[V]$HOME/Pictures/selfie.gif\f[R] to JPEG
 format using the ImageMagick \f[I]convert\f[R] utility then generates
 ascii art from the JPEG file using the Asciiville \f[I]jp2a\f[R] utility
 and displays it along with figlet text.

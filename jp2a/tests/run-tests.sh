@@ -2,6 +2,7 @@
 
 # Copyright 2006-2016 Christian Stigen Larsen
 # Copyright 2020 Christoph Raitzig
+# Copyright 2022 Ronald Record
 #
 # This is a small script to test if jp2a has been correctly built.
 

@@ -1,5 +1,6 @@
 /*! \file
  * \noop Copyright 2020 Christoph Raitzig
+ * \noop Copyright 2022 Ronald Record
  * 
  * \brief HTML/XHTML functions.
  *

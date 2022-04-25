@@ -52,10 +52,15 @@ btop/btop
 cbftp/bin
 .*/
 
-ducker/build/
-ducker/dist/
-ducker/*.bak
-ducker/ddgr.py
+jp2a/INSTALL
+jp2a/Makefile
+jp2a/src/Makefile
+jp2a/src/jp2a
+
+ddgr/build/
+ddgr/dist/
+ddgr/*.bak
+ddgr/ddgr.py
 
 GTAGS
 GRTAGS

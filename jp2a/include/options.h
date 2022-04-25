@@ -1,6 +1,7 @@
 /*! \file
  * \noop Copyright 2006-2016 Christian Stigen Larsen
  * \noop Copyright 2020 Christoph Raitzig
+ * \noop Copyright 2022 Ronald Record
  *
  * \brief Functions for parsing command line arguments.
  *

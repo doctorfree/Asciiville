@@ -1,6 +1,7 @@
 /*
  * Copyright 2006-2016 Christian Stigen Larsen
  * Copyright 2020 Christoph Raitzig
+ * Copyright 2022 Ronald Record
  * Distributed under the GNU General Public License (GPL) v2.
  */
 
@@ -94,7 +95,8 @@ const char *fileout = "-";
 
 const char* version   = PACKAGE_STRING;
 const char* copyright = "Copyright 2006-2016 Christian Stigen Larsen\n"
-	"and 2020 Christoph Raitzig";
+	"Copyright 2020 Christoph Raitzig\n"
+	"Copyright 2022 Ronald Record";
 const char* license   = "Distributed under the GNU General Public License (GPL) v2.";
 const char* url       = PACKAGE_URL;
 
