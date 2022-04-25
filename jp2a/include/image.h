@@ -90,8 +90,9 @@ typedef struct error_collector {
  * \brief Prints the top or bottom of a border around an image.
  *
  * \param width width of the output image
+ * \param f pointer to output
  */
-void print_border(const int width);
+void print_border(const int width, FILE *f);
 
 /*!
  * \brief Prints an image.
