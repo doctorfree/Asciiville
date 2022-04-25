@@ -591,6 +591,7 @@ show_main_menu() {
     [ "${have_mpplus}" ] && options+=("Show MusicPlayerPlus Menu")
     [ "${have_roon}" ] && options+=("Show RoonCommandLine Menu")
     [ "${have_neo}" ] && options+=("Show System Info")
+    options+=("Show Ascii Art")
     [ "${have_curl}" ] && options+=("Phase of the Moon")
     [ "${have_curl}" ] && options+=("Weather Report")
     [ "${have_btop}" ] && options+=("Use Btop System Monitor    [${use_btop}]")
@@ -893,6 +894,22 @@ show_main_menu() {
                 neofetch
               fi
               read -p "Press Enter to continue" answer
+              skip_it_so=1
+              break
+              ;;
+          "Show Ascii Art",*|*,"Show Ascii Art")
+              ART_DIR="/usr/share/doc/asciiville/art"
+              for i in ${ART_DIR}/*.txt
+              do
+                if [ "${use_lolcat}" ]
+                then
+                  /bin/cat "$i" | lolcat
+                else
+                  /bin/cat "$i"
+                fi
+                echo "Ascii Art: $i"
+                read -p "Press Enter to continue" answer
+              done
               skip_it_so=1
               break
               ;;
