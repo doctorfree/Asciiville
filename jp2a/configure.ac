@@ -3,7 +3,6 @@
 
 AC_PREREQ([2.69])
 AC_INIT([jp2a],[1.1.1],[chris-r@posteo.net], [jp2a], [https://github.com/Talinx/jp2a])
-DX_INIT_DOXYGEN([jp2a])
 AM_INIT_AUTOMAKE(dist-bzip2 dist-zip)
 AC_CONFIG_SRCDIR(src/jp2a.c)
 AC_CONFIG_HEADERS([config.h])
