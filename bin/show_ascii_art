@@ -8,28 +8,41 @@ LARGE_FONT="Speed"
 SMALL_FONT="Calvin S"
 art="yinyang"
 
+# Default palette used by jp2a
+defchars="   ...',;:clodxkO0KXNWM"
+# Reversed default palette
+revchars="MWNXK0Okxdolc:;,'...   "
+# Dark to light character set
+revlong='$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,^`.'
+# Light to Dark character set
+longchars='.`^,:;Il!i><~+_-?][}{1)(|\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$'
+
 usage() {
-  printf "\nUsage: show_ascii_art [-a art] [-A art_dir] [-b] [-c] [-C]"
-  printf "\n\t[-d font_dir] [-D seconds] [-i image] [-L] [-n tabs] [-o]"
-  printf "\n\t[-l large_font] [-s small_font] [-q] [-r] [-S]"
-  printf "\n\t[-t first_text] [-T second_text]"
-  printf "\n\t[-h height] [-w width] [-u]"
+  printf "\nUsage: show_ascii_art [-a art] [-A art_dir] [-b] [-c] [-C charset]"
+  printf "\n\t[-d font_dir] [-D seconds] [-F large_font] [-f small_font]"
+  printf "\n\t[-i image] [-l] [-L] [-n tabs] [-o] [-q] [-r] [-S] [-u]"
+  printf "\n\t[-t first_text] [-T second_text] [-h height] [-w width]"
   printf "\nWhere:"
   printf "\n\t-a 'art' specifies which ascii art to display"
   printf "\n\t-A 'art_dir' specifies the path to the ascii art folder"
   printf "\n\t-b when generating ascii art use a border"
   printf "\n\t-c when generating ascii art use ANSI colors"
-  printf "\n\t-C use lolcat coloring"
+  printf "\n\t-C 'charset' specifies which character set to use for ascii art"
+  printf "\n\t\t'charset' can be one of 'def', 'long', 'rev', 'longrev'"
+  printf "\n\t\t'def' is the default set, 'long' a long set,"
+  printf "\n\t\t'rev' reverses default, 'longrev' reverses long"
+  printf "\n\t\tAny other argument to '-C' will be taken as the character set"
   printf "\n\t-d 'font_dir' specifies the path to the figlet fonts"
   printf "\n\t-D 'seconds' specifies the delay, in seconds, between screens"
   printf "\n\t-i 'image' specifies an image file to convert to ascii art"
+  printf "\n\t-l use lolcat coloring"
   printf "\n\t-L lists the ascii art in the 'art_dir' and exits"
-  printf "\n\t-l 'large_font' specifies the figlet font to use for large text"
+  printf "\n\t-f 'small_font' specifies the figlet font to use for small text"
+  printf "\n\t-F 'large_font' specifies the figlet font to use for large text"
   printf "\n\t-n 'tabs' specifies the number of tabs to indent image display"
   printf "\n\t-o indicates overwrite any existing ascii art when saving"
   printf "\n\t-q don't display text, just the ascii art"
   printf "\n\t-r indicates select random fonts"
-  printf "\n\t-s 'small_font' specifies the figlet font to use for small text"
   printf "\n\t-S indicates save converted image ascii art in art_dir"
   printf "\n\t-t 'first_text' specifies the first text to display"
   printf "\n\t-T 'second_text' specifies the second text to display"
@@ -69,6 +82,7 @@ show_ascii() {
 }
 
 border=
+charopt=
 colors=
 list=
 lolcat=
@@ -84,7 +98,7 @@ tabs=
 width=
 have_convert=`type -p convert`
 have_jp2a=`type -p jp2a`
-while getopts "a:A:bcCD:d:h:i:Ll:n:oqrs:St:T:w:u" flag; do
+while getopts "a:A:bcC:D:d:h:i:lLF:f:n:oqrSt:T:w:u" flag; do
   case $flag in
       a)
           art="${OPTARG}"
@@ -99,13 +113,36 @@ while getopts "a:A:bcCD:d:h:i:Ll:n:oqrs:St:T:w:u" flag; do
           colors="--colors"
           ;;
       C)
-          lolcat=1
+          charset="${OPTARG}"
+          case "${charset}" in
+            def)
+              charopt=
+              ;;
+            long)
+              charopt="--chars=${longchars}"
+              ;;
+            rev)
+              charopt="--chars=${revchars}"
+              ;;
+            longrev)
+              charopt="--chars=${revlong}"
+              ;;
+            *)
+              charopt="--chars=${charset}"
+              ;;
+          esac
           ;;
       d)
           FIG_FONTS="${OPTARG}"
           ;;
       D)
           delay="${OPTARG}"
+          ;;
+      F)
+          LARGE_FONT="${OPTARG}"
+          ;;
+      f)
+          SMALL_FONT="${OPTARG}"
           ;;
       i)
           if [ "${have_jp2a}" ]
@@ -120,7 +157,7 @@ while getopts "a:A:bcCD:d:h:i:Ll:n:oqrs:St:T:w:u" flag; do
           list=1
           ;;
       l)
-          LARGE_FONT="${OPTARG}"
+          lolcat=1
           ;;
       n)
           numtabs=${OPTARG}
@@ -133,9 +170,6 @@ while getopts "a:A:bcCD:d:h:i:Ll:n:oqrs:St:T:w:u" flag; do
           ;;
       r)
           randfont=1
-          ;;
-      s)
-          SMALL_FONT="${OPTARG}"
           ;;
       S)
           save_art=1
@@ -244,7 +278,7 @@ then
       cp "${input_image}" /tmp/${image_name}$$.jpg
     }
     # FYI, to get an image width: identify -format "%w" yinyang.jpg
-    jp2a ${border} ${colors} ${size} \
+    jp2a ${border} ${colors} ${size} ${charopt} \
        --output=/tmp/"${image_name}"$$.txt "/tmp/${image_name}$$.jpg"
   fi
   show_ascii "/tmp/${image_name}$$.txt" "${tabs}"

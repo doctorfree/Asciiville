@@ -273,6 +273,7 @@ e.g. `asciiville -u`.
 - [**btop-tmux**](markdown/btop-tmux.1.md) : Asciiville in a tmux session
 - [**btop**](markdown/btop.1.md) : Asciiville system monitor
 - [**cbftp**](markdown/cbftp.1.md) : Asciiville FTP client
+- [**show_ascii_art**](markdown/show_ascii_art.1.md) : Display ascii art, convert images to ascii art
 - [**asciisplash-tmux**](markdown/asciisplash-tmux.1.md) : Asciiville asciimatics animations in a tmux session
 - [**asciisplash**](markdown/asciisplash.1.md) : Asciiville asciimatics animations
 

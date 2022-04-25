@@ -929,10 +929,8 @@ show_main_menu() {
                 esac
                 if [ "${use_lolcat}" ]
                 then
-                  # /bin/cat "$i" | lolcat
-                  show_ascii_art -a "${name}" -q -C -D 2 ${tabs}
+                  show_ascii_art -a "${name}" -q -l -D 2 ${tabs}
                 else
-                  # /bin/cat "$i"
                   show_ascii_art -a "${name}" -q -D 2 ${tabs}
                 fi
                 # echo "Ascii Art: $i"

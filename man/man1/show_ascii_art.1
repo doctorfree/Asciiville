@@ -21,10 +21,10 @@
 show_ascii_art - display ascii art
 .SH SYNOPSIS
 .PP
-\f[B]show_ascii_art\f[R] [-a art] [-A art_dir] [-b] [-c] [-C] [-d
-font_dir] [-D seconds] [-i image] [-L] [-n tabs] [-o] [-l large_font]
-[-s small_font] [-q] [-r] [-S] [-t first_text] [-T second_text] [-h
-height] [-w width] [-u]
+\f[B]show_ascii_art\f[R] [-a art] [-A art_dir] [-b] [-c] [-C charset]
+[-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-i image]
+[-l] [-L] [-n tabs] [-o] [-q] [-r] [-S] [-u] [-t first_text] [-T
+second_text] [-h height] [-w width]
 .SH DESCRIPTION
 .PP
 The \f[I]show_ascii_art\f[R] command displays one of the ascii art
@@ -48,7 +48,17 @@ when generating ascii art use a border
 \f[B]-c\f[R]
 when generating ascii art use ANSI colors
 .TP
-\f[B]-C\f[R]
+\f[B]-C \[aq]charset\[aq]\f[R]
+specifies which character set to use for ascii art
+.RS
+\[aq]charset\[aq] can be one of \[aq]def\[aq], \[aq]long\[aq],
+\[aq]rev\[aq], \[aq]longrev\[aq]
+\[aq]def\[aq] is the default set, \[aq]long\[aq] a long set,
+\[aq]rev\[aq] reverses default, \[aq]longrev\[aq] reverses long
+Any other argument to \[aq]-C\[aq] will be taken as the character set
+.RE
+.TP
+\f[B]-l\f[R]
 use lolcat coloring
 .TP
 \f[B]-d \[aq]font_dir\[aq]\f[R]
@@ -57,14 +67,17 @@ specifies the path to the figlet fonts
 \f[B]-D \[aq]seconds\[aq]\f[R]
 specifies the delay, in seconds, between screens
 .TP
+\f[B]-f \[aq]small_font\[aq]\f[R]
+specifies the figlet font to use for small text
+.TP
+\f[B]-F \[aq]large_font\[aq]\f[R]
+specifies the figlet font to use for large text
+.TP
 \f[B]-i \[aq]image\[aq]\f[R]
 specifies an image file to convert to ascii art
 .TP
 \f[B]-L\f[R]
 lists the ascii art in the \[aq]art_dir\[aq] and exits
-.TP
-\f[B]-l \[aq]large_font\[aq]\f[R]
-specifies the figlet font to use for large text
 .TP
 \f[B]-n \[aq]tabs\[aq]\f[R]
 specifies the number of tabs to indent image display
@@ -77,9 +90,6 @@ don\[aq]t display text, just the ascii art
 .TP
 \f[B]-r\f[R]
 indicates select random fonts
-.TP
-\f[B]-s \[aq]small_font\[aq]\f[R]
-specifies the figlet font to use for small text
 .TP
 \f[B]-S\f[R]
 indicates save converted image ascii art in art_dir
@@ -113,11 +123,11 @@ format using the ImageMagick \f[I]convert\f[R] utility then generates
 ascii art from the JPEG file using the Asciiville \f[I]jp2a\f[R] utility
 and displays it along with figlet text.
 .TP
-\f[B]show_ascii_art -i $HOME/Pictures/profile.jpg -w 40 -h 20 -r\f[R]
-Generates a 40x20 size ascii art from the JPEG image
-\f[V]$HOME/Pictures/profile.jpg\f[R] using the Asciiville \f[I]jp2a\f[R]
-utility and displays it along with figlet text using randomly selected
-fonts.
+\f[B]show_ascii_art -i $HOME/Pictures/profile.jpg -h 20 -r\f[R]
+Generates a 20 line ascii art from the JPEG image
+\f[V]$HOME/Pictures/profile.jpg\f[R] preserving aspect ratio using the
+Asciiville \f[I]jp2a\f[R] utility and displays it along with figlet text
+using randomly selected fonts.
 .SH AUTHORS
 .PP
 Written by Ronald Record <github@ronrecord.com>

@@ -9,7 +9,7 @@ date: April 24, 2022
 show_ascii_art - display ascii art
 
 # SYNOPSIS
-**show_ascii_art** [-a art] [-A art_dir] [-b] [-c] [-C] [-d font_dir] [-D seconds] [-i image] [-L] [-n tabs] [-o] [-l large_font] [-s small_font] [-q] [-r] [-S] [-t first_text] [-T second_text] [-h height] [-w width] [-u]
+**show_ascii_art** [-a art] [-A art_dir] [-b] [-c] [-C charset] [-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-i image] [-l] [-L] [-n tabs] [-o] [-q] [-r] [-S] [-u] [-t first_text] [-T second_text] [-h height] [-w width]
 
 # DESCRIPTION
 The *show_ascii_art* command displays one of the ascii art images included in
@@ -32,7 +32,18 @@ the fonts used to display accompanying text, and the text to display.
 **-c**
 : when generating ascii art use ANSI colors
 
-**-C**
+**-C 'charset'**
+: specifies which character set to use for ascii art
+
+    'charset' can be one of 'def', 'long', 'rev', 'longrev'
+
+    'def' is the default set, 'long' a long set,
+
+    'rev' reverses default, 'longrev' reverses long
+
+    Any other argument to '-C' will be taken as the character set
+
+**-l**
 : use lolcat coloring
 
 **-d 'font_dir'**
@@ -41,14 +52,17 @@ the fonts used to display accompanying text, and the text to display.
 **-D 'seconds'**
 : specifies the delay, in seconds, between screens
 
+**-f 'small_font'**
+: specifies the figlet font to use for small text
+
+**-F 'large_font'**
+: specifies the figlet font to use for large text
+
 **-i 'image'**
 : specifies an image file to convert to ascii art
 
 **-L**
 : lists the ascii art in the 'art_dir' and exits
-
-**-l 'large_font'**
-: specifies the figlet font to use for large text
 
 **-n 'tabs'**
 : specifies the number of tabs to indent image display
@@ -61,9 +75,6 @@ the fonts used to display accompanying text, and the text to display.
 
 **-r**
 : indicates select random fonts
-
-**-s 'small_font'**
-: specifies the figlet font to use for small text
 
 **-S**
 : indicates save converted image ascii art in art_dir
@@ -92,8 +103,8 @@ If only one of 'width' and 'height' is provided, calculate the other from image 
 **show_ascii_art -i $HOME/Pictures/selfie.png**
 : Converts the image file `$HOME/Pictures/selfie.png` to JPEG format using the ImageMagick *convert* utility then generates ascii art from the JPEG file using the Asciiville *jp2a* utility and displays it along with figlet text.
 
-**show_ascii_art -i $HOME/Pictures/profile.jpg -w 40 -h 20 -r**
-: Generates a 40x20 size ascii art from the JPEG image `$HOME/Pictures/profile.jpg` using the Asciiville *jp2a* utility and displays it along with figlet text using randomly selected fonts.
+**show_ascii_art -i $HOME/Pictures/profile.jpg -h 20 -r**
+: Generates a 20 line ascii art from the JPEG image `$HOME/Pictures/profile.jpg` preserving aspect ratio using the Asciiville *jp2a* utility and displays it along with figlet text using randomly selected fonts.
 
 # AUTHORS
 Written by Ronald Record github@ronrecord.com
