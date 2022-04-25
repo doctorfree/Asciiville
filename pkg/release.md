@@ -18,7 +18,10 @@ This release includes support for:
 * Add Figlet Fonts and use Figlet Text for menu headers
 * Lolcat install during postinstall
 * Removed support for neomutt, just use Mutt
-* Added semi-auto-configuration of Mutt
+* Add semi-auto-configuration of Mutt
+* Add `show_ascii_art` command to display/generate ascii art
+* Add dependency on `ImageMagick`
+* Add `show_figlet_fonts` command
 
 Supported features include:
 
@@ -34,7 +37,8 @@ Supported features include:
 * Command line character based Twitter client
 * A network download/upload speed test
 * The AAlib BB demo running in a tmux session (Debian based systems only)
-* Character based ASCII art
+* Display and Generate character based ASCII art
+* Convert any image to ascii art
 * Display system info
 * Display the Phase of the Moon
 * Display a weather report

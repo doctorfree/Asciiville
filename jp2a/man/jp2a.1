@@ -1,6 +1,6 @@
-.TH jp2a 1  "September 4, 2006" "version 1.0" "USER COMMANDS"
+.TH jp2a 1  "November 20, 2020" "version 1.1.1" "USER COMMANDS"
 .SH NAME
-jp2a \- convert JPEG images to ASCII
+jp2a \- convert JPEG and PNG images to ASCII
 .SH SYNOPSIS
 .B jp2a
 [
@@ -11,11 +11,11 @@ jp2a \- convert JPEG images to ASCII
 .LP
 .SH DESCRIPTION
 .B jp2a
-will convert JPEG images to ASCII characters.  You can specify a mixture of files and URLs.
+will convert JPEG and PNG images to ASCII characters.  You can specify a mixture of files and URLs.
 .SH OPTIONS
 .TP
 .BI \-
-Read JPEG image from standard input
+Read JPEG or PNG image from standard input
 .TP
 .B \-\-background=light \-\-background=dark
 If you don't want to mess with \-\-invert all the time, just use these instead.
@@ -29,7 +29,11 @@ Frame output image in a border
 Use the given characters when producing the output ASCII image.  Default is "   ...',;:clodxkO0KXNWM".
 .TP
 .BI \-\-colors
-Use ANSI color for text output and CSS color for HTML output.
+Use truecolor (or ANSI color if truecolor is not supported) for text output and CSS color for HTML output.
+.TP
+. BI \-\-color\-depth= ...
+Use a specific color-depth for terminal output. Valid values are: 4 (for ANSI), 8 (for 256 color
+palette) and 24 (for truecolor or 24-bit color).
 .TP
 .B \-d \-\-debug
 Print debugging information when using libcurl to download images from the net.
@@ -75,8 +79,14 @@ Display a short help text
 Converts image to grayscale when using \-\-html or \-\-colors.
 .TP
 .B \-\-html
-Make ASCII output in strict XHTML 1.0, suitable for viewing with web browsers.
-This is useful with big output dimensions, and you want to check the result with a browser with small font.
+Make ASCII output in strict XHTML 1.0. (Will output in HTML for version 2.0.0 and above.)
+.TP
+.B \-\-htmlls
+Make ASCII output in HTML (Living Standard), suitable for viewing with web browsers.
+This is useful with big output dimensions, and if you want to check the result with a browser with small font.
+.TP
+.B \-\-xhtml
+Make ASCII output in strict XHTML 1.0.
 .TP
 .B \-\-html\-fill
 Same as \-\-fill.  You should use that option instead.
@@ -86,7 +96,7 @@ Do not use bold text for HTML output.
 .TP
 .B \-\-html\-raw
 Output only the image in HTML codes, leaving out the rest of the webpage, so you can construct
-your own.
+your own. (Will use <br> for version 2.0.0 and above instead of <br/>.)
 .TP
 .BI \-\-html\-fontsize= N
 Set fontsize when using \-\-html output.  Default is 4.
@@ -99,7 +109,7 @@ Write ASCII output to given filename.  To explicitly specify standard output, us
 .TP
 .B \-i \-\-invert
 Invert output image.  If you view a picture with white background, but you are using
-a display with light characters on a dark background, you shoudl invert the image.
+a display with light characters on a dark background, you should invert the image.
 .TP
 .BI \-\-red= ...
 .TP
@@ -107,7 +117,6 @@ a display with light characters on a dark background, you shoudl invert the imag
 .TP
 .BI \-\-blue= ...
 When converting from RGB to grayscale, use the given weights to calculate luminance.
-These three floating point values must add up to exactly 1.0.
 The default is red=0.2989, green=0.5866 and blue=0.1145.
 .TP
 .BI \-\-size= WIDTHxHEIGHT
@@ -154,7 +163,7 @@ If you use jp2a together with ImageMagick's convert(1) then you can make good us
 and have ImageMagick do all sorts of image conversions and effects on the source image.  For example:
 .PP
 .B convert
-somefile.png jpg:\- |
+somefile.gif jpg:\- |
 .B jp2a
 \- \-\-width=80
 .PP
@@ -193,7 +202,7 @@ somefile.jpg --red=1.0 --green=0.0 --blue=0.0
 This will calculate luminance based on Y = R*1.0 + G*0.0 + B*0.0.  The default
 values is to use Y = R*0.2989 + G*0.5866 + B*0.1145.
 .SH PROJECT HOMEPAGE
-The latest version of jp2a and news is always available from https://github.com/cslarsen/jp2a
+The latest version of jp2a and news is always available from https://github.com/Talinx/jp2a.
 .SH SEE ALSO
 cjpeg(1), djpeg(1), jpegtran(1), convert(1)
 .SH BUGS
@@ -203,9 +212,11 @@ and convert the source image to the exact output dimensions before using jp2a.
 Another issue is that jp2a skips some X-pixels along each scanline.  This gives a less
 precise output image, and will probably be corrected in future versions.
 .SH AUTHOR
-Christian Stigen Larsen
+Christian Stigen Larsen and Christoph Raitzig
 
 jp2a uses jpeglib to read JPEG files.  jpeglib is made by The Independent JPEG Group (IJG),
 who have a page at http://www.ijg.org
+
+jp2a uses libpng to read PNG files.  libpng's homepage: http://libpng.org/pub/png/libpng.html
 .SH LICENSE
 jp2a is distributed under the GNU General Public License v2.

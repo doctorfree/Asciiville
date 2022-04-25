@@ -1,13 +1,16 @@
 /*
  * Copyright 2006-2016 Christian Stigen Larsen
+ * Copyright 2020 Christoph Raitzig
  * Distributed under the GNU General Public License (GPL) v2.
  */
 
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #include <stdio.h>
+#include <math.h>
+#include <wchar.h>
+#include <limits.h>
+#include <errno.h>
 
 #ifdef HAVE_STRING_H
 #include <string.h>
@@ -27,6 +30,8 @@
 
 #include "jp2a.h"
 #include "options.h"
+#include "terminal.h"
+#include "html.h"
 
 // Default options
 int verbose = 0;
@@ -46,17 +51,20 @@ int invert = 1;
 int flipx = 0;
 int flipy = 0;
 int html = 0;
+int xhtml = 0;
 int colorfill = 0;
 int convert_grayscale = 0;
 int html_fontsize = 8;
 int html_bold = 1;
-const char* html_title = "jp2a converted image";
+const char* html_title_raw = HTML_DEFAULT_TITLE;
+char* html_title = NULL;
 int html_rawoutput = 0;
 int debug = 0;
 int clearscr = 0;
 int term_width = 0;
 int term_height = 0;
 int usecolors = 0;
+int colorDepth = 0;
 
 int termfit =
 #ifdef FEAT_TERMLIB
@@ -65,23 +73,30 @@ int termfit =
  0;
 #endif
 
-#define ASCII_PALETTE_SIZE 256
-char ascii_palette[ASCII_PALETTE_SIZE + 1] = "   ...',;:clodxkO0KXNWM";
+int ascii_palette_length = 23;
+#if ASCII
+char ascii_palette[ASCII_PALETTE_SIZE + 1] = ASCII_PALETTE_DEFAULT;
+#else
+char ascii_palette[ASCII_PALETTE_SIZE * MB_LEN_MAX + 1] = ASCII_PALETTE_DEFAULT;
+unsigned char ascii_palette_indizes[ASCII_PALETTE_SIZE] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22};
+char ascii_palette_lengths[ASCII_PALETTE_SIZE] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+#endif
 
-// Default weights, must add up to 1.0
+// Default weights
 float redweight = 0.2989f;
 float greenweight = 0.5866f;
 float blueweight = 0.1145f;
 
 // calculated in parse_options
-float RED[256], GREEN[256], BLUE[256], GRAY[256];
+float RED[256], GREEN[256], BLUE[256], ALPHA[256], GRAY[256];
 
-const char *fileout = "-"; // stdout
+const char *fileout = "-";
 
 const char* version   = PACKAGE_STRING;
-const char* copyright = "Copyright 2006-2016 Christian Stigen Larsen";
+const char* copyright = "Copyright 2006-2016 Christian Stigen Larsen\n"
+	"and 2020 Christoph Raitzig";
 const char* license   = "Distributed under the GNU General Public License (GPL) v2.";
-const char* url       = "https://github.com/cslarsen/jp2a";
+const char* url       = PACKAGE_URL;
 
 void print_version() {
 	fprintf(stderr, "%s\n%s\n%s\n", version, copyright, license);
@@ -95,11 +110,11 @@ void help() {
 #ifdef FEAT_CURL
 "Usage: jp2a [ options ] [ file(s) | URL(s) ]\n\n"
 
-"Convert files or URLs from JPEG format to ASCII.\n\n"
+"Convert files or URLs from JPEG/PNG format to ASCII.\n\n"
 #else
 "Usage: jp2a [ options ] [ file(s) ]\n\n"
 
-"Convert files in JPEG format to ASCII.\n\n"
+"Convert files in JPEG/PNG format to ASCII.\n\n"
 #endif
 "OPTIONS\n"
 "  -                 Read images from standard input.\n"
@@ -109,10 +124,14 @@ void help() {
 "                    Leftmost character corresponds to black pixel, right-\n"
 "                    most to white.  Minimum two characters must be specified.\n"
 "      --clear       Clears screen before drawing each output image.\n"
-"      --colors      Use ANSI colors in output.\n"
+"      --colors      Use true colors or, if true color is not supported, ANSI\n"
+"                    in output.\n"
+"      --color-depth=N   Use a specific color-depth for terminal output. Valid\n"
+"                        values are: 4 (for ANSI), 8 (for 256 color palette)\n"
+"                        and 24 (for truecolor or 24-bit color).\n"
 "  -d, --debug       Print additional debug information.\n"
-"      --fill        When used with --color and/or --html, color each character's\n"
-"                    background color.\n"
+"      --fill        When used with --color and/or --htmlls or --xhtml, color\n"
+"                    each character's background.\n"
 "  -x, --flipx       Flip image in X direction.\n"
 "  -y, --flipy       Flip image in Y direction.\n"
 #ifdef FEAT_TERMLIB
@@ -122,15 +141,20 @@ void help() {
 "      --term-width  Use terminal display width.\n"
 "  -z, --term-zoom   Use terminal display dimension for output.\n"
 #endif
-"      --grayscale   Convert image to grayscale when using --html or --colors\n"
+"      --grayscale   Convert image to grayscale when using --htmlls or --xhtml\n"
+"                    or --colors\n"
 "      --green=N.N   Set RGB to grayscale conversion weight, default is 0.5866\n"
 "      --height=N    Set output height, calculate width from aspect ratio.\n"
 "  -h, --help        Print program help.\n"
-"      --html        Produce strict XHTML 1.0 output.\n"
-"      --html-fill   Same as --fill (will be phased out)\n"
+"      --htmlls      Produce HTML (Living Standard) output.\n"
+"      --html        Produce strict XHTML 1.0 output (will produce HTML output\n"
+"                    from version 2.0.0 onward).\n"
+"      --xhtml       Produce strict XHTML 1.0 output.\n" // Obsoletely Fabulous
+"      --html-fill   Same as --fill (will be phased out).\n"
 "      --html-fontsize=N   Set fontsize to N pt, default is 4.\n"
 "      --html-no-bold      Do not use bold characters with HTML output\n"
 "      --html-raw    Output raw HTML codes, i.e. without the <head> section etc.\n"
+"                    (Will use <br> for version 2.0.0 and above.)\n"
 "      --html-title=...  Set HTML output title\n"
 "  -i, --invert      Invert output image.  Use if your display has a dark\n"
 "                    background.\n"
@@ -156,12 +180,17 @@ void help() {
 	fprintf(stderr, "Report bugs to <%s>\n", PACKAGE_BUGREPORT);
 }
 
-void precalc_rgb(const float red, const float green, const float blue) {
+void precalc_rgb(float red, float green, float blue) {
 	int n;
+	float sum = red + green + blue;
+	red /= sum;
+	green /= sum;
+	blue /= sum;
 	for ( n=0; n<256; ++n ) {
 		RED[n]   = ((float) n) * red / 255.0f;
 		GREEN[n] = ((float) n) * green / 255.0f;
 		BLUE[n]  = ((float) n) * blue / 255.0f;
+		ALPHA[n] = ((float) n) / 255.0f;
 		GRAY[n]  = ((float) n) / 255.0f;
 	}
 }
@@ -182,30 +211,53 @@ void parse_options(int argc, char** argv) {
 			++files; continue;
 		}
 	
-		IF_OPT ("-")                        { ++files; continue; }
-		IF_OPTS("-h", "--help")             { help(); exit(0); }
-		IF_OPTS("-v", "--verbose")          { verbose = 1; continue; }
-		IF_OPTS("-d", "--debug")            { debug = 1; continue; }
-		IF_OPT ("--clear")                  { clearscr = 1; continue; }
-		IF_OPTS("--color", "--colors")      { usecolors = 1; continue; }
-		IF_OPT ("--fill")                   { colorfill = 1; continue; }
-		IF_OPT ("--grayscale")              { usecolors = 1; convert_grayscale = 1; continue; }
-		IF_OPT ("--html")                   { html = 1; continue; }
-		IF_OPT ("--html-fill")              { colorfill = 1; fputs("warning: --html-fill has changed to --fill\n", stderr); continue; } // TODO: phase out
-		IF_OPT ("--html-no-bold")           { html_bold = 0; continue; }	
-		IF_OPT ("--html-raw")               { html = 1; html_rawoutput = 1; continue; }
-		IF_OPTS("-b", "--border")           { use_border = 1; continue; }
-		IF_OPTS("-i", "--invert")           { invert = !invert; continue; }
-		IF_OPT("--background=dark")         { invert = 1; continue; }
-		IF_OPT("--background=light")        { invert = 0; continue; }
-		IF_OPTS("-x", "--flipx")            { flipx = 1; continue; }
-		IF_OPTS("-y", "--flipy")            { flipy = 1; continue; }
-		IF_OPTS("-V", "--version")          { print_version(); exit(0); }
-		IF_VAR ("--width=%d", &width)       { auto_height += 1; continue; }
-		IF_VAR ("--height=%d", &height)     { auto_width += 1; continue; }
-		IF_VAR ("--red=%f", &redweight)     { continue; }
-		IF_VAR ("--green=%f", &greenweight) { continue; }
-		IF_VAR ("--blue=%f", &blueweight)   { continue; }
+		IF_OPT ("-")                             { ++files; continue; }
+		IF_OPTS("-h", "--help")                  { help(); exit(0); }
+		IF_OPTS("-v", "--verbose")               { verbose = 1; continue; }
+		IF_OPTS("-d", "--debug")                 { debug = 1; continue; }
+		IF_OPT ("--clear")                       { clearscr = 1; continue; }
+		IF_OPTS("--color", "--colors")           { usecolors = 1;
+		if ( debug ) {
+			char *colorterm = getenv("COLORTERM");
+			if ( colorterm==NULL ) {
+				fprintf(stderr, "Environment variable COLORTERM not set.\n");
+			} else {
+				fprintf(stderr, "Environment variable COLORTERM: %s\n", colorterm);
+			}
+		}
+		colorDepth = ( supports_true_color() )? 24 : 4; continue; }
+		IF_VAR ("--color-depth=%d", &colorDepth) {
+			switch(colorDepth) {
+				case 4:
+				case 8:
+				case 24:
+					usecolors = 1;
+					break;
+				default:
+					colorDepth = 0;
+					usecolors = 0;
+			}
+			continue; }
+		IF_OPT ("--fill")                        { colorfill = 1; continue; }
+		IF_OPT ("--grayscale")                   { usecolors = 1; convert_grayscale = 1; continue; }
+		IF_OPT ("--htmlls")                      { html = 1; continue; }
+		IF_OPT ("--html")                        { xhtml = 1; continue; }
+		IF_OPT ("--xhtml")                       { xhtml = 1; continue; }
+		IF_OPT ("--html-fill")                   { colorfill = 1; fputs("warning: --html-fill has changed to --fill\n", stderr); continue; } // TODO: phase out
+		IF_OPT ("--html-no-bold")                { html_bold = 0; continue; }	
+		IF_OPT ("--html-raw")                    { xhtml = 1; html_rawoutput = 1; continue; }
+		IF_OPTS("-b", "--border")                { use_border = 1; continue; }
+		IF_OPTS("-i", "--invert")                { invert = !invert; continue; }
+		IF_OPT("--background=dark")              { invert = 1; continue; }
+		IF_OPT("--background=light")             { invert = 0; continue; }
+		IF_OPTS("-x", "--flipx")                 { flipx = 1; continue; }
+		IF_OPTS("-y", "--flipy")                 { flipy = 1; continue; }
+		IF_OPTS("-V", "--version")               { print_version(); exit(0); }
+		IF_VAR ("--width=%d", &width)            { auto_height += 1; continue; }
+		IF_VAR ("--height=%d", &height)          { auto_width += 1; continue; }
+		IF_VAR ("--red=%f", &redweight)          { continue; }
+		IF_VAR ("--green=%f", &greenweight)      { continue; }
+		IF_VAR ("--blue=%f", &blueweight)        { continue; }
 		IF_VAR ("--html-fontsize=%d",
 			&html_fontsize)             { continue; }
 
@@ -226,21 +278,59 @@ void parse_options(int argc, char** argv) {
 		}
 
 		if ( !strncmp(s, "--html-title=", 13) ) {
-			html_title = s + 13;
+			html_title_raw = s + 13;
 			continue;
 		}
 
 		if ( !strncmp(s, "--chars=", 8) ) {
 
-			if ( strlen(s-8) > ASCII_PALETTE_SIZE ) {
+#if ASCII
+			if ( strlen(s)-8 > ASCII_PALETTE_SIZE ) {
 				fprintf(stderr,
 					"Too many ascii characters specified (max %d)\n",
 					ASCII_PALETTE_SIZE);
 				exit(1);
 			}
+#else
+			if ( strlen(s)-8 > ASCII_PALETTE_SIZE * MB_LEN_MAX ) {
+				fprintf(stderr,
+					"Too many characters specified (max %d)\n",
+					ASCII_PALETTE_SIZE);
+				exit(1);
+			}
+#endif
 	
 			// don't use sscanf, we need to read spaces as well
 			strcpy(ascii_palette, s+8);
+#if ASCII
+			ascii_palette_length = strlen(ascii_palette);
+#else
+			int i = 0;
+			int count = 0;
+			size_t curCharlen;
+			while ( ascii_palette[i] != '\0' ) {
+				ascii_palette_indizes[count] = i;
+				curCharlen = mbrlen(ascii_palette + i, MB_LEN_MAX, NULL);
+				ascii_palette_lengths[count] = curCharlen;
+				if ( curCharlen == -1 ) {
+					fprintf(stderr, "Error with custom chars: %s\n", strerror(errno));
+					exit(1);
+				} else
+				if ( curCharlen == -2 ) {
+					fprintf(stderr, "Error while parsing custom chars.");
+					exit(1);
+				}
+				i += curCharlen;
+				count++;
+			}
+			if ( count > ASCII_PALETTE_SIZE ) {
+				fprintf(stderr,
+					"Too many characters specified (max %d)\n",
+					ASCII_PALETTE_SIZE);
+				exit(1);
+			}
+			ascii_palette_length = count;
+#endif
 			continue;
 		}
 
@@ -319,7 +409,7 @@ void parse_options(int argc, char** argv) {
 	if ( auto_width==2 && auto_height==1 )
 		auto_width = auto_height = 0;
 
-	if ( strlen(ascii_palette) < 2 ) {
+	if ( ascii_palette_length < 2 ) {
 		fputs("You must specify at least two characters in --chars.\n",
 			stderr);
 		exit(1);
@@ -330,14 +420,35 @@ void parse_options(int argc, char** argv) {
 		exit(1);
 	}
 
-	if ( (int)((redweight + greenweight + blueweight)*10000000.0f) != 10000000 ) {
-		fputs("Weights RED + GREEN + BLUE must equal 1.0\n", stderr);
+	if ( redweight < 0 || greenweight < 0 || blueweight < 0 ) {
+		fputs("Weights can't be negative.\n", stderr);
+		exit(1);
+	}
+	if ( !isfinite(redweight) || !isfinite(greenweight) || !isfinite(blueweight) ) {
+		// This can happen if a number can not be represented as floating point, e.g. 3e400.
+		fputs("Did not understand a weight - possibly to large.\n", stderr);
+		exit(1);
+	}
+	if ( (redweight + greenweight + blueweight) == 0.0 ) {
+		fputs("At least one weight must be non-zero.\n", stderr);
 		exit(1);
 	}
 
 	if ( *fileout == 0 ) {
 		fputs("Empty output filename.\n", stderr);
 		exit(1);
+	}
+
+	if ( html && xhtml ) {
+		fputs("Only HTML or XHTML possible, using HTML.\n", stderr);
+		xhtml = 0;
+	}
+
+	if ( html || xhtml ) {
+		if ( !escape_title() ) {
+			fprintf(stderr, "Not enough memory.");
+			exit(1);
+		}
 	}
 
 	precalc_rgb(redweight, greenweight, blueweight);

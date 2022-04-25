@@ -1,15 +1,18 @@
 jp2a
 ====
 
-jp2a is a simple JPEG to ASCII converter.
+![full-check](https://github.com/Talinx/jp2a/workflows/full-check/badge.svg?branch=master)
 
-The source is available at <https://github.com/cslarsen/jp2a>. This project
+
+jp2a is a simple JPEG/PNG to ASCII converter.
+
+The source is available at <https://github.com/Talinx/jp2a>. This project
 used to be hosted on SourceForge.
 
 License
 -------
 
-Copyright 2006-2016 Christian Stigen Larsen  
+Copyright 2006-2016 Christian Stigen Larsen and 2020 Christoph Raitzig  
 Distributed under the GNU General Public License v2.
 
 You can read the full license in the file COPYING.  jp2a also uses other
@@ -75,11 +78,21 @@ Installation
 Look in your system's package manager. I don't maintain Windows binaries
 anymore.
 
+Docker
+------
+
+You can run jp2a using [Docker](https://www.docker.com/):
+```
+docker run -t --rm -e COLORTERM="$COLORTERM" -v "$(pwd)":/app talinx/jp2a [options] <filenames or URLs>
+```
+See [hub.docker.com/r/talinx/jp2a](https://hub.docker.com/r/talinx/jp2a) for details.
+
 Building
 --------
 
-If you want to compile from source, you need autotools and automake. You may
-need to specify the path to jpeglib. I usually just do
+`jp2a` can be compiled as usual: `./configure && make && make install`
+
+If you want to compile after cloning the git repo (i.e. generate the `configure` script yourself), you need autotools, automake and autoconf-archive. You may need to specify the path to jpeglib. I usually just do
 
     autoreconf -vi
     ./configure --with-jpeg-prefix=/usr/local \
@@ -87,14 +100,9 @@ need to specify the path to jpeglib. I usually just do
     make -j
 
 Before installing, you may want to check that jp2a works by running `src/jp2a`
-on some `.jpg` files. The `check` target is currently broken, and won't help
-you. When you're ready to install,
+on some `.jpg` and `.png` files. You can also use `make check`. When you're ready to install,
 
     make -j install
-
-jp2a depends on jpeglib. In case configure fails beacuse jpeglib is not installed,
-it can be built and installed manually. Independent JPEG Group provides a UNIX format
-package in tar.gz format which can be downloaded from http://www.ijg.org/.
 
 Extract the archive and follow the instructions inside 'install.txt' to build and
 install it. For a default install, the corresponding `.so` (shared object) files
@@ -119,8 +127,43 @@ from the net:
 This will look for `curl-config` in $PATH, but you can specify it directly with
 `--with-curl-config=PATH` if you need to.
 
+### Runtime dependencies
+- [jpeglib](https://www.ijg.org/) or [libjpeg-turbo](https://libjpeg-turbo.org/)
+- [libpng](http://libpng.org/pub/png/libpng.html)
+- [curl](https://curl.haxx.se/) (optional)
+- [ncurses](https://invisible-island.net/ncurses/ncurses.html) (optional)
+
+### Build dependencies
+- make (e.g. [GNU Make](https://www.gnu.org/software/make/))
+- a C compiler like [gcc](https://gcc.gnu.org/)
+
+If you generate the `configure` script yourself (i.e. run `autoreconf`) you also need these:
+
+- autotools
+- [automake](https://www.gnu.org/software/automake/)
+- [autoconf](https://www.gnu.org/software/autoconf/autoconf.html)
+- [autoconf-archive](https://www.gnu.org/software/autoconf-archive/)
+
 Windows
 -------
+
+### Cross compiling
+
+You can cross compile.
+
+### WSL
+
+You can use the Windows Subsystem for Linux.
+
+### Compile with `configure`
+
+The `configure` script requires a Bourne shell, so you got to install one (e.g. Bash).
+The easiest way is to install [Cygwin](https://cygwin.com/). Make sure to install the used libraries (curl, jpeglib, libpng, ncurses) as well as gcc and make.
+Open Cygwin and proceed as usual: `./configure && make && make install`
+
+You can also "cross compile" with Cygwin so that you get a binary that does not depend on Cygwin.
+
+### Compile without `configure`
 
 You need a working jpeglib for Windows and set up include paths yourself.
 You will need to manually type out a `config.h` file. Example:
@@ -129,7 +172,7 @@ You will need to manually type out a `config.h` file. Example:
     NDEBUG
     _CONSOLE
     PACKAGE_STRING=\"jp2a x.x.x-win32\"
-    PACKAGE_BUGREPORT=\"csl@csl.name\"
+    PACKAGE_BUGREPORT=\"chris-r@posteo.net\"
     HAVE_STRING_H
     HAVE_STDLIB_H
     FEAT_CURL
@@ -138,4 +181,4 @@ You will need to manually type out a `config.h` file. Example:
     FEAT_TERMLIB
 
 You need to add jpeg.lib to the linker. If you want libcurl support, you need
-that as well. It should be available from http://curl.haxx.se
+that as well. It should be available from https://curl.haxx.se

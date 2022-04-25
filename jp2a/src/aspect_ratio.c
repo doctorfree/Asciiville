@@ -1,12 +1,12 @@
 /*
  * Copyright 2006-2016 Christian Stigen Larsen
+ * Copyright 2020 Christoph Raitzig
  * Distributed under the GNU General Public License (GPL) v2.
  */
 
 #include "options.h"
 #include "round.h"
 
-// Calculate width or height, but not both
 void aspect_ratio(const int jpeg_width, const int jpeg_height) {
 
 	// the 2.0f and 0.5f factors are used for text displays that (usually) have characters
@@ -40,9 +40,8 @@ void aspect_ratio(const int jpeg_width, const int jpeg_height) {
 		height = CALC_HEIGHT;
 
 		// adjust for too small dimensions
-		while ( height==0 ) {
-			++width;
-			aspect_ratio(jpeg_width, jpeg_height);
+		if ( height==0 ) {
+			height = ( jpeg_height == 1 )? 0 : 1;
 		}
 	}
 }

@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-# Asciiville-1.3.1r1 (2022-04-24)
+# Asciiville-1.3.1r1 (2022-04-26)
 
 * Create armhf architecture Debian format package for Raspberry Pi installs
 * With no arguments asciiville brings up a menu
@@ -22,7 +22,10 @@ All notable changes to this project will be documented in this file.
 * Add Figlet Fonts and use Figlet Text for menu headers
 * Lolcat install during postinstall
 * Removed support for neomutt, just use Mutt
-* Added semi-auto-configuration of Mutt
+* Add semi-auto-configuration of Mutt
+* Add `show_ascii_art` command to display/generate ascii art
+* Add dependency on `ImageMagick`
+* Add `show_figlet_fonts` command
 
 # Asciiville-1.3.0r1 (2022-04-20)
 
@@ -45,6 +48,26 @@ Initial release with support for:
 * Any character based client the user wishes to run
 * One of several asciimatics animations optionally accompanied by audio
 
+Mon Apr 25 13:40:10 2022 -0700 95487c8 :
+   Added character set option to show_ascii_art, renamed some options
+Mon Apr 25 12:41:59 2022 -0700 a22f9b5 :
+   Add ascii art, improve art show and ascii art conversion, jp2a border bugfix, add imagemagick
+Sun Apr 24 22:36:54 2022 -0700 5c32cf8 :
+   Add the show_ascii_art command and man page, add ascii art
+Sun Apr 24 16:59:33 2022 -0700 1b660b0 :
+   Fix permissions on doc folders and files
+Sun Apr 24 16:12:48 2022 -0700 1a081af :
+   Copy jp2a license, copyright, and readme
+Sun Apr 24 15:27:29 2022 -0700 f2384ed :
+   Add jp2a to build and packaging
+Sun Apr 24 14:54:09 2022 -0700 62883a3 :
+   Build jp2a with prefix, add to clean
+Sun Apr 24 14:45:51 2022 -0700 0abb789 :
+   Add jp2a
+Sun Apr 24 14:13:39 2022 -0700 d965a6e :
+   Pause after Phase of Moon or Weather report
+Sun Apr 24 13:59:45 2022 -0700 70b9ccc :
+   Update changelog and release notes for v1.3.1r1
 Sun Apr 24 13:12:48 2022 -0700 4c1d3e9 :
    Only ignore the btop Makefile, not cbftp or ddgr
 Sun Apr 24 12:34:51 2022 -0700 8550f2d :

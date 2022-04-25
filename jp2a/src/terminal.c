@@ -1,11 +1,12 @@
 /*
  * Copyright 2006-2016 Christian Stigen Larsen
+ * Copyright 2020 Christoph Raitzig
  * Distributed under the GNU General Public License (GPL) v2.
  */
 
-#ifdef HAVE_CONFIG_H
+#include "terminal.h"
+
 #include "config.h"
-#endif
 
 #include <stdio.h>
 
@@ -36,12 +37,8 @@
 #endif
 #endif
 
-/*
- * Returns:  1  success
- *           0  terminal type not defined
- *          -1  termcap database inaccessible
- *          -2  environment variable TERM not set
- */
+#include <string.h>
+
 int get_termsize(int* _width, int* _height, char** err) {
 	static char errstr[1024];
 
@@ -105,4 +102,16 @@ int get_termsize(int* _width, int* _height, char** err) {
 	return 0;
 
 #endif // FEAT_TERMLIB
+}
+
+int supports_true_color() {
+	char *colorterm = getenv("COLORTERM");
+	if ( colorterm==NULL ) {
+		return 0;
+	}
+	// some terminals have COLORTERM set, although true color is not supported
+	if ( strcmp(colorterm, "rxvt")==0 ) {
+		return 0;
+	}
+	return 1;
 }

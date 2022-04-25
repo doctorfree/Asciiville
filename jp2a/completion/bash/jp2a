@@ -1,0 +1,27 @@
+# bash completion for jp2a                                 -*- shell-script -*-
+
+_jp2a()
+{
+        local cur prev OPTS
+        COMPREPLY=()
+        cur="${COMP_WORDS[COMP_CWORD]}"
+        prev="${COMP_WORDS[COMP_CWORD-1]}"
+        OPTS="--help --verbose --debug --clear --colors --color-depth= --fill
+        --grayscale --html --htmlls --xhtml --html-fill --html-no-bold --html-raw --border
+        --invert --background= --flipx --flipy --version --width= --height=
+        --red= --green= --blue= --html-fontsize= --size= --term-zoom
+        --term-height --term-width --term-fit --output= --html-title= --chars="
+        case $cur in
+                --*)
+						COMPREPLY=( $(compgen -W "${OPTS}" -- $cur) )
+						return 0
+                        ;;
+        esac
+        local IFS=$'\n'
+        compopt -o filenames
+        COMPREPLY=( $(compgen -f -- $cur) )
+        return 0
+}
+complete -F _jp2a jp2a
+
+# ex: filetype=sh

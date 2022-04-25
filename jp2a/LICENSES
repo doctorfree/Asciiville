@@ -3,7 +3,7 @@ COPYING for a copy of that license, and how you can apply that license to make
 derivative works.
 
 Although I do make use of other libraries, the source distribution does not
-include any source-code from these.  However, the win32 version comes with
+include any source-code from these.  However, the win32 version came with
 precompiled library files, so I copy the licenses here.
 
 jp2a makes use of the JPEG library by the Independent JPEG Group.  See
@@ -34,7 +34,7 @@ jp2a makes use of libcurl, which has the following license:
     dealings in this Software without prior written authorization of the
     copyright holder.
 
-The jp2a win32 binary distribution comes with zlib1.dll from
+The jp2a win32 binary distribution came with zlib1.dll from
 http://www.zlib.org.  The zlib license is as follows:
 
     /* zlib.h -- interface of the 'zlib' general purpose compression library
@@ -63,7 +63,7 @@ http://www.zlib.org.  The zlib license is as follows:
 
     */
 
-The jp2a win32 binary distribution comes with precompiled OpenSSL binaries from
+The jp2a win32 binary distribution came with precompiled OpenSSL binaries from
 http://www.openssl.org.  These have the following license:
 
       LICENSE ISSUES

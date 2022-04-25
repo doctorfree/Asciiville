@@ -1,3 +1,18 @@
+CHANGES SINCE 1.1.1
+- Fix images with very high aspect ratio, e.g. 3000:1
+
+CHANGES SINCE 1.1.0
+- support for PNG images
+- support for HTML (Living Standard) additionally to XHTML
+- (optional) support for other character encodings than ASCII
+
+CHANGES SINCE 1.0.9
+- support for true color and 256 color palette output for terminals
+- support for bash completion
+
+CHANGES SINCE 1.0.8
+- Fix images with very small height
+
 CHANGES SINCE 1.0.7
 - Moved repository over to GitHub and made some corresponding changes
 - Reverted code to version 1.0.6 because of unfinished changes that didn't work.

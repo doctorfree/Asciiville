@@ -1,33 +1,58 @@
-/*
- * Copyright 2006-2016 Christian Stigen Larsen
- * Distributed under the GNU General Public License (GPL) v2.
+/*! \file
+ * \noop Copyright 2006-2016 Christian Stigen Larsen
+ * \noop Copyright 2020 Christoph Raitzig
+ *
+ * \brief The main function and a helper function.
+ *
+ * \author Christian Stigen Larsen
+ * \author Christoph Raitzig
+ * \copyright Distributed under the GNU General Public License (GPL) v2.
  */
 
 #ifndef INC_JP2A_H
+#define INC_JP2A_H
 
-#include <stdio.h>
-
-// curl.c
-#ifdef FEAT_CURL
-int is_url(const char* s);
-int curl_download(const char* url, const int debug);
+#ifdef _WIN32
+#include <windows.h>
 #endif
 
-// html.c
-void print_html_start(const int fontsize, FILE *fout);
-void print_html_end(FILE *fout);
-void print_html_char(FILE *fout, const char ch,
-	const int red_fg, const int green_fg, const int blue_fg,
-	const int red_bg, const int green_bg, const int blue_bg);
-void print_html_newline(FILE *fout);
+/*!
+ * \brief The main function.
+ *
+ * \param argc argument count
+ * \param argv the arguments
+ */
+int main(int argc, char** argv);
 
-// image.c
-void decompress(FILE *fin, FILE *fout);
+/*!
+ * \brief Reads from a stream into a buffer.
+ *
+ * This function is used to make a seekable stream from a non-seekable stream:
+ * Read the contents of the non-seekable stream into a buffer (with this function) and open a stream to this buffer (with fmemopen()).
+ * The buffer is (re)allocated as needed.
+ *
+ * \param fp stream to read into buffer
+ * \param buffer the buffer to read into
+ * \param buffer_size the allocated size of the buffer
+ * \param actual_size the number of bytes read into the buffer
+ * \return true if sucessful, false otherwise
+ */
+int read_into_buffer(FILE *fp, char **buffer, size_t *buffer_size, size_t *actual_size);
 
-// options.c
-void parse_options(int argc, char** argv);
+#ifdef _WIN32
 
-// term.c
-int get_termsize(int* width_, int* height_, char** error);
+/*!
+ * \brief fmemopen alternative for Windows.
+ *
+ * Windows does not support opening a file stream to part of the RAM.
+ * This function creates a temporary file and writes the contents of the buffer to it.
+ *
+ * \param buf data to write to the file
+ * \param size number of bytes to write
+ * \param mode ignored, for compatibility with the actual fmemopen()
+ * \return the file handle (or NULL if an error occurred)
+ */
+HANDLE fmemopen(void *buf, size_t size, const char *mode);
+#endif
 
 #endif
