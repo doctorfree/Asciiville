@@ -21,9 +21,10 @@
 show_ascii_art - display ascii art
 .SH SYNOPSIS
 .PP
-\f[B]show_ascii_art\f[R] [-u] [-a art] [-A art_dir] [-d font_dir] [-D
-seconds] [-i image] [-L] [-l large_font] [-o] [-r] [-s small_font] [-S]
-[-t first_text] [-T second_text] [-h height] [-w width]
+\f[B]show_ascii_art\f[R] [-a art] [-A art_dir] [-b] [-c] [-C] [-d
+font_dir] [-D seconds] [-i image] [-L] [-n tabs] [-o] [-l large_font]
+[-s small_font] [-q] [-r] [-S] [-t first_text] [-T second_text] [-h
+height] [-w width] [-u]
 .SH DESCRIPTION
 .PP
 The \f[I]show_ascii_art\f[R] command displays one of the ascii art
@@ -41,6 +42,15 @@ specifies which ascii art to display
 \f[B]-A \[aq]art_dir\[aq]\f[R]
 specifies the path to the ascii art folder
 .TP
+\f[B]-b\f[R]
+when generating ascii art use a border
+.TP
+\f[B]-c\f[R]
+when generating ascii art use ANSI colors
+.TP
+\f[B]-C\f[R]
+use lolcat coloring
+.TP
 \f[B]-d \[aq]font_dir\[aq]\f[R]
 specifies the path to the figlet fonts
 .TP
@@ -56,8 +66,14 @@ lists the ascii art in the \[aq]art_dir\[aq] and exits
 \f[B]-l \[aq]large_font\[aq]\f[R]
 specifies the figlet font to use for large text
 .TP
+\f[B]-n \[aq]tabs\[aq]\f[R]
+specifies the number of tabs to indent image display
+.TP
 \f[B]-o\f[R]
 indicates overwrite any existing ascii art when saving
+.TP
+\f[B]-q\f[R]
+don\[aq]t display text, just the ascii art
 .TP
 \f[B]-r\f[R]
 indicates select random fonts
@@ -79,6 +95,9 @@ specifies the height of the converted ascii art
 .TP
 \f[B]-w \[aq]width\[aq]\f[R]
 specifies the width of the converted ascii art
+.PP
+If only one of \[aq]width\[aq] and \[aq]height\[aq] is provided,
+calculate the other from image aspect ratio
 .TP
 \f[B]-u\f[R]
 displays this usage message and exits

@@ -901,13 +901,41 @@ show_main_menu() {
               ART_DIR="/usr/share/doc/asciiville/art"
               for i in ${ART_DIR}/*.txt
               do
+                b=`basename "$i"`
+                name=`echo $b | sed -e "s/.txt//"`
+                case "$name" in
+                  yinyang_bw|face|nude)
+                    continue
+                    ;;
+                  bob)
+                    if [ "${use_lolcat}" ]
+                    then
+                      /bin/cat "$i" | lolcat
+                    else
+                      /bin/cat "$i"
+                    fi
+                    read -p "Press Enter to continue" answer
+                    continue
+                    ;;
+                  tux|julia|marilyn|yinyang)
+                    tabs="-n 2"
+                    ;;
+                  bobdobbs)
+                    tabs="-n 3"
+                    ;;
+                  *)
+                    tabs=
+                    ;;
+                esac
                 if [ "${use_lolcat}" ]
                 then
-                  /bin/cat "$i" | lolcat
+                  # /bin/cat "$i" | lolcat
+                  show_ascii_art -a "${name}" -q -C -D 2 ${tabs}
                 else
-                  /bin/cat "$i"
+                  # /bin/cat "$i"
+                  show_ascii_art -a "${name}" -q -D 2 ${tabs}
                 fi
-                echo "Ascii Art: $i"
+                # echo "Ascii Art: $i"
                 read -p "Press Enter to continue" answer
               done
               skip_it_so=1

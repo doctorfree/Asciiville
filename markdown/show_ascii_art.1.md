@@ -9,7 +9,7 @@ date: April 24, 2022
 show_ascii_art - display ascii art
 
 # SYNOPSIS
-**show_ascii_art** [-u] [-a art] [-A art_dir] [-d font_dir] [-D seconds] [-i image] [-L] [-l large_font] [-o] [-r] [-s small_font] [-S] [-t first_text] [-T second_text] [-h height] [-w width]
+**show_ascii_art** [-a art] [-A art_dir] [-b] [-c] [-C] [-d font_dir] [-D seconds] [-i image] [-L] [-n tabs] [-o] [-l large_font] [-s small_font] [-q] [-r] [-S] [-t first_text] [-T second_text] [-h height] [-w width] [-u]
 
 # DESCRIPTION
 The *show_ascii_art* command displays one of the ascii art images included in
@@ -19,11 +19,21 @@ options can be used to specify the width and heigh of the converted image,
 the fonts used to display accompanying text, and the text to display.
 
 # COMMAND LINE OPTIONS
+
 **-a 'art'**
 : specifies which ascii art to display
 
 **-A 'art_dir'**
 : specifies the path to the ascii art folder
+
+**-b**
+: when generating ascii art use a border
+
+**-c**
+: when generating ascii art use ANSI colors
+
+**-C**
+: use lolcat coloring
 
 **-d 'font_dir'**
 : specifies the path to the figlet fonts
@@ -40,8 +50,14 @@ the fonts used to display accompanying text, and the text to display.
 **-l 'large_font'**
 : specifies the figlet font to use for large text
 
+**-n 'tabs'**
+: specifies the number of tabs to indent image display
+
 **-o**
 : indicates overwrite any existing ascii art when saving
+
+**-q**
+: don't display text, just the ascii art
 
 **-r**
 : indicates select random fonts
@@ -63,6 +79,8 @@ the fonts used to display accompanying text, and the text to display.
 
 **-w 'width'**
 : specifies the width of the converted ascii art
+
+If only one of 'width' and 'height' is provided, calculate the other from image aspect ratio
 
 **-u**
 : displays this usage message and exits

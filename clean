@@ -4,6 +4,9 @@ sudo rm -rf dist releases
 cd btop
 make distclean
 cd ../jp2a
-make distclean
+[ -f Makefile ] && make distclean
+rm -f aclocal.m4 compile config.h.in configure \
+      depcomp install-sh Makefile.in missing src/Makefile.in
+rm -rf autom4te.cache src/.deps 
 cd ../cbftp
 make clean

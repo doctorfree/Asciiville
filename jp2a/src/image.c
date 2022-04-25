@@ -38,7 +38,7 @@ typedef struct Image_ {
 	int *lookup_resx;
 } Image;
 
-void print_border(const int width) {
+void print_border(const int width, FILE *f) {
 	#ifndef HAVE_MEMSET
 	int n;
 	#endif
@@ -57,7 +57,7 @@ void print_border(const int width) {
 
 	bord[0] = bord[width+1] = '+';
 	bord[width+2] = 0;
-	puts(bord);
+	fprintf(f, "%s\n", bord);
 
 	#ifdef WIN32
 	free(bord);
@@ -442,11 +442,11 @@ void decompress(FILE *fp, FILE *fout) {
 	}
 
 	if ( html && !html_rawoutput ) print_html_start(html_fontsize, fout);
-	if ( use_border ) print_border(image.width);
+	if ( use_border ) print_border(image.width, fout);
 
 	(!usecolors? print_image : print_image_colors) (&image, (int) strlen(ascii_palette) - 1, fout);
 
-	if ( use_border ) print_border(image.width);
+	if ( use_border ) print_border(image.width, fout);
 	if ( html && !html_rawoutput ) print_html_end(fout);
 
 	free_image(&image);

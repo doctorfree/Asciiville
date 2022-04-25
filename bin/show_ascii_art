@@ -9,47 +9,97 @@ SMALL_FONT="Calvin S"
 art="yinyang"
 
 usage() {
-  printf "\nUsage: show_ascii_art [-u] [-a art] [-A art_dir] [-d font_dir]"
-  printf "\n\t[-D seconds] [-i image] [-L] [-l large_font] [-o] [-r]"
-  printf "\n\t[-s small_font] [-S] [-t first_text] [-T second_text]"
-  printf "\n\t[-h height] [-w width]"
+  printf "\nUsage: show_ascii_art [-a art] [-A art_dir] [-b] [-c] [-C]"
+  printf "\n\t[-d font_dir] [-D seconds] [-i image] [-L] [-n tabs] [-o]"
+  printf "\n\t[-l large_font] [-s small_font] [-q] [-r] [-S]"
+  printf "\n\t[-t first_text] [-T second_text]"
+  printf "\n\t[-h height] [-w width] [-u]"
   printf "\nWhere:"
-  printf "\n\t-u displays this usage message and exits"
   printf "\n\t-a 'art' specifies which ascii art to display"
   printf "\n\t-A 'art_dir' specifies the path to the ascii art folder"
+  printf "\n\t-b when generating ascii art use a border"
+  printf "\n\t-c when generating ascii art use ANSI colors"
+  printf "\n\t-C use lolcat coloring"
   printf "\n\t-d 'font_dir' specifies the path to the figlet fonts"
   printf "\n\t-D 'seconds' specifies the delay, in seconds, between screens"
   printf "\n\t-i 'image' specifies an image file to convert to ascii art"
   printf "\n\t-L lists the ascii art in the 'art_dir' and exits"
   printf "\n\t-l 'large_font' specifies the figlet font to use for large text"
+  printf "\n\t-n 'tabs' specifies the number of tabs to indent image display"
   printf "\n\t-o indicates overwrite any existing ascii art when saving"
+  printf "\n\t-q don't display text, just the ascii art"
   printf "\n\t-r indicates select random fonts"
   printf "\n\t-s 'small_font' specifies the figlet font to use for small text"
   printf "\n\t-S indicates save converted image ascii art in art_dir"
   printf "\n\t-t 'first_text' specifies the first text to display"
   printf "\n\t-T 'second_text' specifies the second text to display"
+  printf "\n\t-u displays this usage message and exits"
   printf "\n\t-h 'height' specifies the height of the converted ascii art"
-  printf "\n\t-w 'width' specifies the width of the converted ascii art\n\n"
+  printf "\n\t-w 'width' specifies the width of the converted ascii art"
+  printf "\n\t\tIf only one of 'width' and 'height' is provided,"
+  printf "\n\t\tcalculate the other from image aspect ratio\n\n"
   exit 1
 }
 
+# Display the ascii art
+#   first argument is the file
+#   second argument is prepended on each line of output (e.g. "\t\t")
+#   third is a command to use in a pipe (optional)
+show_ascii() {
+  [ -f "$1" ] || {
+    echo "File: $1 does not exist"
+    echo "Exiting"
+    exit 1
+  }
+  prep="\n${2}"
+
+  if [ "$3" ]
+  then
+    /bin/cat "$1" | while read l
+    do
+      printf "${prep}$l"
+    done | $3
+  else
+    /bin/cat "$1" | while read l
+    do
+      printf "${prep}$l"
+    done
+  fi
+  printf "\n"
+}
+
+border=
+colors=
 list=
+lolcat=
+quiet=
 delay=5
 input_image=
 randfont=
 overwrite=
 save_art=
-height=20
-width=60
+height=
+numtabs=0
+tabs=
+width=
 have_convert=`type -p convert`
 have_jp2a=`type -p jp2a`
-while getopts "a:A:D:d:h:i:Ll:rs:St:T:w:u" flag; do
+while getopts "a:A:bcCD:d:h:i:Ll:n:oqrs:St:T:w:u" flag; do
   case $flag in
       a)
           art="${OPTARG}"
           ;;
       A)
           ART_DIR="${OPTARG}"
+          ;;
+      b)
+          border="--border"
+          ;;
+      c)
+          colors="--colors"
+          ;;
+      C)
+          lolcat=1
           ;;
       d)
           FIG_FONTS="${OPTARG}"
@@ -72,8 +122,14 @@ while getopts "a:A:D:d:h:i:Ll:rs:St:T:w:u" flag; do
       l)
           LARGE_FONT="${OPTARG}"
           ;;
+      n)
+          numtabs=${OPTARG}
+          ;;
       o)
           overwrite=1
+          ;;
+      q)
+          quiet=1
           ;;
       r)
           randfont=1
@@ -121,6 +177,26 @@ done
   exit 0
 }
 
+[ ${numtabs} -gt 0 ] && {
+  tab=0
+  while [ ${tab} -lt ${numtabs} ]
+  do
+    tabs="${tabs}\t"
+    ((tab++))
+  done
+}
+
+if [ "${height}" ] && [ "${width}" ]
+then
+  size="--size=${width}x${height}"
+else
+  if [ "${height}" ] || [ "${width}" ]
+  then
+    [ "${height}" ] && size="--height=${height}"
+    [ "${width}" ] && size="--width=${width}"
+  fi
+fi
+
 [ "${randfont}" ] && {
   # Arrays with font names
   largefonts=("3d" "ANSI Shadow" "Bolger" "sblood" "Slant" "Shadow" "Speed" "Varsity")
@@ -136,19 +212,25 @@ done
 }
 
 clear
-figlet -c -d "${FIG_FONTS}" -f "${SMALL_FONT}" -k -t ${FIG_WELCOME}
-figlet -c -d "${FIG_FONTS}" -f "${SMALL_FONT}" -k -t ${FIG_ASCII}
+[ "${quiet}" ] || {
+  figlet -c -d "${FIG_FONTS}" -f "${SMALL_FONT}" -k -t ${FIG_WELCOME}
+  figlet -c -d "${FIG_FONTS}" -f "${SMALL_FONT}" -k -t ${FIG_ASCII}
+  sleep ${delay}
+}
 
-sleep ${delay}
 if [ "${input_image}" ]
 then
   image_name=`basename "${input_image}"`
   suf=`echo ${image_name} | awk -F '.' ' { print $NF } '`
-  image_name=`echo $image_name} | sed -e "s/.${suf}//"`
-  [ "${suf}" == "jpg" ] || \
-  [ "${suf}" == "jpeg" ] || \
-  [ "${suf}" == "JPG" ] ||
-  [ "${suf}" == "JPEG" ] || {
+  image_name=`echo ${image_name} | sed -e "s/.${suf}//"`
+  if [ "${suf}" == "txt" ]
+  then
+    cp "${input_image}" "/tmp/${image_name}$$.txt"
+  else
+    [ "${suf}" == "jpg" ] || \
+    [ "${suf}" == "jpeg" ] || \
+    [ "${suf}" == "JPG" ] ||
+    [ "${suf}" == "JPEG" ] || {
       if [ "${have_convert}" ]
       then
           convert "${input_image}" /tmp/${image_name}$$.jpg
@@ -157,66 +239,41 @@ then
           echo "Cannot convert ${input_image} to ascii art"
           exit 1
       fi
-  }
-  [ -f /tmp/${image_name}$$.jpg ] || {
+    }
+    [ -f /tmp/${image_name}$$.jpg ] || {
       cp "${input_image}" /tmp/${image_name}$$.jpg
-  }
-  jp2a --border --colors --size=${width}x${height} \
+    }
+    # FYI, to get an image width: identify -format "%w" yinyang.jpg
+    jp2a ${border} ${colors} ${size} \
        --output=/tmp/"${image_name}"$$.txt "/tmp/${image_name}$$.jpg"
-  /bin/cat "/tmp/${image_name}$$.txt" | while read l
-  do
-      printf "\n\t$l"
-  done
-  printf "\n"
+  fi
+  show_ascii "/tmp/${image_name}$$.txt" "${tabs}"
 else
-  /bin/cat ${ART_DIR}/${art}.txt | while read l
-  do
-      printf "\n\t$l"
-  done
-  printf "\n"
+  show_ascii "${ART_DIR}/${art}.txt" "${tabs}"
 fi
 
-sleep ${delay}
-have_lolcat=`type -p lolcat`
-if [ "${have_lolcat}" ]
-then
-  figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME} | lolcat
-  figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII} | lolcat
-else
-  figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME}
-  figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII}
-fi
+have_lolcat=
+[ "${lolcat}" ] && have_lolcat=`type -p lolcat`
 
-sleep ${delay}
+[ "${quiet}" ] || {
+  sleep ${delay}
+  if [ "${have_lolcat}" ]
+  then
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME} | lolcat
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII} | lolcat
+  fi
+}
+
 if [ "${have_lolcat}" ]
 then
+  sleep ${delay}
   if [ "${input_image}" ]
   then
-    /bin/cat "/tmp/${image_name}$$.txt" | while read l
-    do
-      printf "\n\t$l"
-    done | lolcat
+    show_ascii "/tmp/${image_name}$$.txt" "${tabs}" lolcat
   else
-    /bin/cat ${ART_DIR}/${art}.txt | while read l
-    do
-      printf "\n\t$l"
-    done | lolcat
-  fi
-else
-  if [ "${input_image}" ]
-  then
-    /bin/cat "/tmp/${image_name}$$.txt" | while read l
-    do
-      printf "\n\t$l"
-    done
-  else
-    /bin/cat ${ART_DIR}/${art}.txt | while read l
-    do
-      printf "\n\t$l"
-    done
+    show_ascii "${ART_DIR}/${art}.txt" "${tabs}" lolcat
   fi
 fi
-printf "\n"
 
 [ -f "/tmp/${image_name}$$.txt" ] && {
   if [ "${save_art}" ]
