@@ -22,6 +22,9 @@ This release includes support for:
 * Add `show_ascii_art` command to display/generate ascii art
 * Add dependency on `ImageMagick`
 * Add `show_figlet_fonts` command
+* Add grayscale option and color depth option to `show_ascii_art`
+* Fold my changes to jp2a with newer version
+* Added character set option to `show_ascii_art`
 
 Supported features include:
 

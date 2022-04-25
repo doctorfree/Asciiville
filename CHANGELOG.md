@@ -26,6 +26,9 @@ All notable changes to this project will be documented in this file.
 * Add `show_ascii_art` command to display/generate ascii art
 * Add dependency on `ImageMagick`
 * Add `show_figlet_fonts` command
+* Add grayscale option and color depth option to `show_ascii_art`
+* Fold my changes to jp2a with newer version
+* Added character set option to `show_ascii_art`
 
 # Asciiville-1.3.0r1 (2022-04-20)
 
@@ -48,6 +51,16 @@ Initial release with support for:
 * Any character based client the user wishes to run
 * One of several asciimatics animations optionally accompanied by audio
 
+Mon Apr 25 16:48:46 2022 -0700 a9ffb3a :
+   Add grayscale option and color depth option to show_ascii_art
+Mon Apr 25 15:04:13 2022 -0700 9976095 :
+   Update definition of print_border in image.h
+Mon Apr 25 15:00:04 2022 -0700 b70f296 :
+   Remove DX RULES from jp2a Makefile
+Mon Apr 25 14:52:58 2022 -0700 b0582c5 :
+   Remove doxygen init from jp2a configure
+Mon Apr 25 14:44:25 2022 -0700 fc0f3d2 :
+   Fold my changes to jp2a with newer version
 Mon Apr 25 13:40:10 2022 -0700 95487c8 :
    Added character set option to show_ascii_art, renamed some options
 Mon Apr 25 12:41:59 2022 -0700 a22f9b5 :
