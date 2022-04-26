@@ -248,8 +248,8 @@ done
       SLIDE_FONT="3d"
       ;;
     Owls*)
-      FIG_ASCII="Owls"
-      SLIDE_DIR="${ART_DIR}/Owls Ascii Art"
+      FIG_ASCII="Owls Ascii Art"
+      SLIDE_DIR="${ART_DIR}/Owls"
       SLIDE_FONT="ANSI Shadow"
       ;;
     Waterfall*)
