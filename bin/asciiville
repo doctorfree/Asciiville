@@ -907,7 +907,7 @@ show_main_menu() {
                   yinyang_bw|face|nude)
                     continue
                     ;;
-                  bob)
+                  smallerbob)
                     if [ "${use_lolcat}" ]
                     then
                       /bin/cat "$i" | lolcat
@@ -920,8 +920,8 @@ show_main_menu() {
                   tux|julia|marilyn|yinyang)
                     tabs="-n 2"
                     ;;
-                  bobdobbs)
-                    tabs="-n 3"
+                  Bobdobbs)
+                    tabs="-n 2"
                     ;;
                   *)
                     tabs=

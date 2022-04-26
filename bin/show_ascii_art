@@ -20,7 +20,7 @@ longchars="...^,:;Ili+_-1tfjrxnuvczXYUJCLQ0OZmwqpdbkhaoMW8"
 usage() {
   printf "\nUsage: show_ascii_art [-a art] [-A art_dir] [-b] [-c] [-C depth]"
   printf "\n\t[-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g]"
-  printf "\n\t[-i image] [-l] [-L] [-n tabs] [-o] [-p palette] [-q] [-r]"
+  printf "\n\t[-i image] [-l] [-L] [-n tabs] [-o] [-p palette] [-q] [-r] [-s show]"
   printf "\n\t[-S] [-u] [-t first_text] [-T second_text] [-h height] [-w width]"
   printf "\nWhere:"
   printf "\n\t-a 'art' specifies which ascii art to display"
@@ -47,6 +47,8 @@ usage() {
   printf "\n\t\tAny other argument to '-p' will be taken as the character set"
   printf "\n\t-q don't display text, just the ascii art"
   printf "\n\t-r indicates select random fonts"
+  printf "\n\t-s 'show' slide show of ascii art"
+  printf "\n\t\t'show' can be Art, Fractals, Lyap, Owls, Waterfalls, Misc"
   printf "\n\t-S indicates save converted image ascii art in art_dir"
   printf "\n\t-t 'first_text' specifies the first text to display"
   printf "\n\t-T 'second_text' specifies the second text to display"
@@ -100,11 +102,12 @@ overwrite=
 save_art=
 height=
 numtabs=0
+slideshow=
 tabs=
 width=
 have_convert=`type -p convert`
 have_jp2a=`type -p jp2a`
-while getopts "a:A:bcC:D:d:gh:i:lLF:f:n:op:qrSt:T:w:u" flag; do
+while getopts "a:A:bcC:D:d:gh:i:lLF:f:n:op:qrs:St:T:w:u" flag; do
   case $flag in
       a)
           art="${OPTARG}"
@@ -183,6 +186,9 @@ while getopts "a:A:bcC:D:d:gh:i:lLF:f:n:op:qrSt:T:w:u" flag; do
       r)
           randfont=1
           ;;
+      s)
+          slideshow="${OPTARG}"
+          ;;
       S)
           save_art=1
           ;;
@@ -220,6 +226,73 @@ done
       first=
   done
   printf "\n\n"
+  exit 0
+}
+
+[ "${slideshow}" ] && {
+  FIG_WELCOME="Asciiville"
+  case "${slideshow}" in
+    Art*)
+      FIG_ASCII="Ascii Fine Art"
+      SLIDE_DIR="${ART_DIR}/Art"
+      SLIDE_FONT="Shadow"
+      ;;
+    Fractal*)
+      FIG_ASCII="Fractal Ascii Art"
+      SLIDE_DIR="${ART_DIR}/Fractals"
+      SLIDE_FONT="sblood"
+      ;;
+    Lyap*)
+      FIG_ASCII="Lyapunov Ascii Art"
+      SLIDE_DIR="${ART_DIR}/Lyapunov"
+      SLIDE_FONT="3d"
+      ;;
+    Owls*)
+      FIG_ASCII="Owls"
+      SLIDE_DIR="${ART_DIR}/Owls Ascii Art"
+      SLIDE_FONT="ANSI Shadow"
+      ;;
+    Waterfall*)
+      FIG_ASCII="Waterfalls Ascii Art"
+      SLIDE_DIR="${ART_DIR}/Waterfalls"
+      SLIDE_FONT="Bolger"
+      ;;
+    *)
+      FIG_ASCII="Ascii Art"
+      SLIDE_DIR="${ART_DIR}"
+      SLIDE_FONT="Varsity"
+      ;;
+  esac
+
+  clear
+  first=1
+  for art in ${SLIDE_DIR}/*.txt
+  do
+    [ "${art}" == "${SLIDE_DIR}/*.txt" ] && {
+      echo "No ascii art found in ${SLIDE_DIR}"
+      echo "Ascii art files must have a '.txt' suffix"
+      exit 0
+    }
+    [ "${first}" ] && {
+      [ "${quiet}" ] || {
+        printf "\n\n\n"
+        if [ "${have_lolcat}" ]
+        then
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} | lolcat
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} | lolcat
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Slide Show" | lolcat
+        else
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME}
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII}
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Slide Show"
+        fi
+        sleep ${delay}
+      }
+      first=
+    }
+    show_ascii ${art}
+    sleep ${delay}
+  done
   exit 0
 }
 
