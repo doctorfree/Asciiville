@@ -374,45 +374,135 @@ show_art_menu() {
               break 2
               ;;
           "Ascii Fine Art Slide Show",*|*,"Ascii Fine Art Slide Show")
-              # xfce4-terminal --fullscreen --font="Monospace Regular" \
-              #                --command="show_ascii_art ${lolarg} -s Art"
-              gnome-terminal --window --full-screen --profile=Asciiville \
-                             -- show_ascii_art ${lolarg} -s Art
+              if [ "${XFCE4}" ]
+              then
+                xfce4-terminal --fullscreen \
+                               --font="Monospace Regular" \
+                               --color-bg=Black \
+                               --command="show_ascii_art ${lolarg} -s Art"
+              else
+                if [ "${TILIX}" ]
+                then
+                  tilix --full-screen \
+                        --window-style=borderless \
+                        --profile=Asciiville \
+                        --command="show_ascii_art ${lolarg} -s Art"
+                else
+                  gnome-terminal --window --full-screen \
+                                 --profile=Asciiville \
+                                 -- show_ascii_art ${lolarg} -s Art
+                fi
+              fi
               break
               ;;
           "Ascii Fractal Art Slide Show",*|*,"Ascii Fractal Art Slide Show")
-              # xfce4-terminal --fullscreen --font="Monospace Regular" \
-              #                --command="show_ascii_art ${lolarg} -s Fractals"
-              gnome-terminal --window --full-screen --profile=Asciiville \
-                             -- show_ascii_art ${lolarg} -s Fractals
+              if [ "${XFCE4}" ]
+              then
+                xfce4-terminal --fullscreen \
+                               --font="Monospace Regular" \
+                               --color-bg=Black \
+                               --command="show_ascii_art ${lolarg} -s Fractals"
+              else
+                if [ "${TILIX}" ]
+                then
+                  tilix --full-screen \
+                        --window-style=borderless \
+                        --profile=Asciiville \
+                        --command="show_ascii_art ${lolarg} -s Fractals"
+                else
+                  gnome-terminal --window --full-screen \
+                                 --profile=Asciiville \
+                                 -- show_ascii_art ${lolarg} -s Fractals
+                fi
+              fi
               break
               ;;
           "Ascii Lyapunov Art Slide Show",*|*,"Ascii Lyapunov Art Slide Show")
-              # xfce4-terminal --fullscreen --font="Monospace Regular" \
-              #                --command="show_ascii_art ${lolarg} -s Lyap"
-              gnome-terminal --window --full-screen --profile=Asciiville \
-                             -- show_ascii_art ${lolarg} -s Lyap
+              if [ "${XFCE4}" ]
+              then
+                xfce4-terminal --fullscreen \
+                               --font="Monospace Regular" \
+                               --color-bg=Black \
+                               --command="show_ascii_art ${lolarg} -s Lyap"
+              else
+                if [ "${TILIX}" ]
+                then
+                  tilix --full-screen \
+                        --window-style=borderless \
+                        --profile=Asciiville \
+                        --command="show_ascii_art ${lolarg} -s Lyap"
+                else
+                  gnome-terminal --window --full-screen \
+                                 --profile=Asciiville \
+                                 -- show_ascii_art ${lolarg} -s Lyap
+                fi
+              fi
               break
               ;;
           "Ascii Mixed Art Slide Show",*|*,"Ascii Mixed Art Slide Show")
-              # xfce4-terminal --fullscreen --font="Monospace Regular" \
-              #                --command="show_ascii_art ${lolarg} -s Mixed"
-              gnome-terminal --window --full-screen --profile=Asciiville \
-                             -- show_ascii_art ${lolarg} -s Mixed
+              if [ "${XFCE4}" ]
+              then
+                xfce4-terminal --fullscreen \
+                               --font="Monospace Regular" \
+                               --color-bg=Black \
+                               --command="show_ascii_art ${lolarg} -s Mixed"
+              else
+                if [ "${TILIX}" ]
+                then
+                  tilix --full-screen \
+                        --window-style=borderless \
+                        --profile=Asciiville \
+                        --command="show_ascii_art ${lolarg} -s Mixed"
+                else
+                  gnome-terminal --window --full-screen \
+                                 --profile=Asciiville \
+                                 -- show_ascii_art ${lolarg} -s Mixed
+                fi
+              fi
               break
               ;;
           "Ascii Owls Art Slide Show",*|*,"Ascii Owls Art Slide Show")
-              # xfce4-terminal --fullscreen --font="Monospace Regular" \
-              #                --command="show_ascii_art ${lolarg} -s Owls"
-              gnome-terminal --window --full-screen --profile=Asciiville \
-                             -- show_ascii_art ${lolarg} -s Owls
+              if [ "${XFCE4}" ]
+              then
+                xfce4-terminal --fullscreen \
+                               --font="Monospace Regular" \
+                               --color-bg=Black \
+                               --command="show_ascii_art ${lolarg} -s Owls"
+              else
+                if [ "${TILIX}" ]
+                then
+                  tilix --full-screen \
+                        --window-style=borderless \
+                        --profile=Asciiville \
+                        --command="show_ascii_art ${lolarg} -s Owls"
+                else
+                  gnome-terminal --window --full-screen \
+                                 --profile=Asciiville \
+                                 -- show_ascii_art ${lolarg} -s Owls
+                fi
+              fi
               break
               ;;
           "Ascii Waterfalls Art Slide Show",*|*,"Ascii Waterfalls Art Slide Show")
-              # xfce4-terminal --fullscreen --font="Monospace Regular" \
-              #                --command="show_ascii_art ${lolarg} -s Waterfalls"
-              gnome-terminal --window --full-screen --profile=Asciiville \
-                             -- show_ascii_art ${lolarg} -s Waterfalls
+              if [ "${XFCE4}" ]
+              then
+                xfce4-terminal --fullscreen \
+                               --font="Monospace Regular" \
+                               --color-bg=Black \
+                               --command="show_ascii_art ${lolarg} -s Waterfalls"
+              else
+                if [ "${TILIX}" ]
+                then
+                  tilix --full-screen \
+                        --window-style=borderless \
+                        --profile=Asciiville \
+                        --command="show_ascii_art ${lolarg} -s Waterfalls"
+                else
+                  gnome-terminal --window --full-screen \
+                                 --profile=Asciiville \
+                                 -- show_ascii_art ${lolarg} -s Waterfalls
+                fi
+              fi
               break
               ;;
           "Record Tmux Session"*,*|*,"Record Tmux Session"*)
@@ -1631,9 +1721,25 @@ fi
   else
     lolarg=
   fi
-  gnome-terminal --window --full-screen --profile=Asciiville \
-                 -- show_ascii_art ${lolarg} -s ${SLIDESHOW}
-  read -p "Press Enter to continue" answer
+  if [ "${XFCE4}" ]
+  then
+    xfce4-terminal --fullscreen \
+                   --font="Monospace Regular" \
+                   --color-bg=Black \
+                   --command="show_ascii_art ${lolarg} -s ${SLIDESHOW}"
+  else
+    if [ "${TILIX}" ]
+    then
+      tilix --full-screen \
+            --window-style=borderless \
+            --profile=Asciiville \
+            --command="show_ascii_art ${lolarg} -s ${SLIDESHOW}"
+    else
+      gnome-terminal --window --full-screen \
+                     --profile=Asciiville \
+                     -- show_ascii_art ${lolarg} -s ${SLIDESHOW}
+    fi
+  fi
 }
 
 [ "${INTERACTIVE}" ] && show_main_menu

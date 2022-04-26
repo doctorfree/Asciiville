@@ -265,6 +265,7 @@ done
   esac
 
   clear
+  sleep 2
   first=1
   for art in ${SLIDE_DIR}/*.txt
   do
@@ -280,11 +281,9 @@ done
         then
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} | lolcat
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} | lolcat
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Slide Show" | lolcat
         else
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME}
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII}
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Slide Show"
         fi
         sleep ${delay}
       }
