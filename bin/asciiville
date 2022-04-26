@@ -203,7 +203,7 @@ make_it_so() {
             tilix --title="${MTITLE}" \
                   --full-screen \
                   --window-style=borderless \
-                  --profile=MusicPlayer \
+                  --profile=Asciiville \
                   --command="${AVCOMM}" 2> /dev/null &
           else
             if [ "${XFCE4}" ]
@@ -219,6 +219,7 @@ make_it_so() {
               gnome-terminal -t "${MTITLE}" \
                   --hide-menubar \
                   --full-screen \
+                  --profile=Asciiville \
                   -- ${AVCOMM} &
             fi
           fi
@@ -228,7 +229,7 @@ make_it_so() {
             tilix --title="${MTITLE}" \
                   --window-style=borderless \
                   --geometry=90x24+150+25 \
-                  --profile=MusicPlayer \
+                  --profile=Asciiville \
                   --command="${AVCOMM}" 2> /dev/null &
           else
             if [ "${XFCE4}" ]
@@ -244,6 +245,7 @@ make_it_so() {
               gnome-terminal -t "${MTITLE}" \
                   --hide-menubar \
                   --geometry 90x24+150+25 \
+                  --profile=Asciiville \
                   -- ${AVCOMM} &
             fi
           fi

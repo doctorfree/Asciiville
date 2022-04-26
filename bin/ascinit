@@ -105,9 +105,17 @@ pip list | grep asciimatics > /dev/null || python3 -m pip install asciimatics
 pip list | grep rainbowstream > /dev/null || python3 -m pip install rainbowstream
 
 create_new_profile() {
-  local profile_ids=($(dconf list $dconfdir/ | grep ^: |\
-      sed 's/\///g' | sed 's/://g'))
   local proname="$1"
+  if [ "${proname}" == "gnome" ]
+  then
+    local profile_ids=($(dconf list $dconfdir/ | grep ^: |\
+        sed 's/\///g' | sed 's/://g'))
+  fi
+  if [ "${proname}" == "tilix" ]
+  then
+    local profile_ids=($(dconf list $dconfdir/ | grep -v ^list |\
+        sed 's/\///g' | sed 's/://g'))
+  fi
   local profile_ids_old="$(dconf read "$dconfdir"/list | tr -d "]")"
   local profile_id="$(uuidgen)"
 
@@ -118,25 +126,42 @@ create_new_profile() {
   dconf write $dconfdir/list \
       "${profile_ids_old}${delimiter} '$profile_id']"
 
-  profile_path="$dconfdir/:$profile_id"
-  dconf write $profile_path/visible-name "'$proname'"
+  if [ "${proname}" == "gnome" ]
+  then
+    profile_path="$dconfdir/:$profile_id"
+  fi
+  if [ "${proname}" == "tilix" ]
+  then
+    profile_path="$dconfdir/$profile_id"
+  fi
+  dconf write $profile_path/visible-name "'$profile_name'"
 
   # Asciiville profile wants a black background with no transparency
-  dconf write $profile_path/background-color "rgb(0,0,0)"
-  dconf write $profile_path/foreground-color "rgb(255,255,255)"
+  dconf write $profile_path/background-color "'rgb(0,0,0)'"
+  dconf write $profile_path/foreground-color "'rgb(255,255,255)'"
+  dconf write $profile_path/cursor-shape "'underline'"
+  dconf write $profile_path/cursor-blink-mode "'off'"
   dconf write $profile_path/use-theme-colors "false"
-  dconf write $profile_path/use-theme-transparency "false"
-  dconf write $profile_path/use-transparent-background "false"
+  if [ "${proname}" == "gnome" ]
+  then
+    dconf write $profile_path/use-theme-transparency "false"
+    dconf write $profile_path/use-transparent-background "false"
+  fi
+  if [ "${proname}" == "tilix" ]
+  then
+    dconf write $profile_path/background-transparency-percent "0"
+  fi
   # Do we need to set the font in the profile?
   # FONT="Monospace Regular"
   # SIZE=12
 }
 
 # If no gnome-terminal Asciiville profile exists, create one
+declare -a profiles
 profile_name="Asciiville"
+
 profile_exists=
 dconfdir=/org/gnome/terminal/legacy/profiles:
-declare -a profiles
 
 # profiles=($(gconftool-2 -R $gconfdir | grep $gconfdir | cut -d/ -f5 |  \
 #          cut -d: -f1))
@@ -144,7 +169,7 @@ profiles=($(gsettings get org.gnome.Terminal.ProfilesList list | tr -d "[]\',"))
 
 if [ "$profiles" = "" ]
 then
-  create_new_profile ${profile_name}
+  create_new_profile gnome
 else
   for i in ${!profiles[*]}
   do
@@ -157,11 +182,36 @@ else
   done
 fi
 
-if [ "$profile_exists" ]
-then
+[ "$profile_exists" ] || {
   # Create an Asciiville profile in gnome-terminal for this user
-  create_new_profile ${profile_name}
+  create_new_profile gnome
+}
+
+# Create Asciiville Tilix profile, similar to Gnome-terminal's
+profile_exists=
+dconfdir=/com/gexperts/Tilix/profiles
+
+profiles=($(gsettings get com.gexperts.Tilix.ProfilesList list | tr -d "[]\',"))
+
+if [ "$profiles" = "" ]
+then
+  create_new_profile tilix
+else
+  for i in ${!profiles[*]}
+  do
+    if [[ "$(dconf read $dconfdir/${profiles[i]}/visible-name)" == \
+        "'$profile_name'" ]]
+    then
+      profile_exists=1
+      break
+    fi
+  done
 fi
+
+[ "$profile_exists" ] || {
+  # Create an Asciiville profile in Tilix for this user
+  create_new_profile tilix
+}
 
 printf "\n${BOLD}Asciiville Initialization Complete${NORMAL}\n"
 printf "\nAuthorize the Rainbow Stream app at Twitter"
