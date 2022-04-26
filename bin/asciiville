@@ -46,8 +46,8 @@ fi
 
 usage() {
   printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-d] [-f] [-F] [-g] [-i] [-I]"
-  printf "\n\t\t[-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script]"
-  printf "\n\t\t[-r] [-R] [-s song] [-S] [-t] [-T] [-w] [-x] [-X] [-y] [-z] [-u]\n"
+  printf "\n\t\t[-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script] [-r] [-R]"
+  printf "\n\t\t[-s song] [-S] [-t] [-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-u]\n"
   printf "\nTerminal/Command options:"
   printf "\n\t-c 'command' indicates use 'command'"
   printf "\n\t\tIf 'command' is keyword 'maps' then display a map using mapscii"
@@ -68,6 +68,8 @@ usage() {
   printf "\n\t-P script specifies the ASCIImatics script to run in visualizer pane"
   printf "\n\t-r indicates use retro terminal emulator"
   printf "\n\t-t indicates use tilix terminal emulator"
+  printf "\n\t-V 'show' displays an ascii art slide show"
+  printf "\n\t\t'show' can be Art, Fractals, Lyap, Mixed, Owls, Waterfalls"
   printf "\n\t-w indicates use w3m web browser as the default command"
   printf "\n\t-x indicates use xfce4 terminal emulator"
   printf "\n\t-X indicates run command in current terminal window"
@@ -93,6 +95,7 @@ usage() {
   printf "\n\t-k indicates kill Asciiville tmux sessions and ASCIImatics scripts"
   printf "\n\t-R indicates record tmux session with asciinema"
   printf "\n\t-T indicates use a tmux session for either ASCIImatics or command"
+  printf "\n\t-v displays the Asciiville version and exits"
   printf "\n\t-u displays this usage message and exits\n"
   printf "\nInvoked without any arguments, 'asciiville' will display a menu\n"
   printf "\nType 'man asciiville' for detailed usage info on Asciiville"
@@ -1180,7 +1183,9 @@ else
 fi
 
 use_term=1
-while getopts "Aabc:dfFgiIjJklLmMn:NpP:rRSs:tTwxXyzu" flag; do
+show_neofetch=
+SLIDESHOW=
+while getopts "Aabc:dfFgiIjJklLmMn:NpP:rRSs:tTvV:wxXyzu" flag; do
   case $flag in
     A)
       ASCSPLASH="${ASCSPLASH} -i"
@@ -1331,13 +1336,7 @@ while getopts "Aabc:dfFgiIjJklLmMn:NpP:rRSs:tTwxXyzu" flag; do
       ;;
     I)
       [ "${have_neo}" ] && {
-        if [ "${use_lolcat}" ]
-        then
-          neofetch | lolcat
-        else
-          neofetch
-        fi
-        read -p "Press Enter to continue" answer
+        show_neofetch=1
       }
       ;;
     j)
@@ -1465,6 +1464,18 @@ while getopts "Aabc:dfFgiIjJklLmMn:NpP:rRSs:tTwxXyzu" flag; do
       ;;
     T)
       TMUX=1
+      ;;
+    v)
+      [ -f "/usr/share/doc/asciiville/VERSION" ] || {
+        echo "Asciiville VERSION file not installed"
+        exit 1
+      }
+      . "/usr/share/doc/asciiville/VERSION"
+      echo "Asciiville version ${VERSION} release ${RELEASE}"
+      exit 0
+      ;;
+    V)
+      SLIDESHOW="${OPTARG}"
       ;;
     w)
       COMMAND="w3m -v ${WEB_HOME}"
@@ -1600,6 +1611,28 @@ else
     [ "${GNOME}" ] && RETRO=
   fi
 fi
+
+[ "${show_neofetch}" ] && {
+  if [ "${use_lolcat}" ]
+  then
+    neofetch | lolcat
+  else
+    neofetch
+  fi
+  read -p "Press Enter to continue" answer
+}
+
+[ "${SLIDESHOW}" ] && {
+  if [ "${use_lolcat}" ]
+  then
+    lolarg="-l"
+  else
+    lolarg=
+  fi
+  gnome-terminal --window --full-screen --profile=Asciiville \
+                 -- show_ascii_art ${lolarg} -s ${SLIDESHOW}
+  read -p "Press Enter to continue" answer
+}
 
 [ "${INTERACTIVE}" ] && show_main_menu
 
