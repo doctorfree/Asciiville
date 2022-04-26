@@ -274,6 +274,14 @@ select_font() {
   done
 
   case "$1" in
+    AsciiArt)
+      if [ "${goBig}" ]
+      then
+        FIG_TEXT="Asciiville Art Shows"
+      else
+        FIG_TEXT="Ascii Art"
+      fi
+      ;;
     Asciimatics)
       if [ "${goBig}" ]
       then
@@ -317,7 +325,128 @@ select_font() {
   esac
 }
 
-show_ascii_menu() {
+show_art_menu() {
+  while true
+  do
+    if [ "${RECORD}" ]
+    then
+      recordstat="YES"
+    else
+      recordstat="NO"
+    fi
+    if [ "${TMUX}" ]
+    then
+      usetmux="YES"
+    else
+      usetmux="NO"
+    fi
+    if [ "${use_lolcat}" ]
+    then
+      lolarg="-l"
+    else
+      lolarg=
+    fi
+    [ "${use_figlet}" ] && {
+      select_font AsciiArt
+      figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+    }
+    PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
+    options=()
+    options+=("Ascii Fine Art Slide Show")
+    options+=("Ascii Fractal Art Slide Show")
+    options+=("Ascii Lyapunov Art Slide Show")
+    options+=("Ascii Mixed Art Slide Show")
+    options+=("Ascii Owls Art Slide Show")
+    options+=("Ascii Waterfalls Art Slide Show")
+    [ "${have_asciinema}" ] && options+=("Record Tmux Session [${recordstat}]")
+    options+=("Use Tmux [${usetmux}]" "Main menu" "Quit")
+    select opt in "${options[@]}"
+    do
+      case "$opt,$REPLY" in
+          "Main menu",*|*,"Main menu"|"Back",*|*,"Back"|"back",*|*,"back")
+              clear
+              init_vars
+              break 2
+              ;;
+          "Ascii Fine Art Slide Show",*|*,"Ascii Fine Art Slide Show")
+              # xfce4-terminal --fullscreen --font="Monospace Regular" \
+              #                --command="show_ascii_art ${lolarg} -s Art"
+              gnome-terminal --window --full-screen --profile=Asciiville \
+                             -- show_ascii_art ${lolarg} -s Art
+              break
+              ;;
+          "Ascii Fractal Art Slide Show",*|*,"Ascii Fractal Art Slide Show")
+              # xfce4-terminal --fullscreen --font="Monospace Regular" \
+              #                --command="show_ascii_art ${lolarg} -s Fractals"
+              gnome-terminal --window --full-screen --profile=Asciiville \
+                             -- show_ascii_art ${lolarg} -s Fractals
+              break
+              ;;
+          "Ascii Lyapunov Art Slide Show",*|*,"Ascii Lyapunov Art Slide Show")
+              # xfce4-terminal --fullscreen --font="Monospace Regular" \
+              #                --command="show_ascii_art ${lolarg} -s Lyap"
+              gnome-terminal --window --full-screen --profile=Asciiville \
+                             -- show_ascii_art ${lolarg} -s Lyap
+              break
+              ;;
+          "Ascii Mixed Art Slide Show",*|*,"Ascii Mixed Art Slide Show")
+              # xfce4-terminal --fullscreen --font="Monospace Regular" \
+              #                --command="show_ascii_art ${lolarg} -s Mixed"
+              gnome-terminal --window --full-screen --profile=Asciiville \
+                             -- show_ascii_art ${lolarg} -s Mixed
+              break
+              ;;
+          "Ascii Owls Art Slide Show",*|*,"Ascii Owls Art Slide Show")
+              # xfce4-terminal --fullscreen --font="Monospace Regular" \
+              #                --command="show_ascii_art ${lolarg} -s Owls"
+              gnome-terminal --window --full-screen --profile=Asciiville \
+                             -- show_ascii_art ${lolarg} -s Owls
+              break
+              ;;
+          "Ascii Waterfalls Art Slide Show",*|*,"Ascii Waterfalls Art Slide Show")
+              # xfce4-terminal --fullscreen --font="Monospace Regular" \
+              #                --command="show_ascii_art ${lolarg} -s Waterfalls"
+              gnome-terminal --window --full-screen --profile=Asciiville \
+                             -- show_ascii_art ${lolarg} -s Waterfalls
+              break
+              ;;
+          "Record Tmux Session"*,*|*,"Record Tmux Session"*)
+              if [ "${RECORD}" ]
+              then
+                RECORD=
+              else
+                RECORD=1
+                TMUX=1
+              fi
+              if [ "${RECORD}" ]
+              then
+                ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -R"
+              else
+                ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s/ -R//"`
+              fi
+              break
+              ;;
+          "Use Tmux"*,*|*,"Use Tmux"*)
+              if [ "${TMUX}" ]
+              then
+                TMUX=
+                RECORD=
+              else
+                TMUX=1
+              fi
+              break
+              ;;
+          "Quit",*|*,"Quit"|"quit",*|*,"quit")
+              printf "\nExiting\n"
+              exit 0
+              ;;
+      esac
+      REPLY=
+    done
+  done
+}
+
+show_animation_menu() {
   while true
   do
     SPLASH=1
@@ -585,13 +714,13 @@ show_main_menu() {
     [ "${have_speed}" ] && options+=("Run Speed Test")
     [ "${have_rainbow}" ] && options+=("Run Twitter Client")
     [ "${have_splash}" ] && options+=("ASCIImatics Animations")
+    [ "${have_showascii}" ] && options+=("Ascii Art Slide Shows")
     options+=("Kill Tmux Sessions")
     [ "${have_ddgr}" ] && options+=("Search the Web")
     [ "${have_mapscii}" ] && options+=("Show Mapscii World Map")
     [ "${have_mpplus}" ] && options+=("Show MusicPlayerPlus Menu")
     [ "${have_roon}" ] && options+=("Show RoonCommandLine Menu")
     [ "${have_neo}" ] && options+=("Show System Info")
-    options+=("Show Ascii Art")
     [ "${have_curl}" ] && options+=("Phase of the Moon")
     [ "${have_curl}" ] && options+=("Weather Report")
     [ "${have_btop}" ] && options+=("Use Btop System Monitor    [${use_btop}]")
@@ -897,50 +1026,13 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "Show Ascii Art",*|*,"Show Ascii Art")
-              ART_DIR="/usr/share/doc/asciiville/art"
-              for i in ${ART_DIR}/*.txt
-              do
-                b=`basename "$i"`
-                name=`echo $b | sed -e "s/.txt//"`
-                case "$name" in
-                  yinyang_bw|face|nude)
-                    continue
-                    ;;
-                  smallerbob)
-                    if [ "${use_lolcat}" ]
-                    then
-                      /bin/cat "$i" | lolcat
-                    else
-                      /bin/cat "$i"
-                    fi
-                    read -p "Press Enter to continue" answer
-                    continue
-                    ;;
-                  tux|julia|marilyn|yinyang)
-                    tabs="-n 2"
-                    ;;
-                  Bobdobbs)
-                    tabs="-n 2"
-                    ;;
-                  *)
-                    tabs=
-                    ;;
-                esac
-                if [ "${use_lolcat}" ]
-                then
-                  show_ascii_art -a "${name}" -q -l -D 2 ${tabs}
-                else
-                  show_ascii_art -a "${name}" -q -D 2 ${tabs}
-                fi
-                # echo "Ascii Art: $i"
-                read -p "Press Enter to continue" answer
-              done
+          "ASCIImatics Animations",*|*,"ASCIImatics Animations")
+              show_animation_menu
               skip_it_so=1
               break
               ;;
-          "ASCIImatics Animations",*|*,"ASCIImatics Animations")
-              show_ascii_menu
+          "Ascii Art Slide Shows",*|*,"Ascii Art Slide Shows")
+              show_art_menu
               skip_it_so=1
               break
               ;;
@@ -1047,6 +1139,7 @@ have_rainbow=`type -p rainbowstream`
 have_roon=`type -p roon`
 have_speed=`type -p speedtest-cli`
 have_splash=`type -p asciisplash`
+have_showascii=`type -p show_ascii_art`
 have_xfce4=`type -p xfce4-terminal`
 have_gnome=`type -p gnome-terminal`
 have_lynx=`type -p lynx`

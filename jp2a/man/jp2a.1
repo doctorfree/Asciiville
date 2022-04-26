@@ -1,4 +1,4 @@
-.TH jp2a 1  "November 20, 2020" "version 1.1.1" "USER COMMANDS"
+.TH jp2a 1  "April 24, 2022" "version 1.1.2" "USER COMMANDS"
 .SH NAME
 jp2a \- convert JPEG and PNG images to ASCII
 .SH SYNOPSIS
@@ -202,7 +202,7 @@ somefile.jpg --red=1.0 --green=0.0 --blue=0.0
 This will calculate luminance based on Y = R*1.0 + G*0.0 + B*0.0.  The default
 values is to use Y = R*0.2989 + G*0.5866 + B*0.1145.
 .SH PROJECT HOMEPAGE
-The latest version of jp2a and news is always available from https://github.com/Talinx/jp2a.
+The latest version of jp2a and news is always available from https://github.com/doctorfree/Asciiville.
 .SH SEE ALSO
 cjpeg(1), djpeg(1), jpegtran(1), convert(1)
 .SH BUGS
@@ -212,7 +212,7 @@ and convert the source image to the exact output dimensions before using jp2a.
 Another issue is that jp2a skips some X-pixels along each scanline.  This gives a less
 precise output image, and will probably be corrected in future versions.
 .SH AUTHOR
-Christian Stigen Larsen and Christoph Raitzig
+Christian Stigen Larsen, Christoph Raitzig, and Ronald Record
 
 jp2a uses jpeglib to read JPEG files.  jpeglib is made by The Independent JPEG Group (IJG),
 who have a page at http://www.ijg.org

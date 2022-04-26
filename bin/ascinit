@@ -104,6 +104,33 @@ have_pip=`type -p pip`
 pip list | grep asciimatics > /dev/null || python3 -m pip install asciimatics
 pip list | grep rainbowstream > /dev/null || python3 -m pip install rainbowstream
 
+# Create an Asciiville profile in gnome-terminal for this user
+DCONFDIR=/org/gnome/terminal/legacy/profiles:
+FONT="Monospace Regular"
+SIZE=12
+
+create_new_profile() {
+  local profile_ids=($(dconf list $DCONFDIR/ | grep ^: |\
+      sed 's/\///g' | sed 's/://g'))
+  local profile_name="$1"
+  local profile_ids_old="$(dconf read "$DCONFDIR"/list | tr -d "]")"
+  local profile_id="$(uuidgen)"
+
+  [ -z "$profile_ids_old" ] && {
+    local profile_ids_old="["  # if there's no `list` key
+  }
+  [ ${#profile_ids[@]} -gt 0 ] && local delimiter=,  # if the list is empty
+  dconf write $DCONFDIR/list \
+      "${profile_ids_old}${delimiter} '$profile_id']"
+  dconf write "$DCONFDIR/:$profile_id"/visible-name "'$profile_name'"
+  echo $profile_id
+}
+
+# Create profile
+id=$(create_new_profile Asciiville)
+
+# echo "Asciiville gnome-terminal profile created with id=${id}"
+
 printf "\n${BOLD}Asciiville Initialization Complete${NORMAL}\n"
 printf "\nAuthorize the Rainbow Stream app at Twitter"
 printf "\nby running the ${BOLD}'rainbowstream'${NORMAL} command\n"

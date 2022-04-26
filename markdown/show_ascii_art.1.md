@@ -9,7 +9,7 @@ date: April 24, 2022
 show_ascii_art - display ascii art
 
 # SYNOPSIS
-**show_ascii_art** [-a art] [-A art_dir] [-b] [-c] [-C depth] [-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g] [-i image] [-l] [-L] [-n tabs] [-o] [-p palette] [-q] [-r] [-S] [-u] [-t first_text] [-T second_text] [-h height] [-w width]
+**show_ascii_art** [-a art] [-A art_dir] [-b] [-c] [-C depth] [-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g] [-i image] [-l] [-L] [-n tabs] [-o] [-p palette] [-q] [-r] [-s show] [-S] [-u] [-t first_text] [-T second_text] [-h height] [-w width]
 
 # DESCRIPTION
 The *show_ascii_art* command displays one of the ascii art images included in
@@ -85,6 +85,11 @@ the fonts used to display accompanying text, and the text to display.
 
 **-r**
 : indicates select random fonts
+
+**-s 'show'**
+: slide show of ascii art
+
+    'show' can be Art, Fractals, Lyap, Owls, Waterfalls, Mixed
 
 **-S**
 : indicates save converted image ascii art in art_dir
