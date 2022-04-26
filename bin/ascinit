@@ -104,32 +104,55 @@ have_pip=`type -p pip`
 pip list | grep asciimatics > /dev/null || python3 -m pip install asciimatics
 pip list | grep rainbowstream > /dev/null || python3 -m pip install rainbowstream
 
-# Create an Asciiville profile in gnome-terminal for this user
-DCONFDIR=/org/gnome/terminal/legacy/profiles:
-FONT="Monospace Regular"
-SIZE=12
-
 create_new_profile() {
-  local profile_ids=($(dconf list $DCONFDIR/ | grep ^: |\
+  local profile_ids=($(dconf list $dconfdir/ | grep ^: |\
       sed 's/\///g' | sed 's/://g'))
-  local profile_name="$1"
-  local profile_ids_old="$(dconf read "$DCONFDIR"/list | tr -d "]")"
+  local proname="$1"
+  local profile_ids_old="$(dconf read "$dconfdir"/list | tr -d "]")"
   local profile_id="$(uuidgen)"
 
   [ -z "$profile_ids_old" ] && {
     local profile_ids_old="["  # if there's no `list` key
   }
   [ ${#profile_ids[@]} -gt 0 ] && local delimiter=,  # if the list is empty
-  dconf write $DCONFDIR/list \
+  dconf write $dconfdir/list \
       "${profile_ids_old}${delimiter} '$profile_id']"
-  dconf write "$DCONFDIR/:$profile_id"/visible-name "'$profile_name'"
-  echo $profile_id
+  dconf write "$dconfdir/:$profile_id"/visible-name "'$proname'"
 }
 
-# Create profile
-id=$(create_new_profile Asciiville)
+# If no gnome-terminal Asciiville profile exists, create one
+profile_name="Asciiville"
+profile_exists=
+dconfdir=/org/gnome/terminal/legacy/profiles:
+# Do we need to set the font in the profile?
+# FONT="Monospace Regular"
+# SIZE=12
+declare -a profiles
 
-# echo "Asciiville gnome-terminal profile created with id=${id}"
+# profiles=($(gconftool-2 -R $gconfdir | grep $gconfdir | cut -d/ -f5 |  \
+#          cut -d: -f1))
+profiles=($(gsettings get org.gnome.Terminal.ProfilesList list | tr -d "[]\',"))
+
+if [ "$profiles" = "" ]
+then
+  create_new_profile ${profile_name}
+else
+  for i in ${!profiles[*]}
+  do
+    if [[ "$(dconf read $dconfdir/:${profiles[i]}/visible-name)" == \
+        "'$profile_name'" ]]
+    then
+      profile_exists=1
+      break
+    fi
+  done
+fi
+
+if [ "$profile_exists" ]
+then
+  # Create an Asciiville profile in gnome-terminal for this user
+  create_new_profile ${profile_name}
+fi
 
 printf "\n${BOLD}Asciiville Initialization Complete${NORMAL}\n"
 printf "\nAuthorize the Rainbow Stream app at Twitter"

@@ -284,8 +284,8 @@ summary of the command line options:
 
 ```
 Usage: asciiville [-a] [-A] [-b] [-c command] [-d] [-f] [-F] [-g] [-i] [-I]
-		[-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script]
-		[-r] [-R] [-s song] [-S] [-t] [-T] [-w] [-x] [-X] [-y] [-z] [-u]
+		[-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script] [-r] [-R]
+		[-s song] [-S] [-t] [-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-u]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
@@ -307,6 +307,8 @@ Terminal/Command options:
 	-P script specifies the ASCIImatics script to run in visualizer pane
 	-r indicates use retro terminal emulator
 	-t indicates use tilix terminal emulator
+	-V 'show' displays an ascii art slide show
+		'show' can be Art, Fractals, Lyap, Mixed, Owls, Waterfalls
 	-w indicates use w3m web browser as the default command
 	-x indicates use xfce4 terminal emulator
 	-X indicates run command in current terminal window
@@ -334,6 +336,7 @@ General options:
 	-k indicates kill Asciiville tmux sessions and ASCIImatics scripts
 	-R indicates record tmux session with asciinema
 	-T indicates use a tmux session for either ASCIImatics or command
+	-v displays the Asciiville version and exits
 	-u displays this usage message and exits
 
 Invoked without any arguments, 'asciiville' will display a menu

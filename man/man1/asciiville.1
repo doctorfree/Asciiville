@@ -23,9 +23,10 @@ command, ascii art, asciimatics animation, character based
 Email/FTP/File/Web clients, and much more
 .SH SYNOPSIS
 .PP
-\f[B]asciiville\f[R] [-a] [-A] [-b] [-c command] [-d] [-f] [-g] [-i]
-[-I] [-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script] [-r]
-[-R] [-s song] [-S] [-t] [-T] [-x] [-X] [-y] [-z] [-u]
+\f[B]asciiville\f[R] [-a] [-A] [-b] [-c command] [-d] [-f] [-F] [-g]
+[-i] [-I] [-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script]
+[-r] [-R] [-s song] [-S] [-t] [-T] [-v] [-V show] [-w] [-x] [-X] [-y]
+[-z] [-u]
 .PP
 Invoked without any arguments or with the \f[V]-i\f[R] argument,
 \f[V]asciiville\f[R] displays an interactive dialog menu.
@@ -107,6 +108,15 @@ Indicates use retro terminal emulator
 \f[B]-t\f[R]
 Indicates use tilix terminal emulator
 .TP
+\f[B]-V \[aq]show\[aq]\f[R]
+Displays an ascii art slide show
+.RS
+\[aq]show\[aq] can be Art, Fractals, Lyap, Mixed, Owls, Waterfalls
+.RE
+.TP
+\f[B]-w\f[R]
+Indicates use w3m web browser as the default command
+.TP
 \f[B]-x\f[R]
 Indicates use xfce4 terminal emulator
 .TP
@@ -167,6 +177,9 @@ Indicates record tmux session with asciinema
 .TP
 \f[B]-T\f[R]
 Indicates use a tmux session for either ASCIImatics or command
+.TP
+\f[B]-v\f[R]
+Displays the Asciiville version and exits
 .TP
 \f[B]-u\f[R]
 Displays this usage message and exits

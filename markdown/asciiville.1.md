@@ -10,9 +10,7 @@ asciiville - Launch a terminal emulator and specified character based command, a
 and much more
 
 # SYNOPSIS
-**asciiville** [-a] [-A] [-b] [-c command] [-d] [-f] [-g] [-i] [-I]
-		[-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script]
-		[-r] [-R] [-s song] [-S] [-t] [-T] [-x] [-X] [-y] [-z] [-u]
+**asciiville** [-a] [-A] [-b] [-c command] [-d] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-u]
 
 Invoked without any arguments or with the `-i` argument, `asciiville` displays an interactive dialog menu.
 
@@ -63,6 +61,14 @@ Previously started tmux sessions and asciimatics scripts can be quickly and easi
 
 **-t**
 : Indicates use tilix terminal emulator
+
+**-V 'show'**
+: Displays an ascii art slide show
+
+    'show' can be Art, Fractals, Lyap, Mixed, Owls, Waterfalls
+
+**-w**
+: Indicates use w3m web browser as the default command
 
 **-x**
 : Indicates use xfce4 terminal emulator
@@ -124,6 +130,9 @@ Previously started tmux sessions and asciimatics scripts can be quickly and easi
 
 **-T**
 : Indicates use a tmux session for either ASCIImatics or command
+
+**-v**
+: Displays the Asciiville version and exits
 
 **-u**
 : Displays this usage message and exits
