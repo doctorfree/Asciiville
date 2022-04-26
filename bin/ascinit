@@ -117,16 +117,25 @@ create_new_profile() {
   [ ${#profile_ids[@]} -gt 0 ] && local delimiter=,  # if the list is empty
   dconf write $dconfdir/list \
       "${profile_ids_old}${delimiter} '$profile_id']"
-  dconf write "$dconfdir/:$profile_id"/visible-name "'$proname'"
+
+  profile_path="$dconfdir/:$profile_id"
+  dconf write $profile_path/visible-name "'$proname'"
+
+  # Asciiville profile wants a black background with no transparency
+  dconf write $profile_path/background-color "rgb(0,0,0)"
+  dconf write $profile_path/foreground-color "rgb(255,255,255)"
+  dconf write $profile_path/use-theme-colors "false"
+  dconf write $profile_path/use-theme-transparency "false"
+  dconf write $profile_path/use-transparent-background "false"
+  # Do we need to set the font in the profile?
+  # FONT="Monospace Regular"
+  # SIZE=12
 }
 
 # If no gnome-terminal Asciiville profile exists, create one
 profile_name="Asciiville"
 profile_exists=
 dconfdir=/org/gnome/terminal/legacy/profiles:
-# Do we need to set the font in the profile?
-# FONT="Monospace Regular"
-# SIZE=12
 declare -a profiles
 
 # profiles=($(gconftool-2 -R $gconfdir | grep $gconfdir | cut -d/ -f5 |  \
