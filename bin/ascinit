@@ -8,6 +8,12 @@ CONFDIR=/usr/share/doc/asciiville
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 
+debug=
+[ "$1" == "-debug" ] && {
+  debug=1
+  shift
+}
+
 # Mutt configuration user setup
 [ -f ${CONFDIR}/mutt/muttrc ] && {
   [ -d ${HOME}/.mutt ] || {
@@ -118,13 +124,35 @@ create_new_profile() {
   fi
   local profile_ids_old="$(dconf read "$dconfdir"/list | tr -d "]")"
   local profile_id="$(uuidgen)"
-
-  [ -z "$profile_ids_old" ] && {
-    local profile_ids_old="["  # if there's no `list` key
+  [ "${debug}" ] && {
+    echo "profile_ids_old=${profile_ids_old}"
+    echo "profile_id=${profile_id}"
   }
-  [ ${#profile_ids[@]} -gt 0 ] && local delimiter=,  # if the list is empty
-  dconf write $dconfdir/list \
-      "${profile_ids_old}${delimiter} '$profile_id']"
+
+  if [ -z "$profile_ids_old" ]
+  then
+    if [ ${#profile_ids[@]} -gt 0 ]
+    then
+      for id in "${!profile_ids[@]}"
+      do
+        profile_ids[${id}]="'profile_ids[${id}]',"
+      done
+      dconf write $dconfdir/list "[${profile_ids[*]} '$profile_id']"
+      [ "${debug}" ] && {
+        echo "A: dconf write $dconfdir/list [${profile_ids[*]} '$profile_id']"
+      }
+    else
+      dconf write $dconfdir/list "['$profile_id']"
+      [ "${debug}" ] && {
+        echo "B: dconf write $dconfdir/list ['$profile_id']"
+      }
+    fi
+  else
+    dconf write $dconfdir/list "${profile_ids_old}, '$profile_id']"
+    [ "${debug}" ] && {
+      echo "C: dconf write $dconfdir/list ${profile_ids_old}, '$profile_id']"
+    }
+  fi
 
   if [ "${proname}" == "gnome" ]
   then
