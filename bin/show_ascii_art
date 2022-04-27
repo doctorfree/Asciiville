@@ -91,24 +91,39 @@ show_ascii() {
   }
 
   prep="\n${2}"
-  [ "${center}}" ] && {
+  numlines=0
+  [ "${center}" ] && {
     firstline=`head -1 $1`
     echo "${firstline}" | grep "^+-------" > /dev/null && {
       # ascii art with boundary, we know its width
-      awidth=`echo "${firstline}" | wc -c`
-      margin="$((termwidth - awidth))"
-      if [ ${margin} -gt 1 ]
+      awide=`echo "${firstline}" | wc -c`
+      ahigh=`cat "$1" | wc -l`
+      h_margin="$((termwide - awide))"
+      v_margin="$((termhigh - ahigh))"
+      if [ ${h_margin} -gt 1 ]
       then
-        numspaces="$((margin / 2))"
+        numspaces="$((h_margin / 2))"
       else
         numspaces=0
       fi
       spaces=
       set_spaces
       prep="\n${spaces}"
+      if [ ${v_margin} -gt 1 ]
+      then
+        numlines="$((v_margin / 2))"
+      else
+        numlines=0
+      fi
     }
   }
 
+  line=0
+  while [ ${line} -lt ${numlines} ]
+  do
+    printf "\n"
+    ((line++))
+  done
   if [ "$3" ]
   then
     /bin/cat "$1" | while read l
@@ -271,9 +286,16 @@ done
 }
 
 sleep 2
-termwidth=`stty size | awk '{print $2}'`
+termwide=`stty size | awk '{print $2}'`
+termhigh=`stty size | awk '{print $1}'`
+
+function cleanup() {
+  tput cnorm
+}
 
 [ "${slideshow}" ] && {
+  trap cleanup EXIT
+  tput civis
   FIG_WELCOME="Asciiville"
   case "${slideshow}" in
     Art*)
@@ -332,6 +354,7 @@ termwidth=`stty size | awk '{print $2}'`
       }
       first=
     }
+    clear
     show_ascii ${art}
     sleep ${delay}
   done
