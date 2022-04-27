@@ -260,8 +260,8 @@ make_it_so() {
 
 select_font() {
   # Array with font names
-  fonts=("3d" "ANSI Shadow" "Bolger" "sblood" "Slant" "Shadow" "Speed" "Varsity" "Calvin S" "miniwi")
-  smallfonts=("Calvin S" "miniwi")
+  fonts=("Bolger" "sblood" "Slant" "Shadow" "Speed" "Varsity" "Small" "Small Script" "Small Shadow" "Small Slant")
+  smallfonts=("Small" "Small Script" "Small Shadow" "Small Slant")
 
   # Seed random generator
   RANDOM=$$$(date +%s)
@@ -353,7 +353,12 @@ show_art_menu() {
     fi
     [ "${use_figlet}" ] && {
       select_font AsciiArt
-      figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+      if [ "${use_lolcat}" ]
+      then
+        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | lolcat
+      else
+        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+      fi
     }
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
@@ -363,8 +368,9 @@ show_art_menu() {
     options+=("Ascii Mixed Art Slide Show")
     options+=("Ascii Owls Art Slide Show")
     options+=("Ascii Waterfalls Art Slide Show")
+    [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring [${use_lol}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session [${recordstat}]")
-    options+=("Use Tmux [${usetmux}]" "Main menu" "Quit")
+    options+=("Use Tmux            [${usetmux}]" "Main menu" "Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
@@ -505,6 +511,19 @@ show_art_menu() {
               fi
               break
               ;;
+          "Use Lolcat Coloring"*,*|*,"Use Lolcat Coloring"*)
+              if [ "${use_lolcat}" ]
+              then
+                use_lolcat=
+                use_lol="NO"
+                lolarg=
+              else
+                use_lolcat=1
+                use_lol="YES"
+                lolarg="-l"
+              fi
+              break
+              ;;
           "Record Tmux Session"*,*|*,"Record Tmux Session"*)
               if [ "${RECORD}" ]
               then
@@ -566,7 +585,12 @@ show_animation_menu() {
     skip_it_so=
     [ "${use_figlet}" ] && {
       select_font Asciimatics
-      figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+      if [ "${use_lolcat}" ]
+      then
+        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | lolcat
+      else
+        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+      fi
     }
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
@@ -790,10 +814,17 @@ show_main_menu() {
     skip_it_so=
     [ "${use_figlet}" ] && {
       select_font Asciiville
-      figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+      if [ "${use_lolcat}" ]
+      then
+        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | lolcat
+      else
+        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+      fi
     }
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
+    [ "${have_showascii}" ] && options+=("Ascii Art Slide Shows")
+    [ "${have_splash}" ] && options+=("ASCIImatics Animations")
     if [ "${use_term}" ]
     then
       [ "${have_gnome}" ] && options+=("Run ${show_comm} in Gnome Terminal")
@@ -808,9 +839,6 @@ show_main_menu() {
     [ "${have_bb}" ] && options+=("Run AAlib Demo (Curses mode)")
     [ "${have_speed}" ] && options+=("Run Speed Test")
     [ "${have_rainbow}" ] && options+=("Run Twitter Client")
-    [ "${have_splash}" ] && options+=("ASCIImatics Animations")
-    [ "${have_showascii}" ] && options+=("Ascii Art Slide Shows")
-    options+=("Kill Tmux Sessions")
     [ "${have_ddgr}" ] && options+=("Search the Web")
     [ "${have_mapscii}" ] && options+=("Show Mapscii World Map")
     [ "${have_mpplus}" ] && options+=("Show MusicPlayerPlus Menu")
@@ -841,6 +869,7 @@ show_main_menu() {
     [ "${have_asciinema}" ] && options+=("Record Tmux Session        [${recordstat}]")
     options+=("Fullscreen Terminal Window [${fullstat}]")
     options+=("Default Web Browser [${default_browser}]")
+    options+=("Kill Tmux Sessions")
     options+=("Quit")
     select opt in "${options[@]}"
     do
@@ -1093,7 +1122,12 @@ show_main_menu() {
           "Show MusicPlayerPlus Menu",*|*,"Show MusicPlayerPlus Menu")
               [ "${use_figlet}" ] && {
                 select_font MusicPlayer
-                figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+                if [ "${use_lolcat}" ]
+                then
+                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | lolcat
+                else
+                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+                fi
               }
               mpplus -i
               clear
@@ -1103,7 +1137,12 @@ show_main_menu() {
           "Show RoonCommandLine Menu",*|*,"Show RoonCommandLine Menu")
               [ "${use_figlet}" ] && {
                 select_font Roon
-                figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+                if [ "${use_lolcat}" ]
+                then
+                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | lolcat
+                else
+                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+                fi
               }
               roon
               clear
@@ -1742,6 +1781,12 @@ fi
   fi
 }
 
-[ "${INTERACTIVE}" ] && show_main_menu
+[ "${INTERACTIVE}" ] && {
+  [ "${have_lolcat}" ] && {
+    use_lolcat=1
+    use_lol="YES"
+  }
+  show_main_menu
+}
 
 make_it_so

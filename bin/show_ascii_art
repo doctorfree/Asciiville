@@ -4,8 +4,8 @@ ART_DIR="/usr/share/doc/asciiville/art"
 FIG_WELCOME="Welcome To"
 FIG_ASCII="Asciiville"
 FIG_FONTS="/usr/share/figlet-fonts"
-LARGE_FONT="Speed"
-SMALL_FONT="Calvin S"
+LARGE_FONT="Bolger"
+SMALL_FONT="Small"
 art="yinyang"
 
 # Default palette used by jp2a
@@ -99,6 +99,7 @@ show_ascii() {
       awide=`echo "${firstline}" | wc -c`
       ahigh=`cat "$1" | wc -l`
       h_margin="$((termwide - awide))"
+      [ ${h_margin} -lt 0 ] && return 3
       v_margin="$((termhigh - ahigh))"
       if [ ${h_margin} -gt 1 ]
       then
@@ -285,6 +286,11 @@ done
   exit 0
 }
 
+have_lolcat=
+[ "${lolcat}" ] && {
+  have_lolcat=`type -p lolcat`
+}
+
 sleep 2
 termwide=`stty size | awk '{print $2}'`
 termhigh=`stty size | awk '{print $1}'`
@@ -341,14 +347,20 @@ function cleanup() {
     }
     [ "${first}" ] && {
       [ "${quiet}" ] || {
-        printf "\n\n\n"
+        printf "\n\n\n\n"
         if [ "${have_lolcat}" ]
         then
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} | lolcat
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} | lolcat
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Presented" | lolcat
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "by" | lolcat
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Doctor When" | lolcat
         else
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME}
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII}
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Presented"
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "by"
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Doctor When"
         fi
         sleep ${delay}
       }
@@ -356,7 +368,7 @@ function cleanup() {
     }
     clear
     show_ascii ${art}
-    sleep ${delay}
+    [ $? -eq 3 ] || sleep ${delay}
   done
   exit 0
 }
@@ -376,8 +388,8 @@ fi
 
 [ "${randfont}" ] && {
   # Arrays with font names
-  largefonts=("3d" "ANSI Shadow" "Bolger" "sblood" "Slant" "Shadow" "Speed" "Varsity")
-  smallfonts=("small" "Calvin S" "miniwi")
+  largefonts=("Bolger" "sblood" "Slant" "Shadow" "Speed" "Varsity")
+  smallfonts=("Small" "Small Script" "Small Shadow" "Small Slant")
 
   # Seed random generator
   RANDOM=$$$(date +%s)
@@ -428,9 +440,6 @@ then
 else
   show_ascii "${ART_DIR}/${art}.txt" "${tabs}"
 fi
-
-have_lolcat=
-[ "${lolcat}" ] && have_lolcat=`type -p lolcat`
 
 [ "${quiet}" ] || {
   sleep ${delay}

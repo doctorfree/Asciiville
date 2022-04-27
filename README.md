@@ -343,6 +343,49 @@ Invoked without any arguments, 'asciiville' will display a menu
 ```
 
 ```
+Usage: show_ascii_art [-a art] [-A art_dir] [-b] [-c] [-C]
+	[-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g]
+	[-i image] [-l] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-q] [-r] [-s show]
+	[-S] [-u] [-t first_text] [-T second_text] [-h height] [-w width]
+Where:
+	-a 'art' specifies which ascii art to display
+	-A 'art_dir' specifies the path to the ascii art folder
+	-b when generating ascii art use a border
+	-c when generating ascii art use ANSI colors
+	-C center ascii art on screen if border detected
+	-d 'font_dir' specifies the path to the figlet fonts
+	-D 'seconds' specifies the delay, in seconds, between screens
+	-g convert image to grayscale
+	-i 'image' specifies an image file to convert to ascii art
+	-l use lolcat coloring
+	-L lists the ascii art in the 'art_dir' and exits
+	-f 'small_font' specifies the figlet font to use for small text
+	-F 'large_font' specifies the figlet font to use for large text
+	-n 'tabs' specifies the number of tabs to indent image display
+	-N 'depth' specifies the color depth
+		'depth' can be '4' (for ANSI), '8' (for 256 color palette)
+		or '24' (for truecolor or 24-bit color)
+	-o indicates overwrite any existing ascii art when saving
+	-p 'palette' specifies which character set to use for ascii art
+		'palette' can be one of 'def', 'long', 'rev', 'longrev'
+		'def' is the default set, 'long' a long set,
+		'rev' reverses default, 'longrev' reverses long
+		Any other argument to '-p' will be taken as the character set
+	-q don't display text, just the ascii art
+	-r indicates select random fonts
+	-s 'show' slide show of ascii art
+		'show' can be Art, Fractals, Lyap, Owls, Waterfalls, Mixed
+	-S indicates save converted image ascii art in art_dir
+	-t 'first_text' specifies the first text to display
+	-T 'second_text' specifies the second text to display
+	-u displays this usage message and exits
+	-h 'height' specifies the height of the converted ascii art
+	-w 'width' specifies the width of the converted ascii art
+		If only one of 'width' and 'height' is provided,
+		calculate the other from image aspect ratio
+```
+
+```
 Usage: asciisplash [-A] [-a] [-b] [-C] [-c num] [-d] [-jJ] [-m] [-p] [-s song] [-u]
 Where:
 	-A indicates use all effects
