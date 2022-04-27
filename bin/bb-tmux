@@ -96,15 +96,6 @@ tmux send-keys "echo 'n'" C-m
   mkfifo ${FIFO}
   mplayer -novideo -volume 80 -really-quiet -nolirc \
           -slave -input file=${FIFO} "${SONG}" > /dev/null 2>&1 &
-  # tmux set-option -p remain-on-exit on
-  # tmux set-hook -t ${SESSION} pane-exited 'run-shell "/usr/bin/mplayer_stop ${FIFO}"'
-  # tmux set-hook before-kill-window 'run-shell "
-  #    tmux list-panes -t \"#{window_id}\" -F \"##{pane_id}\" | xargs -I {} tmux send-keys -t {} C-c
-  #    "'
-  # tmux set-hook before-kill-window 'run-shell "
-  #    /usr/bin/mplayer_stop ${FIFO}
-  #    "'
-
 }
 
 if [ "${RECORD}" ]
