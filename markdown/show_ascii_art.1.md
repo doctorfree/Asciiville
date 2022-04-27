@@ -9,7 +9,7 @@ date: April 24, 2022
 show_ascii_art - display ascii art
 
 # SYNOPSIS
-**show_ascii_art** [-a art] [-A art_dir] [-b] [-c] [-C depth] [-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g] [-i image] [-l] [-L] [-n tabs] [-o] [-p palette] [-q] [-r] [-s show] [-S] [-u] [-t first_text] [-T second_text] [-h height] [-w width]
+**show_ascii_art** [-a art] [-A art_dir] [-b] [-c] [-C] [-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g] [-i image] [-l] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-q] [-r] [-s show] [-S] [-u] [-t first_text] [-T second_text] [-h height] [-w width]
 
 # DESCRIPTION
 The *show_ascii_art* command displays one of the ascii art images included in
@@ -32,12 +32,8 @@ the fonts used to display accompanying text, and the text to display.
 **-c**
 : when generating ascii art use ANSI colors
 
-**-C 'depth'**
-: specifies the color depth
-
-    'depth' can be '4' (for ANSI), '8' (for 256 color palette)
-
-    or '24' (for truecolor or 24-bit color)
+**-C**
+: center ascii art on screen if border detected
 
 **-d 'font_dir'**
 : specifies the path to the figlet fonts
@@ -62,6 +58,13 @@ the fonts used to display accompanying text, and the text to display.
 
 **-L**
 : lists the ascii art in the 'art_dir' and exits
+
+**-N 'depth'**
+: specifies the color depth
+
+    'depth' can be '4' (for ANSI), '8' (for 256 color palette)
+
+    or '24' (for truecolor or 24-bit color)
 
 **-n 'tabs'**
 : specifies the number of tabs to indent image display
@@ -114,6 +117,9 @@ If only one of 'width' and 'height' is provided, calculate the other from image 
 # EXAMPLES
 **show_ascii_art**
 : Without options show_ascii_art will display an ascii art image and "Welcome to Asciiville" text using Figlet fonts.
+
+**show_ascii_art -C -s Art**
+: Display a slide show of Ascii Fine Art, centering the art in the terminal window.
 
 **show_ascii_art -i $HOME/Pictures/selfie.gif**
 : Converts the GIF image file `$HOME/Pictures/selfie.gif` to JPEG format using the ImageMagick *convert* utility then generates ascii art from the JPEG file using the Asciiville *jp2a* utility and displays it along with figlet text.

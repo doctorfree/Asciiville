@@ -379,18 +379,18 @@ show_art_menu() {
                 xfce4-terminal --fullscreen \
                                --font="Monospace Regular" \
                                --color-bg=Black \
-                               --command="show_ascii_art ${lolarg} -s Art"
+                               --command="show_ascii_art -C ${lolarg} -s Art"
               else
                 if [ "${TILIX}" ]
                 then
                   tilix --full-screen \
                         --window-style=borderless \
                         --profile=Asciiville \
-                        --command="show_ascii_art ${lolarg} -s Art"
+                        --command="show_ascii_art -C ${lolarg} -s Art"
                 else
                   gnome-terminal --window --full-screen \
                                  --profile=Asciiville \
-                                 -- show_ascii_art ${lolarg} -s Art
+                                 -- show_ascii_art -C ${lolarg} -s Art
                 fi
               fi
               break
@@ -401,18 +401,18 @@ show_art_menu() {
                 xfce4-terminal --fullscreen \
                                --font="Monospace Regular" \
                                --color-bg=Black \
-                               --command="show_ascii_art ${lolarg} -s Fractals"
+                               --command="show_ascii_art -C ${lolarg} -s Fractals"
               else
                 if [ "${TILIX}" ]
                 then
                   tilix --full-screen \
                         --window-style=borderless \
                         --profile=Asciiville \
-                        --command="show_ascii_art ${lolarg} -s Fractals"
+                        --command="show_ascii_art -C ${lolarg} -s Fractals"
                 else
                   gnome-terminal --window --full-screen \
                                  --profile=Asciiville \
-                                 -- show_ascii_art ${lolarg} -s Fractals
+                                 -- show_ascii_art -C ${lolarg} -s Fractals
                 fi
               fi
               break
@@ -423,18 +423,18 @@ show_art_menu() {
                 xfce4-terminal --fullscreen \
                                --font="Monospace Regular" \
                                --color-bg=Black \
-                               --command="show_ascii_art ${lolarg} -s Lyap"
+                               --command="show_ascii_art -C ${lolarg} -s Lyap"
               else
                 if [ "${TILIX}" ]
                 then
                   tilix --full-screen \
                         --window-style=borderless \
                         --profile=Asciiville \
-                        --command="show_ascii_art ${lolarg} -s Lyap"
+                        --command="show_ascii_art -C ${lolarg} -s Lyap"
                 else
                   gnome-terminal --window --full-screen \
                                  --profile=Asciiville \
-                                 -- show_ascii_art ${lolarg} -s Lyap
+                                 -- show_ascii_art -C ${lolarg} -s Lyap
                 fi
               fi
               break
@@ -445,18 +445,18 @@ show_art_menu() {
                 xfce4-terminal --fullscreen \
                                --font="Monospace Regular" \
                                --color-bg=Black \
-                               --command="show_ascii_art ${lolarg} -s Mixed"
+                               --command="show_ascii_art -C ${lolarg} -s Mixed"
               else
                 if [ "${TILIX}" ]
                 then
                   tilix --full-screen \
                         --window-style=borderless \
                         --profile=Asciiville \
-                        --command="show_ascii_art ${lolarg} -s Mixed"
+                        --command="show_ascii_art -C ${lolarg} -s Mixed"
                 else
                   gnome-terminal --window --full-screen \
                                  --profile=Asciiville \
-                                 -- show_ascii_art ${lolarg} -s Mixed
+                                 -- show_ascii_art -C ${lolarg} -s Mixed
                 fi
               fi
               break
@@ -467,18 +467,18 @@ show_art_menu() {
                 xfce4-terminal --fullscreen \
                                --font="Monospace Regular" \
                                --color-bg=Black \
-                               --command="show_ascii_art ${lolarg} -s Owls"
+                               --command="show_ascii_art -C ${lolarg} -s Owls"
               else
                 if [ "${TILIX}" ]
                 then
                   tilix --full-screen \
                         --window-style=borderless \
                         --profile=Asciiville \
-                        --command="show_ascii_art ${lolarg} -s Owls"
+                        --command="show_ascii_art -C ${lolarg} -s Owls"
                 else
                   gnome-terminal --window --full-screen \
                                  --profile=Asciiville \
-                                 -- show_ascii_art ${lolarg} -s Owls
+                                 -- show_ascii_art -C ${lolarg} -s Owls
                 fi
               fi
               break
@@ -489,18 +489,18 @@ show_art_menu() {
                 xfce4-terminal --fullscreen \
                                --font="Monospace Regular" \
                                --color-bg=Black \
-                               --command="show_ascii_art ${lolarg} -s Waterfalls"
+                               --command="show_ascii_art -C ${lolarg} -s Waterfalls"
               else
                 if [ "${TILIX}" ]
                 then
                   tilix --full-screen \
                         --window-style=borderless \
                         --profile=Asciiville \
-                        --command="show_ascii_art ${lolarg} -s Waterfalls"
+                        --command="show_ascii_art -C ${lolarg} -s Waterfalls"
                 else
                   gnome-terminal --window --full-screen \
                                  --profile=Asciiville \
-                                 -- show_ascii_art ${lolarg} -s Waterfalls
+                                 -- show_ascii_art -C ${lolarg} -s Waterfalls
                 fi
               fi
               break
@@ -1726,18 +1726,18 @@ fi
     xfce4-terminal --fullscreen \
                    --font="Monospace Regular" \
                    --color-bg=Black \
-                   --command="show_ascii_art ${lolarg} -s ${SLIDESHOW}"
+                   --command="show_ascii_art -C ${lolarg} -s ${SLIDESHOW}"
   else
     if [ "${TILIX}" ]
     then
       tilix --full-screen \
             --window-style=borderless \
             --profile=Asciiville \
-            --command="show_ascii_art ${lolarg} -s ${SLIDESHOW}"
+            --command="show_ascii_art -C ${lolarg} -s ${SLIDESHOW}"
     else
       gnome-terminal --window --full-screen \
                      --profile=Asciiville \
-                     -- show_ascii_art ${lolarg} -s ${SLIDESHOW}
+                     -- show_ascii_art -C ${lolarg} -s ${SLIDESHOW}
     fi
   fi
 }

@@ -18,18 +18,16 @@ revlong="8WMoahkbdpqwmZO0QLCJUYXzcvunxrjft1-_+ilI;:,^..."
 longchars="...^,:;Ili+_-1tfjrxnuvczXYUJCLQ0OZmwqpdbkhaoMW8"
 
 usage() {
-  printf "\nUsage: show_ascii_art [-a art] [-A art_dir] [-b] [-c] [-C depth]"
+  printf "\nUsage: show_ascii_art [-a art] [-A art_dir] [-b] [-c] [-C]"
   printf "\n\t[-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g]"
-  printf "\n\t[-i image] [-l] [-L] [-n tabs] [-o] [-p palette] [-q] [-r] [-s show]"
+  printf "\n\t[-i image] [-l] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-q] [-r] [-s show]"
   printf "\n\t[-S] [-u] [-t first_text] [-T second_text] [-h height] [-w width]"
   printf "\nWhere:"
   printf "\n\t-a 'art' specifies which ascii art to display"
   printf "\n\t-A 'art_dir' specifies the path to the ascii art folder"
   printf "\n\t-b when generating ascii art use a border"
   printf "\n\t-c when generating ascii art use ANSI colors"
-  printf "\n\t-C 'depth' specifies the color depth"
-  printf "\n\t\t'depth' can be '4' (for ANSI), '8' (for 256 color palette)"
-  printf "\n\t\tor '24' (for truecolor or 24-bit color)"
+  printf "\n\t-C center ascii art on screen if border detected"
   printf "\n\t-d 'font_dir' specifies the path to the figlet fonts"
   printf "\n\t-D 'seconds' specifies the delay, in seconds, between screens"
   printf "\n\t-g convert image to grayscale"
@@ -39,6 +37,9 @@ usage() {
   printf "\n\t-f 'small_font' specifies the figlet font to use for small text"
   printf "\n\t-F 'large_font' specifies the figlet font to use for large text"
   printf "\n\t-n 'tabs' specifies the number of tabs to indent image display"
+  printf "\n\t-N 'depth' specifies the color depth"
+  printf "\n\t\t'depth' can be '4' (for ANSI), '8' (for 256 color palette)"
+  printf "\n\t\tor '24' (for truecolor or 24-bit color)"
   printf "\n\t-o indicates overwrite any existing ascii art when saving"
   printf "\n\t-p 'palette' specifies which character set to use for ascii art"
   printf "\n\t\t'palette' can be one of 'def', 'long', 'rev', 'longrev'"
@@ -60,6 +61,24 @@ usage() {
   exit 1
 }
 
+set_spaces() {
+  space=0
+  while [ ${space} -lt ${numspaces} ]
+  do
+    spaces="${spaces} "
+    ((space++))
+  done
+}
+
+set_tabs() {
+  tab=0
+  while [ ${tab} -lt ${numtabs} ]
+  do
+    tabs="${tabs}\t"
+    ((tab++))
+  done
+}
+
 # Display the ascii art
 #   first argument is the file
 #   second argument is prepended on each line of output (e.g. "\t\t")
@@ -70,7 +89,25 @@ show_ascii() {
     echo "Exiting"
     exit 1
   }
+
   prep="\n${2}"
+  [ "${center}}" ] && {
+    firstline=`head -1 $1`
+    echo "${firstline}" | grep "^+-------" > /dev/null && {
+      # ascii art with boundary, we know its width
+      awidth=`echo "${firstline}" | wc -c`
+      margin="$((termwidth - awidth))"
+      if [ ${margin} -gt 1 ]
+      then
+        numspaces="$((margin / 2))"
+      else
+        numspaces=0
+      fi
+      spaces=
+      set_spaces
+      prep="\n${spaces}"
+    }
+  }
 
   if [ "$3" ]
   then
@@ -88,6 +125,7 @@ show_ascii() {
 }
 
 border=
+center=
 charopt=
 colordepth=
 colors=
@@ -107,7 +145,7 @@ tabs=
 width=
 have_convert=`type -p convert`
 have_jp2a=`type -p jp2a`
-while getopts "a:A:bcC:D:d:gh:i:lLF:f:n:op:qrs:St:T:w:u" flag; do
+while getopts "a:A:bcCD:d:gh:i:lLF:f:n:N:op:qrs:St:T:w:u" flag; do
   case $flag in
       a)
           art="${OPTARG}"
@@ -122,7 +160,7 @@ while getopts "a:A:bcC:D:d:gh:i:lLF:f:n:op:qrs:St:T:w:u" flag; do
           colors="--colors"
           ;;
       C)
-          colordepth="--color-depth=${OPTARG}"
+          center=1
           ;;
       d)
           FIG_FONTS="${OPTARG}"
@@ -156,6 +194,9 @@ while getopts "a:A:bcC:D:d:gh:i:lLF:f:n:op:qrs:St:T:w:u" flag; do
           ;;
       n)
           numtabs=${OPTARG}
+          ;;
+      N)
+          colordepth="--color-depth=${OPTARG}"
           ;;
       o)
           overwrite=1
@@ -229,6 +270,9 @@ done
   exit 0
 }
 
+sleep 2
+termwidth=`stty size | awk '{print $2}'`
+
 [ "${slideshow}" ] && {
   FIG_WELCOME="Asciiville"
   case "${slideshow}" in
@@ -265,7 +309,6 @@ done
   esac
 
   clear
-  sleep 2
   first=1
   for art in ${SLIDE_DIR}/*.txt
   do
@@ -295,14 +338,7 @@ done
   exit 0
 }
 
-[ ${numtabs} -gt 0 ] && {
-  tab=0
-  while [ ${tab} -lt ${numtabs} ]
-  do
-    tabs="${tabs}\t"
-    ((tab++))
-  done
-}
+[ ${numtabs} -gt 0 ] && set_tabs
 
 if [ "${height}" ] && [ "${width}" ]
 then

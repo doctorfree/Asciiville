@@ -21,10 +21,10 @@
 show_ascii_art - display ascii art
 .SH SYNOPSIS
 .PP
-\f[B]show_ascii_art\f[R] [-a art] [-A art_dir] [-b] [-c] [-C depth] [-d
+\f[B]show_ascii_art\f[R] [-a art] [-A art_dir] [-b] [-c] [-C] [-d
 font_dir] [-D seconds] [-F large_font] [-f small_font] [-g] [-i image]
-[-l] [-L] [-n tabs] [-o] [-p palette] [-q] [-r] [-s show] [-S] [-u] [-t
-first_text] [-T second_text] [-h height] [-w width]
+[-l] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-q] [-r] [-s show]
+[-S] [-u] [-t first_text] [-T second_text] [-h height] [-w width]
 .SH DESCRIPTION
 .PP
 The \f[I]show_ascii_art\f[R] command displays one of the ascii art
@@ -48,13 +48,8 @@ when generating ascii art use a border
 \f[B]-c\f[R]
 when generating ascii art use ANSI colors
 .TP
-\f[B]-C \[aq]depth\[aq]\f[R]
-specifies the color depth
-.RS
-\[aq]depth\[aq] can be \[aq]4\[aq] (for ANSI), \[aq]8\[aq] (for 256
-color palette)
-or \[aq]24\[aq] (for truecolor or 24-bit color)
-.RE
+\f[B]-C\f[R]
+center ascii art on screen if border detected
 .TP
 \f[B]-d \[aq]font_dir\[aq]\f[R]
 specifies the path to the figlet fonts
@@ -79,6 +74,14 @@ use lolcat coloring
 .TP
 \f[B]-L\f[R]
 lists the ascii art in the \[aq]art_dir\[aq] and exits
+.TP
+\f[B]-N \[aq]depth\[aq]\f[R]
+specifies the color depth
+.RS
+\[aq]depth\[aq] can be \[aq]4\[aq] (for ANSI), \[aq]8\[aq] (for 256
+color palette)
+or \[aq]24\[aq] (for truecolor or 24-bit color)
+.RE
 .TP
 \f[B]-n \[aq]tabs\[aq]\f[R]
 specifies the number of tabs to indent image display
@@ -133,6 +136,10 @@ displays this usage message and exits
 \f[B]show_ascii_art\f[R]
 Without options show_ascii_art will display an ascii art image and
 \[dq]Welcome to Asciiville\[dq] text using Figlet fonts.
+.TP
+\f[B]show_ascii_art -C -s Art\f[R]
+Display a slide show of Ascii Fine Art, centering the art in the
+terminal window.
 .TP
 \f[B]show_ascii_art -i $HOME/Pictures/selfie.gif\f[R]
 Converts the GIF image file \f[V]$HOME/Pictures/selfie.gif\f[R] to JPEG
