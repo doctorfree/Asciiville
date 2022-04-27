@@ -6,6 +6,9 @@ FIG_ASCII="Asciiville"
 FIG_FONTS="/usr/share/figlet-fonts"
 LARGE_FONT="Bolger"
 SMALL_FONT="Small"
+MUSEDIR=/usr/share/doc/asciiville/music
+SONG="${MUSEDIR}/Chronos.mp3"
+ALTSONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 art="yinyang"
 
 # Default palette used by jp2a
@@ -17,15 +20,19 @@ revlong="8WMoahkbdpqwmZO0QLCJUYXzcvunxrjft1-_+ilI;:,^..."
 # Light to Dark character set
 longchars="...^,:;Ili+_-1tfjrxnuvczXYUJCLQ0OZmwqpdbkhaoMW8"
 
+set -m
+
 usage() {
-  printf "\nUsage: show_ascii_art [-a art] [-A art_dir] [-b] [-c] [-C]"
+  printf "\nUsage: show_ascii_art [-a art] [-A art_dir] [-b] [-B] [-c] [-C]"
   printf "\n\t[-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g]"
-  printf "\n\t[-i image] [-l] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-q] [-r] [-s show]"
-  printf "\n\t[-S] [-u] [-t first_text] [-T second_text] [-h height] [-w width]"
+  printf "\n\t[-i image] [-l] [-L] [-n tabs] [-N depth] [-o] [-p palette]"
+  printf "\n\t[-P] [-q] [-r] [-s show] [-S] [-u] [-t first_text]"
+  printf "\n\t[-T second_text] [-h height] [-w width]"
   printf "\nWhere:"
   printf "\n\t-a 'art' specifies which ascii art to display"
   printf "\n\t-A 'art_dir' specifies the path to the ascii art folder"
   printf "\n\t-b when generating ascii art use a border"
+  printf "\n\t-B use backup song when playing audio in slideshows"
   printf "\n\t-c when generating ascii art use ANSI colors"
   printf "\n\t-C center ascii art on screen if border detected"
   printf "\n\t-d 'font_dir' specifies the path to the figlet fonts"
@@ -41,6 +48,7 @@ usage() {
   printf "\n\t\t'depth' can be '4' (for ANSI), '8' (for 256 color palette)"
   printf "\n\t\tor '24' (for truecolor or 24-bit color)"
   printf "\n\t-o indicates overwrite any existing ascii art when saving"
+  printf "\n\t-P indicates play audio during slideshow"
   printf "\n\t-p 'palette' specifies which character set to use for ascii art"
   printf "\n\t\t'palette' can be one of 'def', 'long', 'rev', 'longrev'"
   printf "\n\t\t'def' is the default set, 'long' a long set,"
@@ -127,19 +135,28 @@ show_ascii() {
   done
   if [ "$3" ]
   then
-    /bin/cat "$1" | while read l
-    do
+    # /bin/cat "$1" | while read l
+    # do
+    #   printf "${prep}$l"
+    # done | $3
+    while read l
+    do 
       printf "${prep}$l"
-    done | $3
+    done < <(/bin/cat "$1") | $3
   else
-    /bin/cat "$1" | while read l
-    do
+    # /bin/cat "$1" | while read l
+    # do
+    #   printf "${prep}$l"
+    # done
+    while read l
+    do 
       printf "${prep}$l"
-    done
+    done < <(/bin/cat "$1")
   fi
   printf "\n"
 }
 
+audio=
 border=
 center=
 charopt=
@@ -161,7 +178,7 @@ tabs=
 width=
 have_convert=`type -p convert`
 have_jp2a=`type -p jp2a`
-while getopts "a:A:bcCD:d:gh:i:lLF:f:n:N:op:qrs:St:T:w:u" flag; do
+while getopts "a:A:bBcCD:d:gh:i:lLF:f:n:N:oPp:qrs:St:T:w:u" flag; do
   case $flag in
       a)
           art="${OPTARG}"
@@ -171,6 +188,9 @@ while getopts "a:A:bcCD:d:gh:i:lLF:f:n:N:op:qrs:St:T:w:u" flag; do
           ;;
       b)
           border="--border"
+          ;;
+      B)
+          SONG="${ALTSONG}"
           ;;
       c)
           colors="--colors"
@@ -216,6 +236,9 @@ while getopts "a:A:bcCD:d:gh:i:lLF:f:n:N:op:qrs:St:T:w:u" flag; do
           ;;
       o)
           overwrite=1
+          ;;
+      P)
+          audio=1
           ;;
       p)
           charset="${OPTARG}"
@@ -295,49 +318,78 @@ sleep 2
 termwide=`stty size | awk '{print $2}'`
 termhigh=`stty size | awk '{print $1}'`
 
-function cleanup() {
+fade_audio() {
+  vol=75
+  while [ ${vol} -gt 0 ]
+  do
+    echo "volume ${vol} 1" > ${fifo}
+    vol=$((vol - 5))
+    sleep 0.1
+  done
+  echo "stop" > ${fifo}
+  sleep 0.1
+  echo "quit" > ${fifo}
+  rm -f ${fifo}
+}
+
+cleanup() {
   tput cnorm
+  [ "${playing}" ] && fade_audio
+  exit 0
 }
 
 [ "${slideshow}" ] && {
-  trap cleanup EXIT
-  tput civis
+  stty -echoctl # hide ^C
+  trap 'cleanup' SIGINT SIGTERM
   FIG_WELCOME="Asciiville"
   case "${slideshow}" in
     Art*)
-      FIG_ASCII="Ascii Fine Art"
+      FIG_ASCII="Fine Art"
       SLIDE_DIR="${ART_DIR}/Art"
       SLIDE_FONT="Shadow"
       ;;
     Fractal*)
-      FIG_ASCII="Fractal Ascii Art"
+      FIG_ASCII="Fractal"
       SLIDE_DIR="${ART_DIR}/Fractals"
       SLIDE_FONT="sblood"
       ;;
     Lyap*)
-      FIG_ASCII="Lyapunov Ascii Art"
+      FIG_ASCII="Lyapunov"
       SLIDE_DIR="${ART_DIR}/Lyapunov"
       SLIDE_FONT="3d"
       ;;
     Owls*)
-      FIG_ASCII="Owls Ascii Art"
+      FIG_ASCII="Owls"
       SLIDE_DIR="${ART_DIR}/Owls"
       SLIDE_FONT="ANSI Shadow"
       ;;
     Waterfall*)
-      FIG_ASCII="Waterfalls Ascii Art"
+      FIG_ASCII="Waterfalls"
       SLIDE_DIR="${ART_DIR}/Waterfalls"
       SLIDE_FONT="Bolger"
       ;;
     *)
-      FIG_ASCII="Ascii Art"
+      FIG_ASCII="Mixed"
       SLIDE_DIR="${ART_DIR}"
       SLIDE_FONT="Varsity"
       ;;
   esac
 
+  playing=
+  [ "${audio}" ] && {
+    have_mplayer=`type -p mplayer`
+    [ "${have_mplayer}" ] && {
+      fifo="/tmp/mplayer$$"
+      rm -f ${fifo}
+      mkfifo ${fifo}
+      playing=1
+      mplayer -novideo -loop 0 -volume 80 -really-quiet \
+              -nolirc -slave -input file=${fifo} ${SONG} 2>&1 &
+    }
+  }
   clear
   first=1
+  tput civis
   for art in ${SLIDE_DIR}/*.txt
   do
     [ "${art}" == "${SLIDE_DIR}/*.txt" ] && {
@@ -352,15 +404,11 @@ function cleanup() {
         then
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} | lolcat
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} | lolcat
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Presented" | lolcat
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "by" | lolcat
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Doctor When" | lolcat
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art" | lolcat
         else
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME}
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII}
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Presented"
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "by"
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Doctor When"
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art"
         fi
         sleep ${delay}
       }
@@ -370,6 +418,23 @@ function cleanup() {
     show_ascii ${art}
     [ $? -eq 3 ] || sleep ${delay}
   done
+  clear
+  [ "${quiet}" ] || {
+    printf "\n\n\n\n\n\n"
+    if [ "${have_lolcat}" ]
+    then
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Thanks For" | lolcat
+      printf "\n\n"
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Watching !" | lolcat
+    else
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Thanks For"
+      printf "\n\n"
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Watching !"
+    fi
+    sleep ${delay}
+  }
+  tput cnorm
+  [ "${playing}" ] && fade_audio
   exit 0
 }
 
@@ -479,3 +544,4 @@ fi
   fi
   rm -f "/tmp/${image_name}$$.txt"
 }
+

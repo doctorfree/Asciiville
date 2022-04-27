@@ -76,7 +76,7 @@ usage() {
   printf "\n\t-y indicates use ranger file manager as the default command"
   printf "\n\t-z indicates use mutt email client as the default command\n"
   printf "\nASCIImatics animation options:"
-  printf "\n\t-A indicates use Art Images scenes in ASCIImatics display"
+  printf "\n\t-A indicates use Asciiville scenes in ASCIImatics display"
   printf "\n\t-a indicates play audio during ASCIImatics display"
   printf "\n\t-b indicates use backup audio during ASCIImatics display"
   printf "\n\t-j indicates use Julia Set scenes in ASCIImatics display"
@@ -333,6 +333,12 @@ select_font() {
 show_art_menu() {
   while true
   do
+    if [ "${AUDIO}" ]
+    then
+      audiostat="YES"
+    else
+      audiostat="NO"
+    fi
     if [ "${RECORD}" ]
     then
       recordstat="YES"
@@ -369,8 +375,10 @@ show_art_menu() {
     options+=("Ascii Owls Art Slide Show")
     options+=("Ascii Waterfalls Art Slide Show")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring [${use_lol}]")
+    options+=("Use Audio           [${audiostat}]")
+    options+=("Use Tmux            [${usetmux}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session [${recordstat}]")
-    options+=("Use Tmux            [${usetmux}]" "Main menu" "Quit")
+    options+=("Main menu" "Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
@@ -385,18 +393,18 @@ show_art_menu() {
                 xfce4-terminal --fullscreen \
                                --font="Monospace Regular" \
                                --color-bg=Black \
-                               --command="show_ascii_art -C ${lolarg} -s Art"
+                               --command="show_ascii_art ${showargs} -s Art"
               else
                 if [ "${TILIX}" ]
                 then
                   tilix --full-screen \
                         --window-style=borderless \
                         --profile=Asciiville \
-                        --command="show_ascii_art -C ${lolarg} -s Art"
+                        --command="show_ascii_art ${showargs} -s Art"
                 else
                   gnome-terminal --window --full-screen \
                                  --profile=Asciiville \
-                                 -- show_ascii_art -C ${lolarg} -s Art
+                                 -- show_ascii_art ${showargs} -s Art
                 fi
               fi
               break
@@ -407,18 +415,18 @@ show_art_menu() {
                 xfce4-terminal --fullscreen \
                                --font="Monospace Regular" \
                                --color-bg=Black \
-                               --command="show_ascii_art -C ${lolarg} -s Fractals"
+                               --command="show_ascii_art ${showargs} -s Fractals"
               else
                 if [ "${TILIX}" ]
                 then
                   tilix --full-screen \
                         --window-style=borderless \
                         --profile=Asciiville \
-                        --command="show_ascii_art -C ${lolarg} -s Fractals"
+                        --command="show_ascii_art ${showargs} -s Fractals"
                 else
                   gnome-terminal --window --full-screen \
                                  --profile=Asciiville \
-                                 -- show_ascii_art -C ${lolarg} -s Fractals
+                                 -- show_ascii_art ${showargs} -s Fractals
                 fi
               fi
               break
@@ -429,18 +437,18 @@ show_art_menu() {
                 xfce4-terminal --fullscreen \
                                --font="Monospace Regular" \
                                --color-bg=Black \
-                               --command="show_ascii_art -C ${lolarg} -s Lyap"
+                               --command="show_ascii_art ${showargs} -s Lyap"
               else
                 if [ "${TILIX}" ]
                 then
                   tilix --full-screen \
                         --window-style=borderless \
                         --profile=Asciiville \
-                        --command="show_ascii_art -C ${lolarg} -s Lyap"
+                        --command="show_ascii_art ${showargs} -s Lyap"
                 else
                   gnome-terminal --window --full-screen \
                                  --profile=Asciiville \
-                                 -- show_ascii_art -C ${lolarg} -s Lyap
+                                 -- show_ascii_art ${showargs} -s Lyap
                 fi
               fi
               break
@@ -451,18 +459,18 @@ show_art_menu() {
                 xfce4-terminal --fullscreen \
                                --font="Monospace Regular" \
                                --color-bg=Black \
-                               --command="show_ascii_art -C ${lolarg} -s Mixed"
+                               --command="show_ascii_art ${showargs} -s Mixed"
               else
                 if [ "${TILIX}" ]
                 then
                   tilix --full-screen \
                         --window-style=borderless \
                         --profile=Asciiville \
-                        --command="show_ascii_art -C ${lolarg} -s Mixed"
+                        --command="show_ascii_art ${showargs} -s Mixed"
                 else
                   gnome-terminal --window --full-screen \
                                  --profile=Asciiville \
-                                 -- show_ascii_art -C ${lolarg} -s Mixed
+                                 -- show_ascii_art ${showargs} -s Mixed
                 fi
               fi
               break
@@ -473,18 +481,18 @@ show_art_menu() {
                 xfce4-terminal --fullscreen \
                                --font="Monospace Regular" \
                                --color-bg=Black \
-                               --command="show_ascii_art -C ${lolarg} -s Owls"
+                               --command="show_ascii_art ${showargs} -s Owls"
               else
                 if [ "${TILIX}" ]
                 then
                   tilix --full-screen \
                         --window-style=borderless \
                         --profile=Asciiville \
-                        --command="show_ascii_art -C ${lolarg} -s Owls"
+                        --command="show_ascii_art ${showargs} -s Owls"
                 else
                   gnome-terminal --window --full-screen \
                                  --profile=Asciiville \
-                                 -- show_ascii_art -C ${lolarg} -s Owls
+                                 -- show_ascii_art ${showargs} -s Owls
                 fi
               fi
               break
@@ -495,19 +503,28 @@ show_art_menu() {
                 xfce4-terminal --fullscreen \
                                --font="Monospace Regular" \
                                --color-bg=Black \
-                               --command="show_ascii_art -C ${lolarg} -s Waterfalls"
+                               --command="show_ascii_art ${showargs} -s Waterfalls"
               else
                 if [ "${TILIX}" ]
                 then
                   tilix --full-screen \
                         --window-style=borderless \
                         --profile=Asciiville \
-                        --command="show_ascii_art -C ${lolarg} -s Waterfalls"
+                        --command="show_ascii_art ${showargs} -s Waterfalls"
                 else
                   gnome-terminal --window --full-screen \
                                  --profile=Asciiville \
-                                 -- show_ascii_art -C ${lolarg} -s Waterfalls
+                                 -- show_ascii_art ${showargs} -s Waterfalls
                 fi
+              fi
+              break
+              ;;
+          "Use Audio"*,*|*,"Use Audio"*)
+              if [ "${AUDIO}" ]
+              then
+                AUDIO=
+              else
+                AUDIO=1
               fi
               break
               ;;
@@ -594,13 +611,17 @@ show_animation_menu() {
     }
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
-    [ "${have_asciiart}" ] && options+=("Art Images ASCIImatics Animation")
+    [ "${have_asciiart}" ] && options+=("Asciiville ASCIImatics Animation")
     [ "${have_asciijulia}" ] && options+=("Julia Set ASCIImatics Animation")
     [ "${have_asciimpplus}" ] && options+=("MPPlus ASCIImatics Animation")
     [ "${have_asciiplasma}" ] && options+=("Plasma ASCIImatics Animation")
-    options+=("Audio [${audiostat}]")
+    [ "${have_bb}" ] && options+=("Run AAlib BB Demo")
+    [ "${have_showascii}" ] && options+=("Ascii Art Slide Shows")
+    [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring [${use_lol}]")
+    options+=("Use Audio           [${audiostat}]")
+    options+=("Use Tmux            [${usetmux}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session [${recordstat}]")
-    options+=("Use Tmux [${usetmux}]" "Main menu" "Quit")
+    options+=("Main menu" "Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
@@ -609,7 +630,7 @@ show_animation_menu() {
               init_vars
               break 2
               ;;
-          "Art Images ASCIImatics Animation",*|*,"Art Images ASCIImatics Animation")
+          "Asciiville ASCIImatics Animation",*|*,"Asciiville ASCIImatics Animation")
               ASCSPLASH="${ASCSPLASH} -i"
               ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l art"
               break
@@ -629,7 +650,37 @@ show_animation_menu() {
               ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l plasma"
               break
               ;;
-          "Audio"*,*|*,"Audio"*)
+          "Run AAlib BB Demo",*|*,"Run AAlib BB Demo")
+              SAVED_DISPLAY="${DISPLAY}"
+              export DISPLAY=""
+              if [ "${AUDIO}" ]
+              then
+                bb-tmux -a
+              else
+                bb-tmux
+              fi
+              skip_it_so=1
+              export DISPLAY="${SAVED_DISPLAY}"
+              break
+              ;;
+          "Ascii Art Slide Shows",*|*,"Ascii Art Slide Shows")
+              show_art_menu
+              skip_it_so=1
+              break
+              ;;
+          "Use Lolcat Coloring"*,*|*,"Use Lolcat Coloring"*)
+              if [ "${use_lolcat}" ]
+              then
+                use_lolcat=
+                use_lol="NO"
+              else
+                use_lolcat=1
+                use_lol="YES"
+              fi
+              skip_it_so=1
+              break
+              ;;
+          "Use Audio"*,*|*,"Use Audio"*)
               if [ "${AUDIO}" ]
               then
                 AUDIO=
@@ -693,6 +744,12 @@ show_animation_menu() {
 show_main_menu() {
   while true
   do
+    if [ "${AUDIO}" ]
+    then
+      audiostat="YES"
+    else
+      audiostat="NO"
+    fi
     if [ "${FULLSCREEN}" ]
     then
       fullstat="YES"
@@ -865,10 +922,11 @@ show_main_menu() {
       [ "${have_mutt}" ] && options+=("Use Mutt Mail Client       [${use_mutt}]")
     fi
     [ "${have_ranger}" ] && options+=("Use Ranger File Manager    [${use_ranger}]")
+    options+=("Use Audio                  [${audiostat}]")
     options+=("Use Tmux                   [${usetmux}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session        [${recordstat}]")
     options+=("Fullscreen Terminal Window [${fullstat}]")
-    options+=("Default Web Browser [${default_browser}]")
+    options+=("Default Web Browser        [${default_browser}]")
     options+=("Kill Tmux Sessions")
     options+=("Quit")
     select opt in "${options[@]}"
@@ -1075,13 +1133,23 @@ show_main_menu() {
           "Run AAlib Demo (Curses mode)",*|*,"Run AAlib Demo (Curses mode)")
               SAVED_DISPLAY="${DISPLAY}"
               export DISPLAY=""
-              bb-tmux
+              if [ "${AUDIO}" ]
+              then
+                bb-tmux -a
+              else
+                bb-tmux
+              fi
               skip_it_so=1
               export DISPLAY="${SAVED_DISPLAY}"
               break
               ;;
           "Run AAlib Demo (X11 mode)",*|*,"Run AAlib Demo (X11 mode)")
-              bb-tmux
+              if [ "${AUDIO}" ]
+              then
+                bb-tmux -a
+              else
+                bb-tmux
+              fi
               skip_it_so=1
               break
               ;;
@@ -1203,6 +1271,24 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
+          "Use Audio"*,*|*,"Use Audio"*)
+              if [ "${AUDIO}" ]
+              then
+                AUDIO=
+              else
+                AUDIO=1
+              fi
+              if [ "${AUDIO}" ]
+              then
+                ASCSPLASH="${ASCSPLASH} -a"
+                ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
+              else
+                ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s/ -a//"`
+                ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s/ -a//"`
+              fi
+              skip_it_so=1
+              break
+              ;;
           "Fullscreen Terminal Window"*,*|*,"Fullscreen Terminal Window"*)
               if [ "${FULLSCREEN}" ]
               then
@@ -1233,7 +1319,6 @@ init_vars() {
   ASCSPLASH="asciisplash"
   ASCSPLASH_TMUX="asciisplash-tmux"
 
-  AUDIO=
   FULLSCREEN=
   INTERACTIVE=
   RECORD=
@@ -1760,23 +1845,30 @@ fi
   else
     lolarg=
   fi
+  if [ "${AUDIO}" ]
+  then
+    audarg="-P"
+  else
+    audarg=
+  fi
+  showargs="-C ${lolarg} ${audarg}"
   if [ "${XFCE4}" ]
   then
     xfce4-terminal --fullscreen \
                    --font="Monospace Regular" \
                    --color-bg=Black \
-                   --command="show_ascii_art -C ${lolarg} -s ${SLIDESHOW}"
+                   --command="show_ascii_art ${showargs} -s ${SLIDESHOW}"
   else
     if [ "${TILIX}" ]
     then
       tilix --full-screen \
             --window-style=borderless \
             --profile=Asciiville \
-            --command="show_ascii_art -C ${lolarg} -s ${SLIDESHOW}"
+            --command="show_ascii_art ${showargs} -s ${SLIDESHOW}"
     else
       gnome-terminal --window --full-screen \
                      --profile=Asciiville \
-                     -- show_ascii_art -C ${lolarg} -s ${SLIDESHOW}
+                     -- show_ascii_art ${showargs} -s ${SLIDESHOW}
     fi
   fi
 }

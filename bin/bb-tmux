@@ -5,10 +5,14 @@
 SESSION=bb
 SONG="/usr/share/doc/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav"
 
+set -m
+
 usage() {
-  printf "\nUsage: bb-tmux [-a] [-r] [-u]"
+  printf "\nUsage: bb-tmux [-a] [-c] [-r] [-u]"
   printf "\nWhere:"
   printf "\n\t-a indicates play audio along with bb demo"
+  printf "\n\t-c indicates use curses character based driver"
+  printf "\n\t\t (default is use X11 if available)"
   printf "\n\t-r indicates record tmux session with asciinema"
   printf "\n\t-u displays this usage message and exits\n"
   if [ "${RECORD}" ]
@@ -21,16 +25,37 @@ usage() {
   exit 1
 }
 
+fade_audio() {
+  [ "${AUDIO}" ] && {
+    vol=75
+    while [ ${vol} -gt 0 ]
+    do
+      echo "volume ${vol} 1" > ${FIFO}
+      vol=$((vol - 5))
+      sleep 0.1
+    done
+    echo "stop" > ${FIFO}
+    sleep 0.1
+    echo "quit" > ${FIFO}
+    rm -f ${FIFO}
+  }
+  exit 0
+}
+
+
 AUDIO=
 RECORD=
 USAGE=
-while getopts "aru" flag; do
+while getopts "acru" flag; do
     case $flag in
         a)
           [ -f "${SONG}" ] && {
             have_mplayer=`type -p mplayer`
             [ "${have_mplayer}" ] && AUDIO=1
           }
+          ;;
+        c)
+          export DISPLAY=""
           ;;
         r)
           have_nema=`type -p asciinema`
@@ -45,6 +70,8 @@ shift $(( OPTIND - 1 ))
 
 [ "${USAGE}" ] && usage
 
+trap 'fade_audio' SIGINT SIGTERM SIGHUP EXIT
+
 tmux new-session -d -x "$(tput cols)" -y "$(tput lines)" -s ${SESSION}
 tmux set -g status off
 
@@ -57,21 +84,9 @@ tmux select-pane -t 0
 
 if [ "${DISPLAY}" == "" ]
 then
-  echo "Using curses driver"
-  if [ "${AUDIO}" ]
-  then
-    tmux send-keys "bb -driver curses -kbddriver stdin; echo 'stop' > ${FIFO}; echo 'quit' > ${FIFO}; rm -f ${FIFO}; tmux kill-session -t ${SESSION}" C-m
-  else
-    tmux send-keys "bb -driver curses -kbddriver stdin; tmux kill-session -t ${SESSION}" C-m
-  fi
+  tmux send-keys "bb -driver curses -kbddriver stdin; tmux kill-session -t ${SESSION}" C-m
 else
-  echo "Using X11 driver"
-  if [ "${AUDIO}" ]
-  then
-    tmux send-keys "bb -width 240 -height 80 -kbddriver stdin; echo 'stop' > ${FIFO}; echo 'quit' > ${FIFO}; rm -f ${FIFO}; tmux kill-session -t ${SESSION}" C-m
-  else
-    tmux send-keys "bb -width 240 -height 80 -kbddriver stdin; tmux kill-session -t ${SESSION}" C-m
-  fi
+  tmux send-keys "bb -width 240 -height 80 -kbddriver stdin; tmux kill-session -t ${SESSION}" C-m
 fi
 tmux send-keys "echo 'n'" C-m
 
@@ -80,7 +95,16 @@ tmux send-keys "echo 'n'" C-m
   rm -f ${FIFO}
   mkfifo ${FIFO}
   mplayer -novideo -volume 80 -really-quiet -nolirc \
-          -slave -input file=${FIFO} "${SONG}" > /dev/null 2>&1 $
+          -slave -input file=${FIFO} "${SONG}" > /dev/null 2>&1 &
+  # tmux set-option -p remain-on-exit on
+  # tmux set-hook -t ${SESSION} pane-exited 'run-shell "/usr/bin/mplayer_stop ${FIFO}"'
+  # tmux set-hook before-kill-window 'run-shell "
+  #    tmux list-panes -t \"#{window_id}\" -F \"##{pane_id}\" | xargs -I {} tmux send-keys -t {} C-c
+  #    "'
+  # tmux set-hook before-kill-window 'run-shell "
+  #    /usr/bin/mplayer_stop ${FIFO}
+  #    "'
+
 }
 
 if [ "${RECORD}" ]

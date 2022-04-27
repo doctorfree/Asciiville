@@ -9,7 +9,7 @@ date: April 24, 2022
 show_ascii_art - display ascii art
 
 # SYNOPSIS
-**show_ascii_art** [-a art] [-A art_dir] [-b] [-c] [-C] [-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g] [-i image] [-l] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-q] [-r] [-s show] [-S] [-u] [-t first_text] [-T second_text] [-h height] [-w width]
+**show_ascii_art** [-a art] [-A art_dir] [-b] [-c] [-C] [-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g] [-i image] [-l] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S] [-u] [-t first_text] [-T second_text] [-h height] [-w width]
 
 # DESCRIPTION
 The *show_ascii_art* command displays one of the ascii art images included in
@@ -19,7 +19,6 @@ options can be used to specify the width and heigh of the converted image,
 the fonts used to display accompanying text, and the text to display.
 
 # COMMAND LINE OPTIONS
-
 **-a 'art'**
 : specifies which ascii art to display
 
@@ -71,6 +70,9 @@ the fonts used to display accompanying text, and the text to display.
 
 **-o**
 : indicates overwrite any existing ascii art when saving
+
+**-P**
+: indicates play audio during slideshow
 
 **-p 'palette'**
 : specifies which character set to use for ascii art
