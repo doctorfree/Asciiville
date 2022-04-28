@@ -1,0 +1,104 @@
+#!/bin/bash
+#
+# make_ascii_art - create ascii art from a folder of images
+
+usage() {
+  printf "\nUsage: make_ascii_art [-d] [-i input_dir] [-o output_dir] [-u]\n"
+  exit 1
+}
+
+debug=
+have_convert=`type -p convert`
+INP_DIR="."
+OUT_DIR="./ascii"
+while getopts "di:o:u" flag; do
+  case $flag in
+      d)
+        debug=1
+        ;;
+      i)
+        INP_DIR="$OPTARG"
+        ;;
+      o)
+        OUT_DIR="$OPTARG"
+        ;;
+      u)
+        usage
+        ;;
+  esac
+done
+
+[ -d ${INP_DIR} ] || {
+  echo "${INP_DIR} does not exist or is not a directory. Exiting."
+  usage
+}
+
+[ -d ${OUT_DIR} ] || mkdir -p ${OUT_DIR}
+
+for image in ${INP_DIR}/*
+do
+  [ -d "${image}" ] && continue
+  [ "${image}" == "${INP_DIR}/*" ] && {
+    echo "No images found in ${INP_DIR}. Exiting."
+    usage
+  }
+  [ "${debug}" ] && {
+    echo ""
+    echo "image=${image}"
+  }
+
+  bimage=`basename "${image}"`
+  suffix=`echo ${bimage} | awk -F '.' ' { print $NF } '`
+  art_name=`echo ${bimage} | sed -e "s/.${suffix}//"`
+  [ "${debug}" ] && {
+    echo "suffix=${suffix} art_name=${art_name}"
+  }
+  case "${suffix}" in
+      jpg|JPG|png|PNG|JPEG|jpeg)
+          input_image="${image}"
+          ;;
+      *)
+          [ "${have_convert}" ] || {
+            echo "ImageMagick 'convert' command unavailable."
+            echo "Only Jpeg and PNG format images are supported."
+            echo "Skipping ${image}"
+            continue
+          }
+          [ -f "${INP_DIR}/${art_name}.png" ] && {
+            echo "${INP_DIR}/${art_name}.png already exists."
+            echo "Skipping conversion of ${image}"
+            continue
+          }
+          convert "${image}" "${INP_DIR}/${art_name}.png"
+          input_image="${INP_DIR}/${art_name}.png"
+          ;;
+  esac
+  [ -f ${OUT_DIR}/"${art_name}.txt" ] && {
+    echo "${OUT_DIR}/"${art_name}.txt" already exists."
+    echo "Choose whether you wish to 'Overwrite', 'Skip', or 'Quit'"
+    while true
+    do
+      read -p "Overwrite/Skip/Quit ('O' or 'o' / 'S' or 's' / 'Q' or 'q') " answer
+      case "${answer}" in
+        o|O)
+          break
+          ;;
+        s|S)
+          continue
+          ;;
+        q|Q)
+          exit 0
+          ;;
+        *)
+          echo "Please answer with 'O', 'S', or 'Q'"
+          ;;
+      esac
+    done
+  }
+  [ "${debug}" ] && {
+    echo "Converting with:"
+    echo "jp2a --border --colors --term-fit --output=${OUT_DIR}/${art_name}.txt ${input_image}"
+  }
+  jp2a --border --colors --term-fit \
+       --output=${OUT_DIR}/"${art_name}.txt" "${input_image}"
+done

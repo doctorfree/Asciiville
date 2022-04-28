@@ -25,20 +25,23 @@ set -m
 usage() {
   printf "\nUsage: show_ascii_art [-a art] [-A art_dir] [-b] [-B] [-c] [-C]"
   printf "\n\t[-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g]"
-  printf "\n\t[-i image] [-l] [-L] [-n tabs] [-N depth] [-o] [-p palette]"
-  printf "\n\t[-P] [-q] [-r] [-s show] [-S] [-u] [-t first_text]"
-  printf "\n\t[-T second_text] [-h height] [-w width]"
+  printf "\n\t[-i image] [-I input_dir] [-O output_dir] [-l] [-L] [-n tabs]"
+  printf "\n\t[-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S]"
+  printf "\n\t[-t first_text] [-T second_text] [-h height] [-w width] [-u]"
   printf "\nWhere:"
   printf "\n\t-a 'art' specifies which ascii art to display"
   printf "\n\t-A 'art_dir' specifies the path to the ascii art folder"
   printf "\n\t-b when generating ascii art use a border"
   printf "\n\t-B use backup song when playing audio in slideshows"
-  printf "\n\t-c when generating ascii art use ANSI colors"
+  printf "\n\t-c cycle slideshow endlessly (Ctrl-c to exit show)"
   printf "\n\t-C center ascii art on screen if border detected"
   printf "\n\t-d 'font_dir' specifies the path to the figlet fonts"
   printf "\n\t-D 'seconds' specifies the delay, in seconds, between screens"
   printf "\n\t-g convert image to grayscale"
   printf "\n\t-i 'image' specifies an image file to convert to ascii art"
+  printf "\n\t-I 'input_dir' generates ascii art from all images in 'input_dir'"
+  printf "\n\t\tand saves them in the directory specified with '-O output_dir'"
+  printf "\n\t\t(defaults to current directory if '-O output_dir' is specified)"
   printf "\n\t-l use lolcat coloring"
   printf "\n\t-L lists the ascii art in the 'art_dir' and exits"
   printf "\n\t-f 'small_font' specifies the figlet font to use for small text"
@@ -48,6 +51,8 @@ usage() {
   printf "\n\t\t'depth' can be '4' (for ANSI), '8' (for 256 color palette)"
   printf "\n\t\tor '24' (for truecolor or 24-bit color)"
   printf "\n\t-o indicates overwrite any existing ascii art when saving"
+  printf "\n\t-O 'output_dir' generates ascii art from all images in the"
+  printf "\n\t\tdirectory specified with '-I' and saves them in 'output_dir'"
   printf "\n\t-P indicates play audio during slideshow"
   printf "\n\t-p 'palette' specifies which character set to use for ascii art"
   printf "\n\t\t'palette' can be one of 'def', 'long', 'rev', 'longrev'"
@@ -57,7 +62,9 @@ usage() {
   printf "\n\t-q don't display text, just the ascii art"
   printf "\n\t-r indicates select random fonts"
   printf "\n\t-s 'show' slide show of ascii art"
-  printf "\n\t\t'show' can be Art, Fractals, Lyap, Owls, Waterfalls, Mixed"
+  printf "\n\t\t'show' can be Art, Doctorwhen, Dragonflies, Fractals,"
+  printf "\n\t\t\tLyap, Mixed, Owls, Space, Waterfalls,"
+  printf "\n\t\t\tor a custom folder name (with '-A art_dir')"
   printf "\n\t-S indicates save converted image ascii art in art_dir"
   printf "\n\t-t 'first_text' specifies the first text to display"
   printf "\n\t-T 'second_text' specifies the second text to display"
@@ -162,9 +169,12 @@ center=
 charopt=
 colordepth=
 colors=
+cycle=
 grayscale=
 list=
 lolcat=
+make_inp=
+make_out=
 quiet=
 delay=5
 input_image=
@@ -178,7 +188,7 @@ tabs=
 width=
 have_convert=`type -p convert`
 have_jp2a=`type -p jp2a`
-while getopts "a:A:bBcCD:d:gh:i:lLF:f:n:N:oPp:qrs:St:T:w:u" flag; do
+while getopts "a:A:bBcCD:d:gh:i:I:lLF:f:n:N:oO:Pp:qrs:St:T:w:u" flag; do
   case $flag in
       a)
           art="${OPTARG}"
@@ -193,7 +203,7 @@ while getopts "a:A:bBcCD:d:gh:i:lLF:f:n:N:oPp:qrs:St:T:w:u" flag; do
           SONG="${ALTSONG}"
           ;;
       c)
-          colors="--colors"
+          cycle=1
           ;;
       C)
           center=1
@@ -222,17 +232,23 @@ while getopts "a:A:bBcCD:d:gh:i:lLF:f:n:N:oPp:qrs:St:T:w:u" flag; do
             echo "Skipping conversion and using default ascii art"
           fi
           ;;
+      I)
+          make_inp=${OPTARG}
+          ;;
       L)
           list=1
           ;;
       l)
           lolcat=1
           ;;
+      O)
+          make_out=${OPTARG}
+          ;;
       n)
           numtabs=${OPTARG}
           ;;
       N)
-          colordepth="--color-depth=${OPTARG}"
+          colordepth="--colors --color-depth=${OPTARG}"
           ;;
       o)
           overwrite=1
@@ -309,6 +325,15 @@ done
   exit 0
 }
 
+[ "${make_inp}" ] || [ "${make_out}" ] && {
+  [ "${make_inp}" ] || make_inp="."
+  [ "${make_out}" ] || make_out="ascii"
+  echo "Invoking gnome-terminal to convert ${make_inp} to ${make_out}"
+  gnome-terminal --window --full-screen --profile=Asciiville \
+                 -- make_ascii_art -i "${make_inp}" -o "${make_out}" &
+  exit 0
+}
+
 have_lolcat=
 [ "${lolcat}" ] && {
   have_lolcat=`type -p lolcat`
@@ -332,64 +357,36 @@ fade_audio() {
   rm -f ${fifo}
 }
 
+goodbye() {
+  clear
+  [ "${quiet}" ] || {
+    printf "\n\n\n"
+    if [ "${have_lolcat}" ]
+    then
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Thanks For" | lolcat
+      printf "\n\n"
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Watching" | lolcat
+      printf "\n\n"
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art !" | lolcat
+    else
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Thanks For"
+      printf "\n\n"
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Watching"
+      printf "\n\n"
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art !"
+    fi
+    sleep ${delay}
+  }
+}
+
 cleanup() {
+  goodbye
   tput cnorm
   [ "${playing}" ] && fade_audio
   exit 0
 }
 
-[ "${slideshow}" ] && {
-  stty -echoctl # hide ^C
-  trap 'cleanup' SIGINT SIGTERM
-  FIG_WELCOME="Asciiville"
-  case "${slideshow}" in
-    Art*)
-      FIG_ASCII="Fine Art"
-      SLIDE_DIR="${ART_DIR}/Art"
-      SLIDE_FONT="Shadow"
-      ;;
-    Fractal*)
-      FIG_ASCII="Fractal"
-      SLIDE_DIR="${ART_DIR}/Fractals"
-      SLIDE_FONT="sblood"
-      ;;
-    Lyap*)
-      FIG_ASCII="Lyapunov"
-      SLIDE_DIR="${ART_DIR}/Lyapunov"
-      SLIDE_FONT="3d"
-      ;;
-    Owls*)
-      FIG_ASCII="Owls"
-      SLIDE_DIR="${ART_DIR}/Owls"
-      SLIDE_FONT="ANSI Shadow"
-      ;;
-    Waterfall*)
-      FIG_ASCII="Waterfalls"
-      SLIDE_DIR="${ART_DIR}/Waterfalls"
-      SLIDE_FONT="Bolger"
-      ;;
-    *)
-      FIG_ASCII="Mixed"
-      SLIDE_DIR="${ART_DIR}"
-      SLIDE_FONT="Varsity"
-      ;;
-  esac
-
-  playing=
-  [ "${audio}" ] && {
-    have_mplayer=`type -p mplayer`
-    [ "${have_mplayer}" ] && {
-      fifo="/tmp/mplayer$$"
-      rm -f ${fifo}
-      mkfifo ${fifo}
-      playing=1
-      mplayer -novideo -loop 0 -volume 80 -really-quiet \
-              -nolirc -slave -input file=${fifo} ${SONG} 2>&1 &
-    }
-  }
-  clear
-  first=1
-  tput civis
+play_slide_show() {
   for art in ${SLIDE_DIR}/*.txt
   do
     [ "${art}" == "${SLIDE_DIR}/*.txt" ] && {
@@ -418,21 +415,92 @@ cleanup() {
     show_ascii ${art}
     [ $? -eq 3 ] || sleep ${delay}
   done
-  clear
-  [ "${quiet}" ] || {
-    printf "\n\n\n\n\n\n"
-    if [ "${have_lolcat}" ]
-    then
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Thanks For" | lolcat
-      printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Watching !" | lolcat
-    else
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Thanks For"
-      printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Watching !"
-    fi
-    sleep ${delay}
+}
+
+[ "${slideshow}" ] && {
+  stty -echoctl # hide ^C
+  trap 'cleanup' SIGINT SIGTERM
+  FIG_WELCOME="Asciiville"
+  case "${slideshow}" in
+    Art*)
+      FIG_ASCII="Fine Art"
+      SLIDE_DIR="${ART_DIR}/Art"
+      SLIDE_FONT="Shadow"
+      ;;
+    Dragonf*)
+      FIG_ASCII="Dragonfly"
+      SLIDE_DIR="${ART_DIR}/Dragonflies"
+      SLIDE_FONT="Speed"
+      ;;
+    Fractal*)
+      FIG_ASCII="Fractal"
+      SLIDE_DIR="${ART_DIR}/Fractals"
+      SLIDE_FONT="sblood"
+      ;;
+    Doctor*)
+      FIG_ASCII="Doctorwhen"
+      SLIDE_DIR="${ART_DIR}/Doctorwhen"
+      SLIDE_FONT="3d"
+      ;;
+    Lyap*)
+      FIG_ASCII="Lyapunov"
+      SLIDE_DIR="${ART_DIR}/Lyapunov"
+      SLIDE_FONT="3d"
+      ;;
+    Mixed|Misc)
+      FIG_ASCII="Mixed"
+      SLIDE_DIR="${ART_DIR}"
+      SLIDE_FONT="Varsity"
+      ;;
+    Owls*)
+      FIG_ASCII="Owls"
+      SLIDE_DIR="${ART_DIR}/Owls"
+      SLIDE_FONT="Shadow"
+      ;;
+    Space*)
+      FIG_ASCII="Space"
+      SLIDE_DIR="${ART_DIR}/Space"
+      SLIDE_FONT="Bolger"
+      ;;
+    Waterfall*)
+      FIG_ASCII="Waterfalls"
+      SLIDE_DIR="${ART_DIR}/Waterfalls"
+      SLIDE_FONT="Bolger"
+      ;;
+    *)
+      FIG_ASCII="${slideshow}"
+      SLIDE_DIR="${ART_DIR}/${slideshow}"
+      SLIDE_FONT="Varsity"
+      ;;
+  esac
+
+  playing=
+  [ "${audio}" ] && {
+    have_mplayer=`type -p mplayer`
+    [ "${have_mplayer}" ] && {
+      fifo="/tmp/mplayer$$"
+      rm -f ${fifo}
+      mkfifo ${fifo}
+      playing=1
+      mplayer -novideo -loop 0 -volume 80 -really-quiet \
+              -nolirc -slave -input file=${fifo} ${SONG} 2>&1 &
+    }
   }
+  clear
+  first=1
+  tput civis -- invisible
+  if [ "${cycle}" ]
+  then
+    while true
+    do
+      play_slide_show
+      clear
+      first=1
+    done
+  else
+    play_slide_show
+  fi
+  goodbye
   tput cnorm
   [ "${playing}" ] && fade_audio
   exit 0
