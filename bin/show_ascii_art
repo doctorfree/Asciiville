@@ -10,7 +10,7 @@ MUSEDIR=/usr/share/doc/asciiville/music
 SONG="${MUSEDIR}/Chronos.mp3"
 ALTSONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 LOLCAT_NORM="lolcat"
-LOLCAT_ANIM="lolcat --animate --speed=50.0"
+LOLCAT_ANIM="lolcat --animate --speed=60.0"
 LOLCAT="${LOLCAT_ANIM}"
 art="yinyang"
 
@@ -243,6 +243,12 @@ while getopts "a:A:bBcCD:d:gh:i:I:l:LF:f:n:N:oO:Pp:qrs:St:T:w:u" flag; do
           ;;
       l)
           lolcat=${OPTARG}
+          if [ "${lolcat}" == "2" ]
+          then
+            LOLCAT="${LOLCAT_ANIM}"
+          else
+            LOLCAT="${LOLCAT_NORM}"
+          fi
           ;;
       O)
           make_out=${OPTARG}
@@ -368,17 +374,17 @@ goodbye() {
     then
       figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Thanks For" | ${LOLCAT}
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Watching" | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Viewing" | ${LOLCAT}
       printf "\n\n"
       figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art !" | ${LOLCAT}
     else
       figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Thanks For"
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Watching"
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Viewing"
       printf "\n\n"
       figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art !"
     fi
-    sleep ${delay}
+    sleep $((delay / 2))
   }
 }
 
@@ -390,6 +396,7 @@ cleanup() {
 }
 
 play_slide_show() {
+  tput civis -- invisible
   for art in ${SLIDE_DIR}/*.txt
   do
     [ "${art}" == "${SLIDE_DIR}/*.txt" ] && {
@@ -405,6 +412,7 @@ play_slide_show() {
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} | ${LOLCAT}
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} | ${LOLCAT}
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art" | ${LOLCAT}
+          tput civis -- invisible
         else
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME}
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII}
@@ -491,7 +499,6 @@ play_slide_show() {
   }
   clear
   first=1
-  tput civis -- invisible
   if [ "${cycle}" ]
   then
     while true

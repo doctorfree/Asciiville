@@ -34,7 +34,7 @@ FIG_TEXT="Asciiville"
 USE_FONT="Standard"
 WEB_HOME="https://github.com/doctorfree/Asciiville#readme"
 LOLCAT_NORM="lolcat"
-LOLCAT_ANIM="lolcat --animate --speed=50.0"
+LOLCAT_ANIM="lolcat --animate --speed=60.0"
 LOLCAT="${LOLCAT_ANIM}"
 MTITLE="Btop++ System Monitor"
 
@@ -339,6 +339,7 @@ select_font() {
 
 play_slide_show() {
   showname="$1"
+  showargs="-C ${cycarg} ${lolarg} ${audarg}"
   if [ "${XFCE4}" ]
   then
     xfce4-terminal --fullscreen \
