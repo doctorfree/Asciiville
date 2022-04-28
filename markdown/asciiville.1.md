@@ -10,7 +10,7 @@ asciiville - Launch a terminal emulator and specified character based command, a
 and much more
 
 # SYNOPSIS
-**asciiville** [-a] [-A] [-b] [-c command] [-d] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-u]
+**asciiville** [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F] [-g] [-G geometry] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-n num] [-N] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-u]
 
 Invoked without any arguments or with the `-i` argument, `asciiville` displays an interactive dialog menu.
 
@@ -32,6 +32,9 @@ Previously started tmux sessions and asciimatics scripts can be quickly and easi
 **-c 'command'**
 : Indicates run 'command' in selected terminal window. If *command* is one of the special keywords (*maps*, *moon*, *search*, *speed*, *twitter*, *weather*) then display a map, the phase of the Moon, perform a web search, perform a speed test, run the command line twitter client, or display a weather report.
 
+**-C**
+: Indicates cycle slideshow endlessly (Ctrl-c to exit show)
+
 **-d**
 : Indicates use disk usage analyzer as command
 
@@ -40,6 +43,9 @@ Previously started tmux sessions and asciimatics scripts can be quickly and easi
 
 **-g**
 : Indicates use gnome terminal emulator
+
+**-G 'geometry'**
+: Specifies the slideshow window geometry (default fullscreen)
 
 **-i**
 : Indicates start asciiville in interactive mode
@@ -50,8 +56,8 @@ Previously started tmux sessions and asciimatics scripts can be quickly and easi
 **-l**
 : Indicates use lynx as the default command
 
-**-L**
-: Indicates use lolcat coloring where appropriate
+**-L 'level'**
+: Use lolcat coloring, 'level' can be '1' or '2' (animate)
 
 **-P script**
 : Specifies the ASCIImatics script to run

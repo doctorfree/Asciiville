@@ -9,7 +9,7 @@ date: April 24, 2022
 show_ascii_art - display ascii art
 
 # SYNOPSIS
-**show_ascii_art** [-a art] [-A art_dir] [-b] [-c] [-C] [-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g] [-i image] [-l] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S] [-u] [-t first_text] [-T second_text] [-h height] [-w width]
+**show_ascii_art** [-a art] [-A art_dir] [-b] [-B] [-c] [-C] [-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g] [-i image] [-I input_dir] [-O output_dir] [-l level] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S] [-t first_text] [-T second_text] [-h height] [-w width] [-u]
 
 # DESCRIPTION
 The *show_ascii_art* command displays one of the ascii art images included in
@@ -19,6 +19,7 @@ options can be used to specify the width and heigh of the converted image,
 the fonts used to display accompanying text, and the text to display.
 
 # COMMAND LINE OPTIONS
+
 **-a 'art'**
 : specifies which ascii art to display
 
@@ -29,7 +30,7 @@ the fonts used to display accompanying text, and the text to display.
 : when generating ascii art use a border
 
 **-c**
-: when generating ascii art use ANSI colors
+: cycle slideshow endlessly (Ctrl-c to exit show)
 
 **-C**
 : center ascii art on screen if border detected
@@ -52,8 +53,11 @@ the fonts used to display accompanying text, and the text to display.
 **-i 'image'**
 : specifies an image file to convert to ascii art
 
-**-l**
-: use lolcat coloring
+**-I 'input_dir'**
+: generates ascii art from all images in 'input_dir' and saves them in the directory specified with '-O output_dir' (defaults to current directory if '-O output_dir' is specified)
+
+**-l 'level'**
+: use lolcat coloring, 'level' can be '1' or '2' (animate)
 
 **-L**
 : lists the ascii art in the 'art_dir' and exits

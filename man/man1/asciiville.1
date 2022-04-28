@@ -23,10 +23,10 @@ command, ascii art, asciimatics animation, character based
 Email/FTP/File/Web clients, and much more
 .SH SYNOPSIS
 .PP
-\f[B]asciiville\f[R] [-a] [-A] [-b] [-c command] [-d] [-f] [-F] [-g]
-[-i] [-I] [-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script]
-[-r] [-R] [-s song] [-S] [-t] [-T] [-v] [-V show] [-w] [-x] [-X] [-y]
-[-z] [-u]
+\f[B]asciiville\f[R] [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]
+[-g] [-G geometry] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-n
+num] [-N] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-v] [-V
+show] [-w] [-x] [-X] [-y] [-z] [-u]
 .PP
 Invoked without any arguments or with the \f[V]-i\f[R] argument,
 \f[V]asciiville\f[R] displays an interactive dialog menu.
@@ -78,6 +78,9 @@ If \f[I]command\f[R] is one of the special keywords (\f[I]maps\f[R],
 web search, perform a speed test, run the command line twitter client,
 or display a weather report.
 .TP
+\f[B]-C\f[R]
+Indicates cycle slideshow endlessly (Ctrl-c to exit show)
+.TP
 \f[B]-d\f[R]
 Indicates use disk usage analyzer as command
 .TP
@@ -86,6 +89,9 @@ Indicates fullscreen display
 .TP
 \f[B]-g\f[R]
 Indicates use gnome terminal emulator
+.TP
+\f[B]-G \[aq]geometry\[aq]\f[R]
+Specifies the slideshow window geometry (default fullscreen)
 .TP
 \f[B]-i\f[R]
 Indicates start asciiville in interactive mode
@@ -96,8 +102,9 @@ Indicates display system info
 \f[B]-l\f[R]
 Indicates use lynx as the default command
 .TP
-\f[B]-L\f[R]
-Indicates use lolcat coloring where appropriate
+\f[B]-L \[aq]level\[aq]\f[R]
+Use lolcat coloring, \[aq]level\[aq] can be \[aq]1\[aq] or \[aq]2\[aq]
+(animate)
 .TP
 \f[B]-P script\f[R]
 Specifies the ASCIImatics script to run

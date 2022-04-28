@@ -21,10 +21,11 @@
 show_ascii_art - display ascii art
 .SH SYNOPSIS
 .PP
-\f[B]show_ascii_art\f[R] [-a art] [-A art_dir] [-b] [-c] [-C] [-d
+\f[B]show_ascii_art\f[R] [-a art] [-A art_dir] [-b] [-B] [-c] [-C] [-d
 font_dir] [-D seconds] [-F large_font] [-f small_font] [-g] [-i image]
-[-l] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s
-show] [-S] [-u] [-t first_text] [-T second_text] [-h height] [-w width]
+[-I input_dir] [-O output_dir] [-l level] [-L] [-n tabs] [-N depth] [-o]
+[-p palette] [-P] [-q] [-r] [-s show] [-S] [-t first_text] [-T
+second_text] [-h height] [-w width] [-u]
 .SH DESCRIPTION
 .PP
 The \f[I]show_ascii_art\f[R] command displays one of the ascii art
@@ -46,7 +47,7 @@ specifies the path to the ascii art folder
 when generating ascii art use a border
 .TP
 \f[B]-c\f[R]
-when generating ascii art use ANSI colors
+cycle slideshow endlessly (Ctrl-c to exit show)
 .TP
 \f[B]-C\f[R]
 center ascii art on screen if border detected
@@ -69,8 +70,14 @@ convert image to grayscale
 \f[B]-i \[aq]image\[aq]\f[R]
 specifies an image file to convert to ascii art
 .TP
-\f[B]-l\f[R]
-use lolcat coloring
+\f[B]-I \[aq]input_dir\[aq]\f[R]
+generates ascii art from all images in \[aq]input_dir\[aq] and saves
+them in the directory specified with \[aq]-O output_dir\[aq] (defaults
+to current directory if \[aq]-O output_dir\[aq] is specified)
+.TP
+\f[B]-l \[aq]level\[aq]\f[R]
+use lolcat coloring, \[aq]level\[aq] can be \[aq]1\[aq] or \[aq]2\[aq]
+(animate)
 .TP
 \f[B]-L\f[R]
 lists the ascii art in the \[aq]art_dir\[aq] and exits

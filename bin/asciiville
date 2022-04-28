@@ -33,6 +33,9 @@ HOME_FIG_FONTS="${HOME}/src/Asciiville/share/figlet-fonts"
 FIG_TEXT="Asciiville"
 USE_FONT="Standard"
 WEB_HOME="https://github.com/doctorfree/Asciiville#readme"
+LOLCAT_NORM="lolcat"
+LOLCAT_ANIM="lolcat --animate --speed=50.0"
+LOLCAT="${LOLCAT_ANIM}"
 MTITLE="Btop++ System Monitor"
 
 if [ `echo $PATH | grep -c /usr/local/bin` -ne "1" ]
@@ -46,7 +49,7 @@ fi
 
 usage() {
   printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]"
-  printf "\n\t[-g] [-G geometry] [-i] [-I] [-jJ] [-k] [-l] [-L] [-m] [-M]"
+  printf "\n\t[-g] [-G geometry] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M]"
   printf "\n\t[-n num] [-N] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t]"
   printf "\n\t[-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-u]\n"
   printf "\nTerminal/Command options:"
@@ -67,7 +70,7 @@ usage() {
   printf "\n\t-i indicates start asciiville in interactive mode"
   printf "\n\t-I indicates display system info"
   printf "\n\t-l indicates use lynx web browser as the default command"
-  printf "\n\t-L indicates use lolcat coloring where appropriate"
+  printf "\n\t-L 'level' use lolcat coloring, 'level' can be '1' or '2' (animate)"
   printf "\n\t-P script specifies the ASCIImatics script to run in visualizer pane"
   printf "\n\t-r indicates use retro terminal emulator"
   printf "\n\t-t indicates use tilix terminal emulator"
@@ -358,6 +361,8 @@ play_slide_show() {
 }
 
 show_art_menu() {
+  animation_menu=
+  main_menu=
   while true
   do
     if [ "${AUDIO}" ]
@@ -392,7 +397,7 @@ show_art_menu() {
     fi
     if [ "${use_lolcat}" ]
     then
-      lolarg="-l"
+      lolarg="-l ${use_lolcat}"
     else
       lolarg=
     fi
@@ -400,7 +405,7 @@ show_art_menu() {
       select_font AsciiArt
       if [ "${use_lolcat}" ]
       then
-        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | lolcat
+        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
       else
         figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
       fi
@@ -422,13 +427,17 @@ show_art_menu() {
     options+=("Use Audio           [${audiostat}]")
     options+=("Use Tmux            [${usetmux}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session [${recordstat}]")
+    [ "${have_splash}" ] && options+=("Animations menu")
     options+=("Main menu" "Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
+          "Animations menu",*|*,"Animations menu")
+              animation_menu=1
+              break 2
+              ;;
           "Main menu",*|*,"Main menu"|"Back",*|*,"Back"|"back",*|*,"back")
-              clear
-              init_vars
+              main_menu=1
               break 2
               ;;
           "Ascii Doctorwhen Art Slide Show",*|*,"Ascii Doctorwhen Art Slide Show")
@@ -492,15 +501,24 @@ show_art_menu() {
               break
               ;;
           "Use Lolcat Coloring"*,*|*,"Use Lolcat Coloring"*)
-              if [ "${use_lolcat}" ]
+              if [ "${use_lolcat}" == "2" ]
               then
                 use_lolcat=
                 use_lol="NO"
                 lolarg=
               else
-                use_lolcat=1
-                use_lol="YES"
-                lolarg="-l"
+                if [ "${use_lolcat}" ]
+                then
+                  use_lolcat=2
+                  use_lol="YES+"
+                  lolarg="-l 2"
+                  LOLCAT="${LOLCAT_ANIM}"
+                else
+                  use_lolcat=1
+                  use_lol="YES"
+                  lolarg="-l 1"
+                  LOLCAT="${LOLCAT_NORM}"
+                fi
               fi
               break
               ;;
@@ -538,9 +556,22 @@ show_art_menu() {
       REPLY=
     done
   done
+  [ "${animation_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_animation_menu
+  }
+  [ "${main_menu}" ] && {
+    clear
+    printf "\n"
+    init_vars
+    show_main_menu
+  }
 }
 
 show_animation_menu() {
+  art_menu=
+  main_menu=
   while true
   do
     SPLASH=1
@@ -567,7 +598,7 @@ show_animation_menu() {
       select_font Asciimatics
       if [ "${use_lolcat}" ]
       then
-        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | lolcat
+        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
       else
         figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
       fi
@@ -584,10 +615,15 @@ show_animation_menu() {
     options+=("Use Audio           [${audiostat}]")
     options+=("Use Tmux            [${usetmux}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session [${recordstat}]")
+    [ "${have_showascii}" ] && options+=("Asciiville Art menu")
     options+=("Main menu" "Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
+          "Asciiville Art menu",*|*,"Asciiville Art menu")
+              art_menu=1
+              break 2
+              ;;
           "Main menu",*|*,"Main menu"|"Back",*|*,"Back"|"back",*|*,"back")
               clear
               init_vars
@@ -627,18 +663,31 @@ show_animation_menu() {
               break
               ;;
           "Ascii Art Slide Shows",*|*,"Ascii Art Slide Shows")
+              clear
+              printf "\n\n\n"
               show_art_menu
               skip_it_so=1
               break
               ;;
           "Use Lolcat Coloring"*,*|*,"Use Lolcat Coloring"*)
-              if [ "${use_lolcat}" ]
+              if [ "${use_lolcat}" == "2" ]
               then
                 use_lolcat=
                 use_lol="NO"
+                lolarg=
               else
-                use_lolcat=1
-                use_lol="YES"
+                if [ "${use_lolcat}" ]
+                then
+                  use_lolcat=2
+                  use_lol="YES+"
+                  lolarg="-l 2"
+                  LOLCAT="${LOLCAT_ANIM}"
+                else
+                  use_lolcat=1
+                  use_lol="YES"
+                  lolarg="-l 1"
+                  LOLCAT="${LOLCAT_NORM}"
+                fi
               fi
               skip_it_so=1
               break
@@ -701,7 +750,17 @@ show_animation_menu() {
       init_vars
     }
   done
-  init_vars
+  [ "${art_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_art_menu
+  }
+  [ "${main_menu}" ] && {
+    clear
+    printf "\n"
+    init_vars
+    show_main_menu
+  }
 }
 
 show_main_menu() {
@@ -836,7 +895,7 @@ show_main_menu() {
       select_font Asciiville
       if [ "${use_lolcat}" ]
       then
-        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | lolcat
+        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
       else
         figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
       fi
@@ -1046,13 +1105,21 @@ show_main_menu() {
               break
               ;;
           "Use Lolcat Coloring"*,*|*,"Use Lolcat Coloring"*)
-              if [ "${use_lolcat}" ]
+              if [ "${use_lolcat}" == "2" ]
               then
                 use_lolcat=
                 use_lol="NO"
               else
-                use_lolcat=1
-                use_lol="YES"
+                if [ "${use_lolcat}" ]
+                then
+                  use_lolcat=2
+                  use_lol="YES+"
+                  LOLCAT="${LOLCAT_ANIM}"
+                else
+                  use_lolcat=1
+                  use_lol="YES"
+                  LOLCAT="${LOLCAT_NORM}"
+                fi
               fi
               skip_it_so=1
               break
@@ -1155,7 +1222,7 @@ show_main_menu() {
                 select_font MusicPlayer
                 if [ "${use_lolcat}" ]
                 then
-                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | lolcat
+                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
                 else
                   figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
                 fi
@@ -1170,7 +1237,7 @@ show_main_menu() {
                 select_font Roon
                 if [ "${use_lolcat}" ]
                 then
-                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | lolcat
+                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
                 else
                   figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
                 fi
@@ -1183,7 +1250,7 @@ show_main_menu() {
           "Show System Info",*|*,"Show System Info")
               if [ "${use_lolcat}" ]
               then
-                neofetch | lolcat
+                neofetch | ${LOLCAT}
               else
                 neofetch
               fi
@@ -1192,11 +1259,15 @@ show_main_menu() {
               break
               ;;
           "ASCIImatics Animations",*|*,"ASCIImatics Animations")
+              clear
+              printf "\n\n\n"
               show_animation_menu
               skip_it_so=1
               break
               ;;
           "Ascii Art Slide Shows",*|*,"Ascii Art Slide Shows")
+              clear
+              printf "\n\n\n"
               show_art_menu
               skip_it_so=1
               break
@@ -1366,7 +1437,7 @@ geometry=
 use_term=1
 show_neofetch=
 SLIDESHOW=
-while getopts "Aabc:CdfFgG:iIjJklLmMn:NpP:rRSs:tTvV:wxXyzu" flag; do
+while getopts "Aabc:CdfFgG:iIjJklL:mMn:NpP:rRSs:tTvV:wxXyzu" flag; do
   case $flag in
     A)
       ASCSPLASH="${ASCSPLASH} -i"
@@ -1571,8 +1642,15 @@ while getopts "Aabc:CdfFgG:iIjJklLmMn:NpP:rRSs:tTvV:wxXyzu" flag; do
       ;;
     L)
       [ "${have_lolcat}" ] && {
-        use_lolcat=1
-        use_lol="YES"
+        use_lolcat=${OPTARG}
+        if [ "${use_lolcat}" == "2" ]
+        then
+          use_lol="YES+"
+          LOLCAT="${LOLCAT_ANIM}"
+        else
+          use_lol="YES"
+          LOLCAT="${LOLCAT_NORM}"
+        fi
       }
       ;;
     m)
@@ -1802,7 +1880,7 @@ fi
 [ "${show_neofetch}" ] && {
   if [ "${use_lolcat}" ]
   then
-    neofetch | lolcat
+    neofetch | ${LOLCAT}
   else
     neofetch
   fi
@@ -1818,7 +1896,7 @@ fi
   fi
   if [ "${use_lolcat}" ]
   then
-    lolarg="-l"
+    lolarg="-l ${use_lolcat}"
   else
     lolarg=
   fi
@@ -1874,8 +1952,9 @@ fi
 
 [ "${INTERACTIVE}" ] && {
   [ "${have_lolcat}" ] && {
-    use_lolcat=1
-    use_lol="YES"
+    use_lolcat=2
+    use_lol="YES+"
+    LOLCAT="${LOLCAT_ANIM}"
   }
   clear
   echo ""

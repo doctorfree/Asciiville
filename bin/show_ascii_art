@@ -9,6 +9,9 @@ SMALL_FONT="Small"
 MUSEDIR=/usr/share/doc/asciiville/music
 SONG="${MUSEDIR}/Chronos.mp3"
 ALTSONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
+LOLCAT_NORM="lolcat"
+LOLCAT_ANIM="lolcat --animate --speed=50.0"
+LOLCAT="${LOLCAT_ANIM}"
 art="yinyang"
 
 # Default palette used by jp2a
@@ -25,7 +28,7 @@ set -m
 usage() {
   printf "\nUsage: show_ascii_art [-a art] [-A art_dir] [-b] [-B] [-c] [-C]"
   printf "\n\t[-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g]"
-  printf "\n\t[-i image] [-I input_dir] [-O output_dir] [-l] [-L] [-n tabs]"
+  printf "\n\t[-i image] [-I input_dir] [-O output_dir] [-l level] [-L] [-n tabs]"
   printf "\n\t[-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S]"
   printf "\n\t[-t first_text] [-T second_text] [-h height] [-w width] [-u]"
   printf "\nWhere:"
@@ -42,7 +45,7 @@ usage() {
   printf "\n\t-I 'input_dir' generates ascii art from all images in 'input_dir'"
   printf "\n\t\tand saves them in the directory specified with '-O output_dir'"
   printf "\n\t\t(defaults to current directory if '-O output_dir' is specified)"
-  printf "\n\t-l use lolcat coloring"
+  printf "\n\t-l 'level' use lolcat coloring, 'level' can be '1' or '2' (animate)"
   printf "\n\t-L lists the ascii art in the 'art_dir' and exits"
   printf "\n\t-f 'small_font' specifies the figlet font to use for small text"
   printf "\n\t-F 'large_font' specifies the figlet font to use for large text"
@@ -188,7 +191,7 @@ tabs=
 width=
 have_convert=`type -p convert`
 have_jp2a=`type -p jp2a`
-while getopts "a:A:bBcCD:d:gh:i:I:lLF:f:n:N:oO:Pp:qrs:St:T:w:u" flag; do
+while getopts "a:A:bBcCD:d:gh:i:I:l:LF:f:n:N:oO:Pp:qrs:St:T:w:u" flag; do
   case $flag in
       a)
           art="${OPTARG}"
@@ -239,7 +242,7 @@ while getopts "a:A:bBcCD:d:gh:i:I:lLF:f:n:N:oO:Pp:qrs:St:T:w:u" flag; do
           list=1
           ;;
       l)
-          lolcat=1
+          lolcat=${OPTARG}
           ;;
       O)
           make_out=${OPTARG}
@@ -363,11 +366,11 @@ goodbye() {
     printf "\n\n\n"
     if [ "${have_lolcat}" ]
     then
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Thanks For" | lolcat
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Thanks For" | ${LOLCAT}
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Watching" | lolcat
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Watching" | ${LOLCAT}
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art !" | lolcat
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art !" | ${LOLCAT}
     else
       figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Thanks For"
       printf "\n\n"
@@ -399,9 +402,9 @@ play_slide_show() {
         printf "\n\n\n\n"
         if [ "${have_lolcat}" ]
         then
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} | lolcat
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} | lolcat
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art" | lolcat
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} | ${LOLCAT}
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} | ${LOLCAT}
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art" | ${LOLCAT}
         else
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME}
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII}
@@ -578,8 +581,8 @@ fi
   sleep ${delay}
   if [ "${have_lolcat}" ]
   then
-    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME} | lolcat
-    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII} | lolcat
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME} | ${LOLCAT}
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII} | ${LOLCAT}
   fi
 }
 
@@ -588,9 +591,9 @@ then
   sleep ${delay}
   if [ "${input_image}" ]
   then
-    show_ascii "/tmp/${image_name}$$.txt" "${tabs}" lolcat
+    show_ascii "/tmp/${image_name}$$.txt" "${tabs}" ${LOLCAT}
   else
-    show_ascii "${ART_DIR}/${art}.txt" "${tabs}" lolcat
+    show_ascii "${ART_DIR}/${art}.txt" "${tabs}" ${LOLCAT}
   fi
 fi
 

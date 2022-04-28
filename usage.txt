@@ -1,6 +1,7 @@
-Usage: asciiville [-a] [-A] [-b] [-c command] [-d] [-f] [-F] [-g] [-i] [-I]
-		[-jJ] [-k] [-l] [-L] [-m] [-M] [-n num] [-N] [-p] [-P script] [-r] [-R]
-		[-s song] [-S] [-t] [-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-u]
+Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]
+	[-g] [-G geometry] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M]
+	[-n num] [-N] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t]
+	[-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-u]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
@@ -11,19 +12,22 @@ Terminal/Command options:
 		If 'command' is keyword 'twitter' then a Twitter client is run
 		If 'command' is keyword 'weather' then display a weather report
 		Otherwise, 'command' will be executed in a terminal window
+	-C indicates cycle slideshow endlessly (Ctrl-c to exit show)
 	-d indicates use disk usage analyzer as default command
 	-f indicates use cbftp/ncftp as the default command
 	-F indicates fullscreen display
 	-g indicates use gnome terminal emulator
+	-G 'geometry' specifies the slideshow window geometry (default fullscreen)
 	-i indicates start asciiville in interactive mode
 	-I indicates display system info
 	-l indicates use lynx web browser as the default command
-	-L indicates use lolcat coloring where appropriate
+	-L 'level' use lolcat coloring, 'level' can be '1' or '2' (animate)
 	-P script specifies the ASCIImatics script to run in visualizer pane
 	-r indicates use retro terminal emulator
 	-t indicates use tilix terminal emulator
 	-V 'show' displays an ascii art slide show
-		'show' can be Art, Fractals, Lyap, Mixed, Owls, Waterfalls
+		'show' can be Art, Doctorwhen, Dragonflies, Fractals,
+			Lyap, Mixed, Owls, Space, or Waterfalls
 	-w indicates use w3m web browser as the default command
 	-x indicates use xfce4 terminal emulator
 	-X indicates run command in current terminal window
@@ -31,7 +35,7 @@ Terminal/Command options:
 	-z indicates use mutt email client as the default command
 
 ASCIImatics animation options:
-	-A indicates use Art Images scenes in ASCIImatics display
+	-A indicates use Asciiville scenes in ASCIImatics display
 	-a indicates play audio during ASCIImatics display
 	-b indicates use backup audio during ASCIImatics display
 	-j indicates use Julia Set scenes in ASCIImatics display
