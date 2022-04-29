@@ -13,7 +13,7 @@ of components used to display ASCII art, animations, and utilities.
 1. [Requirements](#requirements)
 1. [Installation](#installation)
     1. [Debian package installation](#debian-package-installation)
-    1. [RPM Package installation](#rpm-package-installation)
+    1. [RPM package installation](#rpm-package-installation)
     1. [BB AAlib Demo](#bb-aalib-demo)
 1. [Configuration files](#configuration-files)
 1. [Documentation](#documentation)
@@ -185,7 +185,7 @@ or
 sudo dpkg -i ./Asciiville_<version>-<release>.armhf.deb
 ```
 
-### RPM Package installation
+### RPM package installation
 
 Red Hat Linux, SUSE Linux, and their derivatives use the RPM packaging
 format. RPM based Linux distributions include Fedora, AlmaLinux, CentOS,
