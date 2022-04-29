@@ -563,7 +563,7 @@ and "The Altar" in George Herbert's The Temple (1633):
 
 <p float="left">
 Easter Wings<br/>
-  <img src="art/pics/george-herbert-easter-wings.jpg" style="width:800px;height:600px;">
+  <img src="art/pics/george-herbert-easter-wings.jpg" style="width:600px;height:800px;">
 </p>
 
 Text artists in the 19th century invented a novel technique for creating art:
@@ -572,7 +572,7 @@ different angle to allow the overprinting and fine-tuning of an image.
 
 <p float="left">
 Typewriter art by Flora F.F. Stacey from 1898<br/>
-  <img src="art/pics/typewriter-art.jpg" style="width:800px;height:600px;">
+  <img src="art/pics/typewriter-art.jpg" style="width:600px;height:800px;">
 </p>
 
 Typewriter art was succeeded by Teletype art using character sets such as the
