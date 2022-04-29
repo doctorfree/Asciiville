@@ -1,3 +1,5 @@
+FIG_FONTS = /usr/share/figlet-fonts
+FONT = Lean
 PREFIX ?= /usr
 BINDIR ?= $(PREFIX)/bin
 MANDIR ?= $(PREFIX)/share/man/man1
@@ -11,24 +13,42 @@ MANS = man/man1/asciiart.1 man/man1/asciijulia.1 man/man1/asciimpplus.1 \
 	   man/man1/asciisplash.1 man/man1/asciiville.1 man/man1/cbftp.1 \
 	   man/man1/show_ascii_art.1
 
-.PHONY: all deb rpm btop cbftp jp2a clean
+ifeq ($(shell command -v lolcat >/dev/null; echo $$?),0)
+	LOL_CMD := lolcat
+else
+	LOL_CMD := cat
+endif
+ifeq ($(shell command -v figlet >/dev/null; echo $$?),0)
+	FIG_CMD := figlet -c -d $(FIG_FONTS) -f $(FONT) -k -t Asciiville | tr ' _/' ' ()' | $(LOL_CMD)
+else
+ifeq ($(shell test -f asciiville.txt; echo $$?),0)
+	FIG_CMD := cat asciiville.txt | $(LOL_CMD)
+else
+	FIG_CMD := echo Asciiville
+endif
+endif
+
+.PHONY: all info deb rpm btop cbftp jp2a clean
 
 all: btop cbftp jp2a deb rpm
 
-btop:
-	./build-btop.sh
+info:
+	@$(FIG_CMD)
 
-cbftp:
-	./build-cbftp.sh
+btop: info
+	@./build-btop.sh
 
-jp2a:
-	./build-jp2a.sh
+cbftp: info
+	@./build-cbftp.sh
 
-deb:
-	./mkdeb
+jp2a: info
+	@./build-jp2a.sh
 
-rpm:
-	./mkrpm
+deb: info
+	@./mkdeb
 
-clean:
-	./clean
+rpm: info
+	@./mkrpm
+
+clean: info
+	@./clean

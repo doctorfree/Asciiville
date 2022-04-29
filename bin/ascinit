@@ -137,18 +137,18 @@ create_new_profile() {
       do
         profile_ids[${id}]="'profile_ids[${id}]',"
       done
-      dconf write $dconfdir/list "[${profile_ids[*]} '$profile_id']"
+      dconf write $dconfdir/list "[${profile_ids[*]} '$profile_id']" 2> /dev/null
       [ "${debug}" ] && {
         echo "A: dconf write $dconfdir/list [${profile_ids[*]} '$profile_id']"
       }
     else
-      dconf write $dconfdir/list "['$profile_id']"
+      dconf write $dconfdir/list "['$profile_id']" 2> /dev/null
       [ "${debug}" ] && {
         echo "B: dconf write $dconfdir/list ['$profile_id']"
       }
     fi
   else
-    dconf write $dconfdir/list "${profile_ids_old}, '$profile_id']"
+    dconf write $dconfdir/list "${profile_ids_old}, '$profile_id']" 2> /dev/null
     [ "${debug}" ] && {
       echo "C: dconf write $dconfdir/list ${profile_ids_old}, '$profile_id']"
     }
@@ -162,22 +162,22 @@ create_new_profile() {
   then
     profile_path="$dconfdir/$profile_id"
   fi
-  dconf write $profile_path/visible-name "'$profile_name'"
+  dconf write $profile_path/visible-name "'$profile_name'" 2> /dev/null
 
   # Asciiville profile wants a black background with no transparency
-  dconf write $profile_path/background-color "'rgb(0,0,0)'"
-  dconf write $profile_path/foreground-color "'rgb(255,255,255)'"
-  dconf write $profile_path/cursor-shape "'underline'"
-  dconf write $profile_path/cursor-blink-mode "'off'"
-  dconf write $profile_path/use-theme-colors "false"
+  dconf write $profile_path/background-color "'rgb(0,0,0)'" 2> /dev/null
+  dconf write $profile_path/foreground-color "'rgb(255,255,255)'" 2> /dev/null
+  dconf write $profile_path/cursor-shape "'underline'" 2> /dev/null
+  dconf write $profile_path/cursor-blink-mode "'off'" 2> /dev/null
+  dconf write $profile_path/use-theme-colors "false" 2> /dev/null
   if [ "${proname}" == "gnome" ]
   then
-    dconf write $profile_path/use-theme-transparency "false"
-    dconf write $profile_path/use-transparent-background "false"
+    dconf write $profile_path/use-theme-transparency "false" 2> /dev/null
+    dconf write $profile_path/use-transparent-background "false" 2> /dev/null
   fi
   if [ "${proname}" == "tilix" ]
   then
-    dconf write $profile_path/background-transparency-percent "0"
+    dconf write $profile_path/background-transparency-percent "0" 2> /dev/null
   fi
   # Do we need to set the font in the profile?
   # FONT="Monospace Regular"
