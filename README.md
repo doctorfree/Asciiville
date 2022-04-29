@@ -658,9 +658,16 @@ Asciiville Main Menu<br/>
   <img src="screenshots/Asciiville-MainMenu.png" style="width:800px;height:600px;">
 </p>
 <p float="left">
-Asciiville Sub-Menus: Asciimatics Animations, MusicPlayerPlus, and RoonCommandLine<br/>
+Asciiville Sub-Menus: Ascii Art, Asciimatics Animations, MusicPlayerPlus, and RoonCommandLine<br/>
+  <img src="screenshots/Asciiville-Art.png" style="width:800px;height:600px;">
   <img src="screenshots/Asciiville-Animation.png" style="width:800px;height:600px;">
   <img src="screenshots/Asciiville-Music.png" style="width:800px;height:600px;">
   <img src="screenshots/Asciiville-Roon.png" style="width:800px;height:600px;">
+</p>
+<p float="left">
+Ascii System Monitor, Maps, and Weather<br/>
+  <img src="screenshots/Btop.png" style="width:800px;height:600px;">
+  <img src="screenshots/Mapscii-Ukraine.png" style="width:800px;height:600px;">
+  <img src="screenshots/Weather.png" style="width:800px;height:600px;">
 </p>
 
