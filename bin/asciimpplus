@@ -249,6 +249,7 @@ def _mpplus(screen):
     scenes.append(Scene(effects, 300))
 
     numplays=0
+    screen.clear()
     while numplays < numcycles:
         screen.play(scenes, stop_on_resize=True, repeat=False)
         numplays += 1

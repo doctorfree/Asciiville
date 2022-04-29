@@ -68,6 +68,7 @@ def asciijulia(screen, c):
     ]
     scenes.append(Scene(effects, numcycles))
 
+    screen.clear()
     if cycle is None:
         screen.play(scenes, stop_on_resize=True)
     else:

@@ -168,6 +168,7 @@ do
   then
     if [ "${have_apt}" ]
     then
+      sudo apt update -y
       sudo apt install "${PKG}"
     else
       if [ "${have_dpkg}" ]
@@ -180,6 +181,7 @@ do
   else
     if [ "${have_dnf}" ]
     then
+      sudo dnf update -y
       sudo dnf localinstall "${PKG}"
     else
       if [ "${have_rpm}" ]

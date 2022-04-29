@@ -55,6 +55,7 @@ class MusicPlayerPlusScene(Scene):
         self._add_mpcplus_comment()
 
 def mpplus(screen, cycle=None):
+    screen.clear()
     if cycle is None:
         screen.play([MusicPlayerPlusScene(screen)], stop_on_resize=True)
     else:
