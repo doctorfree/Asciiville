@@ -25,6 +25,13 @@ This release includes support for:
 * Add grayscale option and color depth option to `show_ascii_art`
 * Fold my changes to jp2a with newer version
 * Added character set option to `show_ascii_art`
+* Updated screenshots
+* Install btop themes, create btop man page
+* Animate lolcat display
+* Add Dragonfly, Space, and Doctorwhen ascii art and slideshows
+* Add `make_ascii_art` command
+* Option to play audio during slideshow
+* Create 'Asciiville' profile for Tilix and gnome-terrminal in `ascinit`
 
 Supported features include:
 

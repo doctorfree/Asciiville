@@ -29,6 +29,13 @@ All notable changes to this project will be documented in this file.
 * Add grayscale option and color depth option to `show_ascii_art`
 * Fold my changes to jp2a with newer version
 * Added character set option to `show_ascii_art`
+* Updated screenshots
+* Install btop themes, create btop man page
+* Animate lolcat display
+* Add Dragonfly, Space, and Doctorwhen ascii art and slideshows
+* Add `make_ascii_art` command
+* Option to play audio during slideshow
+* Create 'Asciiville' profile for Tilix and gnome-terrminal in `ascinit`
 
 # Asciiville-1.3.0r1 (2022-04-20)
 
@@ -51,6 +58,76 @@ Initial release with support for:
 * Any character based client the user wishes to run
 * One of several asciimatics animations optionally accompanied by audio
 
+Fri Apr 29 10:40:57 2022 -0700 00f5c6d :
+   Update and add screenshots
+Fri Apr 29 10:10:56 2022 -0700 9bae3dd :
+   Update todo and notice
+Fri Apr 29 10:01:23 2022 -0700 ab8ddfe :
+   Redirect dconf stderr in ascinit, add Asciiville banner to Makefile rules
+Thu Apr 28 22:15:58 2022 -0700 bdb2b6a :
+   Add links to modern day projects
+Thu Apr 28 21:15:50 2022 -0700 b79f1e9 :
+   Install btop themes, create btop man page
+Thu Apr 28 19:43:18 2022 -0700 cca7d51 :
+   Merge branch 'main' of https://github.com/doctorfree/Asciiville into main
+Thu Apr 28 19:43:06 2022 -0700 0d0d64c :
+   Update History section
+Thu Apr 28 19:26:27 2022 -0700 e4bdd3d :
+   Update README.md
+Thu Apr 28 19:23:47 2022 -0700 641be91 :
+   Rotate concrete poetry image
+Thu Apr 28 19:19:03 2022 -0700 2cb65d1 :
+   Add section to README on History of ASCII Art
+Thu Apr 28 16:37:59 2022 -0700 2dee2c0 :
+   Fix bug passing arguments to slideshow, bump animation speed
+Thu Apr 28 15:34:58 2022 -0700 d02c8e2 :
+   Add option to animate lolcat display, smarter navigation of interactive menus
+Thu Apr 28 13:11:25 2022 -0700 983a822 :
+   Add copyright and license for ascii art
+Thu Apr 28 13:07:02 2022 -0700 d4ccc48 :
+   Add Dragonfly, Space, and Doctorwhen ascii art and slideshows, add make_ascii_art command, options to cycle slideshow and specify slideshow geometry
+Wed Apr 27 15:30:54 2022 -0700 5ec4b5e :
+   Cleanup comments in bb-tmux
+Wed Apr 27 15:26:52 2022 -0700 9da209a :
+   Option to play audio during slideshow, trap in bb demo tmux to fade audio
+Wed Apr 27 08:43:42 2022 -0700 850ca34 :
+   Add debug switch to ascinit and rethink the dconf logic when creating a new profile
+Tue Apr 26 21:16:43 2022 -0700 06e15cf :
+   ImageMagick typo in rpm spec
+Tue Apr 26 21:10:13 2022 -0700 f145361 :
+   Add PNG dependency
+Tue Apr 26 20:55:55 2022 -0700 f7930be :
+   Add jpeglib build dependency
+Tue Apr 26 20:43:18 2022 -0700 7775c11 :
+   Only use Figlet fonts that can be colorized
+Tue Apr 26 18:39:11 2022 -0700 e3132a1 :
+   Center vertically and hide cursor during slideshow
+Tue Apr 26 18:03:43 2022 -0700 a6740fa :
+   Center ascii art in terminal window if -C option to show_ascii_art
+Tue Apr 26 16:19:44 2022 -0700 606e1df :
+   Use xfce4, tilix, or gnome terminal for slide shows
+Tue Apr 26 14:03:06 2022 -0700 0bce4e5 :
+   Create Asciiville profile for Tilix in ascinit
+Tue Apr 26 12:07:22 2022 -0700 378ada2 :
+   Do not assume project is cloned in HOME/src/Asciiville
+Tue Apr 26 11:52:02 2022 -0700 6c5b97b :
+   Set foreground/background/transparency in Asciiville gnome-terminal profile
+Tue Apr 26 10:42:24 2022 -0700 def466e :
+   Check if gnome-terminal profile exists before creating it
+Tue Apr 26 10:01:03 2022 -0700 ef4c6d3 :
+   Add -v and -V show arguments to show version and show slide show
+Tue Apr 26 09:15:41 2022 -0700 70afd2d :
+   Replace Show Ascii Art with slide show menu, create an Asciiville profile in gnome-terminal
+Tue Apr 26 07:30:50 2022 -0700 6bfd0f3 :
+   Typo in Owls slide show
+Tue Apr 26 07:11:24 2022 -0700 87fab68 :
+   Add dconf dependency, rename Art files with spaces
+Mon Apr 25 20:56:22 2022 -0700 b7f913b :
+   Add Fractals and Art ascii art, slideshow feature to show_ascii_art
+Mon Apr 25 18:50:06 2022 -0700 c46e2a8 :
+   Add ascii art
+Mon Apr 25 16:53:46 2022 -0700 1f275a6 :
+   changelog and release notes
 Mon Apr 25 16:48:46 2022 -0700 a9ffb3a :
    Add grayscale option and color depth option to show_ascii_art
 Mon Apr 25 15:04:13 2022 -0700 9976095 :
