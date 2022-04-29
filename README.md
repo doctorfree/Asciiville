@@ -24,6 +24,7 @@ of components used to display ASCII art, animations, and utilities.
 1. [Figlet fonts](#figlet-fonts)
 1. [Build](#build)
 1. [Removal](#removal)
+1. [History](#history)
 1. [Screenshots](#screenshots)
 
 ## Overview
@@ -526,6 +527,99 @@ script in the Asciiville source directory:
     cd Asciiville
     ./Uninstall
 ```
+
+## History
+
+ASCII art is a graphic design technique that uses computers for presentation
+and consists of pictures pieced together from the 95 printable (from a total
+of 128) characters defined by the ASCII Standard from 1963 and ASCII compliant
+character sets with proprietary extended characters (beyond the 128 characters
+of standard 7-bit ASCII). The term is also loosely used to refer to text based
+visual art in general. ASCII art can be created with any text editor, and is
+often used with free-form languages. Most examples of ASCII art require a
+fixed-width font (non-proportional fonts, as on a traditional typewriter) such
+as Courier for presentation.
+
+Among the oldest known examples of ASCII art are the creations by computer-art
+pioneer Kenneth Knowlton from around 1966, who was working for Bell Labs at the
+time. "Studies in Perception I" by Ken Knowlton and Leon Harmon from 1966 shows
+some examples of their early ASCII art.
+
+ASCII art was invented, in large part, because early printers often lacked
+graphics ability and thus characters were used in place of graphic marks.
+Also, to mark divisions between different print jobs from different users,
+bulk printers often used ASCII art to print large banner pages, making the
+division easier to spot so that the results could be more easily separated
+by a computer operator or clerk. ASCII art was also used in early e-mail
+when images could not be embedded.
+
+However, text art predates computers. Perhaps the earliest use of characters
+in art was in ancient Greece during the 3rd and 2nd centuries BCE with shaped
+or patterned poems referred to as "concrete poetry". In this art form, the
+words of a poem are arranged in such a way as to depict their subject.
+
+Early religious examples of shaped poems in English include "Easter Wings"
+and "The Altar" in George Herbert's The Temple (1633):
+
+<p float="left">
+Easter Wings<br/>
+  <img src="art/pics/george-herbert-easter-wings.jpg" style="width:800px;height:600px;">
+</p>
+
+Text artists in the 19th century invented a novel technique for creating art:
+feeding paper into the rollers of typewriters numerous times, each at a
+different angle to allow the overprinting and fine-tuning of an image.
+
+<p float="left">
+Typewriter art by Flora F.F. Stacey from 1898<br/>
+  <img src="art/pics/typewriter-art.jpg" style="width:800px;height:600px;">
+</p>
+
+Typewriter art was succeeded by Teletype art using character sets such as the
+Baudot code which predated ASCII. Text images produced on a TTY or RTTY have
+been discovered as early as 1923. In the 1960s Andries van Dam and Kenneth
+Knowlton were producing realistic images using line printers by overprinting
+several characters on top of one another. This was still not ASCII art as they
+were using EBCDIC rather than ASCII but it was astonishingly good.
+
+Line printer art flourished throughout the 1970s as anyone who had a job in
+a computer lab back then will tell you. Everybody learned how to print a
+Snoopy banner. In the late 1970s and early 1980s computer bulletin board
+systems, email users, game designers, Usenet news groups, and others
+began using ASCII art to represent images. ASCII artists invented Emoticons,
+short small combinations of characters which represented the user's
+emotional state - happy, sad, angry, and more. Email messages and Usenet
+newsgroups were littered with :) and {:> and the Golden Age of ASCII art
+flourished throughout the 1990s.
+
+This technique of representing images as text found its way into the source
+code of computer programs as a way to represent company or product logos.
+In some cases, the entire source code of a program is a piece of ASCII art.
+For instance, an entry to one of the earlier "International Obfuscated C Code
+Contest" is a program that adds numbers, but visually looks like a binary
+adder drawn in logic ports.
+
+ANSI art is similar to ASCII art, but constructed from a larger set of 256
+letters, numbers, and symbols — often referred to as extended ASCII. ANSI art
+also contains special ANSI escape sequences that can be used to color text.
+
+The rise of the Internet and graphical desktop environments saw the decline
+of BBSes and character based user environments which made ASCII and ANSI art
+harder to create and to view due to the lack of software compatible with the
+new dominant operating system, Microsoft Windows.
+
+By the end of 2002 all traditional ANSI art groups like ACiD, ICE, CIA, Fire,
+Dark and many others were no longer making periodic releases of artworks,
+called "artpacks" and the community of artists almost vanished.
+
+ASCII and ANSI art resurrected in 2022 with the publication of "Asciiville",
+a compendium of art, animation, utilities, and integrated components all
+utilizing character based graphics. Haha! Just kidding. Asciiville leverages
+the resurgence of interest in character based graphics accompanied by many
+recent advances like Figlet Fonts, Lolcat, lsd, asciimatics, asciinema,
+btop, jp2a, cbftp, and more. These modern utilities and character based
+components have breathed new life into the ASCII art community and produced
+many beautiful works of art and animation.
 
 ## Screenshots
 
