@@ -638,10 +638,17 @@ ASCII and ANSI art resurrected in 2022 with the publication of
 compendium of art, animation, utilities, and integrated components all
 utilizing character based graphics. Haha! Just kidding :smiley:. Asciiville
 leverages the resurgence of interest in character based graphics accompanied
-by many recent advances like Figlet Fonts, Lolcat, lsd, asciimatics, asciinema,
-btop, jp2a, cbftp, and more. These modern utilities and character based
+by many recent advances like [Figlet Fonts](http://www.figlet.org/),
+[Lolcat](https://github.com/busyloop/lolcat),
+[lsd](https://github.com/Peltoche/lsd),
+[asciimatics](https://github.com/peterbrittain/asciimatics),
+[asciinema](https://asciinema.org/),
+[btop](https://github.com/aristocratos/btop),
+[jp2a](https://github.com/cslarsen/jp2a),
+[Moebius](https://github.com/blocktronics/moebius),
+and more. These modern utilities and character based
 components have breathed new life into the ASCII art community and produced
-many beautiful works of art and animation.
+many interesting works of art and animation.
 
 ## Screenshots
 
