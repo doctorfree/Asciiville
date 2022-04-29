@@ -30,7 +30,7 @@ usage() {
 
 PROJ=btop
 INSTALL=
-PREFIX=
+PREFIX=/usr
 while getopts "ip:u" flag; do
     case $flag in
         i)

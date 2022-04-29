@@ -118,6 +118,8 @@ And will need some help in the form of code contributions to get complete suppor
 
 ## Documents
 
+**[Man page](../markdown/btop.1.md)**
+
 **[CHANGELOG.md](CHANGELOG.md)**
 
 **[CONTRIBUTING.md](CONTRIBUTING.md)**
