@@ -10,7 +10,7 @@ asciiville - Launch a terminal emulator and specified character based command, a
 and much more
 
 # SYNOPSIS
-**asciiville** [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F] [-g] [-G geometry] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-n num] [-N] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-u]
+**asciiville** [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-n num] [-N] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-u]
 
 Invoked without any arguments or with the `-i` argument, `asciiville` displays an interactive dialog menu.
 
@@ -43,9 +43,6 @@ Previously started tmux sessions and asciimatics scripts can be quickly and easi
 
 **-g**
 : Indicates use gnome terminal emulator
-
-**-G 'geometry'**
-: Specifies the slideshow window geometry (default fullscreen)
 
 **-i**
 : Indicates start asciiville in interactive mode

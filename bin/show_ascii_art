@@ -372,17 +372,17 @@ goodbye() {
     printf "\n\n\n"
     if [ "${have_lolcat}" ]
     then
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Thanks For" | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Thanks For" | ${LOLCAT}
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Viewing" | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Viewing" | ${LOLCAT}
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art !" | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Ascii Art !" | ${LOLCAT}
     else
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Thanks For"
+      figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Thanks For"
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Viewing"
+      figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Viewing"
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art !"
+      figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Ascii Art !"
     fi
     sleep $((delay / 2))
   }
@@ -406,7 +406,7 @@ play_slide_show() {
     }
     [ "${first}" ] && {
       [ "${quiet}" ] || {
-        printf "\n\n\n\n"
+        printf "\n\n\n"
         if [ "${have_lolcat}" ]
         then
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} | ${LOLCAT}
@@ -418,6 +418,7 @@ play_slide_show() {
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII}
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art"
         fi
+        figlet -c -d "${FIG_FONTS}" -f "Digital" -k -t "Ctrl-c  Exits"
         sleep ${delay}
       }
       first=
@@ -451,12 +452,12 @@ play_slide_show() {
     Doctor*)
       FIG_ASCII="Doctorwhen"
       SLIDE_DIR="${ART_DIR}/Doctorwhen"
-      SLIDE_FONT="3d"
+      SLIDE_FONT="Varsity"
       ;;
     Lyap*)
       FIG_ASCII="Lyapunov"
       SLIDE_DIR="${ART_DIR}/Lyapunov"
-      SLIDE_FONT="3d"
+      SLIDE_FONT="sblood"
       ;;
     Mixed|Misc)
       FIG_ASCII="Mixed"

@@ -36,7 +36,7 @@ WEB_HOME="https://github.com/doctorfree/Asciiville#readme"
 LOLCAT_NORM="lolcat"
 LOLCAT_ANIM="lolcat --animate --speed=60.0"
 LOLCAT="${LOLCAT_ANIM}"
-MTITLE="Btop++ System Monitor"
+MTITLE="Asciiville"
 
 if [ `echo $PATH | grep -c /usr/local/bin` -ne "1" ]
 then
@@ -49,8 +49,8 @@ fi
 
 usage() {
   printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]"
-  printf "\n\t[-g] [-G geometry] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M]"
-  printf "\n\t[-n num] [-N] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t]"
+  printf "\n\t[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N]"
+  printf "\n\t[-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t]"
   printf "\n\t[-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-u]\n"
   printf "\nTerminal/Command options:"
   printf "\n\t-c 'command' indicates use 'command'"
@@ -66,7 +66,6 @@ usage() {
   printf "\n\t-f indicates use cbftp/ncftp as the default command"
   printf "\n\t-F indicates fullscreen display"
   printf "\n\t-g indicates use gnome terminal emulator"
-  printf "\n\t-G 'geometry' specifies the slideshow window geometry (default fullscreen)"
   printf "\n\t-i indicates start asciiville in interactive mode"
   printf "\n\t-I indicates display system info"
   printf "\n\t-l indicates use lynx web browser as the default command"
@@ -170,12 +169,10 @@ select_alt_term() {
 }
 
 make_it_so() {
-  # Fullscreen tmux sessions and ASCIImatics Animations
-  [ "${SPLASH}" ] || [ "${TMUX_ASC}" ] && FULLSCREEN=1
-
-  # Set the command to use based on command line switches (-S, -T)
+  # Set the command to use
+  # Based on command line switches (-S, -T) or menu selections
   AVCOMM="${COMMAND}"
-  if [ "${SPLASH}" ]
+  if [ "${DO_SPLASH}" ]
   then
     if [ "${TMUX_SPLASH}" ]
     then
@@ -183,6 +180,7 @@ make_it_so() {
     else
       AVCOMM="${ASCSPLASH}"
     fi
+    MTITLE="ASCIImatics Animation"
   else
     [ "${TMUX_ASC}" ] && AVCOMM="${COMMAND_TMUX}"
   fi
@@ -198,9 +196,9 @@ make_it_so() {
       then
         if [ "${FULLSCREEN}" ]
         then
-          cool-retro-term --fullscreen -e "${AVCOMM}" 2> /dev/null &
+          cool-retro-term --fullscreen -e ${AVCOMM} 2> /dev/null &
         else
-          cool-retro-term -e "${AVCOMM}" 2> /dev/null &
+          cool-retro-term -e ${AVCOMM} 2> /dev/null &
         fi
       else
         if [ "${FULLSCREEN}" ]
@@ -235,7 +233,7 @@ make_it_so() {
           then
             tilix --title="${MTITLE}" \
                   --window-style=borderless \
-                  --geometry=90x24+150+25 \
+                  --geometry=90x28+150+25 \
                   --profile=Asciiville \
                   --command="${AVCOMM}" 2> /dev/null &
           else
@@ -246,12 +244,12 @@ make_it_so() {
                 --hide-menubar \
                 --hide-toolbar \
                 --hide-scrollbar \
-                --geometry 90x24+150+25 \
+                --geometry 90x28+150+25 \
                 --command="${AVCOMM}" &
             else
               gnome-terminal -t "${MTITLE}" \
                   --hide-menubar \
-                  --geometry 90x24+150+25 \
+                  --geometry 90x28+150+25 \
                   --profile=Asciiville \
                   -- ${AVCOMM} &
             fi
@@ -340,23 +338,33 @@ select_font() {
 play_slide_show() {
   showname="$1"
   showargs="-C ${cycarg} ${lolarg} ${audarg}"
-  if [ "${XFCE4}" ]
+  [ "${CURRENT}" ] && {
+    show_ascii_art ${showargs} -s ${showname}
+    return
+  }
+  if [ "${RETRO}" ]
   then
-    xfce4-terminal --fullscreen \
-                   --font="Monospace Regular" \
-                   --color-bg=Black \
-                   --command="show_ascii_art ${showargs} -s ${showname}"
+    cool-retro-term --fullscreen \
+                    -e show_ascii_art ${showargs} -s ${showname} 2> /dev/null
   else
-    if [ "${TILIX}" ]
+    if [ "${XFCE4}" ]
     then
-      tilix --full-screen \
-            --window-style=borderless \
-            --profile=Asciiville \
-            --command="show_ascii_art ${showargs} -s ${showname}"
+      xfce4-terminal --fullscreen \
+                     --font="Monospace Regular" \
+                     --color-bg=Black \
+                     --command="show_ascii_art ${showargs} -s ${showname}"
     else
-      gnome-terminal --window --full-screen \
-                     --profile=Asciiville \
-                     -- show_ascii_art ${showargs} -s ${showname}
+      if [ "${TILIX}" ]
+      then
+        tilix --full-screen \
+              --window-style=borderless \
+              --profile=Asciiville \
+              --command="show_ascii_art ${showargs} -s ${showname}"
+      else
+        gnome-terminal --window --full-screen \
+                       --profile=Asciiville \
+                       -- show_ascii_art ${showargs} -s ${showname}
+      fi
     fi
   fi
 }
@@ -378,17 +386,41 @@ show_art_menu() {
     else
       cyclestat="NO"
     fi
-    if [ "${geometry}" ]
-    then
-      fullstat="NO"
-    else
-      fullstat="YES"
-    fi
     if [ "${RECORD}" ]
     then
       recordstat="YES"
     else
       recordstat="NO"
+    fi
+    if [ "${GNOME}" ]
+    then
+      use_gnome="YES"
+    else
+      use_gnome="NO"
+    fi
+    if [ "${XFCE4}" ]
+    then
+      use_xfce4="YES"
+    else
+      use_xfce4="NO"
+    fi
+    if [ "${TILIX}" ]
+    then
+      use_tilix="YES"
+    else
+      use_tilix="NO"
+    fi
+    if [ "${RETRO}" ]
+    then
+      use_retro="YES"
+    else
+      use_retro="NO"
+    fi
+    if [ "${CURRENT}" ]
+    then
+      use_current="YES"
+    else
+      use_current="NO"
     fi
     if [ "${TMUX}" ]
     then
@@ -422,33 +454,70 @@ show_art_menu() {
     options+=("Ascii Owls Art Slide Show")
     options+=("Ascii Space Art Slide Show")
     options+=("Ascii Waterfalls Art Slide Show")
-    options+=("Cycle Slideshow     [${cyclestat}]")
-    options+=("Fullscreen Window   [${fullstat}]")
-    [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring [${use_lol}]")
-    options+=("Use Audio           [${audiostat}]")
-    options+=("Use Tmux            [${usetmux}]")
-    [ "${have_asciinema}" ] && options+=("Record Tmux Session [${recordstat}]")
-    [ "${have_splash}" ] && options+=("Animations menu")
-    options+=("Main menu" "Quit")
+    options+=("Cycle Slideshow       [${cyclestat}]")
+    [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring   [${use_lol}]")
+    options+=("Use Audio             [${audiostat}]")
+    [ "${have_xfce4}" ] && options+=("Use XFCE4 Terminal    [${use_xfce4}]")
+    [ "${have_gnome}" ] && options+=("Use Gnome Terminal    [${use_gnome}]")
+    [ "${have_retro}" ] && options+=("Use Retro Terminal    [${use_retro}]")
+    [ "${have_tilix}" ] && options+=("Use Tilix Terminal    [${use_tilix}]")
+    options+=("Use Current Terminal  [${use_current}]")
+    options+=("Use Tmux              [${usetmux}]")
+    [ "${have_asciinema}" ] && options+=("Record Tmux Session   [${recordstat}]")
+    [ "${have_mpplus}" ] && options+=("Show MusicPlayerPlus Menu")
+    [ "${have_roon}" ] && options+=("Show RoonCommandLine Menu")
+    [ "${have_splash}" ] && options+=("Show Animations Menu")
+    options+=("Show Main Menu" "Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
-          "Animations menu",*|*,"Animations menu")
+          "Show MusicPlayerPlus Menu",*|*,"Show MusicPlayerPlus Menu")
+              [ "${use_figlet}" ] && {
+                select_font MusicPlayer
+                if [ "${use_lolcat}" ]
+                then
+                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
+                else
+                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+                fi
+              }
+              mpplus -i
+              clear
+              break
+              ;;
+          "Show RoonCommandLine Menu",*|*,"Show RoonCommandLine Menu")
+              [ "${use_figlet}" ] && {
+                select_font Roon
+                if [ "${use_lolcat}" ]
+                then
+                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
+                else
+                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+                fi
+              }
+              roon
+              clear
+              break
+              ;;
+          "Show Animations Menu",*|*,"Show Animations Menu")
               animation_menu=1
               break 2
               ;;
-          "Main menu",*|*,"Main menu"|"Back",*|*,"Back"|"back",*|*,"back")
+          "Show Main Menu",*|*,"Show Main Menu"|"Back",*|*,"Back"|"back",*|*,"back")
               main_menu=1
               break 2
               ;;
           "Ascii Doctorwhen Art Slide Show",*|*,"Ascii Doctorwhen Art Slide Show")
               play_slide_show Doctorwhen
+              break
               ;;
           "Ascii Dragonfly Art Slide Show",*|*,"Ascii Dragonfly Art Slide Show")
               play_slide_show Dragonflies
+              break
               ;;
           "Ascii Space Art Slide Show",*|*,"Ascii Space Art Slide Show")
               play_slide_show Space
+              break
               ;;
           "Ascii Fine Art Slide Show",*|*,"Ascii Fine Art Slide Show")
               play_slide_show Art
@@ -474,6 +543,46 @@ show_art_menu() {
               play_slide_show Waterfalls
               break
               ;;
+          "Use XFCE4 Terminal"*,*|*,"Use XFCE4 Terminal"*)
+              XFCE4=1
+              TILIX=
+              GNOME=
+              RETRO=
+              CURRENT=
+              break
+              ;;
+          "Use Gnome Terminal"*,*|*,"Use Gnome Terminal"*)
+              GNOME=1
+              XFCE4=
+              TILIX=
+              RETRO=
+              CURRENT=
+              break
+              ;;
+          "Use Retro Terminal"*,*|*,"Use Retro Terminal"*)
+              RETRO=1
+              GNOME=
+              XFCE4=
+              TILIX=
+              CURRENT=
+              break
+              ;;
+          "Use Tilix Terminal"*,*|*,"Use Tilix Terminal"*)
+              TILIX=1
+              RETRO=
+              GNOME=
+              XFCE4=
+              CURRENT=
+              break
+              ;;
+          "Use Current Terminal"*,*|*,"Use Current Terminal"*)
+              CURRENT=1
+              TILIX=
+              RETRO=
+              GNOME=
+              XFCE4=
+              break
+              ;;
           "Use Audio"*,*|*,"Use Audio"*)
               if [ "${AUDIO}" ]
               then
@@ -489,15 +598,6 @@ show_art_menu() {
                 cycle=
               else
                 cycle=1
-              fi
-              break
-              ;;
-          "Fullscreen Window"*,*|*,"Fullscreen Window"*)
-              if [ "${geometry}" ]
-              then
-                geometry=
-              else
-                geometry="1280x1024+100+100"
               fi
               break
               ;;
@@ -573,14 +673,45 @@ show_art_menu() {
 show_animation_menu() {
   art_menu=
   main_menu=
+  MTITLE="ASCIImatics Animation"
   while true
   do
-    SPLASH=1
+    DO_SPLASH=1
     if [ "${AUDIO}" ]
     then
       audiostat="YES"
     else
       audiostat="NO"
+    fi
+    if [ "${GNOME}" ]
+    then
+      use_gnome="YES"
+    else
+      use_gnome="NO"
+    fi
+    if [ "${XFCE4}" ]
+    then
+      use_xfce4="YES"
+    else
+      use_xfce4="NO"
+    fi
+    if [ "${TILIX}" ]
+    then
+      use_tilix="YES"
+    else
+      use_tilix="NO"
+    fi
+    if [ "${RETRO}" ]
+    then
+      use_retro="YES"
+    else
+      use_retro="NO"
+    fi
+    if [ "${CURRENT}" ]
+    then
+      use_current="YES"
+    else
+      use_current="NO"
     fi
     if [ "${RECORD}" ]
     then
@@ -594,6 +725,12 @@ show_animation_menu() {
     else
       usetmux="NO"
     fi
+    if [ "${FULLSCREEN}" ]
+    then
+      fullstat="YES"
+    else
+      fullstat="NO"
+    fi
     skip_it_so=
     [ "${use_figlet}" ] && {
       select_font Asciimatics
@@ -606,46 +743,49 @@ show_animation_menu() {
     }
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
-    [ "${have_asciiart}" ] && options+=("Asciiville ASCIImatics Animation")
-    [ "${have_asciijulia}" ] && options+=("Julia Set ASCIImatics Animation")
-    [ "${have_asciimpplus}" ] && options+=("MPPlus ASCIImatics Animation")
-    [ "${have_asciiplasma}" ] && options+=("Plasma ASCIImatics Animation")
+    [ "${have_asciiart}" ] && options+=("Run Asciiville Animation")
+    [ "${have_asciijulia}" ] && options+=("Run Julia Set Animation")
+    [ "${have_asciimpplus}" ] && options+=("Run MPPlus Animation")
+    [ "${have_asciiplasma}" ] && options+=("Run Plasma Animation")
     [ "${have_bb}" ] && options+=("Run AAlib BB Demo")
-    [ "${have_showascii}" ] && options+=("Ascii Art Slide Shows")
-    [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring [${use_lol}]")
-    options+=("Use Audio           [${audiostat}]")
-    options+=("Use Tmux            [${usetmux}]")
-    [ "${have_asciinema}" ] && options+=("Record Tmux Session [${recordstat}]")
-    [ "${have_showascii}" ] && options+=("Asciiville Art menu")
-    options+=("Main menu" "Quit")
+    [ "${have_xfce4}" ] && options+=("Use XFCE4 Terminal    [${use_xfce4}]")
+    [ "${have_gnome}" ] && options+=("Use Gnome Terminal    [${use_gnome}]")
+    [ "${have_retro}" ] && options+=("Use Retro Terminal    [${use_retro}]")
+    [ "${have_tilix}" ] && options+=("Use Tilix Terminal    [${use_tilix}]")
+    options+=("Use Current Terminal  [${use_current}]")
+    options+=("Use Fullscreen Window [${fullstat}]")
+    [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring   [${use_lol}]")
+    options+=("Use Audio             [${audiostat}]")
+    options+=("Use Tmux              [${usetmux}]")
+    [ "${have_asciinema}" ] && options+=("Record Tmux Session   [${recordstat}]")
+    [ "${have_mpplus}" ] && options+=("Show MusicPlayerPlus Menu")
+    [ "${have_roon}" ] && options+=("Show RoonCommandLine Menu")
+    [ "${have_showascii}" ] && options+=("Show Slide Show Menu")
+    options+=("Show Main Menu" "Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
-          "Asciiville Art menu",*|*,"Asciiville Art menu")
-              art_menu=1
-              break 2
-              ;;
-          "Main menu",*|*,"Main menu"|"Back",*|*,"Back"|"back",*|*,"back")
+          "Show Main Menu",*|*,"Show Main Menu"|"Back",*|*,"Back"|"back",*|*,"back")
               clear
               init_vars
               break 2
               ;;
-          "Asciiville ASCIImatics Animation",*|*,"Asciiville ASCIImatics Animation")
+          "Run Asciiville Animation",*|*,"Run Asciiville Animation")
               ASCSPLASH="${ASCSPLASH} -i"
               ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l art"
               break
               ;;
-          "Julia Set ASCIImatics Animation",*|*,"Julia Set ASCIImatics Animation")
+          "Run Julia Set Animation",*|*,"Run Julia Set Animation")
               ASCSPLASH="${ASCSPLASH} -j"
               ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l julia"
               break
               ;;
-          "MPPlus ASCIImatics Animation",*|*,"MPPlus ASCIImatics Animation")
+          "Run MPPlus Animation",*|*,"Run MPPlus Animation")
               ASCSPLASH="${ASCSPLASH} -m"
               ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l mpplus"
               break
               ;;
-          "Plasma ASCIImatics Animation",*|*,"Plasma ASCIImatics Animation")
+          "Run Plasma Animation",*|*,"Run Plasma Animation")
               ASCSPLASH="${ASCSPLASH} -p"
               ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l plasma"
               break
@@ -663,10 +803,52 @@ show_animation_menu() {
               export DISPLAY="${SAVED_DISPLAY}"
               break
               ;;
-          "Ascii Art Slide Shows",*|*,"Ascii Art Slide Shows")
-              clear
-              printf "\n\n\n"
-              show_art_menu
+          "Show Slide Show Menu",*|*,"Show Slide Show Menu")
+              art_menu=1
+              break 2
+              ;;
+          "Use XFCE4 Terminal"*,*|*,"Use XFCE4 Terminal"*)
+              XFCE4=1
+              TILIX=
+              GNOME=
+              RETRO=
+              CURRENT=
+              skip_it_so=1
+              break
+              ;;
+          "Use Gnome Terminal"*,*|*,"Use Gnome Terminal"*)
+              GNOME=1
+              XFCE4=
+              TILIX=
+              RETRO=
+              CURRENT=
+              skip_it_so=1
+              break
+              ;;
+          "Use Retro Terminal"*,*|*,"Use Retro Terminal"*)
+              RETRO=1
+              GNOME=
+              XFCE4=
+              TILIX=
+              CURRENT=
+              skip_it_so=1
+              break
+              ;;
+          "Use Tilix Terminal"*,*|*,"Use Tilix Terminal"*)
+              TILIX=1
+              RETRO=
+              GNOME=
+              XFCE4=
+              CURRENT=
+              skip_it_so=1
+              break
+              ;;
+          "Use Current Terminal"*,*|*,"Use Current Terminal"*)
+              CURRENT=1
+              TILIX=
+              RETRO=
+              GNOME=
+              XFCE4=
               skip_it_so=1
               break
               ;;
@@ -736,6 +918,46 @@ show_animation_menu() {
               else
                 TMUX=1
               fi
+              skip_it_so=1
+              break
+              ;;
+          "Use Fullscreen Window"*,*|*,"Use Fullscreen Window"*)
+              if [ "${FULLSCREEN}" ]
+              then
+                FULLSCREEN=
+              else
+                FULLSCREEN=1
+              fi
+              skip_it_so=1
+              break
+              ;;
+          "Show MusicPlayerPlus Menu",*|*,"Show MusicPlayerPlus Menu")
+              [ "${use_figlet}" ] && {
+                select_font MusicPlayer
+                if [ "${use_lolcat}" ]
+                then
+                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
+                else
+                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+                fi
+              }
+              mpplus -i
+              clear
+              skip_it_so=1
+              break
+              ;;
+          "Show RoonCommandLine Menu",*|*,"Show RoonCommandLine Menu")
+              [ "${use_figlet}" ] && {
+                select_font Roon
+                if [ "${use_lolcat}" ]
+                then
+                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
+                else
+                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+                fi
+              }
+              roon
+              clear
               skip_it_so=1
               break
               ;;
@@ -912,7 +1134,7 @@ show_main_menu() {
       [ "${have_tilix}" ] && options+=("Run ${show_comm} in Tilix Terminal")
       [ "${have_xfce4}" ] && options+=("Run ${show_comm} in XFCE4 Terminal")
     fi
-    options+=("Run ${show_comm} in current window")
+    options+=("Run ${show_comm} in Current Terminal")
     [ "${have_bb}" ] && {
       [ "$DISPLAY" = "" ] || options+=("Run AAlib Demo (X11 mode)")
     }
@@ -987,7 +1209,7 @@ show_main_menu() {
               CURRENT=
               break
               ;;
-          "Run ${show_comm} in current window",*|*,"Run ${show_comm} in current window")
+          "Run ${show_comm} in Current Terminal",*|*,"Run ${show_comm} in Current Terminal")
               CURRENT=1
               TILIX=
               RETRO=
@@ -1354,14 +1576,15 @@ init_vars() {
   ASCSPLASH="asciisplash"
   ASCSPLASH_TMUX="asciisplash-tmux"
 
-  FULLSCREEN=
   INTERACTIVE=
   RECORD=
-  SPLASH=
+  DO_SPLASH=
+  MTITLE="Asciiville"
   TMUX_ASC=
   TMUX_SPLASH=
 }
 
+FULLSCREEN=
 init_vars
 # Without any arguments, bring up interactive dialog menu
 [ $# -eq 0 ] && INTERACTIVE=1
@@ -1434,11 +1657,10 @@ else
 fi
 
 cycle=
-geometry=
 use_term=1
 show_neofetch=
 SLIDESHOW=
-while getopts "Aabc:CdfFgG:iIjJklL:mMn:NpP:rRSs:tTvV:wxXyzu" flag; do
+while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wxXyzu" flag; do
   case $flag in
     A)
       ASCSPLASH="${ASCSPLASH} -i"
@@ -1506,9 +1728,9 @@ while getopts "Aabc:CdfFgG:iIjJklL:mMn:NpP:rRSs:tTvV:wxXyzu" flag; do
                 COMMAND="lynx ${WEB_HOME}"
                 MTITLE="Lynx Web Browser"
               else
-                echo "Continuing, using asciiplasma rather than ${COMMAND}."
-                COMMAND=asciiplasma
-                MTITLE="ASCIImatics Plasma"
+                echo "Continuing, using asciiart rather than ${COMMAND}."
+                COMMAND=asciiart
+                MTITLE="Asciiville ASCIImatics"
               fi
             fi
           }
@@ -1538,9 +1760,9 @@ while getopts "Aabc:CdfFgG:iIjJklL:mMn:NpP:rRSs:tTvV:wxXyzu" flag; do
               COMMAND=ranger
               MTITLE="Ranger File Manager"
             else
-              echo "Continuing, using asciiplasma rather than ${COMMAND}."
-              COMMAND=asciiplasma
-              MTITLE="ASCIImatics Plasma"
+              echo "Continuing, using asciiart rather than ${COMMAND}."
+              COMMAND=asciiart
+              MTITLE="Asciiville ASCIImatics"
             fi
           fi
         fi
@@ -1568,9 +1790,9 @@ while getopts "Aabc:CdfFgG:iIjJklL:mMn:NpP:rRSs:tTvV:wxXyzu" flag; do
               COMMAND="lynx ${WEB_HOME}"
               MTITLE="Lynx Web Browser"
             else
-              echo "Continuing, using asciiplasma rather than ${COMMAND}."
-              COMMAND=asciiplasma
-              MTITLE="ASCIImatics Plasma"
+              echo "Continuing, using asciiart rather than ${COMMAND}."
+              COMMAND=asciiart
+              MTITLE="Asciiville ASCIImatics"
             fi
           fi
         fi
@@ -1586,9 +1808,6 @@ while getopts "Aabc:CdfFgG:iIjJklL:mMn:NpP:rRSs:tTvV:wxXyzu" flag; do
         not_in_path gnome-terminal -g
         select_alt_term
       }
-      ;;
-    G)
-      geometry="${OPTARG}"
       ;;
     i)
       INTERACTIVE=1
@@ -1633,9 +1852,9 @@ while getopts "Aabc:CdfFgG:iIjJklL:mMn:NpP:rRSs:tTvV:wxXyzu" flag; do
               COMMAND=ranger
               MTITLE="Ranger File Manager"
             else
-              echo "Continuing, using asciiplasma rather than ${COMMAND}."
-              COMMAND=asciiplasma
-              MTITLE="ASCIImatics Plasma"
+              echo "Continuing, using asciiart rather than ${COMMAND}."
+              COMMAND=asciiart
+              MTITLE="Asciiville ASCIImatics"
             fi
           fi
         fi
@@ -1675,9 +1894,9 @@ while getopts "Aabc:CdfFgG:iIjJklL:mMn:NpP:rRSs:tTvV:wxXyzu" flag; do
             COMMAND=ranger
             MTITLE="Ranger File Manager"
           else
-            echo "Continuing, using asciiplasma rather than ${COMMAND}."
-            COMMAND=asciiplasma
-            MTITLE="ASCIImatics Plasma"
+            echo "Continuing, using asciiart rather than ${COMMAND}."
+            COMMAND=asciiart
+            MTITLE="Asciiville ASCIImatics"
           fi
         fi
       }
@@ -1714,7 +1933,8 @@ while getopts "Aabc:CdfFgG:iIjJklL:mMn:NpP:rRSs:tTvV:wxXyzu" flag; do
       }
       ;;
     S)
-      SPLASH=1
+      DO_SPLASH=1
+      MTITLE="ASCIImatics Animation"
       ;;
     s)
       ASCSPLASH="${ASCSPLASH} -s ${OPTARG}"
@@ -1766,9 +1986,9 @@ while getopts "Aabc:CdfFgG:iIjJklL:mMn:NpP:rRSs:tTvV:wxXyzu" flag; do
               COMMAND=ranger
               MTITLE="Ranger File Manager"
             else
-              echo "Continuing, using asciiplasma rather than ${COMMAND}."
-              COMMAND=asciiplasma
-              MTITLE="ASCIImatics Plasma"
+              echo "Continuing, using asciiart rather than ${COMMAND}."
+              COMMAND=asciiart
+              MTITLE="Asciiville ASCIImatics"
             fi
           fi
         fi
@@ -1802,9 +2022,9 @@ while getopts "Aabc:CdfFgG:iIjJklL:mMn:NpP:rRSs:tTvV:wxXyzu" flag; do
             COMMAND=lynx
             MTITLE="Lynx Web Browser"
           else
-            echo "Continuing, using asciiplasma rather than ${COMMAND}."
-            COMMAND=asciiplasma
-            MTITLE="ASCIImatics Plasma"
+            echo "Continuing, using asciiart rather than ${COMMAND}."
+            COMMAND=asciiart
+            MTITLE="Asciiville ASCIImatics"
           fi
         fi
       }
@@ -1831,9 +2051,9 @@ while getopts "Aabc:CdfFgG:iIjJklL:mMn:NpP:rRSs:tTvV:wxXyzu" flag; do
               COMMAND="lynx ${WEB_HOME}"
               MTITLE="Lynx Web Browser"
             else
-              echo "Continuing, using asciiplasma rather than ${COMMAND}."
-              COMMAND=asciiplasma
-              MTITLE="ASCIImatics Plasma"
+              echo "Continuing, using asciiart rather than ${COMMAND}."
+              COMMAND=asciiart
+              MTITLE="Asciiville ASCIImatics"
             fi
           fi
         fi
@@ -1849,7 +2069,7 @@ done
 # If we have both then do asciimatics in tmux
 # If just the -T then do command in tmux
 [ "${TMUX}" ] && {
-  if [ "${SPLASH}" ]
+  if [ "${DO_SPLASH}" ]
   then
     TMUX_SPLASH=1
   else
@@ -1908,55 +2128,19 @@ fi
     audarg=
   fi
   showargs="-C ${cycarg} ${lolarg} ${audarg}"
-  if [ "${XFCE4}" ]
-  then
-    if [ "${geometry}" ]
-    then
-      xfce4-terminal --geometry=${geometry} \
-                     --font="Monospace Regular" \
-                     --color-bg=Black \
-                     --command="show_ascii_art ${showargs} -s ${SLIDESHOW}"
-    else
-      xfce4-terminal --fullscreen \
-                     --font="Monospace Regular" \
-                     --color-bg=Black \
-                     --command="show_ascii_art ${showargs} -s ${SLIDESHOW}"
-    fi
-  else
-    if [ "${TILIX}" ]
-    then
-      if [ "${geometry}" ]
-      then
-        tilix --geometry=${geometry} \
-              --profile=Asciiville \
-              --command="show_ascii_art ${showargs} -s ${SLIDESHOW}"
-      else
-        tilix --full-screen \
-              --window-style=borderless \
-              --profile=Asciiville \
-              --command="show_ascii_art ${showargs} -s ${SLIDESHOW}"
-      fi
-    else
-      if [ "${geometry}" ]
-      then
-        gnome-terminal --window --geometry=${geometry} \
-                       --profile=Asciiville \
-                       -- show_ascii_art ${showargs} -s ${SLIDESHOW}
-      else
-        gnome-terminal --window --full-screen \
-                       --profile=Asciiville \
-                       -- show_ascii_art ${showargs} -s ${SLIDESHOW}
-      fi
-    fi
-  fi
+  play_slide_show ${SLIDESHOW}
+  exit 0
 }
 
 [ "${INTERACTIVE}" ] && {
   [ "${have_lolcat}" ] && {
-    use_lolcat=2
-    use_lol="YES+"
-    LOLCAT="${LOLCAT_ANIM}"
+    use_lolcat=1
+    use_lol="YES"
+    LOLCAT="${LOLCAT_NORM}"
   }
+  AUDIO=1
+  ASCSPLASH="${ASCSPLASH} -a"
+  ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
   clear
   echo ""
   show_main_menu

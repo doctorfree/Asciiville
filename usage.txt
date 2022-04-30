@@ -1,5 +1,5 @@
 Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]
-	[-g] [-G geometry] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M]
+	[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M]
 	[-n num] [-N] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t]
 	[-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-u]
 
@@ -17,7 +17,6 @@ Terminal/Command options:
 	-f indicates use cbftp/ncftp as the default command
 	-F indicates fullscreen display
 	-g indicates use gnome terminal emulator
-	-G 'geometry' specifies the slideshow window geometry (default fullscreen)
 	-i indicates start asciiville in interactive mode
 	-I indicates display system info
 	-l indicates use lynx web browser as the default command

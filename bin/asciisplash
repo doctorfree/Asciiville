@@ -17,7 +17,7 @@ usage() {
   printf "\n\t-C indicates use alternate comments in Plasma effect"
   printf "\n\t-c num specifies the number of times to cycle"
   printf "\n\t-d indicates enable debug mode"
-  printf "\n\t-i indicates use Art Images effect"
+  printf "\n\t-i indicates use Asciiville effect"
   printf "\n\t-j indicates use Julia Set effect"
   printf "\n\t-J indicates Julia Set with several runs using different parameters"
   printf "\n\t-m indicates use MusicPlayerPlus effect"
@@ -28,7 +28,7 @@ usage() {
   printf "\n\t\t$HOME/Music/"
   printf "\n\t-u displays this usage message and exits\n"
   printf "\nDefault audio: ${SONG}"
-  printf "\nWithout any options the MusicPlayerPlus effect will repeat"
+  printf "\nWithout any options the Asciiville effect will repeat"
   printf "\nType 'man mppsplash' for more detailed usage info\n"
   exit 1
 }
