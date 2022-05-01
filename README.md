@@ -27,7 +27,8 @@ of components used to display ASCII art, animations, and utilities.
 1. [Figlet fonts](#figlet-fonts)
 1. [Build](#build)
 1. [Removal](#removal)
-1. [ASCII Art History](#ascii-art-history)
+1. [What is ASCII](#what-is-ascii)
+    1. [ASCII Art History](#ascii-art-history)
 1. [Screenshots](#screenshots)
 1. [Videos](#videos)
 
@@ -93,7 +94,7 @@ Integration is provided for:
 * [MusicPlayerPlus](https://github.com/doctorfree/MusicPlayerPlus#readme), character based suite of commands to manage music server and player
 * [RoonCommandLine](https://github.com/doctorfree/RoonCommandLine#readme), command line control of the Roon audio system over a local network
 
-### Asciiville Commands
+## Asciiville Commands
 
 Asciiville adds the following commands to your system:
 
@@ -566,7 +567,34 @@ script in the Asciiville source directory:
     ./Uninstall
 ```
 
-## ASCII Art History
+## What is ASCII
+
+ASCII is an abbreviation for "American Standard Code for Information
+Interchange", a character encoding standard for electronic communication.
+ASCII codes represent text in computers, telecommunications equipment,
+and other devices. Most modern character-encoding schemes are based on ASCII,
+although they support many additional characters.
+
+<p float="left">
+ASCII Code Chart<br/>
+  <img src="art/pics/USASCII_code_chart.png" style="width:1024px;height:737px;">
+</p>
+
+ASCII was developed from telegraph code. Its first commercial use was as a
+seven-bit teleprinter code promoted by Bell data services. Originally based
+on the English alphabet, ASCII encodes 128 specified characters into
+seven-bit integers as shown by the ASCII chart above. The first edition of
+the standard was published in 1963.
+
+Extended ASCII (EASCII or high ASCII) character encodings are eight-bit
+or larger encodings that include the standard seven-bit ASCII characters,
+plus additional characters. There are many extended ASCII encodings.
+
+The phrase "ANSI character set" has no well-defined meaning and in the
+context of ANSI art typically refers to "Code page 437", the character
+set of the original IBM PC.
+
+### ASCII Art History
 
 ASCII art is a graphic design technique that uses computers for presentation
 and consists of pictures pieced together from the 95 printable (from a total
