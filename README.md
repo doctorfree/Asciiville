@@ -16,8 +16,11 @@ of components used to display ASCII art, animations, and utilities.
     1. [RPM package installation](#rpm-package-installation)
     1. [BB AAlib Demo](#bb-aalib-demo)
 1. [Configuration files](#configuration-files)
+1. [Mutt email configuration](#mutt-email-configuration)
 1. [Documentation](#documentation)
     1. [Btop++ README](#btop++-readme)
+    1. [Cbftp README](#cbftp-readme)
+    1. [Ddgr README](#ddgr-readme)
     1. [Man Pages](#man-pages)
     1. [Usage](#usage)
     1. [Example invocations](#example-invocations)
@@ -247,6 +250,25 @@ for the Ranger File Manager can be found in `/etc/ranger/config/`. The Lynx
 web browser configuration is in `/etc/lynx/`, and the W3M web browser is
 configured in `/etc/w3m/`.
 
+### Mutt email configuration
+
+In order to use the Mutt email client it will be necessary to configure
+`$HOME/.mutt/.muttrc` with your email address, name, and credentials.
+This is the simplest way to get started with email client support in
+Asciiville. Comments in `$HOME/.mutt/.muttrc` provide pointers to
+configuring your credentials with GMail.
+
+There are many Mutt configuration guides on the Internet. ArchLinux has
+an excellent guide at
+[https://wiki.archlinux.org/title/Mutt](https://wiki.archlinux.org/title/Mutt).
+
+Alternatively, you may wish to consider using [NeoMutt](https://neomutt.org/),
+an improved Mutt client. Asciiville checks to see if NeoMutt is installed and,
+if so, provides support for launching it as well as Mutt. Setup for NeoMutt is
+similar to but different than setup for Mutt. A setup wizard for both is
+available at
+[https://github.com/LukeSmithxyz/mutt-wizard](https://github.com/LukeSmithxyz/mutt-wizard).
+
 ## Documentation
 
 All Asciiville commands have manual pages. Execute `man <command-name>`
@@ -262,6 +284,9 @@ e.g. `asciiville -u`.
 ### Cbftp README
 - [**cbftp/README**](cbftp/README) - Introduction to the cbftp FTP client
 - [**Video on Cbftp**](https://youtu.be/dOIwg9nMF10) - Video introduction to the cbftp FTP client
+
+### Ddgr README
+- [ddgr](ddgr/README.md), Introduction to the command line web search utility
 
 ### Man Pages
 

@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-# Asciiville-1.3.1r1 (2022-04-26)
+# Asciiville-1.3.1r1 (2022-05-01)
 
 * Create armhf architecture Debian format package for Raspberry Pi installs
 * With no arguments asciiville brings up a menu
@@ -58,6 +58,18 @@ Initial release with support for:
 * Any character based client the user wishes to run
 * One of several asciimatics animations optionally accompanied by audio
 
+Sun May 1 09:19:29 2022 -0700 ab0c8bd :
+   Default audio on for slideshows and animations, use wmctrl to fullscreen current window if used
+Sat Apr 30 13:46:57 2022 -0700 5996fc2 :
+   Do not use quotes with cool-retro-term commands, fullscreen slide shows unless current window, use play_slide_show function
+Fri Apr 29 16:03:42 2022 -0700 40e31f6 :
+   Clear screen before playing animation in all asciimatics scripts
+Fri Apr 29 13:36:24 2022 -0700 526729d :
+   Update package size
+Fri Apr 29 13:35:49 2022 -0700 c3479af :
+   Add uuid-runtime and util-linux dependencies
+Fri Apr 29 12:55:35 2022 -0700 0ba33bc :
+   Update changelog and release notes for 1.3.1r1
 Fri Apr 29 10:40:57 2022 -0700 00f5c6d :
    Update and add screenshots
 Fri Apr 29 10:10:56 2022 -0700 9bae3dd :
