@@ -51,7 +51,7 @@ usage() {
   printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]"
   printf "\n\t[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N]"
   printf "\n\t[-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t]"
-  printf "\n\t[-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-u]\n"
+  printf "\n\t[-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-Z] [-u]\n"
   printf "\nTerminal/Command options:"
   printf "\n\t-c 'command' indicates use 'command'"
   printf "\n\t\tIf 'command' is keyword 'maps' then display a map using mapscii"
@@ -61,7 +61,6 @@ usage() {
   printf "\n\t\tIf 'command' is keyword 'twitter' then a Twitter client is run"
   printf "\n\t\tIf 'command' is keyword 'weather' then display a weather report"
   printf "\n\t\tOtherwise, 'command' will be executed in a terminal window"
-  printf "\n\t-C indicates cycle slideshow endlessly (Ctrl-c to exit show)"
   printf "\n\t-d indicates use disk usage analyzer as default command"
   printf "\n\t-f indicates use cbftp/ncftp as the default command"
   printf "\n\t-F indicates fullscreen display"
@@ -70,21 +69,18 @@ usage() {
   printf "\n\t-I indicates display system info"
   printf "\n\t-l indicates use lynx web browser as the default command"
   printf "\n\t-L 'level' use lolcat coloring, 'level' can be '1' or '2' (animate)"
-  printf "\n\t-P script specifies the ASCIImatics script to run in visualizer pane"
   printf "\n\t-r indicates use retro terminal emulator"
   printf "\n\t-t indicates use tilix terminal emulator"
-  printf "\n\t-V 'show' displays an ascii art slide show"
-  printf "\n\t\t'show' can be Art, Doctorwhen, Dragonflies, Fractals,"
-  printf "\n\t\t\tLyap, Mixed, Owls, Space, or Waterfalls"
   printf "\n\t-w indicates use w3m web browser as the default command"
   printf "\n\t-x indicates use xfce4 terminal emulator"
-  printf "\n\t-X indicates run command in current terminal window"
+  printf "\n\t-X indicates run commands in current terminal window"
   printf "\n\t-y indicates use ranger file manager as the default command"
-  printf "\n\t-z indicates use mutt email client as the default command\n"
-  printf "\nASCIImatics animation options:"
+  printf "\n\t-z indicates use mutt email client as the default command"
+  printf "\nSlideshow/ASCIImatics animation options:"
   printf "\n\t-A indicates use Asciiville scenes in ASCIImatics display"
   printf "\n\t-a indicates play audio during ASCIImatics display"
   printf "\n\t-b indicates use backup audio during ASCIImatics display"
+  printf "\n\t-C indicates cycle slideshow endlessly (Ctrl-c to exit show)"
   printf "\n\t-j indicates use Julia Set scenes in ASCIImatics display"
   printf "\n\t-J indicates Julia Set with several runs using different parameters"
   printf "\n\t-m indicates use MusicPlayerPlus scenes in ASCIImatics display"
@@ -92,11 +88,16 @@ usage() {
   printf "\n\t-n num specifies the number of times to cycle ASCIImatics scenes"
   printf "\n\t-N indicates use alternate comments in Plasma ASCIImatics scenes"
   printf "\n\t-p indicates use Plasma scenes in ASCIImatics display"
+  printf "\n\t-P script specifies the ASCIImatics script to run"
   printf "\n\t-s song specifies a song to accompany an ASCIImatics animation"
   printf "\n\t\t'song' can be the full pathname to an audio file or a"
   printf "\n\t\trelative pathname to an audio file in the MPD music library"
   printf "\n\t\tor $HOME/Music/"
-  printf "\n\t-S indicates display ASCIImatics splash animation\n"
+  printf "\n\t-S indicates display ASCIImatics splash animation"
+  printf "\n\t-V 'show' displays an ascii art slide show"
+  printf "\n\t\t'show' can be Art, Doctorwhen, Dragonflies, Fractals,"
+  printf "\n\t\t\tLyap, Mixed, Owls, Space, or Waterfalls"
+  printf "\n\t-Z indicates do not play audio during slideshow/animation\n"
   printf "\nGeneral options:"
   printf "\n\t-k indicates kill Asciiville tmux sessions and ASCIImatics scripts"
   printf "\n\t-R indicates record tmux session with asciinema"
@@ -160,8 +161,8 @@ select_alt_term() {
         then
           RETRO=1
         else
-          echo "Cannot find a terminal emulator I like. Disabling terminal use."
-          use_term=
+          echo "Cannot find a terminal emulator I like. Using current window."
+          CURRENT=1
         fi
       fi
     fi
@@ -185,82 +186,83 @@ make_it_so() {
     [ "${TMUX_ASC}" ] && AVCOMM="${COMMAND_TMUX}"
   fi
 
-  if [ "${use_term}" ]
+  # Begin terminal command startup section
+  if [ "${CURRENT}" ]
   then
-    # Begin terminal command startup section
-    if [ "${CURRENT}" ]
+    [ "${FULLSCREEN}" ] && add_fullscreen
+    ${AVCOMM}
+    [ "${FULLSCREEN}" ] && {
+      remove_fullscreen
+      clear
+      sleep 0.2
+    }
+  else
+    if [ "${RETRO}" ]
     then
-      ${AVCOMM}
-    else
-      if [ "${RETRO}" ]
+      if [ "${FULLSCREEN}" ]
       then
-        if [ "${FULLSCREEN}" ]
-        then
-          cool-retro-term --fullscreen -e ${AVCOMM} 2> /dev/null &
-        else
-          cool-retro-term -e ${AVCOMM} 2> /dev/null &
-        fi
+        cool-retro-term --fullscreen -e ${AVCOMM} 2> /dev/null &
       else
-        if [ "${FULLSCREEN}" ]
+        cool-retro-term -e ${AVCOMM} 2> /dev/null &
+      fi
+    else
+      if [ "${FULLSCREEN}" ]
+      then
+        if [ "${TILIX}" ]
         then
-          if [ "${TILIX}" ]
-          then
-            tilix --title="${MTITLE}" \
-                  --full-screen \
-                  --window-style=borderless \
-                  --profile=Asciiville \
-                  --command="${AVCOMM}" 2> /dev/null &
-          else
-            if [ "${XFCE4}" ]
-            then
-              xfce4-terminal --title "${MTITLE}" \
-                  --icon=audio-player \
-                  --hide-menubar \
-                  --hide-toolbar \
-                  --hide-scrollbar \
-                  --fullscreen \
-                  --command="${AVCOMM}" &
-            else
-              gnome-terminal -t "${MTITLE}" \
-                  --hide-menubar \
-                  --full-screen \
-                  --profile=Asciiville \
-                  -- ${AVCOMM} &
-            fi
-          fi
+          tilix --title="${MTITLE}" \
+                --full-screen \
+                --window-style=borderless \
+                --profile=Asciiville \
+                --command="${AVCOMM}" 2> /dev/null &
         else
-          if [ "${TILIX}" ]
+          if [ "${XFCE4}" ]
           then
-            tilix --title="${MTITLE}" \
-                  --window-style=borderless \
-                  --geometry=90x28+150+25 \
-                  --profile=Asciiville \
-                  --command="${AVCOMM}" 2> /dev/null &
-          else
-            if [ "${XFCE4}" ]
-            then
-              xfce4-terminal --title "${MTITLE}" \
+            xfce4-terminal --title "${MTITLE}" \
                 --icon=audio-player \
                 --hide-menubar \
                 --hide-toolbar \
                 --hide-scrollbar \
-                --geometry 90x28+150+25 \
+                --fullscreen \
                 --command="${AVCOMM}" &
-            else
-              gnome-terminal -t "${MTITLE}" \
-                  --hide-menubar \
-                  --geometry 90x28+150+25 \
-                  --profile=Asciiville \
-                  -- ${AVCOMM} &
-            fi
+          else
+            gnome-terminal -t "${MTITLE}" \
+                --hide-menubar \
+                --full-screen \
+                --profile=Asciiville \
+                -- ${AVCOMM} &
+          fi
+        fi
+      else
+        if [ "${TILIX}" ]
+        then
+          tilix --title="${MTITLE}" \
+                --window-style=borderless \
+                --geometry=90x28+150+25 \
+                --profile=Asciiville \
+                --command="${AVCOMM}" 2> /dev/null &
+        else
+          if [ "${XFCE4}" ]
+          then
+            xfce4-terminal --title "${MTITLE}" \
+              --icon=audio-player \
+              --hide-menubar \
+              --hide-toolbar \
+              --hide-scrollbar \
+              --geometry 90x28+150+25 \
+              --command="${AVCOMM}" &
+          else
+            gnome-terminal -t "${MTITLE}" \
+                --hide-menubar \
+                --geometry 90x28+150+25 \
+                --profile=Asciiville \
+                -- ${AVCOMM} &
           fi
         fi
       fi
     fi
-    # End terminal command startup section
-  else
-    ${AVCOMM}
   fi
+  # End terminal command startup section
 }
 
 select_font() {
@@ -335,11 +337,32 @@ select_font() {
   esac
 }
 
+add_fullscreen() {
+  [ "${have_wmctrl}" ] && {
+    [ "${have_xprop}" ] && {
+      # The things a man must do
+      win_id=`wmctrl -lp | grep $(xprop -root | grep _NET_ACTIVE_WINDOW | head -1 | awk '{print $5}' | sed 's/,//' | sed 's/^0x/0x0/') | awk ' { print $1 } '`
+      [ "${win_id}" ] && xprop -id ${win_id} | grep _NET_WM_STATE | grep FULLSCREEN > /dev/null && isfull=1
+    }
+    [ "${isfull}" ] || wmctrl -r ':ACTIVE:' -b add,fullscreen
+  }
+}
+
+remove_fullscreen() {
+  [ "${have_wmctrl}" ] && {
+    [ "${isfull}" ] || wmctrl -r ':ACTIVE:' -b remove,fullscreen
+  }
+}
+
 play_slide_show() {
   showname="$1"
   showargs="-C ${cycarg} ${lolarg} ${audarg}"
   [ "${CURRENT}" ] && {
+    add_fullscreen
     show_ascii_art ${showargs} -s ${showname}
+    remove_fullscreen
+    clear
+    sleep 0.2
     return
   }
   if [ "${RETRO}" ]
@@ -589,6 +612,14 @@ show_art_menu() {
                 AUDIO=
               else
                 AUDIO=1
+              fi
+              if [ "${AUDIO}" ]
+              then
+                ASCSPLASH="${ASCSPLASH} -a"
+                ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
+              else
+                ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s/ -a//"`
+                ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s/ -a//"`
               fi
               break
               ;;
@@ -1127,13 +1158,10 @@ show_main_menu() {
     options=()
     [ "${have_showascii}" ] && options+=("Ascii Art Slide Shows")
     [ "${have_splash}" ] && options+=("ASCIImatics Animations")
-    if [ "${use_term}" ]
-    then
-      [ "${have_gnome}" ] && options+=("Run ${show_comm} in Gnome Terminal")
-      [ "${have_retro}" ] && options+=("Run ${show_comm} in Retro Terminal")
-      [ "${have_tilix}" ] && options+=("Run ${show_comm} in Tilix Terminal")
-      [ "${have_xfce4}" ] && options+=("Run ${show_comm} in XFCE4 Terminal")
-    fi
+    [ "${have_gnome}" ] && options+=("Run ${show_comm} in Gnome Terminal")
+    [ "${have_retro}" ] && options+=("Run ${show_comm} in Retro Terminal")
+    [ "${have_tilix}" ] && options+=("Run ${show_comm} in Tilix Terminal")
+    [ "${have_xfce4}" ] && options+=("Run ${show_comm} in XFCE4 Terminal")
     options+=("Run ${show_comm} in Current Terminal")
     [ "${have_bb}" ] && {
       [ "$DISPLAY" = "" ] || options+=("Run AAlib Demo (X11 mode)")
@@ -1571,7 +1599,7 @@ show_main_menu() {
 }
 
 init_vars() {
-  VTITLE="Spectrum Visualizer"
+  MTITLE="Asciiville"
   COMMAND_TMUX="btop-tmux"
   ASCSPLASH="asciisplash"
   ASCSPLASH_TMUX="asciisplash-tmux"
@@ -1579,7 +1607,6 @@ init_vars() {
   INTERACTIVE=
   RECORD=
   DO_SPLASH=
-  MTITLE="Asciiville"
   TMUX_ASC=
   TMUX_SPLASH=
 }
@@ -1621,6 +1648,9 @@ have_xfce4=`type -p xfce4-terminal`
 have_gnome=`type -p gnome-terminal`
 have_lynx=`type -p lynx`
 have_w3m=`type -p w3m`
+have_wmctrl=`type -p wmctrl`
+have_xprop=`type -p xprop`
+isfull=
 use_lolcat=
 use_lol="NO"
 if [ "${have_figlet}" ]
@@ -1657,10 +1687,10 @@ else
 fi
 
 cycle=
-use_term=1
+noaudio=
 show_neofetch=
 SLIDESHOW=
-while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wxXyzu" flag; do
+while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wxXyzZu" flag; do
   case $flag in
     A)
       ASCSPLASH="${ASCSPLASH} -i"
@@ -1668,8 +1698,6 @@ while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wxXyzu" flag; do
       ;;
     a)
       AUDIO=1
-      ASCSPLASH="${ASCSPLASH} -a"
-      ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
       ;;
     b)
       ASCSPLASH="${ASCSPLASH} -b"
@@ -1995,7 +2023,7 @@ while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wxXyzu" flag; do
       }
       ;;
     X)
-      use_term=
+      CURRENT=1
       ;;
     x)
       XFCE4=1
@@ -2028,6 +2056,9 @@ while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wxXyzu" flag; do
           fi
         fi
       }
+      ;;
+    Z)
+      noaudio=1
       ;;
     z)
       COMMAND=neomutt
@@ -2077,24 +2108,32 @@ done
   fi
 }
 
-# Figure out which terminal emulator to use
+# If no terminal was specified on the command line, use current window
 [ "${TILIX}" ] || [ "${RETRO}" ] || [ "${GNOME}" ] || [ "${XFCE4}" ] || {
-  select_alt_term
+  CURRENT=1
 }
 
 # Make sure only one terminal is selected
-if [ "${XFCE4}" ]
+if [ "${CURRENT}" ]
 then
+  XFCE4=
   TILIX=
   GNOME=
   RETRO=
 else
-  if [ "${TILIX}" ]
+  if [ "${XFCE4}" ]
   then
+    TILIX=
     GNOME=
     RETRO=
   else
-    [ "${GNOME}" ] && RETRO=
+    if [ "${TILIX}" ]
+    then
+      GNOME=
+      RETRO=
+    else
+      [ "${GNOME}" ] && RETRO=
+    fi
   fi
 fi
 
@@ -2106,6 +2145,12 @@ fi
     neofetch
   fi
   read -p "Press Enter to continue" answer
+}
+
+[ "${noaudio}" ] || {
+  AUDIO=1
+  ASCSPLASH="${ASCSPLASH} -a"
+  ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
 }
 
 [ "${SLIDESHOW}" ] && {
@@ -2138,9 +2183,6 @@ fi
     use_lol="YES"
     LOLCAT="${LOLCAT_NORM}"
   }
-  AUDIO=1
-  ASCSPLASH="${ASCSPLASH} -a"
-  ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
   clear
   echo ""
   show_main_menu

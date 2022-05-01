@@ -24,9 +24,9 @@ Email/FTP/File/Web clients, and much more
 .SH SYNOPSIS
 .PP
 \f[B]asciiville\f[R] [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]
-[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-n num] [-N] [-p]
+[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p]
 [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-v] [-V show] [-w] [-x]
-[-X] [-y] [-z] [-u]
+[-X] [-y] [-z] [-Z] [-u]
 .PP
 Invoked without any arguments or with the \f[V]-i\f[R] argument,
 \f[V]asciiville\f[R] displays an interactive dialog menu.
@@ -78,9 +78,6 @@ If \f[I]command\f[R] is one of the special keywords (\f[I]maps\f[R],
 web search, perform a speed test, run the command line twitter client,
 or display a weather report.
 .TP
-\f[B]-C\f[R]
-Indicates cycle slideshow endlessly (Ctrl-c to exit show)
-.TP
 \f[B]-d\f[R]
 Indicates use disk usage analyzer as command
 .TP
@@ -103,20 +100,11 @@ Indicates use lynx as the default command
 Use lolcat coloring, \[aq]level\[aq] can be \[aq]1\[aq] or \[aq]2\[aq]
 (animate)
 .TP
-\f[B]-P script\f[R]
-Specifies the ASCIImatics script to run
-.TP
 \f[B]-r\f[R]
 Indicates use retro terminal emulator
 .TP
 \f[B]-t\f[R]
 Indicates use tilix terminal emulator
-.TP
-\f[B]-V \[aq]show\[aq]\f[R]
-Displays an ascii art slide show
-.RS
-\[aq]show\[aq] can be Art, Fractals, Lyap, Mixed, Owls, Waterfalls
-.RE
 .TP
 \f[B]-w\f[R]
 Indicates use w3m web browser as the default command
@@ -144,6 +132,9 @@ Indicates use Asciiville scenes in ASCIImatics display
 \f[B]-b\f[R]
 Indicates use backup audio during ASCIImatics display
 .TP
+\f[B]-C\f[R]
+Indicates cycle slideshow endlessly (Ctrl-c to exit show)
+.TP
 \f[B]-j\f[R]
 Indicates use Julia Set scenes in ASCIImatics display
 .TP
@@ -165,11 +156,23 @@ Indicates use alternate comments in Plasma ASCIImatics scenes
 \f[B]-p\f[R]
 Indicates use Plasma scenes in ASCIImatics display
 .TP
+\f[B]-P script\f[R]
+Specifies the ASCIImatics script to run
+.TP
 \f[B]-s song\f[R]
 Specifies a song to accompany an ASCIImatics animation
 .TP
 \f[B]-S\f[R]
 Indicates display ASCIImatics splash animation
+.TP
+\f[B]-V \[aq]show\[aq]\f[R]
+Displays an ascii art slide show
+.RS
+\[aq]show\[aq] can be Art, Fractals, Lyap, Mixed, Owls, Waterfalls
+.RE
+.TP
+\f[B]-Z\f[R]
+Indicates do not play audio during slideshow/animation
 .PP
 \f[I]General options:\f[R]
 .TP

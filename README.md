@@ -287,7 +287,7 @@ summary of the command line options:
 Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]
 	[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N]
 	[-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t]
-	[-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-u]
+	[-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-Z] [-u]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
@@ -298,7 +298,6 @@ Terminal/Command options:
 		If 'command' is keyword 'twitter' then a Twitter client is run
 		If 'command' is keyword 'weather' then display a weather report
 		Otherwise, 'command' will be executed in a terminal window
-	-C indicates cycle slideshow endlessly (Ctrl-c to exit show)
 	-d indicates use disk usage analyzer as default command
 	-f indicates use cbftp/ncftp as the default command
 	-F indicates fullscreen display
@@ -307,22 +306,18 @@ Terminal/Command options:
 	-I indicates display system info
 	-l indicates use lynx web browser as the default command
 	-L 'level' use lolcat coloring, 'level' can be '1' or '2' (animate)
-	-P script specifies the ASCIImatics script to run in visualizer pane
 	-r indicates use retro terminal emulator
 	-t indicates use tilix terminal emulator
-	-V 'show' displays an ascii art slide show
-		'show' can be Art, Doctorwhen, Dragonflies, Fractals,
-			Lyap, Mixed, Owls, Space, or Waterfalls
 	-w indicates use w3m web browser as the default command
 	-x indicates use xfce4 terminal emulator
-	-X indicates run command in current terminal window
+	-X indicates run commands in current terminal window
 	-y indicates use ranger file manager as the default command
 	-z indicates use mutt email client as the default command
-
-ASCIImatics animation options:
+Slideshow/ASCIImatics animation options:
 	-A indicates use Asciiville scenes in ASCIImatics display
 	-a indicates play audio during ASCIImatics display
 	-b indicates use backup audio during ASCIImatics display
+	-C indicates cycle slideshow endlessly (Ctrl-c to exit show)
 	-j indicates use Julia Set scenes in ASCIImatics display
 	-J indicates Julia Set with several runs using different parameters
 	-m indicates use MusicPlayerPlus scenes in ASCIImatics display
@@ -330,11 +325,16 @@ ASCIImatics animation options:
 	-n num specifies the number of times to cycle ASCIImatics scenes
 	-N indicates use alternate comments in Plasma ASCIImatics scenes
 	-p indicates use Plasma scenes in ASCIImatics display
+	-P script specifies the ASCIImatics script to run
 	-s song specifies a song to accompany an ASCIImatics animation
 		'song' can be the full pathname to an audio file or a
 		relative pathname to an audio file in the MPD music library
 		or /home/ronnie/Music/
 	-S indicates display ASCIImatics splash animation
+	-V 'show' displays an ascii art slide show
+		'show' can be Art, Doctorwhen, Dragonflies, Fractals,
+			Lyap, Mixed, Owls, Space, or Waterfalls
+	-Z indicates do not play audio during slideshow/animation
 
 General options:
 	-k indicates kill Asciiville tmux sessions and ASCIImatics scripts
