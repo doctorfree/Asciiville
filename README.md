@@ -1,9 +1,9 @@
 # Asciiville
 
-Asciiville is where you go for ASCII art, animations, and utilities.
+Asciiville is where you go for ASCII Art, animations, and utilities.
 The Asciiville project provides integration and extension of several
 packages as well as providing convenience commands to invoke a variety
-of components used to display ASCII art, animations, and utilities.
+of components used to display ASCII Art, animations, and utilities.
 
 ## Table of contents
 
@@ -36,7 +36,7 @@ of components used to display ASCII art, animations, and utilities.
 
 Asciiville integrations and extensions are aimed at the character
 based terminal user. They enable easy to use seamlessly
-integrated control of a variety of ASCII art, animation, and
+integrated control of a variety of ASCII Art, animation, and
 utilities in a lightweight character based environment.
 
 At the core of Asciiville is the `asciiville` command which acts as
@@ -58,7 +58,7 @@ The `asciiville` command can be used to invoke:
 * Command line character based Twitter client
 * A network download/upload speed test
 * The AAlib BB demo running in a tmux session (Debian based systems only)
-* Character based ASCII art and image to ascii conversion utility `jp2a`
+* Character based ASCII Art and image to ascii conversion utility `jp2a`
 * Display system info
 * Display the Phase of the Moon
 * Display a weather report
@@ -591,32 +591,36 @@ or larger encodings that include the standard seven-bit ASCII characters,
 plus additional characters. There are many extended ASCII encodings.
 
 The phrase "ANSI character set" has no well-defined meaning and in the
-context of ANSI art typically refers to "Code page 437", the character
-set of the original IBM PC.
+context of ANSI Art typically refers to "Code page 437", the character
+set of the original IBM PC. In Asciiville the phrase "ANSI Art" refers
+to ASCII Art that utilizes the extended ASCII character encoding with
+the ability to render colored text. The phrase "ASCII Art" encompasses
+all such character renderings, ASCII and extended ASCII. Whether it's
+"Art" is left as an exercise for the viewer.
 
 ### ASCII Art History
 
-ASCII art is a graphic design technique that uses computers for presentation
+ASCII Art is a graphic design technique that uses computers for presentation
 and consists of pictures pieced together from the 95 printable (from a total
 of 128) characters defined by the ASCII Standard from 1963 and ASCII compliant
 character sets with proprietary extended characters (beyond the 128 characters
 of standard 7-bit ASCII). The term is also loosely used to refer to text based
-visual art in general. ASCII art can be created with any text editor, and is
-often used with free-form languages. Most examples of ASCII art require a
+visual art in general. ASCII Art can be created with any text editor, and is
+often used with free-form languages. Most examples of ASCII Art require a
 fixed-width font (non-proportional fonts, as on a traditional typewriter) such
 as Courier for presentation.
 
-Among the oldest known examples of ASCII art are the creations by computer-art
+Among the oldest known examples of ASCII Art are the creations by computer-art
 pioneer Kenneth Knowlton from around 1966, who was working for Bell Labs at the
 time. "Studies in Perception I" by Ken Knowlton and Leon Harmon from 1966 shows
-some examples of their early ASCII art.
+some examples of their early ASCII Art.
 
-ASCII art was invented, in large part, because early printers often lacked
+ASCII Art was invented, in large part, because early printers often lacked
 graphics ability and thus characters were used in place of graphic marks.
 Also, to mark divisions between different print jobs from different users,
-bulk printers often used ASCII art to print large banner pages, making the
+bulk printers often used ASCII Art to print large banner pages, making the
 division easier to spot so that the results could be more easily separated
-by a computer operator or clerk. ASCII art was also used in early e-mail
+by a computer operator or clerk. ASCII Art was also used in early e-mail
 when images could not be embedded.
 
 ### Pre-Computer Text Art
@@ -667,39 +671,39 @@ back then will tell you. Everybody learned how to print a Snoopy banner.
 
 In the late 1970s and early 1980s computer bulletin board systems,
 email users, game designers, Usenet news groups, and others began
-using ASCII art to represent images. ASCII artists invented Emoticons,
+using ASCII Art to represent images. ASCII artists invented Emoticons,
 short small combinations of characters which represented the user's
 emotional state - happy, sad, angry, and more. Email messages and
 Usenet newsgroups were littered with :) and {:> and the Golden Age
-of ASCII art flourished throughout the 1990s.
+of ASCII Art flourished throughout the 1990s.
 
 This technique of representing images as text found its way into the source
 code of computer programs as a way to represent company or product logos.
-In some cases, the entire source code of a program is a piece of ASCII art.
+In some cases, the entire source code of a program is a piece of ASCII Art.
 For instance, an entry to one of the earlier "International Obfuscated C Code
 Contest" is a program that adds numbers, but visually looks like a binary
 adder drawn in logic ports.
 
 #### ANSI Art
 
-ANSI art is similar to ASCII art, but constructed from a larger set of 256
-letters, numbers, and symbols — often referred to as extended ASCII. ANSI art
+ANSI Art is similar to ASCII Art, but constructed from a larger set of 256
+letters, numbers, and symbols — often referred to as extended ASCII. ANSI Art
 also contains special ANSI escape sequences that can be used to color text.
 
 ### The Decline of ASCII and ANSI Art
 
 The rise of the Internet and graphical desktop environments saw the decline
-of BBSes and character based user environments which made ASCII and ANSI art
+of BBSes and character based user environments which made ASCII and ANSI Art
 harder to create and to view due to the lack of software compatible with the
 new dominant operating system, Microsoft Windows.
 
-By the end of 2002 all traditional ANSI art groups like ACiD, ICE, CIA, Fire,
+By the end of 2002 all traditional ANSI Art groups like ACiD, ICE, CIA, Fire,
 Dark and many others were no longer making periodic releases of artworks,
 called "artpacks" and the community of artists almost vanished.
 
 ### The Resurrection of ASCII and ANSI Art
 
-ASCII and ANSI art resurrected in 2022 with the publication of
+ASCII and ANSI Art resurrected in 2022 with the publication of
 ["Asciiville"](https://github.com/doctorfree/Asciiville#readme), a
 compendium of art, animation, utilities, and integrated components all
 utilizing character based graphics. Haha! Just kidding :smiley:. Asciiville
@@ -713,7 +717,7 @@ by many recent advances like [Figlet Fonts](http://www.figlet.org/),
 [jp2a](https://github.com/cslarsen/jp2a),
 [Moebius](https://github.com/blocktronics/moebius),
 and more. These modern utilities and character based
-components have breathed new life into the ASCII art community and produced
+components have breathed new life into the ASCII Art community and produced
 many interesting works of art and animation.
 
 ## Videos
