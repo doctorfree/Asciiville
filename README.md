@@ -29,6 +29,7 @@ of components used to display ASCII art, animations, and utilities.
 1. [Removal](#removal)
 1. [ASCII Art History](#ascii-art-history)
 1. [Screenshots](#screenshots)
+1. [Videos](#videos)
 
 ## Overview
 
@@ -249,6 +250,10 @@ files, typically installed in `/etc/`. For example, the global configuration
 for the Ranger File Manager can be found in `/etc/ranger/config/`. The Lynx
 web browser configuration is in `/etc/lynx/`, and the W3M web browser is
 configured in `/etc/w3m/`.
+
+After installing Asciiville and running the `ascinit` command, initialize the
+the command line Twitter client by invoking the `rainbowstream` command and
+authorizing the app to access your Twitter account.
 
 ### Mutt email configuration
 
@@ -677,6 +682,10 @@ by many recent advances like [Figlet Fonts](http://www.figlet.org/),
 and more. These modern utilities and character based
 components have breathed new life into the ASCII art community and produced
 many interesting works of art and animation.
+
+## Videos
+
+View a [Video Introduction to Asciiville](https://youtu.be/t5bfVqqDvI0)
 
 ## Screenshots
 
