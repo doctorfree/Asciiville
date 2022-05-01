@@ -201,9 +201,9 @@ make_it_so() {
     then
       if [ "${FULLSCREEN}" ]
       then
-        cool-retro-term --fullscreen -e ${AVCOMM} 2> /dev/null &
+        cool-retro-term --fullscreen -e ${AVCOMM} > /dev/null 2>&1 &
       else
-        cool-retro-term -e ${AVCOMM} 2> /dev/null &
+        cool-retro-term -e ${AVCOMM} > /dev/null 2>&1 &
       fi
     else
       if [ "${FULLSCREEN}" ]
@@ -368,7 +368,7 @@ play_slide_show() {
   if [ "${RETRO}" ]
   then
     cool-retro-term --fullscreen \
-                    -e show_ascii_art ${showargs} -s ${showname} 2> /dev/null
+                    -e show_ascii_art ${showargs} -s ${showname} > /dev/null 2>&1
   else
     if [ "${XFCE4}" ]
     then
