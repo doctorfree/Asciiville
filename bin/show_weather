@@ -1,0 +1,51 @@
+#!/bin/bash
+#
+# show_weather - display a weather report in ANSI characters
+
+usage() {
+  printf "\nUsage: show_weather [-h] [-L location] [-l lang] [-u]"
+  printf "\n\t-h indicates show online help message and exit"
+  printf "\n\t-L 'location' specifies the location key to use"
+  printf "\n\t\tUse any of the location types described in the help document"
+  printf "\n\t\tQuote a location key that includes spaces"
+  printf "\n\t-l 'lang' specifies the language code"
+  printf "\n\tSupported languages:"
+  printf "\n\t\tam ar af be bn ca da de el et fr fa hi hu ia id it lt mg nb nl oc pl pt-br ro ru ta tr th uk vi zh-cn zh-tw"
+  printf "\n\t-s indicates use v1 server"
+  printf "\n\t-u indicates show this usage message and exit\n"
+  [ "${showhelp}" ] && curl ${server}/:help
+  exit 1
+}
+
+langopt=
+location=
+showhelp=
+server="v2.wttr.in"
+while getopts "hL:l:su" flag; do
+    case $flag in
+        h)
+            showhelp=1
+            ;;
+        L)
+            location="/${OPTARG}"
+            location=`echo ${location} | sed -e "s/ /+/g"`
+            ;;
+        l)
+            langopt="&lang=${OPTARG}"
+            ;;
+        s)
+            server="wttr.in"
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+[ "${showhelp}" ] && {
+  curl ${server}/:help
+  exit 0
+}
+
+curl ${server}${location}?AF${langopt} 2> /dev/null

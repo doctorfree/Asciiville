@@ -114,6 +114,9 @@ Asciiville adds the following commands to your system:
 * **mapscii** : character based zoomable map of the world
 * **rainbowstream** : command line Twitter client
 * **set_xfce_trans** : sets an xfce4-terminal window's transparency level
+* **show_ascii_art** : display ascii art, convert images to ascii art
+* **show_moon** : display the phase of the Moon
+* **show_weather** : display a weather report
 
 Additional detail and info can be found in the
 [Asciiville Wiki](https://github.com/doctorfree/Asciiville/wiki).
