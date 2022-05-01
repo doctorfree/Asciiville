@@ -305,6 +305,8 @@ e.g. `asciiville -u`.
 - [**btop**](markdown/btop.1.md) : Asciiville system monitor
 - [**cbftp**](markdown/cbftp.1.md) : Asciiville FTP client
 - [**show_ascii_art**](markdown/show_ascii_art.1.md) : Display ascii art, convert images to ascii art
+- [**show_moon**](markdown/show_moon.1.md) : Display the phase of the Moon
+- [**show_weather**](markdown/show_weather.1.md) : Display a weather report
 - [**asciisplash-tmux**](markdown/asciisplash-tmux.1.md) : Asciiville asciimatics animations in a tmux session
 - [**asciisplash**](markdown/asciisplash.1.md) : Asciiville asciimatics animations
 
