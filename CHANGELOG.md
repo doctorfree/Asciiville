@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 * Install Asciiville Figlet Fonts in pyfiglet during postinstall
 * Add `cbftp` FTP client and support for `ncftp`
 * Add `jp2a` image to ascii converter
+* Add `show_moon` and `show_weather` commands
 * Create cbftp man page
 * Add `show_figlet_fonts` command
 * Add -d option to indicate use of disk usage analyzer
@@ -58,6 +59,14 @@ Initial release with support for:
 * Any character based client the user wishes to run
 * One of several asciimatics animations optionally accompanied by audio
 
+Sun May 1 13:53:27 2022 -0700 19ce725 :
+   Add show_moon and show_weather commands
+Sun May 1 13:40:09 2022 -0700 2aa6aee :
+   Add show_moon and show_weather commands
+Sun May 1 10:49:14 2022 -0700 cbb7256 :
+   Add Videos section to README
+Sun May 1 10:21:27 2022 -0700 093b190 :
+   Update changelog, add Mutt config subsection to README
 Sun May 1 09:19:29 2022 -0700 ab0c8bd :
    Default audio on for slideshows and animations, use wmctrl to fullscreen current window if used
 Sat Apr 30 13:46:57 2022 -0700 5996fc2 :
