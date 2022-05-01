@@ -1435,13 +1435,13 @@ show_main_menu() {
               break
               ;;
           "Phase of the Moon",*|*,"Phase of the Moon")
-              curl wttr.in/Moon 2> /dev/null | sed '$ d'
+              curl wttr.in/Moon?AF 2> /dev/null
               read -p "Press Enter to continue" answer
               skip_it_so=1
               break
               ;;
           "Weather Report",*|*,"Weather Report")
-              curl wttr.in?format=v2 2> /dev/null | sed '$ d'
+              curl v2.wttr.in?AF 2> /dev/null
               read -p "Press Enter to continue" answer
               skip_it_so=1
               break
@@ -1715,7 +1715,7 @@ while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wxXyzZu" flag; do
           ;;
       moon|Moon)
           [ "${have_curl}" ] && {
-            curl wttr.in/Moon 2> /dev/null | sed '$ d'
+            curl wttr.in/Moon?AF 2> /dev/null
             read -p "Press Enter to continue" answer
           }
           break
@@ -1735,7 +1735,7 @@ while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wxXyzZu" flag; do
       weather|Weather)
           break
           [ "${have_curl}" ] && {
-            curl wttr.in?format=v2 2> /dev/null | sed '$ d'
+            curl v2.wttr.in?AF 2> /dev/null
             read -p "Press Enter to continue" answer
           }
           ;;
