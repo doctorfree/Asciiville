@@ -241,6 +241,15 @@ fi
   create_new_profile tilix
 }
 
+[ -d ${CONFDIR}/music ] && {
+  [ -d ${HOME}/Music/Asciiville ] || {
+    [ -d ${HOME}/Music ] || mkdir -p ${HOME}/Music
+    ln -s ${CONFDIR}/music ${HOME}/Music/Asciiville
+  }
+}
+
+touch ${HOME}/.asciiville_init
+
 printf "\n${BOLD}Asciiville Initialization Complete${NORMAL}\n"
 printf "\nAuthorize the Rainbow Stream app at Twitter"
 printf "\nby running the ${BOLD}'rainbowstream'${NORMAL} command\n"

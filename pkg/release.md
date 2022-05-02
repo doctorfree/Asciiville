@@ -63,20 +63,20 @@ Install the package on Debian based systems by executing the commands:
 
 ```bash
 sudo apt update -y
-sudo apt install ./Asciiville_1.3.1-1.amd64.deb
+sudo apt install ./Asciiville_1.3.1-2.amd64.deb
 ```
 
 or, on a Raspberry Pi:
 
 ```bash
 sudo apt update -y
-sudo apt install ./Asciiville_1.3.1-1.armhf.deb
+sudo apt install ./Asciiville_1.3.1-2.armhf.deb
 ```
 
 Install the package on RPM based systems by executing the command
 ```bash
 sudo dnf update -y
-sudo dnf localinstall ./Asciiville-1.3.1-1.x86_64.rpm
+sudo dnf localinstall ./Asciiville-1.3.1-2.x86_64.rpm
 ```
 
 ## Configuration

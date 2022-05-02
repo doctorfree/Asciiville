@@ -763,6 +763,7 @@ show_art_menu() {
     options+=("Cycle Slideshow       [${cyclestat}]")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring   [${use_lol}]")
     options+=("Use Audio             [${audiostat}]")
+    [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
     [ "${have_xfce4}" ] && options+=("Use XFCE4 Terminal    [${use_xfce4}]")
     [ "${have_gnome}" ] && options+=("Use Gnome Terminal    [${use_gnome}]")
     [ "${have_retro}" ] && options+=("Use Retro Terminal    [${use_retro}]")
@@ -971,6 +972,10 @@ show_art_menu() {
               fi
               break
               ;;
+          "Select Song"*,*|*,"Select Song"*)
+              select_song
+              break
+              ;;
           "Quit",*|*,"Quit"|"quit",*|*,"quit")
               printf "\nExiting\n"
               exit 0
@@ -1080,6 +1085,7 @@ show_animation_menu() {
     options+=("Use Fullscreen Window [${fullstat}]")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring   [${use_lol}]")
     options+=("Use Audio             [${audiostat}]")
+    [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
     options+=("Use Tmux              [${usetmux}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session   [${recordstat}]")
     [ "${have_mpplus}" ] && options+=("Show MusicPlayerPlus Menu")
@@ -1298,6 +1304,11 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
+          "Select Song"*,*|*,"Select Song"*)
+              select_song
+              skip_it_so=1
+              break
+              ;;
           "Quit",*|*,"Quit"|"quit",*|*,"quit")
               printf "\nExiting\n"
               exit 0
@@ -1399,12 +1410,12 @@ show_main_menu() {
     [ "${have_curl}" ] && options+=("Weather Report")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring        [${use_lol}]")
     options+=("Use Audio                  [${audiostat}]")
+    [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
     options+=("Use Tmux                   [${usetmux}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session        [${recordstat}]")
     options+=("Fullscreen Window          [${fullstat}]")
     options+=("Default Web Browser        [${default_browser}]")
     options+=("Kill Tmux Sessions")
-    [ "${audiostat}" == "YES" ] && options+=("Select Song")
     [ "${have_neo}" ] && options+=("Show System Info")
     [ "${have_mpplus}" ] && options+=("Show MusicPlayerPlus Menu")
     [ "${have_roon}" ] && options+=("Show RoonCommandLine Menu")
@@ -1638,7 +1649,7 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "Select Song",*|*,"Select Song")
+          "Select Song"*,*|*,"Select Song"*)
               select_song
               skip_it_so=1
               break
@@ -1728,7 +1739,7 @@ show_main_menu() {
 
 choose_song() {
   TMP="$(mktemp)"
-  ranger --choosefile="${TMP}" ${MUSEDIR} 1>&2
+  ranger --choosefile="${TMP}" ${HOME}/Music 1>&2
   cat ${TMP}
   rm  -f ${TMP}
 }
@@ -1736,13 +1747,22 @@ choose_song() {
 select_song() {
   if [ "${have_ranger}" ]
   then
-    SONG="$(choose_song)"
+    selectedSong="$(choose_song)"
   else
-    SONG=$(dialog --stdout \
-                  --title "Please select a song" \
-                  --fselect ${MUSEDIR}/ 14 48)
+    selectedSong=$(dialog --stdout \
+                          --title "Please select a song" \
+                          --fselect ${HOME}/Music/ 14 48)
   fi
-  custom_song=1
+  file ${selectedSong} | grep -i audio > /dev/null && { 
+    SONG="${selectedSong}"
+    songname=`basename "${SONG}"`
+    songleng=`echo ${songname} | wc -c`
+    [ ${songleng} -gt 16 ] && {
+      trimleng=$((songleng - 16))
+      songname="${songname::-${trimleng}}..."
+    }
+    custom_song=1
+  }
 }
 
 set_show_term() {
@@ -2269,6 +2289,35 @@ while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wxXyzZu" flag; do
     esac
 done
 
+# Check if initialization has been run
+[ -f ${HOME}/.asciiville_init ] || {
+  echo ""
+  echo "Asciiville initialization needs to be run once."
+  echo "Answer 'y' to initialize, 'n' to skip it for now,"
+  echo "or 'i' to skip and ignore this in the future"
+  echo ""
+  while true
+  do
+    read -p "Initialize Asciiville now (y/n/i) " answer
+    case ${answer} in
+      [Ii]* )
+        touch ${HOME}/.asciiville_init
+        break
+        ;;
+      [Yy]* )
+        ascinit -n
+        break
+        ;;
+      [Nn]* )
+        printf "\nSkipping initialization.\n"
+        break
+        ;;
+      * ) echo "Please answer 'y' to initialize, 'n' to skip, or 'i' to ignore."
+        ;;
+    esac
+  done
+}
+
 # The -T option says use tmux, -S says do asciimatics
 # If we have both then do asciimatics in tmux
 # If just the -T then do command in tmux
@@ -2356,6 +2405,12 @@ fi
     use_lolcat=1
     use_lol="YES"
     LOLCAT="${LOLCAT_NORM}"
+  }
+  songname=`basename "${SONG}"`
+  songleng=`echo ${songname} | wc -c`
+  [ ${songleng} -gt 16 ] && {
+    trimleng=$((songleng - 16))
+    songname="${songname::-${trimleng}}..."
   }
   set_show_term
   clear
