@@ -1,14 +1,14 @@
 #!/bin/bash
 #
-# mppsplash-tmux - display ASCIImatics splash screens in a tmux session
-MUSEDIR=/usr/share/doc/asciiville/music
+# asciisplash-tmux - display ASCIImatics splash screens in a tmux session
+MUSEDIR=/usr/share/asciiville/music
 SONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 PLASMA_SONG="${MUSEDIR}/Chronos.mp3"
 ALTSONG="${MUSEDIR}/Kevin_MacLeod_-_Also_Sprach_Zarathustra.ogg"
-SESSION=mppsplash
+SESSION=asciisplash
 
 usage() {
-  printf "\nUsage: mppsplash-tmux [-a] [-b] [-c num] [-d] [-l script] "
+  printf "\nUsage: asciisplash-tmux [-a] [-b] [-c num] [-d] [-l script] "
   printf "[-r script] [-R] [-s song] [-t] [-u]"
   printf "\nWhere:"
   printf "\n\t-a indicates play audio during ASCIImatics display"
@@ -34,8 +34,8 @@ usage() {
   else
     printf "\n\trecording disabled"
   fi
-  printf "\nType 'man mppsplash-tmux' for detailed usage info on mppsplash-tmux"
-  printf "\nType 'man mppsplash' for detailed usage info on mppsplash\n"
+  printf "\nType 'man asciisplash-tmux' for detailed usage info on asciisplash-tmux"
+  printf "\nType 'man asciisplash' for detailed usage info on asciisplash\n"
   exit 1
 }
 
@@ -179,7 +179,7 @@ have_left=`type -p ${PYLEFT}`
 }
 
 # Start the left pane script
-tmux send-keys "mppsplash ${left_script_args} ${script_args}; tmux kill-session -t ${SESSION}" C-m
+tmux send-keys "asciisplash ${left_script_args} ${script_args}; tmux kill-session -t ${SESSION}" C-m
 
 [ "${DUAL}" ] && {
   have_right=`type -p ${PYRIGHT}`
@@ -191,7 +191,7 @@ tmux send-keys "mppsplash ${left_script_args} ${script_args}; tmux kill-session 
   tmux select-pane -t 1
 
   # Start the right pane script
-  tmux send-keys "mppsplash ${right_script_args} ${script_args}; tmux kill-session -t ${SESSION}" C-m
+  tmux send-keys "asciisplash ${right_script_args} ${script_args}; tmux kill-session -t ${SESSION}" C-m
 }
 
 #tmux resize-pane -t 0 -x ${WIDTH} -y ${HEIGHT}

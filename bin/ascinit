@@ -4,7 +4,7 @@
 #
 # Setup default tmux configuration for this user
 # Install required pip modules if not already installed
-CONFDIR=/usr/share/doc/asciiville
+CONFDIR=/usr/share/asciiville
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 

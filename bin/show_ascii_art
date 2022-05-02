@@ -1,12 +1,12 @@
 #!/bin/bash
 #
-ART_DIR="/usr/share/doc/asciiville/art"
+ART_DIR="/usr/share/asciiville/art"
 FIG_WELCOME="Welcome To"
 FIG_ASCII="Asciiville"
 FIG_FONTS="/usr/share/figlet-fonts"
 LARGE_FONT="Bolger"
 SMALL_FONT="Small"
-MUSEDIR=/usr/share/doc/asciiville/music
+MUSEDIR=/usr/share/asciiville/music
 SONG="${MUSEDIR}/Chronos.mp3"
 ALTSONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 LOLCAT_NORM="lolcat"
@@ -29,8 +29,8 @@ usage() {
   printf "\nUsage: show_ascii_art [-a art] [-A art_dir] [-b] [-B] [-c] [-C]"
   printf "\n\t[-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g]"
   printf "\n\t[-i image] [-I input_dir] [-O output_dir] [-l level] [-L] [-n tabs]"
-  printf "\n\t[-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S]"
-  printf "\n\t[-t first_text] [-T second_text] [-h height] [-w width] [-u]"
+  printf "\n\t[-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S song]"
+  printf "\n\t[-t first_text] [-T second_text] [-h height] [-w width] [-z] [-u]"
   printf "\nWhere:"
   printf "\n\t-a 'art' specifies which ascii art to display"
   printf "\n\t-A 'art_dir' specifies the path to the ascii art folder"
@@ -68,14 +68,15 @@ usage() {
   printf "\n\t\t'show' can be Art, Doctorwhen, Dragonflies, Fractals,"
   printf "\n\t\t\tLyap, Mixed, Owls, Space, Waterfalls,"
   printf "\n\t\t\tor a custom folder name (with '-A art_dir')"
-  printf "\n\t-S indicates save converted image ascii art in art_dir"
+  printf "\n\t-S 'song' use 'song' as audio track"
   printf "\n\t-t 'first_text' specifies the first text to display"
   printf "\n\t-T 'second_text' specifies the second text to display"
   printf "\n\t-u displays this usage message and exits"
   printf "\n\t-h 'height' specifies the height of the converted ascii art"
   printf "\n\t-w 'width' specifies the width of the converted ascii art"
   printf "\n\t\tIf only one of 'width' and 'height' is provided,"
-  printf "\n\t\tcalculate the other from image aspect ratio\n\n"
+  printf "\n\t\tcalculate the other from image aspect ratio"
+  printf "\n\t-z indicates save converted image ascii art in art_dir\n\n"
   exit 1
 }
 
@@ -191,7 +192,7 @@ tabs=
 width=
 have_convert=`type -p convert`
 have_jp2a=`type -p jp2a`
-while getopts "a:A:bBcCD:d:gh:i:I:l:LF:f:n:N:oO:Pp:qrs:St:T:w:u" flag; do
+while getopts "a:A:bBcCD:d:gh:i:I:l:LF:f:n:N:oO:Pp:qrs:S:t:T:w:zu" flag; do
   case $flag in
       a)
           art="${OPTARG}"
@@ -295,7 +296,7 @@ while getopts "a:A:bBcCD:d:gh:i:I:l:LF:f:n:N:oO:Pp:qrs:St:T:w:u" flag; do
           slideshow="${OPTARG}"
           ;;
       S)
-          save_art=1
+          [ -f "${OPTARG}" ] && SONG="${OPTARG}"
           ;;
       t)
           FIG_WELCOME="${OPTARG}"
@@ -308,6 +309,9 @@ while getopts "a:A:bBcCD:d:gh:i:I:l:LF:f:n:N:oO:Pp:qrs:St:T:w:u" flag; do
           ;;
       w)
           width="${OPTARG}"
+          ;;
+      z)
+          save_art=1
           ;;
       u)
           usage

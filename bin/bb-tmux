@@ -3,17 +3,18 @@
 # bb-tmux - display bb in a tmux session
 
 SESSION=bb
-SONG="/usr/share/doc/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav"
+SONG="/usr/share/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav"
 
 set -m
 
 usage() {
-  printf "\nUsage: bb-tmux [-a] [-c] [-r] [-u]"
+  printf "\nUsage: bb-tmux [-a] [-c] [-r] [-s song] [-u]"
   printf "\nWhere:"
   printf "\n\t-a indicates play audio along with bb demo"
   printf "\n\t-c indicates use curses character based driver"
   printf "\n\t\t (default is use X11 if available)"
   printf "\n\t-r indicates record tmux session with asciinema"
+  printf "\n\t-s 'song' specifies the audio track to play"
   printf "\n\t-u displays this usage message and exits\n"
   if [ "${RECORD}" ]
   then
@@ -46,7 +47,7 @@ fade_audio() {
 AUDIO=
 RECORD=
 USAGE=
-while getopts "acru" flag; do
+while getopts "acrs:u" flag; do
     case $flag in
         a)
           [ -f "${SONG}" ] && {
@@ -60,6 +61,9 @@ while getopts "acru" flag; do
         r)
           have_nema=`type -p asciinema`
           [ "${have_nema}" ] && RECORD=1
+          ;;
+        s)
+          [ -f "${OPTARG}" ] && SONG="${OPTARG}"
           ;;
         u)
           USAGE=1

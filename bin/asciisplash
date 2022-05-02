@@ -1,14 +1,14 @@
 #!/bin/bash
 #
-# mppsplash - display Asciiville splash screens using ASCIImatics
+# asciisplash - display Asciiville splash screens using ASCIImatics
 #
-MUSEDIR=/usr/share/doc/asciiville/music
+MUSEDIR=/usr/share/asciiville/music
 SONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 PLASMA_SONG="${MUSEDIR}/Chronos.mp3"
 ALTSONG="${MUSEDIR}/Kevin_MacLeod_-_Also_Sprach_Zarathustra.ogg"
 
 usage() {
-  printf "\nUsage: mppsplash [-A] [-a] [-b] [-C] [-c num] [-d] [-i] [-jJ] "
+  printf "\nUsage: asciisplash [-A] [-a] [-b] [-C] [-c num] [-d] [-i] [-jJ] "
   printf "[-m] [-p] [-s song] [-u]"
   printf "\nWhere:"
   printf "\n\t-A indicates use all effects"
@@ -29,7 +29,7 @@ usage() {
   printf "\n\t-u displays this usage message and exits\n"
   printf "\nDefault audio: ${SONG}"
   printf "\nWithout any options the Asciiville effect will repeat"
-  printf "\nType 'man mppsplash' for more detailed usage info\n"
+  printf "\nType 'man asciisplash' for more detailed usage info\n"
   exit 1
 }
 

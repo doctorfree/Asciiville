@@ -37,7 +37,7 @@ as accompaniment.
 **asciiart -c 10**
 : Plays the Art Images ASCIImatics animation 10 times then exits 
 
-**asciiart -a /usr/share/doc/musicplayerplus/music/Epic_Dramatic-Yuriy_Bespalov.wav -c 5**
+**asciiart -a /usr/share/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav -c 5**
 : Plays the Art Images ASCIImatics animation 5 times accompanied by audio then exits 
 
 # AUTHORS

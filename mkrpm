@@ -79,7 +79,8 @@ mkdir ${OUT_DIR}
 
 for dir in "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
-           "${DESTDIR}/share/doc/${PKG}" "${DESTDIR}/share/btop"
+           "${DESTDIR}/share/doc/${PKG}" "${DESTDIR}/share/btop" \
+           "${DESTDIR}/share/${PKG}"
 do
     [ -d ${OUT_DIR}/${dir} ] || ${SUDO} mkdir ${OUT_DIR}/${dir}
     ${SUDO} chown root:root ${OUT_DIR}/${dir}
@@ -97,12 +98,12 @@ ${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
 ${SUDO} cp ddgr/ddgr ${OUT_DIR}/${DESTDIR}/bin/ddgr
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
-${SUDO} cp -a conf/mutt ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/mutt
-${SUDO} cp -a conf/mutt_multiple ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/mutt_multiple
-${SUDO} cp -a conf/neomutt ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/neomutt
-${SUDO} cp conf/tmux.conf ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
-${SUDO} cp conf/rifle.conf ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
-${SUDO} cp conf/rainbow_config.json ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
+${SUDO} cp -a conf/mutt ${OUT_DIR}/${DESTDIR}/share/${PKG}/mutt
+${SUDO} cp -a conf/mutt_multiple ${OUT_DIR}/${DESTDIR}/share/${PKG}/mutt_multiple
+${SUDO} cp -a conf/neomutt ${OUT_DIR}/${DESTDIR}/share/${PKG}/neomutt
+${SUDO} cp conf/tmux.conf ${OUT_DIR}/${DESTDIR}/share/${PKG}
+${SUDO} cp conf/rifle.conf ${OUT_DIR}/${DESTDIR}/share/${PKG}
+${SUDO} cp conf/rainbow_config.json ${OUT_DIR}/${DESTDIR}/share/${PKG}
 ${SUDO} cp copyright ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp NOTICE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
@@ -122,8 +123,8 @@ ${SUDO} cp jp2a/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-jp2a
 ${SUDO} cp jp2a/LICENSES ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSES-jp2a
 ${SUDO} gzip -9 ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/CHANGELOG.md
 
-${SUDO} cp -a art "${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/art"
-${SUDO} cp -a music "${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/music"
+${SUDO} cp -a art "${OUT_DIR}/${DESTDIR}/share/${PKG}/art"
+${SUDO} cp -a music "${OUT_DIR}/${DESTDIR}/share/${PKG}/music"
 
 ${SUDO} cp -a man/man1 ${OUT_DIR}/${DESTDIR}/share/man/man1
 ${SUDO} cp ddgr/ddgr.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
@@ -145,6 +146,14 @@ do
   ${SUDO} chmod 755 "${dir}"
 done
 find ${OUT_DIR}/${DESTDIR}/share/doc/${PKG} -type f | while read f
+do
+  ${SUDO} chmod 644 "${f}"
+done
+find ${OUT_DIR}/${DESTDIR}/share/${PKG} -type d | while read dir
+do
+  ${SUDO} chmod 755 "${dir}"
+done
+find ${OUT_DIR}/${DESTDIR}/share/${PKG} -type f | while read f
 do
   ${SUDO} chmod 644 "${f}"
 done

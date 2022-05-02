@@ -9,7 +9,7 @@ date: April 24, 2022
 show_ascii_art - display ascii art
 
 # SYNOPSIS
-**show_ascii_art** [-a art] [-A art_dir] [-b] [-B] [-c] [-C] [-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g] [-i image] [-I input_dir] [-O output_dir] [-l level] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S] [-t first_text] [-T second_text] [-h height] [-w width] [-u]
+**show_ascii_art** [-a art] [-A art_dir] [-b] [-B] [-c] [-C] [-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g] [-i image] [-I input_dir] [-O output_dir] [-l level] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S song] [-t first_text] [-T second_text] [-h height] [-w width] [-z] [-u]
 
 # DESCRIPTION
 The *show_ascii_art* command displays one of the ascii art images included in
@@ -95,13 +95,13 @@ the fonts used to display accompanying text, and the text to display.
 **-r**
 : indicates select random fonts
 
+**-S 'song'**
+: specifies the song to play as audio track (use default if '-s song' omitted)
+
 **-s 'show'**
 : slide show of ascii art
 
     'show' can be Art, Fractals, Lyap, Owls, Waterfalls, Mixed
-
-**-S**
-: indicates save converted image ascii art in art_dir
 
 **-t 'first_text'**
 : specifies the first text to display
@@ -116,6 +116,9 @@ the fonts used to display accompanying text, and the text to display.
 : specifies the width of the converted ascii art
 
 If only one of 'width' and 'height' is provided, calculate the other from image aspect ratio
+
+**-z**
+: indicates save converted image ascii art in art_dir
 
 **-u**
 : displays this usage message and exits

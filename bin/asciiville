@@ -37,6 +37,9 @@ LOLCAT_NORM="lolcat"
 LOLCAT_ANIM="lolcat --animate --speed=60.0"
 LOLCAT="${LOLCAT_ANIM}"
 MTITLE="Asciiville"
+MUSEDIR=/usr/share/asciiville/music
+SONG="${MUSEDIR}/Chronos.mp3"
+ALTSONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 
 if [ `echo $PATH | grep -c /usr/local/bin` -ne "1" ]
 then
@@ -92,7 +95,7 @@ usage() {
   printf "\n\t-s song specifies a song to accompany an ASCIImatics animation"
   printf "\n\t\t'song' can be the full pathname to an audio file or a"
   printf "\n\t\trelative pathname to an audio file in the MPD music library"
-  printf "\n\t\tor $HOME/Music/"
+  printf "\n\t\tor ~/Music/"
   printf "\n\t-S indicates display ASCIImatics splash animation"
   printf "\n\t-V 'show' displays an ascii art slide show"
   printf "\n\t\t'show' can be Art, Doctorwhen, Dragonflies, Fractals,"
@@ -286,6 +289,9 @@ select_font() {
   done
 
   case "$1" in
+    AsciiAppTerm)
+      FIG_TEXT="App & Terminal"
+      ;;
     AsciiArt)
       if [ "${goBig}" ]
       then
@@ -392,6 +398,281 @@ play_slide_show() {
   fi
 }
 
+show_appterm_menu() {
+  animation_menu=
+  art_menu=
+  main_menu=
+  while true
+  do
+    [ "${COMMAND}" ] || COMMAND=btop
+    show_comm=`echo ${COMMAND} | awk ' { print $1 } '`
+    case "${COMMAND}" in
+      btop)
+        use_btop="YES"
+        use_gdu="NO"
+        use_lynx="NO"
+        use_mpp="NO"
+        use_mutt="NO"
+        use_ftp="NO"
+        use_ranger="NO"
+        use_w3m="NO"
+        ;;
+      cbftp|ncftp)
+        use_btop="NO"
+        use_gdu="NO"
+        use_lynx="NO"
+        use_mpp="NO"
+        use_mutt="NO"
+        use_ftp="YES"
+        use_ranger="NO"
+        use_w3m="NO"
+        ;;
+      gdu*)
+        use_btop="NO"
+        use_gdu="YES"
+        use_lynx="NO"
+        use_mpp="NO"
+        use_mutt="NO"
+        use_ftp="NO"
+        use_ranger="NO"
+        use_w3m="NO"
+        ;;
+      lynx*)
+        use_btop="NO"
+        use_gdu="NO"
+        use_lynx="YES"
+        use_mpp="NO"
+        use_mutt="NO"
+        use_ftp="NO"
+        use_ranger="NO"
+        use_w3m="NO"
+        ;;
+      mpcplus)
+        use_btop="NO"
+        use_gdu="NO"
+        use_lynx="NO"
+        use_mpp="YES"
+        use_mutt="NO"
+        use_ftp="NO"
+        use_ranger="NO"
+        use_w3m="NO"
+        ;;
+      mutt|neomutt)
+        use_btop="NO"
+        use_gdu="NO"
+        use_lynx="NO"
+        use_mpp="NO"
+        use_mutt="YES"
+        use_ftp="NO"
+        use_ranger="NO"
+        use_w3m="NO"
+        ;;
+      ranger)
+        use_btop="NO"
+        use_gdu="NO"
+        use_lynx="NO"
+        use_mpp="NO"
+        use_mutt="NO"
+        use_ftp="NO"
+        use_ranger="YES"
+        use_w3m="NO"
+        ;;
+      w3m*)
+        use_btop="NO"
+        use_gdu="NO"
+        use_lynx="NO"
+        use_mpp="NO"
+        use_mutt="NO"
+        use_ftp="NO"
+        use_ranger="NO"
+        use_w3m="YES"
+        ;;
+    esac
+    if [ "${GNOME}" ]
+    then
+      use_gnome="YES"
+    else
+      use_gnome="NO"
+    fi
+    if [ "${XFCE4}" ]
+    then
+      use_xfce4="YES"
+    else
+      use_xfce4="NO"
+    fi
+    if [ "${TILIX}" ]
+    then
+      use_tilix="YES"
+    else
+      use_tilix="NO"
+    fi
+    if [ "${RETRO}" ]
+    then
+      use_retro="YES"
+    else
+      use_retro="NO"
+    fi
+    if [ "${CURRENT}" ]
+    then
+      use_current="YES"
+    else
+      use_current="NO"
+    fi
+    [ "${use_figlet}" ] && {
+      select_font AsciiAppTerm
+      if [ "${use_lolcat}" ]
+      then
+        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
+      else
+        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
+      fi
+    }
+    PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
+    options=()
+    [ "${have_btop}" ] && options+=("Use Btop System Monitor    [${use_btop}]")
+    [ "${have_gdu}" ] && options+=("Use Disk Usage Analyzer    [${use_gdu}]")
+    [ "${have_lynx}" ] && options+=("Use  Lynx  Web  Browser    [${use_lynx}]")
+    [ "${have_w3m}" ] && options+=("Use  W3M   Web  Browser    [${use_w3m}]")
+    [ "${have_mpcplus}" ] && options+=("Use Music Player Plus      [${use_mpp}]")
+    if [ "${have_cbftp}" ]
+    then
+      options+=("Use Cbftp FTP Client       [${use_ftp}]")
+    else
+      [ "${have_ncftp}" ] && options+=("Use Ncftp FTP Client       [${use_ftp}]")
+    fi
+    if [ "${have_neomutt}" ]
+    then
+      options+=("Use NeoMutt Mail Client    [${use_mutt}]")
+    else
+      [ "${have_mutt}" ] && options+=("Use Mutt Mail Client       [${use_mutt}]")
+    fi
+    [ "${have_ranger}" ] && options+=("Use Ranger File Manager    [${use_ranger}]")
+    [ "${have_xfce4}" ] && options+=("Use XFCE4 Terminal    [${use_xfce4}]")
+    [ "${have_gnome}" ] && options+=("Use Gnome Terminal    [${use_gnome}]")
+    [ "${have_retro}" ] && options+=("Use Retro Terminal    [${use_retro}]")
+    [ "${have_tilix}" ] && options+=("Use Tilix Terminal    [${use_tilix}]")
+    options+=("Use Current Terminal  [${use_current}]")
+    options+=("Back to Main Menu" "Quit")
+    select opt in "${options[@]}"
+    do
+      case "$opt,$REPLY" in
+          "Back to Main Menu",*|*,"Back to Main Menu"|"Back",*|*,"Back"|"back",*|*,"back")
+              main_menu=1
+              break 2
+              ;;
+          "Use Btop System Monitor"*,*|*,"Use Btop System Monitor"*)
+              COMMAND=btop
+              MTITLE="Btop++ System Monitor"
+              break
+              ;;
+          "Use Disk Usage Analyzer"*,*|*,"Use Disk Usage Analyzer"*)
+              COMMAND="gdu ${HOME}"
+              MTITLE="Disk Usage Analyzer"
+              break
+              ;;
+          "Use  Lynx  Web  Browser"*,*|*,"Use  Lynx  Web  Browser"*)
+              COMMAND="lynx ${WEB_HOME}"
+              MTITLE="Lynx Web Browser"
+              export BROWSER=lynx
+              break
+              ;;
+          "Use  W3M   Web  Browser"*,*|*,"Use  W3M   Web  Browser"*)
+              COMMAND="w3m -v ${WEB_HOME}"
+              MTITLE="W3M Web Browser"
+              export BROWSER=w3m
+              break
+              ;;
+          "Use Music Player Plus"*,*|*,"Use Music Player Plus"*)
+              COMMAND=mpcplus
+              MTITLE="Music Player Plus MPD Client"
+              break
+              ;;
+          "Use Cbftp FTP Client"*,*|*,"Use Cbftp FTP Client"*)
+              COMMAND=cbftp
+              MTITLE="Cbftp FTP Client"
+              break
+              ;;
+          "Use Ncftp FTP Client"*,*|*,"Use Ncftp FTP Client"*)
+              COMMAND=ncftp
+              MTITLE="Ncftp FTP Client"
+              break
+              ;;
+          "Use Mutt Mail Client"*,*|*,"Use Mutt Mail Client"*)
+              COMMAND=mutt
+              MTITLE="Mutt Mail Client"
+              break
+              ;;
+          "Use NeoMutt Mail Client"*,*|*,"Use NeoMutt Mail Client"*)
+              COMMAND=neomutt
+              MTITLE="NeoMutt Mail Client"
+              break
+              ;;
+          "Use Ranger File Manager"*,*|*,"Use Ranger File Manager"*)
+              COMMAND=ranger
+              MTITLE="Ranger File Manager"
+              break
+              ;;
+          "Use XFCE4 Terminal"*,*|*,"Use XFCE4 Terminal"*)
+              XFCE4=1
+              TILIX=
+              GNOME=
+              RETRO=
+              CURRENT=
+              break
+              ;;
+          "Use Gnome Terminal"*,*|*,"Use Gnome Terminal"*)
+              GNOME=1
+              XFCE4=
+              TILIX=
+              RETRO=
+              CURRENT=
+              break
+              ;;
+          "Use Retro Terminal"*,*|*,"Use Retro Terminal"*)
+              RETRO=1
+              GNOME=
+              XFCE4=
+              TILIX=
+              CURRENT=
+              break
+              ;;
+          "Use Tilix Terminal"*,*|*,"Use Tilix Terminal"*)
+              TILIX=1
+              RETRO=
+              GNOME=
+              XFCE4=
+              CURRENT=
+              break
+              ;;
+          "Use Current Terminal"*,*|*,"Use Current Terminal"*)
+              CURRENT=1
+              TILIX=
+              RETRO=
+              GNOME=
+              XFCE4=
+              break
+              ;;
+          "Quit",*|*,"Quit"|"quit",*|*,"quit")
+              printf "\nExiting\n"
+              exit 0
+              ;;
+      esac
+      REPLY=
+    done
+  done
+  [ "${animation_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_animation_menu
+  }
+  [ "${main_menu}" ] && {
+    clear
+    printf "\n"
+    init_vars
+    show_main_menu
+  }
+}
+
 show_art_menu() {
   animation_menu=
   main_menu=
@@ -400,7 +681,7 @@ show_art_menu() {
     if [ "${AUDIO}" ]
     then
       audiostat="YES"
-      audarg="-P"
+      audarg="-P -S ${SONG}"
     else
       audiostat="NO"
       audarg=
@@ -617,12 +898,18 @@ show_art_menu() {
               fi
               if [ "${AUDIO}" ]
               then
-                ASCSPLASH="${ASCSPLASH} -a"
-                ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
-                audarg="-P"
+                if [ "${custom_song}" ]
+                then
+                  ASCSPLASH="${ASCSPLASH} -a -s ${SONG}"
+                  ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a -s ${SONG}"
+                else
+                  ASCSPLASH="${ASCSPLASH} -a"
+                  ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
+                fi
+                audarg="-P -S ${SONG}"
               else
-                ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s/ -a//"`
-                ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s/ -a//"`
+                ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s/ -a//" -e "s/ -s ${SONG}//"`
+                ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s/ -a//" -e "s/ -s ${SONG}//"`
                 audarg=
               fi
               break
@@ -715,7 +1002,7 @@ show_animation_menu() {
     if [ "${AUDIO}" ]
     then
       audiostat="YES"
-      audarg="-P"
+      audarg="-P -S ${SONG}"
     else
       audiostat="NO"
       audarg=
@@ -832,7 +1119,12 @@ show_animation_menu() {
               export DISPLAY=""
               if [ "${AUDIO}" ]
               then
-                bb-tmux -a
+                if [ "${custom_song}" ]
+                then
+                  bb-tmux -a -s "${SONG}"
+                else
+                  bb-tmux -a
+                fi
               else
                 bb-tmux
               fi
@@ -921,12 +1213,18 @@ show_animation_menu() {
               fi
               if [ "${AUDIO}" ]
               then
-                ASCSPLASH="${ASCSPLASH} -a"
-                ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
-                audarg="-P"
+                if [ "${custom_song}" ]
+                then
+                  ASCSPLASH="${ASCSPLASH} -a -s ${SONG}"
+                  ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a -s ${SONG}"
+                else
+                  ASCSPLASH="${ASCSPLASH} -a"
+                  ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
+                fi
+                audarg="-P -S ${SONG}"
               else
-                ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s/ -a//"`
-                ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s/ -a//"`
+                ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s/ -a//" -e "s/ -s ${SONG}//"`
+                ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s/ -a//" -e "s/ -s ${SONG}//"`
                 audarg=
               fi
               skip_it_so=1
@@ -1031,7 +1329,7 @@ show_main_menu() {
     if [ "${AUDIO}" ]
     then
       audiostat="YES"
-      audarg="-P"
+      audarg="-P -S ${SONG}"
     else
       audiostat="NO"
       audarg=
@@ -1072,88 +1370,7 @@ show_main_menu() {
     fi
     [ "${COMMAND}" ] || COMMAND=btop
     show_comm=`echo ${COMMAND} | awk ' { print $1 } '`
-    case "${COMMAND}" in
-      btop)
-        use_btop="YES"
-        use_gdu="NO"
-        use_lynx="NO"
-        use_mpp="NO"
-        use_mutt="NO"
-        use_ftp="NO"
-        use_ranger="NO"
-        use_w3m="NO"
-        ;;
-      cbftp|ncftp)
-        use_btop="NO"
-        use_gdu="NO"
-        use_lynx="NO"
-        use_mpp="NO"
-        use_mutt="NO"
-        use_ftp="YES"
-        use_ranger="NO"
-        use_w3m="NO"
-        ;;
-      gdu*)
-        use_btop="NO"
-        use_gdu="YES"
-        use_lynx="NO"
-        use_mpp="NO"
-        use_mutt="NO"
-        use_ftp="NO"
-        use_ranger="NO"
-        use_w3m="NO"
-        ;;
-      lynx*)
-        use_btop="NO"
-        use_gdu="NO"
-        use_lynx="YES"
-        use_mpp="NO"
-        use_mutt="NO"
-        use_ftp="NO"
-        use_ranger="NO"
-        use_w3m="NO"
-        ;;
-      mpcplus)
-        use_btop="NO"
-        use_gdu="NO"
-        use_lynx="NO"
-        use_mpp="YES"
-        use_mutt="NO"
-        use_ftp="NO"
-        use_ranger="NO"
-        use_w3m="NO"
-        ;;
-      mutt|neomutt)
-        use_btop="NO"
-        use_gdu="NO"
-        use_lynx="NO"
-        use_mpp="NO"
-        use_mutt="YES"
-        use_ftp="NO"
-        use_ranger="NO"
-        use_w3m="NO"
-        ;;
-      ranger)
-        use_btop="NO"
-        use_gdu="NO"
-        use_lynx="NO"
-        use_mpp="NO"
-        use_mutt="NO"
-        use_ftp="NO"
-        use_ranger="YES"
-        use_w3m="NO"
-        ;;
-      w3m*)
-        use_btop="NO"
-        use_gdu="NO"
-        use_lynx="NO"
-        use_mpp="NO"
-        use_mutt="NO"
-        use_ftp="NO"
-        use_ranger="NO"
-        use_w3m="YES"
-        ;;
-    esac
+    set_show_term
     skip_it_so=
     [ "${use_figlet}" ] && {
       select_font Asciiville
@@ -1166,105 +1383,36 @@ show_main_menu() {
     }
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
+    options+=("Run ${show_comm} in ${show_term}")
+    options+=("Select App and Terminal")
     [ "${have_showascii}" ] && options+=("Ascii Art Slide Shows")
     [ "${have_splash}" ] && options+=("ASCIImatics Animations")
-    [ "${have_gnome}" ] && options+=("Run ${show_comm} in Gnome Terminal")
-    [ "${have_retro}" ] && options+=("Run ${show_comm} in Retro Terminal")
-    [ "${have_tilix}" ] && options+=("Run ${show_comm} in Tilix Terminal")
-    [ "${have_xfce4}" ] && options+=("Run ${show_comm} in XFCE4 Terminal")
-    options+=("Run ${show_comm} in Current Terminal")
     [ "${have_bb}" ] && {
-      [ "$DISPLAY" = "" ] || options+=("Run AAlib Demo (X11 mode)")
+      [ "$DISPLAY" = "" ] || options+=("AAlib Demo (X11 mode)")
     }
-    [ "${have_bb}" ] && options+=("Run AAlib Demo (Curses mode)")
-    [ "${have_speed}" ] && options+=("Run Speed Test")
-    [ "${have_rainbow}" ] && options+=("Run Twitter Client")
-    [ "${have_ddgr}" ] && options+=("Search the Web")
-    [ "${have_mapscii}" ] && options+=("Show Mapscii World Map")
-    [ "${have_mpplus}" ] && options+=("Show MusicPlayerPlus Menu")
-    [ "${have_roon}" ] && options+=("Show RoonCommandLine Menu")
-    [ "${have_neo}" ] && options+=("Show System Info")
+    [ "${have_bb}" ] && options+=("AAlib Demo (Curses mode)")
+    [ "${have_mapscii}" ] && options+=("Mapscii World Map")
     [ "${have_curl}" ] && options+=("Phase of the Moon")
+    [ "${have_ddgr}" ] && options+=("Search the Web")
+    [ "${have_speed}" ] && options+=("Speed Test")
+    [ "${have_rainbow}" ] && options+=("Twitter Client")
     [ "${have_curl}" ] && options+=("Weather Report")
-    [ "${have_btop}" ] && options+=("Use Btop System Monitor    [${use_btop}]")
-    [ "${have_gdu}" ] && options+=("Use Disk Usage Analyzer    [${use_gdu}]")
-    [ "${have_lynx}" ] && options+=("Use  Lynx  Web  Browser    [${use_lynx}]")
-    [ "${have_w3m}" ] && options+=("Use  W3M   Web  Browser    [${use_w3m}]")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring        [${use_lol}]")
-    [ "${have_mpcplus}" ] && options+=("Use Music Player Plus      [${use_mpp}]")
-    if [ "${have_cbftp}" ]
-    then
-      options+=("Use Cbftp FTP Client       [${use_ftp}]")
-    else
-      [ "${have_ncftp}" ] && options+=("Use Ncftp FTP Client       [${use_ftp}]")
-    fi
-    if [ "${have_neomutt}" ]
-    then
-      options+=("Use NeoMutt Mail Client    [${use_mutt}]")
-    else
-      [ "${have_mutt}" ] && options+=("Use Mutt Mail Client       [${use_mutt}]")
-    fi
-    [ "${have_ranger}" ] && options+=("Use Ranger File Manager    [${use_ranger}]")
     options+=("Use Audio                  [${audiostat}]")
     options+=("Use Tmux                   [${usetmux}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session        [${recordstat}]")
     options+=("Fullscreen Window          [${fullstat}]")
     options+=("Default Web Browser        [${default_browser}]")
     options+=("Kill Tmux Sessions")
+    [ "${audiostat}" == "YES" ] && options+=("Select Song")
+    [ "${have_neo}" ] && options+=("Show System Info")
+    [ "${have_mpplus}" ] && options+=("Show MusicPlayerPlus Menu")
+    [ "${have_roon}" ] && options+=("Show RoonCommandLine Menu")
     options+=("Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
-          "Run ${show_comm} in XFCE4 Terminal",*|*,"Run ${show_comm} in XFCE4 Terminal")
-              XFCE4=1
-              TILIX=
-              GNOME=
-              RETRO=
-              CURRENT=
-              break
-              ;;
-          "Run ${show_comm} in Gnome Terminal",*|*,"Run ${show_comm} in Gnome Terminal")
-              GNOME=1
-              XFCE4=
-              TILIX=
-              RETRO=
-              CURRENT=
-              break
-              ;;
-          "Run ${show_comm} in Retro Terminal",*|*,"Run ${show_comm} in Retro Terminal")
-              RETRO=1
-              GNOME=
-              XFCE4=
-              TILIX=
-              CURRENT=
-              break
-              ;;
-          "Run ${show_comm} in Tilix Terminal",*|*,"Run ${show_comm} in Tilix Terminal")
-              TILIX=1
-              RETRO=
-              GNOME=
-              XFCE4=
-              CURRENT=
-              break
-              ;;
-          "Run ${show_comm} in Current Terminal",*|*,"Run ${show_comm} in Current Terminal")
-              CURRENT=1
-              TILIX=
-              RETRO=
-              GNOME=
-              XFCE4=
-              break
-              ;;
-          "Use Btop System Monitor"*,*|*,"Use Btop System Monitor"*)
-              COMMAND=btop
-              MTITLE="Btop++ System Monitor"
-              skip_it_so=1
-              break
-              ;;
-          "Use Disk Usage Analyzer"*,*|*,"Use Disk Usage Analyzer"*)
-              COMMAND="gdu ${HOME}"
-              MTITLE="Disk Usage Analyzer"
-              skip_it_so=1
+          "Run ${show_comm} in ${show_term}",*|*,"Run ${show_comm} in ${show_term}")
               break
               ;;
           "Default Web Browser"*,*|*,"Default Web Browser"*)
@@ -1351,20 +1499,6 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "Use  Lynx  Web  Browser"*,*|*,"Use  Lynx  Web  Browser"*)
-              COMMAND="lynx ${WEB_HOME}"
-              MTITLE="Lynx Web Browser"
-              export BROWSER=lynx
-              skip_it_so=1
-              break
-              ;;
-          "Use  W3M   Web  Browser"*,*|*,"Use  W3M   Web  Browser"*)
-              COMMAND="w3m -v ${WEB_HOME}"
-              MTITLE="W3M Web Browser"
-              export BROWSER=w3m
-              skip_it_so=1
-              break
-              ;;
           "Use Lolcat Coloring"*,*|*,"Use Lolcat Coloring"*)
               if [ "${use_lolcat}" == "2" ]
               then
@@ -1385,43 +1519,7 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "Use Music Player Plus"*,*|*,"Use Music Player Plus"*)
-              COMMAND=mpcplus
-              MTITLE="Music Player Plus MPD Client"
-              skip_it_so=1
-              break
-              ;;
-          "Use Cbftp FTP Client"*,*|*,"Use Cbftp FTP Client"*)
-              COMMAND=cbftp
-              MTITLE="Cbftp FTP Client"
-              skip_it_so=1
-              break
-              ;;
-          "Use Ncftp FTP Client"*,*|*,"Use Ncftp FTP Client"*)
-              COMMAND=ncftp
-              MTITLE="Ncftp FTP Client"
-              skip_it_so=1
-              break
-              ;;
-          "Use Mutt Mail Client"*,*|*,"Use Mutt Mail Client"*)
-              COMMAND=mutt
-              MTITLE="Mutt Mail Client"
-              skip_it_so=1
-              break
-              ;;
-          "Use NeoMutt Mail Client"*,*|*,"Use NeoMutt Mail Client"*)
-              COMMAND=neomutt
-              MTITLE="NeoMutt Mail Client"
-              skip_it_so=1
-              break
-              ;;
-          "Use Ranger File Manager"*,*|*,"Use Ranger File Manager"*)
-              COMMAND=ranger
-              MTITLE="Ranger File Manager"
-              skip_it_so=1
-              break
-              ;;
-          "Run AAlib Demo (Curses mode)",*|*,"Run AAlib Demo (Curses mode)")
+          "AAlib Demo (Curses mode)",*|*,"AAlib Demo (Curses mode)")
               SAVED_DISPLAY="${DISPLAY}"
               export DISPLAY=""
               if [ "${AUDIO}" ]
@@ -1434,7 +1532,7 @@ show_main_menu() {
               export DISPLAY="${SAVED_DISPLAY}"
               break
               ;;
-          "Run AAlib Demo (X11 mode)",*|*,"Run AAlib Demo (X11 mode)")
+          "AAlib Demo (X11 mode)",*|*,"AAlib Demo (X11 mode)")
               if [ "${AUDIO}" ]
               then
                 bb-tmux -a
@@ -1456,12 +1554,12 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "Run Speed Test",*|*,"Run Speed Test")
+          "Speed Test",*|*,"Speed Test")
               speedtest-cli
               skip_it_so=1
               break
               ;;
-          "Run Twitter Client",*|*,"Run Twitter Client")
+          "Twitter Client",*|*,"Twitter Client")
               # For 24-bit color image support, run with the '-p24' option
               # rainbowstream -p24
               rainbowstream
@@ -1473,7 +1571,7 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "Show Mapscii World Map",*|*,"Show Mapscii World Map")
+          "Mapscii World Map",*|*,"Mapscii World Map")
               mapscii
               skip_it_so=1
               break
@@ -1533,6 +1631,18 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
+          "Select App and Terminal",*|*,"Select App and Terminal")
+              clear
+              printf "\n\n\n"
+              show_appterm_menu
+              skip_it_so=1
+              break
+              ;;
+          "Select Song",*|*,"Select Song")
+              select_song
+              skip_it_so=1
+              break
+              ;;
           "Kill Tmux Sessions",*|*,"Kill Tmux Sessions")
               kill_tmux_sessions
               skip_it_so=1
@@ -1575,12 +1685,18 @@ show_main_menu() {
               fi
               if [ "${AUDIO}" ]
               then
-                ASCSPLASH="${ASCSPLASH} -a"
-                ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
-                audarg="-P"
+                if [ "${custom_song}" ]
+                then
+                  ASCSPLASH="${ASCSPLASH} -a -s ${SONG}"
+                  ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a -s ${SONG}"
+                else
+                  ASCSPLASH="${ASCSPLASH} -a"
+                  ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
+                fi
+                audarg="-P -S ${SONG}"
               else
-                ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s/ -a//"`
-                ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s/ -a//"`
+                ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s/ -a//" -e "s/ -s ${SONG}//"`
+                ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s/ -a//" -e "s/ -s ${SONG}//"`
                 audarg=
               fi
               skip_it_so=1
@@ -1608,6 +1724,49 @@ show_main_menu() {
       init_vars
     }
   done
+}
+
+choose_song() {
+  TMP="$(mktemp)"
+  ranger --choosefile="${TMP}" ${MUSEDIR} 1>&2
+  cat ${TMP}
+  rm  -f ${TMP}
+}
+
+select_song() {
+  if [ "${have_ranger}" ]
+  then
+    SONG="$(choose_song)"
+  else
+    SONG=$(dialog --stdout \
+                  --title "Please select a song" \
+                  --fselect ${MUSEDIR}/ 14 48)
+  fi
+  custom_song=1
+}
+
+set_show_term() {
+  if [ "${GNOME}" ]
+  then
+    show_term="Gnome Terminal"
+  else
+    if [ "${XFCE4}" ]
+    then
+      show_term="XFCE4 Terminal"
+    else
+      if [ "${TILIX}" ]
+      then
+        show_term="Tilix Terminal"
+      else
+        if [ "${RETRO}" ]
+        then
+          show_term="Retro Terminal"
+        else
+          show_term="Current Terminal"
+        fi
+      fi
+    fi
+  fi
 }
 
 init_vars() {
@@ -1663,6 +1822,7 @@ have_w3m=`type -p w3m`
 have_wmctrl=`type -p wmctrl`
 have_xprop=`type -p xprop`
 isfull=
+custom_song=
 use_lolcat=
 use_lol="NO"
 if [ "${have_figlet}" ]
@@ -1710,7 +1870,7 @@ while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wxXyzZu" flag; do
       ;;
     a)
       AUDIO=1
-      audarg="-P"
+      audarg="-P -S ${SONG}"
       ;;
     b)
       ASCSPLASH="${ASCSPLASH} -b"
@@ -2162,7 +2322,7 @@ fi
 
 [ "${noaudio}" ] || {
   AUDIO=1
-  audarg="-P"
+  audarg="-P -S ${SONG}"
   ASCSPLASH="${ASCSPLASH} -a"
   ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
 }
@@ -2182,7 +2342,7 @@ fi
   fi
   if [ "${AUDIO}" ]
   then
-    audarg="-P"
+    audarg="-P -S ${SONG}"
   else
     audarg=
   fi
@@ -2197,6 +2357,7 @@ fi
     use_lol="YES"
     LOLCAT="${LOLCAT_NORM}"
   }
+  set_show_term
   clear
   echo ""
   show_main_menu

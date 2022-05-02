@@ -24,8 +24,8 @@ show_ascii_art - display ascii art
 \f[B]show_ascii_art\f[R] [-a art] [-A art_dir] [-b] [-B] [-c] [-C] [-d
 font_dir] [-D seconds] [-F large_font] [-f small_font] [-g] [-i image]
 [-I input_dir] [-O output_dir] [-l level] [-L] [-n tabs] [-N depth] [-o]
-[-p palette] [-P] [-q] [-r] [-s show] [-S] [-t first_text] [-T
-second_text] [-h height] [-w width] [-u]
+[-p palette] [-P] [-q] [-r] [-s show] [-S song] [-t first_text] [-T
+second_text] [-h height] [-w width] [-z] [-u]
 .SH DESCRIPTION
 .PP
 The \f[I]show_ascii_art\f[R] command displays one of the ascii art
@@ -115,14 +115,15 @@ don\[aq]t display text, just the ascii art
 \f[B]-r\f[R]
 indicates select random fonts
 .TP
+\f[B]-S \[aq]song\[aq]\f[R]
+specifies the song to play as audio track (use default if \[aq]-s
+song\[aq] omitted)
+.TP
 \f[B]-s \[aq]show\[aq]\f[R]
 slide show of ascii art
 .RS
 \[aq]show\[aq] can be Art, Fractals, Lyap, Owls, Waterfalls, Mixed
 .RE
-.TP
-\f[B]-S\f[R]
-indicates save converted image ascii art in art_dir
 .TP
 \f[B]-t \[aq]first_text\[aq]\f[R]
 specifies the first text to display
@@ -138,6 +139,9 @@ specifies the width of the converted ascii art
 .PP
 If only one of \[aq]width\[aq] and \[aq]height\[aq] is provided,
 calculate the other from image aspect ratio
+.TP
+\f[B]-z\f[R]
+indicates save converted image ascii art in art_dir
 .TP
 \f[B]-u\f[R]
 displays this usage message and exits

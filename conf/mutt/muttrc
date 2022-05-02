@@ -2,8 +2,8 @@
 #
 # Basic Mutt GMail Configuration
 #
-# See /usr/share/doc/asciiville/mutt/ and
-#     /usr/share/doc/asciiville/mutt_multiple/
+# See /usr/share/asciiville/mutt/ and
+#     /usr/share/asciiville/mutt_multiple/
 # for more complex Mutt configuration examples
 #
 set from = "username@gmail.com"
