@@ -196,8 +196,6 @@ make_it_so() {
     ${AVCOMM}
     [ "${FULLSCREEN}" ] && {
       remove_fullscreen
-      clear
-      sleep 0.2
     }
   else
     if [ "${RETRO}" ]
@@ -270,13 +268,21 @@ make_it_so() {
 
 select_font() {
   # Array with font names
-  fonts=("Bolger" "sblood" "Slant" "Shadow" "Speed" "Varsity" "Small" "Small Script" "Small Shadow" "Small Slant")
+  fonts=("Bolger" "Lean" "sblood" "Slant" "Shadow" "Speed" "Varsity" "Small" "Small Script" "Small Shadow" "Small Slant")
   smallfonts=("Small" "Small Script" "Small Shadow" "Small Slant")
 
   # Seed random generator
   RANDOM=$$$(date +%s)
 
   USE_FONT=${fonts[ $RANDOM % ${#fonts[@]} ]}
+  [ "${USE_FONT}" == "Lean" ] && {
+    [ "${FULLSCREEN}" ] || {
+      while [ "${USE_FONT}" == "Lean" ]
+      do
+        USE_FONT=${fonts[ $RANDOM % ${#fonts[@]} ]}
+      done
+    }
+  }
   [ -r "${FIG_FONTS}/${USE_FONT}.flf" ] || USE_FONT="Standard"
 
   goBig=
@@ -356,7 +362,11 @@ add_fullscreen() {
 
 remove_fullscreen() {
   [ "${have_wmctrl}" ] && {
-    [ "${isfull}" ] || wmctrl -r ':ACTIVE:' -b remove,fullscreen
+    [ "${isfull}" ] || {
+      wmctrl -r ':ACTIVE:' -b remove,fullscreen
+      clear
+      sleep 0.2
+    }
   }
 }
 
@@ -367,8 +377,6 @@ play_slide_show() {
     add_fullscreen
     show_ascii_art ${showargs} -s ${showname}
     remove_fullscreen
-    clear
-    sleep 0.2
     return
   }
   if [ "${RETRO}" ]
@@ -394,6 +402,25 @@ play_slide_show() {
                        --profile=Asciiville \
                        -- show_ascii_art ${showargs} -s ${showname}
       fi
+    fi
+  fi
+}
+
+show_figlet() {
+  if [ "${use_lolcat}" ]
+  then
+    if [ "${USE_FONT}" == "Lean" ]
+    then
+      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} | tr ' _/' ' ()' | ${LOLCAT}
+    else
+      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
+    fi
+  else
+    if [ "${USE_FONT}" == "Lean" ]
+    then
+      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} | tr ' _/' ' ()'
+    else
+      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT}
     fi
   fi
 }
@@ -520,38 +547,33 @@ show_appterm_menu() {
     fi
     [ "${use_figlet}" ] && {
       select_font AsciiAppTerm
-      if [ "${use_lolcat}" ]
-      then
-        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
-      else
-        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
-      fi
+      show_figlet
     }
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
-    [ "${have_btop}" ] && options+=("Use Btop System Monitor    [${use_btop}]")
-    [ "${have_gdu}" ] && options+=("Use Disk Usage Analyzer    [${use_gdu}]")
-    [ "${have_lynx}" ] && options+=("Use  Lynx  Web  Browser    [${use_lynx}]")
-    [ "${have_w3m}" ] && options+=("Use  W3M   Web  Browser    [${use_w3m}]")
-    [ "${have_mpcplus}" ] && options+=("Use Music Player Plus      [${use_mpp}]")
+    [ "${have_btop}" ] && options+=("Btop System Monitor    [${use_btop}]")
+    [ "${have_gdu}" ] && options+=("Disk Usage Analyzer    [${use_gdu}]")
+    [ "${have_lynx}" ] && options+=("Lynx Web Browser       [${use_lynx}]")
+    [ "${have_w3m}" ] && options+=("W3M Web Browser        [${use_w3m}]")
+    [ "${have_mpcplus}" ] && options+=("Music Player Plus      [${use_mpp}]")
     if [ "${have_cbftp}" ]
     then
-      options+=("Use Cbftp FTP Client       [${use_ftp}]")
+      options+=("Cbftp FTP Client       [${use_ftp}]")
     else
-      [ "${have_ncftp}" ] && options+=("Use Ncftp FTP Client       [${use_ftp}]")
+      [ "${have_ncftp}" ] && options+=("Ncftp FTP Client       [${use_ftp}]")
     fi
     if [ "${have_neomutt}" ]
     then
-      options+=("Use NeoMutt Mail Client    [${use_mutt}]")
+      options+=("NeoMutt Mail Client    [${use_mutt}]")
     else
-      [ "${have_mutt}" ] && options+=("Use Mutt Mail Client       [${use_mutt}]")
+      [ "${have_mutt}" ] && options+=("Mutt Mail Client       [${use_mutt}]")
     fi
-    [ "${have_ranger}" ] && options+=("Use Ranger File Manager    [${use_ranger}]")
-    [ "${have_xfce4}" ] && options+=("Use XFCE4 Terminal    [${use_xfce4}]")
-    [ "${have_gnome}" ] && options+=("Use Gnome Terminal    [${use_gnome}]")
-    [ "${have_retro}" ] && options+=("Use Retro Terminal    [${use_retro}]")
-    [ "${have_tilix}" ] && options+=("Use Tilix Terminal    [${use_tilix}]")
-    options+=("Use Current Terminal  [${use_current}]")
+    [ "${have_ranger}" ] && options+=("Ranger File Manager    [${use_ranger}]")
+    [ "${have_xfce4}" ] && options+=("XFCE4 Terminal    [${use_xfce4}]")
+    [ "${have_gnome}" ] && options+=("Gnome Terminal    [${use_gnome}]")
+    [ "${have_retro}" ] && options+=("Retro Terminal    [${use_retro}]")
+    [ "${have_tilix}" ] && options+=("Tilix Terminal    [${use_tilix}]")
+    options+=("Current Terminal  [${use_current}]")
     options+=("Back to Main Menu" "Quit")
     select opt in "${options[@]}"
     do
@@ -560,59 +582,59 @@ show_appterm_menu() {
               main_menu=1
               break 2
               ;;
-          "Use Btop System Monitor"*,*|*,"Use Btop System Monitor"*)
+          "Btop System Monitor"*,*|*,"Btop System Monitor"*)
               COMMAND=btop
               MTITLE="Btop++ System Monitor"
               break
               ;;
-          "Use Disk Usage Analyzer"*,*|*,"Use Disk Usage Analyzer"*)
+          "Disk Usage Analyzer"*,*|*,"Disk Usage Analyzer"*)
               COMMAND="gdu ${HOME}"
               MTITLE="Disk Usage Analyzer"
               break
               ;;
-          "Use  Lynx  Web  Browser"*,*|*,"Use  Lynx  Web  Browser"*)
+          "Lynx Web Browser"*,*|*,"Lynx Web Browser"*)
               COMMAND="lynx ${WEB_HOME}"
               MTITLE="Lynx Web Browser"
               export BROWSER=lynx
               break
               ;;
-          "Use  W3M   Web  Browser"*,*|*,"Use  W3M   Web  Browser"*)
+          "W3M Web Browser"*,*|*,"W3M Web Browser"*)
               COMMAND="w3m -v ${WEB_HOME}"
               MTITLE="W3M Web Browser"
               export BROWSER=w3m
               break
               ;;
-          "Use Music Player Plus"*,*|*,"Use Music Player Plus"*)
+          "Music Player Plus"*,*|*,"Music Player Plus"*)
               COMMAND=mpcplus
               MTITLE="Music Player Plus MPD Client"
               break
               ;;
-          "Use Cbftp FTP Client"*,*|*,"Use Cbftp FTP Client"*)
+          "Cbftp FTP Client"*,*|*,"Cbftp FTP Client"*)
               COMMAND=cbftp
               MTITLE="Cbftp FTP Client"
               break
               ;;
-          "Use Ncftp FTP Client"*,*|*,"Use Ncftp FTP Client"*)
+          "Ncftp FTP Client"*,*|*,"Ncftp FTP Client"*)
               COMMAND=ncftp
               MTITLE="Ncftp FTP Client"
               break
               ;;
-          "Use Mutt Mail Client"*,*|*,"Use Mutt Mail Client"*)
+          "Mutt Mail Client"*,*|*,"Mutt Mail Client"*)
               COMMAND=mutt
               MTITLE="Mutt Mail Client"
               break
               ;;
-          "Use NeoMutt Mail Client"*,*|*,"Use NeoMutt Mail Client"*)
+          "NeoMutt Mail Client"*,*|*,"NeoMutt Mail Client"*)
               COMMAND=neomutt
               MTITLE="NeoMutt Mail Client"
               break
               ;;
-          "Use Ranger File Manager"*,*|*,"Use Ranger File Manager"*)
+          "Ranger File Manager"*,*|*,"Ranger File Manager"*)
               COMMAND=ranger
               MTITLE="Ranger File Manager"
               break
               ;;
-          "Use XFCE4 Terminal"*,*|*,"Use XFCE4 Terminal"*)
+          "XFCE4 Terminal"*,*|*,"XFCE4 Terminal"*)
               XFCE4=1
               TILIX=
               GNOME=
@@ -620,7 +642,7 @@ show_appterm_menu() {
               CURRENT=
               break
               ;;
-          "Use Gnome Terminal"*,*|*,"Use Gnome Terminal"*)
+          "Gnome Terminal"*,*|*,"Gnome Terminal"*)
               GNOME=1
               XFCE4=
               TILIX=
@@ -628,7 +650,7 @@ show_appterm_menu() {
               CURRENT=
               break
               ;;
-          "Use Retro Terminal"*,*|*,"Use Retro Terminal"*)
+          "Retro Terminal"*,*|*,"Retro Terminal"*)
               RETRO=1
               GNOME=
               XFCE4=
@@ -636,7 +658,7 @@ show_appterm_menu() {
               CURRENT=
               break
               ;;
-          "Use Tilix Terminal"*,*|*,"Use Tilix Terminal"*)
+          "Tilix Terminal"*,*|*,"Tilix Terminal"*)
               TILIX=1
               RETRO=
               GNOME=
@@ -644,7 +666,7 @@ show_appterm_menu() {
               CURRENT=
               break
               ;;
-          "Use Current Terminal"*,*|*,"Use Current Terminal"*)
+          "Current Terminal"*,*|*,"Current Terminal"*)
               CURRENT=1
               TILIX=
               RETRO=
@@ -653,8 +675,17 @@ show_appterm_menu() {
               break
               ;;
           "Quit",*|*,"Quit"|"quit",*|*,"quit")
-              printf "\nExiting\n"
+              remove_fullscreen
+              printf "\nExiting Asciiville\n"
               exit 0
+              ;;
+          *,*|*,*)
+              printf "\nCould not match '${REPLY}' with a menu entry."
+              printf "\nPlease try again with an exact match.\n"
+              [ "${use_figlet}" ] && {
+                select_font AsciiAppTerm
+                show_figlet
+              }
               ;;
       esac
       REPLY=
@@ -742,115 +773,100 @@ show_art_menu() {
     fi
     [ "${use_figlet}" ] && {
       select_font AsciiArt
-      if [ "${use_lolcat}" ]
-      then
-        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
-      else
-        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
-      fi
+      show_figlet
     }
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
-    options+=("Ascii Doctorwhen Art Slide Show")
-    options+=("Ascii Dragonfly Art Slide Show")
-    options+=("Ascii Fine Art Slide Show")
-    options+=("Ascii Fractal Art Slide Show")
-    options+=("Ascii Lyapunov Art Slide Show")
-    options+=("Ascii Mixed Art Slide Show")
-    options+=("Ascii Owls Art Slide Show")
-    options+=("Ascii Space Art Slide Show")
-    options+=("Ascii Waterfalls Art Slide Show")
+    options+=("Doctorwhen Art Slideshow")
+    options+=("Dragonfly Art Slideshow")
+    options+=("Fine Art Slideshow")
+    options+=("Fractal Art Slideshow")
+    options+=("Lyapunov Art Slideshow")
+    options+=("Mixed Art Slideshow")
+    options+=("Owls Art Slideshow")
+    options+=("Space Art Slideshow")
+    options+=("Waterfalls Art Slideshow")
     options+=("Cycle Slideshow       [${cyclestat}]")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring   [${use_lol}]")
     options+=("Use Audio             [${audiostat}]")
     [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
-    [ "${have_xfce4}" ] && options+=("Use XFCE4 Terminal    [${use_xfce4}]")
-    [ "${have_gnome}" ] && options+=("Use Gnome Terminal    [${use_gnome}]")
-    [ "${have_retro}" ] && options+=("Use Retro Terminal    [${use_retro}]")
-    [ "${have_tilix}" ] && options+=("Use Tilix Terminal    [${use_tilix}]")
-    options+=("Use Current Terminal  [${use_current}]")
+    [ "${have_xfce4}" ] && options+=("XFCE4 Terminal        [${use_xfce4}]")
+    [ "${have_gnome}" ] && options+=("Gnome Terminal        [${use_gnome}]")
+    [ "${have_retro}" ] && options+=("Retro Terminal        [${use_retro}]")
+    [ "${have_tilix}" ] && options+=("Tilix Terminal        [${use_tilix}]")
+    options+=("Current Terminal      [${use_current}]")
     options+=("Use Tmux              [${usetmux}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session   [${recordstat}]")
-    [ "${have_mpplus}" ] && options+=("Show MusicPlayerPlus Menu")
-    [ "${have_roon}" ] && options+=("Show RoonCommandLine Menu")
-    [ "${have_splash}" ] && options+=("Show Animations Menu")
-    options+=("Show Main Menu" "Quit")
+    [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
+    [ "${have_roon}" ] && options+=("RoonCommandLine Menu")
+    [ "${have_splash}" ] && options+=("Animations Menu")
+    options+=("Main Menu" "Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
-          "Show MusicPlayerPlus Menu",*|*,"Show MusicPlayerPlus Menu")
+          "MusicPlayerPlus"*,*|*,"MusicPlayerPlus"*)
               [ "${use_figlet}" ] && {
                 select_font MusicPlayer
-                if [ "${use_lolcat}" ]
-                then
-                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
-                else
-                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
-                fi
+                show_figlet
               }
               mpplus -i
               clear
               break
               ;;
-          "Show RoonCommandLine Menu",*|*,"Show RoonCommandLine Menu")
+          "RoonCommandLine"*,*|*,"RoonCommandLine"*)
               [ "${use_figlet}" ] && {
                 select_font Roon
-                if [ "${use_lolcat}" ]
-                then
-                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
-                else
-                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
-                fi
+                show_figlet
               }
               roon
               clear
               break
               ;;
-          "Show Animations Menu",*|*,"Show Animations Menu")
+          "Animations"*,*|*,"Animations"*)
               animation_menu=1
               break 2
               ;;
-          "Show Main Menu",*|*,"Show Main Menu"|"Back",*|*,"Back"|"back",*|*,"back")
+          "Main"*,*|*,"Main"*|"Back",*|*,"Back"|"back",*|*,"back")
               main_menu=1
               break 2
               ;;
-          "Ascii Doctorwhen Art Slide Show",*|*,"Ascii Doctorwhen Art Slide Show")
+          "Doctorwhen"*,*|*,"Doctorwhen"*)
               play_slide_show Doctorwhen
               break
               ;;
-          "Ascii Dragonfly Art Slide Show",*|*,"Ascii Dragonfly Art Slide Show")
+          "Dragonfly"*,*|*,"Dragonfly"*)
               play_slide_show Dragonflies
               break
               ;;
-          "Ascii Space Art Slide Show",*|*,"Ascii Space Art Slide Show")
+          "Space"*,*|*,"Space"*)
               play_slide_show Space
               break
               ;;
-          "Ascii Fine Art Slide Show",*|*,"Ascii Fine Art Slide Show")
+          "Fine"*,*|*,"Fine"*)
               play_slide_show Art
               break
               ;;
-          "Ascii Fractal Art Slide Show",*|*,"Ascii Fractal Art Slide Show")
+          "Fractal"*,*|*,"Fractal"*)
               play_slide_show Fractals
               break
               ;;
-          "Ascii Lyapunov Art Slide Show",*|*,"Ascii Lyapunov Art Slide Show")
+          "Lyapunov"*,*|*,"Lyapunov"*)
               play_slide_show Lyap
               break
               ;;
-          "Ascii Mixed Art Slide Show",*|*,"Ascii Mixed Art Slide Show")
+          "Mixed"*,*|*,"Mixed"*)
               play_slide_show Mixed
               break
               ;;
-          "Ascii Owls Art Slide Show",*|*,"Ascii Owls Art Slide Show")
+          "Owls"*,*|*,"Owls"*)
               play_slide_show Owls
               break
               ;;
-          "Ascii Waterfalls Art Slide Show",*|*,"Ascii Waterfalls Art Slide Show")
+          "Waterfalls"*,*|*,"Waterfalls"*)
               play_slide_show Waterfalls
               break
               ;;
-          "Use XFCE4 Terminal"*,*|*,"Use XFCE4 Terminal"*)
+          "XFCE4 Terminal"*,*|*,"XFCE4 Terminal"*)
               XFCE4=1
               TILIX=
               GNOME=
@@ -858,7 +874,7 @@ show_art_menu() {
               CURRENT=
               break
               ;;
-          "Use Gnome Terminal"*,*|*,"Use Gnome Terminal"*)
+          "Gnome Terminal"*,*|*,"Gnome Terminal"*)
               GNOME=1
               XFCE4=
               TILIX=
@@ -866,7 +882,7 @@ show_art_menu() {
               CURRENT=
               break
               ;;
-          "Use Retro Terminal"*,*|*,"Use Retro Terminal"*)
+          "Retro Terminal"*,*|*,"Retro Terminal"*)
               RETRO=1
               GNOME=
               XFCE4=
@@ -874,7 +890,7 @@ show_art_menu() {
               CURRENT=
               break
               ;;
-          "Use Tilix Terminal"*,*|*,"Use Tilix Terminal"*)
+          "Tilix Terminal"*,*|*,"Tilix Terminal"*)
               TILIX=1
               RETRO=
               GNOME=
@@ -882,7 +898,7 @@ show_art_menu() {
               CURRENT=
               break
               ;;
-          "Use Current Terminal"*,*|*,"Use Current Terminal"*)
+          "Current Terminal"*,*|*,"Current Terminal"*)
               CURRENT=1
               TILIX=
               RETRO=
@@ -977,8 +993,17 @@ show_art_menu() {
               break
               ;;
           "Quit",*|*,"Quit"|"quit",*|*,"quit")
-              printf "\nExiting\n"
+              remove_fullscreen
+              printf "\nExiting Asciiville\n"
               exit 0
+              ;;
+          *,*|*,*)
+              printf "\nCould not match '${REPLY}' with a menu entry."
+              printf "\nPlease try again with an exact match.\n"
+              [ "${use_figlet}" ] && {
+                select_font AsciiArt
+                show_figlet
+              }
               ;;
       esac
       REPLY=
@@ -1063,64 +1088,59 @@ show_animation_menu() {
     skip_it_so=
     [ "${use_figlet}" ] && {
       select_font Asciimatics
-      if [ "${use_lolcat}" ]
-      then
-        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
-      else
-        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
-      fi
+      show_figlet
     }
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
-    [ "${have_asciiart}" ] && options+=("Run Asciiville Animation")
-    [ "${have_asciijulia}" ] && options+=("Run Julia Set Animation")
-    [ "${have_asciimpplus}" ] && options+=("Run MPPlus Animation")
-    [ "${have_asciiplasma}" ] && options+=("Run Plasma Animation")
-    [ "${have_bb}" ] && options+=("Run AAlib BB Demo")
-    [ "${have_xfce4}" ] && options+=("Use XFCE4 Terminal    [${use_xfce4}]")
-    [ "${have_gnome}" ] && options+=("Use Gnome Terminal    [${use_gnome}]")
-    [ "${have_retro}" ] && options+=("Use Retro Terminal    [${use_retro}]")
-    [ "${have_tilix}" ] && options+=("Use Tilix Terminal    [${use_tilix}]")
-    options+=("Use Current Terminal  [${use_current}]")
-    options+=("Use Fullscreen Window [${fullstat}]")
+    [ "${have_asciiart}" ] && options+=("Asciiville Animation")
+    [ "${have_asciijulia}" ] && options+=("Julia Set Animation")
+    [ "${have_asciimpplus}" ] && options+=("MPPlus Animation")
+    [ "${have_asciiplasma}" ] && options+=("Plasma Animation")
+    [ "${have_bb}" ] && options+=("AAlib BB Demo")
+    [ "${have_xfce4}" ] && options+=("XFCE4 Terminal    [${use_xfce4}]")
+    [ "${have_gnome}" ] && options+=("Gnome Terminal    [${use_gnome}]")
+    [ "${have_retro}" ] && options+=("Retro Terminal    [${use_retro}]")
+    [ "${have_tilix}" ] && options+=("Tilix Terminal    [${use_tilix}]")
+    options+=("Current Terminal  [${use_current}]")
+    options+=("Fullscreen Window [${fullstat}]")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring   [${use_lol}]")
-    options+=("Use Audio             [${audiostat}]")
-    [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
     options+=("Use Tmux              [${usetmux}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session   [${recordstat}]")
-    [ "${have_mpplus}" ] && options+=("Show MusicPlayerPlus Menu")
-    [ "${have_roon}" ] && options+=("Show RoonCommandLine Menu")
-    [ "${have_showascii}" ] && options+=("Show Slide Show Menu")
-    options+=("Show Main Menu" "Quit")
+    options+=("Use Audio             [${audiostat}]")
+    [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
+    [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
+    [ "${have_roon}" ] && options+=("RoonCommandLine Menu")
+    [ "${have_showascii}" ] && options+=("Slideshow Menu")
+    options+=("Main Menu" "Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
-          "Show Main Menu",*|*,"Show Main Menu"|"Back",*|*,"Back"|"back",*|*,"back")
+          "Main Menu",*|*,"Main Menu"|"Back",*|*,"Back"|"back",*|*,"back")
               clear
               init_vars
               break 2
               ;;
-          "Run Asciiville Animation",*|*,"Run Asciiville Animation")
+          "Asciiville Animation",*|*,"Asciiville Animation")
               ASCSPLASH="${ASCSPLASH} -i"
               ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l art"
               break
               ;;
-          "Run Julia Set Animation",*|*,"Run Julia Set Animation")
+          "Julia Set Animation",*|*,"Julia Set Animation")
               ASCSPLASH="${ASCSPLASH} -j"
               ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l julia"
               break
               ;;
-          "Run MPPlus Animation",*|*,"Run MPPlus Animation")
+          "MPPlus Animation",*|*,"MPPlus Animation")
               ASCSPLASH="${ASCSPLASH} -m"
               ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l mpplus"
               break
               ;;
-          "Run Plasma Animation",*|*,"Run Plasma Animation")
+          "Plasma Animation",*|*,"Plasma Animation")
               ASCSPLASH="${ASCSPLASH} -p"
               ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l plasma"
               break
               ;;
-          "Run AAlib BB Demo",*|*,"Run AAlib BB Demo")
+          "AAlib BB Demo",*|*,"AAlib BB Demo")
               SAVED_DISPLAY="${DISPLAY}"
               export DISPLAY=""
               if [ "${AUDIO}" ]
@@ -1138,11 +1158,11 @@ show_animation_menu() {
               export DISPLAY="${SAVED_DISPLAY}"
               break
               ;;
-          "Show Slide Show Menu",*|*,"Show Slide Show Menu")
+          "Slideshow Menu",*|*,"Slideshow Menu")
               art_menu=1
               break 2
               ;;
-          "Use XFCE4 Terminal"*,*|*,"Use XFCE4 Terminal"*)
+          "XFCE4 Terminal"*,*|*,"XFCE4 Terminal"*)
               XFCE4=1
               TILIX=
               GNOME=
@@ -1151,7 +1171,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Use Gnome Terminal"*,*|*,"Use Gnome Terminal"*)
+          "Gnome Terminal"*,*|*,"Gnome Terminal"*)
               GNOME=1
               XFCE4=
               TILIX=
@@ -1160,7 +1180,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Use Retro Terminal"*,*|*,"Use Retro Terminal"*)
+          "Retro Terminal"*,*|*,"Retro Terminal"*)
               RETRO=1
               GNOME=
               XFCE4=
@@ -1169,7 +1189,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Use Tilix Terminal"*,*|*,"Use Tilix Terminal"*)
+          "Tilix Terminal"*,*|*,"Tilix Terminal"*)
               TILIX=1
               RETRO=
               GNOME=
@@ -1178,7 +1198,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Use Current Terminal"*,*|*,"Use Current Terminal"*)
+          "Current Terminal"*,*|*,"Current Terminal"*)
               CURRENT=1
               TILIX=
               RETRO=
@@ -1264,40 +1284,36 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Use Fullscreen Window"*,*|*,"Use Fullscreen Window"*)
+          "Fullscreen Window"*,*|*,"Fullscreen Window"*)
               if [ "${FULLSCREEN}" ]
               then
                 FULLSCREEN=
               else
                 FULLSCREEN=1
               fi
+              if [ "${FULLSCREEN}" ]
+              then
+                add_fullscreen
+              else
+                remove_fullscreen
+              fi
               skip_it_so=1
               break
               ;;
-          "Show MusicPlayerPlus Menu",*|*,"Show MusicPlayerPlus Menu")
+          "MusicPlayerPlus Menu",*|*,"MusicPlayerPlus Menu")
               [ "${use_figlet}" ] && {
                 select_font MusicPlayer
-                if [ "${use_lolcat}" ]
-                then
-                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
-                else
-                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
-                fi
+                show_figlet
               }
               mpplus -i
               clear
               skip_it_so=1
               break
               ;;
-          "Show RoonCommandLine Menu",*|*,"Show RoonCommandLine Menu")
+          "RoonCommandLine Menu",*|*,"RoonCommandLine Menu")
               [ "${use_figlet}" ] && {
                 select_font Roon
-                if [ "${use_lolcat}" ]
-                then
-                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
-                else
-                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
-                fi
+                show_figlet
               }
               roon
               clear
@@ -1310,8 +1326,17 @@ show_animation_menu() {
               break
               ;;
           "Quit",*|*,"Quit"|"quit",*|*,"quit")
-              printf "\nExiting\n"
+              remove_fullscreen
+              printf "\nExiting Asciiville\n"
               exit 0
+              ;;
+          *,*|*,*)
+              printf "\nCould not match '${REPLY}' with a menu entry."
+              printf "\nPlease try again with an exact match.\n"
+              [ "${use_figlet}" ] && {
+                select_font Asciimatics
+                show_figlet
+              }
               ;;
       esac
       REPLY=
@@ -1385,18 +1410,13 @@ show_main_menu() {
     skip_it_so=
     [ "${use_figlet}" ] && {
       select_font Asciiville
-      if [ "${use_lolcat}" ]
-      then
-        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
-      else
-        figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
-      fi
+      show_figlet
     }
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
     options+=("Run ${show_comm} in ${show_term}")
     options+=("Select App and Terminal")
-    [ "${have_showascii}" ] && options+=("Ascii Art Slide Shows")
+    [ "${have_showascii}" ] && options+=("Ascii Art Slideshow")
     [ "${have_splash}" ] && options+=("ASCIImatics Animations")
     [ "${have_bb}" ] && {
       [ "$DISPLAY" = "" ] || options+=("AAlib Demo (X11 mode)")
@@ -1409,16 +1429,16 @@ show_main_menu() {
     [ "${have_rainbow}" ] && options+=("Twitter Client")
     [ "${have_curl}" ] && options+=("Weather Report")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring        [${use_lol}]")
-    options+=("Use Audio                  [${audiostat}]")
-    [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
     options+=("Use Tmux                   [${usetmux}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session        [${recordstat}]")
     options+=("Fullscreen Window          [${fullstat}]")
     options+=("Default Web Browser        [${default_browser}]")
+    options+=("Use Audio                  [${audiostat}]")
+    [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
     options+=("Kill Tmux Sessions")
     [ "${have_neo}" ] && options+=("Show System Info")
-    [ "${have_mpplus}" ] && options+=("Show MusicPlayerPlus Menu")
-    [ "${have_roon}" ] && options+=("Show RoonCommandLine Menu")
+    [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
+    [ "${have_roon}" ] && options+=("RoonCommandLine Menu")
     options+=("Quit")
     select opt in "${options[@]}"
     do
@@ -1426,7 +1446,7 @@ show_main_menu() {
           "Run ${show_comm} in ${show_term}",*|*,"Run ${show_comm} in ${show_term}")
               break
               ;;
-          "Default Web Browser"*,*|*,"Default Web Browser"*)
+          "Default Web"*,*|*,"Default Web"*)
               if [ "${default_browser}" == "W3M" ]
               then
                 if [ "${have_lynx}" ]
@@ -1510,7 +1530,7 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "Use Lolcat Coloring"*,*|*,"Use Lolcat Coloring"*)
+          "Use Lolcat"*,*|*,"Use Lolcat"*)
               if [ "${use_lolcat}" == "2" ]
               then
                 use_lolcat=
@@ -1553,71 +1573,61 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "Phase of the Moon",*|*,"Phase of the Moon")
+          "Phase"*,*|*,"Phase"*)
               curl wttr.in/Moon?AF 2> /dev/null
               read -p "Press Enter to continue" answer
               skip_it_so=1
               break
               ;;
-          "Weather Report",*|*,"Weather Report")
+          "Weather"*,*|*,"Weather"*)
               curl v2.wttr.in?AF 2> /dev/null
               read -p "Press Enter to continue" answer
               skip_it_so=1
               break
               ;;
-          "Speed Test",*|*,"Speed Test")
+          "Speed"*,*|*,"Speed"*)
               speedtest-cli
               skip_it_so=1
               break
               ;;
-          "Twitter Client",*|*,"Twitter Client")
+          "Twitter"*,*|*,"Twitter"*)
               # For 24-bit color image support, run with the '-p24' option
               # rainbowstream -p24
               rainbowstream
               skip_it_so=1
               break
               ;;
-          "Search the Web",*|*,"Search the Web")
+          "Search"*,*|*,"Search"*)
               ddgr
               skip_it_so=1
               break
               ;;
-          "Mapscii World Map",*|*,"Mapscii World Map")
+          "Mapscii"*,*|*,"Mapscii"*)
               mapscii
               skip_it_so=1
               break
               ;;
-          "Show MusicPlayerPlus Menu",*|*,"Show MusicPlayerPlus Menu")
+          "MusicPlayerPlus"*,*|*,"MusicPlayerPlus"*)
               [ "${use_figlet}" ] && {
                 select_font MusicPlayer
-                if [ "${use_lolcat}" ]
-                then
-                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
-                else
-                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
-                fi
+                show_figlet
               }
               mpplus -i
               clear
               skip_it_so=1
               break
               ;;
-          "Show RoonCommandLine Menu",*|*,"Show RoonCommandLine Menu")
+          "RoonCommandLine"*,*|*,"RoonCommandLine"*)
               [ "${use_figlet}" ] && {
                 select_font Roon
-                if [ "${use_lolcat}" ]
-                then
-                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
-                else
-                  figlet -c -d "${FIG_FONTS}" -f "${USE_FONT}" -k -t ${FIG_TEXT}
-                fi
+                show_figlet
               }
               roon
               clear
               skip_it_so=1
               break
               ;;
-          "Show System Info",*|*,"Show System Info")
+          "Show System"*,*|*,"Show System"*)
               if [ "${use_lolcat}" ]
               then
                 neofetch | ${LOLCAT}
@@ -1628,21 +1638,21 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "ASCIImatics Animations",*|*,"ASCIImatics Animations")
+          "ASCIImatics"*,*|*,"ASCIImatics"*)
               clear
               printf "\n\n\n"
               show_animation_menu
               skip_it_so=1
               break
               ;;
-          "Ascii Art Slide Shows",*|*,"Ascii Art Slide Shows")
+          "Ascii Art"*,*|*,"Ascii Art"*)
               clear
               printf "\n\n\n"
               show_art_menu
               skip_it_so=1
               break
               ;;
-          "Select App and Terminal",*|*,"Select App and Terminal")
+          "Select App"*,*|*,"Select App"*)
               clear
               printf "\n\n\n"
               show_appterm_menu
@@ -1654,7 +1664,7 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "Kill Tmux Sessions",*|*,"Kill Tmux Sessions")
+          "Kill"*,*|*,"Kill"*)
               kill_tmux_sessions
               skip_it_so=1
               break
@@ -1670,7 +1680,7 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "Record Tmux Session"*,*|*,"Record Tmux Session"*)
+          "Record"*,*|*,"Record"*)
               if [ "${RECORD}" ]
               then
                 RECORD=
@@ -1713,19 +1723,34 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "Fullscreen Window"*,*|*,"Fullscreen Window"*)
+          "Fullscreen"*,*|*,"Fullscreen"*)
               if [ "${FULLSCREEN}" ]
               then
                 FULLSCREEN=
               else
                 FULLSCREEN=1
               fi
+              if [ "${FULLSCREEN}" ]
+              then
+                add_fullscreen
+              else
+                remove_fullscreen
+              fi
               skip_it_so=1
               break
               ;;
           "Quit",*|*,"Quit"|"quit",*|*,"quit")
-              printf "\nExiting\n"
+              remove_fullscreen
+              printf "\nExiting Asciiville\n"
               exit 0
+              ;;
+          *,*|*,*)
+              printf "\nCould not match '${REPLY}' with a menu entry."
+              printf "\nPlease try again with an exact match.\n"
+              [ "${use_figlet}" ] && {
+                select_font Asciiville
+                show_figlet
+              }
               ;;
       esac
       REPLY=
@@ -2413,6 +2438,7 @@ fi
     songname="${songname::-${trimleng}}..."
   }
   set_show_term
+  [ "${FULLSCREEN}" ] && add_fullscreen
   clear
   echo ""
   show_main_menu
