@@ -360,7 +360,6 @@ have_lolcat=
   have_lolcat=`type -p lolcat`
 }
 
-sleep 2
 termwide=`stty size | awk '{print $2}'`
 termhigh=`stty size | awk '{print $1}'`
 
