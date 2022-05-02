@@ -400,8 +400,10 @@ show_art_menu() {
     if [ "${AUDIO}" ]
     then
       audiostat="YES"
+      audarg="-P"
     else
       audiostat="NO"
+      audarg=
     fi
     if [ "${cycle}" ]
     then
@@ -617,9 +619,11 @@ show_art_menu() {
               then
                 ASCSPLASH="${ASCSPLASH} -a"
                 ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
+                audarg="-P"
               else
                 ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s/ -a//"`
                 ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s/ -a//"`
+                audarg=
               fi
               break
               ;;
@@ -711,8 +715,10 @@ show_animation_menu() {
     if [ "${AUDIO}" ]
     then
       audiostat="YES"
+      audarg="-P"
     else
       audiostat="NO"
+      audarg=
     fi
     if [ "${GNOME}" ]
     then
@@ -917,9 +923,11 @@ show_animation_menu() {
               then
                 ASCSPLASH="${ASCSPLASH} -a"
                 ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
+                audarg="-P"
               else
                 ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s/ -a//"`
                 ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s/ -a//"`
+                audarg=
               fi
               skip_it_so=1
               break
@@ -1023,8 +1031,10 @@ show_main_menu() {
     if [ "${AUDIO}" ]
     then
       audiostat="YES"
+      audarg="-P"
     else
       audiostat="NO"
+      audarg=
     fi
     if [ "${FULLSCREEN}" ]
     then
@@ -1567,9 +1577,11 @@ show_main_menu() {
               then
                 ASCSPLASH="${ASCSPLASH} -a"
                 ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
+                audarg="-P"
               else
                 ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s/ -a//"`
                 ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s/ -a//"`
+                audarg=
               fi
               skip_it_so=1
               break
@@ -1698,6 +1710,7 @@ while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wxXyzZu" flag; do
       ;;
     a)
       AUDIO=1
+      audarg="-P"
       ;;
     b)
       ASCSPLASH="${ASCSPLASH} -b"
@@ -2149,6 +2162,7 @@ fi
 
 [ "${noaudio}" ] || {
   AUDIO=1
+  audarg="-P"
   ASCSPLASH="${ASCSPLASH} -a"
   ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
 }
