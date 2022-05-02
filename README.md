@@ -722,10 +722,10 @@ many interesting works of art and animation.
 
 ## Videos
 
-Introduction to Asciiville:
+Introduction to Asciiville Video:
 [![Asciiville Introduction](https://i.imgur.com/k7ZgRi4.png)](https://www.youtube.com/watch?v=t5bfVqqDvI0 "Asciiville Introduction")
 
-Asciiville Art Slideshow:
+Asciiville Art Slideshow Video:
 [![Asciiville Art Slideshow](https://i.imgur.com/fZK70ZW.png)](https://www.youtube.com/watch?v=HQPvfJGo4VA "Asciiville Art Slideshow")
 
 ## Screenshots
