@@ -5,6 +5,8 @@
 MUSEDIR=/usr/share/asciiville/music
 SONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 PLASMA_SONG="${MUSEDIR}/Chronos.mp3"
+NATURE_SONG="${MUSEDIR}/Moving-Ahead-RA.mp3"
+STRONG_SONG="${MUSEDIR}/Overdrive-Matrika.mp3"
 ALTSONG="${MUSEDIR}/Kevin_MacLeod_-_Also_Sprach_Zarathustra.ogg"
 
 usage() {
@@ -149,11 +151,18 @@ shift $(( OPTIND - 1 ))
 script_args="$* ${debug} ${script_args}"
 
 [ "${audio}" ] && {
-  [ "${script}" == "art" ] && {
-    [ "${custom_audio}" ] || SONG="${PLASMA_SONG}"
-  }
-  [ "${script}" == "plasma" ] && {
-    [ "${custom_audio}" ] || SONG="${PLASMA_SONG}"
+  [ "${custom_audio}" ] || {
+    if [ "${script}" == "art" ]
+    then
+      SONG="${NATURE_SONG}"
+    else
+      if [ "${script}" == "plasma" ]
+      then
+        SONG="${PLASMA_SONG}"
+      else
+        [ "${script}" == "julia" ] && SONG="${STRONG_SONG}"
+      fi
+    fi
   }
   if [ -f "${SONG}" ]
   then

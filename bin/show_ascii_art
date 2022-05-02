@@ -13,6 +13,7 @@ LOLCAT_NORM="lolcat"
 LOLCAT_ANIM="lolcat --animate --speed=60.0"
 LOLCAT="${LOLCAT_ANIM}"
 art="yinyang"
+custom_song=
 
 # Default palette used by jp2a
 defchars="   ...',;:clodxkO0KXNWM"
@@ -296,7 +297,10 @@ while getopts "a:A:bBcCD:d:gh:i:I:l:LF:f:n:N:oO:Pp:qrs:S:t:T:w:zu" flag; do
           slideshow="${OPTARG}"
           ;;
       S)
-          [ -f "${OPTARG}" ] && SONG="${OPTARG}"
+          [ -f "${OPTARG}" ] && {
+            SONG="${OPTARG}"
+            custom_song=1
+          }
           ;;
       t)
           FIG_WELCOME="${OPTARG}"
@@ -447,11 +451,21 @@ play_slide_show() {
       FIG_ASCII="Dragonfly"
       SLIDE_DIR="${ART_DIR}/Dragonflies"
       SLIDE_FONT="Speed"
+      [ "${custom_song}" ] || {
+        [ -f "${MUSEDIR}/Moving-Ahead-RA.mp3" ] && {
+          SONG="${MUSEDIR}/Moving-Ahead-RA.mp3"
+        }
+      }
       ;;
     Fractal*)
       FIG_ASCII="Fractal"
       SLIDE_DIR="${ART_DIR}/Fractals"
       SLIDE_FONT="sblood"
+      [ "${custom_song}" ] || {
+        [ -f "${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav" ] && {
+          SONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
+        }
+      }
       ;;
     Doctor*)
       FIG_ASCII="Doctorwhen"
@@ -462,6 +476,11 @@ play_slide_show() {
       FIG_ASCII="Lyapunov"
       SLIDE_DIR="${ART_DIR}/Lyapunov"
       SLIDE_FONT="sblood"
+      [ "${custom_song}" ] || {
+        [ -f "${MUSEDIR}/Overdrive-Matrika.mp3" ] && {
+          SONG="${MUSEDIR}/Overdrive-Matrika.mp3"
+        }
+      }
       ;;
     Mixed|Misc)
       FIG_ASCII="Mixed"
@@ -472,16 +491,31 @@ play_slide_show() {
       FIG_ASCII="Owls"
       SLIDE_DIR="${ART_DIR}/Owls"
       SLIDE_FONT="Shadow"
+      [ "${custom_song}" ] || {
+        [ -f "${MUSEDIR}/Moving-Ahead-RA.mp3" ] && {
+          SONG="${MUSEDIR}/Moving-Ahead-RA.mp3"
+        }
+      }
       ;;
     Space*)
       FIG_ASCII="Space"
       SLIDE_DIR="${ART_DIR}/Space"
       SLIDE_FONT="Bolger"
+      [ "${custom_song}" ] || {
+        [ -f "${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav" ] && {
+          SONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
+        }
+      }
       ;;
     Waterfall*)
       FIG_ASCII="Waterfalls"
       SLIDE_DIR="${ART_DIR}/Waterfalls"
       SLIDE_FONT="Bolger"
+      [ "${custom_song}" ] || {
+        [ -f "${MUSEDIR}/Moving-Ahead-RA.mp3" ] && {
+          SONG="${MUSEDIR}/Moving-Ahead-RA.mp3"
+        }
+      }
       ;;
     *)
       FIG_ASCII="${slideshow}"
