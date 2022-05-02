@@ -722,9 +722,8 @@ many interesting works of art and animation.
 
 ## Videos
 
-
-- [![Asciiville Introduction](https://imgur.com/a/8b7ZFR5)](https://www.youtube.com/watch?v=t5bfVqqDvI0 "Asciiville Introduction")
-- [![Asciiville Art Slideshow](https://imgur.com/a/BRDAJBE)](https://www.youtube.com/watch?v=HQPvfJGo4VA "Asciiville Art Slideshow")
+- [![Asciiville Introduction](https://imgur.com/k7ZgRi4)](https://www.youtube.com/watch?v=t5bfVqqDvI0 "Asciiville Introduction")
+- [![Asciiville Art Slideshow](https://imgur.com/fZK70ZW)](https://www.youtube.com/watch?v=HQPvfJGo4VA "Asciiville Art Slideshow")
 
 ## Screenshots
 
