@@ -73,8 +73,8 @@ do
           input_image="${INP_DIR}/${art_name}.png"
           ;;
   esac
-  [ -f ${OUT_DIR}/"${art_name}.txt" ] && {
-    echo "${OUT_DIR}/"${art_name}.txt" already exists."
+  [ -f ${OUT_DIR}/"${art_name}.asc" ] && {
+    echo "${OUT_DIR}/"${art_name}.asc" already exists."
     echo "Choose whether you wish to 'Overwrite', 'Skip', or 'Quit'"
     while true
     do
@@ -97,8 +97,8 @@ do
   }
   [ "${debug}" ] && {
     echo "Converting with:"
-    echo "jp2a --border --colors --term-fit --output=${OUT_DIR}/${art_name}.txt ${input_image}"
+    echo "jp2a --border --colors --term-fit --output=${OUT_DIR}/${art_name}.asc ${input_image}"
   }
   jp2a --border --colors --term-fit \
-       --output=${OUT_DIR}/"${art_name}.txt" "${input_image}"
+       --output=${OUT_DIR}/"${art_name}.asc" "${input_image}"
 done

@@ -28,12 +28,16 @@ set -m
 
 usage() {
   printf "\nUsage: show_ascii_art [-a art] [-A art_dir] [-b] [-B] [-c] [-C]"
-  printf "\n\t[-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g]"
-  printf "\n\t[-i image] [-I input_dir] [-O output_dir] [-l level] [-L] [-n tabs]"
-  printf "\n\t[-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S song]"
-  printf "\n\t[-t first_text] [-T second_text] [-h height] [-w width] [-z] [-u]"
+  printf "\n\t[-d font_dir] [-D seconds] [-F large_font] [-f small_font]"
+  printf "\n\t[-g] [-i image] [-I input_dir] [-O output_dir] [-l level]"
+  printf "\n\t[-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r]"
+  printf "\n\t[-s show] [-S song] [-t first_text] [-T second_text]"
+  printf "\n\t[-h height] [-w width] [-z] [-u]"
   printf "\nWhere:"
   printf "\n\t-a 'art' specifies which ascii art to display"
+  printf "\n\t\t'art' can be the relative path to a file in:"
+  printf "\n\t\t\t${ART_DIR}"
+  printf "\n\t\tor the path to a file, with or without file extension"
   printf "\n\t-A 'art_dir' specifies the path to the ascii art folder"
   printf "\n\t-b when generating ascii art use a border"
   printf "\n\t-B use backup song when playing audio in slideshows"
@@ -325,16 +329,16 @@ done
 
 [ "${list}" ] && {
   first=1
-  for art in ${ART_DIR}/*.txt
+  for art in ${ART_DIR}/*.asc
   do
-      [ "${art}" == "${ART_DIR}/*.txt" ] && {
+      [ "${art}" == "${ART_DIR}/*.asc" ] && {
           echo "No ascii art found in ${ART_DIR}"
-          echo "Ascii art files must have a '.txt' suffix"
+          echo "Ascii art files must have a '.asc' suffix"
           exit 0
       }
       [ "${first}" ] && echo "Ascii Art in ${ART_DIR} :"
       bart=`basename "${art}"`
-      name=`echo ${bart} | sed -e "s/.txt//"`
+      name=`echo ${bart} | sed -e "s/.asc//"`
       printf "\n\t${name}"
       first=
   done
@@ -405,11 +409,11 @@ cleanup() {
 
 play_slide_show() {
   tput civis -- invisible
-  for art in ${SLIDE_DIR}/*.txt
+  for art in ${SLIDE_DIR}/*.asc
   do
-    [ "${art}" == "${SLIDE_DIR}/*.txt" ] && {
+    [ "${art}" == "${SLIDE_DIR}/*.asc" ] && {
       echo "No ascii art found in ${SLIDE_DIR}"
-      echo "Ascii art files must have a '.txt' suffix"
+      echo "Ascii art files must have a '.asc' suffix"
       exit 0
     }
     [ "${first}" ] && {
@@ -594,9 +598,9 @@ then
   image_name=`basename "${input_image}"`
   suf=`echo ${image_name} | awk -F '.' ' { print $NF } '`
   image_name=`echo ${image_name} | sed -e "s/.${suf}//"`
-  if [ "${suf}" == "txt" ]
+  if [ "${suf}" == "asc" ]
   then
-    cp "${input_image}" "/tmp/${image_name}$$.txt"
+    cp "${input_image}" "/tmp/${image_name}$$.asc"
   else
     [ "${suf}" == "jpg" ] || \
     [ "${suf}" == "jpeg" ] || \
@@ -616,11 +620,31 @@ then
     }
     # FYI, to get an image width: identify -format "%w" yinyang.jpg
     jp2a ${border} ${colors} ${colordepth} ${grayscale} ${size} ${charopt} \
-         --output=/tmp/"${image_name}"$$.txt "/tmp/${image_name}$$.jpg"
+         --output=/tmp/"${image_name}"$$.asc "/tmp/${image_name}$$.jpg"
   fi
-  show_ascii "/tmp/${image_name}$$.txt" "${tabs}"
+  show_ascii "/tmp/${image_name}$$.asc" "${tabs}"
 else
-  show_ascii "${ART_DIR}/${art}.txt" "${tabs}"
+  if [ -f "${ART_DIR}/${art}.asc" ]
+  then
+    show_ascii "${ART_DIR}/${art}.asc" "${tabs}"
+  else
+    if [ -f "${ART_DIR}/${art}" ]
+    then
+      show_ascii "${ART_DIR}/${art}" "${tabs}"
+    else
+      if [ -f "${art}.asc" ]
+      then
+        show_ascii "${art}.asc" "${tabs}"
+      else
+        if [ -f "${art}" ]
+        then
+          show_ascii "${art}" "${tabs}"
+        else
+          echo "Cannot locate ${art}"
+        fi
+      fi
+    fi
+  fi
 fi
 
 [ "${quiet}" ] || {
@@ -637,28 +661,46 @@ then
   sleep ${delay}
   if [ "${input_image}" ]
   then
-    show_ascii "/tmp/${image_name}$$.txt" "${tabs}" ${LOLCAT}
+    show_ascii "/tmp/${image_name}$$.asc" "${tabs}" ${LOLCAT}
   else
-    show_ascii "${ART_DIR}/${art}.txt" "${tabs}" ${LOLCAT}
+    if [ -f "${ART_DIR}/${art}.asc" ]
+    then
+      show_ascii "${ART_DIR}/${art}.asc" "${tabs}" ${LOLCAT}
+    else
+      if [ -f "${ART_DIR}/${art}" ]
+      then
+        show_ascii "${ART_DIR}/${art}" "${tabs}" ${LOLCAT}
+      else
+        if [ -f "${art}.asc" ]
+        then
+          show_ascii "${art}.asc" "${tabs}" ${LOLCAT}
+        else
+          if [ -f "${art}" ]
+          then
+            show_ascii "${art}" "${tabs}" ${LOLCAT}
+          fi
+        fi
+      fi
+    fi
   fi
 fi
 
-[ -f "/tmp/${image_name}$$.txt" ] && {
+[ -f "/tmp/${image_name}$$.asc" ] && {
   if [ "${save_art}" ]
   then
-    if [ -f "${ART_DIR}/${image_name}.txt" ]
+    if [ -f "${ART_DIR}/${image_name}.asc" ]
     then
       if [ "${overwrite}" ]
       then
-        sudo cp "/tmp/${image_name}$$.txt" "${ART_DIR}/${image_name}.txt"
+        sudo cp "/tmp/${image_name}$$.asc" "${ART_DIR}/${image_name}.asc"
       else
-        echo "${ART_DIR}/${image_name}.txt already exists"
-        echo "Not saving ${image_name}.txt"
+        echo "${ART_DIR}/${image_name}.asc already exists"
+        echo "Not saving ${image_name}.asc"
       fi
     else
-      sudo cp "/tmp/${image_name}$$.txt" "${ART_DIR}/${image_name}.txt"
+      sudo cp "/tmp/${image_name}$$.asc" "${ART_DIR}/${image_name}.asc"
     fi
   fi
-  rm -f "/tmp/${image_name}$$.txt"
+  rm -f "/tmp/${image_name}$$.asc"
 }
 

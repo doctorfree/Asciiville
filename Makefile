@@ -60,8 +60,8 @@ endif
 ifeq ($(shell command -v figlet >/dev/null; echo $$?),0)
 	FIG_CMD := figlet -c -d $(FIG_FONTS) -f $(FONT) -k -t Asciiville | tr ' _/' ' ()' | $(LOL_CMD)
 else
-ifeq ($(shell test -f asciiville.txt; echo $$?),0)
-	FIG_CMD := cat asciiville.txt | $(LOL_CMD)
+ifeq ($(shell test -f asciiville.asc; echo $$?),0)
+	FIG_CMD := cat asciiville.asc | $(LOL_CMD)
 else
 	FIG_CMD := echo Asciiville
 endif
