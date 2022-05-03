@@ -323,6 +323,14 @@ select_font() {
         FIG_TEXT="Asciiville"
       fi
       ;;
+    Help)
+      if [ "${goBig}" ]
+      then
+        FIG_TEXT="Asciiville Help"
+      else
+        FIG_TEXT="Help"
+      fi
+      ;;
     MusicPlayer)
       if [ "${goBig}" ]
       then
@@ -426,9 +434,207 @@ show_figlet() {
   fi
 }
 
-show_appterm_menu() {
+show_help_menu() {
+  main_menu=
+  MTITLE="Asciiville Help"
+  while true
+  do
+    [ "${use_figlet}" ] && {
+      select_font Help
+      show_figlet
+    }
+    PS3="${BOLD}${PLEASE} choice (numeric or text): ${NORMAL}"
+    options=()
+    if [ "${have_w3m}" ]
+    then
+      options+=("Asciiville README")
+    else
+      [ "${have_lynx}" ] && options+=("Asciiville README")
+    fi
+    options+=("Asciiville Manual")
+    options+=("Asciiville Animation Manual")
+    options+=("Julia Set Animation Manual")
+    options+=("MusicPlayer Animation Manual")
+    options+=("ASCIInema Manual")
+    options+=("Plasma Animation Manual")
+    options+=("ASCII Splash Manual")
+    options+=("ASCII Splash Tmux Manual")
+    options+=("Btop System Monitor Manual")
+    options+=("Cbftp FTP Client Manual")
+    options+=("Ddgr Web Search Manual")
+    options+=("Gdu Disk Usage Manual")
+    options+=("Lynx Web Browser Manual")
+    options+=("Mpcplus Music Player Manual")
+    options+=("Mutt Mail Client Manual")
+    [ "${have_nethack}" ] && options+=("NetHack Dungeon Game Manual")
+    [ "${have_ranger}" ] && options+=("Ranger File Manager Manual")
+    [ "${have_ranger}" ] && options+=("Rifle File Opener Manual")
+    options+=("Show ASCII Art Manual")
+    options+=("Show Phase of Moon Manual")
+    options+=("Show Weather Report Manual")
+    options+=("Tmux Multiplexer Manual")
+    options+=("W3m Web Browser Manual")
+    options+=("Retro Terminal Manual")
+    options+=("Gnome Terminal Manual")
+    options+=("Tilix Terminal Manual")
+    options+=("Xfce4 Terminal Manual")
+    options+=("Main Menu" "Quit")
+    select opt in "${options[@]}"
+    do
+      case "$opt,$REPLY" in
+        "Main"*,*|*,"Main"*|"main"*,*|*,"main"*|"Back",*|*,"Back"|"back",*|*,"back")
+          main_menu=1
+          break 2
+          ;;
+        "Asciiville README",*|*,"Asciiville README")
+          if [ "${have_w3m}" ]
+          then
+            w3m /usr/share/doc/asciiville/README.html
+          else
+            [ "${have_lynx}" ] && {
+              lynx /usr/share/doc/asciiville/README.html
+            }
+          fi
+          break
+          ;;
+        "Asciiville Man"*,*|*,"Asciiville Man"*)
+          man asciiville
+          break
+          ;;
+        "Asciiville Animation"*,*|*,"Asciiville Animation"*)
+          man asciiart
+          break
+          ;;
+        "Julia"*,*|*,"Julia"*)
+          man asciijulia
+          break
+          ;;
+        "MusicPlayer"*,*|*,"MusicPlayer"*)
+          man asciimpplus
+          break
+          ;;
+        "ASCIInema"*,*|*,"ASCIInema"*)
+          man asciinema
+          break
+          ;;
+        "Plasma"*,*|*,"Plasma"*)
+          man asciiplasma
+          break
+          ;;
+        "ASCII Splash Tmux"*,*|*,"ASCII Splash Tmux"*)
+          man asciisplash-tmux
+          break
+          ;;
+        "ASCII Splash"*,*|*,"ASCII Splash"*)
+          man asciisplash
+          break
+          ;;
+        "Btop"*,*|*,"Btop"*)
+          man btop
+          break
+          ;;
+        "Cbftp"*,*|*,"Cbftp"*)
+          man cbftp
+          break
+          ;;
+        "Ddgr"*,*|*,"Ddgr"*)
+          man ddgr
+          break
+          ;;
+        "Gdu"*,*|*,"Gdu"*)
+          man gdu
+          break
+          ;;
+        "Lynx"*,*|*,"Lynx"*)
+          man lynx
+          break
+          ;;
+        "Mpcplus"*,*|*,"Mpcplus"*)
+          man mpcplus
+          break
+          ;;
+        "Mutt"*,*|*,"Mutt"*)
+          man mutt
+          break
+          ;;
+        "NetHack"*,*|*,"NetHack"*)
+          man nethack
+          break
+          ;;
+        "Ranger"*,*|*,"Ranger"*)
+          man ranger
+          break
+          ;;
+        "Rifle"*,*|*,"Rifle"*)
+          man rifle
+          break
+          ;;
+        "Show ASCII"*,*|*,"Show ASCII"*)
+          man show_ascii_art
+          break
+          ;;
+        "Show Phase"*,*|*,"Show Phase"*)
+          man show_moon
+          break
+          ;;
+        "Show Weather"*,*|*,"Show Weather"*)
+          man show_weather
+          break
+          ;;
+        "Tmux"*,*|*,"Tmux"*)
+          man tmux
+          break
+          ;;
+        "W3m"*,*|*,"W3m"*)
+          man w3m
+          break
+          ;;
+        "Retro"*,*|*,"Retro"*)
+          man cool-retro-term
+          break
+          ;;
+        "Gnome"*,*|*,"Gnome"*)
+          man gnome-terminal
+          break
+          ;;
+        "Tilix"*,*|*,"Tilix"*)
+          man tilix
+          break
+          ;;
+        "Xfce4"*,*|*,"Xfce4"*)
+          man xfce4-terminal
+          break
+          ;;
+        "Quit",*|*,"Quit"|"quit",*|*,"quit")
+          remove_fullscreen
+          printf "\nExiting Asciiville\n"
+          exit 0
+          ;;
+        *,*|*,*)
+          printf "\nCould not match '${REPLY}' with a menu entry."
+          printf "\nPlease try again with an exact match.\n"
+          [ "${use_figlet}" ] && {
+            select_font Asciimatics
+            show_figlet
+          }
+          ;;
+      esac
+      REPLY=
+    done
+  done
+  [ "${main_menu}" ] && {
+    clear
+    printf "\n"
+    init_vars
+    show_main_menu
+  }
+}
+
+
+show_select_menu() {
   animation_menu=
   art_menu=
+  help_menu=
   main_menu=
   while true
   do
@@ -506,7 +712,7 @@ show_appterm_menu() {
       select_font AsciiAppTerm
       show_figlet
     }
-    PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
+    PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORMAL}"
     options=()
     [ "${have_btop}" ] && options+=("Btop System Monitor    [${use_btop}]")
     [ "${have_gdu}" ] && options+=("Disk Usage Analyzer    [${use_gdu}]")
@@ -538,6 +744,10 @@ show_appterm_menu() {
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
+          "h",*|*,"h"|"H",*|*,"H"|"help",*|*,"help"|"Help",*|*,"Help")
+              help_menu=1
+              break 2
+              ;;
           "Done"*,*|*,"Done"*|"Back",*|*,"Back"|"back",*|*,"back"|"Main"*,*|*,"Main"*|"main",*|*,"main")
               main_menu=1
               break 2
@@ -674,6 +884,11 @@ show_appterm_menu() {
     printf "\n\n\n"
     show_animation_menu
   }
+  [ "${help_menu}" ] && {
+    clear
+    printf "\n"
+    show_help_menu
+  }
   [ "${main_menu}" ] && {
     clear
     printf "\n"
@@ -684,6 +899,7 @@ show_appterm_menu() {
 
 show_art_menu() {
   animation_menu=
+  help_menu=
   main_menu=
   while true
   do
@@ -753,7 +969,7 @@ show_art_menu() {
       select_font AsciiArt
       show_figlet
     }
-    PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
+    PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORMAL}"
     options=()
     options+=("Doctorwhen Art Slideshow")
     options+=("Dragonfly Art Slideshow")
@@ -782,6 +998,10 @@ show_art_menu() {
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
+          "h",*|*,"h"|"H",*|*,"H"|"help",*|*,"help"|"Help",*|*,"Help")
+              help_menu=1
+              break 2
+              ;;
           "MusicPlayerPlus"*,*|*,"MusicPlayerPlus"*)
               [ "${use_figlet}" ] && {
                 select_font MusicPlayer
@@ -992,6 +1212,11 @@ show_art_menu() {
     printf "\n\n\n"
     show_animation_menu
   }
+  [ "${help_menu}" ] && {
+    clear
+    printf "\n"
+    show_help_menu
+  }
   [ "${main_menu}" ] && {
     clear
     printf "\n"
@@ -1002,6 +1227,7 @@ show_art_menu() {
 
 show_animation_menu() {
   art_menu=
+  help_menu=
   main_menu=
   MTITLE="ASCIImatics Animation"
   while true
@@ -1068,7 +1294,7 @@ show_animation_menu() {
       select_font Asciimatics
       show_figlet
     }
-    PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
+    PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORMAL}"
     options=()
     [ "${have_asciiart}" ] && options+=("Asciiville Animation")
     [ "${have_asciijulia}" ] && options+=("Julia Set Animation")
@@ -1093,6 +1319,10 @@ show_animation_menu() {
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
+          "h",*|*,"h"|"H",*|*,"H"|"help",*|*,"help"|"Help",*|*,"Help")
+              help_menu=1
+              break 2
+              ;;
           "Main Menu",*|*,"Main Menu"|"Back",*|*,"Back"|"back",*|*,"back")
               main_menu=1
               break 2
@@ -1328,6 +1558,11 @@ show_animation_menu() {
     printf "\n\n\n"
     show_art_menu
   }
+  [ "${help_menu}" ] && {
+    clear
+    printf "\n"
+    show_help_menu
+  }
   [ "${main_menu}" ] && {
     clear
     printf "\n"
@@ -1339,6 +1574,7 @@ show_animation_menu() {
 show_main_menu() {
   art_menu=
   animation_menu=
+  help_menu=
   select_menu=
   while true
   do
@@ -1392,7 +1628,7 @@ show_main_menu() {
       select_font Asciiville
       show_figlet
     }
-    PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
+    PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORMAL}"
     options=()
     [ "${have_showascii}" ] && options+=("Ascii Art Slideshow")
     [ "${have_splash}" ] && options+=("ASCIImatics Animations")
@@ -1423,6 +1659,10 @@ show_main_menu() {
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
+          "h",*|*,"h"|"H",*|*,"H"|"help",*|*,"help"|"Help",*|*,"Help")
+              help_menu=1
+              break 2
+              ;;
           "Run ${show_comm} in ${show_term}",*|*,"Run ${show_comm} in ${show_term}")
               break
               ;;
@@ -1567,6 +1807,7 @@ show_main_menu() {
               ;;
           "Speed"*,*|*,"Speed"*)
               speedtest-cli
+              read -p "Press Enter to continue" answer
               skip_it_so=1
               break
               ;;
@@ -1741,10 +1982,15 @@ show_main_menu() {
     printf "\n\n\n"
     show_animation_menu
   }
+  [ "${help_menu}" ] && {
+    clear
+    printf "\n"
+    show_help_menu
+  }
   [ "${select_menu}" ] && {
     clear
     printf "\n\n\n"
-    show_appterm_menu
+    show_select_menu
   }
 }
 
@@ -1821,8 +2067,8 @@ init_vars
 # Without any arguments, bring up interactive dialog menu
 [ $# -eq 0 ] && INTERACTIVE=1
 have_btop=`type -p btop`
-have_neomutt=`type -p neomutt`
 have_mutt=`type -p mutt`
+have_neomutt=`type -p neomutt`
 have_nethack=`type -p nethack`
 have_ranger=`type -p ranger`
 have_retro=`type -p cool-retro-term`

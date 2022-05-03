@@ -46,6 +46,7 @@ stage/
 *.out
 *.app
 
+README.html
 btop/build
 btop/bin
 btop/btop

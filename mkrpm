@@ -187,6 +187,7 @@ ${SUDO} cp LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp NOTICE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp CHANGELOG.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
+pandoc -f gfm README.md > ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README.html
 ${SUDO} cp VERSION ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp ddgr/README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-ddgr.md
 ${SUDO} cp btop/README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-btop.md
