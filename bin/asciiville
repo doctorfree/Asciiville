@@ -582,59 +582,59 @@ show_appterm_menu() {
               main_menu=1
               break 2
               ;;
-          "Btop System Monitor"*,*|*,"Btop System Monitor"*)
+          "Btop"*,*|*,"Btop"*)
               COMMAND=btop
               MTITLE="Btop++ System Monitor"
               break
               ;;
-          "Disk Usage Analyzer"*,*|*,"Disk Usage Analyzer"*)
+          "Disk"*,*|*,"Disk"*)
               COMMAND="gdu ${HOME}"
               MTITLE="Disk Usage Analyzer"
               break
               ;;
-          "Lynx Web Browser"*,*|*,"Lynx Web Browser"*)
+          "Lynx"*,*|*,"Lynx"*)
               COMMAND="lynx ${WEB_HOME}"
               MTITLE="Lynx Web Browser"
               export BROWSER=lynx
               break
               ;;
-          "W3M Web Browser"*,*|*,"W3M Web Browser"*)
+          "W3M"*,*|*,"W3M"*)
               COMMAND="w3m -v ${WEB_HOME}"
               MTITLE="W3M Web Browser"
               export BROWSER=w3m
               break
               ;;
-          "Music Player Plus"*,*|*,"Music Player Plus"*)
+          "Music"*,*|*,"Music"*)
               COMMAND=mpcplus
               MTITLE="Music Player Plus MPD Client"
               break
               ;;
-          "Cbftp FTP Client"*,*|*,"Cbftp FTP Client"*)
+          "Cbftp"*,*|*,"Cbftp"*)
               COMMAND=cbftp
               MTITLE="Cbftp FTP Client"
               break
               ;;
-          "Ncftp FTP Client"*,*|*,"Ncftp FTP Client"*)
+          "Ncftp"*,*|*,"Ncftp"*)
               COMMAND=ncftp
               MTITLE="Ncftp FTP Client"
               break
               ;;
-          "Mutt Mail Client"*,*|*,"Mutt Mail Client"*)
+          "Mutt"*,*|*,"Mutt"*)
               COMMAND=mutt
               MTITLE="Mutt Mail Client"
               break
               ;;
-          "NeoMutt Mail Client"*,*|*,"NeoMutt Mail Client"*)
+          "NeoMutt"*,*|*,"NeoMutt"*)
               COMMAND=neomutt
               MTITLE="NeoMutt Mail Client"
               break
               ;;
-          "Ranger File Manager"*,*|*,"Ranger File Manager"*)
+          "Ranger"*,*|*,"Ranger"*)
               COMMAND=ranger
               MTITLE="Ranger File Manager"
               break
               ;;
-          "XFCE4 Terminal"*,*|*,"XFCE4 Terminal"*)
+          "XFCE4"*,*|*,"XFCE4"*)
               XFCE4=1
               TILIX=
               GNOME=
@@ -642,7 +642,7 @@ show_appterm_menu() {
               CURRENT=
               break
               ;;
-          "Gnome Terminal"*,*|*,"Gnome Terminal"*)
+          "Gnome"*,*|*,"Gnome"*)
               GNOME=1
               XFCE4=
               TILIX=
@@ -650,7 +650,7 @@ show_appterm_menu() {
               CURRENT=
               break
               ;;
-          "Retro Terminal"*,*|*,"Retro Terminal"*)
+          "Retro"*,*|*,"Retro"*)
               RETRO=1
               GNOME=
               XFCE4=
@@ -658,7 +658,7 @@ show_appterm_menu() {
               CURRENT=
               break
               ;;
-          "Tilix Terminal"*,*|*,"Tilix Terminal"*)
+          "Tilix"*,*|*,"Tilix"*)
               TILIX=1
               RETRO=
               GNOME=
@@ -666,7 +666,7 @@ show_appterm_menu() {
               CURRENT=
               break
               ;;
-          "Current Terminal"*,*|*,"Current Terminal"*)
+          "Current"*,*|*,"Current"*)
               CURRENT=1
               TILIX=
               RETRO=
@@ -866,7 +866,7 @@ show_art_menu() {
               play_slide_show Waterfalls
               break
               ;;
-          "XFCE4 Terminal"*,*|*,"XFCE4 Terminal"*)
+          "XFCE4"*,*|*,"XFCE4"*)
               XFCE4=1
               TILIX=
               GNOME=
@@ -874,7 +874,7 @@ show_art_menu() {
               CURRENT=
               break
               ;;
-          "Gnome Terminal"*,*|*,"Gnome Terminal"*)
+          "Gnome"*,*|*,"Gnome"*)
               GNOME=1
               XFCE4=
               TILIX=
@@ -882,7 +882,7 @@ show_art_menu() {
               CURRENT=
               break
               ;;
-          "Retro Terminal"*,*|*,"Retro Terminal"*)
+          "Retro"*,*|*,"Retro"*)
               RETRO=1
               GNOME=
               XFCE4=
@@ -890,7 +890,7 @@ show_art_menu() {
               CURRENT=
               break
               ;;
-          "Tilix Terminal"*,*|*,"Tilix Terminal"*)
+          "Tilix"*,*|*,"Tilix"*)
               TILIX=1
               RETRO=
               GNOME=
@@ -898,7 +898,7 @@ show_art_menu() {
               CURRENT=
               break
               ;;
-          "Current Terminal"*,*|*,"Current Terminal"*)
+          "Current"*,*|*,"Current"*)
               CURRENT=1
               TILIX=
               RETRO=
@@ -931,7 +931,7 @@ show_art_menu() {
               fi
               break
               ;;
-          "Cycle Slideshow"*,*|*,"Cycle Slideshow"*)
+          "Cycle"*,*|*,"Cycle"*)
               if [ "${cycle}" ]
               then
                 cycle=
@@ -940,7 +940,7 @@ show_art_menu() {
               fi
               break
               ;;
-          "Use Lolcat Coloring"*,*|*,"Use Lolcat Coloring"*)
+          "Use Lolcat"*,*|*,"Use Lolcat"*)
               if [ "${use_lolcat}" == "2" ]
               then
                 use_lolcat=
@@ -962,7 +962,7 @@ show_art_menu() {
               fi
               break
               ;;
-          "Record Tmux Session"*,*|*,"Record Tmux Session"*)
+          "Record"*,*|*,"Record"*)
               if [ "${RECORD}" ]
               then
                 RECORD=
@@ -988,7 +988,7 @@ show_art_menu() {
               fi
               break
               ;;
-          "Select Song"*,*|*,"Select Song"*)
+          "Select"*,*|*,"Select"*)
               select_song
               break
               ;;
@@ -1120,27 +1120,27 @@ show_animation_menu() {
               init_vars
               break 2
               ;;
-          "Asciiville Animation",*|*,"Asciiville Animation")
+          "Asciiville"*,*|*,"Asciiville"*)
               ASCSPLASH="${ASCSPLASH} -i"
               ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l art"
               break
               ;;
-          "Julia Set Animation",*|*,"Julia Set Animation")
+          "Julia"*,*|*,"Julia"*)
               ASCSPLASH="${ASCSPLASH} -j"
               ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l julia"
               break
               ;;
-          "MPPlus Animation",*|*,"MPPlus Animation")
+          "MPPlus"*,*|*,"MPPlus"*)
               ASCSPLASH="${ASCSPLASH} -m"
               ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l mpplus"
               break
               ;;
-          "Plasma Animation",*|*,"Plasma Animation")
+          "Plasma"*,*|*,"Plasma"*)
               ASCSPLASH="${ASCSPLASH} -p"
               ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l plasma"
               break
               ;;
-          "AAlib BB Demo",*|*,"AAlib BB Demo")
+          "AAlib"*,*|*,"AAlib"*)
               SAVED_DISPLAY="${DISPLAY}"
               export DISPLAY=""
               if [ "${AUDIO}" ]
@@ -1158,11 +1158,11 @@ show_animation_menu() {
               export DISPLAY="${SAVED_DISPLAY}"
               break
               ;;
-          "Slideshow Menu",*|*,"Slideshow Menu")
+          "Slideshow"*,*|*,"Slideshow"*)
               art_menu=1
               break 2
               ;;
-          "XFCE4 Terminal"*,*|*,"XFCE4 Terminal"*)
+          "XFCE4"*,*|*,"XFCE4"*)
               XFCE4=1
               TILIX=
               GNOME=
@@ -1171,7 +1171,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Gnome Terminal"*,*|*,"Gnome Terminal"*)
+          "Gnome"*,*|*,"Gnome"*)
               GNOME=1
               XFCE4=
               TILIX=
@@ -1180,7 +1180,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Retro Terminal"*,*|*,"Retro Terminal"*)
+          "Retro"*,*|*,"Retro"*)
               RETRO=1
               GNOME=
               XFCE4=
@@ -1189,7 +1189,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Tilix Terminal"*,*|*,"Tilix Terminal"*)
+          "Tilix"*,*|*,"Tilix"*)
               TILIX=1
               RETRO=
               GNOME=
@@ -1198,7 +1198,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Current Terminal"*,*|*,"Current Terminal"*)
+          "Current"*,*|*,"Current"*)
               CURRENT=1
               TILIX=
               RETRO=
@@ -1207,7 +1207,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Use Lolcat Coloring"*,*|*,"Use Lolcat Coloring"*)
+          "Use Lolcat"*,*|*,"Use Lolcat"*)
               if [ "${use_lolcat}" == "2" ]
               then
                 use_lolcat=
@@ -1256,7 +1256,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Record Tmux Session"*,*|*,"Record Tmux Session"*)
+          "Record"*,*|*,"Record"*)
               if [ "${RECORD}" ]
               then
                 RECORD=
@@ -1284,7 +1284,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Fullscreen Window"*,*|*,"Fullscreen Window"*)
+          "Fullscreen"*,*|*,"Fullscreen"*)
               if [ "${FULLSCREEN}" ]
               then
                 FULLSCREEN=
@@ -1300,7 +1300,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "MusicPlayerPlus Menu",*|*,"MusicPlayerPlus Menu")
+          "MusicPlayerPlus"*,*|*,"MusicPlayerPlus"*)
               [ "${use_figlet}" ] && {
                 select_font MusicPlayer
                 show_figlet
@@ -1310,7 +1310,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "RoonCommandLine Menu",*|*,"RoonCommandLine Menu")
+          "RoonCommandLine"*,*|*,"RoonCommandLine"*)
               [ "${use_figlet}" ] && {
                 select_font Roon
                 show_figlet
@@ -1320,7 +1320,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Select Song"*,*|*,"Select Song"*)
+          "Select"*,*|*,"Select"*)
               select_song
               skip_it_so=1
               break
@@ -1446,7 +1446,7 @@ show_main_menu() {
           "Run ${show_comm} in ${show_term}",*|*,"Run ${show_comm} in ${show_term}")
               break
               ;;
-          "Default Web"*,*|*,"Default Web"*)
+          "Default"*,*|*,"Default"*)
               if [ "${default_browser}" == "W3M" ]
               then
                 if [ "${have_lynx}" ]
