@@ -6,7 +6,7 @@ SONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 PLASMA_SONG="${MUSEDIR}/Chronos.mp3"
 NATURE_SONG="${MUSEDIR}/Moving-Ahead-RA.mp3"
 STRONG_SONG="${MUSEDIR}/Overdrive-Matrika.mp3"
-ALTSONG="${MUSEDIR}/Kevin_MacLeod_-_Also_Sprach_Zarathustra.ogg"
+ALTSONG="${MUSEDIR}/Jean_Baptiste_Singelee-3er_Solo_de_Concert.ogg"
 SESSION=asciisplash
 
 usage() {
@@ -57,6 +57,7 @@ while getopts "abc:dl:r:Rs:tu" flag; do
           AUDIO=1
           ;;
         b)
+          custom_audio=1
           AUDIO=1
           TMPSONG=${SONG}
           SONG=${ALTSONG}

@@ -7,7 +7,7 @@ SONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 PLASMA_SONG="${MUSEDIR}/Chronos.mp3"
 NATURE_SONG="${MUSEDIR}/Moving-Ahead-RA.mp3"
 STRONG_SONG="${MUSEDIR}/Overdrive-Matrika.mp3"
-ALTSONG="${MUSEDIR}/Kevin_MacLeod_-_Also_Sprach_Zarathustra.ogg"
+ALTSONG="${MUSEDIR}/Jean_Baptiste_Singelee-3er_Solo_de_Concert.ogg"
 
 usage() {
   printf "\nUsage: asciisplash [-A] [-a] [-b] [-C] [-c num] [-d] [-i] [-jJ] "
@@ -74,6 +74,7 @@ while getopts "AabCc:dijJmps:u" flag; do
         ;;
       b)
         audio=1
+        custom_audio=1
         TMPSONG=${SONG}
         SONG=${ALTSONG}
         ALTSONG=${TMPSONG}

@@ -449,6 +449,11 @@ play_slide_show() {
       FIG_ASCII="Fine Art"
       SLIDE_DIR="${ART_DIR}/Art"
       SLIDE_FONT="Shadow"
+      [ "${custom_song}" ] || {
+        [ -f "${MUSEDIR}/Jean_Baptiste_Singelee-3er_Solo_de_Concert.ogg" ] && {
+          SONG="${MUSEDIR}/Jean_Baptiste_Singelee-3er_Solo_de_Concert.ogg"
+        }
+      }
       ;;
     Dragonf*)
       FIG_ASCII="Dragonfly"
