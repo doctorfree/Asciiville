@@ -111,29 +111,69 @@ ${SUDO} cp jp2a/src/jp2a ${OUT_DIR}/${DESTDIR}/bin/jp2a
 ${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
 ${SUDO} cp ddgr/ddgr ${OUT_DIR}/${DESTDIR}/bin/ddgr
 
+${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/save
+${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/save
+${SUDO} chmod 0755 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir \
+                   ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/save
 cd nethack/dat
-${SUDO} cp license symbols help hh cmdhelp keyhelp history opthelp optmenu wizhelp dungeon.lua tribute asmodeus.lua baalz.lua bigrm-*.lua castle.lua fakewiz?.lua juiblex.lua knox.lua medusa-?.lua minend-?.lua minefill.lua minetn-?.lua oracle.lua orcus.lua sanctum.lua soko?-?.lua tower?.lua valley.lua wizard?.lua nhcore.lua nhlib.lua themerms.lua astral.lua air.lua earth.lua fire.lua water.lua ???-goal.lua ???-fil?.lua ???-loca.lua ???-strt.lua bogusmon data engrave epitaph oracles options quest.lua rumors ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir
+${SUDO} LC_ALL=C ../util/dlb cf nhdat help hh cmdhelp keyhelp history opthelp optmenu wizhelp dungeon.lua tribute asmodeus.lua baalz.lua bigrm-*.lua castle.lua fakewiz?.lua juiblex.lua knox.lua medusa-?.lua minend-?.lua minefill.lua minetn-?.lua oracle.lua orcus.lua sanctum.lua soko?-?.lua tower?.lua valley.lua wizard?.lua nhcore.lua nhlib.lua themerms.lua astral.lua air.lua earth.lua fire.lua water.lua ???-goal.lua ???-fil?.lua ???-loca.lua ???-strt.lua bogusmon data engrave epitaph oracles options quest.lua rumors
+${SUDO} cp nhdat   license symbols ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir
+${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/nhdat \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/license \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/symbols
+${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/nhdat \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/license \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/symbols
+${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/nhdat \
+                   ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/license \
+                   ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/symbols
+
 cd ..
 ${SUDO} cp src/nethack ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir
 ${SUDO} cp util/recover ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir
-${SUDO} cp sys/unix/nethack.sh ${OUT_DIR}/${DESTDIR}/games/nethack
-${SUDO} cp doc/Guidebook ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir
-${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/Guidebook
-${SUDO} chmod 0755 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/nethack
+${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/nethack \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/recover
+${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/nethack \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/recover
+${SUDO} chmod 04755 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/nethack
 ${SUDO} chmod 0755 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/recover
+${SUDO} cp sys/unix/nethack.sh ${OUT_DIR}/${DESTDIR}/games/nethack
+${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/nethack
+${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/nethack
 ${SUDO} chmod 0755 ${OUT_DIR}/${DESTDIR}/games/nethack
+
 ${SUDO} touch ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/perm \
               ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/record \
               ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/logfile \
               ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/xlogfile \
               ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/livelog
-${SUDO} chmod 0600 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/perm \
-                   ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/record \
-                   ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/logfile \
-                   ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/xlogfile \
-                   ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/livelog
+
+${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/perm \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/record \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/logfile \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/xlogfile \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/livelog
+${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/perm \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/record \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/logfile \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/xlogfile \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/livelog
+${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/perm \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/record \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/logfile \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/xlogfile \
+                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/livelog
+
+${SUDO} cp sys/unix/sysconf ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/sysconf
+${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/sysconf
+${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/sysconf
+${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/sysconf
+
+${SUDO} cp doc/Guidebook ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir
+${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/Guidebook
 cd ..
-# You may also want to reinstall the man pages via the doc Makefile.
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
 ${SUDO} cp -a conf/mutt ${OUT_DIR}/${DESTDIR}/share/${PKG}/mutt

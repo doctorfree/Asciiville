@@ -30,7 +30,7 @@ EXPLORERS=*
 # occasionally get stuck outside the game by accidentally typing '!' or
 # '^Z' during play and not knowing how to go back.)
 # Uses the same syntax as the WIZARDS and EXPLORERS options above.
-#SHELLERS=
+SHELLERS=*
 
 # If the user name is found in this list, prompt for username instead.
 # Uses the same syntax as the WIZARDS option above.

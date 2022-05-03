@@ -527,17 +527,27 @@ show_appterm_menu() {
     fi
     [ "${have_nethack}" ] && options+=("NetHack Dungeon Game   [${use_nethack}]")
     [ "${have_ranger}" ] && options+=("Ranger File Manager    [${use_ranger}]")
-    [ "${have_xfce4}" ] && options+=("XFCE4 Terminal    [${use_xfce4}]")
-    [ "${have_gnome}" ] && options+=("Gnome Terminal    [${use_gnome}]")
-    [ "${have_retro}" ] && options+=("Retro Terminal    [${use_retro}]")
-    [ "${have_tilix}" ] && options+=("Tilix Terminal    [${use_tilix}]")
-    options+=("Current Terminal  [${use_current}]")
-    options+=("Back to Main Menu" "Quit")
+    [ "${have_xfce4}" ] && options+=("XFCE4 Terminal         [${use_xfce4}]")
+    [ "${have_gnome}" ] && options+=("Gnome Terminal         [${use_gnome}]")
+    [ "${have_retro}" ] && options+=("Retro Terminal         [${use_retro}]")
+    [ "${have_tilix}" ] && options+=("Tilix Terminal         [${use_tilix}]")
+    options+=("Current Terminal       [${use_current}]")
+    [ "${have_showascii}" ] && options+=("Slideshow Menu")
+    [ "${have_splash}" ] && options+=("Animations Menu")
+    options+=("Done / Main Menu" "Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
-          "Back to Main Menu",*|*,"Back to Main Menu"|"Back",*|*,"Back"|"back",*|*,"back")
+          "Done"*,*|*,"Done"*|"Back",*|*,"Back"|"back",*|*,"back"|"Main"*,*|*,"Main"*|"main",*|*,"main")
               main_menu=1
+              break 2
+              ;;
+          "Animations"*,*|*,"Animations"*)
+              animation_menu=1
+              break 2
+              ;;
+          "Slideshow"*,*|*,"Slideshow"*)
+              art_menu=1
               break 2
               ;;
           "Btop"*,*|*,"Btop"*)
@@ -654,6 +664,11 @@ show_appterm_menu() {
       REPLY=
     done
   done
+  [ "${art_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_art_menu
+  }
   [ "${animation_menu}" ] && {
     clear
     printf "\n\n\n"
@@ -1079,8 +1094,7 @@ show_animation_menu() {
     do
       case "$opt,$REPLY" in
           "Main Menu",*|*,"Main Menu"|"Back",*|*,"Back"|"back",*|*,"back")
-              clear
-              init_vars
+              main_menu=1
               break 2
               ;;
           "Asciiville"*,*|*,"Asciiville"*)
@@ -1323,6 +1337,9 @@ show_animation_menu() {
 }
 
 show_main_menu() {
+  art_menu=
+  animation_menu=
+  select_menu=
   while true
   do
     if [ "${AUDIO}" ]
@@ -1377,10 +1394,10 @@ show_main_menu() {
     }
     PS3="${BOLD}${PLEASE} command choice (numeric or text): ${NORMAL}"
     options=()
-    options+=("Run ${show_comm} in ${show_term}")
-    options+=("Select App and Terminal")
     [ "${have_showascii}" ] && options+=("Ascii Art Slideshow")
     [ "${have_splash}" ] && options+=("ASCIImatics Animations")
+    options+=("Run ${show_comm} in ${show_term}")
+    options+=("Select App and Terminal")
     [ "${have_bb}" ] && {
       [ "$DISPLAY" = "" ] || options+=("AAlib Demo (X11 mode)")
     }
@@ -1602,25 +1619,16 @@ show_main_menu() {
               break
               ;;
           "ASCIImatics"*,*|*,"ASCIImatics"*)
-              clear
-              printf "\n\n\n"
-              show_animation_menu
-              skip_it_so=1
-              break
+              animation_menu=1
+              break 2
               ;;
           "Ascii Art"*,*|*,"Ascii Art"*)
-              clear
-              printf "\n\n\n"
-              show_art_menu
-              skip_it_so=1
-              break
+              art_menu=1
+              break 2
               ;;
           "Select App"*,*|*,"Select App"*)
-              clear
-              printf "\n\n\n"
-              show_appterm_menu
-              skip_it_so=1
-              break
+              select_menu=1
+              break 2
               ;;
           "Select Song"*,*|*,"Select Song"*)
               select_song
@@ -1723,6 +1731,21 @@ show_main_menu() {
       init_vars
     }
   done
+  [ "${art_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_art_menu
+  }
+  [ "${animation_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_animation_menu
+  }
+  [ "${select_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_appterm_menu
+  }
 }
 
 choose_song() {
