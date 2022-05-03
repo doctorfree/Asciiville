@@ -1,0 +1,9 @@
+*.def	NHSUBST
+*.des	NHSUBST
+*.txt	NHSUBST
+data.base NHSUBST
+symbols NHSUBST
+tribute NHSUBST
+GENFILES NHSUBST
+* NH_filestag=(file%s_for_all_versions)
+..files NH_filegenprog

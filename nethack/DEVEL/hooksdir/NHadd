@@ -1,0 +1,22 @@
+#!/usr/bin/perl
+# NetHack 3.7  NHadd       $NHDT-Date: 1596498406 2020/08/03 23:46:46 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.2 $
+# Copyright (c) 2015 by Kenneth Lorber, Kensington, Maryland
+# NetHack may be freely redistributed.  See license for details.
+
+# wrapper for nhadd and nhcommit aliases
+
+%ok = map { $_ => 1 } ('add', 'commit');
+
+die "Bad subcommand '$ARGV[0]'" unless $ok{$ARGV[0]};
+
+# we won't fail on a failure, so just system()
+$rv = system('.git/hooks/nhsub',"--$ARGV[0]",@ARGV[1..$#ARGV]);
+if($rv){
+        print "warning: nhsub failed: $rv $!\n";
+}
+
+if(length $ENV{GIT_PREFIX}){
+        chdir($ENV{GIT_PREFIX}) or die "Can't chdir $ENV{GIT_PREFIX}: $!";
+}
+
+exec "git", @ARGV or die "Can't exec git: $!";

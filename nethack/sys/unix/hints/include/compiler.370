@@ -1,0 +1,138 @@
+#------------------------------------------------------------------------------
+# NetHack 3.7  compiler.370 $NHDT-Date: 1637992237 2021/11/27 05:50:37 $  $NHDT-Branch: NetHack-3.7 $
+
+# compiler flags:  CCFLAGS is used to construct a value for CFLAGS with
+#	various -I, -D, and -W settings appended below;
+#	these are the settings of most interest for an end-user build
+#	(clang doesn't support '-Og', gcc needs 4.x or later)
+CCFLAGS = -g
+#CCFLAGS = -g -Og
+#CCFLAGS = -O2
+#	Note: this is not the usual 'CFLAGS' which is used in default
+#	rules for compiling C code; specifying a value for that on the
+#	'make' command line should be avoided.
+
+#If you want to force use of one particular set of compilers, do it
+#here, ahead of the detection, so that the detection will match your
+#choice and set variables CCISCLANG, GCCGTEQ, CLANGPPGTEQ9 etc.
+#accordingly.
+#
+#CC= gcc
+#CXX= g++ -std-gnu++11
+#
+#CC= clang
+#CXX=clang++ -std=gnu++11
+
+#detection
+CCISCLANG := $(shell echo `$(CC) --version` | grep clang)
+ifeq "$(CCISCLANG)" ""
+ifdef WANT_WIN_QT6
+CXX=g++ -std=c++17
+else
+CXX=g++ -std=gnu++11
+endif
+else
+ifdef WANT_WIN_QT6
+CXX=clang++ -std=c++17
+else
+CXX=clang++ -std=gnu++11
+endif
+endif   # clang
+
+# If you want to override the compiler detection just carried out
+# uncomment one of the following pairs. Note, however, that
+# doing this after the detection above will likely result in
+# mismatched variable values for CCISCLANG, GCCGTEQ, CLANGPPGTEQ9 etc.
+#
+#CC= gcc
+#CXX= g++ -std-gnu++11
+#
+#CC= clang
+#CXX=clang++ -std=gnu++11
+
+CFLAGS=$(CCFLAGS) -I../include -DNOTPARMDECL
+CFLAGS+=-Wall -Wextra -Wno-missing-field-initializers \
+	-Wreturn-type -Wunused -Wformat -Wswitch -Wshadow -Wwrite-strings
+CFLAGS+=-pedantic
+CFLAGS+=-Wmissing-declarations
+CFLAGS+=-Wunreachable-code
+CFLAGS+=-Wformat-nonliteral
+#
+# the following are not allowed in C++
+CFLAGS+=-Wimplicit
+CFLAGS+=-Wimplicit-function-declaration
+CFLAGS+=-Wimplicit-int
+CFLAGS+=-Wmissing-prototypes
+CFLAGS+=-Wold-style-definition
+CFLAGS+=-Wstrict-prototypes
+
+CCXXFLAGS = -g -I../include -DNOTPARMDECL
+CCXXFLAGS+=-Wall -Wextra -Wno-missing-field-initializers \
+        -Wreturn-type -Wunused -Wformat -Wswitch -Wshadow -Wwrite-strings
+CCXXFLAGS+=-pedantic
+CCXXFLAGS+=-Wmissing-declarations
+
+ifeq "$(CCISCLANG)" ""
+# gcc-specific follows
+CFLAGS+=-Wmissing-parameter-type
+ifdef WANT_WIN_QT
+CCXXFLAGS+= -Wno-deprecated-copy
+endif  # WANT_WIN_QT
+# get the version of gcc
+GCCGTEQ9 := $(shell expr `$(CC) -dumpversion | cut -f1 -d.` \>= 9)
+ifeq "$(GCCGTEQ9)" "1"
+# flags present in gcc version greater than or equal to 9 can go here
+CFLAGS+=-Wformat-overflow
+endif  #gcc version greater than or equal to 9
+#still in gcc-specific section here
+# get the version of g++
+GPPGTEQ9 := $(shell expr `$(CXX) -dumpversion | cut -f1 -d.` \>= 9)
+ifeq "$(GPPGTEQ9)" "1"
+CCXXFLAGS+=-Wformat-overflow
+ifdef WANT_WIN_QT
+CCXXFLAGS+=-Wno-deprecated-copy
+CCXXFLAGS+=-Wno-deprecated-declarations
+endif  # WANT_WIN_QT
+endif  # g++ version greater than or equal to 9
+# end of gcc-specific
+
+else   # clang-specific follows
+
+# get the version of clang++
+CLANGPPGTEQ9 := $(shell expr `$(CXX) -dumpversion | cut -f1 -d.` \>= 9)
+ifeq "$(CLANGPPGTEQ9)" "1"
+ifdef WANT_WIN_QT
+CCXXFLAGS+=-Wno-deprecated-copy
+endif  # WANT_WIN_QT
+endif  #clang++ greater than or equal to 9
+
+ifdef WANT_WIN_QT
+CCXXFLAGS+=-Wno-deprecated-declarations
+endif  # WANT_WIN_QT
+endif  # clang-specific ends here
+
+# enable some optional code in various NetHack source files
+CFLAGS+=-DGCC_WARN
+CCXXFLAGS+=-DGCC_WARN
+
+ifdef MAKEFILE_SRC
+ifdef WANT_WIN_QT
+# when switching from Qt5 to Qt6 or vice versa, any old .moc files will be
+# incompatible; get rid of them in case user hasn't run 'make spotless';
+# object files are incompatable with Qt library, so get rid of them too;
+# Qt*.h-t are empty timestamp files and at most one should exist
+QTany_H = Qt*.h-t
+ifdef WANT_WIN_QT6
+# Qt 6 builds and runs (with a couple of warnings) but needs more testing
+QTn_H = Qt6.h-t
+else
+# Qt 5 is currently the default version for nethack 3.7.x's Qt interface
+QTn_H = Qt5.h-t
+endif
+$(QTn_H) ::
+	@if test ! -f $@; then ( rm -f $(QTany_H) *.moc qt_*.o; touch $@ ); fi;
+endif #WANT_WIN_QT
+endif #MAKFILE_SRC
+
+#end of compiler.370
+#------------------------------------------------------------------------------

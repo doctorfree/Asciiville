@@ -1,0 +1,92 @@
+# CVS default ignores begin
+tags
+TAGS
+.make.state
+.nse_depinfo
+*~
+\#*
+.#*
+,*
+_$*
+*$
+*.old
+*.bak
+*.BAK
+*.orig
+*.rej
+.del-*
+*.a
+*.olb
+*.o
+*.obj
+*.so
+*.exe
+*.Z
+*.elc
+*.ln
+core
+# CVS default ignores end
+.*.swp
+
+# We generate makefiles by shell script
+Makefile
+
+# Win32-specific ignores
+Debug/
+Release/
+binary/
+build/
+ipch/
+lib/*
+Nethack.sln
+Nethack.sdf
+Nethack.opensdf
+Makefile.bcc
+Makefile.gcc
+Makefile-orig
+Makefile.bcc-orig
+Makefile.gcc-orig
+*.suo
+*.pdb
+*.ilk
+# VS2013 extension to auto-whine about questionable code generates these
+*.lastcodeanalysissucceeded
+# VS 2017 caches data into the hidden directory .vs
+.vs
+# Win32-specific ignores end
+.DS_Store
+# ms-dos 
+# resulting zip
+NH*DOS.ZIP
+# 8.3 versions
+dat/data.bas
+sys/share/posixreg.c
+include/patchlev.h
+doc/guidebk.txt
+# folders compiler, target objs, binary results
+djgpp/
+src/msdos_o/
+msdos-binary/
+dat/NHTILES.BMP
+dat/msdoshlp.txt
+src/host_o/
+util/djgpp-linux64-gcc550.tar.bz2
+util/djgpp-osx-gcc550.tar.bz2
+util/djgpp-mingw-gcc550-standalone.zip
+util/dlb_main
+util/thintile
+util/til2bin2
+util/tile2bin
+win/share/monthin.txt
+win/share/objthin.txt
+win/share/oththin.txt
+# end of ms-dos
+
+#libnethack
+targets/*
+#test.js
+#sys/lib/npm-package/build/nethack.js
+#sys/lib/npm-package/build/nethack.wasm
+*.user
+util/*.lib
+util/*.exp

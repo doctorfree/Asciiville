@@ -1,0 +1,4589 @@
+. = (71, 108, 108)
+A = (0, 0, 0)
+B = (0, 182, 255)
+C = (255, 108, 0)
+D = (255, 0, 0)
+E = (0, 0, 255)
+F = (0, 145, 0)
+G = (108, 255, 0)
+H = (255, 255, 0)
+I = (255, 0, 255)
+J = (145, 71, 0)
+K = (204, 79, 0)
+L = (255, 182, 145)
+M = (237, 237, 237)
+N = (255, 255, 255)
+O = (215, 215, 215)
+P = (108, 145, 182)
+Q = (18, 18, 18)
+R = (54, 54, 54)
+S = (73, 73, 73)
+T = (82, 82, 82)
+U = (205,205,205)
+V = (104, 104, 104)
+W = (131, 131, 131)
+X = (140, 140, 140)
+Y = (149, 149, 149)
+Z = (195, 195, 195)
+0 = (100, 100, 100)
+1 = (72, 108, 108)
+# tile 0 (stone)
+{
+  PPPPPPPPPPPPJPPP
+  PAPPPJPPAPPPPPPP
+  PPPPPPPPPPPPPPPP
+  PPJPPPPPPPJPPPAP
+  PPPPPAPPPPPPPPPP
+  PPPPPPPPPPPPPPPP
+  PAPPPPPPPAPPPJPP
+  PPPPPPPPPPPPPPPP
+  JPPPAPPJPPPPPPPP
+  PPPPPPPPPPJPPPPP
+  PPPPPPPPPPPPPAPP
+  PPPJPPPPAPPPPPPP
+  PPPPPPPPPPPPPPPP
+  PPPPPJPPPPPPAPPJ
+  PPAPPPPPPJPPPPPP
+  PPPPPPPPPPPPPPPP
+}
+# tile 1 (main walls vertical)
+{
+  ANNOA1PPPPP1NNOA
+  AOOOA1P1PP11OOOA
+  AOOOA1PPPPP1OOOA
+  AOOOA1PPPPP1OOOA
+  AOOOA11PPPP1OOOA
+  A1AAA11PPPP11A1A
+  A111A11PPPP1111A
+  AOPPA11PP1P1OP1A
+  ANNOA1PPPPP1NNOA
+  AOOOA1PPPPP1OOOA
+  AOOOA1PPPPP1OOOA
+  AOOOA1PPPPP1OOOA
+  AOOOA11P1P11OOOA
+  A1AAA11PPPP11A1A
+  A111A11PPPP1111A
+  AOPPA11PPPP1OP1A
+}
+# tile 2 (main walls horizontal)
+{
+  AAANOOAAAAANOOAA
+  OOONOOA1OOONOOA1
+  POO111A1POO111A1
+  1111111111111111
+  PP111PPPPP111PPP
+  PPNOOPPPPPNOOPPP
+  OONOOA1OOONOOA1O
+  OO111A1POO111A1P
+  1111111111111111
+  PP1OPPPP1OPPP1OP
+  PP1PPPPP1PPPP1PP
+  1111111111111111
+  1OPPPP1OPPPP1OPP
+  1PPPPP1PPPPP1PPP
+  1111111111111111
+  AAAAAAAAAAAAAAAA
+}
+# tile 3 (main walls tlcorn)
+{
+  AAANNNNOOOOOOAAA
+  NNNNAA11PPPPO111
+  OOONA11PPPBBO111
+  OOOOOOOOOOOOO111
+  OOOPPPPPPPPPP111
+  OOOPPPPPPPPPP111
+  OOPPPPPPPPPPPP11
+  OPPPPPPPPPPPPPP1
+  1111111111111111
+  APP111111111PPP1
+  AOOOAAAAAAAAOOOA
+  AOOOA1PPPPP1OOOA
+  AOOOA1PPPPP1OOOA
+  A1AAA11PPPP11A1A
+  A111A11PPPP1111A
+  AOPPA11PPPP1OP1A
+}
+# tile 4 (main walls trcorn)
+{
+  AAANNNNOOOOOOAAA
+  NNNNAA11PPPPO111
+  OOONA11PPPBBO111
+  OOOOOOOOOOOOO111
+  OOOPPPPPPPPPP111
+  OOOPPPPPPPPPP111
+  OOPPPPPPPPPPPP11
+  OPPPPPPPPPPPPPP1
+  1111111111111111
+  APP111111111PPP1
+  AOOOAAAAAAAAOOOA
+  AOOOA1PPPPP1OOOA
+  AOOOA1PPPPP1OOOA
+  A1AAA11PPPP11A1A
+  A111A11PPPP1111A
+  AOPPA11PPPP1OP1A
+}
+# tile 5 (main walls blcorn)
+{
+  AAANNNNOOOOOOAAA
+  NNNNAA11PPPPO111
+  OOONA11PPPBBO111
+  OOOOOOOOOOOOO111
+  OOOPPPPPPPPPP111
+  OOOPPPPPPPPPP111
+  OOPPPPPPPPPPPP11
+  OPPPPPPPPPPPPPP1
+  1111111111111111
+  PP1OPPPP1OPPP1OP
+  PP1PPPPP1PPPP1PP
+  1111111111111111
+  1OPPPP1OPPPP1OPP
+  1PPPPP1PPPPP1PPP
+  1111111111111111
+  AAAAAAAAAAAAAAAA
+}
+# tile 6 (main walls brcorn)
+{
+  AAANNNNOOOOOOAAA
+  NNNNAA11PPPPO111
+  OOONA11PPPBBO111
+  OOOOOOOOOOOOO111
+  OOOPPPPPPPPPP111
+  OOOPPPPPPPPPP111
+  OOPPPPPPPPPPPP11
+  OPPPPPPPPPPPPPP1
+  1111111111111111
+  PP1OPPPP1OPPP1OP
+  PP1PPPPP1PPPP1PP
+  1111111111111111
+  1OPPPP1OPPPP1OPP
+  1PPPPP1PPPPP1PPP
+  1111111111111111
+  AAAAAAAAAAAAAAAA
+}
+# tile 7 (main walls cross wall)
+{
+  AAANNNNOOOOOOAAA
+  NNNNAA11PPPPO111
+  OOONA11PPPBBO111
+  OOOOOOOOOOOOO111
+  OOOPPPPPPPPPP111
+  OOOPPPPPPPPPP111
+  OOPPPPPPPPPPPP11
+  OPPPPPPPPPPPPPP1
+  1111111111111111
+  APP111111111PPP1
+  AOOOAAAAAAAAOOOA
+  AOOOA1PPPPP1OOOA
+  AOOOA1PPPPP1OOOA
+  A1AAA11PPPP11A1A
+  A111A11PPPP1111A
+  AOPPA11PPPP1OP1A
+}
+# tile 8 (main walls tuwall)
+{
+  AAANNNNOOOOOOAAA
+  NNNNAA11PPPPO111
+  OOONA11PPPBBO111
+  OOOOOOOOOOOOO111
+  OOOPPPPPPPPPP111
+  OOOPPPPPPPPPP111
+  OOPPPPPPPPPPPP11
+  OPPPPPPPPPPPPPP1
+  1111111111111111
+  PP1OPPPP1OPPP1OP
+  PP1PPPPP1PPPP1PP
+  1111111111111111
+  1OPPPP1OPPPP1OPP
+  1PPPPP1PPPPP1PPP
+  1111111111111111
+  AAAAAAAAAAAAAAAA
+}
+# tile 9 (main walls tdwall)
+{
+  AAANNNNOOOOOOAAA
+  NNNNAA11PPPPO111
+  OOONA11PPPBBO111
+  OOOOOOOOOOOOO111
+  OOOPPPPPPPPPP111
+  OOOPPPPPPPPPP111
+  OOPPPPPPPPPPPP11
+  OPPPPPPPPPPPPPP1
+  1111111111111111
+  APP111111111PPP1
+  AOOOAAAAAAAAOOOA
+  AOOOA1PPPPP1OOOA
+  AOOOA1PPPPP1OOOA
+  A1AAA11PPPP11A1A
+  A111A11PPPP1111A
+  AOPPA11PPPP1OP1A
+}
+# tile 10 (main walls tlwall)
+{
+  AAANNNNOOOOOOAAA
+  NNNNAA11PPPPO111
+  OOONA11PPPBBO111
+  OOOOOOOOOOOOO111
+  OOOPPPPPPPPPP111
+  OOOPPPPPPPPPP111
+  OOPPPPPPPPPPPP11
+  OPPPPPPPPPPPPPP1
+  1111111111111111
+  APP111111111PPP1
+  AOOOAAAAAAAAOOOA
+  AOOOA1PPPPP1OOOA
+  AOOOA1PPPPP1OOOA
+  A1AAA11PPPP11A1A
+  A111A11PPPP1111A
+  AOPPA11PPPP1OP1A
+}
+# tile 11 (main walls trwall)
+{
+  AAANNNNOOOOOOAAA
+  NNNNAA11PPPPO111
+  OOONA11PPPBBO111
+  OOOOOOOOOOOOO111
+  OOOPPPPPPPPPP111
+  OOOPPPPPPPPPP111
+  OOPPPPPPPPPPPP11
+  OPPPPPPPPPPPPPP1
+  1111111111111111
+  APP111111111PPP1
+  AOOOAAAAAAAAOOOA
+  AOOOA1PPPPP1OOOA
+  AOOOA1PPPPP1OOOA
+  A1AAA11PPPP11A1A
+  A111A11PPPP1111A
+  AOPPA11PPPP1OP1A
+}
+# tile 12 (no door)
+{
+  AAAAAAAAAAAAAAAA
+  AA............AA
+  A..............A
+  A..............A
+  A..............A
+  A..............A
+  A..............A
+  A..............A
+  A..............A
+  A..............A
+  A..............A
+  A..............A
+  A..............A
+  A..............A
+  AA............AA
+  AAAAAAAAAAAAAAAA
+}
+# tile 13 (vertical open door)
+{
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAJJ.JJJJJJJJJAA
+  AJKJJKJJKJJJJJJA
+  AAAAAAAAAAAAAAAA
+  A..............A
+  A..............A
+  A..............A
+  A..............A
+  A..............A
+  A..............A
+  A..............A
+  A..............A
+  A..............A
+  A..............A
+  AAAAAAAAAAAAAAAA
+}
+# tile 14 (horizontal open door)
+{
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AK............AA
+  ACK............A
+  APJ............A
+  A.J............A
+  A.J............A
+  A.J............A
+  AJJ............A
+  APJ............A
+  A.J............A
+  A.J............A
+  A.J............A
+  AK.............A
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+}
+# tile 15 (vertical closed door)
+{
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AACCKKKKKKKKJJAA
+  ACKJJJJJJJJJJKJA
+  APJJPKJJKJJJJJJA
+  A.PP.PPPPP.BPPJA
+  A.........BPP.JA
+  A.JJ.JJJJJPAPAJA
+  AJJJJKJJJJ.P.AJA
+  APKJPKJJJJJAAAJA
+  A.PP.PPPPPP..PJA
+  A.............JA
+  A.JJ.JJJJJJJJJJA
+  AJKJJKJJKJJJJJJA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+}
+# tile 16 (horizontal closed door)
+{
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AACCKKKKKKKKJJAA
+  ACKJJJJJJJJJJKJA
+  APJJPKJJKJJJJJJA
+  A.PP.PPPPP.BPPJA
+  A.........BPP.JA
+  A.JJ.JJJJJPAPAJA
+  AJJJJKJJJJ.P.AJA
+  APKJPKJJJJJAAAJA
+  A.PP.PPPPPP..PJA
+  A.............JA
+  A.JJ.JJJJJJJJJJA
+  AJKJJKJJKJJJJJJA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+}
+# tile 17 (iron bars)
+{
+  ................
+  ................
+  .......BB.......
+  ....BB.BP.BP....
+  .BB.BP.BP.PP.BP.
+  .BP.BP.BP.PP.PP.
+  .BP.BP.BP.PP.PP.
+  .BP.BP.BP.PPAPP.
+  .BP.BP.BPAPPAPP.
+  .BP.BPABPAPPAPP.
+  .BPABPABPAPPAPPA
+  .BPABPABPAPPAPPA
+  .BPABPABPAPPAPPA
+  .BPABPABPAPPAPPA
+  .BP.BP.BP.PP.PP.
+  ................
+}
+# tile 18 (tree)
+{
+  ................
+  .....FFFFFF.....
+  ...FFFFFFFFFF...
+  ..FFFFFFFFFFFF..
+  ..FFFFFFFFFFFF..
+  ..FFFFJFFFJFFF..
+  ...FFFFJFJFFF...
+  ....FFJJJJFF....
+  .......KJJ.AAAA.
+  .......KJ.AAAAAA
+  .......JJ.AAAAAA
+  .......KJ.AAAAA.
+  .......KJAAA....
+  ......KJJJAA....
+  ...JJJJ.J.JJJA..
+  ................
+}
+# tile 19 (floor of a room)
+{
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  .......PP.......
+  .......PP.......
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+}
+# tile 20 (dark part of a room)
+{
+  .A.A.A.A.A.A.A.A
+  A.A.A.A.A.A.A.A.
+  .A.A.A.A.A.A.A.A
+  A.A.A.A.A.A.A.A.
+  .A.A.A.A.A.A.A.A
+  A.A.A.A.A.A.A.A.
+  .A.A.A.A.A.A.A.A
+  A.A.A.APP.A.A.A.
+  .A.A.A.PPA.A.A.A
+  A.A.A.A.A.A.A.A.
+  .A.A.A.A.A.A.A.A
+  A.A.A.A.A.A.A.A.
+  .A.A.A.A.A.A.A.A
+  A.A.A.A.A.A.A.A.
+  .A.A.A.A.A.A.A.A
+  A.A.A.A.A.A.A.A.
+}
+# tile 21 (corridor)
+{
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  .......PP.......
+  ......P..P......
+  ......P..P......
+  .......PP.......
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+}
+# tile 22 (lit corridor)
+{
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  .......PP.......
+  ......PPPP......
+  ......PPPP......
+  .......PP.......
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+}
+# tile 23 (staircase up)
+{
+  AAAAAAAAAAAAAA.A
+  AADJJJJJJJJJDA.A
+  AACDDJKNKKDDCA.A
+  AAAAAANNNAAAA..A
+  AAADJNNNNNJDA..A
+  AAACNOONONNCA..A
+  AAAAAAOONAAA...A
+  AAAAKDOOOKJA...A
+  AAAACKPONKCA...A
+  AAAAAAOPOAA....A
+  AAAAAKPPPJA....A
+  AAAAACKJJKA....A
+  AAAAAAAAAAAA...A
+  AAAAAAAAAAAAA..A
+  AAAAAAAAAAAAAA.A
+  AAAAAAAAAAAAAAAA
+}
+# tile 24 (staircase down)
+{
+  AAAAAAAAAAAAAA.A
+  AADJJJJJJJJJDA.A
+  AACDDJNNNKDDCA.A
+  AAAAAANNNAAAA..A
+  AAADJJNONJJDA..A
+  AAACDDONNKDCA..A
+  AAAAAAONOAAA...A
+  AAAAPOOONONA...A
+  AAAACPOOOPCA...A
+  AAAAAANPNAA....A
+  AAAAAKKOJJA....A
+  AAAAACKJJKA....A
+  AAAAAAAAAAAA...A
+  AAAAAAAAAAAAA..A
+  AAAAAAAAAAAAAA.A
+  AAAAAAAAAAAAAAAA
+}
+# tile 25 (ladder up)
+{
+  ADAAAAAAAAAAAD.A
+  AADAAAANAAAADA.A
+  AACCCCNNNCCCCA.A
+  AADAANANANAAD..A
+  AAADAAANAAADA..A
+  AAACDDDNDDDCA..A
+  AAADAAAOAAAD...A
+  AAAAKAAOAAJA...A
+  AAAACKKOKKCA...A
+  AAAADAAPAAD....A
+  AAAAAKJPJJA....A
+  AAAAADAAAKA....A
+  AAAAAAAAAAAA...A
+  AAAAAAAAAAAAA..A
+  AAAAAAAAAAAAAA.A
+  AAAAAAAAAAAAAAAA
+}
+# tile 26 (ladder down)
+{
+  ADAAAAAAAAAAAD.A
+  AADAAAANAAAADA.A
+  AACCCCCNCCCCCA.A
+  AADAAAANAAAAD..A
+  AAADAAANAAADA..A
+  AAACDDDNDDDCA..A
+  AAADAAAOAAAD...A
+  AAAAKAAOAAJA...A
+  AAAACOKOKOCA...A
+  AAAADAOOOAD....A
+  AAAAAKJOJJA....A
+  AAAAADAAAKA....A
+  AAAAAAAAAAAA...A
+  AAAAAAAAAAAAA..A
+  AAAAAAAAAAAAAA.A
+  AAAAAAAAAAAAAAAA
+}
+# tile 27 (branch staircase up)
+{
+  AAAAAAAAAAAAAA.A
+  AADJJJJJJJJJDA.A
+  AACDDJKHKKDDCA.A
+  AAAAAAHHHAAAA..A
+  AAADJHHHHHJDA..A
+  AAACHGGHGHHCA..A
+  AAAAAAGGHAAA...A
+  AAAAKDGGGKJA...A
+  AAAACKFGHKCA...A
+  AAAAAAGFGAA....A
+  AAAAAKFFFJA....A
+  AAAAACKJJKA....A
+  AAAAAAAAAAAA...A
+  AAAAAAAAAAAAA..A
+  AAAAAAAAAAAAAA.A
+  AAAAAAAAAAAAAAAA
+}
+# tile 28 (branch staircase down)
+{
+  AAAAAAAAAAAAAA.A
+  AADJJJJJJJJJDA.A
+  AACDDJHHHKDDCA.A
+  AAAAAAHHHAAAA..A
+  AAADJJHGHJJDA..A
+  AAACDDGHHKDCA..A
+  AAAAAAGHGAAA...A
+  AAAAFGGGHGHA...A
+  AAAACFGGGFCA...A
+  AAAAAAHFHAA....A
+  AAAAAKKGJJA....A
+  AAAAACKJJKA....A
+  AAAAAAAAAAAA...A
+  AAAAAAAAAAAAA..A
+  AAAAAAAAAAAAAA.A
+  AAAAAAAAAAAAAAAA
+}
+# tile 29 (branch ladder up)
+{
+  ADAAAAAAAAAAAD.A
+  AADAAAAHAAAADA.A
+  AACCCCHHHCCCCA.A
+  AADAAHAHAHAAD..A
+  AAADAAAHAAADA..A
+  AAACDDDHDDDCA..A
+  AAADAAAGAAAD...A
+  AAAAKAAGAAJA...A
+  AAAACKKGKKCA...A
+  AAAADAAFAAD....A
+  AAAAAKJFJJA....A
+  AAAAADAAAKA....A
+  AAAAAAAAAAAA...A
+  AAAAAAAAAAAAA..A
+  AAAAAAAAAAAAAA.A
+  AAAAAAAAAAAAAAAA
+}
+# tile 30 (branch ladder down)
+{
+  ADAAAAAAAAAAAD.A
+  AADAAAAHAAAADA.A
+  AACCCCCHCCCCCA.A
+  AADAAAAHAAAAD..A
+  AAADAAAHAAADA..A
+  AAACDDDHDDDCA..A
+  AAADAAAGAAAD...A
+  AAAAKAAGAAJA...A
+  AAAACGKGKGCA...A
+  AAAADAGGGAD....A
+  AAAAAKJGJJA....A
+  AAAAADAAAKA....A
+  AAAAAAAAAAAA...A
+  AAAAAAAAAAAAA..A
+  AAAAAAAAAAAAAA.A
+  AAAAAAAAAAAAAAAA
+}
+# tile 31 (unaligned altar)
+{
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ...QDDQDDDDQ....
+  ..QQQDDQDDQDQ...
+  ...RRDQDQDQQAA..
+  ...RQDQQQQQQA...
+  ..QQQQQQDQQQQ...
+  ...AAAAAAAAAAA..
+  ................
+}
+# tile 32 (chaotic altar)
+{
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ...SDDDDDSDS....
+  ..SSSDSDDSSSS...
+  ...TTSDSDSSRQQ..
+  ...TSSSSSSRRQ...
+  ..SSRRRRRRRSS...
+  ...AAAAAAAAAAA..
+  ................
+}
+# tile 33 (neutral altar)
+{
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ...PDPDPDPDP....
+  ..PPPDPDDDPPP...
+  ...BBPPPDPP.AA..
+  ...BPPPPPP..A...
+  ..PP.......PP...
+  ...AAAAAAAAAAA..
+  ................
+}
+# tile 34 (lawful altar)
+{
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  ...MMMDMDMDM....
+  ..MMMDMMMDMMM...
+  ...NNMMMMMMZAA..
+  ...NMMMMMMZZA...
+  ..MMZZZZZZZMM...
+  ...AAAAAAAAAAA..
+  ................
+}
+# tile 35 (other altar)
+{
+  ................
+  ................
+  ................
+  ................
+  ......N.N.......
+  ...N..N.N..N....
+  .N..N.....N..N..
+  ..N.........N...
+  ................
+  NN.IIIIIIIII.NN.
+  ..IIIIIIIIIII...
+  ...LLIIIIIIKAA..
+  ...LIIIIIIKKQ...
+  ..IIKKKKKKKII...
+  ...AAAAAAAAAAA..
+  ................
+}
+# tile 36 (grave)
+{
+  ................
+  ................
+  .....ONOPP......
+  ...ONPPPPPP.....
+  ..OPPPPPPPPP....
+  .OPPPPPPPPPPP...
+  .OPAAPPAPAAPP...
+  .OPAPAPAPAPAPAA.
+  .OPAAPPAPAAPPAAA
+  .OPAPAPAPAPPPAAA
+  .OPAPAPAPAPPPAAA
+  .OPPPPPPPPPPPAAA
+  .OPPPPPPPFPPPAA.
+  .OPPF..PPF.PPA..
+  FFFFFFFFFFFFFFF.
+  ................
+}
+# tile 37 (throne)
+{
+  ................
+  .....HHHHH......
+  ....HCCCDDH.....
+  ....HCCEDDH.....
+  ....HCEEEDH.....
+  ....HCCEDDH.....
+  ....HCCEDDH..AA.
+  .....HCDDHAAAAA.
+  ..CCOHCDDHOCCAAA
+  .HHHDHHHHHCHHHAA
+  .H.HODDDCCOHAHAA
+  ...HHHHHHHHHAAA.
+  ...HALAAALAHAA..
+  ..HA.AAAAAAAH...
+  ................
+  ................
+}
+# tile 38 (sink)
+{
+  ................
+  ................
+  ................
+  ....P....P......
+  ..NPPPPPPPPN....
+  .NO.P.PP.P.ON...
+  .NOB..PP..BON...
+  .NOBBBPPBBBONAA.
+  .NOBBBBBBBBONAAA
+  .NOOOOOOOOOONAAA
+  ..NNNNNNNNNNAAAA
+  .....OOOOAAAAAAA
+  .....OOOOAAAAA..
+  ....OOOOOOA.....
+  ................
+  ................
+}
+# tile 39 (fountain)
+{
+  ....E....E......
+  ..EEEE..EEE.....
+  ..E...EEE.EE....
+  ...E.EEEE.E.....
+  ..E..EEOE.EE.A..
+  .EE.EENOE.E.EAA.
+  .E..E.NO.E.EAAA.
+  ...PPPNOPPPAAA..
+  ..PEEENOEEEPAA..
+  .OEENNNOOOEEPA..
+  .NOEEEEEEEEONAA.
+  .PNOOOOOOOONPAA.
+  ..PNNNNNNNNPAAA.
+  ...PPPPPPPPAAA..
+  ....AAAAAAAAA...
+  ................
+}
+# tile 40 (pool)
+{
+  ..........NNN...
+  .EEEE....NE.EN..
+  ....EE.EEE......
+  .....EEE........
+  .NN......EE.....
+  E.EN....E.EE..EE
+  ...EN.E....E..E.
+  ....EE......EE..
+  ................
+  N..EE...EEEE....
+  NNE..E.E...EE..N
+  .E....E.NN..EEN.
+  .......NEEEE....
+  ..EEE..E...EEE..
+  .E..EE...E..EEE.
+  EE....EEE.....EE
+}
+# tile 41 (ice)
+{
+  NNNNNNNNNNNNNNNN
+  NNNNNNNNNNNNNNNN
+  NNNNNNNNNNNNNNNN
+  NNNNNNNNNNNNNNNN
+  NNNNNNNNNNNNNNNN
+  NNNNNNNNNNNNNNNN
+  NNNNNNN..NNNNNNN
+  NNNNNN.NN.NNNNNN
+  NNNNNN.NN.NNNNNN
+  NNNNNNN..NNNNNNN
+  NNNNNNNNNNNNNNNN
+  NNNNNNNNNNNNNNNN
+  NNNNNNNNNNNNNNNN
+  NNNNNNNNNNNNNNNN
+  NNNNNNNNNNNNNNNN
+  NNNNNNNNNNNNNNNN
+}
+# tile 42 (molten lava)
+{
+  DDDDDDCDDDDDDDDD
+  DDDDDCDKDDDDDDDD
+  DDCCDDKDDDDCCCDD
+  DCJJKDDDDDCKJJKD
+  DCJDKDDDDDCJKDKD
+  DDKKDDDDDDCJDKKD
+  DDDDDDDCDDDKKKDD
+  DDDCDDDDDDDDDDDD
+  DDDDJDCDDDDCDDDD
+  DDDDDDDDDDCJKDDD
+  DDDDDDDDDDDKDDDC
+  DDDDCCDDDDDDDDDD
+  DDDCJJKDDDDDDDDD
+  CDDCJDKDDDDDDJDD
+  DDDDKKDDDDCDDDDD
+  DDDDDDDDDDDKDDDD
+}
+# tile 43 (vertical open drawbridge)
+{
+  EKKAKKKKKKKAKKAE
+  EJKKKKKKKKKKKJAA
+  EEJJJJJJJJJJJAAA
+  EJKKKKKKKKKKKJAA
+  EKKAKKKKKKKAKKAE
+  EJKKKKKKKKKKKJAA
+  EEJJJJJJJJJJKAAA
+  EJKKKKKKKKKKKJAA
+  EKKAKKKKKKKAKKAE
+  EJKKKKKKKKKKKJAA
+  EEJJJJJJJJJJJAAA
+  EJKKKKKKKKKKKJAA
+  EKKAKKKKKKKAKKAE
+  EJKKKKKKKKKKKJAA
+  EEJJJJJJJJJJJAAA
+  EJKKKKKKKKKKKJAA
+}
+# tile 44 (horizontal open drawbridge)
+{
+  EEEEEEEEEEEEEEEE
+  JEJKJEJKJEJKJEJK
+  KJKKKJKKKJKKKJKK
+  KJKAKJKAKJKAKJKA
+  KJKKKJKKKJKKKJKK
+  KJKKKJKKKJKKKJKK
+  KJKKKJKKKJKKKJKK
+  KJKKKJKKKJKKKJKK
+  KJKKKJKKKJKKKJKK
+  KJKKKJKKKJKKKJKK
+  KJKKKJKKKJKKKJKK
+  KJKAKJKAKJKAKJKA
+  KJKKKJKKKKKKKJKK
+  JAJKJAJKJAJKJAJK
+  AAAAAAAAAAAAAAAA
+  AAAEAAAEAAAEAAAE
+}
+# tile 45 (vertical closed drawbridge)
+{
+  ................
+  ..JKJ.JKJ.JKJ...
+  .JKKKJKKKJKKKJ..
+  .JKAKJKAKJKAKJA.
+  .JKKKJKKKJKKKJA.
+  .JKKKJKKKJKKKJA.
+  .JKKKJKKKJKKKJA.
+  .JKKKJKKKJKKKJA.
+  .JKKKJKKKJKKKJA.
+  .JKKKJKKKJKKKJA.
+  .JKKKJKKKJKKKJA.
+  .JKAKJKAKJKAKJA.
+  .JKKKJKKKKKKKJA.
+  ..JKJAJKJAJKJAA.
+  ...AAA.AAA.AAA..
+  ................
+}
+# tile 46 (horizontal closed drawbridge)
+{
+  ................
+  ..JJJJJJJJJJJ...
+  .JKKKKKKKKKKKJ..
+  .KKAKKKKKKKAKKA.
+  .JKKKKKKKKKKKJA.
+  ..JJJJJJJJJJJAA.
+  .JKKKKKKKKKKKJ..
+  .KKAKKKKKKKAKKA.
+  .JKKKKKKKKKKKJA.
+  ..JJJJJJJJJJKAA.
+  .JKKKKKKKKKKKJ..
+  .KKAKKKKKKKAKKA.
+  .JKKKKKKKKKKKJA.
+  ..JJJJJJJJJJJAA.
+  ...AAAAAAAAAAA..
+  ................
+}
+# tile 47 (air)
+{
+  BBBBBBBBBBBBBBBB
+  BBBBBBBBBBBBBBBB
+  BBBBBBBBBBBBBBBB
+  BBBBBBBBBBBBBBBB
+  BBBBBBBBBBBBBBBB
+  BBBBBBBBBBBBBBBB
+  BBBBBBBBBBBBBBBB
+  BBBBBBBBBBBBBBBB
+  BBBBBBBBBBBBBBBB
+  BBBBBBBBBBBBBBBB
+  BBBBBBBBBBBBBBBB
+  BBBBBBBBBBBBBBBB
+  BBBBBBBBBBBBBBBB
+  BBBBBBBBBBBBBBBB
+  BBBBBBBBBBBBBBBB
+  BBBBBBBBBBBBBBBB
+}
+# tile 48 (cloud)
+{
+  BBBBBBBBBBBBBBBB
+  BBBBBNNNNNNNBBBB
+  BBBNNNNNNNNNNBBB
+  BBNNNNNNNNNONNBB
+  BBNNNNNNNNNNNNNB
+  BNNNNNNNNNNNNONB
+  NNNONNNNNNNNONNN
+  NNNNNNNNNNOONNNN
+  NNNNNNNNNNNNNONN
+  NNOONNNNNNNOONNO
+  NNNNNOOOOONNNNOO
+  BONNNNNNNNNNOOOB
+  BBOOONNNNOOOOOOB
+  BBBOOOOOOOOOOBBB
+  BBBBBBOOOOBBBBBB
+  BBBBBBBBBBBBBBBB
+}
+# tile 49 (water)
+{
+  EEEEEEEEEEEEEEEE
+  EEEEEEEEEEEEEEEE
+  EEEEEEEEEEEEEEEE
+  EEEEEEEEEEEEEEEE
+  EEEEEEEEEEEEEEEE
+  EEEEEEEEEEEEEEEE
+  EEEEEEEEEEEEEEEE
+  EEEEEEEEEEEEEEEE
+  EEEEEEEEEEEEEEEE
+  EEEEEEEEEEEEEEEE
+  EEEEEEEEEEEEEEEE
+  EEEEEEEEEEEEEEEE
+  EEEEEEEEEEEEEEEE
+  EEEEEEEEEEEEEEEE
+  EEEEEEEEEEEEEEEE
+  EEEEEEEEEEEEEEEE
+}
+# tile 50 (arrow trap)
+{
+  ................
+  .....DDDDD......
+  ....DDCACDD.....
+  ...DCCAAACCD....
+  ...CCAAAAACDA...
+  ..DCCHHAHHCDDA..
+  ..DCHHNANHHCDA..
+  ..DCHNNANNHCDA..
+  ..DCHNNANNHCDA..
+  ..DCCHAAAHCCDA..
+  ...CCAAAAACCAA..
+  ...DCAAAAACDA...
+  ....DAACAADAA...
+  .....DDDDDAA....
+  ......AAAAA.....
+  ................
+}
+# tile 51 (dart trap)
+{
+  ................
+  .....DDDDD......
+  ....DDCACDD.....
+  ...DCCCACCCD....
+  ...CCCHAHCCDA...
+  ..DCCHAAAHCDD...
+  ..DCHHAAAHHCDA..
+  ..DCHNAAANHCDA..
+  ..DCHNNANNHCDA..
+  ..DCCAAAAACDDA..
+  ...CCAACAACDAA..
+  ...DCACACACDA...
+  ....DDCCCCDAA...
+  .....DDDDDAA....
+  ......AAAAA.....
+  ................
+}
+# tile 52 (falling rock trap)
+{
+  ................
+  .....DDDDD......
+  ....DDAACDD.....
+  ...DCCCCCCCD....
+  ...CCCAAHCCDA...
+  ..DCCHHHHHCDDA..
+  ..DCHHAAHHHCDA..
+  ..DCHHHHHHHCDA..
+  ..DCHHAAHHHCDA..
+  ..DCHAHAAHHCDA..
+  ...CCAAAAHCCAA..
+  ...DCCAAHCCDA...
+  ....DCCCCCDAA...
+  .....DDDDDAA....
+  ......AAAAA.....
+  ................
+}
+# tile 53 (squeaky board)
+{
+  ................
+  .....DDDDD......
+  ....DDCCCDD.....
+  ...DCCCCCCCD....
+  ...CCCHHHCCDA...
+  ..DCCHHNHHCDDA..
+  ..DAAAAAAAAADA..
+  ..DAAAAAAAAADA..
+  ..DAAAAAAAAADA..
+  ..DAAAAAAAAADA..
+  ...CCHHNHHCCAA..
+  ...DCCHHHCCDA...
+  ....DCCCCCDAA...
+  .....DDDDDAA....
+  ......AAAAA.....
+  ................
+}
+# tile 54 (bear trap)
+{
+  ................
+  .....DDDDD......
+  ....DDCCCDD.....
+  ...DAAPCPAAD....
+  ...DAHHHHHADA...
+  ..DDAAPNPAACD...
+  ..DCANNNNNACDA..
+  ..DCAAPNPAACDA..
+  ..DCANNNNNACDA..
+  ..DDAHHHHHACDA..
+  ...DAACHCAADAA..
+  ...DCAAAAACDA...
+  ....DDAAADDAA...
+  .....DDDDDAA....
+  ......AAAAA.....
+  ................
+}
+# tile 55 (land mine)
+{
+  ................
+  .....DDDDD......
+  ....DDCCCDD.....
+  ...DCCCCCCCD....
+  ...CCCHHHCCDA...
+  ..DCCHHAHHCDDA..
+  ..DCHHAAAHHCDA..
+  ..DCAAAAAAACDA..
+  ..DCAAAAAAACDA..
+  ..DCHHNNNHHCDA..
+  ...CCHHNHHCCAA..
+  ...DCCHHHCCDA...
+  ....DCCCCCDAA...
+  .....DDDDDAA....
+  ......AAAAA.....
+  ................
+}
+# tile 56 (rolling boulder trap)
+{
+  ................
+  .....DDDDD......
+  ....DDCCCDD.....
+  ...DCCCCCCCD....
+  ...CCCHHHCCDA...
+  ..DCCAAAAHCDDA..
+  ..DCAAHAAAHCDA..
+  ..DCAHAAAAHCDA..
+  ..DCAAAAAAHCDA..
+  ..DCAAAAAAHCDA..
+  ...CCAAAAHCCAA..
+  ...DCCHHHCCDA...
+  ....DCCCCCDAA...
+  .....DDDDDAA....
+  ......AAAAA.....
+  ................
+}
+# tile 57 (sleeping gas trap)
+{
+  ................
+  .....DDDDD......
+  ....DDCCCDD.....
+  ...DCCHHHCCD....
+  ...CAAAAAAACA...
+  ..DCAANNAAACDA..
+  ..DCHNNAAAHCDA..
+  ..DCHNAAANHCDA..
+  ..DCHAAANHHCDA..
+  ..DCAAAHHHACDA..
+  ...CAAAAAAACAA..
+  ...DCCHHHCCDA...
+  ....DDCCCCDAA...
+  .....DDDDDAA....
+  ......AAAAA.....
+  ................
+}
+# tile 58 (rust trap)
+{
+  ................
+  .....DDDDD......
+  ....DDCCCDD.....
+  ...DCCCCCCCD....
+  ...CCCHHHCCDA...
+  ..DCCAAAAACDDA..
+  ..DCAAEEEAACDA..
+  ..DCAEEEEEACDA..
+  ..DCAEEEEEACDA..
+  ..DCAAEEEAACDA..
+  ...CCAAAAACCAA..
+  ...DCCHHHCCDA...
+  ....DCCCCCDAA...
+  .....DDDDDAA....
+  ......AAAAA.....
+  ................
+}
+# tile 59 (fire trap)
+{
+  ................
+  .....DDDDD......
+  ....DDCCCDD.....
+  ...DCCAAACCD....
+  ...CCAADAACDA...
+  ..DCAADDAAADDA..
+  ..DCAADDDAACDA..
+  ..DCADCHCDACDA..
+  ..DCADHNHDACDA..
+  ..DCAAHNHAACDA..
+  ...CCAANAACCAA..
+  ...DCCAAACCDA...
+  ....DCCCCCDAA...
+  .....DDDDDAA....
+  ......AAAAA.....
+  ................
+}
+# tile 60 (pit)
+{
+  AAAAAAAAAAAAAAAA
+  A.AAAAAAAAAAAABA
+  A..AAAAAAAAAABBA
+  A...AAAAAAAABBBA
+  A...A......ABBBA
+  A...A......ABBBA
+  A...A......ABBBA
+  A...A......ABBBA
+  A...A......ABBBA
+  A...A......ABBBA
+  A...A......ABBBA
+  A...AAAAAAAABBBA
+  A...PPPPPPPPPBBA
+  A..PPPPPPPPPPPBA
+  A.PPPPPPPPPPPPPA
+  AAAAAAAAAAAAAAAA
+}
+# tile 61 (spiked pit)
+{
+  AAAAAAAAAAAAAAAA
+  A.AAAAAAAAAAAABA
+  A..AAAAAAAAAABBA
+  A...AAAAAAAABBBA
+  A...A......ABBBA
+  A...A.N.N..ABBBA
+  A...A......ABBBA
+  A...A..N.N.ABBBA
+  A...A......ABBBA
+  A...A.N.N..ABBBA
+  A...A......ABBBA
+  A...AAAAAAAABBBA
+  A...PPPPPPPPPBBA
+  A..PPPPPPPPPPPBA
+  A.PPPPPPPPPPPPPA
+  AAAAAAAAAAAAAAAA
+}
+# tile 62 (hole)
+{
+  ................
+  ......AAAA......
+  .....AAAAAAB....
+  ....AAAAAAABB...
+  ...AAAAAAAAABBB.
+  ...AAAAAAAAAABB.
+  ...AAAAAAAAAABB.
+  ...AAAAAAAAAABB.
+  ...AAAAAAAAAABB.
+  ....AAAAAAAAABB.
+  .....AAAAAAAABB.
+  .....AAAAAAABB..
+  ......AAAAAB....
+  ................
+  ................
+  ................
+}
+# tile 63 (trap door)
+{
+  AAAAAAAAAAAAAAAA
+  A.AAAAAAAAAAAABA
+  A..AAAAAAAAAABBA
+  A...AAAAAAAABBBA
+  A...AAAAAAAABBBA
+  A...AAAAAAAABBBA
+  A...AAAAAAAABBBA
+  A...AAAAAAAABBBA
+  A...AAAAAAAABBBA
+  A...AAAAAAAABBBA
+  A...AAAAAAAABBBA
+  A...AAAAAAAABBBA
+  A...PPPPPPPPPBBA
+  A..PPPPPPPPPPPBA
+  A.PPPPPPPPPPPPPA
+  AAAAAAAAAAAAAAAA
+}
+# tile 64 (teleportation trap)
+{
+  ................
+  .....DDDDD......
+  ....DDCACDD.....
+  ...DCCAAACCD....
+  ...DCAAAAACCA...
+  ..DDCHHAHHCCD...
+  ..DCOHAAAHOCDA..
+  ..DCHOAAAOHCDA..
+  ..DCHOAAAOHCDA..
+  ..DDCHHAHHCCDA..
+  ...DCAAAAACCAA..
+  ...DCCAAACCDA...
+  ....DDCACDDAA...
+  .....DDDDDAA....
+  ......AAAAA.....
+  ................
+}
+# tile 65 (level teleporter)
+{
+  ................
+  .....DDADD......
+  ....DDAAADD.....
+  ...DCAAAAADD....
+  ...DCCCACCCCA...
+  ..DDCHAAAHCCD...
+  ..DCOAAOAAOCDA..
+  ..DCHAOOOAHCDA..
+  ..DCHAAOAAHCDA..
+  ..DDCHAAAHCCDA..
+  ...DCCCACCCCAA..
+  ...DCAAAAACDA...
+  ....DDAAADDAA...
+  .....DDADDAA....
+  ......AAAAA.....
+  ................
+}
+# tile 66 (magic portal)
+{
+  ................
+  .....DDDDD......
+  ....DDCACDD.....
+  ...DCCAAACCD....
+  ...DCAAAAACCA...
+  ..DDCHHAHHHAD...
+  ..DDCHOAOAACDA..
+  ..DDOAAAAAOCDA..
+  ..DDAAOAOOCCDA..
+  ..DAHHHAHHCCDA..
+  ...DCAAAAACCAA..
+  ...DCCAAACCDA...
+  ....DDCACDDAA...
+  .....DDDDDAA....
+  ......AAAAA.....
+  ................
+}
+# tile 67 (web)
+{
+  OAOA.OA...O....O
+  .O.NNNN.NOA..OOA
+  OON.NO.NA..OOA..
+  .N..OO.N.NOA....
+  .N.O...NOA......
+  ONO.O.NA........
+  .ONNNNA.........
+  ..O.NA..........
+  .OA.OA..........
+  .OONA...........
+  OA.OA...........
+  ..OA............
+  ..OA............
+  .OA.............
+  .OA.............
+  OA..............
+}
+# tile 68 (statue trap)
+{
+  ................
+  .....DDDDD......
+  ....DDCAADD.....
+  ...DCCAJJACD....
+  ...CCAKCJJADA...
+  ..DAAAKKJJADDA..
+  ..ACKACKJAAADA..
+  ..AJJCKKJACJAA..
+  ..DAJCKJJJJJAA..
+  ..DAJCKJJJAADA..
+  ...CACKJAACCAA..
+  ...DACKJACCDA...
+  ....DCCCCCDAA...
+  .....DDDDDAA....
+  ......AAAAA.....
+  ................
+}
+# tile 69 (magic trap)
+{
+  ................
+  .....DDDDD......
+  ....DDCCCDA.....
+  ...DCCCCCCAD....
+  ...CCCHHHAADA...
+  ..DCAHHNHAADDA..
+  ..DCAANNAAACDA..
+  ..DCAAAAAAACDA..
+  ..DCAAANNAACDA..
+  ..DCAANNNHACDA..
+  ...CAAHNHHCCAA..
+  ...DACHHHCCDA...
+  ....ACCCCCDAA...
+  .....DDDDDAA....
+  ......AAAAA.....
+  ................
+}
+# tile 70 (anti-magic field)
+{
+  ................
+  ......DDDDD.....
+  .....ADCCCDD....
+  ....DACCCCCCD...
+  ...ADAAHHHCCC...
+  ..ADDAAHNHHACD..
+  ..ADCAAANNAACD..
+  ..ADCAAAAAAACD..
+  ..ADCAANNAAACD..
+  ..ADCAHNNNAACD..
+  ..AACCHHNHAAC...
+  ...ADCCHHHCAD...
+  ...AADCCCCCA....
+  ....AADDDDD.....
+  .....AAAAA......
+  ................
+}
+# tile 71 (polymorph trap)
+{
+  ................
+  .....DDDDD......
+  ....DDCCCDD.....
+  ...DCAAAPCCD....
+  ...CCAAPHCCDA...
+  ..DCCAPAAHCDDA..
+  ..DCHPNAAHHCDA..
+  ..DCHNPAPNHCDA..
+  ..DCHNAANPHCDA..
+  ..DCHHAAPAHCDA..
+  ...CCHHPAACCAA..
+  ...DCCPAAACDA...
+  ....DCCCCCDAA...
+  .....DDDDDAA....
+  ......AAAAA.....
+  ................
+}
+# tile 72 (vibrating square)
+{
+  ................
+  ................
+  ......H.H.......
+  ...H.H.H.H.H....
+  ....H.H.H.H.....
+  ...H.H.H.H.H....
+  ....H.H.H.H.....
+  ...H.H.H.H.H....
+  ...H.H.H.H.H....
+  ....H.H.H.H.....
+  ...H.H.H.H.H....
+  ....H.H.H.H.....
+  ...H.H.H.H.H....
+  ......H.H.......
+  ................
+  ................
+}
+# tile 73 (trapped door)
+{
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AACCKKKKKKKKJJAA
+  ACKJJJJJJJJJJKJA
+  APJJPKJJKJJJJJJA
+  A.PP.PPPPP.BPPJA
+  A.........BPP.JA
+  A.JJ.JJJJJDAPADA
+  AJJJJKJJJJ.D.DJA
+  APKJPKJJJJJADAJA
+  A.PP.PPPPPPD.DJA
+  A.........D...DA
+  A.JJ.JJJJJJJJJJA
+  AJKJJKJJKJJJNJNA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+}
+# tile 74 (trapped chest)
+{
+  ................
+  ................
+  ................
+  ...CJKKKCJKKKC..
+  .CKJKKCKJKKCJJK.
+  .KJKKKKJKKKKJJJ.
+  CJKDKCJKDKCJJJJ.
+  CJKKDCJDKKCJJJJ.
+  CCCCCDHCCCCJJJJ.
+  CJJJHQQHJJJJJJJ.
+  CJKKDHHDKKCJJJJN
+  CJKDKHHKDKCJJJJA
+  CJKKKCJKKKCJJJAA
+  CJCCCCJCCCCJJAA.
+  CKKKKKKKKKKJAA..
+  .NAAAAAAAAAAA...
+}
+# tile 75 (missile zap 1 0)
+{
+  .......II.......
+  ......IIII......
+  ......IIII......
+  .......II.......
+  .......II.......
+  ......IIII......
+  ......IIII......
+  .......II.......
+  .......II.......
+  ......IIII......
+  ......IIII......
+  .......II.......
+  .......II.......
+  ......IIII......
+  ......IIII......
+  .......II.......
+}
+# tile 76 (missile zap 1 1)
+{
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  .II..II..II..II.
+  IIIIIIIIIIIIIIII
+  IIIIIIIIIIIIIIII
+  .II..II..II..II.
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+}
+# tile 77 (missile zap 1 2)
+{
+  III.............
+  IIII............
+  IIII............
+  .IIII...........
+  ...IIII.........
+  ....IIII........
+  ....IIII........
+  .....IIII.......
+  .......IIII.....
+  ........IIII....
+  ........IIII....
+  .........IIII...
+  ...........IIII.
+  ............IIII
+  ............IIII
+  .............III
+}
+# tile 78 (missile zap 1 3)
+{
+  .............III
+  ............IIII
+  ............IIII
+  ...........IIII.
+  .........IIII...
+  ........IIII....
+  ........IIII....
+  .......IIII.....
+  .....IIII.......
+  ....IIII........
+  ....IIII........
+  ...IIII.........
+  .IIII...........
+  IIII............
+  IIII............
+  III.............
+}
+# tile 79 (fire zap 2 0)
+{
+  .......CC.......
+  ......CCCC......
+  ......CCCC......
+  .......CC.......
+  .......CC.......
+  ......CCCC......
+  ......CCCC......
+  .......CC.......
+  .......CC.......
+  ......CCCC......
+  ......CCCC......
+  .......CC.......
+  .......CC.......
+  ......CCCC......
+  ......CCCC......
+  .......CC.......
+}
+# tile 80 (fire zap 2 1)
+{
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  .CC..CC..CC..CC.
+  CCCCCCCCCCCCCCCC
+  CCCCCCCCCCCCCCCC
+  .CC..CC..CC..CC.
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+}
+# tile 81 (fire zap 2 2)
+{
+  CCC.............
+  CCCC............
+  CCCC............
+  .CCCC...........
+  ...CCCC.........
+  ....CCCC........
+  ....CCCC........
+  .....CCCC.......
+  .......CCCC.....
+  ........CCCC....
+  ........CCCC....
+  .........CCCC...
+  ...........CCCC.
+  ............CCCC
+  ............CCCC
+  .............CCC
+}
+# tile 82 (fire zap 2 3)
+{
+  .............CCC
+  ............CCCC
+  ............CCCC
+  ...........CCCC.
+  .........CCCC...
+  ........CCCC....
+  ........CCCC....
+  .......CCCC.....
+  .....CCCC.......
+  ....CCCC........
+  ....CCCC........
+  ...CCCC.........
+  .CCCC...........
+  CCCC............
+  CCCC............
+  CCC.............
+}
+# tile 83 (frost zap 3 0)
+{
+  .......NN.......
+  ......NNNN......
+  ......NNNN......
+  .......NN.......
+  .......NN.......
+  ......NNNN......
+  ......NNNN......
+  .......NN.......
+  .......NN.......
+  ......NNNN......
+  ......NNNN......
+  .......NN.......
+  .......NN.......
+  ......NNNN......
+  ......NNNN......
+  .......NN.......
+}
+# tile 84 (frost zap 3 1)
+{
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  .NN..NN..NN..NN.
+  NNNNNNNNNNNNNNNN
+  NNNNNNNNNNNNNNNN
+  .NN..NN..NN..NN.
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+}
+# tile 85 (frost zap 3 2)
+{
+  NNN.............
+  NNNN............
+  NNNN............
+  .NNNN...........
+  ...NNNN.........
+  ....NNNN........
+  ....NNNN........
+  .....NNNN.......
+  .......NNNN.....
+  ........NNNN....
+  ........NNNN....
+  .........NNNN...
+  ...........NNNN.
+  ............NNNN
+  ............NNNN
+  .............NNN
+}
+# tile 86 (frost zap 3 3)
+{
+  .............NNN
+  ............NNNN
+  ............NNNN
+  ...........NNNN.
+  .........NNNN...
+  ........NNNN....
+  ........NNNN....
+  .......NNNN.....
+  .....NNNN.......
+  ....NNNN........
+  ....NNNN........
+  ...NNNN.........
+  .NNNN...........
+  NNNN............
+  NNNN............
+  NNN.............
+}
+# tile 87 (sleep zap 4 0)
+{
+  .......BB.......
+  ......BBBB......
+  ......BBBB......
+  .......BB.......
+  .......BB.......
+  ......BBBB......
+  ......BBBB......
+  .......BB.......
+  .......BB.......
+  ......BBBB......
+  ......BBBB......
+  .......BB.......
+  .......BB.......
+  ......BBBB......
+  ......BBBB......
+  .......BB.......
+}
+# tile 88 (sleep zap 4 1)
+{
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  .BB..BB..BB..BB.
+  BBBBBBBBBBBBBBBB
+  BBBBBBBBBBBBBBBB
+  .BB..BB..BB..BB.
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+}
+# tile 89 (sleep zap 4 2)
+{
+  BBB.............
+  BBBB............
+  BBBB............
+  .BBBB...........
+  ...BBBB.........
+  ....BBBB........
+  ....BBBB........
+  .....BBBB.......
+  .......BBBB.....
+  ........BBBB....
+  ........BBBB....
+  .........BBBB...
+  ...........BBBB.
+  ............BBBB
+  ............BBBB
+  .............BBB
+}
+# tile 90 (sleep zap 4 3)
+{
+  .............BBB
+  ............BBBB
+  ............BBBB
+  ...........BBBB.
+  .........BBBB...
+  ........BBBB....
+  ........BBBB....
+  .......BBBB.....
+  .....BBBB.......
+  ....BBBB........
+  ....BBBB........
+  ...BBBB.........
+  .BBBB...........
+  BBBB............
+  BBBB............
+  BBB.............
+}
+# tile 91 (death zap 5 0)
+{
+  .......AA.......
+  ......AAAA......
+  ......AAAA......
+  .......AA.......
+  .......AA.......
+  ......AAAA......
+  ......AAAA......
+  .......AA.......
+  .......AA.......
+  ......AAAA......
+  ......AAAA......
+  .......AA.......
+  .......AA.......
+  ......AAAA......
+  ......AAAA......
+  .......AA.......
+}
+# tile 92 (death zap 5 1)
+{
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  .AA..AA..AA..AA.
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  .AA..AA..AA..AA.
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+}
+# tile 93 (death zap 5 2)
+{
+  AAA.............
+  AAAA............
+  AAAA............
+  .AAAA...........
+  ...AAAA.........
+  ....AAAA........
+  ....AAAA........
+  .....AAAA.......
+  .......AAAA.....
+  ........AAAA....
+  ........AAAA....
+  .........AAAA...
+  ...........AAAA.
+  ............AAAA
+  ............AAAA
+  .............AAA
+}
+# tile 94 (death zap 5 3)
+{
+  .............AAA
+  ............AAAA
+  ............AAAA
+  ...........AAAA.
+  .........AAAA...
+  ........AAAA....
+  ........AAAA....
+  .......AAAA.....
+  .....AAAA.......
+  ....AAAA........
+  ....AAAA........
+  ...AAAA.........
+  .AAAA...........
+  AAAA............
+  AAAA............
+  AAA.............
+}
+# tile 95 (lightning zap 6 0)
+{
+  .......NN.......
+  ......NNNN......
+  ......NNNN......
+  .......NN.......
+  .......NN.......
+  ......NNNN......
+  ......NNNN......
+  .......NN.......
+  .......NN.......
+  ......NNNN......
+  ......NNNN......
+  .......NN.......
+  .......NN.......
+  ......NNNN......
+  ......NNNN......
+  .......NN.......
+}
+# tile 96 (lightning zap 6 1)
+{
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  .NN..NN..NN..NN.
+  NNNNNNNNNNNNNNNN
+  NNNNNNNNNNNNNNNN
+  .NN..NN..NN..NN.
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+}
+# tile 97 (lightning zap 6 2)
+{
+  NNN.............
+  NNNN............
+  NNNN............
+  .NNNN...........
+  ...NNNN.........
+  ....NNNN........
+  ....NNNN........
+  .....NNNN.......
+  .......NNNN.....
+  ........NNNN....
+  ........NNNN....
+  .........NNNN...
+  ...........NNNN.
+  ............NNNN
+  ............NNNN
+  .............NNN
+}
+# tile 98 (lightning zap 6 3)
+{
+  .............NNN
+  ............NNNN
+  ............NNNN
+  ...........NNNN.
+  .........NNNN...
+  ........NNNN....
+  ........NNNN....
+  .......NNNN.....
+  .....NNNN.......
+  ....NNNN........
+  ....NNNN........
+  ...NNNN.........
+  .NNNN...........
+  NNNN............
+  NNNN............
+  NNN.............
+}
+# tile 99 (poison gas zap 7 0)
+{
+  .......FF.......
+  ......FFFF......
+  ......FFFF......
+  .......FF.......
+  .......FF.......
+  ......FFFF......
+  ......FFFF......
+  .......FF.......
+  .......FF.......
+  ......FFFF......
+  ......FFFF......
+  .......FF.......
+  .......FF.......
+  ......FFFF......
+  ......FFFF......
+  .......FF.......
+}
+# tile 100 (poison gas zap 7 1)
+{
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  .FF..FF..FF..FF.
+  FFFFFFFFFFFFFFFF
+  FFFFFFFFFFFFFFFF
+  .FF..FF..FF..FF.
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+}
+# tile 101 (poison gas zap 7 2)
+{
+  FFF.............
+  FFFF............
+  FFFF............
+  .FFFF...........
+  ...FFFF.........
+  ....FFFF........
+  ....FFFF........
+  .....FFFF.......
+  .......FFFF.....
+  ........FFFF....
+  ........FFFF....
+  .........FFFF...
+  ...........FFFF.
+  ............FFFF
+  ............FFFF
+  .............FFF
+}
+# tile 102 (poison gas zap 7 3)
+{
+  .............FFF
+  ............FFFF
+  ............FFFF
+  ...........FFFF.
+  .........FFFF...
+  ........FFFF....
+  ........FFFF....
+  .......FFFF.....
+  .....FFFF.......
+  ....FFFF........
+  ....FFFF........
+  ...FFFF.........
+  .FFFF...........
+  FFFF............
+  FFFF............
+  FFF.............
+}
+# tile 103 (acid zap 8 0)
+{
+  .......GG.......
+  ......GGGG......
+  ......GGGG......
+  .......GG.......
+  .......GG.......
+  ......GGGG......
+  ......GGGG......
+  .......GG.......
+  .......GG.......
+  ......GGGG......
+  ......GGGG......
+  .......GG.......
+  .......GG.......
+  ......GGGG......
+  ......GGGG......
+  .......GG.......
+}
+# tile 104 (acid zap 8 1)
+{
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+  .GG..GG..GG..GG.
+  GGGGGGGGGGGGGGGG
+  GGGGGGGGGGGGGGGG
+  .GG..GG..GG..GG.
+  ................
+  ................
+  ................
+  ................
+  ................
+  ................
+}
+# tile 105 (acid zap 8 2)
+{
+  GGG.............
+  GGGG............
+  GGGG............
+  .GGGG...........
+  ...GGGG.........
+  ....GGGG........
+  ....GGGG........
+  .....GGGG.......
+  .......GGGG.....
+  ........GGGG....
+  ........GGGG....
+  .........GGGG...
+  ...........GGGG.
+  ............GGGG
+  ............GGGG
+  .............GGG
+}
+# tile 106 (acid zap 8 3)
+{
+  .............GGG
+  ............GGGG
+  ............GGGG
+  ...........GGGG.
+  .........GGGG...
+  ........GGGG....
+  ........GGGG....
+  .......GGGG.....
+  .....GGGG.......
+  ....GGGG........
+  ....GGGG........
+  ...GGGG.........
+  .GGGG...........
+  GGGG............
+  GGGG............
+  GGG.............
+}
+# tile 107 (dig beam)
+{
+  ....AAAA........
+  ..A....AA..AA...
+  .AA.AAA......AA.
+  .AA.A....A..AA..
+  ..A....A.A.A.AA.
+  .A..AAA.A....AA.
+  .A.AA.....A.AA..
+  ...AA....AA.....
+  .A.A...A...A.A..
+  ...A......AA.AA.
+  .A.AAA.AAAA.A.A.
+  .AA..AA.......A.
+  ..A...AA..A..AA.
+  ..AAAAA..AAAAA..
+  ....AA....AAA...
+  ................
+}
+# tile 108 (flash beam)
+{
+  ................
+  .....NNNNNN.....
+  ...NNNNNNNNNN...
+  ..NNNNNNNNNNNN..
+  ..NNNNNNNNNNNN..
+  .NNNNNNNNNNNNNN.
+  .NNNNNNNNNNNNNN.
+  .NNNNNNNNNNNNNN.
+  .NNNNNNNNNNNNNN.
+  .NNNNNNNNNNNNNN.
+  .NNNNNNNNNNNNNN.
+  ..NNNNNNNNNNNN..
+  ..NNNNNNNNNNNN..
+  ...NNNNNNNNNN...
+  .....NNNNNN.....
+  ................
+}
+# tile 109 (boom left)
+{
+  ................
+  ................
+  ....KK..........
+  ....KHKA........
+  .....KHKA.......
+  ......KKKA......
+  .......KKKA.....
+  ........KDKA....
+  ........JDKA....
+  .......JKDJA....
+  ......JKDJA.....
+  .....JHDJA......
+  ....JHDJA.......
+  .....KJA........
+  ................
+  ................
+}
+# tile 110 (boom right)
+{
+  ................
+  ................
+  .........JK.....
+  ........JDHJ....
+  .......JDHJA....
+  ......JDKJA.....
+  .....JDKJA......
+  .....KDJA.......
+  .....KDKA.......
+  ......KKKA......
+  .......KKKA.....
+  ........KHKA....
+  .........KHKA...
+  ..........KKA...
+  ................
+  ................
+}
+# tile 111 (shield1)
+{
+  ................
+  .....I....I.....
+  ....I......I....
+  ...I........I...
+  ..I...IIII...I..
+  .I............I.
+  ....I..II..I....
+  ....I.IIII.I....
+  ....I.IIII.I....
+  ....I..II..I....
+  .I............I.
+  ..I...IIII...I..
+  ...I........I...
+  ....I......I....
+  .....I....I.....
+  ................
+}
+# tile 112 (shield2)
+{
+  ................
+  .CCCCCCCCCCCCCCC
+  .C..............
+  .C.CCCCCCCCCCCC.
+  .C.C..........C.
+  .C.C.CCCCCCCC.C.
+  .C.C.C......C.C.
+  .C.C.C.CCCC.C.C.
+  .C.C.C.CC.C.C.C.
+  .C.C.C....C.C.C.
+  .C.C.CCCCCC.C.C.
+  .C.C........C.C.
+  .C.CCCCCCCCCC.C.
+  .C............C.
+  .CCCCCCCCCCCCCC.
+  ................
+}
+# tile 113 (shield3)
+{
+  .......HH.......
+  .......HH.......
+  ....HH.HH.HH....
+  ...H...HH...H...
+  ..H.H......H.H..
+  ..H..H....H..H..
+  ......H..H......
+  HHHH...HH...HHHH
+  HHHH...HH...HHHH
+  ......H..H......
+  ..H..H....H..H..
+  ..H.H......H.H..
+  ...H...HH...H...
+  ....HH.HH.HH....
+  .......HH.......
+  .......HH.......
+}
+# tile 114 (shield4)
+{
+  ................
+  ......NNNNN.....
+  ........N.......
+  ...NNNN.N.NNN...
+  ...N..N.N.N.N...
+  .N.NNNN.N.N.N...
+  .N......N.NNN.N.
+  .NNNNNNNN.....N.
+  .N.....NNNNNNNN.
+  .N.NNN.N......N.
+  ...N.N.N.NNNN.N.
+  ...N.N.N.N..N...
+  ...NNN.N.NNNN...
+  .......N........
+  .....NNNNN......
+  ................
+}
+# tile 115 (poison cloud)
+{
+  BBBBBBBBBBBBBBBB
+  BBBBBFFFFFFFBBBB
+  BBBFFFFFFFFFFBBB
+  BBFFFFFFFFFGFFBB
+  BBFFFFFFFFFFFFFB
+  BFFFFFFFFFFFFGFB
+  FFFGFFFFFFFFGFFF
+  FFFFFFFFFFGGFFFF
+  FFFFFFFFFFFFFGFF
+  FFGGFFFFFFFGGFFG
+  FFFFFGGGGGFFFFGG
+  BGFFFFFFFFFFGGGB
+  BBGGGFFFFGGGGGGB
+  BBBGGGGGGGGGGBBB
+  BBBBBBGGGGBBBBBB
+  BBBBBBBBBBBBBBBB
+}
+# tile 116 (valid position)
+{
+  ................
+  ................
+  .....GGGG.......
+  ....GGGGGG......
+  ...GGFFFFGG.....
+  ...GGF...GGF....
+  ....FF...GGF....
+  ........GGFF....
+  .......GGFF.....
+  ......GGFF......
+  ......GGF.......
+  .......FF.......
+  ......GG........
+  ......GGF.......
+  .......FF.......
+  ................
+}
+# tile 117 (swallow top left)
+{
+  AAAAAAADDDDDDAAA
+  AAAAADDDDDDDDDDD
+  AAAADDDDDDDDDDDD
+  AAADDDDDDCCDDDDD
+  AAADDDCCCCCCDDDD
+  AADDDDCCCCCDDDDD
+  AADDDCCCCCDDDDDD
+  AADDDCCCCDDDDD..
+  AADDDCCCDDDD....
+  AADDDCCCDDDD....
+  AADDDDDDDDD.....
+  AAADDDDDDD......
+  AAADDDDDDD......
+  AAAADDDDDD......
+  AAAADDDDDD......
+  AAAADDDDDD......
+}
+# tile 118 (swallow top center)
+{
+  AAAAAAAAAAAAAAAA
+  DDAAAAAAAAAAAAAA
+  DDDDAAAAAAAAAADD
+  DDDDDDDDDDDDDDDD
+  DDDDDDDDDDDDDDDD
+  DDDDDDDDDDDDDDDD
+  DDDDDDDCCCCCCDDD
+  .DDDDDDDDCCCCCDD
+  ...DDDDDDDDDDDDD
+  ....DDDDDDDDDDDD
+  ......DDDDDDDD..
+  .......DDDD.....
+  ................
+  ................
+  ................
+  ................
+}
+# tile 119 (swallow top right)
+{
+  AAAAAAAAAAAAAAAA
+  AAADDDDDAAAAAAAA
+  DDDDDDDDDDDAAAAA
+  DDDDDDDDDDDDAAAA
+  DDDDDCCCDDDDDAAA
+  DDDDDCCCCDDDDDAA
+  DDDDDCCCCDDDDDDA
+  DDDDDCCCCCDDDDDD
+  DDDDDDCCCCCDDDDD
+  DDDDDDDCCCCDDDDD
+  ...DDDDDCCCDDDDD
+  ...DDDDDDCCDDDDD
+  ....DDDDDDDDDDDD
+  ....DDDDDDDDDDDD
+  ....DDDDDDDDDDDD
+  ....DDDDDDDDDDDA
+}
+# tile 120 (swallow middle left)
+{
+  AAAADDDDDD......
+  AAAADDDDDDD.....
+  AAAADDDDDDD.....
+  AAAADDDDDDDD....
+  AAAADDCCCDDD....
+  AAADDDDCCDDD....
+  AADDDDCCCDDD....
+  AADDDDCCCDDD....
+  AADDDDCDDDDD....
+  ADDDDDDDDDD.....
+  ADDDDDDDDD......
+  DDDDDDDDD.......
+  DDDDDDDD........
+  DDDDDDD.........
+  DDDDDDD.........
+  DDCCDDD.........
+}
+# tile 121 (swallow middle right)
+{
+  ....DDDDDDDDDDDA
+  ....DDDDDDDDDDDA
+  ....DDDDDDDDDDAA
+  ....DDDDDDDDDDAA
+  ...DDDDDDDDDDDAA
+  ..DDDCCDDDDDDAAA
+  ..DDDCCDDDDDDAAA
+  ..DDDCCDDDDDAAAA
+  ..DDDCCDDDDDAAAA
+  ..DDDDDDDDDDAAAA
+  ...DDDDDDDDDAAAA
+  ...DDDDDDDDDAAAA
+  ....DDDDDDDDDAAA
+  .....DDDDDDDDAAA
+  ......DDDDDDDDAA
+  .......DDDDDDDAA
+}
+# tile 122 (swallow bottom left)
+{
+  DDDCDDD.........
+  DDDCDDD.........
+  ADDCDDD.........
+  ADDDDDDD........
+  ADDDDDDDDDDDD...
+  AADDDDDDDDDDDDDD
+  AADDDDDDDDDDDDDD
+  AAADDDDDDDDCDDDD
+  AAAAADDDDDDCCCCD
+  AAAAAAADDDDDCCCD
+  AAAAAAAAADDDDCCC
+  AAAAAAAAAADDDDCC
+  AAAAAAAAAAADDDDD
+  AAAAAAAAAAADDDDD
+  AAAAAAAAAAAADDDD
+  AAAAAAAAAAAAAADD
+}
+# tile 123 (swallow bottom center)
+{
+  ................
+  ................
+  ................
+  ................
+  .............DDD
+  ............DDDD
+  D...........DDDD
+  DD..........DDDC
+  DDD.........DDDC
+  DDDD........DDDC
+  DDDDDD....DDDDDC
+  DDDDDDDDDDDDDDDC
+  DDDDDDDDDDDDDDDC
+  DDDDDDDDDDDDDDDD
+  DDDDDDDDDDDDDDDD
+  DDDDDDDDDDDDDDAA
+}
+# tile 124 (swallow bottom right)
+{
+  ......DDDDDDDDAA
+  ......DDDDDDDDDA
+  .....DDDDDDDDDDA
+  ....DDDDDDDDDDDA
+  DDDDDDDDDDDDDDDA
+  DDDDDDDDDDDDDDDA
+  CCCDDDDDDDDDDDAA
+  CCCCDDDDDDDDDDAA
+  CCCDDDDDDDDDDDAA
+  CCDDDDDDDDDDDAAA
+  CCDDDDDDAAAAAAAA
+  CDDDDDAAAAAAAAAA
+  CDDDDAAAAAAAAAAA
+  DDDDAAAAAAAAAAAA
+  DDAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+}
+# tile 125 (explosion dark top left)
+{
+  ................
+  ................
+  .............AAA
+  ......A...AAAAAA
+  .........AAAAAAA
+  .........AAAAAA.
+  ........AAAA...A
+  ...AAA.AAAA...AA
+  .A...AAAAAA.AAAA
+  .....AAAAAA.AAAA
+  ....AAAAAAA.AAAA
+  ........AA..AA..
+  ....AAAAAAAAAA..
+  ...AAAA..AAA....
+  ..AAAA..AAAA....
+  ..AAA..AAAAA....
+}
+# tile 126 (explosion dark top center)
+{
+  ................
+  ................
+  A........AAAAAA.
+  AAAAAA.AAAAAAAA.
+  AAAAAA.....AAAAA
+  ...AAA.AAAAAAAAA
+  AAAAAA.AAAAAAAAA
+  AAAAAA.AAAAAAAA.
+  AA...........A..
+  ..AAA.A.....AAAA
+  .A.A.A...A...AAA
+  .PPA...AA.....AA
+  .A.....A....AAAA
+  .....A..A...PAAA
+  ........A.A.APAA
+  .PA...APAAAAAAAA
+}
+# tile 127 (explosion dark top right)
+{
+  ................
+  ................
+  ................
+  ........A...A...
+  AAAAA...........
+  AAAAAA...A..A...
+  AAAAAAA.........
+  ......AAAA......
+  AAAAA..AAAA.....
+  ..AAAAAAAAAA....
+  AA.AA....AAA....
+  AA.AAAAA.AAA....
+  AAPAA.AAAAAA.A..
+  AAA.....AAAA....
+  AA.A..A.AAAA....
+  A.AA..A.AAAAA...
+}
+# tile 128 (explosion dark middle left)
+{
+  ..AAA.A.AAA.....
+  ..AAA.AAAAA.AP..
+  ...AA.AA.......A
+  ...AAAAAA....PP.
+  ..AAA.AA..A..PAP
+  .AAA...A....P.AP
+  .AAA.AAA.A..P..P
+  .AAA.AAA...AAAAP
+  .AAA.AAA....PAAA
+  .AAA..AA....PPAA
+  ..AAA..AA...PAAP
+  ...AAA...AP.PPPP
+  ....AAA...P..P.A
+  .....AA.....AAA.
+  ..A.A...AAP...PA
+  ....A.........PA
+}
+# tile 129 (explosion dark middle center)
+{
+  APAAA..PPAPAAAAA
+  .APA..A.AAAPAAA.
+  AAP.PAA..AAAAAA.
+  PAPPPAAA..AAPA..
+  AAAPPAAAAPAAP..A
+  AAPP.PPPAAAAA..A
+  AAPAAAAAAAAAAA..
+  APPAAAAAAAAAAA..
+  AAAAAAAAAAAAPAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAA.AA
+  AAAAAAAAAAA.HH..
+}
+# tile 130 (explosion dark middle right)
+{
+  ..AAA.A.A.AAAA..
+  ..AAAAA.A.AAAA..
+  ..AAAAA.A.AAAA..
+  P.AAAAA...AAAA..
+  P.AAPAPAA.AAAA..
+  P...P..A..AAA...
+  ...AP..AAAAAA...
+  .PAAPAAAAAAAA...
+  AAP...PAAAAA....
+  ..AA.PPAA.A...A.
+  A...PP..........
+  .AAAAPPAA...A...
+  ..AA.PP.AAA.....
+  A......AAAAA....
+  AAA...AAAAAAA...
+  ....PPAAAAAAAA..
+}
+# tile 131 (explosion dark bottom left)
+{
+  ....A.......A..P
+  ....A.......AA..
+  .A..AA...P..A.A.
+  ...AAA.A..P..AAP
+  ...AAAA..AAP..A.
+  ...AAAA....P...A
+  ...AAAA..A..A..A
+  ...AAAAA.AAA....
+  ...AAAAA..AA....
+  ....AAAAAAAAA...
+  .....AAAAAAAAAAA
+  ...A..AAAAAAAAAA
+  ........AA.AAAAA
+  ...A........AAAA
+  ................
+  ................
+}
+# tile 132 (explosion dark bottom center)
+{
+  PPPAAAAAPAAA.A..
+  AAPPAAPPPPA.A...
+  PPPPPPPPPPA..APP
+  .PPAA.AA.APAA...
+  ..AAAA.A..AAAPAA
+  APPAPAP.A.A.PAA.
+  A..PPAAA.......P
+  AA.......A......
+  PAPA.AAAAAAAAAAP
+  AA.APAAAA......A
+  AAA.A.PP...AAAAA
+  AAAAAA.A..AAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAA..........AA
+  ................
+  ................
+}
+# tile 133 (explosion dark bottom right)
+{
+  ....P..AAAAAAA..
+  ..A..A.AA.A.AA..
+  PP..A..AA.A.AA..
+  ...AAA.AA.A.AA..
+  .AAAAA.AAA..AA..
+  ..PAA..AAA.AAA..
+  .AAA..AAA..AAA..
+  .A.AA.AAAAAAAA..
+  AA.AAAAAA.AAAA..
+  ...AAAAAAAAAAA..
+  .AAAAAAAA.AAA...
+  AAAAAAAA........
+  AAAAAA....A.....
+  AAA...A.........
+  ................
+  ................
+}
+# tile 134 (explosion noxious top left)
+{
+  ................
+  ................
+  .............FFF
+  ......F...FFFFFF
+  .........FFFFFFF
+  .........FFFFFF.
+  ........FFFF...F
+  ...FFF.FFFF...FF
+  .F...FFFFFF.FFFF
+  .....FFFFFF.FFFF
+  ....FFFFFFF.FFFF
+  ........FF..FF..
+  ....FFFFFFFFFF..
+  ...FFFF..FFF....
+  ..FFFF..FFFF....
+  ..FFF..FFFFF....
+}
+# tile 135 (explosion noxious top center)
+{
+  ................
+  ................
+  F........FFFFFF.
+  FFFFFF.FFFFFFFF.
+  FFFFFF.....FFFFF
+  ...FFF.FFFFFFFFF
+  FFFFFF.FFFFFFFFF
+  FFFFFF.FFFFFFFF.
+  FF...........F..
+  ..FFF.F.....FFFF
+  .H.F.F...F...FFF
+  .GGF...FF.....FF
+  .H.....F....FFFF
+  .....F..F...GFFF
+  ........F.F.FGFF
+  .GH...HGHHFFFFFF
+}
+# tile 136 (explosion noxious top right)
+{
+  ................
+  ................
+  ................
+  ........F...F...
+  FFFFF...........
+  FFFFFF...F..F...
+  FFFFFFF.........
+  ......FFFF......
+  FFFFF..FFFF.....
+  ..FFFFFFFFFF....
+  FF.FF....FFF....
+  FF.FFFFF.FFF....
+  FFGFF.FFFFFF.F..
+  FFF.....FFFF....
+  FF.F..F.FFFF....
+  F.FF..F.FFFFF...
+}
+# tile 137 (explosion noxious middle left)
+{
+  ..FFF.F.FFF.....
+  ..FFF.FFFFF.FG..
+  ...FF.FF.......F
+  ...FFFFFF....GG.
+  ..FFF.FF..F..GFG
+  .FFF...F....G.FG
+  .FFF.FFF.H..G..G
+  .FFF.FFF...FFFFG
+  .FFF.FFF....GFHH
+  .FFF..FF....GGHH
+  ..FFF..FF...GHHG
+  ...FFF...FG.GGGG
+  ....FFF...G..G.H
+  .....FF.....HHF.
+  ..F.F...FHG...GH
+  ....F.........GH
+}
+# tile 138 (explosion noxious middle center)
+{
+  FGHFF..GGFGHFFFF
+  .HGH..F.FFHGFHF.
+  HFG.GHF..HHHFFH.
+  GFGGGHHH..HHGF..
+  HHHGGHHHHGHHG..F
+  HHGG.GGGHHHHF..F
+  HHGHHHHHHHHHHF..
+  HGGHHHHHHHHHHH..
+  HHHHHHNNNNHHGHNH
+  GHHHHHHHNHHHHHNH
+  GHHGHGNNNNHHHHGF
+  GGNHNHNNNNHHHGGF
+  HHHHNHNNNHHHGGGG
+  HGGNGHNNNHHHGGGF
+  HHHHNHNHN.GGG.GF
+  GGGGNHHHGGG.HH..
+}
+# tile 139 (explosion noxious middle right)
+{
+  ..FFF.F.F.FFFF..
+  ..FFFFF.F.FFFF..
+  ..FFFFF.F.FFFF..
+  G.FFFFF...FFFF..
+  G.FFGFGFF.FFFF..
+  G...G.GF..FFF...
+  ...FG..FFFFFF...
+  .GFFFFFFFFFFF...
+  FFG...GFFFFF....
+  ..FF.GGFF.F...F.
+  F...GG..........
+  .FFFFGGFF...F...
+  ..HF.GG.FFF.....
+  H......FFFFF....
+  HFH...FFFFFFF...
+  ....GGFFFFFFFF..
+}
+# tile 140 (explosion noxious bottom left)
+{
+  ....F.......H..G
+  ....F.......FH..
+  .F..FF...G..F.H.
+  ...FFF.F..G..FFG
+  ...FFFF..FFG..F.
+  ...FFFF....G...F
+  ...FFFF..F..H..F
+  ...FFFFF.FFF....
+  ...FFFFF..FF....
+  ....FFFFFFFFF...
+  .....FFFHFFFFFFF
+  ...F..FFFFFFFFFF
+  ........FF.FFFFF
+  ...F........FFFF
+  ................
+  ................
+}
+# tile 141 (explosion noxious bottom center)
+{
+  GGGHHHHHGHHH.H..
+  HHGGHHGGGGH.F...
+  GGGGGGGGGGF..FGG
+  .GGHF.FF.HGFF...
+  ..HHHH.F..FFHGHF
+  HGGFGFG.H.H.GFF.
+  F..GGFFH.......G
+  HF.......F......
+  GHGF.FFFFFFFFFFG
+  HF.HGHFFF......F
+  FFF.F.GG...FFFFF
+  FFFFFF.F..FFFFFF
+  FFFFFFFFFFFFFFFF
+  FFFF..........FF
+  ................
+  ................
+}
+# tile 142 (explosion noxious bottom right)
+{
+  ....G..FFFFFFF..
+  ..F..F.FF.F.FF..
+  GG..F..FF.F.FF..
+  ...FFF.FF.F.FF..
+  .FFFFF.FFF..FF..
+  ..GFF..FFF.FFF..
+  .FFF..FFF..FFF..
+  .F.FF.FFFFFFFF..
+  FF.FFFFFF.FFFF..
+  ...FFFFFFFFFFF..
+  .FFFFFFFF.FFF...
+  FFFFFFFF........
+  FFFFFF....F.....
+  FFF...F.........
+  ................
+  ................
+}
+# tile 143 (explosion muddy top left)
+{
+  ................
+  ................
+  .............JJJ
+  ......J...JJJJJJ
+  .........JJJJJJJ
+  .........JJJJJJK
+  ........JJJJKKKJ
+  ...JJJ.JJJJKKKJJ
+  .J...JJJJJJKJJJJ
+  .....JJJJJJKJJJJ
+  ....JJJJJJJKJJJJ
+  .......KJJKKJJKK
+  ....JJJJJJJJJJKK
+  ...JJJJKKJJJKKKK
+  ..JJJJKKJJJJKKKK
+  ..JJJKKJJJJJKKKK
+}
+# tile 144 (explosion muddy top center)
+{
+  ................
+  ................
+  J........JJJJJJ.
+  JJJJJJKJJJJJJJJ.
+  JJJJJJKKKKKJJJJJ
+  KKKJJJKJJJJJJJJJ
+  JJJJJJKJJJJJJJJJ
+  JJJJJJKJJJJJJJJK
+  JJKKKKKKKKKKKJKK
+  KKJJJKJKKKKKJJJJ
+  KLKJKJKKKJKKKJJJ
+  KCCJKKKJJKKKKKJJ
+  KLKKKKKJKKKKJJJJ
+  KKKKKJKKJKKKCJJJ
+  KKKKKKKKJKJKJCJJ
+  KCLKKKLCLLJJJJJJ
+}
+# tile 145 (explosion muddy top right)
+{
+  ................
+  ................
+  ................
+  ........J...J...
+  JJJJJ...........
+  JJJJJJ...J..J...
+  JJJJJJJ.........
+  KKKKKKJJJJ......
+  JJJJJKKJJJJ.....
+  KKJJJJJJJJJJ....
+  JJKJJKKKKJJJ....
+  JJKJJJJJKJJJ....
+  JJCJJKJJJJJJ.J..
+  JJJKKKKKJJJJ....
+  JJKJKKJKJJJJ....
+  JKJJKKJKJJJJJ...
+}
+# tile 146 (explosion muddy middle left)
+{
+  ..JJJKJKJJJKKKKK
+  ..JJJKJJJJJKJCKK
+  ...JJKJJKKKKKKKJ
+  ...JJJJJJKKKKCCK
+  ..JJJKJJKKJKKCJC
+  .JJJKKKJKKKKCKJC
+  .JJJKJJJKLKKCKKC
+  .JJJKJJJKKKJJJJC
+  .JJJKJJJKKKKCJLL
+  .JJJKKJJKKKKCCLL
+  ..JJJKKJJKKKCLLC
+  ...JJJKKKJCKCCCC
+  ....JJJKKKCKKCKL
+  .....JJKKKKKLLJK
+  ..J.JKKKJLCKKKCL
+  ....JKKKKKKKKKCL
+}
+# tile 147 (explosion muddy middle center)
+{
+  JCLJJKKCCJCLJJJJ
+  KLCLKKJKJJLCJLJK
+  LJCKCLJKKLLLJJLK
+  CJCCCLLLKKLLCJKK
+  LLLCCLLLLCLLCKKJ
+  LLCCKCCCLLLLJKKJ
+  LLCLLLLLLLLLLJKK
+  LCCLLLLLLLLLLLKK
+  LLLLLLCCCCLLCLCL
+  CLLLLLLLCLLLLLCL
+  CLLCLCCCCCLLLLCJ
+  CCCLCLCCCCLLLCCJ
+  LLLLCLCCCLLLCCCC
+  LCCCCLCCCLLLCCCJ
+  LLLLCLCLCKCCCKCJ
+  CCCCCLLLCCCKLLKK
+}
+# tile 148 (explosion muddy middle right)
+{
+  KKJJJKJKJKJJJJ..
+  KKJJJJJKJKJJJJ..
+  KKJJJJJKJKJJJJ..
+  CKJJJJJKKKJJJJ..
+  CKJJCJCJJKJJJJ..
+  CKKKCKKJKKJJJ...
+  KKKJCKKJJJJJJ...
+  KCJJCJJJJJJJJ...
+  JJCKKKCJJJJJ....
+  KKJJKCCJJKJ...J.
+  JKKKCCKKKK......
+  KJJJJCCJJK..J...
+  KKLJKCCKJJJ.....
+  LKKKKKKJJJJJ....
+  LJLKKKJJJJJJJ...
+  KKKKCCJJJJJJJJ..
+}
+# tile 149 (explosion muddy bottom left)
+{
+  ....JKKKKKKKLKKC
+  ....JKKKKKKKJLKK
+  .J..JJKKKCKKJKLK
+  ...JJJKJKKCKKJJC
+  ...JJJJKKJJCKKJK
+  ...JJJJKKKKCKKKJ
+  ...JJJJKKJKKLKKJ
+  ...JJJJJKJJJKKKK
+  ...JJJJJKKJJKKKK
+  ....JJJJJJJJJKKK
+  .....JJJLJJJJJJJ
+  ...J..JJJJJJJJJJ
+  ........JJ.JJJJJ
+  ...J........JJJJ
+  ................
+  ................
+}
+# tile 150 (explosion muddy bottom center)
+{
+  CCCLLLLLCLLLKLKK
+  LLCCLLCCCCLKJKKK
+  CCCCCCCCCCJKKJCC
+  KCCLJKJJKLCJJKKK
+  KKLLLLKJKKJJLCLJ
+  LCCJCJCKLKLKCJJK
+  JKKCCJJLKKKKKKKC
+  LJKKKKKKKJKKKKKK
+  CLCJKJJJJJJJJJJC
+  LJKLCLJJJKKKKKKJ
+  JJJKJKCCKKKJJJJJ
+  JJJJJJKJKKJJJJJJ
+  JJJJJJJJJJJJJJJJ
+  JJJJ..........JJ
+  ................
+  ................
+}
+# tile 151 (explosion muddy bottom right)
+{
+  KKKKCKKJJJJJJJ..
+  KKJKKJKJJKJKJJ..
+  CCKKJKKJJKJKJJ..
+  KKKJJJKJJKJKJJ..
+  KJJJJJKJJJKKJJ..
+  KKCJJKKJJJKJJJ..
+  KJJJKKJJJKKJJJ..
+  KJKJJKJJJJJJJJ..
+  JJKJJJJJJKJJJJ..
+  KKKJJJJJJJJJJJ..
+  KJJJJJJJJ.JJJ...
+  JJJJJJJJ........
+  JJJJJJ....J.....
+  JJJ...J.........
+  ................
+  ................
+}
+# tile 152 (explosion wet top left)
+{
+  ................
+  ................
+  .............EEE
+  ......E...EEEEEE
+  .........EEEEEEE
+  .........EEEEEEP
+  ........EEEEPPPE
+  ...EEE.EEEEPPPEE
+  .E...EEEEEEPEEEE
+  .....EEEEEEPEEEE
+  ....EEEEEEEPEEEE
+  .......PEEPPEEPP
+  ....EEEEEEEEEEPP
+  ...EEEEPPEEEPPPP
+  ..EEEEPPEEEEPPPP
+  ..EEEPPEEEEEPPPP
+}
+# tile 153 (explosion wet top center)
+{
+  ................
+  ................
+  E........EEEEEE.
+  EEEEEEPEEEEEEEE.
+  EEEEEEPPPPPEEEEE
+  PPPEEEPEEEEEEEEE
+  EEEEEEPEEEEEEEEE
+  EEEEEEPEEEEEEEEP
+  EEPPPPPPPPPPPEPP
+  PPEEEPEPPPPPEEEE
+  PNPEPEPPPEPPPEEE
+  PBBEPPPEEPPPPPEE
+  PNPPPPPEPPPPEEEE
+  PPPPPEPPEPPPBEEE
+  PPPPPPPPEPEPEBEE
+  PBNPPPNBEEEEEEEE
+}
+# tile 154 (explosion wet top right)
+{
+  ................
+  ................
+  ................
+  ........E...E...
+  EEEEE...........
+  EEEEEE...E..E...
+  EEEEEEE.........
+  PPPPPPEEEE......
+  EEEEEPPEEEE.....
+  PPEEEEEEEEEE....
+  EEPEEPPPPEEE....
+  EEPEEEEEPEEE....
+  EEBEEPEEEEEE.E..
+  EEEPPPPPEEEE....
+  EEPEPPEPEEEE....
+  EPEEPPEPEEEEE...
+}
+# tile 155 (explosion wet middle left)
+{
+  ..EEEPEPEEEPPPPP
+  ..EEEPEEEEEPEBPP
+  ...EEPEEPPPPPPPE
+  ...EEEEEEPPPPBBP
+  ..EEEPEEPPEPPBEB
+  .EEEPPPEPPPPBPEB
+  .EEEPEEEPNPPBPPB
+  .EEEPEEEPPPEEEEB
+  .EEEPEEEPPPPBEEE
+  .EEEPPEEPPPPBBEE
+  ..EEEPPEEPPPBEEB
+  ...EEEPPPEBPBBBB
+  ....EEEPPPBPPBPN
+  .....EEPPPPPNNEP
+  ..E.EPPPENBPPPBE
+  ....EPPPPPPPPPBE
+}
+# tile 156 (explosion wet middle center)
+{
+  EBNEEPPBBEBNEEEE
+  PNBNPPEPEEEBENEP
+  NEBPBEEPPEEEEENP
+  BEBBBEEEPPEEBEPP
+  EEEBBEEEEBEEBPPE
+  EEBBPBBBEEEEEPPE
+  EEBEEEEEEEEEEEPP
+  EBBEEEEEEEEEEEPP
+  EEEEEEEEEEEEBEEE
+  BEEEEEEEEEEEEEEE
+  BEEBEBEEEEEEEEBE
+  BBEEEEEEEEEEEBBE
+  EEEEEEEEEEEEBBBB
+  EBBEBEEEEEEEBBBE
+  EEEEEEEEEPBBBPBE
+  BBBBEEEEBBBPNNPP
+}
+# tile 157 (explosion wet middle right)
+{
+  PPEEEPEPEPEEEE..
+  PPEEEEEPEPEEEE..
+  PPEEEEEPEPEEEE..
+  BPEEEEEPPPEEEE..
+  BPEEBEBEEPEEEE..
+  BPPPBPPEPPEEE...
+  PPPEBPPEEEEEE...
+  PBEEBEEEEEEEE...
+  EEBPPPBEEEEE....
+  PPEEPBBEEPE...E.
+  EPPPBBPPPP......
+  PEEEEBBEEP..E...
+  PPNEPBBPEEE.....
+  NPPPPPPEEEEE....
+  NENPPPEEEEEEE...
+  PPPPBBEEEEEEEE..
+}
+# tile 158 (explosion wet bottom left)
+{
+  ....EPPPPPPPNPPB
+  ....EPPPPPPPENPP
+  .E..EEPPPBPPEPNP
+  ...EEEPEPPBPPEEB
+  ...EEEEPPEEBPPEP
+  ...EEEEPPPPBPPPE
+  ...EEEEPPEPPNPPE
+  ...EEEEEPEEEPPPP
+  ...EEEEEPPEEPPPP
+  ....EEEEEEEEEPPP
+  .....EEENEEEEEEE
+  ...E..EEEEEEEEEE
+  ........EE.EEEEE
+  ...E........EEEE
+  ................
+  ................
+}
+# tile 159 (explosion wet bottom center)
+{
+  BBBEEEEEBEEEPEPP
+  EEBBEEBBBBEPEPPP
+  BBBBBBBBBBEPPEBB
+  PBBEEPEEPNBEEPPP
+  PPEEEEPEPPEENBNE
+  NBBEBEBPNPNPBEEP
+  EPPBBEENPPPPPPPB
+  NEPPPPPPPEPPPPPP
+  BNBEPEEEEEEEEEEB
+  NEPNBNEEEPPPPPPE
+  EEEPEPBBPPPEEEEE
+  EEEEEEPEPPEEEEEE
+  EEEEEEEEEEEEEEEE
+  EEEE..........EE
+  ................
+  ................
+}
+# tile 160 (explosion wet bottom right)
+{
+  PPPPBPPEEEEEEE..
+  PPEPPEPEEPEPEE..
+  BBPPEPPEEPEPEE..
+  PPPEEEPEEPEPEE..
+  PEEEEEPEEEPPEE..
+  PPBEEPPEEEPEEE..
+  PEEEPPEEEPPEEE..
+  PEPEEPEEEEEEEE..
+  EEPEEEEEEPEEEE..
+  PPPEEEEEEEEEEE..
+  PEEEEEEEE.EEE...
+  EEEEEEEE........
+  EEEEEE....E.....
+  EEE...E.........
+  ................
+  ................
+}
+# tile 161 (explosion magical top left)
+{
+  ................
+  ................
+  .............EEE
+  ......E...EEEEEE
+  .........EEEEEEE
+  .........EEEEEEC
+  ........EEEEIIIE
+  ...EEE.EEEEIIIEE
+  .E...EEEEEEIEEEE
+  .....EEEEEEIEEEE
+  ....EEEEEEEIEEEE
+  .......IEEIIEEII
+  ....EEEEEEEEEEII
+  ...EEEEIIEEEIIII
+  ..EEEEIIEEEEIIII
+  ..EEEIIEEEEEIIII
+}
+# tile 162 (explosion magical top center)
+{
+  ................
+  ................
+  E........EEEEEE.
+  EEEEEEIEEEEEEEE.
+  EEEEEEIIIIIEEEEE
+  IIIEEEIEEEEEEEEE
+  EEEEEEIEEEEEEEEE
+  EEEEEEIEEEEEEEEI
+  EEIIIIIIIIIIIEII
+  IIEEEIEIIIIIEEEE
+  IHIEIEIIIEIIIEEE
+  ILLEIIIEEIIIIIEE
+  IHIIIIIEIIIIEEEE
+  IIIIIEIIEIIILEEE
+  IIIIIIIIEIEIELEE
+  ILHIIIHLHHEEEEEE
+}
+# tile 163 (explosion magical top right)
+{
+  ................
+  ................
+  ................
+  ........E...E...
+  EEEEE...........
+  EEEEEE...E..E...
+  EEEEEEE.........
+  IIIIIIEEEE......
+  EEEEEIIEEEE.....
+  IIEEEEEEEEEE....
+  EEIEEIIIIEEE....
+  EEIEEEEEIEEE....
+  EELEEIEEEEEE.E..
+  EEEIIIIIEEEE....
+  EEIEIIEIEEEE....
+  EIEEIIEIEEEEE...
+}
+# tile 164 (explosion magical middle left)
+{
+  ..EEEIEIEEEIIIII
+  ..EEEIEEEEEIEIII
+  ...EEIEEIIIIIIIE
+  ...EEEEEEIIIIIII
+  ..EEEIEEIIEIIIEI
+  .EEEIIIEIIIIIIEI
+  .EEEIEEEINIIIIII
+  .EEEIEEEIIIEEEEI
+  .EEEIEEEIIIIIENN
+  .EEEIIEEIIIIIINN
+  ..EEEIIEEIIIINNI
+  ...EEEIIIEIIIIII
+  ....EEEIIIIIIIIN
+  .....EEIIIIINNEI
+  ..E.EIIIENIIIIIN
+  ....EIIIIIIIIIIN
+}
+# tile 165 (explosion magical middle center)
+{
+  EINEEIIIIEINEEEE
+  ININIIEIEENIENEI
+  NEIIINEIINNNEENI
+  IEIIINNNIINNIEII
+  NNNIINNNNINNIIIE
+  NNIIIIIINNNNEIIE
+  NNINNNNNNNNNNEII
+  NIINNNNNNNNNNNII
+  NNNNNNNNNNNNINNN
+  INNNNNNNNNNNNNNN
+  INNININNNNNNNNIE
+  IINNNNNNNNNNNIIE
+  NNNNNNNNNNNNIIII
+  NIININNNNNNNIIIE
+  NNNNNNNNNIIIIIIE
+  IIIINNNNIIIINNII
+}
+# tile 166 (explosion magical middle right)
+{
+  IIEEEIEIEIEEEE..
+  IIEEEEEIEIEEEE..
+  IIEEEEEIEIEEEE..
+  IIEEEEEIIIEEEE..
+  IIEEIEIEEIEEEE..
+  IIIIIIIEIIEEE...
+  IIIEIIIEEEEEE...
+  IIEEIEEEEEEEE...
+  EEIIIIIEEEEE....
+  IIEEIIIEEIE...E.
+  EIIIIIIIII......
+  IEEEEIIEEI..E...
+  IINEIIIIEEE.....
+  NIIIIIIEEEEE....
+  NENIIIEEEEEEE...
+  IIIIIIEEEEEEEE..
+}
+# tile 167 (explosion magical bottom left)
+{
+  ....EIIIIIIIHIII
+  ....EIIIIIIIEHII
+  .E..EEIIIIIIEIHI
+  ...EEEIEIIIIIEEI
+  ...EEEEIIEEIIIEI
+  ...EEEEIIIIIIIIE
+  ...EEEEIIEIIHIIE
+  ...EEEEEIEEEIIII
+  ...EEEEEIIEEIIII
+  ....EEEEEEEEEIII
+  .....EEEHEEEEEEE
+  ...E..EEEEEEEEEE
+  ........EE.EEEEE
+  ...E........EEEE
+  ................
+  ................
+}
+# tile 168 (explosion magical bottom center)
+{
+  IIINNNNNINNNINII
+  NNIINNIIIINIEIII
+  IIIIIIIIIIEIIEII
+  IIINEIEEINIEEIII
+  IINNNNIEIIEENINE
+  NIIEIEIININIIEEI
+  EIIIIEENIIIIIIII
+  NEIIIIIIIEIIIIII
+  INIEIEEEEEEEEEEI
+  NEININEEEIIIIIIE
+  EEEIEIIIIIIEEEEE
+  EEEEEEIEIIEEEEEE
+  EEEEEEEEEEEEEEEE
+  EEEE..........EE
+  ................
+  ................
+}
+# tile 169 (explosion magical bottom right)
+{
+  IIIIIIIEEEEEEE..
+  IIEIIEIEEIEIEE..
+  IIIIEIIEEIEIEE..
+  IIIEEEIEEIEIEE..
+  IEEEEEIEEEIIEE..
+  IIIEEIIEEEIEEE..
+  IEEEIIEEEIIEEE..
+  IEIEEIEEEEEEEE..
+  EEIEEEEEEIEEEE..
+  IIIEEEEEEEEEEE..
+  IEEEEEEEE.EEE...
+  EEEEEEEE........
+  EEEEEE....E.....
+  EEE...E.........
+  ................
+  ................
+}
+# tile 170 (explosion fiery top left)
+{
+  ................
+  ................
+  .............DDD
+  ......D...DDDDDD
+  .........DDDDDDD
+  .........DDDDDDC
+  ........DDDDCCCD
+  ...DDD.DDDDCCCDD
+  .D...DDDDDDCDDDD
+  .....DDDDDDCDDDD
+  ....DDDDDDDCDDDD
+  .......CDDCCDDCC
+  ....DDDDDDDDDDCC
+  ...DDDDCCDDDCCCC
+  ..DDDDCCDDDDCCCC
+  ..DDDCCDDDDDCCCC
+}
+# tile 171 (explosion fiery top center)
+{
+  ................
+  ................
+  D........DDDDDD.
+  DDDDDDCDDDDDDDD.
+  DDDDDDCCCCCDDDDD
+  CCCDDDCDDDDDDDDD
+  DDDDDDCDDDDDDDDD
+  DDDDDDCDDDDDDDDC
+  DDCCCCCCCCCCCDCC
+  CCDDDCDCCCCCDDDD
+  CHCDCDCCCDCCCDDD
+  CLLDCCCDDCCCCCDD
+  CHCCCCCDCCCCDDDD
+  CCCCCDCCDCCCLDDD
+  CCCCCCCCDCDCDLDD
+  CLHCCCHLHHDDDDDD
+}
+# tile 172 (explosion fiery top right)
+{
+  ................
+  ................
+  ................
+  ........D...D...
+  DDDDD...........
+  DDDDDD...D..D...
+  DDDDDDD.........
+  CCCCCCDDDD......
+  DDDDDCCDDDD.....
+  CCDDDDDDDDDD....
+  DDCDDCCCCDDD....
+  DDCDDDDDCDDD....
+  DDLDDCDDDDDD.D..
+  DDDCCCCCDDDD....
+  DDCDCCDCDDDD....
+  DCDDCCDCDDDDD...
+}
+# tile 173 (explosion fiery middle left)
+{
+  ..DDDCDCDDDCCCCC
+  ..DDDCDDDDDCDLCC
+  ...DDCDDCCCCCCCD
+  ...DDDDDDCCCCLLC
+  ..DDDCDDCCDCCLDL
+  .DDDCCCDCCCCLCDL
+  .DDDCDDDCHCCLCCL
+  .DDDCDDDCCCDDDDL
+  .DDDCDDDCCCCLDHH
+  .DDDCCDDCCCCLLHH
+  ..DDDCCDDCCCLHHL
+  ...DDDCCCDLCLLLL
+  ....DDDCCCLCCLCH
+  .....DDCCCCCHHDC
+  ..D.DCCCDHLCCCLH
+  ....DCCCCCCCCCLH
+}
+# tile 174 (explosion fiery middle center)
+{
+  DLHDDCCLLDLHDDDD
+  CHLHCCDCDDHLDHDC
+  HDLCLHDCCHHHDDHC
+  LDLLLHHHCCHHLDCC
+  HHHLLHHHHLHHLCCD
+  HHLLCLLLHHHHDCCD
+  HHLHHHHHHHHHHDCC
+  HLLHHHHHHHHHHHCC
+  HHHHHHNNNNHHLHNH
+  LHHHHHHHNHHHHHNH
+  LHHLHLNNNNHHHHLD
+  LLNHNHNNNNHHHLLD
+  HHHHNHNNNHHHLLLL
+  HLLNLHNNNHHHLLLD
+  HHHHNHNHNCLLLCLD
+  LLLLNHHHLLLCHHCC
+}
+# tile 175 (explosion fiery middle right)
+{
+  CCDDDCDCDCDDDD..
+  CCDDDDDCDCDDDD..
+  CCDDDDDCDCDDDD..
+  LCDDDDDCCCDDDD..
+  LCDDLDLDDCDDDD..
+  LCCCLCCDCCDDD...
+  CCCDLCCDDDDDD...
+  CLDDLDDDDDDDD...
+  DDLCCCLDDDDD....
+  CCDDCLLDDCD...D.
+  DCCCLLCCCC......
+  CDDDDLLDDC..D...
+  CCHDCLLCDDD.....
+  HCCCCCCDDDDD....
+  HDHCCCDDDDDDD...
+  CCCCLLDDDDDDDD..
+}
+# tile 176 (explosion fiery bottom left)
+{
+  ....DCCCCCCCHCCL
+  ....DCCCCCCCDHCC
+  .D..DDCCCLCCDCHC
+  ...DDDCDCCLCCDDL
+  ...DDDDCCDDLCCDC
+  ...DDDDCCCCLCCCD
+  ...DDDDCCDCCHCCD
+  ...DDDDDCDDDCCCC
+  ...DDDDDCCDDCCCC
+  ....DDDDDDDDDCCC
+  .....DDDHDDDDDDD
+  ...D..DDDDDDDDDD
+  ........DD.DDDDD
+  ...D........DDDD
+  ................
+  ................
+}
+# tile 177 (explosion fiery bottom center)
+{
+  LLLHHHHHLHHHCHCC
+  HHLLHHLLLLHCDCCC
+  LLLLLLLLLLDCCDLL
+  CLLHDCDDCHLDDCCC
+  CCHHHHCDCCDDHLHD
+  HLLDLDLCHCHCLDDC
+  DCCLLDDHCCCCCCCL
+  HDCCCCCCCDCCCCCC
+  LHLDCDDDDDDDDDDL
+  HDCHLHDDDCCCCCCD
+  DDDCDCLLCCCDDDDD
+  DDDDDDCDCCDDDDDD
+  DDDDDDDDDDDDDDDD
+  DDDD..........DD
+  ................
+  ................
+}
+# tile 178 (explosion fiery bottom right)
+{
+  CCCCLCCDDDDDDD..
+  CCDCCDCDDCDCDD..
+  LLCCDCCDDCDCDD..
+  CCCDDDCDDCDCDD..
+  CDDDDDCDDDCCDD..
+  CCLDDCCDDDCDDD..
+  CDDDCCDDDCCDDD..
+  CDCDDCDDDDDDDD..
+  DDCDDDDDDCDDDD..
+  CCCDDDDDDDDDDD..
+  CDDDDDDDD.DDD...
+  DDDDDDDD........
+  DDDDDD....D.....
+  DDD...D.........
+  ................
+  ................
+}
+# tile 179 (explosion frosty top left)
+{
+  ................
+  ................
+  .............EEE
+  .....NE...EEEEEE
+  ..N...N..ENBEEEE
+  .N.N.N...EEEEEEP
+  ....N...EEEEPPPE
+  ...NEN.NEEEPPPEE
+  .EN..ENEEEEPNBEE
+  ...N.EEEEEEPEEEE
+  ....EENBEEEPEEEE
+  .......PEEPPEEPP
+  ....EEEEEEEEEEPP
+  ...EEEEPPEEEPPPP
+  ..EEEEPPNBEEPPPP
+  ..EEEPPEEEEEPPPP
+}
+# tile 180 (explosion frosty top center)
+{
+  ................
+  ................
+  E........EEEEEE.
+  ENBEENPEEEENBEE.
+  EEEEEENPNPNEEEEE
+  PPBEEEPENEEEEEEE
+  EEEEEENNNNNEEEEE
+  EEEEEEPENEEENBEP
+  EEPPPPNPNPNPPPPP
+  PPEEENEPPPPNEEEE
+  PNPEPEPPPEPPPEEE
+  PBBEPPPEEPPNBPEE
+  PNPPPPPEPPPPEEEE
+  PPPPPEPPEPPPBEEE
+  PPPPPPPPEPEPEBEE
+  PBNPPPNBNNEEEEEE
+}
+# tile 181 (explosion frosty top right)
+{
+  ................
+  ................
+  ................
+  ........E...E...
+  EEEEE...........
+  EEEEEE...E..N...
+  EEEEEEEN..NN....
+  PPPPPPENEN......
+  EEEEEPPENEN.N...
+  PPEEEEEEEEEN.N..
+  EEPEEPPPPNNE.N..
+  EEPEEEEENEEE....
+  EEBEEPEEEEEE.E..
+  EEEPPPPPEEEE....
+  EEPEPPEPEEEE....
+  EPEEPPEPEEEEE...
+}
+# tile 182 (explosion frosty middle left)
+{
+  ..EEEPEPEEEPPPPP
+  ..EEEPEEEEEPEBPP
+  ...EEPEEPPPPPPPE
+  ...ENENEEPPPPBBP
+  ..EEENEEPPEPPBEB
+  .EEENENEPPPPBPEB
+  .EEEPEEEPNPPBPPB
+  .EEEPEEEPPPEEEEB
+  .EEEPEEEPPPPBENN
+  .EEEPPEEPPPPBBNN
+  ..EEEPNEEPPPBNNB
+  ...EENNNPEBPBBBB
+  ....EENPPPBPPBPN
+  .....EEPPPPPNNEP
+  ..E.EPPPENBPPPBN
+  ....EPPPPPPPPPBN
+}
+# tile 183 (explosion frosty middle center)
+{
+  EBNEEPPBBEBNEEEE
+  PNBNPPEPEENBENEP
+  NEBPBNEPPNNNEENP
+  BEBBBNNNPPNNBEPP
+  NNNBBNNNNBNNBPPE
+  NNBBPBBBNNNNEPPE
+  NNBNNNNNNNNNNEPP
+  NBBNNNNNNNNNNNPP
+  NNNNNNNNNNNNBNNN
+  BNNNNNNNNNNNNNNN
+  BNNBNBNNNNNNNNBE
+  BBNNNNNNNNNNNBBE
+  NNNNNNNNNNNNBBBB
+  NBBNBNNNNNNNBBBE
+  NNNNNNNNNPBBBPBE
+  BBBBNNNNBBBPNNPP
+}
+# tile 184 (explosion frosty middle right)
+{
+  PPEEEPEPEPEEEE..
+  PPEEEEEPEPEEEE..
+  PPEEEEEPEPEEEE..
+  BPEEEEEPPPEEEE..
+  BPEEBEBEEPEEEE..
+  BPPPBPPEPPEEE...
+  PPPEBPPENEEEN...
+  PBEEBEEEENENE...
+  EEBPPPBNNNNNNN..
+  PPEEPBBEENEN..E.
+  EPPPBBPPNP..N...
+  PEEEEBBEEP..E...
+  PPNEPBBPEEE.....
+  NPPPPPPEEEEE....
+  NENPPPEEEEEEE...
+  PPPPBBEEEEEEEE..
+}
+# tile 185 (explosion frosty bottom left)
+{
+  ....EPPPPPPPNPPB
+  ....EPPPPPPPENPP
+  .E..EEPPPBPPEPNP
+  ...EEEPEPPBPPEEB
+  ...EENEPPEEBPPEP
+  ...NEEENPPPBPPPE
+  ..NENPNPNEPPNPPE
+  ...NNENNPEEEPPPP
+  .N.PEEEPPNEEPPPP
+  ...NNENNEEEEEPPP
+  ..N.NPNENEEEEEEE
+  ...N..ENEEEEEEEE
+  .....N..EE.EEEEE
+  ...E........EEEE
+  ................
+  ................
+}
+# tile 186 (explosion frosty bottom center)
+{
+  BBBNNNNNBNNNPNPP
+  NNBBNNBBBBNPEPPP
+  BBBBBBBBBBEPPEBB
+  PBBNEPEEPNBEEPPP
+  PPNNNNPEPPEENBNE
+  NBBEBEBPNPNPBEEP
+  EPPBBEENPPPPPPPB
+  NEPPPPPPPEPPPPPP
+  BNBEPEEEEEEEEEEB
+  NEPNBNEEEPNENPPE
+  EEEPEPBBPPPNEEEE
+  EEEEEEPEPNNNNNEE
+  EEEEEEEEEEENEEEE
+  EEEE......N.N.EE
+  ................
+  ................
+}
+# tile 187 (explosion frosty bottom right)
+{
+  PPPPBPPEEEEEEE..
+  PPEPPEPEEPEPEE..
+  BBPPEPPEEPEPNEN.
+  PPPEEEPEEPEPEN..
+  PEEEEEPEEEPPNEN.
+  PPBEEPNENEPEEE..
+  PEEEPPENEPPEEE..
+  PEPEENNNNNEEEE..
+  EEPEEEENEPEEEE..
+  PPPEEENENEEEEE..
+  PEEEEEEEE.EEE...
+  EEEEEEEE........
+  EEEEEE....EN....
+  EEE...E...N.N...
+  ...........N....
+  ................
+}
+# tile 188 (warning 0)
+{
+  ................
+  ................
+  .....OOOO.......
+  ....OOOOOO......
+  ...OOAAAAOO.....
+  ...OOA...OOA....
+  ....AA...OOA....
+  ........OOAA....
+  .......OOAA.....
+  ......OOAA......
+  ......OOA.......
+  .......AA.......
+  ......OO........
+  ......OOA.......
+  .......AA.......
+  ................
+}
+# tile 189 (warning 1)
+{
+  ................
+  ................
+  .....OCOC.......
+  ....OCOCOC......
+  ...OCAAAAOC.....
+  ...COA...COA....
+  ....AA...OCA....
+  ........OCAA....
+  .......OCAA.....
+  ......OCAA......
+  ......COA.......
+  .......AA.......
+  ......CO........
+  ......OCA.......
+  .......AA.......
+  ................
+}
+# tile 190 (warning 2)
+{
+  ................
+  ................
+  .....CCCC.......
+  ....CCCCCC......
+  ...CCAAAACC.....
+  ...CCA...CCA....
+  ....AA...CCA....
+  ........CCAA....
+  .......CCAA.....
+  ......CCAA......
+  ......CCA.......
+  .......AA.......
+  ......CC........
+  ......CCA.......
+  .......AA.......
+  ................
+}
+# tile 191 (warning 3)
+{
+  ................
+  ................
+  .....DDDD.......
+  ....DDDDDD......
+  ...DDAAAADD.....
+  ...DDA...DDA....
+  ....AA...DDA....
+  ........DDAA....
+  .......DDAA.....
+  ......DDAA......
+  ......DDA.......
+  .......AA.......
+  ......DD........
+  ......DDA.......
+  .......AA.......
+  ................
+}
+# tile 192 (warning 4)
+{
+  ................
+  ................
+  .....IIII.......
+  ....IIIIII......
+  ...IIAAAAII.....
+  ...IIA...IIA....
+  ....AA...IIA....
+  ........IIAA....
+  .......IIAA.....
+  ......IIAA......
+  ......IIA.......
+  .......AA.......
+  ......II........
+  ......IIA.......
+  .......AA.......
+  ................
+}
+# tile 193 (warning 5)
+{
+  ................
+  ................
+  .....IEIE.......
+  ....IEIEIE......
+  ...IEAAAAIE.....
+  ...EIA...EIA....
+  ....AA...IEA....
+  ........IEAA....
+  .......IEAA.....
+  ......IEAA......
+  ......EIA.......
+  .......AA.......
+  ......EI........
+  ......IEA.......
+  .......AA.......
+  ................
+}
+# tile 194 (unexplored)
+{
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+}
+# tile 195 (nothing)
+{
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+  AAAAAAAAAAAAAAAA
+}
+# tile 196 (mines walls vertical)
+{
+  AJJKKKACJAAJJJAA
+  AJKKKACLJJAJJJJA
+  AJKKACLCKJJAJJJA
+  AAKACLCKJJJJAAAA
+  AAACLLKKJJJJJJAA
+  AACLLKKKAAJJJJJA
+  ACKKKKKACJAJJJJA
+  AKKKKKACLJJAJJJA
+  AAKKKACLKJJJAJAA
+  AAKKACLKKJJJJJAA
+  AACCCKKAAJJJJJJA
+  ACCKKKACJAJJJJJA
+  ACKKKACLJJAJJJJA
+  AAKKACLCKJJAJJAA
+  AAJACKCKKJJJAJAA
+  AAJCKKJAAAJJJJJA
+}
+# tile 197 (mines walls horizontal)
+{
+  AJAAAAAAJJAAAJAA
+  JJJAAAJJJJJAAAAJ
+  JJJACJAJJJACCJAJ
+  AAACLJJAJACCLJJA
+  AACLCKJJACCLCKJJ
+  ACKCKKJJJCKCKKJA
+  CJKKKKJJCKCKJJAC
+  KJJKCJJCKKKJJJCK
+  KJKKKJJKJKJJJJKK
+  JJJKCJKKJKJJJCKJ
+  JJJJJJKJKKJJJKKJ
+  JJJJJKJJJJJJJJJJ
+  JJJJJJJJJJJJJJJJ
+  JJJJJJJJJJJJJJJJ
+  JJJJJJJJJJJJJJJJ
+  AAAAAAAAAAAAAAAA
+}
+# tile 198 (mines walls tlcorn)
+{
+  AAAAAAKCCKKJAAAA
+  AAAAKKCLCJKJJAAA
+  AAKKKCLCKJJJKKAA
+  AKKKCLCKJJJJJJKA
+  AKKCLLKKJJJJJJJA
+  AKCLLKKKAAJJJJJJ
+  ACKKKKKACJAJJJJJ
+  AKKKKKACLJJAAJJJ
+  AAKKKCLLKJJJAJAJ
+  AAKKCCCKKJJJAJAA
+  AACCKKKAAJJJJJJA
+  ACCKKKACJAJJJJJA
+  ACKKKACLJJAJJJJA
+  AAKKACLCKJJAJJAA
+  AAJACKCKKJJJAJAA
+  AAJCKKJAAAJJJJJA
+}
+# tile 199 (mines walls trcorn)
+{
+  AAAAAAKCCKKJAAAA
+  AAAAKKCLCJKJJAAA
+  AAKKKCLCKJJJKKAA
+  AKKCCLCKJJJJJJKA
+  KKCCLLKKJJJJJJJA
+  KKCLKKKKAAJJJJJA
+  KCLKKKKACJAJJJJA
+  CKKKKKACLJJAAJJA
+  KAKKKCLLKJJJAJAA
+  AKKKCCCKKJJJAJAA
+  AACCKKKAAJJJJJJA
+  ACCKKKACJAJJJJJA
+  ACKKKACLJJAJJJJA
+  AKKKACLCKJJAJJAA
+  AAJACKCKKJJJAJAA
+  AAJCKKJAAAJJJJJA
+}
+# tile 200 (mines walls blcorn)
+{
+  AKKKAAKKKKAAJJJA
+  AKKAAKCCCJJJAAJA
+  AKKAALLJJJACCJAA
+  AKAACLJJJACCLJJA
+  AAACCKJJACLLCKJJ
+  AAACLKJJJCKCKKJA
+  AACLKKJJCKCKJJAC
+  AAKKCJJCKKKJJJCK
+  ACKKKJJKJKJJJJKK
+  ACKKCJKKJKJJJCKJ
+  AKKKJJKJKKJJJKKJ
+  ACKJJKJJJJJJJJJJ
+  AKJJJJJJJJJJJJJJ
+  AKJJJJJJJJJJJJJJ
+  AJJJJJJJJJJJJJJJ
+  AAAAAAAAAAAAAAAA
+}
+# tile 201 (mines walls brcorn)
+{
+  AKKAAAKKAAAAJJJA
+  AKAAKKLCKAAAAAJA
+  AAKKCLCJJACCAJJA
+  AKKCLJJJACCCLAJA
+  AKCKKKJACCCLCAAA
+  ACKKKKJACCKCKKAA
+  CJKKKKACCKCKJJAA
+  KJJKCJJCKKKJJJAA
+  KJKKKJJKJKJJJJJA
+  JJJKCJKKJKJJJJJA
+  JJJJJJKJKKJJJJJA
+  JJJJJKJJJJJJJJJA
+  JJJJJJJJJJJJJJJA
+  JJJJJJJJJJJJJJJA
+  JJJJJJJJJJJJJJJA
+  AAAAAAAAAAAAAAAA
+}
+# tile 202 (mines walls cross wall)
+{
+  AAAAAAKCCKKJAAAA
+  AAAAKCCLCJKJJAAA
+  AAKKCCLCKJJJKKAA
+  AKKKCLCKJJJJJJKA
+  KKKCLKKKJJJJJJJA
+  KKCLKKKKAAJJJJJJ
+  KCKLKKKACJAJJJJJ
+  CKKKKKACLJJAAJJJ
+  KAKKKCLLKJJJAJAJ
+  AKKKCCCKKJJJAJAA
+  AACCKKKAAJJJJJJA
+  ACCKKKACJAJJJJJA
+  ACKKKACLJJAJJJJA
+  AKKKACLCKJJAJJAA
+  AAJACKCKKJJJAJAA
+  AAJCKKJAAAJJJJJA
+}
+# tile 203 (mines walls tuwall)
+{
+  AKKAAAKKKKAAJJJA
+  AKAAKKLCCJJJAAJA
+  AAKKCLCJJJACCJAA
+  AKKCLJJJJACCLJJA
+  AKCLCKJJACCLCKJJ
+  ACKCKKJJJCKCKKJA
+  CJKKKKJJCKCKJJAC
+  KJJKCJJCKKKJJJCK
+  KJKKKJJKJKJJJJKK
+  JJJKCJKKJKJJJCKJ
+  JJJJJJKJKKJJJKKJ
+  JJJJJKJJJJJJJJJJ
+  JJJJJJJJJJJJJJJJ
+  JJJJJJJJJJJJJJJJ
+  JJJJJJJJJJJJJJJJ
+  AAAAAAAAAAAAAAAA
+}
+# tile 204 (mines walls tdwall)
+{
+  AAAAAAKCCKKJAAAA
+  AAAAKCCLCJKJJAAA
+  AAKKKCLCKJJJKKAA
+  AKKKCLCKJJJJJJKA
+  KKCCLLKKJJJJJJJA
+  KKCLLKKKAAJJJJJJ
+  KCLLKKKACJAJJJJJ
+  CKLKKKACLJJAAJJJ
+  KAKKKCLLKJJJAJAJ
+  AKKKCCCKKJJJAJAA
+  AACCKKKAAJJJJJJA
+  ACCKKKACJAJJJJJA
+  ACKKKACLJJAJJJJA
+  AKKKACLCKJJAJJAA
+  AAJACKCKKJJJAJAA
+  AAJCKKJAAAJJJJJA
+}
+# tile 205 (mines walls tlwall)
+{
+  AKKAACKCCKKJAJJA
+  AKACKKKLLJKJJAJA
+  AAKKKCCCKJJJKKAA
+  AKKKCCLKJJJJJJKA
+  AKKCLLKKJJJJJJJA
+  AKCLLKKKAAJJJJJJ
+  ACLKKKKACJAJJJJJ
+  AKKKKKACLJJAAJJJ
+  AAKKKCLLKJJJAJAJ
+  AAKKCCCKKJJJAJAA
+  AACCKKKAAJJJJJJA
+  ACCKKKACJAJJJJJA
+  ACKKKACLJJAJJJJA
+  AAKKACLCKJJAJJAA
+  AAJACKCKKJJJAJAA
+  AAJCKKJAAAJJJJJA
+}
+# tile 206 (mines walls trwall)
+{
+  AKKAACKCCKKJAJJA
+  AKACKKCLCJKJJAJA
+  AAKKCCLCKJJJKKAA
+  AKKCLLCKJJJJJJKA
+  KKCCLLKKJJJJJJJA
+  KCKLLKKKAAJJJJJA
+  CCKKKKKACJAJJJJA
+  CKKKKKACLJJAAJJA
+  KAKKKCLLKJJJAJAA
+  AKKKCCCKKJJJAJAA
+  AACCKKKAAJJJJJJA
+  ACCKKKACJAJJJJJA
+  ACKKKACLJJAJJJJA
+  AKKKACLCKJJAJJAA
+  AAJACKCKKJJJAJAA
+  AAJCKKJAAAJJJJJA
+}
+# tile 207 (gehennom walls vertical)
+{
+  ALLDAJ11111JLLDA
+  ADDDAJ1J11JJDDDA
+  ADDDAJ11111JDDDA
+  ADDDAJ11111JDDDA
+  ADDDAJJ1111JDDDA
+  AJAAAJJ1111JJAJA
+  AJJJAJJ1111JJJJA
+  AD11AJJ11J1JD1JA
+  ALLDAJ11111JLLDA
+  ADDDAJ11111JDDDA
+  ADDDAJ11111JDDDA
+  ADDDAJ11111JDDDA
+  ADDDAJJ1J1JJDDDA
+  AJAAAJJ1111JJAJA
+  AJJJAJJ1111JJJJA
+  AD11AJJ1111JD1JA
+}
+# tile 208 (gehennom walls horizontal)
+{
+  AAALDDAAAAALDDAA
+  DDDLDDAJDDDLDDAJ
+  1DDJJJAJ1DDJJJAJ
+  JJJJJJJJJJJJJJJJ
+  11JJJ11111JJJ111
+  11LDD11111LDD111
+  DDLDDAJDDDLDDAJD
+  DDJJJAJ1DDJJJAJ1
+  JJJJJJJJJJJJJJJJ
+  11JD1111JD111JD1
+  11J11111J1111J11
+  JJJJJJJJJJJJJJJJ
+  JD1111JD1111JD11
+  J11111J11111J111
+  JJJJJJJJJJJJJJJJ
+  AAAAAAAAAAAAAAAA
+}
+# tile 209 (gehennom walls tlcorn)
+{
+  AAALLLLDDDDDDAAA
+  LLLLAAJJ1111DJJJ
+  DDDLAJJ111CCDJJJ
+  DDDDDDDDDDDDDJJJ
+  DDD1111111111JJJ
+  DDD1111111111JJJ
+  DD111111111111JJ
+  D11111111111111J
+  JJJJJJJJJJJJJJJJ
+  A11JJJJJJJJJ111J
+  ADDDAAAAAAAADDDA
+  ADDDAJ11111JDDDA
+  ADDDAJ11111JDDDA
+  AJAAAJJ1111JJAJA
+  AJJJAJJ1111JJJJA
+  AD11AJJ1111JD1JA
+}
+# tile 210 (gehennom walls trcorn)
+{
+  AAALLLLDDDDDDAAA
+  LLLLAAJJ1111DJJJ
+  DDDLAJJ111CCDJJJ
+  DDDDDDDDDDDDDJJJ
+  DDD1111111111JJJ
+  DDD1111111111JJJ
+  DD111111111111JJ
+  D11111111111111J
+  JJJJJJJJJJJJJJJJ
+  A11JJJJJJJJJ111J
+  ADDDAAAAAAAADDDA
+  ADDDAJ11111JDDDA
+  ADDDAJ11111JDDDA
+  AJAAAJJ1111JJAJA
+  AJJJAJJ1111JJJJA
+  AD11AJJ1111JD1JA
+}
+# tile 211 (gehennom walls blcorn)
+{
+  AAALLLLDDDDDDAAA
+  LLLLAAJJ1111DJJJ
+  DDDLAJJ111CCDJJJ
+  DDDDDDDDDDDDDJJJ
+  DDD1111111111JJJ
+  DDD1111111111JJJ
+  DD111111111111JJ
+  D11111111111111J
+  JJJJJJJJJJJJJJJJ
+  11JD1111JD111JD1
+  11J11111J1111J11
+  JJJJJJJJJJJJJJJJ
+  JD1111JD1111JD11
+  J11111J11111J111
+  JJJJJJJJJJJJJJJJ
+  AAAAAAAAAAAAAAAA
+}
+# tile 212 (gehennom walls brcorn)
+{
+  AAALLLLDDDDDDAAA
+  LLLLAAJJ1111DJJJ
+  DDDLAJJ111CCDJJJ
+  DDDDDDDDDDDDDJJJ
+  DDD1111111111JJJ
+  DDD1111111111JJJ
+  DD111111111111JJ
+  D11111111111111J
+  JJJJJJJJJJJJJJJJ
+  11JD1111JD111JD1
+  11J11111J1111J11
+  JJJJJJJJJJJJJJJJ
+  JD1111JD1111JD11
+  J11111J11111J111
+  JJJJJJJJJJJJJJJJ
+  AAAAAAAAAAAAAAAA
+}
+# tile 213 (gehennom walls cross wall)
+{
+  AAALLLLDDDDDDAAA
+  LLLLAAJJ1111DJJJ
+  DDDLAJJ111CCDJJJ
+  DDDDDDDDDDDDDJJJ
+  DDD1111111111JJJ
+  DDD1111111111JJJ
+  DD111111111111JJ
+  D11111111111111J
+  JJJJJJJJJJJJJJJJ
+  A11JJJJJJJJJ111J
+  ADDDAAAAAAAADDDA
+  ADDDAJ11111JDDDA
+  ADDDAJ11111JDDDA
+  AJAAAJJ1111JJAJA
+  AJJJAJJ1111JJJJA
+  AD11AJJ1111JD1JA
+}
+# tile 214 (gehennom walls tuwall)
+{
+  AAALLLLDDDDDDAAA
+  LLLLAAJJ1111DJJJ
+  DDDLAJJ111CCDJJJ
+  DDDDDDDDDDDDDJJJ
+  DDD1111111111JJJ
+  DDD1111111111JJJ
+  DD111111111111JJ
+  D11111111111111J
+  JJJJJJJJJJJJJJJJ
+  11JD1111JD111JD1
+  11J11111J1111J11
+  JJJJJJJJJJJJJJJJ
+  JD1111JD1111JD11
+  J11111J11111J111
+  JJJJJJJJJJJJJJJJ
+  AAAAAAAAAAAAAAAA
+}
+# tile 215 (gehennom walls tdwall)
+{
+  AAALLLLDDDDDDAAA
+  LLLLAAJJ1111DJJJ
+  DDDLAJJ111CCDJJJ
+  DDDDDDDDDDDDDJJJ
+  DDD1111111111JJJ
+  DDD1111111111JJJ
+  DD111111111111JJ
+  D11111111111111J
+  JJJJJJJJJJJJJJJJ
+  A11JJJJJJJJJ111J
+  ADDDAAAAAAAADDDA
+  ADDDAJ11111JDDDA
+  ADDDAJ11111JDDDA
+  AJAAAJJ1111JJAJA
+  AJJJAJJ1111JJJJA
+  AD11AJJ1111JD1JA
+}
+# tile 216 (gehennom walls tlwall)
+{
+  AAALLLLDDDDDDAAA
+  LLLLAAJJ1111DJJJ
+  DDDLAJJ111CCDJJJ
+  DDDDDDDDDDDDDJJJ
+  DDD1111111111JJJ
+  DDD1111111111JJJ
+  DD111111111111JJ
+  D11111111111111J
+  JJJJJJJJJJJJJJJJ
+  A11JJJJJJJJJ111J
+  ADDDAAAAAAAADDDA
+  ADDDAJ11111JDDDA
+  ADDDAJ11111JDDDA
+  AJAAAJJ1111JJAJA
+  AJJJAJJ1111JJJJA
+  AD11AJJ1111JD1JA
+}
+# tile 217 (gehennom walls trwall)
+{
+  AAALLLLDDDDDDAAA
+  LLLLAAJJ1111DJJJ
+  DDDLAJJ111CCDJJJ
+  DDDDDDDDDDDDDJJJ
+  DDD1111111111JJJ
+  DDD1111111111JJJ
+  DD111111111111JJ
+  D11111111111111J
+  JJJJJJJJJJJJJJJJ
+  A11JJJJJJJJJ111J
+  ADDDAAAAAAAADDDA
+  ADDDAJ11111JDDDA
+  ADDDAJ11111JDDDA
+  AJAAAJJ1111JJAJA
+  AJJJAJJ1111JJJJA
+  AD11AJJ1111JD1JA
+}
+# tile 218 (knox walls vertical)
+{
+  AJJJAAACJAAAJJJA
+  AJJJAACLJJAAJJJA
+  AJJJACLCKJJAJJJA
+  AAAAALCKJJJAAAAA
+  AAJAAAKKJJAAAJAA
+  ACJJAAAAAAAACJJA
+  AJJJAAACJAAAJJJA
+  AJJJAACLJJAAJJJA
+  AAAAACLCKJJAAAAA
+  AAJAAACKKJAAAJAA
+  ACJJAAAAAAAACJJA
+  AJJJAAACJAAAJJJA
+  AJJJAACLJJAAJJJA
+  AAAAACLCKJJAAAAA
+  AAJAAACKKJAAAJAA
+  ACJJAAAAAAAACJJA
+}
+# tile 219 (knox walls horizontal)
+{
+  AJAAAJAAAJAAAJAA
+  JJJAAAJAJJJAAAJA
+  JJJACJAAJJJACJAA
+  AAACLJJAJJACLJJA
+  AACLCKJJAACLCKJJ
+  AAACKKJAAAACKKJA
+  AJAAAJAAAJAAAJAA
+  KJJACJJAKJJACJJA
+  KJJAKJJAKJJACJJA
+  KJJACJAAKJJAKJAA
+  CJJACJAACJJAKJJA
+  KJAACJJACJJACJJA
+  KJAACJJACJAAKJJA
+  KJJAKJJAKJJACJAA
+  KJJACJJAKJJACJJA
+  AAAAAAAAAAAAAAAA
+}
+# tile 220 (knox walls tlcorn)
+{
+  AAAAAAKCJKAAAAAA
+  AAAAKKCLKJKKAAAA
+  AAKKKCLCKJJKKKAA
+  AKKKCLCKKJJJKKKA
+  AKKCCCKKJJJJJKKA
+  AKCCCKKAAJJJJJKA
+  AJJCKKACJAJJJJJA
+  AJJJAACLJJAAJJJA
+  AAAAACLCKJJAAAAA
+  AAJAAACKKJAAAJAA
+  ACJJAAAAAAAACJJA
+  AJJJAAACJAAAJJJA
+  AJJJAACLJJAAJJJA
+  AAAAACLCKJJAAAAA
+  AAJAAACKKJAAAJAA
+  ACJJAAAAAAAACJJA
+}
+# tile 221 (knox walls trcorn)
+{
+  AAAAAAKCJKAAAAAA
+  AAAAKKCLKJKKAAAA
+  AAKKKCLCKJJKKKAA
+  AKKKCLCKKJJJKKKA
+  AKKCCCKKJJJJJKKA
+  AKCCCKKAAJJJJJKA
+  AJJCKKACJAJJJJJA
+  AJJJAACLJJAAJJJA
+  AAAAACLCKJJAAAAA
+  AAJAAACKKJAAAJAA
+  ACJJAAAAAAAACJJA
+  AJJJAAACJAAAJJJA
+  AJJJAACLJJAAJJJA
+  AAAAACLCKJJAAAAA
+  AAJAAACKKJAAAJAA
+  ACJJAAAAAAAACJJA
+}
+# tile 222 (knox walls blcorn)
+{
+  AAAAAAKCJKAAAAAA
+  AAAAKKCLKJKKAAAA
+  AAKKKCLCKJJKKKAA
+  AKKKCLCKKJJJKKKA
+  AKKCCCKKJJJJJKKA
+  AACCCAKJJAJJJAKA
+  AJACAJAJAJAJAJAA
+  KJJACJJAKJJACJJA
+  KJJAKJJAKJJACJJA
+  KJJACJAAKJJAKJAA
+  CJJACJAACJJAKJJA
+  KJAACJJACJJACJJA
+  KJAACJJACJAAKJJA
+  KJJAKJJAKJJACJAA
+  KJJACJJAKJJACJJA
+  AAAAAAAAAAAAAAAA
+}
+# tile 223 (knox walls brcorn)
+{
+  AAAAAAKCJKAAAAAA
+  AAAAKKCLKJKKAAAA
+  AAKKKCLCKJJKKKAA
+  AKKKCLCKKJJJKKKA
+  AKKCCCKKJJJJJKKA
+  AACCCAKJJAJJJAKA
+  AJACAJAJAJAJAJAA
+  KJJACJJAKJJACJJA
+  KJJAKJJAKJJACJJA
+  KJJACJAAKJJAKJAA
+  CJJACJAACJJAKJJA
+  KJAACJJACJJACJJA
+  KJAACJJACJAAKJJA
+  KJJAKJJAKJJACJAA
+  KJJACJJAKJJACJJA
+  AAAAAAAAAAAAAAAA
+}
+# tile 224 (knox walls cross wall)
+{
+  AAAAAAKCJKAAAAAA
+  AAAAKKCLKJKKAAAA
+  AAKKKCLCKJJKKKAA
+  AKKKCLCKKJJJKKKA
+  AKKCCCKKJJJJJKKA
+  AKCCCKKAAJJJJJKA
+  AJJCKKACJAJJJJJA
+  AJJJAACLJJAAJJJA
+  AAAAACLCKJJAAAAA
+  AAJAAACKKJAAAJAA
+  ACJJAAAAAAAACJJA
+  AJJJAAACJAAAJJJA
+  AJJJAACLJJAAJJJA
+  AAAAACLCKJJAAAAA
+  AAJAAACKKJAAAJAA
+  ACJJAAAAAAAACJJA
+}
+# tile 225 (knox walls tuwall)
+{
+  AAAAAAKCJKAAAAAA
+  AAAAKKCLKJKKAAAA
+  AAKKKCLCKJJKKKAA
+  AKKKCLCKKJJJKKKA
+  AKKCCCKKJJJJJKKA
+  AACCCAKJJAJJJAKA
+  AJACAJAJAJAJAJAA
+  KJJACJJAKJJACJJA
+  KJJAKJJAKJJACJJA
+  KJJACJAAKJJAKJAA
+  CJJACJAACJJAKJJA
+  KJAACJJACJJACJJA
+  KJAACJJACJAAKJJA
+  KJJAKJJAKJJACJAA
+  KJJACJJAKJJACJJA
+  AAAAAAAAAAAAAAAA
+}
+# tile 226 (knox walls tdwall)
+{
+  AAAAAAKCJKAAAAAA
+  AAAAKKCLKJKKAAAA
+  AAKKKCLCKJJKKKAA
+  AKKKCLCKKJJJKKKA
+  AKKCCCKKJJJJJKKA
+  AKCCCKKAAJJJJJKA
+  AJJCKKACJAJJJJJA
+  AJJJAACLJJAAJJJA
+  AAAAACLCKJJAAAAA
+  AAJAAACKKJAAAJAA
+  ACJJAAAAAAAACJJA
+  AJJJAAACJAAAJJJA
+  AJJJAACLJJAAJJJA
+  AAAAACLCKJJAAAAA
+  AAJAAACKKJAAAJAA
+  ACJJAAAAAAAACJJA
+}
+# tile 227 (knox walls tlwall)
+{
+  AAAAAAKCJKAAAAAA
+  AAAAKKCLKJKKAAAA
+  AAKKKCLCKJJKKKAA
+  AKKKCLCKKJJJKKKA
+  AKKCCCKKJJJJJKKA
+  AKCCCKKAAJJJJJKA
+  AJJCKKACJAJJJJJA
+  AJJJAACLJJAAJJJA
+  AAAAACLCKJJAAAAA
+  AAJAAACKKJAAAJAA
+  ACJJAAAAAAAACJJA
+  AJJJAAACJAAAJJJA
+  AJJJAACLJJAAJJJA
+  AAAAACLCKJJAAAAA
+  AAJAAACKKJAAAJAA
+  ACJJAAAAAAAACJJA
+}
+# tile 228 (knox walls trwall)
+{
+  AAAAAAKCJKAAAAAA
+  AAAAKKCLKJKKAAAA
+  AAKKKCLCKJJKKKAA
+  AKKKCLCKKJJJKKKA
+  AKKCCCKKJJJJJKKA
+  AKCCCKKAAJJJJJKA
+  AJJCKKACJAJJJJJA
+  AJJJAACLJJAAJJJA
+  AAAAACLCKJJAAAAA
+  AAJAAACKKJAAAJAA
+  ACJJAAAAAAAACJJA
+  AJJJAAACJAAAJJJA
+  AJJJAACLJJAAJJJA
+  AAAAACLCKJJAAAAA
+  AAJAAACKKJAAAJAA
+  ACJJAAAAAAAACJJA
+}
+# tile 229 (sokoban walls vertical)
+{
+  ANNBA1EEEEE1NNBA
+  ABBBA1E1EE11BBBA
+  ABBBA1EEEEE1BBBA
+  ABBBA1EEEEE1BBBA
+  ABBBA11EEEE1BBBA
+  A1AAA11EEEE11A1A
+  A111A11EEEE1111A
+  ABEEA11EE1E1BE1A
+  ANNBA1EEEEE1NNBA
+  ABBBA1EEEEE1BBBA
+  ABBBA1EEEEE1BBBA
+  ABBBA1EEEEE1BBBA
+  ABBBA11E1E11BBBA
+  A1AAA11EEEE11A1A
+  A111A11EEEE1111A
+  ABEEA11EEEE1BE1A
+}
+# tile 230 (sokoban walls horizontal)
+{
+  AAANBBAAAAANBBAA
+  BBBNBBA1BBBNBBA1
+  EBB111A1EBB111A1
+  1111111111111111
+  EE111EEEEE111EEE
+  EENBBEEEEENBBEEE
+  BBNBBA1BBBNBBA1B
+  BB111A1EBB111A1E
+  1111111111111111
+  EE1BEEEE1BEEE1BE
+  EE1EEEEE1EEEE1EE
+  1111111111111111
+  1BEEEE1BEEEE1BEE
+  1EEEEE1EEEEE1EEE
+  1111111111111111
+  AAAAAAAAAAAAAAAA
+}
+# tile 231 (sokoban walls tlcorn)
+{
+  AAANNNNBBBBBBAAA
+  NNNNAA11EEEEB111
+  BBBNA11EEENNB111
+  BBBBBBBBBBBBB111
+  BBBEEEEEEEEEE111
+  BBBEEEEEEEEEE111
+  BBEEEEEEEEEEEE11
+  BEEEEEEEEEEEEEE1
+  1111111111111111
+  AEE111111111EEE1
+  ABBBAAAAAAAABBBA
+  ABBBA1EEEEE1BBBA
+  ABBBA1EEEEE1BBBA
+  A1AAA11EEEE11A1A
+  A111A11EEEE1111A
+  ABEEA11EEEE1BE1A
+}
+# tile 232 (sokoban walls trcorn)
+{
+  AAANNNNBBBBBBAAA
+  NNNNAA11EEEEB111
+  BBBNA11EEENNB111
+  BBBBBBBBBBBBB111
+  BBBEEEEEEEEEE111
+  BBBEEEEEEEEEE111
+  BBEEEEEEEEEEEE11
+  BEEEEEEEEEEEEEE1
+  1111111111111111
+  AEE111111111EEE1
+  ABBBAAAAAAAABBBA
+  ABBBA1EEEEE1BBBA
+  ABBBA1EEEEE1BBBA
+  A1AAA11EEEE11A1A
+  A111A11EEEE1111A
+  ABEEA11EEEE1BE1A
+}
+# tile 233 (sokoban walls blcorn)
+{
+  AAANNNNBBBBBBAAA
+  NNNNAA11EEEEB111
+  BBBNA11EEENNB111
+  BBBBBBBBBBBBB111
+  BBBEEEEEEEEEE111
+  BBBEEEEEEEEEE111
+  BBEEEEEEEEEEEE11
+  BEEEEEEEEEEEEEE1
+  1111111111111111
+  EE1BEEEE1BEEE1BE
+  EE1EEEEE1EEEE1EE
+  1111111111111111
+  1BEEEE1BEEEE1BEE
+  1EEEEE1EEEEE1EEE
+  1111111111111111
+  AAAAAAAAAAAAAAAA
+}
+# tile 234 (sokoban walls brcorn)
+{
+  AAANNNNBBBBBBAAA
+  NNNNAA11EEEEB111
+  BBBNA11EEENNB111
+  BBBBBBBBBBBBB111
+  BBBEEEEEEEEEE111
+  BBBEEEEEEEEEE111
+  BBEEEEEEEEEEEE11
+  BEEEEEEEEEEEEEE1
+  1111111111111111
+  EE1BEEEE1BEEE1BE
+  EE1EEEEE1EEEE1EE
+  1111111111111111
+  1BEEEE1BEEEE1BEE
+  1EEEEE1EEEEE1EEE
+  1111111111111111
+  AAAAAAAAAAAAAAAA
+}
+# tile 235 (sokoban walls cross wall)
+{
+  AAANNNNBBBBBBAAA
+  NNNNAA11EEEEB111
+  BBBNA11EEENNB111
+  BBBBBBBBBBBBB111
+  BBBEEEEEEEEEE111
+  BBBEEEEEEEEEE111
+  BBEEEEEEEEEEEE11
+  BEEEEEEEEEEEEEE1
+  1111111111111111
+  AEE111111111EEE1
+  ABBBAAAAAAAABBBA
+  ABBBA1EEEEE1BBBA
+  ABBBA1EEEEE1BBBA
+  A1AAA11EEEE11A1A
+  A111A11EEEE1111A
+  ABEEA11EEEE1BE1A
+}
+# tile 236 (sokoban walls tuwall)
+{
+  AAANNNNBBBBBBAAA
+  NNNNAA11EEEEB111
+  BBBNA11EEENNB111
+  BBBBBBBBBBBBB111
+  BBBEEEEEEEEEE111
+  BBBEEEEEEEEEE111
+  BBEEEEEEEEEEEE11
+  BEEEEEEEEEEEEEE1
+  1111111111111111
+  EE1BEEEE1BEEE1BE
+  EE1EEEEE1EEEE1EE
+  1111111111111111
+  1BEEEE1BEEEE1BEE
+  1EEEEE1EEEEE1EEE
+  1111111111111111
+  AAAAAAAAAAAAAAAA
+}
+# tile 237 (sokoban walls tdwall)
+{
+  AAANNNNBBBBBBAAA
+  NNNNAA11EEEEB111
+  BBBNA11EEENNB111
+  BBBBBBBBBBBBB111
+  BBBEEEEEEEEEE111
+  BBBEEEEEEEEEE111
+  BBEEEEEEEEEEEE11
+  BEEEEEEEEEEEEEE1
+  1111111111111111
+  AEE111111111EEE1
+  ABBBAAAAAAAABBBA
+  ABBBA1EEEEE1BBBA
+  ABBBA1EEEEE1BBBA
+  A1AAA11EEEE11A1A
+  A111A11EEEE1111A
+  ABEEA11EEEE1BE1A
+}
+# tile 238 (sokoban walls tlwall)
+{
+  AAANNNNBBBBBBAAA
+  NNNNAA11EEEEB111
+  BBBNA11EEENNB111
+  BBBBBBBBBBBBB111
+  BBBEEEEEEEEEE111
+  BBBEEEEEEEEEE111
+  BBEEEEEEEEEEEE11
+  BEEEEEEEEEEEEEE1
+  1111111111111111
+  AEE111111111EEE1
+  ABBBAAAAAAAABBBA
+  ABBBA1EEEEE1BBBA
+  ABBBA1EEEEE1BBBA
+  A1AAA11EEEE11A1A
+  A111A11EEEE1111A
+  ABEEA11EEEE1BE1A
+}
+# tile 239 (sokoban walls trwall)
+{
+  AAANNNNBBBBBBAAA
+  NNNNAA11EEEEB111
+  BBBNA11EEENNB111
+  BBBBBBBBBBBBB111
+  BBBEEEEEEEEEE111
+  BBBEEEEEEEEEE111
+  BBEEEEEEEEEEEE11
+  BEEEEEEEEEEEEEE1
+  1111111111111111
+  AEE111111111EEE1
+  ABBBAAAAAAAABBBA
+  ABBBA1EEEEE1BBBA
+  ABBBA1EEEEE1BBBA
+  A1AAA11EEEE11A1A
+  A111A11EEEE1111A
+  ABEEA11EEEE1BE1A
+}

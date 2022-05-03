@@ -1,0 +1,15 @@
+*.mn	NHSUBST
+*.6	NHSUBST
+*.7	NHSUBST
+fixes*	NHSUBST
+window.txt NHSUBST
+config.nh NHSUBST
+Guidebook.txt NH_header=no
+tmac.n NH_header=no
+tmac.nh NUSUBST
+fixes* NH_header=no
+*.txt NH_header=no
+* NH_filestag=(file%s_for_all_versions)
+Guidebook.tex	NH_DATESUB
+Guidebook.mn	NH_DATESUB
+*.6	NH_DATESUB

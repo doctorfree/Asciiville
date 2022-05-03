@@ -1,0 +1,248 @@
+#	NetHack Makefile (VMS) - for utility programs.
+#	NetHack 3.7	Makefile.utl	$NHDT-Date: 1609347482 2020/12/30 16:58:02 $	$NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.20 $
+# Copyright (c) 2011 by Robert Patrick Rankin
+# NetHack may be freely redistributed.  See license for details.
+
+#  Copy this file to [.util]Makefile. and then edit it as needed.
+#  The default configuration is for building with DEC C (aka Compaq C).
+#  Settings for CC and CFLAGS ought to match the ones used in [.src]Makefile.
+
+MAKE	= $(MMS)
+CD	= set default
+ECHO	= write sys$output
+MOVE	= rename/New		# within same device only
+MUNG	= search/Exact/Match=NOR	# to strip bogus #module directives
+NOOP	= continue
+RM	= delete/noConfirm
+RUN	= mcr			# simplest way to pass command line args
+TOUCH	= append/New _NLA0:	# only one file per $(TOUCH)
+# source tree, relative to 'src' and 'util'
+DAT = [-.dat]
+INC = [-.include]
+SYSSHR = [-.sys.share]
+SRC = [-.src]
+UTL = [-.util]
+VMS = [-.sys.vms]
+WINSHR = [-.win.share]
+WINX11 = [-.win.X11]
+# targets, with enough punctuation to keep MCR and DELETE happy
+MAKEDEFS= $(UTL)makedefs.exe;
+DLB	= $(UTL)dlb.exe;
+RECOVER = $(UTL)recover.exe;
+# used by $(DAT)Makefile for synchronization
+MARKER	= $(UTL)util.timestamp;
+
+# if you are using gcc as your compiler,
+#	uncomment the CC definition below if it's not in your environment
+# CC = gcc
+
+CFLAGS	= /Prefix=All/Incl=$(INC)/noList	# DECC in native mode
+#CFLAGS	= /Include=$(INC)/noList	# VAXC or GNUC
+LFLAGS	= /noMap
+LIBS	= $(SRC)crtl.opt/Options,$(SRC)ident.opt/Options  # run-time library
+LINK	= link
+
+#
+# Nothing below this line should have to be changed.
+#
+
+# linker options files
+LIBOPT	= $(SRC)crtl.opt;
+ID_OPT	= $(SRC)ident.opt;
+
+# timestamps for primary header files, matching src/Makefile
+CONFIG_H = $(SRC)config.h-t
+HACK_H   = $(SRC)hack.h-t
+
+# utility .c files
+MAKESRC    = makedefs.c
+RECOVSRC   = recover.c
+DLBSRC	   = dlb_main.c
+UTILSRCS   = $(MAKESRC) $(SPLEVSRC) $(DGNCOMPSRC) $(RECOVSRC) $(DLBSRC) panic.c
+
+VMSOBJS = $(SRC)vmsmisc.obj,$(SRC)vmsfiles.obj
+
+# object files that provide access to NetHack's names
+NAMEOBJ1 = $(SRC)monst.obj,$(SRC)objects.obj
+NAMEOBJ2 = $(SRC)drawing.obj,$(SRC)decl.obj
+NAMEOBJS = $(NAMEOBJ1),$(NAMEOBJ2)
+
+# object files for makedefs
+MAKEOBJS = makedefs.obj,$(NAMEOBJ1)
+
+# object files for recovery utility
+RECOVOBJS = recover.obj
+
+# object files for dlb utility
+DLBOBJS = dlb_main.obj,panic.obj,$(SRC)alloc.obj,$(SRC)dlb.obj
+
+
+#	fake target
+default :
+      @ $(ECHO) "Oops!  No target(s) specified...."
+
+<all	: $(MAKEDEFS) $(LEVCOMP) $(DGNCOMP) $(RECOVER) $(DLB)
+      @ $(ECHO) "util is up to date."
+
+#	alternate target names for possible interactive use
+makedefs : $(MAKEDEFS)
+      @ $(ECHO) "makedefs is up to date."
+recover  : $(RECOVER)
+      @ $(ECHO) "recover is up to date."
+dlb	 : $(DLB)
+      @ $(ECHO) "dlb is up to date."
+
+$(LIBOPT) : $(SRC)Makefile.;		# linker options file
+	$(CD) $(SRC)
+	$(MAKE)$(MAKEFLAGS) $(LIBOPT)
+      @ $(CD) $(UTL)
+
+$(ID_OPT) : $(SRC)Makefile.;		# linker options file
+	$(CD) $(SRC)
+	$(MAKE)$(MAKEFLAGS) $(ID_OPT)
+      @ $(CD) $(UTL)
+
+#	dependencies for makedefs
+#
+$(MAKEDEFS) :	$(MAKEOBJS) $(VMSOBJS) $(LIBOPT) $(ID_OPT)
+	$(LINK) $(LFLAGS) $(MAKEOBJS),$(VMSOBJS),$(LIBS)
+      @ $(TOUCH) $(MARKER)
+
+makedefs.obj :	makedefs.c \
+		$(CONFIG_H) $(INC)permonst.h $(INC)objclass.h \
+		$(INC)sym.h $(INC)defsym.h $(INC)artilist.h \
+		$(INC)dungeon.h $(INC)obj.h $(INC)monst.h \
+		$(INC)you.h $(INC)flag.h $(INC)dlb.h $(INC)patchlevel.h
+
+$(INC)onames.h	: $(MAKEDEFS)
+	$(RUN) $(MAKEDEFS) -o
+$(INC)pm.h	: $(MAKEDEFS)
+	$(RUN) $(MAKEDEFS) -p
+
+# the src Makefile is responsible for knowing when to call this, since
+# it knows all about the main src and include files
+$(INC)date.h :	$(MAKEDEFS)
+	$(RUN) $(MAKEDEFS) -v
+
+panic.obj    : $(CONFIG_H)
+	$(CC) $(CFLAGS) panic.c
+
+#	dependencies for recover
+#
+$(RECOVER) : $(RECOVOBJS) $(VMSOBJS) $(LIBOPT) $(ID_OPT)
+	$(LINK) $(LFLAGS) $(RECOVOBJS),$(VMSOBJS),$(LIBS)
+
+recover.obj : $(CONFIG_H) recover.c
+
+#	dependencies for dlb
+#
+$(DLB) : $(DLBOBJS) $(VMSOBJS) $(LIBOPT) $(ID_OPT)
+	$(LINK)/Exe=$(DLB) $(LFLAGS) $(DLBOBJS),$(VMSOBJS),$(LIBS)
+
+dlb_main.obj : $(CONFIG_H) $(INC)dlb.h dlb_main.c
+
+#	dependencies and build rules for tile utilities
+#
+TILEMAP    = $(UTL)tilemap.exe;
+GIF2TXT    = $(UTL)gif2txt.exe;
+TXT2PPM    = $(UTL)txt2ppm.exe;
+TILE2X11   = $(UTL)tile2x11.exe;
+TILEUTILS  = $(TILEMAP),$(GIF2TXT),$(TXT2PPM),$(TILE2X11)
+TEXTIO	   = $(UTL)tiletxt.obj,tiletext.obj,$(NAMEOBJS),$(SRC)vmsmisc.obj
+GIFREADERS = gifread.obj,panic.obj,$(SRC)alloc.obj
+PPMWRITERS = ppmwrite.obj,panic.obj,$(SRC)alloc.obj
+
+tileutils : $(TILEUTILS)
+	@ $(NOOP)
+
+$(GIF2TXT) : $(GIFREADERS) $(TEXTIO) $(LIBOPT) $(ID_OPT)
+	$(LINK)/Exe=$(GIF2TXT) $(LFLAGS) $(GIFREADERS),$(TEXTIO),$(LIBS)
+$(TXT2PPM) : $(PPMWRITERS) $(TEXTIO) $(LIBOPT) $(ID_OPT)
+	$(LINK)/Exe=$(TXT2PPM) $(LFLAGS) $(PPMWRITERS),$(TEXTIO),$(LIBS)
+$(TILE2X11) : tile2x11.obj $(TEXTIO) $(LIBOPT) $(ID_OPT)
+	$(LINK) $(LFLAGS) tile2x11.obj,$(TEXTIO),$(LIBS)
+$(TILEMAP) : tilemap.obj $(SRC)vmsmisc.obj $(LIBOPT) $(ID_OPT)
+	$(LINK) $(LFLAGS) tilemap.obj,$(SRC)vmsmisc.obj,$(LIBS)
+
+$(SRC)tile.c : $(TILEMAP)
+	$(RUN) $(TILEMAP)
+$(INC)tile.h : $(WINSHR)tile.h
+	copy $(WINSHR)tile.h $(INC)tile.h
+
+# Force an explicit directory prefix on tiletxt.obj so that we don't get
+# unwanted "sticky defaults" when $(TEXTIO) is used in a comma-separated
+# list on the link command line.
+#
+$(UTL)tiletxt.obj : $(HACK_H) $(WINSHR)tilemap.c
+	$(CC) $(CFLAGS) /Def=("TILETEXT")/Obj=$@ $(WINSHR)tilemap.c
+tilemap.obj  : $(HACK_H) $(WINSHR)tilemap.c
+tiletext.obj : $(CONFIG_H) $(INC)tile.h $(WINSHR)tiletext.c
+gifread.obj  : $(CONFIG_H) $(INC)tile.h $(WINSHR)gifread.c
+ppmwrite.obj : $(CONFIG_H) $(INC)tile.h $(WINSHR)ppmwrite.c
+tile2x11.obj : $(HACK_H) $(INC)tile.h $(INC)tile2x11.h $(WINX11)tile2x11.c
+
+
+# make sure object files from src are available when needed
+#
+$(SRC)alloc.obj : $(SRC)alloc.c $(CONFIG_H)
+	$(CD) $(SRC)
+	$(MAKE)$(MAKEFLAGS) alloc.obj
+      @ $(CD) $(UTL)
+
+$(SRC)monst.obj : $(SRC)monst.c $(CONFIG_H)
+	$(CD) $(SRC)
+	$(MAKE)$(MAKEFLAGS) monst.obj
+      @ $(CD) $(UTL)
+
+$(SRC)objects.obj : $(SRC)objects.c $(CONFIG_H)
+	$(CD) $(SRC)
+	$(MAKE)$(MAKEFLAGS) objects.obj
+      @ $(CD) $(UTL)
+
+$(SRC)decl.obj : $(SRC)decl.c $(HACK_H)
+	$(CD) $(SRC)
+	$(MAKE)$(MAKEFLAGS) decl.obj
+      @ $(CD) $(UTL)
+
+$(SRC)drawing.obj : $(SRC)drawing.c $(HACK_H)
+	$(CD) $(SRC)
+	$(MAKE)$(MAKEFLAGS) drawing.obj
+      @ $(CD) $(UTL)
+
+$(SRC)dlb.obj : $(SRC)dlb.c $(CONFIG_H) $(INC)dlb.h
+	$(CD) $(SRC)
+	$(MAKE)$(MAKEFLAGS) dlb.obj
+      @ $(CD) $(UTL)
+
+# make sure hack.h dependencies get transitive information
+$(HACK_H) : $(CONFIG_H)
+	$(CD) $(SRC)
+	$(MAKE)$(MAKEFLAGS) $(HACK_H)
+      @ $(CD) $(UTL)
+$(CONFIG_H) : $(INC)config.h
+	$(CD) $(SRC)
+	$(MAKE)$(MAKEFLAGS) $(CONFIG_H)
+      @ $(CD) $(UTL)
+
+# VMS specific dependencies
+$(SRC)vmsmisc.obj :	$(VMS)vmsmisc.c $(CONFIG_H)
+	$(CD) $(SRC)
+	$(MAKE)$(MAKEFLAGS) vmsmisc.obj
+      @ $(CD) $(UTL)
+
+$(SRC)vmsfiles.obj :	$(VMS)vmsfiles.c $(CONFIG_H)
+	$(CD) $(SRC)
+	$(MAKE)$(MAKEFLAGS) vmsfiles.obj
+      @ $(CD) $(UTL)
+
+
+clean :
+      - if f$search("*.*;-1").nes."" then  purge
+      - if f$search("*.obj") .nes."" then  $(RM) *.obj;
+
+spotless :	clean
+      - if f$search("$(INC)tile.h").nes."" then  $(RM) $(INC)tile.h;*
+      - if f$search("*.exe").nes."" then \
+ $(RM) $(MAKEDEFS),$(RECOVER),$(DLB)
+      - if f$search("*.exe").nes."" then  $(RM) $(TILEUTILS)
+      - if f$search("$(MARKER)").nes."" then  $(RM) $(MARKER)

@@ -1,0 +1,36 @@
+#
+# NetHack 3.7 unix $NHDT-Date: 1596498428 2020/08/03 23:47:08 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.14 $
+# Copyright (c) Kenneth Lorber, Kensington, Maryland, 2007.
+# NetHack may be freely redistributed.  See license for details. 
+#
+#-PRE
+# unix hints file
+# This hints file provides the legacy configuration that NetHack has shipped
+# with historically - this means you will most likely need to hand edit .h
+# and Makefiles.
+
+
+PREFIX=/usr
+HACKDIR=$(PREFIX)/games/lib/$(GAME)dir
+INSTDIR=$(HACKDIR)
+VARDIR=$(HACKDIR)
+SHELLDIR=$(PREFIX)/games
+
+CFLAGS=-O -I../include
+LINK=$(CC)
+
+WINSRC = $(WINTTYSRC)
+WINOBJ = $(WINTTYOBJ)
+WINLIB = $(WINTTYLIB)
+
+WINTTYLIB=-ltermlib
+
+CHOWN=chown
+CHGRP=chgrp
+
+GAMEUID  = games
+GAMEGRP  = bin
+
+GAMEPERM = 04755
+VARFILEPERM = 0644
+VARDIRPERM = 0755

@@ -1,0 +1,115 @@
+
+	   Copyright (c) NetHack PC Development Team 1990-2021.
+       NetHack may be freely redistributed.  See license for details.
+       ==============================================================
+              Instructions for compiling and installing
+		     NetHack 3.7 on a DOS system
+         ======================================================
+                   (or, How to make PC NetHack 3.7)
+        Last revision: $NHDT-Date: 1596508786 2021/06/04 08:45:00 $
+
+Credit for a runnable full PC NetHack 3.7 goes to the PC Development team
+of Paul Winner, Kevin Smolkowski, Michael Allison, Yitzhak Sapir, Bill Dyer,
+Timo Hakulinen, Yamamoto Keizo, Mike Threepoint, Mike Stephenson,
+Stephen White, Ken Washikita and Janet Walz.  The present port is based
+on the previous effort of Pierre Martineau, Stephen Spackman, Steve Creps, Mike
+Threepoint, Mike Stephenson, Norm Meluch and Don Kneller.
+
+CONTENTS:
+
+        I.   Dispelling the Myths
+        II.  Compiling on Linux or macOS via cross-compiler
+        Appendix A - Additional Notes
+        Appendix D - Contacting Us
+
+I.  Dispelling the Myths:
+
+    Compiling NetHack is not as easy as it sounds, nor as hard as it looks,
+    however it will behoove you to read this entire file through before
+    beginning the task.
+
+
+II. There once was a time when people built NetHack right on their DOS machine.
+    The arcane recipe often involved flat cylinders known as "floppy disks",
+    much gnashing of teeth, squeezing large things into small spaces, and
+    required the sacrifice of copious amounts of time and coffee.
+
+    These days, to compile your copy of NetHack on Linux or macOS machine you
+    can use Andrew Wu's djgpp cross-compiler from:
+        https://github.com/andrewwutw/build-djgpp
+    downloaded from:
+        https://github.com/andrewwutw/build-djgpp/releases/download/v3.0/ 
+    a DOS-extender (for including in msdos packaging) from:
+        http://sandmann.dotster.com/cwsdpmi/csdpmi7b.zip
+    and pdcurses from:
+        https://github.com/wmcbrine/PDCurses.git
+    and Lua from:
+        http://www.lua.org/ftp/lua-5.4.4.tar.gz
+
+    - A shell script to download the above-mentioned djgpp cross-compiler and
+      associated support pieces for either linux or macOS is available:
+        sh sys/msdos/fetch-cross-compiler.sh
+
+    That script won't install anything, it just does file fetches and stores
+    them in subfolders of lib. The linux.370 and macOS.370 hints files are
+    configured to find the cross-compiler there if you add
+        CROSS_TO_MSDOS=1
+    on your make command line.
+
+    Note: Both the fetch-cross-compiler.sh script and and the msdos
+    cross-compile and package procedures require unzip and zip to be available
+    on your host build system.
+
+    On your linux host:
+
+        cd sys/unix ; sh setup.sh hints/linux.370 ; cd ../..
+        make fetch-lua
+
+    On your macOS host:
+
+        cd sys/unix ; sh setup.sh hints/macOS.370 ; cd ../..
+        make fetch-lua
+
+    The MSDOS cross-compile can then be carried out by specifying
+    CROSS_TO_MSDOS=1 on the make command line:
+
+        make CROSS_TO_MSDOS=1 all
+        make CROSS_TO_MSDOS=1 package
+
+    You can explicitly include tty and curses support if desired. The default
+    you'll end up with is a tty-only cross-compile build:
+
+        make WANT_WIN_TTY=1 WANT_WIN_CURSES=1 CROSS_TO_MSDOS=1 all
+        make WANT_WIN_TTY=1 WANT_WIN_CURSES=1 CROSS_TO_MSDOS=1 package
+
+    Result: The "make package" target will bundle all of the necessary
+            components to run NetHack on msdos into a folder:
+                targets/msdos/pkg
+            and then it zips the contents of that folder into:
+                targets/msdos/nh370dos.zip
+
+    Also note that building the msdos targets using the make command
+    above, does not preclude you from building local linux or macOS
+    targets as well. Just drop the CROSS_TO_MSDOS=1 from the make
+    command line. That's because the cross-compiler hints additions are
+    enclosed inside ifdef sections and won't interfere with the
+    non-cross-compile build in that case.
+
+Appendix A - Additional Notes
+
+1. In your game directory, review the settings in defaults.nh and adjust
+    them according to your style of play.
+
+2. Play NetHack.  If it works, you're done!
+
+Appendix D - Contacting the Development Team
+
+    If you discover a bug and wish to report it, or if you have comments
+    or suggestions we recommend using
+    our "Contact Us" web page at:
+        https://www.nethack.org/common/contact.html
+
+    If you don't have access to the web, or you want to send us a patch
+    to the NetHack source code feel free to drop us a line c/o:
+        DevTeam (at) nethack.org
+

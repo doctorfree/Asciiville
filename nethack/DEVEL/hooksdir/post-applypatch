@@ -1,0 +1,32 @@
+#!/usr/bin/perl
+# $NHDT-Date: 1524689631 2018/04/25 20:53:51 $ $NHDT-Branch: NetHack-3.6.0 $:$NHDT-Revision: 1.1 $
+# Copyright (c) 2015 by Kenneth Lorber, Kensington, Maryland
+# NetHack may be freely redistributed.  See license for details.
+
+#STARTUP-START
+BEGIN {
+    # OS hackery has to be duplicated in each of the hooks :/
+    # first the directory separator
+    my $DS = quotemeta('/');
+    my $PDS = '/';
+    # msys: POSIXish over a Windows filesystem (so / not \ but \r\n not \n).
+    # temporarily removed because inconsistent behavior
+    # if ($^O eq "msys")
+    # {
+    #   $/ = "\r\n";
+    #   $\ = "\r\n";
+    # }
+    if($^O eq "MSWin32"){
+        $DS = quotemeta('\\');
+	$PDS = '\\';
+    }
+    $gitdir = `git rev-parse --git-dir`;
+    chomp $gitdir;
+    push(@INC, $gitdir.$PDS."hooks");
+}
+use NHgithook;
+#STARTUP-END
+
+&NHgithook::PRE;
+&NHgithook::POST;
+exit 0;
