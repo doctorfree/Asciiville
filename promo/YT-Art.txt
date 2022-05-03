@@ -1,0 +1,32 @@
+The Asciiville project is is a suite of open source text based applications, utilities, and graphics hosted at https://github.com/doctorfree/Asciiville#readme
+
+All of the Ascii Art presented in this video was created and displayed using
+the text based utilities in the Asciiville project.
+
+Asciiville integrates and extends a wide variety of ASCII art, animation, tools, and utilities in a lightweight character based environment providing ease of use and control for the Linux console/terminal user.
+
+At the core of Asciiville is the 'asciiville' command which acts as a front-end for a variety of terminal commands and 'tmux' sessions.
+
+The 'asciiville' command can be used to invoke:
+
+* The lightweight character based system monitor, 'btop'
+* The lightweight character based web browser, 'lynx' or 'w3m'
+* The lightweight character based mail client, 'mutt'
+* The lightweight character based FTP client, 'cbftp'
+* The lightweight character based music player, 'mpcplus'
+* The lightweight character based file manager, 'ranger'
+* The lightweight character based disk usage analyzer, 'gdu'
+* One or more terminal emulators running a command
+* One of several included tmux sessions, recording with asciinema
+* A command line web search
+* A zoomable map of the world
+* Command line character based Twitter client
+* A network download/upload speed test
+* The AAlib BB demo running in a tmux session (Debian based systems only)
+* Character based ASCII art and image to ascii conversion utility 'jp2a'
+* Display system info
+* Display the Phase of the Moon
+* Display a weather report
+* Display the MusicPlayerPlus or RoonCommandLine interactive menus
+* Any character based client the user wishes to run
+* One of several asciimatics animations optionally accompanied by audio

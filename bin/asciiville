@@ -1778,7 +1778,10 @@ select_song() {
                           --title "Please select a song" \
                           --fselect ${HOME}/Music/ 14 48)
   fi
-  file ${selectedSong} | grep -i audio > /dev/null && { 
+  songfile=
+  file ${selectedSong} | grep -i audio > /dev/null || \
+  file ${selectedSong} | grep Ogg > /dev/null && songfile=1
+  [ "${songfile}" ] && {
     SONG="${selectedSong}"
     songname=`basename "${SONG}"`
     songleng=`echo ${songname} | wc -c`

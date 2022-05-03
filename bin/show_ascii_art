@@ -360,6 +360,7 @@ have_lolcat=
   have_lolcat=`type -p lolcat`
 }
 
+sleep 1
 termwide=`stty size | awk '{print $2}'`
 termhigh=`stty size | awk '{print $1}'`
 
@@ -383,17 +384,17 @@ goodbye() {
     printf "\n\n\n"
     if [ "${have_lolcat}" ]
     then
-      figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Thanks For" | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Thanks For" | ${LOLCAT}
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Viewing" | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Viewing" | ${LOLCAT}
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Ascii Art !" | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Ascii Art !" | ${LOLCAT}
     else
-      figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Thanks For"
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Thanks For"
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Viewing"
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Viewing"
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Ascii Art !"
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Ascii Art !"
     fi
     sleep $((delay / 2))
   }
@@ -597,8 +598,8 @@ fi
 
 clear
 [ "${quiet}" ] || {
-  figlet -c -d "${FIG_FONTS}" -f "${SMALL_FONT}" -k -t ${FIG_WELCOME}
-  figlet -c -d "${FIG_FONTS}" -f "${SMALL_FONT}" -k -t ${FIG_ASCII}
+  figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME}
+  figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII}
   sleep ${delay}
 }
 

@@ -728,6 +728,9 @@ Introduction to Asciiville Video:
 Asciiville Art Slideshow Video:
 [![Asciiville Art Slideshow](https://i.imgur.com/fZK70ZW.png)](https://www.youtube.com/watch?v=HQPvfJGo4VA "Asciiville Art Slideshow")
 
+Asciiville Space Slideshow Video:
+[![Asciiville Space Slideshow](https://i.imgur.com/TJomRY2.png)](https://www.youtube.com/watch?v=DZV69SYLvc4 "Asciiville Space Slideshow")
+
 ## Screenshots
 
 <p float="left">
