@@ -54,7 +54,7 @@ usage() {
   printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]"
   printf "\n\t[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N]"
   printf "\n\t[-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t]"
-  printf "\n\t[-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-Z] [-u]\n"
+  printf "\n\t[-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]\n"
   printf "\nTerminal/Command options:"
   printf "\n\t-c 'command' indicates use 'command'"
   printf "\n\t\tIf 'command' is keyword 'maps' then display a map using mapscii"
@@ -78,6 +78,7 @@ usage() {
   printf "\n\t-x indicates use xfce4 terminal emulator"
   printf "\n\t-X indicates run commands in current terminal window"
   printf "\n\t-y indicates use ranger file manager as the default command"
+  printf "\n\t-Y indicates use NetHack dungeon game as the default command"
   printf "\n\t-z indicates use mutt email client as the default command"
   printf "\nSlideshow/ASCIImatics animation options:"
   printf "\n\t-A indicates use Asciiville scenes in ASCIImatics display"
@@ -433,85 +434,41 @@ show_appterm_menu() {
   do
     [ "${COMMAND}" ] || COMMAND=btop
     show_comm=`echo ${COMMAND} | awk ' { print $1 } '`
+    use_btop="NO"
+    use_ftp="NO"
+    use_gdu="NO"
+    use_lynx="NO"
+    use_mpp="NO"
+    use_mutt="NO"
+    use_nethack="NO"
+    use_ranger="NO"
+    use_w3m="NO"
     case "${COMMAND}" in
       btop)
         use_btop="YES"
-        use_gdu="NO"
-        use_lynx="NO"
-        use_mpp="NO"
-        use_mutt="NO"
-        use_ftp="NO"
-        use_ranger="NO"
-        use_w3m="NO"
         ;;
       cbftp|ncftp)
-        use_btop="NO"
-        use_gdu="NO"
-        use_lynx="NO"
-        use_mpp="NO"
-        use_mutt="NO"
         use_ftp="YES"
-        use_ranger="NO"
-        use_w3m="NO"
         ;;
       gdu*)
-        use_btop="NO"
         use_gdu="YES"
-        use_lynx="NO"
-        use_mpp="NO"
-        use_mutt="NO"
-        use_ftp="NO"
-        use_ranger="NO"
-        use_w3m="NO"
         ;;
       lynx*)
-        use_btop="NO"
-        use_gdu="NO"
         use_lynx="YES"
-        use_mpp="NO"
-        use_mutt="NO"
-        use_ftp="NO"
-        use_ranger="NO"
-        use_w3m="NO"
         ;;
       mpcplus)
-        use_btop="NO"
-        use_gdu="NO"
-        use_lynx="NO"
         use_mpp="YES"
-        use_mutt="NO"
-        use_ftp="NO"
-        use_ranger="NO"
-        use_w3m="NO"
         ;;
       mutt|neomutt)
-        use_btop="NO"
-        use_gdu="NO"
-        use_lynx="NO"
-        use_mpp="NO"
         use_mutt="YES"
-        use_ftp="NO"
-        use_ranger="NO"
-        use_w3m="NO"
+        ;;
+      nethack)
+        use_nethack="YES"
         ;;
       ranger)
-        use_btop="NO"
-        use_gdu="NO"
-        use_lynx="NO"
-        use_mpp="NO"
-        use_mutt="NO"
-        use_ftp="NO"
         use_ranger="YES"
-        use_w3m="NO"
         ;;
       w3m*)
-        use_btop="NO"
-        use_gdu="NO"
-        use_lynx="NO"
-        use_mpp="NO"
-        use_mutt="NO"
-        use_ftp="NO"
-        use_ranger="NO"
         use_w3m="YES"
         ;;
     esac
@@ -568,6 +525,7 @@ show_appterm_menu() {
     else
       [ "${have_mutt}" ] && options+=("Mutt Mail Client       [${use_mutt}]")
     fi
+    [ "${have_nethack}" ] && options+=("NetHack Dungeon Game   [${use_nethack}]")
     [ "${have_ranger}" ] && options+=("Ranger File Manager    [${use_ranger}]")
     [ "${have_xfce4}" ] && options+=("XFCE4 Terminal    [${use_xfce4}]")
     [ "${have_gnome}" ] && options+=("Gnome Terminal    [${use_gnome}]")
@@ -627,6 +585,11 @@ show_appterm_menu() {
           "NeoMutt"*,*|*,"NeoMutt"*)
               COMMAND=neomutt
               MTITLE="NeoMutt Mail Client"
+              break
+              ;;
+          "NetHack"*,*|*,"NetHack"*)
+              COMMAND=nethack
+              MTITLE="NetHack Dungeon Game"
               break
               ;;
           "Ranger"*,*|*,"Ranger"*)
@@ -1837,6 +1800,7 @@ init_vars
 have_btop=`type -p btop`
 have_neomutt=`type -p neomutt`
 have_mutt=`type -p mutt`
+have_nethack=`type -p nethack`
 have_ranger=`type -p ranger`
 have_retro=`type -p cool-retro-term`
 have_tilix=`type -p tilix`
@@ -1910,7 +1874,7 @@ cycle=
 noaudio=
 show_neofetch=
 SLIDESHOW=
-while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wxXyzZu" flag; do
+while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wxXyYzZu" flag; do
   case $flag in
     A)
       ASCSPLASH="${ASCSPLASH} -i"
@@ -2253,6 +2217,15 @@ while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wxXyzZu" flag; do
         not_in_path xfce4-terminal -x
         select_alt_term
       }
+      ;;
+    Y)
+      if [ "${have_nethack}" ]
+      then
+        COMMAND=nethack
+        MTITLE="NetHack Dungeon Game"
+      else
+        not_in_path nethack -Y
+      fi
       ;;
     y)
       COMMAND=ranger
