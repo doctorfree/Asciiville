@@ -494,6 +494,11 @@ play_slide_show() {
       FIG_ASCII="Mixed"
       SLIDE_DIR="${ART_DIR}"
       SLIDE_FONT="Varsity"
+      [ "${custom_song}" ] || {
+        [ -f "${MUSEDIR}/Loyalty_Freak_Music-Im_On_Fire.ogg" ] && {
+          SONG="${MUSEDIR}/Loyalty_Freak_Music-Im_On_Fire.ogg"
+        }
+      }
       ;;
     Owls*)
       FIG_ASCII="Owls"
