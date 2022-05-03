@@ -1,7 +1,7 @@
 Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]
 	[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N]
 	[-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t]
-	[-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-Z] [-u]
+	[-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
@@ -26,6 +26,7 @@ Terminal/Command options:
 	-x indicates use xfce4 terminal emulator
 	-X indicates run commands in current terminal window
 	-y indicates use ranger file manager as the default command
+	-Y indicates use NetHack dungeon game as the default command
 	-z indicates use mutt email client as the default command
 Slideshow/ASCIImatics animation options:
 	-A indicates use Asciiville scenes in ASCIImatics display
@@ -43,7 +44,7 @@ Slideshow/ASCIImatics animation options:
 	-s song specifies a song to accompany an ASCIImatics animation
 		'song' can be the full pathname to an audio file or a
 		relative pathname to an audio file in the MPD music library
-		or /home/ronnie/Music/
+		or ~/Music/
 	-S indicates display ASCIImatics splash animation
 	-V 'show' displays an ascii art slide show
 		'show' can be Art, Doctorwhen, Dragonflies, Fractals,

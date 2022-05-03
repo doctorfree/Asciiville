@@ -58,6 +58,7 @@ The `asciiville` command can be used to invoke:
 * Command line character based Twitter client
 * A network download/upload speed test
 * The AAlib BB demo running in a tmux session (Debian based systems only)
+* The ASCII text-based dungeon game `nethack` with Extended ASCII glyphs
 * Character based ASCII Art and image to ascii conversion utility `jp2a`
 * Display system info
 * Display the Phase of the Moon
@@ -83,6 +84,7 @@ Integration is provided for:
 * [rainbowstream](https://github.com/orakaro/rainbowstream) - command line character based Twitter client
     * See [the rainbowstream usage manual](https://rainbowstream.readthedocs.io/en/latest/#usage) to get started
 * [mapscii](https://github.com/rastapasta/mapscii#readme), zoomable map of the world
+* [nethack](https://en.wikipedia.org/wiki/NetHack), ASCII text dungeon game
 * [tmux](https://github.com/tmux/tmux/wiki), a terminal multiplexer
 * [wttr.in](https://github.com/chubin/wttr.in), console-oriented weather report
 * Enhanced key bindings for extended control of terminal windows
@@ -113,6 +115,7 @@ Asciiville adds the following commands to your system:
 * **ddgr** : command line web search
 * **jp2a** : image to ascii conversion utility
 * **mapscii** : character based zoomable map of the world
+* **nethack** : character based dungeon game
 * **rainbowstream** : command line Twitter client
 * **set_xfce_trans** : sets an xfce4-terminal window's transparency level
 * **show_ascii_art** : display ascii art, convert images to ascii art
@@ -316,14 +319,31 @@ e.g. `asciiville -u`.
 
 ### Usage
 
-The usage message for `asciiville` provides a brief
-summary of the command line options:
+Many of the Asciiville features and facilities work perfectly well with
+both fixed and variable width fonts. However, Ascii Art and graphics are
+best viewed using a Monospaced or "fixed-width" font such as "Courier",
+"Lucida Console", "Monaco", "Consolas", "Inconsolata", or "Monospace Regular".
+Variable width fonts can interfere with the intended display of Ascii Art.
+
+The Asciiville package creates an "Asciiville" profile in the `gnome-terminal`
+and `tilix` terminal emulators to configure use of a Monospaced font as well
+as invoking `xfce4-terminal` with a *--font* option specifying a Monospaced
+font. The `asciiville` command attempts to ensure the use of a Monospaced
+font where it is possible but options do exist for the Asciiville user to
+use whatever the current terminal window might be. In this case, "Use Current
+Terminal", it is up to the Asciiville user to configure the terminal window
+for Monospaced font use.
+
+#### Usage message for the `asciiville` command
+
+The usage message for `asciiville` provides a brief summary of the command
+line options:
 
 ```
 Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]
 	[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N]
 	[-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t]
-	[-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-Z] [-u]
+	[-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
@@ -348,6 +368,7 @@ Terminal/Command options:
 	-x indicates use xfce4 terminal emulator
 	-X indicates run commands in current terminal window
 	-y indicates use ranger file manager as the default command
+	-Y indicates use NetHack dungeon game as the default command
 	-z indicates use mutt email client as the default command
 Slideshow/ASCIImatics animation options:
 	-A indicates use Asciiville scenes in ASCIImatics display
@@ -365,7 +386,7 @@ Slideshow/ASCIImatics animation options:
 	-s song specifies a song to accompany an ASCIImatics animation
 		'song' can be the full pathname to an audio file or a
 		relative pathname to an audio file in the MPD music library
-		or /home/ronnie/Music/
+		or ~/Music/
 	-S indicates display ASCIImatics splash animation
 	-V 'show' displays an ascii art slide show
 		'show' can be Art, Doctorwhen, Dragonflies, Fractals,
@@ -381,6 +402,8 @@ General options:
 
 Invoked without any arguments, 'asciiville' will display a menu
 ```
+
+#### Usage message for the `show_ascii_art` command
 
 ```
 Usage: show_ascii_art [-a art] [-A art_dir] [-b] [-c] [-C]
@@ -424,6 +447,8 @@ Where:
 		If only one of 'width' and 'height' is provided,
 		calculate the other from image aspect ratio
 ```
+
+#### Usage message for the `asciisplash` command
 
 ```
 Usage: asciisplash [-A] [-a] [-b] [-C] [-c num] [-d] [-jJ] [-m] [-p] [-s song] [-u]
