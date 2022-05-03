@@ -24,7 +24,7 @@ PKG_REL=${RELEASE}
 umask 0022
 
 # Subdirectory in which to create the distribution files
-OUT_DIR="dist/${PKG_NAME}_${PKG_VER}"
+OUT_DIR="${SRC}/${SRC_NAME}/dist/${PKG_NAME}_${PKG_VER}"
 
 [ -d "${SRC}/${SRC_NAME}" ] || {
     echo "$SRC/$SRC_NAME does not exist or is not a directory. Exiting."
@@ -71,6 +71,18 @@ else
   cd ..
 fi
 
+# Build nethack
+if [ -x build-nethack.sh ]
+then
+  ./build-nethack.sh
+else
+  cd nethack
+  sys/unix/setup.sh sys/unix/hints/linux-asciiville
+  make fetch-lua
+  make
+  cd ..
+fi
+
 ${SUDO} rm -rf dist
 mkdir dist
 
@@ -80,7 +92,9 @@ mkdir ${OUT_DIR}
 for dir in "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
            "${DESTDIR}/share/doc/${PKG}" "${DESTDIR}/share/btop" \
-           "${DESTDIR}/share/${PKG}"
+           "${DESTDIR}/share/${PKG}" "${DESTDIR}/games" \
+           "${DESTDIR}/games/lib" "${DESTDIR}/games/lib/nethackdir" \
+           "${DESTDIR}/games/lib/nethackdir/save"
 do
     [ -d ${OUT_DIR}/${dir} ] || ${SUDO} mkdir ${OUT_DIR}/${dir}
     ${SUDO} chown root:root ${OUT_DIR}/${dir}
@@ -96,6 +110,30 @@ ${SUDO} cp btop/bin/btop ${OUT_DIR}/${DESTDIR}/bin/btop
 ${SUDO} cp jp2a/src/jp2a ${OUT_DIR}/${DESTDIR}/bin/jp2a
 ${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
 ${SUDO} cp ddgr/ddgr ${OUT_DIR}/${DESTDIR}/bin/ddgr
+
+cd nethack/dat
+${SUDO} cp license symbols help hh cmdhelp keyhelp history opthelp optmenu wizhelp dungeon.lua tribute asmodeus.lua baalz.lua bigrm-*.lua castle.lua fakewiz?.lua juiblex.lua knox.lua medusa-?.lua minend-?.lua minefill.lua minetn-?.lua oracle.lua orcus.lua sanctum.lua soko?-?.lua tower?.lua valley.lua wizard?.lua nhcore.lua nhlib.lua themerms.lua astral.lua air.lua earth.lua fire.lua water.lua ???-goal.lua ???-fil?.lua ???-loca.lua ???-strt.lua bogusmon data engrave epitaph oracles options quest.lua rumors ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir
+cd ..
+${SUDO} cp src/nethack ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir
+${SUDO} cp util/recover ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir
+${SUDO} cp sys/unix/nethack.sh ${OUT_DIR}/${DESTDIR}/games/nethack
+${SUDO} cp doc/Guidebook ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir
+${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/Guidebook
+${SUDO} chmod 0755 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/nethack
+${SUDO} chmod 0755 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/recover
+${SUDO} chmod 0755 ${OUT_DIR}/${DESTDIR}/games/nethack
+${SUDO} touch ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/perm \
+              ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/record \
+              ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/logfile \
+              ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/xlogfile \
+              ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/livelog
+${SUDO} chmod 0600 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/perm \
+                   ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/record \
+                   ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/logfile \
+                   ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/xlogfile \
+                   ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/livelog
+cd ..
+# You may also want to reinstall the man pages via the doc Makefile.
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
 ${SUDO} cp -a conf/mutt ${OUT_DIR}/${DESTDIR}/share/${PKG}/mutt
@@ -129,6 +167,15 @@ ${SUDO} cp -a music "${OUT_DIR}/${DESTDIR}/share/${PKG}/music"
 ${SUDO} cp -a man/man1 ${OUT_DIR}/${DESTDIR}/share/man/man1
 ${SUDO} cp ddgr/ddgr.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
 ${SUDO} cp jp2a/man/jp2a.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
+[ -d ${OUT_DIR}/${DESTDIR}/share/man/man6 ] || {
+  ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/man/man6
+}
+[ -d ${OUT_DIR}/${DESTDIR}/share/man/man7 ] || {
+  ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/man/man7
+}
+${SUDO} cp nethack/doc/*.6 ${OUT_DIR}/${DESTDIR}/share/man/man6
+${SUDO} cp nethack/doc/*.7 ${OUT_DIR}/${DESTDIR}/share/man/man7
+
 ${SUDO} cp -a share/menu "${OUT_DIR}/${DESTDIR}/share/menu"
 ${SUDO} cp -a share/figlet-fonts "${OUT_DIR}/${DESTDIR}/share/figlet-fonts"
 

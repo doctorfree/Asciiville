@@ -44,8 +44,14 @@ shift $(( OPTIND - 1 ))
 
 cd ${PROJ}
 
-sys/unix/setup.sh sys/unix/hints/linux-asciiville
-make fetch-lua
-make
+[ -f src/nethack ] || {
+    sys/unix/setup.sh sys/unix/hints/linux-asciiville
+    make fetch-lua
+    make
+    cd doc
+    make
+    cd ..
+}
+chmod +x src/nethack
 
 [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
