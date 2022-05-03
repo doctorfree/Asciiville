@@ -7,7 +7,7 @@ date: April 16, 2022
 ---
 # NAME
 asciiville - Launch a terminal emulator and specified character based command, ascii art, asciimatics animation, character based Email/FTP/File/Web clients,
-and much more
+and character based utilities
 
 # SYNOPSIS
 **asciiville** [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-Z] [-u]
@@ -21,7 +21,7 @@ The *asciiville* command can also act as a front-end to the *asciisplash* and *a
 
 When invoked with the `-i` option, `asciiville` presents a selection menu and operates in interactive mode. Included in the wide variety of options available in the Asciiville interactive menus are selections to display the *MusicPlayerPlus* and *RoonCommandLine* interactive menus.
 
-The interactive menu interface provides three types of menu options. Some menu selections trigger the execution of a command. These are usually menu entries beginning with *Run*. Other menu selections are used to set the command that would be run when a terminal emulator is selected. These are usually menu entries beginning with *Use*. Finally, some menu selections can be used to toggle preferences like *Fullscreen*, *Use Tmux*, and *Record Tmux Session*. Once a command has been selected with the *Use* menu entry and desired options are set then the command can be executed by selecting one of the terminal emulators (menu entries beginning with *Run <command> in <terminal name> Terminal*).
+The interactive menu interface provides three types of menu options. Some menu selections trigger the execution of a command. Other menu selections are used to set the command that would be run when a terminal emulator is selected. Finally, some menu selections can be used to toggle preferences like *Fullscreen*, *Use Tmux*, and *Record Tmux Session*. Once a command and terminal type have been selected and desired options are set then the command can be executed by selecting the menu entry *Run <command> in <terminal name> Terminal*.
 
 Previously started tmux sessions and asciimatics scripts can be quickly and easily terminated by executing the `asciiville -k` command.
 
@@ -201,7 +201,7 @@ Submit bug reports online at:
 https://github.com/doctorfree/Asciiville/issues
 
 # SEE ALSO
-**asciiart**(1), **asciijulia**(1), **asciimpplus**(1), **asciinema**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1), **ddgr**(1), **lynx**(1), **mutt**(1), **ranger**(1)
+**asciiart**(1), **asciijulia**(1), **asciimpplus**(1), **asciinema**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1), **btop**(1), **cbftp**(1), **ddgr**(1), **jp2a**(1), **lynx**(1), **mutt**(1), **ranger**(1), **show_moon**(1), **show_weather**(1)
 
 Full documentation and sources at:
 
