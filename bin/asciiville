@@ -467,7 +467,8 @@ show_help_menu() {
     options+=("Matrix Screen Manual")
     options+=("Mpcplus Music Player Manual")
     options+=("Mutt Mail Client Manual")
-    [ "${have_nethack}" ] && options+=("NetHack Dungeon Game Manual")
+    [ "${have_nethack}" ] && options+=("NetHack Game Manual")
+    [ "${have_nethack}" ] && options+=("NetHack Guide Book")
     [ "${have_ranger}" ] && options+=("Ranger File Manager Manual")
     [ "${have_ranger}" ] && options+=("Rifle File Opener Manual")
     options+=("Show ASCII Art Manual")
@@ -561,8 +562,12 @@ show_help_menu() {
           man mutt
           break
           ;;
-        "NetHack"*,*|*,"NetHack"*)
+        "NetHack Game"*,*|*,"NetHack Game"*)
           man nethack
+          break
+          ;;
+        "NetHack Guide"*,*|*,"NetHack Guide"*)
+          less /usr/games/lib/nethackdir/Guidebook
           break
           ;;
         "Ranger"*,*|*,"Ranger"*)
