@@ -53,8 +53,8 @@ fi
 usage() {
   printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]"
   printf "\n\t[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N]"
-  printf "\n\t[-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t]"
-  printf "\n\t[-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]\n"
+  printf "\n\t[-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T]"
+  printf "\n\t[-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]\n"
   printf "\nTerminal/Command options:"
   printf "\n\t-c 'command' indicates use 'command'"
   printf "\n\t\tIf 'command' is keyword 'maps' then display a map using mapscii"
@@ -75,6 +75,7 @@ usage() {
   printf "\n\t-r indicates use retro terminal emulator"
   printf "\n\t-t indicates use tilix terminal emulator"
   printf "\n\t-w indicates use w3m web browser as the default command"
+  printf "\n\t-W indicates use cmatrix as the default command"
   printf "\n\t-x indicates use xfce4 terminal emulator"
   printf "\n\t-X indicates run commands in current terminal window"
   printf "\n\t-y indicates use ranger file manager as the default command"
@@ -435,7 +436,6 @@ show_figlet() {
 }
 
 show_help_menu() {
-  main_menu=
   MTITLE="Asciiville Help"
   while true
   do
@@ -464,6 +464,7 @@ show_help_menu() {
     options+=("Ddgr Web Search Manual")
     options+=("Gdu Disk Usage Manual")
     options+=("Lynx Web Browser Manual")
+    options+=("Matrix Screen Manual")
     options+=("Mpcplus Music Player Manual")
     options+=("Mutt Mail Client Manual")
     [ "${have_nethack}" ] && options+=("NetHack Dungeon Game Manual")
@@ -478,12 +479,11 @@ show_help_menu() {
     options+=("Gnome Terminal Manual")
     options+=("Tilix Terminal Manual")
     options+=("Xfce4 Terminal Manual")
-    options+=("Main Menu" "Quit")
+    options+=("Done / Back" "Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
-        "Main"*,*|*,"Main"*|"main"*,*|*,"main"*|"Back",*|*,"Back"|"back",*|*,"back")
-          main_menu=1
+        "Done"*,*|*,"Done"*|"done"*,*|*,"done"*|"Back"*,*|*,"Back"*|"back"*,*|*,"back"*)
           break 2
           ;;
         "Asciiville README",*|*,"Asciiville README")
@@ -547,6 +547,10 @@ show_help_menu() {
           ;;
         "Lynx"*,*|*,"Lynx"*)
           man lynx
+          break
+          ;;
+        "Matrix"*,*|*,"Matrix"*)
+          man cmatrix
           break
           ;;
         "Mpcplus"*,*|*,"Mpcplus"*)
@@ -622,25 +626,21 @@ show_help_menu() {
       REPLY=
     done
   done
-  [ "${main_menu}" ] && {
-    clear
-    printf "\n"
-    init_vars
-    show_main_menu
-  }
+  clear
+  printf "\n"
 }
 
 
 show_select_menu() {
   animation_menu=
   art_menu=
-  help_menu=
   main_menu=
   while true
   do
     [ "${COMMAND}" ] || COMMAND=btop
     show_comm=`echo ${COMMAND} | awk ' { print $1 } '`
     use_btop="NO"
+    use_cmatrix="NO"
     use_ftp="NO"
     use_gdu="NO"
     use_lynx="NO"
@@ -655,6 +655,9 @@ show_select_menu() {
         ;;
       cbftp|ncftp)
         use_ftp="YES"
+        ;;
+      cmatrix*)
+        use_cmatrix="YES"
         ;;
       gdu*)
         use_gdu="YES"
@@ -718,6 +721,7 @@ show_select_menu() {
     [ "${have_gdu}" ] && options+=("Disk Usage Analyzer    [${use_gdu}]")
     [ "${have_lynx}" ] && options+=("Lynx Web Browser       [${use_lynx}]")
     [ "${have_w3m}" ] && options+=("W3M Web Browser        [${use_w3m}]")
+    [ "${have_cmatrix}" ] && options+=("Matrix Screen          [${use_cmatrix}]")
     [ "${have_mpcplus}" ] && options+=("Music Player Plus      [${use_mpp}]")
     if [ "${have_cbftp}" ]
     then
@@ -745,8 +749,10 @@ show_select_menu() {
     do
       case "$opt,$REPLY" in
           "h",*|*,"h"|"H",*|*,"H"|"help",*|*,"help"|"Help",*|*,"Help")
-              help_menu=1
-              break 2
+              clear
+              printf "\n"
+              show_help_menu
+              break
               ;;
           "Done"*,*|*,"Done"*|"Back",*|*,"Back"|"back",*|*,"back"|"Main"*,*|*,"Main"*|"main",*|*,"main")
               main_menu=1
@@ -780,6 +786,11 @@ show_select_menu() {
               COMMAND="w3m -v ${WEB_HOME}"
               MTITLE="W3M Web Browser"
               export BROWSER=w3m
+              break
+              ;;
+          "Matrix"*,*|*,"Matrix"*)
+              COMMAND="cmatrix -u 8"
+              MTITLE="Matrix Screen"
               break
               ;;
           "Music"*,*|*,"Music"*)
@@ -884,11 +895,6 @@ show_select_menu() {
     printf "\n\n\n"
     show_animation_menu
   }
-  [ "${help_menu}" ] && {
-    clear
-    printf "\n"
-    show_help_menu
-  }
   [ "${main_menu}" ] && {
     clear
     printf "\n"
@@ -899,7 +905,6 @@ show_select_menu() {
 
 show_art_menu() {
   animation_menu=
-  help_menu=
   main_menu=
   while true
   do
@@ -999,8 +1004,10 @@ show_art_menu() {
     do
       case "$opt,$REPLY" in
           "h",*|*,"h"|"H",*|*,"H"|"help",*|*,"help"|"Help",*|*,"Help")
-              help_menu=1
-              break 2
+              clear
+              printf "\n"
+              show_help_menu
+              break
               ;;
           "MusicPlayerPlus"*,*|*,"MusicPlayerPlus"*)
               [ "${use_figlet}" ] && {
@@ -1212,11 +1219,6 @@ show_art_menu() {
     printf "\n\n\n"
     show_animation_menu
   }
-  [ "${help_menu}" ] && {
-    clear
-    printf "\n"
-    show_help_menu
-  }
   [ "${main_menu}" ] && {
     clear
     printf "\n"
@@ -1227,7 +1229,6 @@ show_art_menu() {
 
 show_animation_menu() {
   art_menu=
-  help_menu=
   main_menu=
   MTITLE="ASCIImatics Animation"
   while true
@@ -1320,8 +1321,11 @@ show_animation_menu() {
     do
       case "$opt,$REPLY" in
           "h",*|*,"h"|"H",*|*,"H"|"help",*|*,"help"|"Help",*|*,"Help")
-              help_menu=1
-              break 2
+              clear
+              printf "\n"
+              show_help_menu
+              skip_it_so=1
+              break
               ;;
           "Main Menu",*|*,"Main Menu"|"Back",*|*,"Back"|"back",*|*,"back")
               main_menu=1
@@ -1558,11 +1562,6 @@ show_animation_menu() {
     printf "\n\n\n"
     show_art_menu
   }
-  [ "${help_menu}" ] && {
-    clear
-    printf "\n"
-    show_help_menu
-  }
   [ "${main_menu}" ] && {
     clear
     printf "\n"
@@ -1574,7 +1573,6 @@ show_animation_menu() {
 show_main_menu() {
   art_menu=
   animation_menu=
-  help_menu=
   select_menu=
   while true
   do
@@ -1660,8 +1658,11 @@ show_main_menu() {
     do
       case "$opt,$REPLY" in
           "h",*|*,"h"|"H",*|*,"H"|"help",*|*,"help"|"Help",*|*,"Help")
-              help_menu=1
-              break 2
+              clear
+              printf "\n"
+              show_help_menu
+              skip_it_so=1
+              break
               ;;
           "Run ${show_comm} in ${show_term}",*|*,"Run ${show_comm} in ${show_term}")
               break
@@ -1982,11 +1983,6 @@ show_main_menu() {
     printf "\n\n\n"
     show_animation_menu
   }
-  [ "${help_menu}" ] && {
-    clear
-    printf "\n"
-    show_help_menu
-  }
   [ "${select_menu}" ] && {
     clear
     printf "\n\n\n"
@@ -2079,6 +2075,7 @@ have_asciiplasma=`type -p asciiplasma`
 have_asciimpplus=`type -p asciimpplus`
 have_asciinema=`type -p asciinema`
 have_bb=`type -p bb-tmux`
+have_cmatrix=`type -p cmatrix`
 have_curl=`type -p curl`
 have_ddgr=`type -p ddgr`
 have_figlet=`type -p figlet`
@@ -2143,7 +2140,7 @@ cycle=
 noaudio=
 show_neofetch=
 SLIDESHOW=
-while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wxXyYzZu" flag; do
+while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wWxXyYzZu" flag; do
   case $flag in
     A)
       ASCSPLASH="${ASCSPLASH} -i"
@@ -2444,6 +2441,15 @@ while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wxXyYzZu" flag; do
       ;;
     V)
       SLIDESHOW="${OPTARG}"
+      ;;
+    W)
+      if [ "${have_cmatrix}" ]
+      then
+        COMMAND="cmatrix -u 8"
+        MTITLE="Matrix Screen"
+      else
+        not_in_path cmatrix -W
+      fi
       ;;
     w)
       COMMAND="w3m -v ${WEB_HOME}"
