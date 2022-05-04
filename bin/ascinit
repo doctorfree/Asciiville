@@ -8,14 +8,156 @@ CONFDIR=/usr/share/asciiville
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 
-debug=
-[ "$1" == "-debug" ] && {
-  debug=1
-  shift
+usage() {
+  printf "\nUsage: ascinit [-a] [-d] [-m] [-M] [-n] [-N] [-q] [-t] [-u]"
+  printf "\nWhere:"
+  printf "\n\t-a indicates do not ask to play an animation when done"
+  printf "\n\t-d indicates debug mode"
+  printf "\n\t-m indicates setup user Mutt configuration"
+  printf "\n\t-M indicates setup both Mutt and NeoMutt configurations"
+  printf "\n\t-n indicates setup user NeoMutt configuration"
+  printf "\n\t-N indicates setup neither Mutt or NeoMutt configuration"
+  printf "\n\t-q indicates quiet mode"
+  printf "\n\t-t indicates authorize the Rainbow Stream app at Twitter"
+  printf "\n\t-u indicates display this usage message and exit\n"
+  exit 1
 }
 
-# Mutt configuration user setup
+inst_pkg() {
+  PKG="$1"
+  [ "${quiet}" ] || echo "Installing ${PKG}"
+  if [ "${debian}" ]
+  then
+    if [ "${have_apt}" ]
+    then
+      sudo apt install "${PKG}" -y
+    else
+      [ "${quiet}" ] || echo "Cannot locate apt to install. Skipping."
+    fi
+  else
+    if [ "${have_dnf}" ]
+    then
+      sudo dnf install "${PKG}" -y
+    else
+      [ "${quiet}" ] || echo "Cannot locate dnf to install. Skipping."
+    fi
+  fi
+}
+
+ask_install() {
+  opt="$1"
+  nam="$2"
+  pkg="$3"
+  echo "The ${opt} option indicates configure ${nam} but ${nam} is not installed"
+  echo "Would you like to install ${nam} at this time?"
+  while true
+  do
+    read -p "Install ${nam} ? (y/n) " yn
+    case $yn in
+      [Yy]* )
+          inst_pkg ${pkg}
+          case ${pkg} in
+            mutt)
+                use_mutt=1
+                ;;
+            neomutt)
+                use_neomutt=1
+                ;;
+          esac
+          break
+          ;;
+      [Nn]* )
+          case ${pkg} in
+            mutt)
+                use_mutt=
+                ;;
+            neomutt)
+                use_neomutt=
+                ;;
+          esac
+          break
+          ;;
+        * ) echo "Please answer yes or no."
+          ;;
+    esac
+  done
+}
+
 have_mutt=`type -p mutt`
+have_neomutt=`type -p neomutt`
+have_apt=`type -p apt`
+have_dnf=`type -p dnf`
+
+debian=
+[ -f /etc/os-release ] && . /etc/os-release
+[ "${ID_LIKE}" == "debian" ] && debian=1
+[ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
+
+ask_anim=1
+debug=
+init_twit=
+quiet=
+use_mutt=
+use_neomutt=1
+
+while getopts "admMnNqtu" flag; do
+  case $flag in
+    a)
+        ask_anim=
+        ;;
+    d)
+        debug=1
+        ;;
+    m)
+        if [ "${have_mutt}" ]
+        then
+          use_mutt=1
+          use_neomutt=
+        else
+          ask_install -m Mutt mutt
+        fi
+        ;;
+    n)
+        if [ "${have_neomutt}" ]
+        then
+          use_mutt=
+          use_neomutt=1
+        else
+          ask_install -n NeoMutt neomutt
+        fi
+        ;;
+    M)
+        if [ "${have_mutt}" ]
+        then
+          use_mutt=1
+        else
+          ask_install -m Mutt mutt
+        fi
+        if [ "${have_neomutt}" ]
+        then
+          use_neomutt=1
+        else
+          ask_install -n NeoMutt neomutt
+        fi
+        ;;
+    N)
+        use_mutt=
+        use_neomutt=
+        ;;
+    q)
+        quiet=1
+        ;;
+    t)
+        init_twit=1
+        ;;
+    u)
+        usage
+        ;;
+  esac
+done
+shift $(( OPTIND - 1 ))
+
+# Mutt configuration user setup
 [ "${have_mutt}" ] && {
   [ -f ${CONFDIR}/mutt/muttrc ] && {
     [ -d ${HOME}/.mutt ] || {
@@ -41,17 +183,19 @@ have_mutt=`type -p mutt`
     [ -f ${HOME}/.mutt/muttrc ] || {
       cp ${CONFDIR}/mutt/muttrc ${HOME}/.mutt/muttrc
       chmod 600 ${HOME}/.mutt/muttrc
-      echo "A basic ${HOME}/.mutt/muttrc Mutt email client configuration"
-      echo "has been created for you. The default configuration can be used"
-      echo "as a template to create a GMail IMAP Mutt email account."
-      echo "Edit ${HOME}/.mutt/muttrc and add your GMail credentials."
-      echo ""
-      echo "Several more extensive Mutt configurations are included in Asciiville."
-      echo "See the folders:"
-      printf "\t${CONFDIR}/mutt/\nand\n\t${CONFDIR}/mutt_multiple/\n"
-      echo ""
-      echo "A good starting point for the new Mutt user is the Mutt Wiki at:"
-      echo "https://gitlab.com/muttmua/mutt/-/wikis/home"
+      [ "${quiet}" ] || {
+        echo "A basic ${HOME}/.mutt/muttrc Mutt email client configuration"
+        echo "has been created for you. The default configuration can be used"
+        echo "as a template to create a GMail IMAP Mutt email account."
+        echo "Edit ${HOME}/.mutt/muttrc and add your GMail credentials."
+        echo ""
+        echo "Several extensive Mutt configurations are included in Asciiville."
+        echo "See the folders:"
+        printf "\t${CONFDIR}/mutt/\nand\n\t${CONFDIR}/mutt_multiple/\n"
+        echo ""
+        echo "A good starting point for the new Mutt user is the Mutt Wiki at:"
+        echo "https://gitlab.com/muttmua/mutt/-/wikis/home"
+      }
     }
     [ -f ${HOME}/.mutt/colors ] || {
       cp ${CONFDIR}/mutt/colors ${HOME}/.mutt/colors
@@ -61,19 +205,20 @@ have_mutt=`type -p mutt`
 }
 
 # NeoMutt configuration user setup
-have_neomutt=`type -p neomutt`
 [ "${have_neomutt}" ] && {
   [ -d ${CONFDIR}/neomutt ] && {
     [ -d ${HOME}/.config/neomutt ] || {
       cp -a ${CONFDIR}/neomutt ${HOME}/.config/neomutt
       chmod 600 ${HOME}/.config/neomutt/accounts/*
       chmod 750 ${HOME}/.config/neomutt/accounts
-      echo "A ${HOME}/.config/neomutt/ NeoMutt email client configuration"
-      echo "has been created for you. Edit your name, email address, and"
-      echo "email account credentials in ${HOME}/.config/neomutt/accounts/*"
-      echo ""
-      echo "A good starting point for the NeoMutt user is the NeoMutt Guide at:"
-      echo "https://neomutt.org/guide/"
+      [ "${quiet}" ] || {
+        echo "A ${HOME}/.config/neomutt/ NeoMutt email client configuration"
+        echo "has been created for you. Edit your name, email address, and"
+        echo "email account credentials in ${HOME}/.config/neomutt/accounts/*"
+        echo ""
+        echo "A good starting point for the NeoMutt user is the NeoMutt Guide at:"
+        echo "https://neomutt.org/guide/"
+      }
     }
   }
 }
@@ -130,6 +275,8 @@ have_pip=`type -p pip`
 
 pip list | grep asciimatics > /dev/null || python3 -m pip install asciimatics
 pip list | grep rainbowstream > /dev/null || python3 -m pip install rainbowstream
+
+[ "${init_twit}" ] && rainbowstream
 
 create_new_profile() {
   local proname="$1"
@@ -271,13 +418,17 @@ fi
 
 touch ${HOME}/.asciiville_init
 
-printf "\n${BOLD}Asciiville Initialization Complete${NORMAL}\n"
-printf "\nAuthorize the Rainbow Stream app at Twitter"
-printf "\nby running the ${BOLD}'rainbowstream'${NORMAL} command\n"
-printf "\nVisit the Asciiville Wiki at:"
-printf "\n\t${BOLD}https://github.com/doctorfree/Asciiville/wiki${NORMAL}\n"
+[ "${quiet}" ] || {
+  printf "\n${BOLD}Asciiville Initialization Complete${NORMAL}\n"
+  [ "${init_twit}" ] || {
+    printf "\nAuthorize the Rainbow Stream app at Twitter"
+    printf "\nby running the ${BOLD}'rainbowstream'${NORMAL} command\n"
+  }
+  printf "\nVisit the Asciiville Wiki at:"
+  printf "\n\t${BOLD}https://github.com/doctorfree/Asciiville/wiki${NORMAL}\n"
+}
 
-[ "$1" == "-n" ] || {
+[ "$ask_anim" ] && {
   type -p asciisplash > /dev/null && {
     while true
     do

@@ -2615,7 +2615,7 @@ done
         break
         ;;
       [Yy]* )
-        ascinit -n
+        ascinit -a
         break
         ;;
       [Nn]* )

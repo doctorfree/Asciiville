@@ -15,8 +15,9 @@ of components used to display ASCII Art, animations, and utilities.
     1. [Debian package installation](#debian-package-installation)
     1. [RPM package installation](#rpm-package-installation)
     1. [BB AAlib Demo](#bb-aalib-demo)
-1. [Configuration files](#configuration-files)
-1. [Mutt email configuration](#mutt-email-configuration)
+1. [Configuration](#configuration)
+    1. [NeoMutt email configuration](#neomutt-email-configuration)
+    1. [Mutt email configuration](#mutt-email-configuration)
 1. [Documentation](#documentation)
     1. [Btop++ README](#btop++-readme)
     1. [Cbftp README](#cbftp-readme)
@@ -238,7 +239,7 @@ repository. For example, on Fedora Linux, to install `bb`:
 
 The BB AAlib Demo is not required. It's just a fun demo.
 
-## Configuration files
+## Configuration
 
 Asciiville creates several default configuration files for utilities
 included in the distribution. Examine these files to further customize
@@ -250,6 +251,7 @@ Generated configuration files include:
 * `$HOME/.config/btop/btop.conf` : Btop++ system monitor
 * `$HOME/.mutt/muttrc` : Mutt email client
 * `$HOME/.mutt/colors` : Mutt email client color palette
+* `$HOME/.config/neomutt/` : NeoMutt email client startup files
 * `$HOME/.config/neofetch/config.conf` : NeoFetch system info script
 * `$HOME/.rainbow_config.json` : Rainbowstream Twitter client
 * `$HOME/.config/ranger/rifle.conf` : Rifle, Ranger's file opener
@@ -258,31 +260,106 @@ Generated configuration files include:
 These override or extend the settings in the utilities' global configuration
 files, typically installed in `/etc/`. For example, the global configuration
 for the Ranger File Manager can be found in `/etc/ranger/config/`. The Lynx
-web browser configuration is in `/etc/lynx/`, and the W3M web browser is
-configured in `/etc/w3m/`.
+web browser configuration is in `/etc/lynx/`, the W3M web browser is
+configured in `/etc/w3m/`, and the NeoMutt global config is `/etc/neomuttrc`.
 
 After installing Asciiville and running the `ascinit` command, initialize the
 the command line Twitter client by invoking the `rainbowstream` command and
 authorizing the app to access your Twitter account.
 
-### Mutt email configuration
+#### NeoMutt email configuration
+
+The [NeoMutt](https://neomutt.org/) email client is an improved Mutt client.
+Asciiville installs NeoMutt as a dependency and provides support for configuring
+and launching NeoMutt. Setup for NeoMutt is similar to setup for Mutt.
+
+The `ascinit` command creates an initial NeoMutt configuration in
+`$HOME/.config/neomutt/`. In order to use the NeoMutt email client it will be
+necessary to configure `$HOME/.config/neomutt/accounts/*` with your name,
+email address, and credentials. The default NeoMutt user configuration files
+configure NeoMutt for use with GMail. This can be modified by editing the
+accounts configured in `$HOME/.config/neomutt/neomuttrc`.
+
+Comments in `$HOME/.config/neomutt/accounts/gmail`
+provide pointers to configuring your credentials with GMail. If Google 2FA
+Authentication is enabled in your Google account, create an App password for
+NeoMutt. See
+[https://security.google.com/settings/security/apppasswords](https://security.google.com/settings/security/apppasswords)
+
+NeoMutt can use the output of external commands to set a configuration value.
+Storing a password in a configuration file is generally a bad idea. Passwords
+and other sensitive material can be stored elsewhere and a command used to
+retrieve and set them in the configuration file. Storing a plain text password
+in a file and reading that file from the NeoMutt configuration is better than
+placing the password directly in the configuration file. But it is still plain
+text in a file somewhere. A more secure manner of storing passwords can be
+implemented using encryption with utilities like PGP or GPG.
+
+To use an encrypted password with NeoMutt, follow the guide at:
+[https://www.xmodulo.com/mutt-email-client-encrypted-passwords.html](https://www.xmodulo.com/mutt-email-client-encrypted-passwords.html)
+The ArchLinux wiki has a good article on configuring GPG to encrypt/decrypt
+passwords and email. See
+[https://wiki.archlinux.org/title/GnuPG](https://wiki.archlinux.org/title/GnuPG)
+
+For example, if you have encrypted your Google NeoMutt App password in the
+file `~/.neomutt/gmail.gpg` then the following can be used for GMail
+authentication in `$HOME/.config/neomutt/accounts/gmail`
+
+Create a GPG key pair
+```console
+gpg --gen-key
+```
+
+Create a file containing the encrypted password:
+```console
+echo "your_gmail_app_password" > ~/.config/neomutt/gmail
+gpg -r youremail@gmail.com -e ~/.config/neomutt/gmail
+rm -f ~/.config/neomutt/gmail
+chmod 600 ~/.config/neomutt/gmail.gpg
+```
+
+Configure NeoMutt authentication in `$HOME/.config/neomutt/accounts/gmail`
+```console
+set imap_pass="`gpg --batch -q --decrypt ~/.neomutt/gmail.gpg`"
+```
+
+The first time `neomutt` is executed it will prompt you for the passphrase
+used to create the GPG key pair. If you check the box to use the GPG
+passphrase manager then subsequent invocations of NeoMutt will not prompt
+for the passphrase. This assumes the `gpg-agent` has been installed and
+configured. Many modern Linux distributions do this by default.
+
+Creating and using encrypted passwords is strongly recommended. That's why
+I spent the time to write this section of the README. A similar procedure
+can be used with Mutt.
+
+A setup wizard for both NeoMutt and Mutt is available at
+[https://github.com/LukeSmithxyz/mutt-wizard](https://github.com/LukeSmithxyz/mutt-wizard).
+
+#### Mutt email configuration
+
+Alternatively, you may prefer using the older but still maintained and robust
+[Mutt](https://www.mutt.org/) email client. Asciiville checks to see if Mutt
+is installed and, if so, provides support for launching it as well as NeoMutt.
+Mutt and NeoMutt can coexist peacefully.
+
+Mutt is not installed as a dependency during the Asciiville installation.
+If you wish to use the Mutt integration in Asciiville, Mutt must be installed.
+A Mutt installation and Asciiville Mutt configuration can be accomplished
+by running the command `ascinit -m` or `ascinit -M` for both Mutt and NeoMutt.
+If no text based email client is desired, then configuration for both Mutt
+and NeoMutt can be skipped by executing `ascinit -N` during initialization.
 
 In order to use the Mutt email client it will be necessary to configure
 `$HOME/.mutt/.muttrc` with your email address, name, and credentials.
-This is the simplest way to get started with email client support in
-Asciiville. Comments in `$HOME/.mutt/.muttrc` provide pointers to
-configuring your credentials with GMail.
+Comments in `$HOME/.mutt/.muttrc` provide pointers to configuring your
+credentials with GMail. If Google 2FA Authentication is enabled in your
+Google account, create an App password for NeoMutt. See
+[https://security.google.com/settings/security/apppasswords](https://security.google.com/settings/security/apppasswords)
 
 There are many Mutt configuration guides on the Internet. ArchLinux has
-an excellent guide at
+a good guide at
 [https://wiki.archlinux.org/title/Mutt](https://wiki.archlinux.org/title/Mutt).
-
-Alternatively, you may wish to consider using [NeoMutt](https://neomutt.org/),
-an improved Mutt client. Asciiville checks to see if NeoMutt is installed and,
-if so, provides support for launching it as well as Mutt. Setup for NeoMutt is
-similar to but different than setup for Mutt. A setup wizard for both is
-available at
-[https://github.com/LukeSmithxyz/mutt-wizard](https://github.com/LukeSmithxyz/mutt-wizard).
 
 ## Documentation
 

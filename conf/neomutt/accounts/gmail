@@ -10,11 +10,13 @@
 #
 set realname="Firstname Lastname"
 set imap_user="youraccount@gmail.com"
-set imap_pass=<yourpassword>
+#set imap_pass=<yourpassword>
+set imap_pass="`gpg --batch -q --decrypt ~/.config/neomutt/gmail.gpg`"
 set from="youraccount@gmail.com"
 #set smtp_url="smtps://youraccount@gmail.com@smtp.gmail.com:587"
 set smtp_url="smtps://youraccount@gmail.com@smtp.gmail.com:465"
-set smtp_pass=<yourpassword>
+#set smtp_pass=<yourpassword>
+set smtp_pass="`gpg --batch -q --decrypt ~/.config/neomutt/gmail.gpg`"
 #
 
 set folder=imaps://imap.gmail.com/

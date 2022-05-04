@@ -3,9 +3,11 @@ unmailboxes *
 
 # in/out mail servers
 set realname = "Firstname Lastname"
-set imap_pass = "SOME_PASSWORD"
+#set imap_pass = "SOME_PASSWORD"
+set imap_pass="`gpg --batch -q --decrypt ~/.config/neomutt/main.gpg`"
 set smtp_url = "smtps://you@somedomain.com@mailserver.com:465"
-set smtp_pass = "SOME_PASSWORD"
+#set smtp_pass = "SOME_PASSWORD"
+set smtp_pass="`gpg --batch -q --decrypt ~/.config/neomutt/main.gpg`"
 set folder = "imaps://you@somedomain.com@mailserver.com:993"
 set spoolfile = "+INBOX"
 
