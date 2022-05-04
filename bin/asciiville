@@ -276,7 +276,12 @@ select_font() {
   # Seed random generator
   RANDOM=$$$(date +%s)
 
-  USE_FONT=${fonts[ $RANDOM % ${#fonts[@]} ]}
+  if [ "$2" == "small" ]
+  then
+    USE_FONT=${smallfonts[ $RANDOM % ${#smallfonts[@]} ]}
+  else
+    USE_FONT=${fonts[ $RANDOM % ${#fonts[@]} ]}
+  fi
   [ "${USE_FONT}" == "Lean" ] && {
     [ "${FULLSCREEN}" ] || {
       while [ "${USE_FONT}" == "Lean" ]
@@ -440,7 +445,7 @@ show_help_menu() {
   while true
   do
     [ "${use_figlet}" ] && {
-      select_font Help
+      select_font Help small
       show_figlet
     }
     PS3="${BOLD}${PLEASE} choice (numeric or text): ${NORMAL}"
@@ -451,38 +456,38 @@ show_help_menu() {
     else
       [ "${have_lynx}" ] && options+=("Asciiville README")
     fi
-    options+=("Asciiville Manual")
-    options+=("Asciiville Animation Manual")
-    options+=("Julia Set Animation Manual")
-    options+=("MusicPlayer Animation Manual")
-    options+=("ASCIInema Manual")
-    options+=("Plasma Animation Manual")
-    options+=("ASCII Splash Manual")
-    options+=("ASCII Splash Tmux Manual")
-    [ "${have_btop}" ] && options+=("Btop System Monitor Manual")
-    [ "${have_cbftp}" ] && options+=("Cbftp FTP Client Manual")
-    [ "${have_ddgr}" ] && options+=("Ddgr Web Search Manual")
-    [ "${have_gdu}" ] && options+=("Gdu Disk Usage Manual")
-    [ "${have_lynx}" ] && options+=("Lynx Web Browser Manual")
-    [ "${have_cmatrix}" ] && options+=("Matrix Screen Manual")
-    [ "${have_mpcplus}" ] && options+=("Mpcplus Music Player Manual")
+    options+=("Asciiville Man Page")
+    options+=("Asciiville Animation Man Page")
+    options+=("Julia Set Animation Man Page")
+    options+=("MusicPlayer Animation Man Page")
+    options+=("ASCIInema Man Page")
+    options+=("Plasma Animation Man Page")
+    options+=("ASCII Splash Man Page")
+    options+=("ASCII Splash Tmux Man Page")
+    [ "${have_btop}" ] && options+=("Btop System Monitor Man Page")
+    [ "${have_cbftp}" ] && options+=("Cbftp FTP Client Man Page")
+    [ "${have_ddgr}" ] && options+=("Ddgr Web Search Man Page")
+    [ "${have_gdu}" ] && options+=("Gdu Disk Usage Man Page")
+    [ "${have_lynx}" ] && options+=("Lynx Web Browser Man Page")
+    [ "${have_cmatrix}" ] && options+=("Matrix Screen Man Page")
+    [ "${have_mpcplus}" ] && options+=("Mpcplus Music Player Man Page")
     [ "${have_mutt}" ] && options+=("Mutt Mail Client Man Page")
     [ "${have_mutt}" ] && options+=("Mutt Full Manual")
     [ "${have_neomutt}" ] && options+=("NeoMutt Mail Client Man Page")
     [ "${have_neomutt}" ] && options+=("NeoMutt Full Manual")
-    [ "${have_nethack}" ] && options+=("NetHack Game Manual")
+    [ "${have_nethack}" ] && options+=("NetHack Game Man Page")
     [ "${have_nethack}" ] && options+=("NetHack Guide Book")
-    [ "${have_ranger}" ] && options+=("Ranger File Manager Manual")
-    [ "${have_ranger}" ] && options+=("Rifle File Opener Manual")
-    options+=("Show ASCII Art Manual")
-    options+=("Show Phase of Moon Manual")
-    options+=("Show Weather Report Manual")
-    options+=("Tmux Multiplexer Manual")
-    [ "${have_w3m}" ] && options+=("W3m Web Browser Manual")
-    [ "${have_retro}" ] && options+=("Retro Terminal Manual")
-    [ "${have_gnome}" ] && options+=("Gnome Terminal Manual")
-    [ "${have_tilix}" ] && options+=("Tilix Terminal Manual")
-    [ "${have_xfce4}" ] && options+=("Xfce4 Terminal Manual")
+    [ "${have_ranger}" ] && options+=("Ranger File Manager Man Page")
+    [ "${have_ranger}" ] && options+=("Rifle File Opener Man Page")
+    options+=("Show ASCII Art Man Page")
+    options+=("Show Phase of Moon Man Page")
+    options+=("Show Weather Report Man Page")
+    options+=("Tmux Multiplexer Man Page")
+    [ "${have_w3m}" ] && options+=("W3m Web Browser Man Page")
+    [ "${have_retro}" ] && options+=("Retro Terminal Man Page")
+    [ "${have_gnome}" ] && options+=("Gnome Terminal Man Page")
+    [ "${have_tilix}" ] && options+=("Tilix Terminal Man Page")
+    [ "${have_xfce4}" ] && options+=("Xfce4 Terminal Man Page")
     options+=("Done / Back" "Quit")
     select opt in "${options[@]}"
     do
@@ -2615,7 +2620,7 @@ done
         break
         ;;
       [Yy]* )
-        ascinit -a
+        ascinit -a -q
         break
         ;;
       [Nn]* )

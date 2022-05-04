@@ -189,10 +189,6 @@ shift $(( OPTIND - 1 ))
         echo "as a template to create a GMail IMAP Mutt email account."
         echo "Edit ${HOME}/.mutt/muttrc and add your GMail credentials."
         echo ""
-        echo "Several extensive Mutt configurations are included in Asciiville."
-        echo "See the folders:"
-        printf "\t${CONFDIR}/mutt/\nand\n\t${CONFDIR}/mutt_multiple/\n"
-        echo ""
         echo "A good starting point for the new Mutt user is the Mutt Wiki at:"
         echo "https://gitlab.com/muttmua/mutt/-/wikis/home"
       }
@@ -212,12 +208,14 @@ shift $(( OPTIND - 1 ))
       chmod 600 ${HOME}/.config/neomutt/accounts/*
       chmod 750 ${HOME}/.config/neomutt/accounts
       [ "${quiet}" ] || {
+        echo ""
         echo "A ${HOME}/.config/neomutt/ NeoMutt email client configuration"
         echo "has been created for you. Edit your name, email address, and"
         echo "email account credentials in ${HOME}/.config/neomutt/accounts/*"
         echo ""
         echo "A good starting point for the NeoMutt user is the NeoMutt Guide at:"
         echo "https://neomutt.org/guide/"
+        echo ""
       }
     }
   }

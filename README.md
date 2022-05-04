@@ -370,6 +370,14 @@ viewed with the command `man asciiville`. Most commands also have
 help/usage messages that can be viewed with the **-u** argument option,
 e.g. `asciiville -u`.
 
+In interactive mode, the `asciiville` command presents a series of menus from
+which commands can be executed. Each of these menus provides an entry point
+for a 'Help' menu that can be displayed by typing 'h' at the prompt. The
+Asciiville Help menu contains a large number of menu entries providing access
+to manuals and man pages describing usage of the Asciiville components.
+Run the `asciiville` command with no arguments or the `-i` argument to
+bring up the interactive menu interface.
+
 ### Btop++ README
 - [**btop/README.md**](btop/README.md) - Introduction to the btop system monitor
 

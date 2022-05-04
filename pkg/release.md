@@ -1,5 +1,19 @@
 This release includes support for:
 
+* NeoMutt and Mutt configuration in `ascinit`
+* Enhanced NeoMutt mailcap
+* Support for GPG encrypted passwords in NeoMutt
+* Extended Help menu in `asciiville`
+* Add Matrix and NetHack commands
+* Additional freely licensed songs for slideshow and animation audio tracks
+* Rename all Ascii Art files to use `.asc` filename suffix
+* Add rifle config for opening .asc files
+* Simplify menus, match partial responses when possible
+* Add 'Select Song' to menus, create and check initialization file in asciiville
+* Add selection menu for command and terminal, add select song option
+
+Previous releases include support for:
+
 * Create armhf architecture Debian format package for Raspberry Pi installs
 * With no arguments asciiville brings up a menu
 * Add Mutt configuration to `ascinit`
@@ -81,7 +95,7 @@ sudo dnf localinstall ./Asciiville-1.3.1-2.x86_64.rpm
 
 ## Configuration
 
-* REQUIRED: execute the `ascinit` command to initialize *tmux*, *ranger*, and *rainbowstream*
+* REQUIRED: execute the `ascinit` command to initialize *mutt/neomutt*, *tmux*, *ranger*, and *rainbowstream*
 * OPTIONAL: authorize the command line Twitter client by executing `rainbowstream`
 
 See the [Asciiville README](https://github.com/doctorfree/Asciiville#readme) for additional configuration info.

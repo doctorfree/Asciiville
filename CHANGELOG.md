@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+# Asciiville-1.3.1r2 (2022-05-05)
+
+* NeoMutt and Mutt configuration in `ascinit`
+* Enhanced NeoMutt mailcap
+* Support for GPG encrypted passwords in NeoMutt
+* Extended Help menu in `asciiville`
+* Add Matrix and NetHack commands
+* Additional freely licensed songs for slideshow and animation audio tracks
+* Rename all Ascii Art files to use `.asc` filename suffix
+* Add rifle config for opening .asc files
+* Simplify menus, match partial responses when possible
+* Add 'Select Song' to menus, create and check initialization file in asciiville
+* Add selection menu for command and terminal, add select song option
+
 # Asciiville-1.3.1r1 (2022-05-01)
 
 * Create armhf architecture Debian format package for Raspberry Pi installs
@@ -59,6 +73,78 @@ Initial release with support for:
 * Any character based client the user wishes to run
 * One of several asciimatics animations optionally accompanied by audio
 
+Wed May 4 13:02:15 2022 -0700 1688a82 :
+   gitignore was ignoring some config files in nethack
+Wed May 4 12:28:14 2022 -0700 ab445c7 :
+   Enhanced NeoMutt mailcap
+Wed May 4 11:41:41 2022 -0700 1157fbe :
+   NeoMutt and Mutt config in ascinit, use GPG for encrypted passwords section in README and email configs
+Tue May 3 22:40:53 2022 -0700 135263b :
+   Add NeoMutt initialization to ascinit
+Tue May 3 19:51:32 2022 -0700 aa14128 :
+   Add NeoMutt to Help, add cmatrix to README
+Tue May 3 17:43:44 2022 -0700 e43d994 :
+   Add NetHack Guide Book to Help, update Size field in control file
+Tue May 3 17:32:03 2022 -0700 ce24636 :
+   Add cmatrix command
+Tue May 3 16:48:30 2022 -0700 4a74b7c :
+   Add Help menu to asciiville, generate and distribute README.html for use with Help
+Tue May 3 14:02:40 2022 -0700 12738e2 :
+   Add section on Monospaced fonts to README, updated info on nethack in README
+Tue May 3 13:05:13 2022 -0700 d83df70 :
+   Set permissions and ownership on NetHack installation files and folders
+Tue May 3 10:32:03 2022 -0700 21869de :
+   Add NetHack to asciiville command
+Tue May 3 10:15:18 2022 -0700 b40eb21 :
+   Add nethack to package creation scripts
+Tue May 3 09:14:19 2022 -0700 7602192 :
+   Set MANDIR for Linux build
+Tue May 3 08:59:53 2022 -0700 9ec9b85 :
+   Added nethack source and build script
+Tue May 3 07:39:19 2022 -0700 afef4e3 :
+   Recognize Ogg format audio files, delay slightly when going fullscreen
+Mon May 2 19:57:07 2022 -0700 cbfc0ec :
+   Update Size in mkdeb, update asciiville man page
+Mon May 2 19:09:13 2022 -0700 2bcd2b5 :
+   Custom song for Mixed Ascii Art slideshow
+Mon May 2 17:42:46 2022 -0700 e13375c :
+   Simplify menu selection matching
+Mon May 2 17:20:27 2022 -0700 a10751c :
+   Add classical piece for Art exhibits and backup
+Mon May 2 16:24:20 2022 -0700 c5330e8 :
+   Use quiet option for ascii art in Rifle
+Mon May 2 16:08:44 2022 -0700 9b7101c :
+   Rename all Ascii Art files with .asc suffix, update commands with .asc suffix, add rifle config for opening .asc files
+Mon May 2 14:49:06 2022 -0700 9021be3 :
+   Add new music, customize audio track for animations and slideshows
+Mon May 2 13:28:58 2022 -0700 73299fc :
+   Simplify menus, match partial responses when possible
+Mon May 2 11:22:47 2022 -0700 3eeb418 :
+   Add 'Select Song' to menus, create and check initialization file in asciiville
+Sun May 1 23:54:58 2022 -0700 6dd1551 :
+   Add selection menu for app and term, add select song option, reorganize file layout
+Sun May 1 20:16:23 2022 -0700 0bf3007 :
+   Modify video labels
+Sun May 1 19:49:49 2022 -0700 127d510 :
+   Add labels to videos
+Sun May 1 19:45:51 2022 -0700 a9f716d :
+   Fix imgur urls
+Sun May 1 19:38:54 2022 -0700 8d89495 :
+   Fix imgur urls
+Sun May 1 19:35:14 2022 -0700 b228902 :
+   Add Art slideshow video
+Sun May 1 18:21:47 2022 -0700 438ccac :
+   Fix bug with audio in slideshows not playing
+Sun May 1 15:58:34 2022 -0700 cb195d3 :
+   ASCII vs ANSI Art
+Sun May 1 15:34:03 2022 -0700 4a3c6c8 :
+   Add section on ASCII
+Sun May 1 14:35:09 2022 -0700 915999d :
+   Redirect stdout and stderr in cool-retro-term invocations
+Sun May 1 14:14:12 2022 -0700 d931e57 :
+   Use options rather than sed with moon and weather output
+Sun May 1 13:55:22 2022 -0700 94a0df7 :
+   Update changelog and release notes
 Sun May 1 13:53:27 2022 -0700 19ce725 :
    Add show_moon and show_weather commands
 Sun May 1 13:40:09 2022 -0700 2aa6aee :
