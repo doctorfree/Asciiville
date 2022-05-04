@@ -1,4 +1,14 @@
-# vim: filetype=muttrc
+# If Google 2FA Authentication is enabled, create an App password for NeoMutt
+# See https://security.google.com/settings/security/apppasswords
+#
+# To use an encrypted password with NeoMutt, follow the guide at:
+# https://www.xmodulo.com/mutt-email-client-encrypted-passwords.html
+# and see the Asciiville README Configuration section at:
+# https://github.com/doctorfree/Asciiville#configuration
+#
+# Set your name, email address, and credentials
+# If Google 2FA is enabled, use the App password created from above URL
+#
 unmailboxes *
 
 # in/out mail servers
@@ -24,6 +34,3 @@ unset imap_passive
 
 # Keep the IMAP connection alive by polling intermittently (time in seconds).
 set imap_keepalive = 300
-
-## Hook -- IMPORTANT!
-account-hook $folder "set imap_pass=SOME_PASSWORD"

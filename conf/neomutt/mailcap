@@ -1,18 +1,67 @@
 # vim: filetype=muttrc
 #
-# MS Word documents
-application/msword; ~/dotfiles/office/view-attachment.sh %s "-" '/Applications/LibreOffice.app'
-application/vnd.ms-excel; ~/dotfiles/office/view-attachment.sh %s "-" '/Applications/LibreOffice.app'
-application/vnd.openxmlformats-officedocument.presentationml.presentation; ~/dotfiles/office/view-attachment.sh %s "-" '/Applications/LibreOffice.app'
-application/vnd.oasis.opendocument.text; ~/dotfiles/office/view-attachment.sh %s "-" '/Applications/LibreOffice.app'
+# general hint
+# find out unknown file extension mime type:
+# in the neomutt index view, go to the mail and press "|"
+# then enter the command: grep Content-Type
+#
+# Use vlc to view all videos
+video/*;                    vlc %s > /dev/null
 
-# HTML
-text/html; w3m -I %{charset} -T text/html; copiousoutput;
-text/plain; vim %s
+# .html
+# sudo aptitude install w3m
+# interactive: open in w3m from attachments menu to click links in emails
+text/html;                  w3m -I %{charset} -T text/html %s;
+# non-interactive: used in auto-view and reply
+text/html;                  w3m -dump -T text/html -I %{charset} -O utf-8 %s; copiousoutput;
+# Send html to a running firefox by remote
+text/html;                  firefox -remote 'openURL(%s)'; test=RunningFirefox
+# If I'm not running firefox but I am running X, start firefox
+text/html;                  firefox %s; test=RunningX
+# Else use lynx to view it as text
+text/html;                  lynx %s
+# This version would convert the text/html to text/plain
+text/html;                  lynx -dump %s; copiousoutput
 
-#PDFs
-application/pdf; /usr/bin/zathura %s pdf
+# Plain text, use Vim
+text/plain;                 vim %s
+text/plain;                 cat %s; copiousoutput
+
+# .rtf
+# sudo apt install unrtf
+application/rtf;            unrtf --text %s; copiousoutput
+text/rtf;                   unrtf --text %s; copiousoutput
+
+# use enscript to print text in two columns to a page
+text/*;                     more %s; print=enscript -2Gr %s
+
+# .pdf
+# sudo aptitude install poppler-utils
+application/pdf;            pdftotext -q -raw %s -; copiousoutput
+application/vnd.fdf;        pdftotext -q -raw %s -; copiousoutput
+
+# open office
+# .odt
+# sudo aptitude install odt2txt
+application/vnd.oasis.opendocument.text;    odt2txt %s; copiousoutput
+
+# microsoft office
+# .docx (since Office 2010)
+# https://github.com/rainey/antiword-xp-rb
+application/vnd.ms-word.document.12;        cat %s | antiwordxp; copiousoutput
+application/vnd.openxmlformats-officedocument.wordprocessingml.document;    cat %s | antiwordxp; copiousoutput
+
+# .doc
+# sudo aptitude install antiword
+application/msword;         antiword %s; copiousoutput
+
+# .xls
+# sudo aptitude install catdoc
+application/vnd.ms-excel;   xls2csv -x %s -s cp1252 -d utf-8; copiousoutput
 
 #Images
 image/png; /usr/bin/feh %s
 image/jpeg; /usr/bin/feh %s
+# Convert images to text using the netpbm tools
+image/*;        (anytopnm %s | pnmscale -xysize 80 46 | ppmtopgm | pgmtopbm | \
+                pbmtoascii -1x2) 2>&1 ; copiousoutput
