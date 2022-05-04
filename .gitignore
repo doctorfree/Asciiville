@@ -71,7 +71,6 @@ Makefile.in
 aclocal.m4
 autom4te.cache/
 compile
-config.*
 configure
 depcomp
 **/.dirstamp
