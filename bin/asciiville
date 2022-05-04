@@ -466,8 +466,10 @@ show_help_menu() {
     [ "${have_lynx}" ] && options+=("Lynx Web Browser Manual")
     [ "${have_cmatrix}" ] && options+=("Matrix Screen Manual")
     [ "${have_mpcplus}" ] && options+=("Mpcplus Music Player Manual")
-    [ "${have_mutt}" ] && options+=("Mutt Mail Client Manual")
-    [ "${have_neomutt}" ] && options+=("NeoMutt Mail Client Manual")
+    [ "${have_mutt}" ] && options+=("Mutt Mail Client Man Page")
+    [ "${have_mutt}" ] && options+=("Mutt Full Manual")
+    [ "${have_neomutt}" ] && options+=("NeoMutt Mail Client Man Page")
+    [ "${have_neomutt}" ] && options+=("NeoMutt Full Manual")
     [ "${have_nethack}" ] && options+=("NetHack Game Manual")
     [ "${have_nethack}" ] && options+=("NetHack Guide Book")
     [ "${have_ranger}" ] && options+=("Ranger File Manager Manual")
@@ -559,12 +561,34 @@ show_help_menu() {
           man mpcplus
           break
           ;;
-        "Mutt"*,*|*,"Mutt"*)
+        "Mutt Mail"*,*|*,"Mutt Mail"*)
           man mutt
           break
           ;;
-        "NeoMutt"*,*|*,"NeoMutt"*)
+        "NeoMutt Mail"*,*|*,"NeoMutt Mail"*)
           man neomutt
+          break
+          ;;
+        "Mutt Full"*,*|*,"Mutt Full"*)
+          if [ "${have_w3m}" ]
+          then
+            w3m /usr/share/doc/mutt/html/index.html
+          else
+            [ "${have_lynx}" ] && {
+              lynx /usr/share/doc/mutt/html/index.html
+            }
+          fi
+          break
+          ;;
+        "NeoMutt Full"*,*|*,"NeoMutt Full"*)
+          if [ "${have_w3m}" ]
+          then
+            w3m /usr/share/doc/neomutt/html/index.html
+          else
+            [ "${have_lynx}" ] && {
+              lynx /usr/share/doc/neomutt/html/index.html
+            }
+          fi
           break
           ;;
         "NetHack Game"*,*|*,"NetHack Game"*)

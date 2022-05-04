@@ -15,45 +15,66 @@ debug=
 }
 
 # Mutt configuration user setup
-[ -f ${CONFDIR}/mutt/muttrc ] && {
-  [ -d ${HOME}/.mutt ] || {
-    mkdir ${HOME}/.mutt
-    chmod 750 ${HOME}/.mutt
+have_mutt=`type -p mutt`
+[ "${have_mutt}" ] && {
+  [ -f ${CONFDIR}/mutt/muttrc ] && {
+    [ -d ${HOME}/.mutt ] || {
+      mkdir ${HOME}/.mutt
+      chmod 750 ${HOME}/.mutt
+    }
+    [ -d ${HOME}/.mutt/cache ] || {
+      mkdir ${HOME}/.mutt/cache
+      chmod 750 ${HOME}/.mutt/cache
+    }
+    [ -d ${HOME}/.mutt/cache/headers ] || {
+      mkdir ${HOME}/.mutt/cache/headers
+      chmod 750 ${HOME}/.mutt/cache/headers
+    }
+    [ -d ${HOME}/.mutt/cache/bodies ] || {
+      mkdir ${HOME}/.mutt/cache/bodies
+      chmod 750 ${HOME}/.mutt/cache/bodies
+    }
+    [ -f ${HOME}/.mutt/certificates ] || {
+      touch ${HOME}/.mutt/certificates
+      chmod 640 ${HOME}/.mutt/certificates
+    }
+    [ -f ${HOME}/.mutt/muttrc ] || {
+      cp ${CONFDIR}/mutt/muttrc ${HOME}/.mutt/muttrc
+      chmod 600 ${HOME}/.mutt/muttrc
+      echo "A basic ${HOME}/.mutt/muttrc Mutt email client configuration"
+      echo "has been created for you. The default configuration can be used"
+      echo "as a template to create a GMail IMAP Mutt email account."
+      echo "Edit ${HOME}/.mutt/muttrc and add your GMail credentials."
+      echo ""
+      echo "Several more extensive Mutt configurations are included in Asciiville."
+      echo "See the folders:"
+      printf "\t${CONFDIR}/mutt/\nand\n\t${CONFDIR}/mutt_multiple/\n"
+      echo ""
+      echo "A good starting point for the new Mutt user is the Mutt Wiki at:"
+      echo "https://gitlab.com/muttmua/mutt/-/wikis/home"
+    }
+    [ -f ${HOME}/.mutt/colors ] || {
+      cp ${CONFDIR}/mutt/colors ${HOME}/.mutt/colors
+      chmod 640 ${HOME}/.mutt/colors
+    }
   }
-  [ -d ${HOME}/.mutt/cache ] || {
-    mkdir ${HOME}/.mutt/cache
-    chmod 750 ${HOME}/.mutt/cache
-  }
-  [ -d ${HOME}/.mutt/cache/headers ] || {
-    mkdir ${HOME}/.mutt/cache/headers
-    chmod 750 ${HOME}/.mutt/cache/headers
-  }
-  [ -d ${HOME}/.mutt/cache/bodies ] || {
-    mkdir ${HOME}/.mutt/cache/bodies
-    chmod 750 ${HOME}/.mutt/cache/bodies
-  }
-  [ -f ${HOME}/.mutt/certificates ] || {
-    touch ${HOME}/.mutt/certificates
-    chmod 640 ${HOME}/.mutt/certificates
-  }
-  [ -f ${HOME}/.mutt/muttrc ] || {
-    cp ${CONFDIR}/mutt/muttrc ${HOME}/.mutt/muttrc
-    chmod 600 ${HOME}/.mutt/muttrc
-    echo "A basic ${HOME}/.mutt/muttrc Mutt email client configuration"
-    echo "has been created for you. The default configuration can be used"
-    echo "as a template to create a GMail IMAP Mutt email account."
-    echo "Edit ${HOME}/.mutt/muttrc and add your GMail credentials."
-    echo ""
-    echo "Several more extensive Mutt configurations are included in Asciiville."
-    echo "See the folders:"
-    printf "\t${CONFDIR}/mutt/\nand\n\t${CONFDIR}/mutt_multiple/\n"
-    echo ""
-    echo "A good starting point for the new Mutt user is the Mutt Wiki at:"
-    echo "https://gitlab.com/muttmua/mutt/-/wikis/home"
-  }
-  [ -f ${HOME}/.mutt/colors ] || {
-    cp ${CONFDIR}/mutt/colors ${HOME}/.mutt/colors
-    chmod 640 ${HOME}/.mutt/colors
+}
+
+# NeoMutt configuration user setup
+have_neomutt=`type -p neomutt`
+[ "${have_neomutt}" ] && {
+  [ -d ${CONFDIR}/neomutt ] && {
+    [ -d ${HOME}/.config/neomutt ] || {
+      cp -a ${CONFDIR}/neomutt ${HOME}/.config/neomutt
+      chmod 600 ${HOME}/.config/neomutt/accounts/*
+      chmod 750 ${HOME}/.config/neomutt/accounts
+      echo "A ${HOME}/.config/neomutt/ NeoMutt email client configuration"
+      echo "has been created for you. Edit your name, email address, and"
+      echo "email account credentials in ${HOME}/.config/neomutt/accounts/*"
+      echo ""
+      echo "A good starting point for the NeoMutt user is the NeoMutt Guide at:"
+      echo "https://neomutt.org/guide/"
+    }
   }
 }
 

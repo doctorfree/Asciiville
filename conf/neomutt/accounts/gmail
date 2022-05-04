@@ -1,15 +1,21 @@
-set imap_user="youraccount@gmail.com"
 #
-# If Google 2FA Authentication is enabled, create an App password for Mutt
+# If Google 2FA Authentication is enabled, create an App password for NeoMutt
 # See https://security.google.com/settings/security/apppasswords
 #
-# To use an encrypted password with Mutt, follow the guide at:
+# To use an encrypted password with NeoMutt, follow the guide at:
 # https://www.xmodulo.com/mutt-email-client-encrypted-passwords.html
 #
-set imap_pass=<yourpassword>
+# Set your name, email address, and credentials
+# If Google 2FA is enabled, use the App password created from above URL
 #
-# On Mac OS X, /usr/bin/security can be used
-# set imap_pass=`/usr/bin/security find-generic-password -w -a 'youraccount@gmail.com' -s 'Gmail'`
+set realname="Firstname Lastname"
+set imap_user="youraccount@gmail.com"
+set imap_pass=<yourpassword>
+set from="youraccount@gmail.com"
+#set smtp_url="smtps://youraccount@gmail.com@smtp.gmail.com:587"
+set smtp_url="smtps://youraccount@gmail.com@smtp.gmail.com:465"
+set smtp_pass=<yourpassword>
+#
 
 set folder=imaps://imap.gmail.com/
 set spoolfile=+INBOX
@@ -19,7 +25,6 @@ set postponed="+[Gmail]/Drafts"
 # https://www.neomutt.org/guide/reference search sleep_time for additional info
 set sleep_time=0 # be faster
 set beep=no # no beep sound
-# set editor="/Applications/MacVim.app/Contents/MacOS/Vim -c 'set tw=74' -c 'set wrap'"
 set editor="/usr/bin/vim -c 'set tw=74' -c 'set wrap'"
 auto_view text/html
 set sort=reverse-date   # default sorting by date
@@ -52,11 +57,4 @@ bind index,pager \CN sidebar-next                 # Ctrl-p to select previous fo
 bind index,pager \CI sidebar-open                 # Ctrl-o to open selected folder
 bind index,pager \CB sidebar-toggle-visible       # Ctrl-b to toggle visibility of the sidebar
 
-set realname="Firstname Lastname"
-set from="youraccount@gmail.com"
-
-#set smtp_url="smtps://youraccount@gmail.com@smtp.gmail.com:587"
-set smtp_url="smtps://youraccount@gmail.com@smtp.gmail.com:465"
-# set smtp_pass=`/usr/bin/security find-generic-password -w -a 'youraccount@gmail.com' -s 'Gmail'`
-set smtp_pass=<yourpassword>
 set smtp_authenticators="gssapi:login"
