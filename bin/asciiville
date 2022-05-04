@@ -459,14 +459,15 @@ show_help_menu() {
     options+=("Plasma Animation Manual")
     options+=("ASCII Splash Manual")
     options+=("ASCII Splash Tmux Manual")
-    options+=("Btop System Monitor Manual")
-    options+=("Cbftp FTP Client Manual")
-    options+=("Ddgr Web Search Manual")
-    options+=("Gdu Disk Usage Manual")
-    options+=("Lynx Web Browser Manual")
-    options+=("Matrix Screen Manual")
-    options+=("Mpcplus Music Player Manual")
-    options+=("Mutt Mail Client Manual")
+    [ "${have_btop}" ] && options+=("Btop System Monitor Manual")
+    [ "${have_cbftp}" ] && options+=("Cbftp FTP Client Manual")
+    [ "${have_ddgr}" ] && options+=("Ddgr Web Search Manual")
+    [ "${have_gdu}" ] && options+=("Gdu Disk Usage Manual")
+    [ "${have_lynx}" ] && options+=("Lynx Web Browser Manual")
+    [ "${have_cmatrix}" ] && options+=("Matrix Screen Manual")
+    [ "${have_mpcplus}" ] && options+=("Mpcplus Music Player Manual")
+    [ "${have_mutt}" ] && options+=("Mutt Mail Client Manual")
+    [ "${have_neomutt}" ] && options+=("NeoMutt Mail Client Manual")
     [ "${have_nethack}" ] && options+=("NetHack Game Manual")
     [ "${have_nethack}" ] && options+=("NetHack Guide Book")
     [ "${have_ranger}" ] && options+=("Ranger File Manager Manual")
@@ -475,11 +476,11 @@ show_help_menu() {
     options+=("Show Phase of Moon Manual")
     options+=("Show Weather Report Manual")
     options+=("Tmux Multiplexer Manual")
-    options+=("W3m Web Browser Manual")
-    options+=("Retro Terminal Manual")
-    options+=("Gnome Terminal Manual")
-    options+=("Tilix Terminal Manual")
-    options+=("Xfce4 Terminal Manual")
+    [ "${have_w3m}" ] && options+=("W3m Web Browser Manual")
+    [ "${have_retro}" ] && options+=("Retro Terminal Manual")
+    [ "${have_gnome}" ] && options+=("Gnome Terminal Manual")
+    [ "${have_tilix}" ] && options+=("Tilix Terminal Manual")
+    [ "${have_xfce4}" ] && options+=("Xfce4 Terminal Manual")
     options+=("Done / Back" "Quit")
     select opt in "${options[@]}"
     do
@@ -560,6 +561,10 @@ show_help_menu() {
           ;;
         "Mutt"*,*|*,"Mutt"*)
           man mutt
+          break
+          ;;
+        "NeoMutt"*,*|*,"NeoMutt"*)
+          man neomutt
           break
           ;;
         "NetHack Game"*,*|*,"NetHack Game"*)

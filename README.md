@@ -59,6 +59,7 @@ The `asciiville` command can be used to invoke:
 * A network download/upload speed test
 * The AAlib BB demo running in a tmux session (Debian based systems only)
 * The ASCII text-based dungeon game `nethack` with Extended ASCII glyphs
+* The `cmatrix` command that displays the screen from "The Matrix"
 * Character based ASCII Art and image to ascii conversion utility `jp2a`
 * Display system info
 * Display the Phase of the Moon
@@ -84,6 +85,7 @@ Integration is provided for:
 * [rainbowstream](https://github.com/orakaro/rainbowstream) - command line character based Twitter client
     * See [the rainbowstream usage manual](https://rainbowstream.readthedocs.io/en/latest/#usage) to get started
 * [mapscii](https://github.com/rastapasta/mapscii#readme), zoomable map of the world
+* [cmatrix](https://github.com/abishekvashok/cmatrix), screen from "The Matrix"
 * [nethack](https://en.wikipedia.org/wiki/NetHack), ASCII text dungeon game
 * [tmux](https://github.com/tmux/tmux/wiki), a terminal multiplexer
 * [wttr.in](https://github.com/chubin/wttr.in), console-oriented weather report
@@ -112,6 +114,7 @@ Asciiville adds the following commands to your system:
     * **asciiplasma** : ASCIImatics animated plasma graphic
     * **asciimpplus** : ASCIImatics animated Music Player Plus splash screen
 * **chktermcolor** : checks if a terminal has 24-bit true color support
+* **cmatrix** : display that screen from "The Matrix"
 * **ddgr** : command line web search
 * **jp2a** : image to ascii conversion utility
 * **mapscii** : character based zoomable map of the world
