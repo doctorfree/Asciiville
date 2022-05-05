@@ -55,15 +55,16 @@ ask_install() {
     read -p "Install ${nam} ? (y/n) " yn
     case $yn in
       [Yy]* )
-          inst_pkg ${pkg}
           case ${pkg} in
             mutt)
                 use_mutt=1
                 ;;
             neomutt)
+                sudo dnf copr enable flatcap/neomutt -y 2> /dev/null
                 use_neomutt=1
                 ;;
           esac
+          inst_pkg ${pkg}
           break
           ;;
       [Nn]* )
@@ -209,24 +210,26 @@ shift $(( OPTIND - 1 ))
 }
 
 # NeoMutt configuration user setup
-[ "${have_neomutt}" ] && {
-  [ -d ${CONFDIR}/neomutt ] && {
-    [ -d ${HOME}/.config/neomutt ] || {
-      cp -a ${CONFDIR}/neomutt ${HOME}/.config/neomutt
-      chmod 600 ${HOME}/.config/neomutt/accounts/*
-      chmod 750 ${HOME}/.config/neomutt/accounts
-      [ -d ${HOME}/.config/neomutt/tmp ] || mkdir ${HOME}/.config/neomutt/tmp
-      chmod 750 ${HOME}/.config/neomutt/tmp
-      [ "${quiet}" ] || {
-        echo ""
-        echo "A ${HOME}/.config/neomutt/ NeoMutt email client configuration"
-        echo "has been created for you. Edit your name, email address, and"
-        echo "email account credentials in ${HOME}/.config/neomutt/accounts/*"
-        echo ""
-        echo "A good starting point for the NeoMutt user is the NeoMutt Guide at:"
-        echo "https://neomutt.org/guide/"
-        echo ""
-      }
+[ "${have_neomutt}" ] || [ "${debian}" ] || {
+  sudo dnf copr enable flatcap/neomutt -y 2> /dev/null
+  inst_pkg neomutt
+}
+[ -d ${CONFDIR}/neomutt ] && {
+  [ -d ${HOME}/.config/neomutt ] || {
+    cp -a ${CONFDIR}/neomutt ${HOME}/.config/neomutt
+    chmod 600 ${HOME}/.config/neomutt/accounts/*
+    chmod 750 ${HOME}/.config/neomutt/accounts
+    [ -d ${HOME}/.config/neomutt/tmp ] || mkdir ${HOME}/.config/neomutt/tmp
+    chmod 750 ${HOME}/.config/neomutt/tmp
+    [ "${quiet}" ] || {
+      echo ""
+      echo "A ${HOME}/.config/neomutt/ NeoMutt email client configuration"
+      echo "has been created for you. Edit your name, email address, and"
+      echo "email account credentials in ${HOME}/.config/neomutt/accounts/*"
+      echo ""
+      echo "A good starting point for the NeoMutt user is the NeoMutt Guide at:"
+      echo "https://neomutt.org/guide/"
+      echo ""
     }
   }
 }

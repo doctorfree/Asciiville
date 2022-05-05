@@ -57,6 +57,7 @@ jp2a/INSTALL
 jp2a/Makefile
 jp2a/src/Makefile
 jp2a/src/jp2a
+jp2a/config.*
 
 ddgr/build/
 ddgr/dist/
