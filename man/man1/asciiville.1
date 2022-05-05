@@ -116,7 +116,7 @@ Indicates use current terminal emulator window
 Indicates use ranger file manager as the default command
 .TP
 \f[B]-z\f[R]
-Indicates use mutt email client as the default command
+Indicates use neomutt email client as the default command
 .PP
 \f[I]ASCIImatics animation options:\f[R]
 .TP
@@ -190,50 +190,51 @@ Displays this usage message and exits
 .SH EXAMPLES
 .TP
 \f[B]asciiville\f[R]
-Launches \f[V]btop\f[R] system monitor running in a gnome-terminal
-emulator window.
-.TP
-\f[B]asciiville -i\f[R]
 Launches \f[V]asciiville\f[R] in interactive mode with menu selections
-controlling actions rather than command line arguments
+controlling actions rather than command line arguments, Btop System
+Monitor is the default command
+.TP
+\f[B]asciiville -i -y\f[R]
+Launches \f[V]asciiville\f[R] in interactive mode with Ranger File
+Manager selected as command rather than Btop System Monitor
 .TP
 \f[B]asciiville -r -y\f[R]
 Launches \f[V]ranger\f[R] file manager running in cool-retro-term
-terminal emulator.
+terminal emulator
 .TP
 \f[B]asciiville -M -t\f[R]
 Launches \f[V]mpcplus\f[R] music player running in Tilix terminal
-emulator.
+emulator
 .TP
 \f[B]asciiville -c maps\f[R]
-Displays a zoomable map of the world using \f[V]mapscii\f[R].
+Displays a zoomable map of the world using \f[V]mapscii\f[R]
 .TP
 \f[B]asciiville -c moon\f[R]
-Displays the Phase of the Moon using \f[V]wttr.in\f[R].
+Displays the Phase of the Moon using \f[V]wttr.in\f[R]
 .TP
 \f[B]asciiville -c search\f[R]
 Launches the \f[V]ddgr\f[R] command line web search in the current
-terminal window.
+terminal window
 .TP
 \f[B]asciiville -c twitter\f[R]
 Launches the \f[V]rainbowstream\f[R] command line Twitter client in the
-current terminal window.
+current terminal window
 .TP
 \f[B]asciiville -c weather\f[R]
 Displays a weather report for your IP address location using
-\f[V]wttr.in\f[R].
+\f[V]wttr.in\f[R]
 .TP
 \f[B]asciiville -c cmus -g\f[R]
 Launches the \f[V]cmus\f[R] music player client running in a
-gnome-terminal emulator window.
+gnome-terminal emulator window
 .TP
 \f[B]asciiville -f -t -z\f[R]
-Launches \f[V]mutt\f[R] mail client in fullscreen mode running in a
-tilix terminal emulator window.
+Launches \f[V]neomutt\f[R] mail client in fullscreen mode running in a
+tilix terminal emulator window
 .TP
 \f[B]asciiville -l -T -x\f[R]
 Launches \f[V]lynx\f[R] web browser running in a tmux session in an
-xfce4-terminal window.
+xfce4-terminal window
 .TP
 \f[B]asciiville -R -T\f[R]
 Creates an asciinema recording of \f[V]btop\f[R] system monitor running

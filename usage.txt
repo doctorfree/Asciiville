@@ -1,7 +1,7 @@
 Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]
 	[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N]
-	[-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t]
-	[-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]
+	[-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T]
+	[-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
@@ -23,11 +23,12 @@ Terminal/Command options:
 	-r indicates use retro terminal emulator
 	-t indicates use tilix terminal emulator
 	-w indicates use w3m web browser as the default command
+	-W indicates use cmatrix as the default command
 	-x indicates use xfce4 terminal emulator
 	-X indicates run commands in current terminal window
 	-y indicates use ranger file manager as the default command
 	-Y indicates use NetHack dungeon game as the default command
-	-z indicates use mutt email client as the default command
+	-z indicates use neomutt email client as the default command
 Slideshow/ASCIImatics animation options:
 	-A indicates use Asciiville scenes in ASCIImatics display
 	-a indicates play audio during ASCIImatics display

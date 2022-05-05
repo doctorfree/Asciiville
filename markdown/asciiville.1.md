@@ -72,7 +72,7 @@ Previously started tmux sessions and asciimatics scripts can be quickly and easi
 : Indicates use ranger file manager as the default command
 
 **-z**
-: Indicates use mutt email client as the default command
+: Indicates use neomutt email client as the default command
 
 *ASCIImatics animation options:*
 
@@ -145,40 +145,40 @@ Previously started tmux sessions and asciimatics scripts can be quickly and easi
 
 # EXAMPLES
 **asciiville**
-: Launches `btop` system monitor running in a gnome-terminal emulator window. 
+: Launches `asciiville` in interactive mode with menu selections controlling actions rather than command line arguments, Btop System Monitor is the default command
 
-**asciiville -i**
-: Launches `asciiville` in interactive mode with menu selections controlling actions rather than command line arguments
+**asciiville -i -y**
+: Launches `asciiville` in interactive mode with Ranger File Manager selected as command rather than Btop System Monitor
 
 **asciiville -r -y**
-: Launches `ranger` file manager running in cool-retro-term terminal emulator. 
+: Launches `ranger` file manager running in cool-retro-term terminal emulator
 
 **asciiville -M -t**
-: Launches `mpcplus` music player running in Tilix terminal emulator. 
+: Launches `mpcplus` music player running in Tilix terminal emulator
 
 **asciiville -c maps**
-: Displays a zoomable map of the world using `mapscii`. 
+: Displays a zoomable map of the world using `mapscii`
 
 **asciiville -c moon**
-: Displays the Phase of the Moon using `wttr.in`. 
+: Displays the Phase of the Moon using `wttr.in`
 
 **asciiville -c search**
-: Launches the `ddgr` command line web search in the current terminal window. 
+: Launches the `ddgr` command line web search in the current terminal window
 
 **asciiville -c twitter**
-: Launches the `rainbowstream` command line Twitter client in the current terminal window. 
+: Launches the `rainbowstream` command line Twitter client in the current terminal window
 
 **asciiville -c weather**
-: Displays a weather report for your IP address location using `wttr.in`. 
+: Displays a weather report for your IP address location using `wttr.in`
 
 **asciiville -c cmus -g**
-: Launches the `cmus` music player client running in a gnome-terminal emulator window. 
+: Launches the `cmus` music player client running in a gnome-terminal emulator window
 
 **asciiville -f -t -z**
-: Launches `mutt` mail client in fullscreen mode running in a tilix terminal emulator window. 
+: Launches `neomutt` mail client in fullscreen mode running in a tilix terminal emulator window
 
 **asciiville -l -T -x**
-: Launches `lynx` web browser running in a tmux session in an xfce4-terminal window. 
+: Launches `lynx` web browser running in a tmux session in an xfce4-terminal window
 
 **asciiville -R -T**
 : Creates an asciinema recording of `btop` system monitor running in a tmux session

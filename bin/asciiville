@@ -6,7 +6,7 @@
 #
 #     * The lightweight character based system monitor, `btop`
 #     * The lightweight character based web browser, `lynx` or `w3m`
-#     * The lightweight character based mail client, `mutt`
+#     * The lightweight character based mail client, `neomutt`
 #     * The lightweight character based file manager, `ranger`
 #     * One or more terminal emulators running a specified command
 #     * A tmux session
@@ -80,7 +80,7 @@ usage() {
   printf "\n\t-X indicates run commands in current terminal window"
   printf "\n\t-y indicates use ranger file manager as the default command"
   printf "\n\t-Y indicates use NetHack dungeon game as the default command"
-  printf "\n\t-z indicates use mutt email client as the default command"
+  printf "\n\t-z indicates use neomutt email client as the default command"
   printf "\nSlideshow/ASCIImatics animation options:"
   printf "\n\t-A indicates use Asciiville scenes in ASCIImatics display"
   printf "\n\t-a indicates play audio during ASCIImatics display"
@@ -114,7 +114,7 @@ usage() {
   printf "\nType 'man asciisplash' for detailed usage info on Asciisplash"
   printf "\nType 'man btop' for detailed usage info on the Btop system monitor"
   printf "\nType 'man lynx' for detailed usage info on the Lynx web browser"
-  printf "\nType 'man mutt' for detailed usage info on the Mutt email client"
+  printf "\nType 'man neomutt' for detailed usage info on the NeoMutt email client"
   printf "\nType 'man cbftp' for detailed usage info on the Cbftp FTP client"
   printf "\nType 'man ranger' for detailed usage info on the Ranger file manager\n"
   exit 1

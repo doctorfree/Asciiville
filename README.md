@@ -17,6 +17,8 @@ of components used to display ASCII Art, animations, and utilities.
     1. [BB AAlib Demo](#bb-aalib-demo)
 1. [Configuration](#configuration)
     1. [NeoMutt email configuration](#neomutt-email-configuration)
+        1. [NeoMutt encrypted passwords](#neomutt-encrypted-passwords)
+        1. [Replacing an existing NeoMutt configuration](#replacing-an-existing-neomutt-configuration)
     1. [Mutt email configuration](#mutt-email-configuration)
 1. [Documentation](#documentation)
     1. [Btop++ README](#btop++-readme)
@@ -47,7 +49,7 @@ The `asciiville` command can be used to invoke:
 
 * The lightweight character based system monitor, `btop`
 * The lightweight character based web browser, `lynx` or `w3m`
-* The lightweight character based mail client, `mutt`
+* The lightweight character based mail client, `neomutt`
 * The lightweight character based FTP client, `cbftp`
 * The lightweight character based music player, `mpcplus`
 * The lightweight character based file manager, `ranger`
@@ -77,6 +79,7 @@ Integration is provided for:
 * [lynx](https://lynx.invisible-island.net/), character based web browser
 * [w3m](http://w3m.sourceforge.net/), another character based web browser
 * [mutt](http://www.mutt.org/), character based email client
+* [neomutt](http://neomutt.org/), character based email client
 * [ranger](https://ranger.github.io/), character based file manager
 * [gdu](https://github.com/dundee/gdu#readme), character based disk usage analyzer
 * [mpcplus](https://github.com/doctorfree/MusicPlayerPlus/blob/master/mpcplus/README.md), featureful ncurses based Music Player client
@@ -150,7 +153,7 @@ installed if needed when using the Debian or RPM format package install.
 * asciimatics
 * asciinema
 * lynx
-* mutt
+* neomutt
 * ranger
 * gdu
 * mplayer
@@ -250,7 +253,6 @@ Generated configuration files include:
 
 * `$HOME/.config/btop/btop.conf` : Btop++ system monitor
 * `$HOME/.mutt/muttrc` : Mutt email client
-* `$HOME/.mutt/colors` : Mutt email client color palette
 * `$HOME/.config/neomutt/` : NeoMutt email client startup files
 * `$HOME/.config/neofetch/config.conf` : NeoFetch system info script
 * `$HOME/.rainbow_config.json` : Rainbowstream Twitter client
@@ -267,7 +269,7 @@ After installing Asciiville and running the `ascinit` command, initialize the
 the command line Twitter client by invoking the `rainbowstream` command and
 authorizing the app to access your Twitter account.
 
-#### NeoMutt email configuration
+### NeoMutt email configuration
 
 The [NeoMutt](https://neomutt.org/) email client is an improved Mutt client.
 Asciiville installs NeoMutt as a dependency and provides support for configuring
@@ -294,6 +296,8 @@ in a file and reading that file from the NeoMutt configuration is better than
 placing the password directly in the configuration file. But it is still plain
 text in a file somewhere. A more secure manner of storing passwords can be
 implemented using encryption with utilities like PGP or GPG.
+
+#### NeoMutt encrypted passwords
 
 To use an encrypted password with NeoMutt, follow the guide at:
 [https://www.xmodulo.com/mutt-email-client-encrypted-passwords.html](https://www.xmodulo.com/mutt-email-client-encrypted-passwords.html)
@@ -333,6 +337,11 @@ Creating and using encrypted passwords is strongly recommended. That's why
 I spent the time to write this section of the README. A similar procedure
 can be used with Mutt.
 
+To transfer a previously generated GnuPG key pair from another system, see
+[https://gist.github.com/angela-d/8b27670bac26e4bf7c431715fef5cc51](https://gist.github.com/angela-d/8b27670bac26e4bf7c431715fef5cc51)
+
+#### Replacing an existing NeoMutt configuration
+
 Asciiville `ascinit` skips NeoMutt initialization and configuration if it
 detects an existing `$HOME/.config/neomutt/` folder. If you have already
 configured NeoMutt then `ascinit` does not touch the existing configuration.
@@ -342,7 +351,7 @@ want to use the Asciiville NeoMutt setup files rather than your previously
 configured setup, move the existing `$HOME/.config/neomutt/` folder aside
 and rerun `ascinit`.
 
-#### Mutt email configuration
+### Mutt email configuration
 
 Alternatively, you may prefer using the older but still maintained and robust
 [Mutt](https://www.mutt.org/) email client. Asciiville checks to see if Mutt
@@ -443,8 +452,8 @@ line options:
 ```
 Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]
 	[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N]
-	[-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t]
-	[-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]
+	[-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T]
+	[-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
@@ -466,11 +475,12 @@ Terminal/Command options:
 	-r indicates use retro terminal emulator
 	-t indicates use tilix terminal emulator
 	-w indicates use w3m web browser as the default command
+	-W indicates use cmatrix as the default command
 	-x indicates use xfce4 terminal emulator
 	-X indicates run commands in current terminal window
 	-y indicates use ranger file manager as the default command
 	-Y indicates use NetHack dungeon game as the default command
-	-z indicates use mutt email client as the default command
+	-z indicates use neomutt email client as the default command
 Slideshow/ASCIImatics animation options:
 	-A indicates use Asciiville scenes in ASCIImatics display
 	-a indicates play audio during ASCIImatics display
@@ -578,11 +588,19 @@ invoke commands. The `asciiville` command utilizes several different terminal
 emulators and can also be used to invoke any specified command. Some example
 invocations of `asciiville` follow.
 
+Run `asciiville` in interactive menu mode:
+
+`asciiville`
+
+Run `asciiville` in interactive mode with Ranger File Manager selected as command:
+
+`asciiville -i -y`
+
 Open the btop client in fullscreen mode:
 
 `asciiville -F`
 
-Open the btop client in fullscreen mode using the tilix terminal emulator
+Open the btop client in fullscreen mode using the Tilix terminal emulator:
 
 `asciiville -F -t`
 
@@ -590,9 +608,53 @@ Open the btop client in the cool-retro-term terminal:
 
 `asciiville -r`
 
-To test the btop lyrics fetchers:
+Run `ranger` file manager in cool-retro-term terminal emulator:
 
-`btop --test-lyrics-fetchers`
+`asciiville -r -y`
+
+Run `mpcplus` music player in Tilix terminal emulator:
+
+`asciiville -M -t`
+
+Display a zoomable map of the world using `mapscii`:
+
+`asciiville -c maps`
+
+Display the Phase of the Moon using `wttr.in`:
+
+`asciiville -c moon`
+
+Run the `ddgr` command line web search in the current terminal window:
+
+`asciiville -c search`
+
+Run the `rainbowstream` command line Twitter client in the current terminal window:
+
+`asciiville -c twitter`
+
+Display a weather report for your IP address location using `wttr.in`:
+
+`asciiville -c weather`
+
+Run the `cmus` music player client in a gnome-terminal emulator window:
+
+`asciiville -c cmus -g`
+
+Run `neomutt` mail client in fullscreen mode in a tilix terminal emulator window:
+
+`asciiville -f -t -z`
+
+Run `lynx` web browser in a tmux session in an xfce4-terminal window:
+
+`asciiville -l -T -x`
+
+Creates an asciinema recording of `btop` system monitor in a tmux session:
+
+`asciiville -R -T`
+
+Run `asciisplash` displaying the Julia Set asciimatics animation with audio:
+
+`asciiville -S -j -a`
 
 ## Figlet fonts
 
