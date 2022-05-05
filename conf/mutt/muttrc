@@ -27,6 +27,8 @@ set spoolfile = "+INBOX"
 set postponed = "+[Gmail]/Drafts"
 set record = "+[Gmail]/Sent Mail"
 set trash = "+[Gmail]/Trash"
+# Path for mailcap to use with MIME mappings
+set mailcap_path=~/.mutt/mailcap:/usr/local/etc/mailcap:/etc/mailcap
 # Vim spell checking (enable in Vim with :set spell)
 set editor="vim -c 'set spell spelllang=en'"
 # Header Cache, Message Cache, Certificates File
@@ -35,3 +37,10 @@ set message_cachedir = "~/.mutt/cache/bodies"
 set certificate_file = "~/.mutt/certificates"
 # Custom Mutt Color Settings
 source ~/.mutt/colors
+# Temporary files go here
+set tmpdir = ~/.mutt/tmp # where to keep temp files
+# Use utf-8 charset
+set send_charset = "utf-8:iso-8859-1:us-ascii"
+set charset = "utf-8"
+# View html automatically
+auto_view text/html text/calendar application/ics

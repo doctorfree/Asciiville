@@ -176,9 +176,21 @@ shift $(( OPTIND - 1 ))
       mkdir ${HOME}/.mutt/cache/bodies
       chmod 750 ${HOME}/.mutt/cache/bodies
     }
+    [ -d ${HOME}/.mutt/tmp ] || {
+      mkdir ${HOME}/.mutt/tmp
+      chmod 750 ${HOME}/.mutt/tmp
+    }
     [ -f ${HOME}/.mutt/certificates ] || {
       touch ${HOME}/.mutt/certificates
       chmod 640 ${HOME}/.mutt/certificates
+    }
+    [ -f ${HOME}/.mutt/colors ] || {
+      cp ${CONFDIR}/mutt/colors ${HOME}/.mutt/colors
+      chmod 640 ${HOME}/.mutt/colors
+    }
+    [ -f ${HOME}/.mutt/mailcap ] || {
+      cp ${CONFDIR}/mutt/mailcap ${HOME}/.mutt/mailcap
+      chmod 640 ${HOME}/.mutt/mailcap
     }
     [ -f ${HOME}/.mutt/muttrc ] || {
       cp ${CONFDIR}/mutt/muttrc ${HOME}/.mutt/muttrc
@@ -193,10 +205,6 @@ shift $(( OPTIND - 1 ))
         echo "https://gitlab.com/muttmua/mutt/-/wikis/home"
       }
     }
-    [ -f ${HOME}/.mutt/colors ] || {
-      cp ${CONFDIR}/mutt/colors ${HOME}/.mutt/colors
-      chmod 640 ${HOME}/.mutt/colors
-    }
   }
 }
 
@@ -207,6 +215,8 @@ shift $(( OPTIND - 1 ))
       cp -a ${CONFDIR}/neomutt ${HOME}/.config/neomutt
       chmod 600 ${HOME}/.config/neomutt/accounts/*
       chmod 750 ${HOME}/.config/neomutt/accounts
+      [ -d ${HOME}/.config/neomutt/tmp ] || mkdir ${HOME}/.config/neomutt/tmp
+      chmod 750 ${HOME}/.config/neomutt/tmp
       [ "${quiet}" ] || {
         echo ""
         echo "A ${HOME}/.config/neomutt/ NeoMutt email client configuration"

@@ -333,8 +333,14 @@ Creating and using encrypted passwords is strongly recommended. That's why
 I spent the time to write this section of the README. A similar procedure
 can be used with Mutt.
 
-A setup wizard for both NeoMutt and Mutt is available at
-[https://github.com/LukeSmithxyz/mutt-wizard](https://github.com/LukeSmithxyz/mutt-wizard).
+Asciiville `ascinit` skips NeoMutt initialization and configuration if it
+detects an existing `$HOME/.config/neomutt/` folder. If you have already
+configured NeoMutt then `ascinit` does not touch the existing configuration.
+However, you may want to examine the NeoMutt configuration provided in
+Asciiville by viewing the files in `/usr/share/asciiville/neomutt/`. If you
+want to use the Asciiville NeoMutt setup files rather than your previously
+configured setup, move the existing `$HOME/.config/neomutt/` folder aside
+and rerun `ascinit`.
 
 #### Mutt email configuration
 
@@ -357,8 +363,15 @@ credentials with GMail. If Google 2FA Authentication is enabled in your
 Google account, create an App password for NeoMutt. See
 [https://security.google.com/settings/security/apppasswords](https://security.google.com/settings/security/apppasswords)
 
-There are many Mutt configuration guides on the Internet. ArchLinux has
-a good guide at
+Asciiville `ascinit` Mutt initialization does not overwrite any previously
+existing Mutt configuration files in `$HOME/.mutt/`. However, you may want
+to examine the Mutt configuration provided in Asciiville by viewing the files
+in `/usr/share/asciiville/mutt/`. If you want to use the Asciiville Mutt setup
+files rather than your previously configured setup, move the existing
+`$HOME/.mutt/` folder aside and rerun `ascinit`.
+
+There are many Mutt configuration guides on the Internet.
+ArchLinux has a good guide at
 [https://wiki.archlinux.org/title/Mutt](https://wiki.archlinux.org/title/Mutt).
 
 ## Documentation
