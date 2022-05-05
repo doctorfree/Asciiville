@@ -1,7 +1,7 @@
 This release includes support for:
 
 * NeoMutt and Mutt configuration in `ascinit`
-* Enhanced NeoMutt mailcap
+* Enhanced Mutt/NeoMutt mailcap, auto view text/html MIME type
 * Support for GPG encrypted passwords in NeoMutt
 * Extended Help menu in `asciiville`
 * Add Matrix and NetHack commands
@@ -9,7 +9,7 @@ This release includes support for:
 * Rename all Ascii Art files to use `.asc` filename suffix
 * Add rifle config for opening .asc files
 * Simplify menus, match partial responses when possible
-* Add 'Select Song' to menus, create and check initialization file in asciiville
+* Create and check initialization file in asciiville
 * Add selection menu for command and terminal, add select song option
 
 Previous releases include support for:
