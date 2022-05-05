@@ -109,7 +109,7 @@ Version: ${PKG_VER}-${PKG_REL}
 Section: misc
 Priority: optional
 Architecture: ${ARCH}
-Depends: uuid-runtime, python3, python3-pip, gnome-terminal, tilix (>= 1.9.1), xfce4-terminal (>= 0.8.9.1), cool-retro-term (>= 1.1.1), tmux, mplayer, w3m, neomutt, ranger, jq, asciinema, speedtest-cli, caca-utils, libaa-bin, libaa1, bb, neofetch, figlet, ruby, imagemagick, dconf-cli, libjpeg-dev, libpng-dev, cmatrix, gnupg
+Depends: uuid-runtime, python3, python3-pip, gnome-terminal, tilix (>= 1.9.1), xfce4-terminal (>= 0.8.9.1), cool-retro-term (>= 1.1.1), tmux, mplayer, w3m, neomutt, ranger, jq, asciinema, speedtest-cli, libaa-bin, libaa1, bb, neofetch, figlet, imagemagick, dconf-cli, libjpeg-dev, libpng-dev, cmatrix, gnupg
 Maintainer: ${DEBFULLNAME} <${DEBEMAIL}>
 Installed-Size: 144000
 Build-Depends: debhelper (>= 11)
