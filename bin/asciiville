@@ -352,7 +352,7 @@ select_font() {
     Journal)
       if [ "${goBig}" ]
       then
-        FIG_TEXT="Journal Add/View"
+        FIG_TEXT="Journal"
       else
         FIG_TEXT="Journal"
       fi
@@ -1679,9 +1679,9 @@ show_journal_menu() {
     options+=("This Year's Journal Entries")
     options+=("Last 10 Journal Entries")
     [ ${numjrnls} -gt 1 ] && {
-      options+=("Use Journal        [${journal}]")
+      options+=("Switch Journal        [${journal}]")
     }
-    options+=("Use Display Format [${fancy}]")
+    options+=("Switch Display Format [${fancy}]")
     encrypted=
     jloc=`jrnl --list | grep '*' | grep ${journal} | awk ' { print $4 } '`
     first=${jloc:0:1}
@@ -1769,7 +1769,7 @@ show_journal_menu() {
               read -p "Press Enter to continue" answer
               break
               ;;
-          "Use Journal"*,*|*,"Use Journal"*)
+          "Switch Journal"*,*|*,"Switch Journal"*)
               for (( j=0; j<${numjrnls}; j++ ));
               do
                 [ "${journal}" == "${journals[$j]}" ] && {
@@ -1785,7 +1785,7 @@ show_journal_menu() {
               done
               break
               ;;
-          "Use Display"*,*|*,"Use Display"*)
+          "Switch Display"*,*|*,"Switch Display"*)
               if [ "${fancy}" == "pretty" ]
               then
                 fancy="fancy"
@@ -1930,6 +1930,7 @@ show_main_menu() {
     [ "${have_speed}" ] && options+=("Speed Test")
     [ "${have_rainbow}" ] && options+=("Twitter Client")
     [ "${have_curl}" ] && options+=("Weather Report")
+    options+=("Kill Tmux Sessions")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring        [${use_lol}]")
     options+=("Use Tmux                   [${usetmux}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session        [${recordstat}]")
@@ -1937,7 +1938,6 @@ show_main_menu() {
     options+=("Default Web Browser        [${default_browser}]")
     options+=("Use Audio                  [${audiostat}]")
     [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
-    options+=("Kill Tmux Sessions")
     [ "${have_neo}" ] && options+=("Show System Info")
     [ "${have_jrnl}" ] && options+=("Journal Menu")
     [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
