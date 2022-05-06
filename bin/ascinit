@@ -236,8 +236,25 @@ shift $(( OPTIND - 1 ))
 
 # Custom W3M configuration for this user unless one exists
 [ -d ${CONFDIR}/w3m ] && {
-  [ -d ${HOME}/.config/w3m ] || {
-    cp -a ${CONFDIR}/w3m ${HOME}/.config/w3m
+  if [ -d ${HOME}/.w3m ]
+  then
+    for w3mconf in ${CONFDIR}/w3m/*
+    do
+      [ "${w3mconf}" == "${CONFDIR}/w3m/*" ] && continue
+      bconf=`basename "${w3mconf}"`
+      [ -f "${HOME}/.w3m/${bconf}" ] || {
+        cp "${w3mconf}" "${HOME}/.w3m/${bconf}"
+      }
+    done
+  else
+    cp -a ${CONFDIR}/w3m ${HOME}/.w3m
+  fi
+  # Verify text/markdown is a recognized MIME type
+  [ -f /etc/mime.types ] && {
+    grep ^text/markdown /etc/mime.types > /dev/null || {
+      cp /etc/mime.types ${HOME}/.w3m/mime.types
+      echo 'text/markdown    md markdown' >> ${HOME}/.w3m/mime.types
+    }
   }
 }
 

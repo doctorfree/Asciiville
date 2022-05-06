@@ -2,7 +2,7 @@ Name: Asciiville
 Version:    %{_version}
 Release:    %{_release}
 BuildArch:  x86_64
-Requires: util-linux, python3, python3-pip, gnome-terminal, tilix, xfce4-terminal, cool-retro-term, tmux, mplayer, w3m, ranger, jq, asciinema, speedtest-cli, neofetch, figlet, ImageMagick, dconf, libjpeg-turbo, libpng, cmatrix, gnupg
+Requires: util-linux, python3, python3-pip, gnome-terminal, tilix, xfce4-terminal, cool-retro-term, tmux, mplayer, w3m, ranger, jq, asciinema, speedtest-cli, neofetch, figlet, ImageMagick, dconf, libjpeg-turbo, libpng, cmatrix, gnupg, pandoc
 URL:        https://github.com/doctorfree/Asciiville
 Vendor:     Doctorwhen's Bodacious Laboratory
 Packager:   ronaldrecord@gmail.com

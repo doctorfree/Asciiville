@@ -23,6 +23,12 @@ text/html;                  lynx %s
 # This version would convert the text/html to text/plain
 text/html;                  lynx -dump %s; copiousoutput
 
+# Markdown, use w3m
+# interactive: open in w3m from attachments menu to click links in emails
+text/markdown;              w3m -I %{charset} -T text/html %s;
+# non-interactive: used in auto-view and reply
+text/markdown;              w3m -dump -T text/html -I %{charset} -O utf-8 %s; copiousoutput;
+
 # Plain text, use Vim
 text/plain;                 vim %s
 text/plain;                 cat %s; copiousoutput

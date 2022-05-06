@@ -261,7 +261,7 @@ Generated configuration files include:
 * `$HOME/.rainbow_config.json` : Rainbowstream Twitter client
 * `$HOME/.config/ranger/rifle.conf` : Rifle, Ranger's file opener
 * `$HOME/.tmux.conf` : Tmux terminal multiplexer
-* `$HOME/.config/w3m/` : W3M web browser custom configuration
+* `$HOME/.w3m/` : W3M web browser custom configuration
 
 These override or extend the settings in the utilities' global configuration
 files, typically installed in `/etc/`. For example, the global configuration

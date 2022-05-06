@@ -9,7 +9,7 @@
 video/*;                    vlc %s > /dev/null
 
 # .html
-# sudo aptitude install w3m
+# sudo apt install w3m
 # interactive: open in w3m from attachments menu to click links in emails
 text/html;                  w3m -I %{charset} -T text/html %s;
 # non-interactive: used in auto-view and reply
@@ -22,6 +22,12 @@ text/html;                  firefox %s; test=RunningX
 text/html;                  lynx %s
 # This version would convert the text/html to text/plain
 text/html;                  lynx -dump %s; copiousoutput
+
+# Markdown, use w3m
+# interactive: open in w3m from attachments menu to click links in emails
+text/markdown;              w3m -I %{charset} -T text/html %s;
+# non-interactive: used in auto-view and reply
+text/markdown;              w3m -dump -T text/html -I %{charset} -O utf-8 %s; copiousoutput;
 
 # Plain text, use Vim
 text/plain;                 vim %s
@@ -36,13 +42,13 @@ text/rtf;                   unrtf --text %s; copiousoutput
 text/*;                     more %s; print=enscript -2Gr %s
 
 # .pdf
-# sudo aptitude install poppler-utils
+# sudo apt install poppler-utils
 application/pdf;            pdftotext -q -raw %s -; copiousoutput
 application/vnd.fdf;        pdftotext -q -raw %s -; copiousoutput
 
 # open office
 # .odt
-# sudo aptitude install odt2txt
+# sudo apt install odt2txt
 application/vnd.oasis.opendocument.text;    odt2txt %s; copiousoutput
 
 # microsoft office
@@ -52,11 +58,11 @@ application/vnd.ms-word.document.12;        cat %s | antiwordxp; copiousoutput
 application/vnd.openxmlformats-officedocument.wordprocessingml.document;    cat %s | antiwordxp; copiousoutput
 
 # .doc
-# sudo aptitude install antiword
+# sudo apt install antiword
 application/msword;         antiword %s; copiousoutput
 
 # .xls
-# sudo aptitude install catdoc
+# sudo apt install catdoc
 application/vnd.ms-excel;   xls2csv -x %s -s cp1252 -d utf-8; copiousoutput
 
 #Images

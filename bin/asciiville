@@ -1720,53 +1720,71 @@ show_journal_menu() {
               jrnl ${journal}
               printf "\n\nThe new journal entry:\n\n"
               jrnl ${journal} ${formatarg} -n 1
-              read -p "Press Enter to continue" answer
+              [ "${journal_pager}" == "${PAGER}" ] && {
+                read -p "Press Enter to continue" answer
+              }
               break
               ;;
           "Last"*,*|*,"Last"*)
-              jrnl ${journal} ${formatarg} -n 10 | more
-              read -p "Press Enter to continue" answer
+              jrnl ${journal} ${formatarg} -n 10 | ${journal_pager} 2> /dev/null
+              [ "${journal_pager}" == "${PAGER}" ] && {
+                read -p "Press Enter to continue" answer
+              }
               break
               ;;
           "Yesterday"*,*|*,"Yesterday"*)
-              jrnl ${journal} ${formatarg} -on yesterday | more
-              read -p "Press Enter to continue" answer
+              jrnl ${journal} ${formatarg} -on yesterday | ${journal_pager} 2> /dev/null
+              [ "${journal_pager}" == "${PAGER}" ] && {
+                read -p "Press Enter to continue" answer
+              }
               break
               ;;
           "Today"*,*|*,"Today"*)
-              jrnl ${journal} ${formatarg} -on today | more
-              read -p "Press Enter to continue" answer
+              jrnl ${journal} ${formatarg} -on today | ${journal_pager} 2> /dev/null
+              [ "${journal_pager}" == "${PAGER}" ] && {
+                read -p "Press Enter to continue" answer
+              }
               break
               ;;
           "This Week"*,*|*,"This Week"*)
               day=`date +%A`
-              jrnl ${journal} ${formatarg} -from "last ${day}" -to today | more
-              read -p "Press Enter to continue" answer
+              jrnl ${journal} ${formatarg} -from "last ${day}" -to today | ${journal_pager} 2> /dev/null
+              [ "${journal_pager}" == "${PAGER}" ] && {
+                read -p "Press Enter to continue" answer
+              }
               break
               ;;
           "This Month"*,*|*,"This Month"*)
               month=`date +%B`
               year=`date +%Y`
-              jrnl ${journal} ${formatarg} -on "${month} ${year}" | more
-              read -p "Press Enter to continue" answer
+              jrnl ${journal} ${formatarg} -on "${month} ${year}" | ${journal_pager} 2> /dev/null
+              [ "${journal_pager}" == "${PAGER}" ] && {
+                read -p "Press Enter to continue" answer
+              }
               break
               ;;
           "This Year"*,*|*,"This Year"*)
               year=`date +%Y`
-              jrnl ${journal} ${formatarg} -on "${year}" | more
-              read -p "Press Enter to continue" answer
+              jrnl ${journal} ${formatarg} -on "${year}" | ${journal_pager} 2> /dev/null
+              [ "${journal_pager}" == "${PAGER}" ] && {
+                read -p "Press Enter to continue" answer
+              }
               break
               ;;
           "Last Year"*,*|*,"Last Year"*)
               year=`date +%Y`
               year=$((year - 1))
-              jrnl ${journal} ${formatarg} -on "${year}" | more
-              read -p "Press Enter to continue" answer
+              jrnl ${journal} ${formatarg} -on "${year}" | ${journal_pager} 2> /dev/null
+              [ "${journal_pager}" == "${PAGER}" ] && {
+                read -p "Press Enter to continue" answer
+              }
               break
               ;;
           "All"*,*|*,"All"*)
-              jrnl ${journal} ${formatarg} -to today | more
-              read -p "Press Enter to continue" answer
+              jrnl ${journal} ${formatarg} -to today | ${journal_pager} 2> /dev/null
+              [ "${journal_pager}" == "${PAGER}" ] && {
+                read -p "Press Enter to continue" answer
+              }
               break
               ;;
           "Switch Journal"*,*|*,"Switch Journal"*)
@@ -1789,14 +1807,17 @@ show_journal_menu() {
               if [ "${fancy}" == "pretty" ]
               then
                 fancy="fancy"
+                journal_pager=${PAGER}
                 formatarg="--format fancy"
               else
                 if [ "${fancy}" == "fancy" ]
                 then
                   fancy="markdown"
+                  journal_pager="w3m -T text/markdown -o confirm_qq=false"
                   formatarg="--format markdown"
                 else
                   fancy="pretty"
+                  journal_pager=${PAGER}
                   formatarg="--format pretty"
                 fi
               fi
@@ -2421,6 +2442,8 @@ fi
   fancy="pretty"
   formatarg="--format pretty"
   journal="default"
+  [ "${PAGER}" ] || PAGER=more
+  journal_pager=${PAGER}
   declare -a journals=()
   numjrnls=`jrnl --list | grep '*' | wc -l`
   if [ ${numjrnls} -gt 1 ]
