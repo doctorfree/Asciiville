@@ -1,9 +1,13 @@
-This release includes support for:
+This release adds support for:
 
+* W3M configuration with support for acting as a Markdown pager
+* Mailcap and MIME type enhancements for NeoMutt, Mutt, and W3M
 * NeoMutt and Mutt configuration in `ascinit`
 * Enhanced Mutt/NeoMutt mailcap, auto view text/html MIME type
 * Support for GPG encrypted passwords in NeoMutt
 * Extended Help menu in `asciiville`
+* Colorized `man` command output in Help menus
+* Add support and integration for `jrnl` Journal application
 * Add Matrix and NetHack commands
 * Additional freely licensed songs for slideshow and animation audio tracks
 * Rename all Ascii Art files to use `.asc` filename suffix
@@ -12,49 +16,16 @@ This release includes support for:
 * Create and check initialization file in asciiville
 * Add selection menu for command and terminal, add select song option
 
-Previous releases include support for:
-
-* Create armhf architecture Debian format package for Raspberry Pi installs
-* With no arguments asciiville brings up a menu
-* Add Mutt configuration to `ascinit`
-* Install Asciiville Figlet Fonts in pyfiglet during postinstall
-* Add `cbftp` FTP client and support for `ncftp`
-* Add `jp2a` image to ascii converter
-* Add `show_moon` and `show_weather` commands
-* Create cbftp man page
-* Add `show_figlet_fonts` command
-* Add -d option to indicate use of disk usage analyzer
-* Add -f option to indicate use of FTP client
-* Add -X option to indicate use of current terminal window
-* Change -f to -F option to indicate fullscreen terminal window
-* Fixup exit from asciimatics scripts
-* MusicPlayerPlus and RoonCommandLine menu integration
-* Support for w3m, mapscii, and setting default browser
-* Add Figlet Fonts and use Figlet Text for menu headers
-* Lolcat install during postinstall
-* Removed support for neomutt, just use Mutt
-* Add semi-auto-configuration of Mutt
-* Add `show_ascii_art` command to display/generate ascii art
-* Add dependency on `ImageMagick`
-* Add `show_figlet_fonts` command
-* Add grayscale option and color depth option to `show_ascii_art`
-* Fold my changes to jp2a with newer version
-* Added character set option to `show_ascii_art`
-* Updated screenshots
-* Install btop themes, create btop man page
-* Animate lolcat display
-* Add Dragonfly, Space, and Doctorwhen ascii art and slideshows
-* Add `make_ascii_art` command
-* Option to play audio during slideshow
-* Create 'Asciiville' profile for Tilix and gnome-terrminal in `ascinit`
-
 Supported features include:
 
 * The lightweight character based system monitor, `btop`
-* The lightweight character based web browser, `lynx` or `w3m`
-* The lightweight character based mail client, `mutt`
-* The lightweight character based file manager, `ranger`
+* The lightweight character based web browser, `w3m`
+* The lightweight character based mail client, `neomutt`
+* The lightweight character based FTP client, `cbftp`
 * The lightweight character based music player, `mpcplus`
+* The lightweight character based file manager, `ranger`
+* The lightweight character based disk usage analyzer, `gdu`
+* The lightweight character based journal app, `jrnl`
 * One or more terminal emulators running a command
 * A tmux session
 * A command line web search
@@ -62,14 +33,15 @@ Supported features include:
 * Command line character based Twitter client
 * A network download/upload speed test
 * The AAlib BB demo running in a tmux session (Debian based systems only)
-* Display and Generate character based ASCII art
-* Convert any image to ascii art
+* The ASCII text-based dungeon game `nethack` with Extended ASCII glyphs
+* The `cmatrix` command that displays the screen from "The Matrix"
+* Character based ASCII Art and image to ascii conversion utility `jp2a`
 * Display system info
 * Display the Phase of the Moon
 * Display a weather report
 * Display the MusicPlayerPlus or RoonCommandLine interactive menus
 * Any character based client the user wishes to run
-* Several asciimatics animations optionally accompanied by audio
+* One of several asciimatics animations optionally accompanied by audio
 
 ## Installation
 

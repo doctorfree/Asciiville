@@ -48,7 +48,7 @@ a front-end for a variety of terminal commands and `tmux` sessions.
 The `asciiville` command can be used to invoke:
 
 * The lightweight character based system monitor, `btop`
-* The lightweight character based web browser, `lynx` or `w3m`
+* The lightweight character based web browser, `w3m`
 * The lightweight character based mail client, `neomutt`
 * The lightweight character based FTP client, `cbftp`
 * The lightweight character based music player, `mpcplus`
@@ -78,8 +78,8 @@ Integration is provided for:
 * [cbftp](cbftp/README), character based FTP client
 * [ddgr](ddgr/README.md), command line web search
 * [jrnl](https://jrnl.sh/en/stable/), a simple command line journal application
-* [lynx](https://lynx.invisible-island.net/), character based web browser
 * [w3m](http://w3m.sourceforge.net/), another character based web browser
+* [lynx](https://lynx.invisible-island.net/), character based web browser
 * [mutt](http://www.mutt.org/), character based email client
 * [neomutt](http://neomutt.org/), character based email client
 * [ranger](https://ranger.github.io/), character based file manager
@@ -154,8 +154,9 @@ installed if needed when using the Debian or RPM format package install.
 * tmux
 * asciimatics
 * asciinema
-* lynx
+* w3m
 * neomutt
+* pandoc
 * ranger
 * gdu
 * mplayer
@@ -267,9 +268,9 @@ Generated configuration files include:
 
 These override or extend the settings in the utilities' global configuration
 files, typically installed in `/etc/`. For example, the global configuration
-for the Ranger File Manager can be found in `/etc/ranger/config/`. The Lynx
-web browser configuration is in `/etc/lynx/`, the W3M web browser is
-configured in `/etc/w3m/`, and the NeoMutt global config is `/etc/neomuttrc`.
+for the Ranger File Manager can be found in `/etc/ranger/config/`. The W3M
+web browser is configured in `/etc/w3m/`, and the NeoMutt global config is
+`/etc/neomuttrc`.
 
 After installing Asciiville and running the `ascinit` command, initialize the
 the command line Twitter client by invoking the `rainbowstream` command and

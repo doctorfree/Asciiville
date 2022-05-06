@@ -2,12 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-# Asciiville-1.3.1r2 (2022-05-05)
+# Asciiville-1.3.1r2 (2022-05-06)
 
+* W3M configuration with support for acting as a Markdown pager
+* Mailcap and MIME type enhancements for NeoMutt, Mutt, and W3M
 * NeoMutt and Mutt configuration in `ascinit`
 * Enhanced Mutt/NeoMutt mailcap, auto view text/html MIME type
 * Support for GPG encrypted passwords in NeoMutt
 * Extended Help menu in `asciiville`
+* Colorized `man` command output in Help menus
+* Add support and integration for `jrnl` Journal application
 * Add Matrix and NetHack commands
 * Additional freely licensed songs for slideshow and animation audio tracks
 * Rename all Ascii Art files to use `.asc` filename suffix
@@ -73,6 +77,28 @@ Initial release with support for:
 * Any character based client the user wishes to run
 * One of several asciimatics animations optionally accompanied by audio
 
+Fri May 6 11:50:32 2022 -0700 0f0dda9 :
+   Add note on using w3m as a markdown pager
+Fri May 6 11:39:26 2022 -0700 7bb680e :
+   Add w3m config to distribution, move asciiville init up before setting vars
+Fri May 6 11:15:40 2022 -0700 07a64c9 :
+   Add mailcap and mime.types config for w3m, use w3m and PAGER for jrnl displays, add pandoc dependency
+Fri May 6 08:50:22 2022 -0700 17a84a5 :
+   Arrange menu entries slightly
+Fri May 6 08:09:28 2022 -0700 bcecff9 :
+   Added jrnl journal application and journal menu to asciiville
+Thu May 5 08:24:20 2022 -0700 1ebefda :
+   Add 'man' function to asciiville for colored output from man commands
+Wed May 4 20:00:02 2022 -0700 40ca8ee :
+   Finish up Example Invocations section of README, change references from Mutt to NeoMutt
+Wed May 4 18:08:51 2022 -0700 d9b412e :
+   Install NeoMutt in ascinit on RPM systems
+Wed May 4 17:45:33 2022 -0700 74c763d :
+   Update changelog and release notes
+Wed May 4 17:42:13 2022 -0700 448cb88 :
+   Fixup Mutt and NeoMutt settings
+Wed May 4 14:51:12 2022 -0700 028ce5d :
+   Update changelog and release notes for 1.3.1r2
 Wed May 4 13:02:15 2022 -0700 1688a82 :
    gitignore was ignoring some config files in nethack
 Wed May 4 12:28:14 2022 -0700 ab445c7 :
