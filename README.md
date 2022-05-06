@@ -262,6 +262,8 @@ Generated configuration files include:
 * `$HOME/.config/ranger/rifle.conf` : Rifle, Ranger's file opener
 * `$HOME/.tmux.conf` : Tmux terminal multiplexer
 * `$HOME/.w3m/` : W3M web browser custom configuration
+    * W3M web browser configured to act as a Markdown pager
+	* W3M configuration enables support for many MIME types and external apps
 
 These override or extend the settings in the utilities' global configuration
 files, typically installed in `/etc/`. For example, the global configuration
