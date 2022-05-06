@@ -142,17 +142,14 @@ kill_tmux_sessions() {
 }
 
 # colorize man pages
-man() {
-  export LESS_TERMCAP_mb=$'\e[1;32m'
-  export LESS_TERMCAP_md=$'\e[1;32m'
-  export LESS_TERMCAP_me=$'\e[0m'
-  export LESS_TERMCAP_se=$'\e[0m'
-  export LESS_TERMCAP_so=$'\e[01;33m'
-  export LESS_TERMCAP_ue=$'\e[0m'
-  export LESS_TERMCAP_us=$'\e[1;4;31m'
-  export LESSHISTFILE=-
-  export PAGER=less
-
+man () {
+  LESS_TERMCAP_mb=$'\e[1;32m' \
+  LESS_TERMCAP_md=$'\e[1;32m' \
+  LESS_TERMCAP_me=$'\e[0m' \
+  LESS_TERMCAP_se=$'\e[0m' \
+  LESS_TERMCAP_so=$'\e[01;33m' \
+  LESS_TERMCAP_ue=$'\e[0m' \
+  LESS_TERMCAP_us=$'\e[1;4;31m' \
   command man "$@"
 }
 
@@ -352,6 +349,14 @@ select_font() {
         FIG_TEXT="Help"
       fi
       ;;
+    Journal)
+      if [ "${goBig}" ]
+      then
+        FIG_TEXT="Journal Add/View"
+      else
+        FIG_TEXT="Journal"
+      fi
+      ;;
     MusicPlayer)
       if [ "${goBig}" ]
       then
@@ -473,18 +478,17 @@ show_help_menu() {
     fi
     options+=("Asciiville Man Page")
     options+=("Asciiville Animation Man Page")
+    options+=("ASCIInema Man Page")
     options+=("Julia Set Animation Man Page")
     options+=("MusicPlayer Animation Man Page")
-    options+=("ASCIInema Man Page")
-    options+=("Plasma Animation Man Page")
     options+=("ASCII Splash Man Page")
     options+=("ASCII Splash Tmux Man Page")
     [ "${have_btop}" ] && options+=("Btop System Monitor Man Page")
     [ "${have_cbftp}" ] && options+=("Cbftp FTP Client Man Page")
     [ "${have_ddgr}" ] && options+=("Ddgr Web Search Man Page")
     [ "${have_gdu}" ] && options+=("Gdu Disk Usage Man Page")
+    [ "${have_jrnl}" ] && options+=("Journal Command Help")
     [ "${have_lynx}" ] && options+=("Lynx Web Browser Man Page")
-    [ "${have_cmatrix}" ] && options+=("Matrix Screen Man Page")
     [ "${have_mpcplus}" ] && options+=("Mpcplus Music Player Man Page")
     [ "${have_mutt}" ] && options+=("Mutt Mail Client Man Page")
     [ "${have_mutt}" ] && options+=("Mutt Full Manual")
@@ -541,10 +545,6 @@ show_help_menu() {
           man asciinema
           break
           ;;
-        "Plasma"*,*|*,"Plasma"*)
-          man asciiplasma
-          break
-          ;;
         "ASCII Splash Tmux"*,*|*,"ASCII Splash Tmux"*)
           man asciisplash-tmux
           break
@@ -569,12 +569,12 @@ show_help_menu() {
           man gdu
           break
           ;;
-        "Lynx"*,*|*,"Lynx"*)
-          man lynx
+        "Journal"*,*|*,"Journal"*)
+          jrnl --help | less
           break
           ;;
-        "Matrix"*,*|*,"Matrix"*)
-          man cmatrix
+        "Lynx"*,*|*,"Lynx"*)
+          man lynx
           break
           ;;
         "Mpcplus"*,*|*,"Mpcplus"*)
@@ -688,6 +688,7 @@ show_help_menu() {
 show_select_menu() {
   animation_menu=
   art_menu=
+  journal_menu=
   main_menu=
   while true
   do
@@ -796,6 +797,7 @@ show_select_menu() {
     [ "${have_retro}" ] && options+=("Retro Terminal         [${use_retro}]")
     [ "${have_tilix}" ] && options+=("Tilix Terminal         [${use_tilix}]")
     options+=("Current Terminal       [${use_current}]")
+    [ "${have_jrnl}" ] && options+=("Journal Menu")
     [ "${have_showascii}" ] && options+=("Slideshow Menu")
     [ "${have_splash}" ] && options+=("Animations Menu")
     options+=("Done / Main Menu" "Quit")
@@ -814,6 +816,10 @@ show_select_menu() {
               ;;
           "Animations"*,*|*,"Animations"*)
               animation_menu=1
+              break 2
+              ;;
+          "Journal"*,*|*,"Journal"*)
+              journal_menu=1
               break 2
               ;;
           "Slideshow"*,*|*,"Slideshow"*)
@@ -944,6 +950,11 @@ show_select_menu() {
     printf "\n\n\n"
     show_art_menu
   }
+  [ "${journal_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_journal_menu
+  }
   [ "${animation_menu}" ] && {
     clear
     printf "\n\n\n"
@@ -959,6 +970,7 @@ show_select_menu() {
 
 show_art_menu() {
   animation_menu=
+  journal_menu=
   main_menu=
   while true
   do
@@ -1050,6 +1062,7 @@ show_art_menu() {
     options+=("Current Terminal      [${use_current}]")
     options+=("Use Tmux              [${usetmux}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session   [${recordstat}]")
+    [ "${have_jrnl}" ] && options+=("Journal Menu")
     [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
     [ "${have_roon}" ] && options+=("RoonCommandLine Menu")
     [ "${have_splash}" ] && options+=("Animations Menu")
@@ -1080,6 +1093,10 @@ show_art_menu() {
               roon
               clear
               break
+              ;;
+          "Journal"*,*|*,"Journal"*)
+              journal_menu=1
+              break 2
               ;;
           "Animations"*,*|*,"Animations"*)
               animation_menu=1
@@ -1273,6 +1290,11 @@ show_art_menu() {
     printf "\n\n\n"
     show_animation_menu
   }
+  [ "${journal_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_journal_menu
+  }
   [ "${main_menu}" ] && {
     clear
     printf "\n"
@@ -1283,6 +1305,7 @@ show_art_menu() {
 
 show_animation_menu() {
   art_menu=
+  journal_menu=
   main_menu=
   MTITLE="ASCIImatics Animation"
   while true
@@ -1367,6 +1390,7 @@ show_animation_menu() {
     [ "${have_asciinema}" ] && options+=("Record Tmux Session   [${recordstat}]")
     options+=("Use Audio             [${audiostat}]")
     [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
+    [ "${have_jrnl}" ] && options+=("Journal Menu")
     [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
     [ "${have_roon}" ] && options+=("RoonCommandLine Menu")
     [ "${have_showascii}" ] && options+=("Slideshow Menu")
@@ -1422,6 +1446,10 @@ show_animation_menu() {
               skip_it_so=1
               export DISPLAY="${SAVED_DISPLAY}"
               break
+              ;;
+          "Journal"*,*|*,"Journal"*)
+              journal_menu=1
+              break 2
               ;;
           "Slideshow"*,*|*,"Slideshow"*)
               art_menu=1
@@ -1616,6 +1644,211 @@ show_animation_menu() {
     printf "\n\n\n"
     show_art_menu
   }
+  [ "${journal_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_journal_menu
+  }
+  [ "${main_menu}" ] && {
+    clear
+    printf "\n"
+    init_vars
+    show_main_menu
+  }
+}
+
+show_journal_menu() {
+  art_menu=
+  animation_menu=
+  main_menu=
+
+  while true
+  do
+    [ "${use_figlet}" ] && {
+      select_font Journal
+      show_figlet
+    }
+    PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORMAL}"
+    options=()
+    options+=("New Journal Entry")
+    options+=("All Journal Entries")
+    options+=("Today's Journal Entries")
+    options+=("Yesterday's Journal Entries")
+    options+=("This Week's Journal Entries")
+    options+=("This Month's Journal Entries")
+    options+=("This Year's Journal Entries")
+    options+=("Last 10 Journal Entries")
+    [ ${numjrnls} -gt 1 ] && {
+      options+=("Use Journal        [${journal}]")
+    }
+    options+=("Use Display Format [${fancy}]")
+    encrypted=
+    jloc=`jrnl --list | grep '*' | grep ${journal} | awk ' { print $4 } '`
+    first=${jloc:0:1}
+    uses_tilda=
+    [ "${first}" == "~" ] && {
+      uses_tilda=1
+      jloc=`echo ${jloc} | sed -e "s/~//"`
+    }
+    if [ "${uses_tilda}" ]
+    then
+      file ${HOME}${jloc} | grep -i terminator > /dev/null && encrypted=1 
+    else
+      file ${jloc} | grep -i terminator > /dev/null && encrypted=1 
+    fi
+    if [ "${encrypted}" ]
+    then
+      options+=("Decrypt Journal")
+    else
+      options+=("Encrypt Journal")
+    fi
+    [ "${have_splash}" ] && options+=("Animations Menu")
+    [ "${have_showascii}" ] && options+=("Ascii Art Slideshows")
+    options+=("Main Menu" "Quit")
+    select opt in "${options[@]}"
+    do
+      case "$opt,$REPLY" in
+          "h",*|*,"h"|"H",*|*,"H"|"help",*|*,"help"|"Help",*|*,"Help")
+              clear
+              printf "\n"
+              show_help_menu
+              break
+              ;;
+          "New"*,*|*,"New"*)
+              # To run jrnl in a terminal window:
+              # tilix -t floating-jrnl -e jrnl --config-override editor ""
+              jrnl ${journal}
+              printf "\n\nThe new journal entry:\n\n"
+              jrnl ${journal} ${formatarg} -n 1
+              read -p "Press Enter to continue" answer
+              break
+              ;;
+          "Last"*,*|*,"Last"*)
+              jrnl ${journal} ${formatarg} -n 10 | more
+              read -p "Press Enter to continue" answer
+              break
+              ;;
+          "Yesterday"*,*|*,"Yesterday"*)
+              jrnl ${journal} ${formatarg} -on yesterday | more
+              read -p "Press Enter to continue" answer
+              break
+              ;;
+          "Today"*,*|*,"Today"*)
+              jrnl ${journal} ${formatarg} -on today | more
+              read -p "Press Enter to continue" answer
+              break
+              ;;
+          "This Week"*,*|*,"This Week"*)
+              day=`date +%A`
+              jrnl ${journal} ${formatarg} -from "last ${day}" -to today | more
+              read -p "Press Enter to continue" answer
+              break
+              ;;
+          "This Month"*,*|*,"This Month"*)
+              month=`date +%B`
+              year=`date +%Y`
+              jrnl ${journal} ${formatarg} -on "${month} ${year}" | more
+              read -p "Press Enter to continue" answer
+              break
+              ;;
+          "This Year"*,*|*,"This Year"*)
+              year=`date +%Y`
+              jrnl ${journal} ${formatarg} -on "${year}" | more
+              read -p "Press Enter to continue" answer
+              break
+              ;;
+          "Last Year"*,*|*,"Last Year"*)
+              year=`date +%Y`
+              year=$((year - 1))
+              jrnl ${journal} ${formatarg} -on "${year}" | more
+              read -p "Press Enter to continue" answer
+              break
+              ;;
+          "All"*,*|*,"All"*)
+              jrnl ${journal} ${formatarg} -to today | more
+              read -p "Press Enter to continue" answer
+              break
+              ;;
+          "Use Journal"*,*|*,"Use Journal"*)
+              for (( j=0; j<${numjrnls}; j++ ));
+              do
+                [ "${journal}" == "${journals[$j]}" ] && {
+                  k=$((j + 1))
+                  if [ ${numjrnls} -gt $k ]
+                  then
+                    journal="${journals[$k]}"
+                  else
+                    journal="${journals[0]}"
+                  fi
+                  break
+                }
+              done
+              break
+              ;;
+          "Use Display"*,*|*,"Use Display"*)
+              if [ "${fancy}" == "pretty" ]
+              then
+                fancy="fancy"
+                formatarg="--format fancy"
+              else
+                if [ "${fancy}" == "fancy" ]
+                then
+                  fancy="markdown"
+                  formatarg="--format markdown"
+                else
+                  fancy="pretty"
+                  formatarg="--format pretty"
+                fi
+              fi
+              break
+              ;;
+          "Decrypt"*,*|*,"Decrypt"*)
+              jrnl ${journal} --decrypt
+              break
+              ;;
+          "Encrypt"*,*|*,"Encrypt"*)
+              jrnl ${journal} --encrypt
+              break
+              ;;
+          "Animation"*,*|*,"Animation"*)
+              animation_menu=1
+              break 2
+              ;;
+          "Ascii"*,*|*,"Ascii"*)
+              art_menu=1
+              break 2
+              ;;
+          "Main Menu",*|*,"Main Menu"|"Back",*|*,"Back"|"back",*|*,"back")
+              main_menu=1
+              break 2
+              ;;
+          "Quit",*|*,"Quit"|"quit",*|*,"quit")
+              remove_fullscreen
+              printf "\nExiting Asciiville\n"
+              exit 0
+              ;;
+          *,*|*,*)
+              printf "\nCould not match '${REPLY}' with a menu entry."
+              printf "\nPlease try again with an exact match.\n"
+              [ "${use_figlet}" ] && {
+                select_font Journal
+                show_figlet
+              }
+              ;;
+      esac
+      REPLY=
+    done
+  done
+  [ "${animation_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_animation_menu
+  }
+  [ "${art_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_art_menu
+  }
   [ "${main_menu}" ] && {
     clear
     printf "\n"
@@ -1627,6 +1860,7 @@ show_animation_menu() {
 show_main_menu() {
   art_menu=
   animation_menu=
+  journal_menu=
   select_menu=
   while true
   do
@@ -1705,6 +1939,7 @@ show_main_menu() {
     [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
     options+=("Kill Tmux Sessions")
     [ "${have_neo}" ] && options+=("Show System Info")
+    [ "${have_jrnl}" ] && options+=("Journal Menu")
     [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
     [ "${have_roon}" ] && options+=("RoonCommandLine Menu")
     options+=("Quit")
@@ -1922,6 +2157,10 @@ show_main_menu() {
               art_menu=1
               break 2
               ;;
+          "Journal"*,*|*,"Journal"*)
+              journal_menu=1
+              break 2
+              ;;
           "Select App"*,*|*,"Select App"*)
               select_menu=1
               break 2
@@ -2037,6 +2276,11 @@ show_main_menu() {
     printf "\n\n\n"
     show_animation_menu
   }
+  [ "${journal_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_journal_menu
+  }
   [ "${select_menu}" ] && {
     clear
     printf "\n\n\n"
@@ -2149,6 +2393,7 @@ have_splash=`type -p asciisplash`
 have_showascii=`type -p show_ascii_art`
 have_xfce4=`type -p xfce4-terminal`
 have_gnome=`type -p gnome-terminal`
+have_jrnl=`type -p jrnl`
 have_lynx=`type -p lynx`
 have_w3m=`type -p w3m`
 have_wmctrl=`type -p wmctrl`
@@ -2172,6 +2417,22 @@ else
   use_figlet=
 fi
 
+[ "${have_jrnl}" ] && {
+  fancy="pretty"
+  formatarg="--format pretty"
+  journal="default"
+  declare -a journals=()
+  numjrnls=`jrnl --list | grep '*' | wc -l`
+  if [ ${numjrnls} -gt 1 ]
+  then
+    IFS=$'\n' read -r -d '' -a journals < <( jrnl --list | grep '*' | awk ' { print $2 } ' && printf '\0' )
+  else
+    journals=("default")
+  fi
+  numjrnls=${#journals[@]}
+}
+
+
 SAVED_BROWSER=
 if [ "${BROWSER}" ]
 then
@@ -2180,12 +2441,13 @@ then
     SAVED_BROWSER="${BROWSER}"
   }
 else
-  if [ "${have_lynx}" ]
+  # We prefer W3M over Lynx
+  if [ "${have_w3m}" ]
   then
-    [ "${BROWSER}" ] || export BROWSER=lynx
+    [ "${BROWSER}" ] || export BROWSER=w3m
   else
-    [ "${have_w3m}" ] && {
-      [ "${BROWSER}" ] || export BROWSER=w3m
+    [ "${have_lynx}" ] && {
+      [ "${BROWSER}" ] || export BROWSER=lynx
     }
   fi
 fi

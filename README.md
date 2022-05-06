@@ -54,6 +54,7 @@ The `asciiville` command can be used to invoke:
 * The lightweight character based music player, `mpcplus`
 * The lightweight character based file manager, `ranger`
 * The lightweight character based disk usage analyzer, `gdu`
+* The lightweight character based journal app, `jrnl`
 * One or more terminal emulators running a command
 * A tmux session
 * A command line web search
@@ -76,6 +77,7 @@ Integration is provided for:
 * [btop](btop/README.md), character based system monitor
 * [cbftp](cbftp/README), character based FTP client
 * [ddgr](ddgr/README.md), command line web search
+* [jrnl](https://jrnl.sh/en/stable/), a simple command line journal application
 * [lynx](https://lynx.invisible-island.net/), character based web browser
 * [w3m](http://w3m.sourceforge.net/), another character based web browser
 * [mutt](http://www.mutt.org/), character based email client
@@ -255,9 +257,11 @@ Generated configuration files include:
 * `$HOME/.mutt/muttrc` : Mutt email client
 * `$HOME/.config/neomutt/` : NeoMutt email client startup files
 * `$HOME/.config/neofetch/config.conf` : NeoFetch system info script
+* `$HOME/.config/jrnl/` : Journal command `jrnl` configuration file
 * `$HOME/.rainbow_config.json` : Rainbowstream Twitter client
 * `$HOME/.config/ranger/rifle.conf` : Rifle, Ranger's file opener
 * `$HOME/.tmux.conf` : Tmux terminal multiplexer
+* `$HOME/.config/w3m/` : W3M web browser custom configuration
 
 These override or extend the settings in the utilities' global configuration
 files, typically installed in `/etc/`. For example, the global configuration

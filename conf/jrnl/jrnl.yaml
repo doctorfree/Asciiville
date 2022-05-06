@@ -1,0 +1,32 @@
+colors:
+  body: cyan
+  date: green
+  tags: magenta
+  title: blue
+default_hour: 9
+default_minute: 0
+# Set editor: to your desired text editor
+# editor: nano
+editor: vi
+# encrypt: controls whether newly created journals will be encrypted
+# Use 'jrnl --encrypt' and 'jrnl --decrypt' to encrypt and decrypt journals
+encrypt: false
+highlight: true
+indent_character: '|'
+# Uncomment 'template:' entries below to use the respective templates for
+# new journal entries. Replace __HOME__ with your $HOME (e.g. /home/jdoe)
+#
+# Uncomment 'encrypt:' entries below to use encryption for the journal
+journals:
+  asciiville:
+    journal: ~/.local/share/jrnl/asciiville.txt
+#   template: __HOME__/.config/jrnl/template-asciiville.txt
+#   encrypt: true
+  default:
+    journal: ~/.local/share/jrnl/journal.txt
+#   template: __HOME__/.config/jrnl/template-default.txt
+#   encrypt: true
+linewrap: 79
+tagsymbols: '#@'
+template: false
+timeformat: '%Y-%m-%d %H:%M'

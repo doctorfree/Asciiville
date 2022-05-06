@@ -1,0 +1,71 @@
+#
+# Display settings
+#
+# Auto preview link url
+display_link 1
+# Ascii entity renderings
+graphic_char 2
+# no images
+display_image 0
+# activate external image viewer
+ext_image_viewer 1
+imgdisplay w3mimgdisplay
+#
+# Color settings
+#
+color 1
+basic_color terminal
+anchor_color green
+image_color cyan
+form_color blue
+mark_color yellow
+bg_color terminal
+active_style 0
+visited_anchor 0
+#
+# Misc settings
+#
+use_history 1
+history 100
+save_hist 1
+confirm_qq 1
+mark 1
+mark_all_pages 0
+wrap_search 1
+ignorecase_search 1
+keymap_file keymap
+#
+# External program settings
+#
+# Open page in the default browser or Opera
+extbrowser xdg-open %s
+extbrowser2 opera %s
+# Append url to $NOTES or the jrnl CLI app
+extbrowser3 url=%s out_file=$NOTES && echo $url >> $out_file && echo $url saved to $out_file && read s
+extbrowser4 url=%s && jrnl @link $url && echo $url saved to journal && read s
+# Copy url to the tmux or the X paste buffer
+extbrowser7 url=%s && printf %s "$url" | xargs tmux set-buffer
+extbrowser8 url=%s && printf %s "$url" | xsel && printf %s "$url" | xsel -b &
+# Auto enable VIM html file type for editor command
+editor vim -c "set filetype=html"
+# run external viewers/commands in background
+bgextviewer 1
+#
+# Network settings
+#
+# Modify user-agent string and languages accepted
+user_agent 
+accept_language en;q=1.0
+# auto-populate with current URL in URL open command
+default_url 1
+# follow meta refresh
+meta_refresh 1
+#
+# Cookie settings (likely default)
+#
+use_cookie 1
+show_cookie 0
+accept_cookie 1
+accept_bad_cookie 0
+cookie_reject_domains 
+cookie_accept_domains
