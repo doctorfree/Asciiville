@@ -2377,6 +2377,35 @@ init_vars() {
   TMUX_SPLASH=
 }
 
+# Check if initialization has been run
+[ -f ${HOME}/.asciiville_init ] || {
+  echo ""
+  echo "Asciiville initialization needs to be run once."
+  echo "Answer 'y' to initialize, 'n' to skip it for now,"
+  echo "or 'i' to skip and ignore this in the future"
+  echo ""
+  while true
+  do
+    read -p "Initialize Asciiville now (y/n/i) " answer
+    case ${answer} in
+      [Ii]* )
+        touch ${HOME}/.asciiville_init
+        break
+        ;;
+      [Yy]* )
+        ascinit -a -q
+        break
+        ;;
+      [Nn]* )
+        printf "\nSkipping initialization.\n"
+        break
+        ;;
+      * ) echo "Please answer 'y' to initialize, 'n' to skip, or 'i' to ignore."
+        ;;
+    esac
+  done
+}
+
 FULLSCREEN=
 init_vars
 # Without any arguments, bring up interactive dialog menu
@@ -2903,35 +2932,6 @@ while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wWxXyYzZu" flag; do
       ;;
     esac
 done
-
-# Check if initialization has been run
-[ -f ${HOME}/.asciiville_init ] || {
-  echo ""
-  echo "Asciiville initialization needs to be run once."
-  echo "Answer 'y' to initialize, 'n' to skip it for now,"
-  echo "or 'i' to skip and ignore this in the future"
-  echo ""
-  while true
-  do
-    read -p "Initialize Asciiville now (y/n/i) " answer
-    case ${answer} in
-      [Ii]* )
-        touch ${HOME}/.asciiville_init
-        break
-        ;;
-      [Yy]* )
-        ascinit -a -q
-        break
-        ;;
-      [Nn]* )
-        printf "\nSkipping initialization.\n"
-        break
-        ;;
-      * ) echo "Please answer 'y' to initialize, 'n' to skip, or 'i' to ignore."
-        ;;
-    esac
-  done
-}
 
 # The -T option says use tmux, -S says do asciimatics
 # If we have both then do asciimatics in tmux
