@@ -53,6 +53,9 @@ btop/btop
 cbftp/bin
 .*/
 
+diagon/tools/antlr.jar
+diagon/build
+
 jp2a/INSTALL
 jp2a/Makefile
 jp2a/src/Makefile

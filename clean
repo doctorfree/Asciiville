@@ -12,3 +12,6 @@ cd ../cbftp
 make clean
 cd ../nethack
 make spotless
+cd ../diagon
+rm -rf build
+rm -f tools/*.jar

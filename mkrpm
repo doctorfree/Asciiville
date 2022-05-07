@@ -23,6 +23,7 @@ CONSOLE=
 . "${SRC}/${SRC_NAME}/VERSION"
 PKG_VER=${VERSION}
 PKG_REL=${RELEASE}
+[ "${CONSOLE}" ] && PKG_REL="${PKG_REL}c"
 
 umask 0022
 
@@ -84,7 +85,7 @@ else
   cd build
   cmake .. -DCMAKE_BUILD_TYPE=Release
   make -j
-  cd ..
+  cd ../..
 fi
 
 # Build nethack
@@ -325,11 +326,5 @@ ${SUDO} cp ${OUT_DIR}/RPMS/*/*.rpm dist
 [ "${GCI}" ] || {
   [ -d releases ] || mkdir releases
   [ -d releases/${PKG_VER} ] || mkdir releases/${PKG_VER}
-  if [ "${CONSOLE}" ]
-  then
-    [ -d releases/${PKG_VER}/console ] || mkdir releases/${PKG_VER}/console
-    ${SUDO} cp ${OUT_DIR}/RPMS/*/*.rpm releases/${PKG_VER}/console
-  else
-    ${SUDO} cp ${OUT_DIR}/RPMS/*/*.rpm releases/${PKG_VER}
-  fi
+  ${SUDO} cp ${OUT_DIR}/RPMS/*/*.rpm releases/${PKG_VER}
 }

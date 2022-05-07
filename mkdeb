@@ -37,6 +37,7 @@ dpkg_arch=`dpkg --print-architecture`
 . "${SRC}/${SRC_NAME}/VERSION"
 PKG_VER=${VERSION}
 PKG_REL=${RELEASE}
+[ "${CONSOLE}" ] && PKG_REL="${PKG_REL}c"
 
 umask 0022
 
@@ -84,7 +85,7 @@ else
   cd build
   cmake .. -DCMAKE_BUILD_TYPE=Release
   make -j
-  cd ..
+  cd ../..
 fi
 
 # Build jp2a
@@ -321,27 +322,28 @@ ${SUDO} chown -R root:root ${OUT_DIR}/${DESTDIR}/bin
 cd dist
 echo "Building ${PKG_NAME}_${PKG_VER} Debian package"
 ${SUDO} dpkg --build ${PKG_NAME}_${PKG_VER} ${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.deb
-cd ${PKG_NAME}_${PKG_VER}
-echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
-${SUDO} tar cf - usr | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.tgz
+[ "${CONSOLE}" ] || {
+  cd ${PKG_NAME}_${PKG_VER}
+  echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
+  ${SUDO} tar cf - usr | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.tgz
 
-have_zip=`type -p zip`
-[ "${have_zip}" ] || {
-  ${SUDO} apt-get update
-  ${SUDO} apt-get install zip -y
+  have_zip=`type -p zip`
+  [ "${have_zip}" ] || {
+    ${SUDO} apt-get update
+    ${SUDO} apt-get install zip -y
+  }
+  echo "Creating zip archive of ${PKG_NAME} ${PKG_VER} distribution"
+  ${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.zip usr
+  cd ..
 }
-echo "Creating zip archive of ${PKG_NAME} ${PKG_VER} distribution"
-${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.zip usr
 
-cd ..
 [ "${GCI}" ] || {
-    [ -d ../releases ] || mkdir ../releases
-    [ -d ../releases/${PKG_VER} ] || mkdir ../releases/${PKG_VER}
-    if [ "${CONSOLE}" ]
-    then
-      [ -d ../releases/${PKG_VER}/console ] || mkdir ../releases/${PKG_VER}/console
-      ${SUDO} cp *.deb *.tgz *.zip ../releases/${PKG_VER}/console
-    else
-      ${SUDO} cp *.deb *.tgz *.zip ../releases/${PKG_VER}
-    fi
+  [ -d ../releases ] || mkdir ../releases
+  [ -d ../releases/${PKG_VER} ] || mkdir ../releases/${PKG_VER}
+  if [ "${CONSOLE}" ]
+  then
+    ${SUDO} cp *.deb ../releases/${PKG_VER}
+  else
+    ${SUDO} cp *.deb *.tgz *.zip ../releases/${PKG_VER}
+  fi
 }

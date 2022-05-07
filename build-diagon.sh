@@ -50,9 +50,17 @@ shift $(( OPTIND - 1 ))
 
 cd ${PROJ}
 
-[ -d build ] || mkdir build
-cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-make -j
+buildit=1
+[ -L build/diagon ] && {
+  diagonpath=`realpath build/diagon`
+  [ -f ${diagonpath} ] && buildit=
+}
+
+[ "${buildit}" ] && {
+  [ -d build ] || mkdir build
+  cd build
+  cmake .. -DCMAKE_BUILD_TYPE=Release
+  make -j
+}
 
 [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
