@@ -75,18 +75,18 @@ else
   cd ..
 fi
 
-# Build diagon
-if [ -x build-diagon.sh ]
-then
-  ./build-diagon.sh
-else
-  cd diagon
-  [ -d build ] || mkdir build
-  cd build
-  cmake .. -DCMAKE_BUILD_TYPE=Release
-  make -j
-  cd ../..
-fi
+# Build diagon - NOT YET PORTED to Fedora, skip diagon build
+# if [ -x build-diagon.sh ]
+# then
+#   ./build-diagon.sh
+# else
+#   cd diagon
+#   [ -d build ] || mkdir build
+#   cd build
+#   cmake .. -DCMAKE_BUILD_TYPE=Release
+#   make -j
+#   cd ../..
+# fi
 
 # Build nethack
 if [ -x build-nethack.sh ]
@@ -128,8 +128,8 @@ ${SUDO} cp jp2a/src/jp2a ${OUT_DIR}/${DESTDIR}/bin/jp2a
 ${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
 ${SUDO} cp ddgr/ddgr ${OUT_DIR}/${DESTDIR}/bin/ddgr
 
-diagonpath=`realpath diagon/build/diagon`
-${SUDO} cp "${diagonpath}" ${OUT_DIR}/${DESTDIR}/bin/diagon
+# diagonpath=`realpath diagon/build/diagon`
+# ${SUDO} cp "${diagonpath}" ${OUT_DIR}/${DESTDIR}/bin/diagon
 
 ${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir \
                     ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/save
@@ -219,8 +219,8 @@ ${SUDO} cp btop/LICENSE ${OUT_DIR}/${DESTDIR}/share/btop/LICENSE
 ${SUDO} cp -a btop/themes ${OUT_DIR}/${DESTDIR}/share/btop/themes
 ${SUDO} cp cbftp/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-cbftp
 ${SUDO} cp cbftp/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-cbftp
-${SUDO} cp diagon/README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-diagon.md
-${SUDO} cp diagon/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-diagon
+# ${SUDO} cp diagon/README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-diagon.md
+# ${SUDO} cp diagon/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-diagon
 ${SUDO} cp jp2a/COPYING ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/COPYING-jp2a
 ${SUDO} cp jp2a/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-jp2a
 ${SUDO} cp jp2a/LICENSES ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSES-jp2a
