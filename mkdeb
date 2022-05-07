@@ -17,6 +17,10 @@ dpkg=`type -p dpkg-deb`
     echo "Exiting"
     exit 1
 }
+
+CONSOLE=
+[ "$1" == "console" ] && CONSOLE=1
+
 dpkg_arch=`dpkg --print-architecture`
 [ "${dpkg_arch}" == "${ARCH}" ] || ARCH=${dpkg_arch}
 
@@ -70,6 +74,19 @@ else
   cd ..
 fi
 
+# Build diagon
+if [ -x build-diagon.sh ]
+then
+  ./build-diagon.sh
+else
+  cd diagon
+  [ -d build ] || mkdir build
+  cd build
+  cmake .. -DCMAKE_BUILD_TYPE=Release
+  make -j
+  cd ..
+fi
+
 # Build jp2a
 if [ -x build-jp2a.sh ]
 then
@@ -104,7 +121,22 @@ mkdir ${OUT_DIR}
 cp -a pkg/debian ${OUT_DIR}/DEBIAN
 chmod 755 ${OUT_DIR} ${OUT_DIR}/DEBIAN ${OUT_DIR}/DEBIAN/*
 
-echo "Package: ${PKG}
+if [ "${CONSOLE}" ]
+then
+  echo "Package: ${PKG}
+Version: ${PKG_VER}-${PKG_REL}
+Section: misc
+Priority: optional
+Architecture: ${ARCH}
+Depends: uuid-runtime, python3, python3-pip, python3-venv, tmux, mplayer, w3m, neomutt, ranger, jq, asciinema, speedtest-cli, libaa-bin, libaa1, bb, neofetch, figlet, imagemagick, dconf-cli, libjpeg-dev, libpng-dev, cmatrix, gnupg, pandoc
+Maintainer: ${DEBFULLNAME} <${DEBEMAIL}>
+Installed-Size: 100000
+Build-Depends: debhelper (>= 11)
+Suggests: desktop-file-utils
+Homepage: https://github.com/doctorfree/Asciiville
+Description: Console Ascii Art and Utilities" > ${OUT_DIR}/DEBIAN/control
+else
+  echo "Package: ${PKG}
 Version: ${PKG_VER}-${PKG_REL}
 Section: misc
 Priority: optional
@@ -116,6 +148,7 @@ Build-Depends: debhelper (>= 11)
 Suggests: desktop-file-utils
 Homepage: https://github.com/doctorfree/Asciiville
 Description: Ascii Art and Utilities" > ${OUT_DIR}/DEBIAN/control
+fi
 
 chmod 644 ${OUT_DIR}/DEBIAN/control
 
@@ -140,6 +173,9 @@ ${SUDO} cp btop/bin/btop ${OUT_DIR}/${DESTDIR}/bin/btop
 ${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
 ${SUDO} cp ddgr/ddgr ${OUT_DIR}/${DESTDIR}/bin/ddgr
 ${SUDO} cp jp2a/src/jp2a ${OUT_DIR}/${DESTDIR}/bin/jp2a
+
+diagonpath=`realpath diagon/build/diagon`
+${SUDO} cp "${diagonpath}" ${OUT_DIR}/${DESTDIR}/bin/diagon
 
 ${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir \
                     ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/save
@@ -229,6 +265,8 @@ ${SUDO} cp btop/LICENSE ${OUT_DIR}/${DESTDIR}/share/btop/LICENSE
 ${SUDO} cp -a btop/themes ${OUT_DIR}/${DESTDIR}/share/btop/themes
 ${SUDO} cp cbftp/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-cbftp
 ${SUDO} cp cbftp/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-cbftp
+${SUDO} cp diagon/README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-diagon.md
+${SUDO} cp diagon/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-diagon
 ${SUDO} cp jp2a/COPYING ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/COPYING-jp2a
 ${SUDO} cp jp2a/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-jp2a
 ${SUDO} cp jp2a/LICENSES ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSES-jp2a
@@ -299,5 +337,11 @@ cd ..
 [ "${GCI}" ] || {
     [ -d ../releases ] || mkdir ../releases
     [ -d ../releases/${PKG_VER} ] || mkdir ../releases/${PKG_VER}
-    ${SUDO} cp *.deb *.tgz *.zip ../releases/${PKG_VER}
+    if [ "${CONSOLE}" ]
+    then
+      [ -d ../releases/${PKG_VER}/console ] || mkdir ../releases/${PKG_VER}/console
+      ${SUDO} cp *.deb *.tgz *.zip ../releases/${PKG_VER}/console
+    else
+      ${SUDO} cp *.deb *.tgz *.zip ../releases/${PKG_VER}
+    fi
 }

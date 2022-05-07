@@ -1,0 +1,24 @@
+if ("DO YOU UNDERSTAND FLOW CHARTS?")
+  "GOOD!";
+else if ("OKAY, YOU SEE THE LINE LABELED \"YES\"?") {
+  if ("... AND YOU CAN SEE THE ONES LABELED \"NO\"?") {
+    "GOOD";
+  } else {
+    if ("BUT YOU JUST FOLLOWED THEM TWICE?")
+      noop;
+    else
+      noop;
+    "(THAT WASN'T A QUESTION)";
+    "SCREW IT"
+  }
+} else {
+  if ("BUT YOU SEE THE ONES LABELED \"NO\"?") {
+    return "WAIT, WHAT?";
+  } else {
+    "LISTEN.";
+    return "I HATE YOU";
+  }
+}
+
+"LET'S GO DRING";
+"HEY, I SHOULD TRY INSTALLING FREEBSD!"

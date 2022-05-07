@@ -407,7 +407,13 @@ remove_fullscreen() {
 
 play_slide_show() {
   showname="$1"
-  showargs="-C ${cycarg} ${lolarg} ${audarg}"
+  if [ "$2" ]
+  then
+    art_dir="-A $2"
+  else
+    art_dir=
+  fi
+  showargs="${art_dir} -C ${cycarg} ${lolarg} ${audarg}"
   [ "${CURRENT}" ] && {
     add_fullscreen
     show_ascii_art ${showargs} -s ${showname}
@@ -1958,6 +1964,7 @@ show_main_menu() {
     options+=("Fullscreen Window          [${fullstat}]")
     options+=("Default Web Browser        [${default_browser}]")
     options+=("Use Audio                  [${audiostat}]")
+    options+=("Generate ASCII Art")
     [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
     [ "${have_neo}" ] && options+=("Show System Info")
     [ "${have_jrnl}" ] && options+=("Journal Menu")
@@ -2186,6 +2193,48 @@ show_main_menu() {
               select_menu=1
               break 2
               ;;
+          "Generate"*,*|*,"Generate"*)
+              select_input_dir
+              select_output_dir
+              echo "Selected image input directory = ${image_dir}"
+              echo "Selected ascii art output directory = ${ascii_dir}"
+              while true
+              do
+                read -p "Generate ASCII Art with these selections? (y/n) " answer
+                case ${answer} in
+                  [Yy]* )
+                    show_ascii_art -I "${image_dir}" -O "${ascii_dir}"
+                    while true
+                    do
+                      read -p "View slideshow of generated ascii art? (y/n) " viewslides
+                      case ${viewslides} in
+                        [Yy]* )
+                          showname=`basename "${ascii_dir}"`
+                          showdir=`dirname "${ascii_dir}"`
+                          play_slide_show "${showname}" "${showdir}"
+                          break
+                          ;;
+                        [Nn]* )
+                          printf "\nSkipping ascii art slideshow.\n"
+                          break
+                          ;;
+                        * ) echo "Please answer 'y' to view slideshow, or 'n' to skip."
+                          ;;
+                      esac
+                    done
+                    break
+                    ;;
+                  [Nn]* )
+                    printf "\nSkipping ascii art generation.\n"
+                    break
+                    ;;
+                  * ) echo "Please answer 'y' to select directory, or 'n' to skip."
+                    ;;
+                esac
+              done
+              skip_it_so=1
+              break
+              ;;
           "Select Song"*,*|*,"Select Song"*)
               select_song
               skip_it_so=1
@@ -2309,11 +2358,96 @@ show_main_menu() {
   }
 }
 
+choose_folder() {
+  TMP="$(mktemp)"
+  ranger --choosedir="${TMP}" ${HOME} 1>&2
+  cat ${TMP}
+  rm  -f ${TMP}
+}
+
 choose_song() {
   TMP="$(mktemp)"
   ranger --choosefile="${TMP}" ${HOME}/Music 1>&2
   cat ${TMP}
   rm  -f ${TMP}
+}
+
+select_input_dir() {
+  if [ "${have_ranger}" ]
+  then
+    echo ""
+    echo "Choosing a directory in Ranger is done by visiting a directory"
+    echo ""
+    echo "Use the arrow keys to browse folders"
+    echo "Press 'Enter' to enter a directory"
+    echo "Create a new directory with ':mkdir <dirname>'"
+    echo ""
+    echo "While in the directory you wish to select, quit Ranger with 'q'"
+    echo ""
+    while true
+    do
+      read -p "Select image input directory now? (y/n) " answer
+      case ${answer} in
+        [Yy]* )
+          image_dir="$(choose_folder)"
+          echo ""
+          echo "Selected image input directory = ${image_dir}"
+          echo ""
+          break
+          ;;
+        [Nn]* )
+          printf "\nSkipping image input directory selection.\n"
+          image_dir=
+          break
+          ;;
+        * ) echo "Please answer 'y' to select directory, or 'n' to skip."
+          ;;
+      esac
+    done
+  else
+    image_dir=$(dialog --stdout \
+                          --title "Please select an image input folder" \
+                          --fselect ${HOME}/Pictures/ 14 48)
+  fi
+}
+
+select_output_dir() {
+  if [ "${have_ranger}" ]
+  then
+    echo ""
+    echo "Choosing a directory in Ranger is done by visiting a directory"
+    echo ""
+    echo "Use the arrow keys to browse folders"
+    echo "Press 'Enter' to enter a directory"
+    echo "Create a new directory with ':mkdir <dirname>'"
+    echo ""
+    echo "While in the directory you wish to select, quit Ranger with 'q'"
+    echo ""
+    while true
+    do
+      read -p "Select ascii art output directory now? (y/n) " answer
+      case ${answer} in
+        [Yy]* )
+          ascii_dir="$(choose_folder)"
+          echo ""
+          echo "Selected ASCII Art output directory = ${ascii_dir}"
+          echo ""
+          break
+          ;;
+        [Nn]* )
+          printf "\nSkipping ascii art output directory selection.\n"
+          ascii_dir=
+          break
+          ;;
+        * ) echo "Please answer 'y' to select directory, or 'n' to skip."
+          ;;
+      esac
+    done
+  else
+    ascii_dir=$(dialog --stdout \
+                          --title "Please select an ascii art output folder" \
+                          --fselect ${HOME}/Pictures/ 14 48)
+  fi
 }
 
 select_song() {
@@ -2377,6 +2511,8 @@ init_vars() {
   TMUX_SPLASH=
 }
 
+have_gnome=`type -p gnome-terminal`
+have_tilix=`type -p tilix`
 # Check if initialization has been run
 [ -f ${HOME}/.asciiville_init ] || {
   echo ""
@@ -2393,7 +2529,12 @@ init_vars() {
         break
         ;;
       [Yy]* )
-        ascinit -a -q
+        if [ "${have_gnome}" ] || [ "${have_tilix}" ]
+        then
+          ascinit -a -q
+        else
+          ascinit -a -c -q
+        fi
         break
         ;;
       [Nn]* )
@@ -2416,7 +2557,6 @@ have_neomutt=`type -p neomutt`
 have_nethack=`type -p nethack`
 have_ranger=`type -p ranger`
 have_retro=`type -p cool-retro-term`
-have_tilix=`type -p tilix`
 have_asciiart=`type -p asciiart`
 have_asciijulia=`type -p asciijulia`
 have_asciiplasma=`type -p asciiplasma`
@@ -2442,13 +2582,14 @@ have_speed=`type -p speedtest-cli`
 have_splash=`type -p asciisplash`
 have_showascii=`type -p show_ascii_art`
 have_xfce4=`type -p xfce4-terminal`
-have_gnome=`type -p gnome-terminal`
 have_jrnl=`type -p jrnl`
 have_lynx=`type -p lynx`
 have_w3m=`type -p w3m`
 have_wmctrl=`type -p wmctrl`
 have_xprop=`type -p xprop`
 isfull=
+image_dir=
+ascii_dir=
 custom_song=
 use_lolcat=
 use_lol="NO"

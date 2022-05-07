@@ -1,4 +1,13 @@
 Todo:
+- Add diagon to menus, README, and command line args in asciiville
+- Add got translator to menus, README, and command line args in asciiville
+    - https://github.com/fedeztk/got
+- Add tdraw ascii draw tool to menus, README, and command line args in asciiville
+    - https://github.com/aca/tdraw
+- Try out Sampler dashboard
+    - https://github.com/sqshq/sampler
+    - sudo wget https://github.com/sqshq/sampler/releases/download/v1.1.0/sampler-1.1.0-linux-amd64 -O /usr/bin/sampler
+    - sudo chmod +x /usr/bin/sampler
 
 Done:
 - v1.0.0r1 git repository

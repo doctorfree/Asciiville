@@ -9,9 +9,10 @@ BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 
 usage() {
-  printf "\nUsage: ascinit [-a] [-d] [-m] [-M] [-n] [-N] [-q] [-t] [-u]"
+  printf "\nUsage: ascinit [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-t] [-u]"
   printf "\nWhere:"
   printf "\n\t-a indicates do not ask to play an animation when done"
+  printf "\n\t-c indicates console mode - no windowing system, headless config"
   printf "\n\t-d indicates debug mode"
   printf "\n\t-m indicates setup user Mutt configuration"
   printf "\n\t-M indicates setup both Mutt and NeoMutt configurations"
@@ -95,16 +96,20 @@ debian=
 [ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
 
 ask_anim=1
+console=
 debug=
 init_twit=
 quiet=
 use_mutt=
 use_neomutt=1
 
-while getopts "admMnNqtu" flag; do
+while getopts "acdmMnNqtu" flag; do
   case $flag in
     a)
         ask_anim=
+        ;;
+    c)
+        console=1
         ;;
     d)
         debug=1
@@ -422,61 +427,63 @@ create_new_profile() {
   # SIZE=12
 }
 
-# If no gnome-terminal Asciiville profile exists, create one
-declare -a profiles
-profile_name="Asciiville"
+[ "${console}" ] || {
+  # If no gnome-terminal Asciiville profile exists, create one
+  declare -a profiles
+  profile_name="Asciiville"
 
-profile_exists=
-dconfdir=/org/gnome/terminal/legacy/profiles:
+  profile_exists=
+  dconfdir=/org/gnome/terminal/legacy/profiles:
 
-# profiles=($(gconftool-2 -R $gconfdir | grep $gconfdir | cut -d/ -f5 |  \
-#          cut -d: -f1))
-profiles=($(gsettings get org.gnome.Terminal.ProfilesList list | tr -d "[]\',"))
+  # profiles=($(gconftool-2 -R $gconfdir | grep $gconfdir | cut -d/ -f5 |  \
+  #          cut -d: -f1))
+  profiles=($(gsettings get org.gnome.Terminal.ProfilesList list | tr -d "[]\',"))
 
-if [ "$profiles" = "" ]
-then
-  create_new_profile gnome
-else
-  for i in ${!profiles[*]}
-  do
-    if [[ "$(dconf read $dconfdir/:${profiles[i]}/visible-name)" == \
-        "'$profile_name'" ]]
-    then
-      profile_exists=1
-      break
-    fi
-  done
-fi
+  if [ "$profiles" = "" ]
+  then
+    create_new_profile gnome
+  else
+    for i in ${!profiles[*]}
+    do
+      if [[ "$(dconf read $dconfdir/:${profiles[i]}/visible-name)" == \
+          "'$profile_name'" ]]
+      then
+        profile_exists=1
+        break
+      fi
+    done
+  fi
 
-[ "$profile_exists" ] || {
-  # Create an Asciiville profile in gnome-terminal for this user
-  create_new_profile gnome
-}
+  [ "$profile_exists" ] || {
+    # Create an Asciiville profile in gnome-terminal for this user
+    create_new_profile gnome
+  }
 
-# Create Asciiville Tilix profile, similar to Gnome-terminal's
-profile_exists=
-dconfdir=/com/gexperts/Tilix/profiles
+  # Create Asciiville Tilix profile, similar to Gnome-terminal's
+  profile_exists=
+  dconfdir=/com/gexperts/Tilix/profiles
 
-profiles=($(gsettings get com.gexperts.Tilix.ProfilesList list | tr -d "[]\',"))
+  profiles=($(gsettings get com.gexperts.Tilix.ProfilesList list | tr -d "[]\',"))
 
-if [ "$profiles" = "" ]
-then
-  create_new_profile tilix
-else
-  for i in ${!profiles[*]}
-  do
-    if [[ "$(dconf read $dconfdir/${profiles[i]}/visible-name)" == \
-        "'$profile_name'" ]]
-    then
-      profile_exists=1
-      break
-    fi
-  done
-fi
+  if [ "$profiles" = "" ]
+  then
+    create_new_profile tilix
+  else
+    for i in ${!profiles[*]}
+    do
+      if [[ "$(dconf read $dconfdir/${profiles[i]}/visible-name)" == \
+          "'$profile_name'" ]]
+      then
+        profile_exists=1
+        break
+      fi
+    done
+  fi
 
-[ "$profile_exists" ] || {
-  # Create an Asciiville profile in Tilix for this user
-  create_new_profile tilix
+  [ "$profile_exists" ] || {
+    # Create an Asciiville profile in Tilix for this user
+    create_new_profile tilix
+  }
 }
 
 [ -d ${CONFDIR}/music ] && {
@@ -484,6 +491,12 @@ fi
     [ -d ${HOME}/Music ] || mkdir -p ${HOME}/Music
     ln -s ${CONFDIR}/music ${HOME}/Music/Asciiville
   }
+}
+
+have_go=`type -p go`
+[ "${have_go}" ] && {
+  go install github.com/fedeztk/got/cmd/got@latest
+  go get -u github.com/aca/tdraw
 }
 
 touch ${HOME}/.asciiville_init
