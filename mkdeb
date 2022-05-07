@@ -325,7 +325,7 @@ ${SUDO} dpkg --build ${PKG_NAME}_${PKG_VER} ${PKG_NAME}_${PKG_VER}-${PKG_REL}.${
 [ "${CONSOLE}" ] || {
   cd ${PKG_NAME}_${PKG_VER}
   echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
-  ${SUDO} tar cf - usr | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.tgz
+  ${SUDO} tar cf - usr | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.tgz
 
   have_zip=`type -p zip`
   [ "${have_zip}" ] || {
@@ -333,7 +333,7 @@ ${SUDO} dpkg --build ${PKG_NAME}_${PKG_VER} ${PKG_NAME}_${PKG_VER}-${PKG_REL}.${
     ${SUDO} apt-get install zip -y
   }
   echo "Creating zip archive of ${PKG_NAME} ${PKG_VER} distribution"
-  ${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.zip usr
+  ${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.zip usr
   cd ..
 }
 

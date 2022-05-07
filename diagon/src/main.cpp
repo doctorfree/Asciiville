@@ -105,7 +105,7 @@ WEBSITE:
 }
 
 int PrintVersion() {
-  std::cout << "version: " << git_version << std::endl;
+  std::cout << "version: 1.0.127" << std::endl;
   std::cout << "Written by Arthur Sonzogni" << std::endl;
   std::cout << "License MIT" << std::endl;
   return EXIT_SUCCESS;

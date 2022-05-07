@@ -492,6 +492,7 @@ show_help_menu() {
     [ "${have_btop}" ] && options+=("Btop System Monitor Man Page")
     [ "${have_cbftp}" ] && options+=("Cbftp FTP Client Man Page")
     [ "${have_ddgr}" ] && options+=("Ddgr Web Search Man Page")
+    [ "${have_diagon}" ] && options+=("Diagon Ascii Diagrams Man Page")
     [ "${have_gdu}" ] && options+=("Gdu Disk Usage Man Page")
     [ "${have_jrnl}" ] && options+=("Journal Command Help")
     [ "${have_lynx}" ] && options+=("Lynx Web Browser Man Page")
@@ -569,6 +570,10 @@ show_help_menu() {
           ;;
         "Ddgr"*,*|*,"Ddgr"*)
           man ddgr
+          break
+          ;;
+        "Diagon"*,*|*,"Diagon"*)
+          man diagon
           break
           ;;
         "Gdu"*,*|*,"Gdu"*)
@@ -2566,6 +2571,7 @@ have_bb=`type -p bb-tmux`
 have_cmatrix=`type -p cmatrix`
 have_curl=`type -p curl`
 have_ddgr=`type -p ddgr`
+have_diagon=`type -p diagon`
 have_figlet=`type -p figlet`
 have_gdu=`type -p gdu`
 have_ncdu=`type -p ncdu`
