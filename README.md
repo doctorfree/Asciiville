@@ -3,7 +3,8 @@
 Asciiville is where you go for ASCII Art, animations, and utilities.
 The Asciiville project provides integration and extension of several
 packages as well as providing convenience commands to invoke a variety
-of components used to display ASCII Art, animations, and utilities.
+of components used to display ASCII Art, animations, and text based
+utilities to perform common operations in a text-only environment.
 
 ## Table of contents
 
@@ -62,6 +63,7 @@ The `asciiville` command can be used to invoke:
 * A command line web search
 * A zoomable map of the world
 * Command line character based Twitter client
+* Translate words and phrases from and to a wide variety of languages
 * A network download/upload speed test
 * The AAlib BB demo running in a tmux session (Debian based systems only)
 * The ASCII text-based dungeon game `nethack` with Extended ASCII glyphs
@@ -87,6 +89,7 @@ Integration is provided for:
 * [neomutt](http://neomutt.org/), character based email client
 * [ranger](https://ranger.github.io/), character based file manager
 * [gdu](https://github.com/dundee/gdu#readme), character based disk usage analyzer
+* [got](https://github.com/fedeztk/got), text based translation tool
 * [mpcplus](https://github.com/doctorfree/MusicPlayerPlus/blob/master/mpcplus/README.md), featureful ncurses based Music Player client
 * [mplayer](http://mplayerhq.hu/design7/info.html), a media player
 * [asciimatics](https://github.com/peterbrittain/asciimatics) - automatically display a variety of character based animation effects
@@ -125,6 +128,7 @@ Asciiville adds the following commands to your system:
 * **chktermcolor** : checks if a terminal has 24-bit true color support
 * **cmatrix** : display that screen from "The Matrix"
 * **ddgr** : command line web search
+* **got** : text based translation tool (only added if `go` is installed)
 * **jp2a** : image to ascii conversion utility
 * **mapscii** : character based zoomable map of the world
 * **nethack** : character based dungeon game
@@ -133,6 +137,7 @@ Asciiville adds the following commands to your system:
 * **show_ascii_art** : display ascii art, convert images to ascii art
 * **show_moon** : display the phase of the Moon
 * **show_weather** : display a weather report
+* **tdraw** : ASCII drawing tool (only added if `go` is installed)
 
 Additional detail and info can be found in the
 [Asciiville Wiki](https://github.com/doctorfree/Asciiville/wiki).
@@ -140,7 +145,9 @@ Additional detail and info can be found in the
 ## Quickstart
 
 * Install the latest Debian or RPM format installation package from the [Asciiville Releases](https://github.com/doctorfree/Asciiville/releases) page
-* Run the `ascinit` command (must be done as your normal user, no need for `sudo`)
+* Run the `ascinit` command
+    * Must be done as a normal user with `sudo` privilege
+	* Run `ascinit -c` to perform a console initialization (no graphical utilities)
 * Initialize the command line Twitter client by invoking the `rainbowstream` command and authorizing the app to access your Twitter account
 * Execute the `asciiville` command in interactive menu mode by running `asciiville -i`
 * See the [online asciiville man page](https://github.com/doctorfree/Asciiville/wiki/asciiville.1) or `man asciiville` for different ways to invoke the `asciiville` command
@@ -151,18 +158,52 @@ Asciiville can be installed on Debian or RPM based Linux systems.
 All of the following dependencies/requirements are automatically
 installed if needed when using the Debian or RPM format package install.
 
-* tilix (>= 1.9.1)
-* xfce4-terminal (>= 0.8.9.1)
-* cool-retro-term (>= 1.1.1)
-* tmux
-* asciimatics
 * asciinema
-* w3m
-* neomutt
-* pandoc
-* ranger
+* cmatrix
+* figlet
 * gdu
+* gnupg
+* imagemagick
+* jq
 * mplayer
+* neofetch
+* pandoc
+* python3
+* ranger
+* speedtest-cli
+* tmux
+* w3m
+
+After installing Asciiville the `ascinit` command performs a one-time
+initialization in which several additional packages are optionally installed.
+This post-installation configuration can install any or all of several
+terminal emulators along with character based tools. Terminal emulators
+supported by Asciiville available during post-install configuration are:
+
+* cool-retro-term
+* gnome-terminal
+* tilix
+* xfce4-terminal
+
+Tools installed during post-installation configuration include:
+
+* asciimatics
+* got (if the `go` command is installed)
+* jrnl
+* mutt
+* neomutt
+* pipx
+* rainbowstream
+* tdraw (if the `go` command is installed)
+
+Asciiville does not install the `go` command. In order for the `got` and
+`tdraw` commands to be installed during post-installation configuration,
+the `go` command needs to be previously installed. On most Debian based
+systems `go` can be installed with the command `sudo apt install golang-go`.
+On RPM based systems `go` can be installed with a command like
+`sudo dnf install golang`. See
+[https://go.dev/doc/install](https://go.dev/doc/install)
+for a guide on installing `go` on your system.
 
 ## Installation
 
@@ -250,6 +291,21 @@ The BB AAlib Demo is not required. It's just a fun demo.
 
 ## Configuration
 
+After installing Asciiville, initialize Asciiville configurations and
+install additional features by executing the `ascinit` command as a normal
+user with `sudo` privilege. The `ascinit` command will customize the
+configuration of several Asciiville packages and install additional
+packages. If you wish to perform a "console" initialization on a headless
+system or a system on which there is no available X Server, then execute
+the command `ascinit -c` rather than `ascinit`.
+
+```console
+# Execute the ascinit command:
+ascinit
+# Or, on a console system without the X11 windowing system:
+ascinit -c
+```
+
 Asciiville creates several default configuration files for utilities
 included in the distribution. Examine these files to further customize
 each program. The default configuration generated when running the
@@ -258,6 +314,7 @@ each program. The default configuration generated when running the
 Generated configuration files include:
 
 * `$HOME/.config/btop/btop.conf` : Btop++ system monitor
+* `$HOME/.config/got/config.yml` : Got text translation tool
 * `$HOME/.mutt/muttrc` : Mutt email client
 * `$HOME/.config/neomutt/` : NeoMutt email client startup files
 * `$HOME/.config/neofetch/config.conf` : NeoFetch system info script
@@ -472,6 +529,7 @@ Terminal/Command options:
 		If 'command' is keyword 'moon' then display the phase of the Moon
 		If 'command' is keyword 'search' then a web search is performed
 		If 'command' is keyword 'speed' then a speed test is performed
+		If 'command' is keyword 'translate' then the translation tool is run
 		If 'command' is keyword 'twitter' then a Twitter client is run
 		If 'command' is keyword 'weather' then display a weather report
 		Otherwise, 'command' will be executed in a terminal window

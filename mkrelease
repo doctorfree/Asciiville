@@ -38,10 +38,7 @@ done
 shift $(( OPTIND - 1 ))
 
 [ "$CLEAN" ] && ./clean
-[ "$PACKAGE" ] && {
-    ./mkdeb
-    ./mkdeb console
-}
+[ "$PACKAGE" ] && ./mkdeb
 
 ANNO="Asciiville Version ${VERSION} Release ${RELEASE}"
 gittag v${VERSION}r${RELEASE} ${ANNO}

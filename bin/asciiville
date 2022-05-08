@@ -62,6 +62,7 @@ usage() {
   printf "\n\t\tIf 'command' is keyword 'moon' then display the phase of the Moon"
   printf "\n\t\tIf 'command' is keyword 'search' then a web search is performed"
   printf "\n\t\tIf 'command' is keyword 'speed' then a speed test is performed"
+  printf "\n\t\tIf 'command' is keyword 'translate' then the translation tool is run"
   printf "\n\t\tIf 'command' is keyword 'twitter' then a Twitter client is run"
   printf "\n\t\tIf 'command' is keyword 'weather' then display a weather report"
   printf "\n\t\tOtherwise, 'command' will be executed in a terminal window"
@@ -1978,8 +1979,8 @@ show_main_menu() {
     options+=("Default Web Browser        [${default_browser}]")
     options+=("Use Audio                  [${audiostat}]")
     options+=("Generate ASCII Art")
-    [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
     [ "${have_neo}" ] && options+=("Show System Info")
+    [ "${have_got}" ] && options+=("Text Translation Tool")
     [ "${have_jrnl}" ] && options+=("Journal Menu")
     [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
     [ "${have_roon}" ] && options+=("RoonCommandLine Menu")
@@ -2207,49 +2208,55 @@ show_main_menu() {
               break 2
               ;;
           "Generate"*,*|*,"Generate"*)
+              image_dir=
               select_input_dir
-              select_output_dir
-              echo "Selected image input directory = ${image_dir}"
-              echo "Selected ascii art output directory = ${ascii_dir}"
-              while true
-              do
-                read -p "Generate ASCII Art with these selections? (y/n) " answer
-                case ${answer} in
-                  [Yy]* )
-                    show_ascii_art -I "${image_dir}" -O "${ascii_dir}"
-                    while true
-                    do
-                      read -p "View slideshow of generated ascii art? (y/n) " viewslides
-                      case ${viewslides} in
-                        [Yy]* )
-                          showname=`basename "${ascii_dir}"`
-                          showdir=`dirname "${ascii_dir}"`
-                          play_slide_show "${showname}" "${showdir}"
-                          break
-                          ;;
-                        [Nn]* )
-                          printf "\nSkipping ascii art slideshow.\n"
-                          break
-                          ;;
-                        * ) echo "Please answer 'y' to view slideshow, or 'n' to skip."
-                          ;;
-                      esac
-                    done
-                    break
-                    ;;
-                  [Nn]* )
-                    printf "\nSkipping ascii art generation.\n"
-                    break
-                    ;;
-                  * ) echo "Please answer 'y' to select directory, or 'n' to skip."
-                    ;;
-                esac
-              done
+              [ "${image_dir}" ] && {
+                ascii_dir=
+                select_output_dir
+                [ "${ascii_dir}" ] && {
+                  echo "Selected image input directory = ${image_dir}"
+                  echo "Selected ascii art output directory = ${ascii_dir}"
+                  while true
+                  do
+                    read -p "Generate ASCII Art with these selections? (y/n) " answer
+                    case ${answer} in
+                      [Yy]* )
+                        show_ascii_art -I "${image_dir}" -O "${ascii_dir}"
+                        while true
+                        do
+                          read -p "View slideshow of generated ascii art? (y/n) " viewslides
+                          case ${viewslides} in
+                            [Yy]* )
+                              showname=`basename "${ascii_dir}"`
+                              showdir=`dirname "${ascii_dir}"`
+                              play_slide_show "${showname}" "${showdir}"
+                              break
+                              ;;
+                            [Nn]* )
+                              printf "\nSkipping ascii art slideshow.\n"
+                              break
+                              ;;
+                            * ) echo "Please answer 'y' to view slideshow, or 'n' to skip."
+                              ;;
+                          esac
+                        done
+                        break
+                        ;;
+                      [Nn]* )
+                        printf "\nSkipping ascii art generation.\n"
+                        break
+                        ;;
+                      * ) echo "Please answer 'y' to select directory, or 'n' to skip."
+                        ;;
+                    esac
+                  done
+                }
+              }
               skip_it_so=1
               break
               ;;
-          "Select Song"*,*|*,"Select Song"*)
-              select_song
+          "Text"*,*|*,"Text"*)
+              got
               skip_it_so=1
               break
               ;;
@@ -2535,23 +2542,23 @@ have_tilix=`type -p tilix`
   echo ""
   while true
   do
-    read -p "Initialize Asciiville now (y/n/i) " answer
+    read -p "Initialize Asciiville (with terminal emulators) now [y/n/i] " answer
     case ${answer} in
       [Ii]* )
+        printf "\nIgnoring initialization.\n"
+        printf "\nInitialize Asciiville by executing the command 'ascinit'\n"
+        read -p "Press Enter to continue" contans
         touch ${HOME}/.asciiville_init
         break
         ;;
       [Yy]* )
-        if [ "${have_gnome}" ] || [ "${have_tilix}" ]
-        then
-          ascinit -a -q
-        else
-          ascinit -a -c -q
-        fi
+        ascinit -a -q
         break
         ;;
       [Nn]* )
         printf "\nSkipping initialization.\n"
+        printf "\nInitialize Asciiville by executing the command 'ascinit'\n"
+        read -p "Press Enter to continue" contans
         break
         ;;
       * ) echo "Please answer 'y' to initialize, 'n' to skip, or 'i' to ignore."
@@ -2582,6 +2589,7 @@ have_ddgr=`type -p ddgr`
 have_diagon=`type -p diagon`
 have_figlet=`type -p figlet`
 have_gdu=`type -p gdu`
+have_got=`type -p got`
 have_ncdu=`type -p ncdu`
 have_mapscii=`type -p mapscii`
 have_mpcplus=`type -p mpcplus`
@@ -2700,6 +2708,10 @@ while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wWxXyYzZu" flag; do
           ;;
       speed|Speed)
           [ "${have_speed}" ] && speedtest-cli
+          break
+          ;;
+      translate|Translate)
+          [ "${have_got}" ] && got
           break
           ;;
       twitter|Twitter)

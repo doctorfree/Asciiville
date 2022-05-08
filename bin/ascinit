@@ -2,8 +2,12 @@
 #
 # ascinit - initialize Asciiville configuration files
 #
-# Setup default tmux configuration for this user
-# Install required pip modules if not already installed
+# Terminal emulators optionally installed:
+#     gnome-terminal
+#     tilix
+#     xfce4-terminal
+#     cool-retro-term
+
 CONFDIR=/usr/share/asciiville
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
@@ -87,6 +91,10 @@ ask_install() {
 
 have_mutt=`type -p mutt`
 have_neomutt=`type -p neomutt`
+have_gnome=`type -p gnome-terminal`
+have_tilix=`type -p tilix`
+have_xfce4=`type -p xfce4-terminal`
+have_retro=`type -p cool-retro-term`
 have_apt=`type -p apt`
 have_dnf=`type -p dnf`
 
@@ -137,13 +145,13 @@ while getopts "acdmMnNqtu" flag; do
         then
           use_mutt=1
         else
-          ask_install -m Mutt mutt
+          ask_install -M Mutt mutt
         fi
         if [ "${have_neomutt}" ]
         then
           use_neomutt=1
         else
-          ask_install -n NeoMutt neomutt
+          ask_install -M NeoMutt neomutt
         fi
         ;;
     N)
@@ -428,6 +436,10 @@ create_new_profile() {
 }
 
 [ "${console}" ] || {
+  [ "${have_gnome}" ] || inst_pkg gnome-terminal
+  [ "${have_tilix}" ] || inst_pkg tilix
+  [ "${have_xfce4}" ] || inst_pkg xfce4-terminal
+  [ "${have_retro}" ] || inst_pkg cool-retro-term
   # If no gnome-terminal Asciiville profile exists, create one
   declare -a profiles
   profile_name="Asciiville"
@@ -495,8 +507,29 @@ create_new_profile() {
 
 have_go=`type -p go`
 [ "${have_go}" ] && {
-  go install github.com/fedeztk/got/cmd/got@latest
-  go get -u github.com/aca/tdraw
+  printf "\nInstalling 'got' translator. Please wait ..."
+  go install github.com/fedeztk/got/cmd/got@latest > /dev/null 2>&1
+  printf " done\n"
+  # Setup default got configuration for this user unless one exists
+  [ -f ${CONFDIR}/got/config.yml ] && {
+    [ -f ${HOME}/.config/got/config.yml ] || {
+      [ -d ${HOME}/.config ] || mkdir -p ${HOME}/.config
+      [ -d ${HOME}/.config/got ] || mkdir -p ${HOME}/.config/got
+      cp ${CONFDIR}/got/config.yml ${HOME}/.config/got/config.yml
+      [ "${LANG}" ] && {
+        lang=`echo ${LANG} | awk -F '.' '{print $1}' | awk -F '_' '{print $1}'`
+        [ "${lang}" == "en" ] || {
+          cat ${HOME}/.config/got/config.yml | sed -e "s/source: en/source: ${lang}/" -e "s/target: es/target: en/" > /tmp/gotconf$$
+          cp /tmp/gotconf$$ ${HOME}/.config/got/config.yml
+          rm -f /tmp/gotconf$$
+        }
+      }
+    }
+  }
+
+  printf "\nInstalling 'tdraw' ascii art draw program. Please wait ..."
+  go install github.com/aca/tdraw@latest > /dev/null 2>&1
+  printf " done\n"
 }
 
 touch ${HOME}/.asciiville_init

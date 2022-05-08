@@ -17,13 +17,9 @@ GCI=
   GCI=1
 }
 
-CONSOLE=
-[ "$1" == "console" ] && CONSOLE=1
-
 . "${SRC}/${SRC_NAME}/VERSION"
 PKG_VER=${VERSION}
 PKG_REL=${RELEASE}
-[ "${CONSOLE}" ] && PKG_REL="${PKG_REL}c"
 
 umask 0022
 
@@ -196,6 +192,7 @@ ${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/Guidebook
 cd ..
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
+${SUDO} cp -a conf/got ${OUT_DIR}/${DESTDIR}/share/${PKG}/got
 ${SUDO} cp -a conf/jrnl ${OUT_DIR}/${DESTDIR}/share/${PKG}/jrnl
 ${SUDO} cp -a conf/mutt ${OUT_DIR}/${DESTDIR}/share/${PKG}/mutt
 ${SUDO} cp -a conf/mutt_multiple ${OUT_DIR}/${DESTDIR}/share/${PKG}/mutt_multiple
@@ -291,24 +288,13 @@ have_rpm=`type -p rpmbuild`
   fi
 }
 
-if [ "${CONSOLE}" ]
-then
-  rpmbuild -ba --build-in-place \
-    --define "_topdir ${OUT_DIR}" \
-    --define "_sourcedir ${OUT_DIR}" \
-    --define "_version ${PKG_VER}" \
-    --define "_release ${PKG_REL}" \
-    --buildroot ${SRC}/${SRC_NAME}/${OUT_DIR}/BUILDROOT \
-    ${OUT_DIR}/rpm/${PKG_NAME}.spec
-else
-  rpmbuild -ba --build-in-place \
-    --define "_topdir ${OUT_DIR}" \
-    --define "_sourcedir ${OUT_DIR}" \
-    --define "_version ${PKG_VER}" \
-    --define "_release ${PKG_REL}" \
-    --buildroot ${SRC}/${SRC_NAME}/${OUT_DIR}/BUILDROOT \
-    ${OUT_DIR}/rpm/${PKG_NAME}-console.spec
-fi
+rpmbuild -ba --build-in-place \
+         --define "_topdir ${OUT_DIR}" \
+         --define "_sourcedir ${OUT_DIR}" \
+         --define "_version ${PKG_VER}" \
+         --define "_release ${PKG_REL}" \
+         --buildroot ${SRC}/${SRC_NAME}/${OUT_DIR}/BUILDROOT \
+         ${OUT_DIR}/rpm/${PKG_NAME}.spec
 
 # Rename RPMs if necessary
 for rpmfile in ${OUT_DIR}/RPMS/*/*.rpm
@@ -323,25 +309,21 @@ done
 
 ${SUDO} cp ${OUT_DIR}/RPMS/*/*.rpm dist
 
-[ "${CONSOLE}" ] || {
-  cd ${OUT_DIR}
-  echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
-  ${SUDO} tar cf - usr | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.tgz
+cd ${OUT_DIR}
+echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
+${SUDO} tar cf - usr | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.tgz
 
-  have_zip=`type -p zip`
-  [ "${have_zip}" ] || {
-    ${SUDO} yum install zip -y
-  }
-  echo "Creating zip archive of ${PKG_NAME} ${PKG_VER} distribution"
-  ${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.zip usr
-  cd ../..
+have_zip=`type -p zip`
+[ "${have_zip}" ] || {
+  ${SUDO} yum install zip -y
 }
+echo "Creating zip archive of ${PKG_NAME} ${PKG_VER} distribution"
+${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.zip usr
+cd ../..
 
 [ "${GCI}" ] || {
   [ -d releases ] || mkdir releases
   [ -d releases/${PKG_VER} ] || mkdir releases/${PKG_VER}
   ${SUDO} cp ${OUT_DIR}/RPMS/*/*.rpm releases/${PKG_VER}
-  [ "${CONSOLE}" ] || {
-    ${SUDO} cp dist/*.tgz dist/*.zip releases/${PKG_VER}
-  }
+  ${SUDO} cp dist/*.tgz dist/*.zip releases/${PKG_VER}
 }
