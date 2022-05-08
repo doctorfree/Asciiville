@@ -163,6 +163,53 @@ not_in_path() {
   printf "\n\tsudo dnf install $1\n\n"
 }
 
+generate_art() {
+  image_dir=
+  select_input_dir
+  [ "${image_dir}" ] && {
+    ascii_dir=
+    select_output_dir
+    [ "${ascii_dir}" ] && {
+      echo "Selected image input directory = ${image_dir}"
+      echo "Selected ascii art output directory = ${ascii_dir}"
+      while true
+      do
+        read -p "Generate ASCII Art with these selections? (y/n) " answer
+        case ${answer} in
+          [Yy]* )
+            show_ascii_art -I "${image_dir}" -O "${ascii_dir}"
+            while true
+            do
+              read -p "View slideshow of generated ascii art? (y/n) " viewslides
+              case ${viewslides} in
+                [Yy]* )
+                  showname=`basename "${ascii_dir}"`
+                  showdir=`dirname "${ascii_dir}"`
+                  play_slide_show "${showname}" "${showdir}"
+                  break
+                  ;;
+                [Nn]* )
+                  printf "\nSkipping ascii art slideshow.\n"
+                  break
+                  ;;
+                * ) echo "Please answer 'y' to view slideshow, or 'n' to skip."
+                  ;;
+              esac
+            done
+            break
+            ;;
+          [Nn]* )
+            printf "\nSkipping ascii art generation.\n"
+            break
+            ;;
+          * ) echo "Please answer 'y' to select directory, or 'n' to skip."
+            ;;
+        esac
+      done
+    }
+  }
+}
+
 select_alt_term() {
   if [ "${have_gnome}" ]
   then
@@ -1077,6 +1124,7 @@ show_art_menu() {
     options+=("Current Terminal      [${use_current}]")
     options+=("Use Tmux              [${usetmux}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session   [${recordstat}]")
+    options+=("Generate ASCII Art")
     [ "${have_jrnl}" ] && options+=("Journal Menu")
     [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
     [ "${have_roon}" ] && options+=("RoonCommandLine Menu")
@@ -1282,6 +1330,10 @@ show_art_menu() {
               else
                 TMUX=1
               fi
+              break
+              ;;
+          "Generate"*,*|*,"Generate"*)
+              generate_art
               break
               ;;
           "Select"*,*|*,"Select"*)
@@ -2208,50 +2260,7 @@ show_main_menu() {
               break 2
               ;;
           "Generate"*,*|*,"Generate"*)
-              image_dir=
-              select_input_dir
-              [ "${image_dir}" ] && {
-                ascii_dir=
-                select_output_dir
-                [ "${ascii_dir}" ] && {
-                  echo "Selected image input directory = ${image_dir}"
-                  echo "Selected ascii art output directory = ${ascii_dir}"
-                  while true
-                  do
-                    read -p "Generate ASCII Art with these selections? (y/n) " answer
-                    case ${answer} in
-                      [Yy]* )
-                        show_ascii_art -I "${image_dir}" -O "${ascii_dir}"
-                        while true
-                        do
-                          read -p "View slideshow of generated ascii art? (y/n) " viewslides
-                          case ${viewslides} in
-                            [Yy]* )
-                              showname=`basename "${ascii_dir}"`
-                              showdir=`dirname "${ascii_dir}"`
-                              play_slide_show "${showname}" "${showdir}"
-                              break
-                              ;;
-                            [Nn]* )
-                              printf "\nSkipping ascii art slideshow.\n"
-                              break
-                              ;;
-                            * ) echo "Please answer 'y' to view slideshow, or 'n' to skip."
-                              ;;
-                          esac
-                        done
-                        break
-                        ;;
-                      [Nn]* )
-                        printf "\nSkipping ascii art generation.\n"
-                        break
-                        ;;
-                      * ) echo "Please answer 'y' to select directory, or 'n' to skip."
-                        ;;
-                    esac
-                  done
-                }
-              }
+              generate_art
               skip_it_so=1
               break
               ;;
