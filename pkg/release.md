@@ -1,4 +1,19 @@
-This release adds support for:
+Version 1.4.0 adds support for:
+
+* Beginning with version 1.4.0 a console-only setup is supported
+    * No graphical utilities are installed if `ascinit -c` used
+    * Console screen used exclusively for display
+* Move installation of terminal emulators to `ascinit`
+* Add `got` translation tool
+* Add `tdraw` ascii drawing tool
+* Dynamically generate Art folder menu entries
+* User generated ASCII Art galleries can be added to menu
+* Use architecture in distribution filenames
+* Add diagon tool for ascii diagram generation
+    * Don't include diagon in RPM builds, not ported yet
+* Add menu for generating and viewing ascii art
+
+Version 1.3.1 included:
 
 * W3M configuration with support for acting as a Markdown pager
 * Mailcap and MIME type enhancements for NeoMutt, Mutt, and W3M
@@ -49,32 +64,37 @@ Install the package on Debian based systems by executing the commands:
 
 ```bash
 sudo apt update -y
-sudo apt install ./Asciiville_1.3.1-2.amd64.deb
+sudo apt install ./Asciiville_1.4.0-1.amd64.deb
 ```
 
 or, on a Raspberry Pi:
 
 ```bash
 sudo apt update -y
-sudo apt install ./Asciiville_1.3.1-2.armhf.deb
+sudo apt install ./Asciiville_1.4.0-1.armhf.deb
 ```
 
 Install the package on RPM based systems by executing the command
 ```bash
 sudo dnf update -y
-sudo dnf localinstall ./Asciiville-1.3.1-2.x86_64.rpm
+sudo dnf localinstall ./Asciiville-1.4.0-1.x86_64.rpm
 ```
 
 ## Configuration
 
-* REQUIRED: execute the `ascinit` command to initialize *mutt/neomutt*, *tmux*, *ranger*, and *rainbowstream*
+* REQUIRED: execute the `ascinit` command to initialize *mutt/neomutt*, *tmux*, *ranger*, *rainbowstream*, and install terminal emulators
+    * Execute `ascinit -c` rather than `ascinit` if no terminal emulators or graphical utilities are desired
 * OPTIONAL: authorize the command line Twitter client by executing `rainbowstream`
 
 See the [Asciiville README](https://github.com/doctorfree/Asciiville#readme) for additional configuration info.
 
 ## Usage
 
-Execute `man asciiville` to view the *asciiville* manual page. Explore the features and capabilities of *asciiville* by running it in interactive menu mode with the command `asciiville -i`.
+Execute `man asciiville` to view the *asciiville* manual page. Explore the features and capabilities of *asciiville* by running it in interactive menu mode with the command:
+
+```console
+asciiville
+```
 
 Asciiville is a suite of character based utilities, art, and animation. As such, it is intended for use in a terminal window from the command line. To view some of the ASCII animation capabilities provided in Asciiville, try the ASCIImatics animations. For example:
 

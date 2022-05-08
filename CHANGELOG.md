@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+# Asciiville-1.4.0r1 (2022-05-09)
+
+* Beginning with version 1.4.0 a console-only setup is supported
+    * No graphical utilities are installed if `ascinit -c` used
+    * Console screen used exclusively for display
+* Move installation of terminal emulators to ascinit
+* Add `got` translation tool
+* Add `tdraw` ascii drawing tool
+* Dynamically generate Art folder menu entries
+* User generated ASCII Art galleries can be added to menu
+* Use architecture in distribution filenames
+* Add diagon tool for ascii diagram generation
+    * Don't include diagon in RPM builds, not ported yet
+* Add menu for generating and viewing ascii art
+
 # Asciiville-1.3.1r2 (2022-05-06)
 
 * W3M configuration with support for acting as a Markdown pager
@@ -77,6 +92,24 @@ Initial release with support for:
 * Any character based client the user wishes to run
 * One of several asciimatics animations optionally accompanied by audio
 
+Sun May 8 15:15:03 2022 -0700 8227a06 :
+   Move installation of terminal emulators to ascinit, add got translation tool to asciiville, add install of tdraw
+Sat May 7 17:56:08 2022 -0700 6c049d5 :
+   Dynamically generate Art folder menu entries so users can add their own ASCII Art galleries
+Sat May 7 14:33:52 2022 -0700 b0cad4f :
+   Don't include diagon in RPM builds, not ported yet
+Sat May 7 13:38:10 2022 -0700 7e66613 :
+   Use architecture in distribution filenames, add diagon man page
+Sat May 7 12:18:40 2022 -0700 0a55af3 :
+   Include console packages in release
+Sat May 7 11:58:59 2022 -0700 fae4671 :
+   Create console-only packages
+Sat May 7 10:43:40 2022 -0700 227aca5 :
+   Add diagon, make console-only packages, add generate ascii art to menus
+Fri May 6 15:20:08 2022 -0700 f7819bb :
+   Revised bug report template
+Fri May 6 12:07:37 2022 -0700 5ce1685 :
+   Update release notes and changelog
 Fri May 6 11:50:32 2022 -0700 0f0dda9 :
    Add note on using w3m as a markdown pager
 Fri May 6 11:39:26 2022 -0700 7bb680e :
