@@ -25,8 +25,8 @@ Email/FTP/File/Web clients, and character based utilities
 .PP
 \f[B]asciiville\f[R] [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]
 [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p]
-[-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-v] [-V show] [-w] [-x]
-[-X] [-y] [-z] [-Z] [-u]
+[-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-v] [-V show] [-w] [-W]
+[-x] [-X] [-y] [-Y] [-z] [-Z] [-u]
 .PP
 Invoked without any arguments or with the \f[V]-i\f[R] argument,
 \f[V]asciiville\f[R] displays an interactive dialog menu.
@@ -70,10 +70,11 @@ and easily terminated by executing the \f[V]asciiville -k\f[R] command.
 \f[B]-c \[aq]command\[aq]\f[R]
 Indicates run \[aq]command\[aq] in selected terminal window.
 If \f[I]command\f[R] is one of the special keywords (\f[I]maps\f[R],
-\f[I]moon\f[R], \f[I]search\f[R], \f[I]speed\f[R], \f[I]twitter\f[R],
-\f[I]weather\f[R]) then display a map, the phase of the Moon, perform a
-web search, perform a speed test, run the command line twitter client,
-or display a weather report.
+\f[I]moon\f[R], \f[I]search\f[R], \f[I]speed\f[R], \f[I]translate\f[R],
+\f[I]twitter\f[R], \f[I]weather\f[R]) then display a map, the phase of
+the Moon, perform a web search, perform a speed test, run the
+\f[V]got\f[R] text based translation tool, run the command line twitter
+client, or display a weather report.
 .TP
 \f[B]-d\f[R]
 Indicates use disk usage analyzer as command
@@ -214,6 +215,10 @@ Displays the Phase of the Moon using \f[V]wttr.in\f[R]
 .TP
 \f[B]asciiville -c search\f[R]
 Launches the \f[V]ddgr\f[R] command line web search in the current
+terminal window
+.TP
+\f[B]asciiville -c translate\f[R]
+Launches the \f[V]got\f[R] command line translation tool in the current
 terminal window
 .TP
 \f[B]asciiville -c twitter\f[R]

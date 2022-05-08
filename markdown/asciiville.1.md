@@ -10,7 +10,7 @@ asciiville - Launch a terminal emulator and specified character based command, a
 and character based utilities
 
 # SYNOPSIS
-**asciiville** [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-v] [-V show] [-w] [-x] [-X] [-y] [-z] [-Z] [-u]
+**asciiville** [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]
 
 Invoked without any arguments or with the `-i` argument, `asciiville` displays an interactive dialog menu.
 
@@ -30,7 +30,7 @@ Previously started tmux sessions and asciimatics scripts can be quickly and easi
 *Terminal/Command options:*
 
 **-c 'command'**
-: Indicates run 'command' in selected terminal window. If *command* is one of the special keywords (*maps*, *moon*, *search*, *speed*, *twitter*, *weather*) then display a map, the phase of the Moon, perform a web search, perform a speed test, run the command line twitter client, or display a weather report.
+: Indicates run 'command' in selected terminal window. If *command* is one of the special keywords (*maps*, *moon*, *search*, *speed*, *translate*, *twitter*, *weather*) then display a map, the phase of the Moon, perform a web search, perform a speed test, run the `got` text based translation tool, run the command line twitter client, or display a weather report.
 
 **-d**
 : Indicates use disk usage analyzer as command
@@ -164,6 +164,9 @@ Previously started tmux sessions and asciimatics scripts can be quickly and easi
 
 **asciiville -c search**
 : Launches the `ddgr` command line web search in the current terminal window
+
+**asciiville -c translate**
+: Launches the `got` command line translation tool in the current terminal window
 
 **asciiville -c twitter**
 : Launches the `rainbowstream` command line Twitter client in the current terminal window

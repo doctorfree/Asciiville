@@ -14,30 +14,32 @@
 . ftr VB CB
 . ftr VBI CBI
 .\}
-.TH "ASCINIT" "1" "May 04, 2022" "ascinit 1.0.0" "User Manual"
+.TH "ASCINIT" "1" "May 04, 2022" "ascinit 1.0.1" "User Manual"
 .hy
 .SH NAME
 .PP
 ascinit - Asciiville initialization script
 .SH SYNOPSIS
 .PP
-\f[B]ascinit\f[R] [-a] [-d] [-m] [-M] [-n] [-N] [-q] [-t] [-u]
+\f[B]ascinit\f[R] [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-t] [-u]
 .SH DESCRIPTION
 .PP
-The \f[I]ascinit\f[R] command should be run as a normal user (not the
-root user and not with \f[V]sudo\f[R]) after installing Asciiville.
+The \f[I]ascinit\f[R] command should be run as a normal user with
+\f[V]sudo\f[R] privilege after installing Asciiville.
 It performs several configuration initializations for the user.
-These include setting up:
+These include:
 .IP \[bu] 2
-Asciiville profiles in Gnome and Tilix terminals
+Installing terminal emulators if no \f[V]-c\f[R] option is provided
 .IP \[bu] 2
-Mutt and/or NeoMutt startup files
+Asciiville profiles in Gnome and Tilix terminals are created
 .IP \[bu] 2
-Tmux configuration
+Mutt and/or NeoMutt startup files are customized
 .IP \[bu] 2
-default Ranger and Rifle configuration files
+Tmux configuration is created
 .IP \[bu] 2
-Asciimatics and Rainbowstream installation
+default Ranger and Rifle configuration files are created
+.IP \[bu] 2
+Asciimatics and Rainbowstream installation is performed
 .IP \[bu] 2
 Optionally authorizing the Rainbow Stream app with Twitter
 .PP
@@ -47,12 +49,22 @@ simply be \f[V]ascinit\f[R] with no options.
 This default invocation performs a NeoMutt configuration, does not
 configure Mutt, configures Tmux and Ranger and Rifle, installs
 Asciimatics and Rainbowstream if not already installed, does not
-authorize Rainbow Stream with Twitter, and creates an Asciiville profile
-in the terminals.
+authorize Rainbow Stream with Twitter, installs the terminal emulators,
+and creates an Asciiville profile in the terminals.
+.PP
+If initialization is being performed on a headless system or a system
+without graphical capabilities then execute the command
+\f[V]ascinit -c\f[R] rather than \f[V]ascinit\f[R].
+When invoked with the \f[V]-c\f[R] option the \f[V]ascinit\f[R] command
+will not install the terminal emulators or create the terminal profiles.
 .SH COMMAND LINE OPTIONS
 .TP
 \f[B]-a\f[R]
 indicates do not ask to play an animation when done
+.TP
+\f[B]-c\f[R]
+indicates console-only mode, no terminal emulators are installed or
+configured
 .TP
 \f[B]-d\f[R]
 indicates debug mode
