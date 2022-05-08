@@ -37,6 +37,7 @@ LOLCAT_NORM="lolcat"
 LOLCAT_ANIM="lolcat --animate --speed=60.0"
 LOLCAT="${LOLCAT_ANIM}"
 MTITLE="Asciiville"
+ARTDIR=/usr/share/asciiville/art
 MUSEDIR=/usr/share/asciiville/music
 SONG="${MUSEDIR}/Chronos.mp3"
 ALTSONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
@@ -1053,15 +1054,17 @@ show_art_menu() {
     }
     PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORMAL}"
     options=()
-    options+=("Doctorwhen Art Slideshow")
-    options+=("Dragonfly Art Slideshow")
-    options+=("Fine Art Slideshow")
-    options+=("Fractal Art Slideshow")
-    options+=("Lyapunov Art Slideshow")
+    for ascii_art_dir in ${ARTDIR}/*
+    do
+      [ "${ascii_art_dir}" == "${ARTDIR}/*" ] && continue
+      [ -d "${ascii_art_dir}" ] || continue
+      [ "${ascii_art_dir}" == "${ARTDIR}/pics" ] && continue
+      ascii_dir_name=`basename "${ascii_art_dir}"`
+      [ "${ascii_dir_name}" == "Art" ] && ascii_dir_name="Fine"
+      [ "${ascii_dir_name}" == "Dragonflies" ] && ascii_dir_name="Dragonfly"
+      options+=("${ascii_dir_name} Art Slideshow")
+    done
     options+=("Mixed Art Slideshow")
-    options+=("Owls Art Slideshow")
-    options+=("Space Art Slideshow")
-    options+=("Waterfalls Art Slideshow")
     options+=("Cycle Slideshow       [${cyclestat}]")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring   [${use_lol}]")
     options+=("Use Audio             [${audiostat}]")
@@ -1151,6 +1154,11 @@ show_art_menu() {
               ;;
           "Waterfalls"*,*|*,"Waterfalls"*)
               play_slide_show Waterfalls
+              break
+              ;;
+          *"Art Slideshow",*|*,*"Art Slideshow")
+              gallery_name=`echo ${opt} | sed -e "s/ Art Slideshow//"`
+              play_slide_show "${gallery_name}"
               break
               ;;
           "XFCE4"*,*|*,"XFCE4"*)
@@ -1948,7 +1956,7 @@ show_main_menu() {
     }
     PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORMAL}"
     options=()
-    [ "${have_showascii}" ] && options+=("Ascii Art Slideshow")
+    [ "${have_showascii}" ] && options+=("Ascii Art Slideshows")
     [ "${have_splash}" ] && options+=("ASCIImatics Animations")
     options+=("Run ${show_comm} in ${show_term}")
     options+=("Select App and Terminal")

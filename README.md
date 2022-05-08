@@ -27,6 +27,7 @@ of components used to display ASCII Art, animations, and utilities.
     1. [Man Pages](#man-pages)
     1. [Usage](#usage)
     1. [Example invocations](#example-invocations)
+1. [Adding an ASCII Art Gallery](#adding-an-ascii-art-gallery)
 1. [Figlet fonts](#figlet-fonts)
 1. [Build](#build)
 1. [Removal](#removal)
@@ -665,6 +666,83 @@ Creates an asciinema recording of `btop` system monitor in a tmux session:
 Run `asciisplash` displaying the Julia Set asciimatics animation with audio:
 
 `asciiville -S -j -a`
+
+## Adding an ASCII Art Gallery
+
+Asciiville includes several ASCII Art galleries produced by the renowned
+Ascii Artist, Doctorwhen. These galleries can be viewed by opening
+`asciiville` in interactive menu mode (execute `asciiville` with no
+arguments or the `-i` argument). From the main Asciiville menu select
+*Ascii Art Slideshows* then select an Ascii Art slideshow to view from
+the list of slideshows available in the Asciiville Art menu.
+
+Additional ASCII Art galleries can be added to the Asciiville Art menu
+by creating and populating a directory in `/usr/share/asciiville/art/`
+with ASCII Art files. The convention in Asciiville is for ASCII Art
+filenames to end with the suffix `.asc` so generate or locate ASCII Art
+files, make sure the filenames end in `.asc`, and copy them to a new
+folder in `/usr/share/asciiville/art/`. The new ASCII Art gallery will
+show up in the menu listing the available ASCII Art slideshows the next
+time you run `asciiville`.
+
+### Generating ASCII Art
+
+Asciiville provides utilities and convenience menus for generating ASCII
+Art from existing images. The pre-existing images can be in any image format.
+To generate ASCII Art from a folder of images either use the `show_ascii_art`
+command or the interactive menu interface in `asciiville`:
+
+#### Using `show_ascii_art` to generate ASCII Art
+
+The `show_ascii_art` command can be used to generate ASCII Art by supplying
+it with an input folder of existing images and a desired output folder to
+hold the generated ASCII Art files. To do so, invoke the command as follows:
+
+`show_ascii_art -I <input folder> -O <output folder>`
+
+For example, the command `show_ascii_art -I /u/pics/beach -O /u/pics/asciibeach`
+would convert all of the image files  in the `/u/pics/beach` folder into
+ASCII Art files and store them in the `/u/pics/asciibeach` folder.
+
+Note that the quality of generated ASCII Art is quite sensitive to the
+font in use. The best quality can be achieved with a fixed width font and
+small font size. You can think of the font as your paint brush and its size
+as the size of the brush. Higher resolution ASCII Art is achieved with a
+finer brush. The "palette" used to create ASCII Art is a string of characters.
+A default palette is defined in Asciiville but alternate palettes can be
+selected with command line switches.
+
+If one of the terminal emulators that Asciiville is familiar with is used,
+the font and font size are set for you in a terminal profile or by command
+line arguments. The terminal emulators that Asciiville has integrated into
+its generation and viewing facilities are *gnome-terminal*, *tilix*, and
+*xfce4-terminal*. The currnt terminal window or console screen can also be
+used but in that case the font and font size will be whatever is already set.
+
+If you use the current terminal window to generate/view ASCII Art then you
+may wish to set the font to a fixed width font and size 10 or 12. On the
+other hand, sometimes lower resolution ASCII Art is appealing. It's up to you.
+
+#### Using `asciiville` menus to generate ASCII Art
+
+When the `asciiville` command is invoked in interactive menu mode the main
+menu contains an entry *Generate ASCII Art*. Selecting this menu entry will
+prompt the user to select an image input directory. Answering 'y' to the
+input directory prompt executed the Ranger file manager in directory selection
+mode. Use the arrow keys to browse folders, press `Enter` to enter a directory,
+and create a new directory with `:mkdir <dirname>`. While in the directory you
+wish to select, quit Ranger with 'q' and that directory will be selected as
+the image input directory. Do the same to select an ascii output directory.
+
+After selecting an image input directory and ascii art output directory
+the user will then be prompted to confirm the directory selections and
+generate ASCII Art. Answering 'y' at this prompt will generate ASCII Art
+files for each of the images in the image input directory and store them
+in the ascii art output directory.
+
+After using either of these methods to generate ASCII Art, follow the guide
+above to add the newly generated ASCII Art folder to the Asciiville ASCII
+Art galleries.
 
 ## Figlet fonts
 

@@ -349,9 +349,37 @@ done
 [ "${make_inp}" ] || [ "${make_out}" ] && {
   [ "${make_inp}" ] || make_inp="."
   [ "${make_out}" ] || make_out="ascii"
-  echo "Invoking gnome-terminal to convert ${make_inp} to ${make_out}"
-  gnome-terminal --window --full-screen --profile=Asciiville \
-                 -- make_ascii_art -i "${make_inp}" -o "${make_out}" &
+  have_gnome=`type -p gnome-terminal`
+  have_tilix=`type -p tilix`
+  have_xfce4=`type -p xfce4-terminal`
+  if [ "${have_gnome}" ]
+  then
+    echo "Invoking gnome-terminal to convert ${make_inp} to ${make_out}"
+    gnome-terminal --window --full-screen --profile=Asciiville \
+                   -- make_ascii_art -i "${make_inp}" -o "${make_out}" &
+  else
+    if [ "${have_tilix}" ]
+    then
+      echo "Invoking Tilix to convert ${make_inp} to ${make_out}"
+      tilix --full-screen \
+            --profile=Asciiville \
+            --window-style=borderless \
+            --command="make_ascii_art -i "${make_inp}" -o "${make_out}" \
+              2> /dev/null &
+    else
+      if [ "${have_xfce4}" ]
+      then
+        xfce4-terminal \
+            --hide-menubar \
+            --hide-toolbar \
+            --hide-scrollbar \
+            --fullscreen \
+            --command="make_ascii_art -i "${make_inp}" -o "${make_out}" &
+      else
+        make_ascii_art -i "${make_inp}" -o "${make_out}" &
+      fi
+    fi
+  fi
   exit 0
 }
 
@@ -537,6 +565,10 @@ play_slide_show() {
       SLIDE_FONT="Varsity"
       ;;
   esac
+  [ -d "${SLIDE_DIR}" ] || {
+    echo "${SLIDE_DIR} does not exist or is not a directory. Exiting."
+    exit 1
+  }
 
   playing=
   [ "${audio}" ] && {
