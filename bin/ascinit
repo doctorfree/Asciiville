@@ -276,6 +276,7 @@ shift $(( OPTIND - 1 ))
   [ -d ${HOME}/.newsboat ] || {
     cp -a ${CONFDIR}/newsboat ${HOME}/.newsboat
     chmod 600 ${HOME}/.newsboat/urls
+    chmod 755 ${HOME}/.newsboat/bookmark.sh
   }
 }
 
@@ -515,9 +516,10 @@ create_new_profile() {
 
 have_go=`type -p go`
 [ "${have_go}" ] && {
-  printf "\nInstalling 'got' translator. Please wait ..."
-  go install github.com/fedeztk/got/cmd/got@latest > /dev/null 2>&1
-  printf " done\n"
+  have_got=`type -p got`
+  [ "${have_got}" ] || {
+    go install github.com/fedeztk/got/cmd/got@latest > /dev/null 2>&1
+  }
   # Setup default got configuration for this user unless one exists
   [ -f ${CONFDIR}/got/config.yml ] && {
     [ -f ${HOME}/.config/got/config.yml ] || {
@@ -534,10 +536,10 @@ have_go=`type -p go`
       }
     }
   }
-
-  printf "\nInstalling 'tdraw' ascii art draw program. Please wait ..."
-  go install github.com/aca/tdraw@latest > /dev/null 2>&1
-  printf " done\n"
+  have_tdraw=`type -p tdraw`
+  [ "${have_tdraw}" ] || {
+    go install github.com/aca/tdraw@latest > /dev/null 2>&1
+  }
 }
 
 CONF="${HOME}/.config/asciiville/init"

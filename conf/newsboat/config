@@ -629,12 +629,12 @@ goto-next-feed no
 #
 # include "~/.newsboat/colors"
 # include "~/.newsboat/colorschemes/commander
-# include "~/.newsboat/colorschemes/cyanism
+include "~/.newsboat/colorschemes/cyanism
 # include "~/.newsboat/colorschemes/greenscreen
 # include "~/.newsboat/colorschemes/inkpot
 # include "~/.newsboat/colorschemes/kinda-maia
 # include "~/.newsboat/colorschemes/light
-include "~/.newsboat/colorschemes/nord
+# include "~/.newsboat/colorschemes/nord
 # include "~/.newsboat/colorschemes/plain
 # include "~/.newsboat/colorschemes/psychedelic
 # include "~/.newsboat/colorschemes/schleichfahrt

@@ -12,8 +12,7 @@ fi
 url=$(echo "${url}" | perl -p -e 's/(\?|\&)?utm_[a-z]+=[^\&]+//g;' -e 's/(#|\&)?utm_[a-z]+=[^\&]+//g;')
 title="$2"
 description="$3"
-feed_title="$4"
 
-grep -q "${url}\t${title}\t${description}\t${feed_title}" ${BOOKMARKS} || {
-  echo -e "${url}\t${title}\t${description}\t${feed_title}" >> ${BOOKMARKS}
+grep -q "${url}\t${title}\t${description}" ${BOOKMARKS} || {
+  echo -e "${url}\t${title}\t${description}" >> ${BOOKMARKS}
 }
