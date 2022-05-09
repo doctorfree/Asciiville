@@ -791,7 +791,6 @@ show_select_menu() {
   while true
   do
     [ "${COMMAND}" ] || COMMAND=btop
-    show_comm=`echo ${COMMAND} | awk ' { print $1 } '`
     use_btop="NO"
     use_cmatrix="NO"
     use_ftp="NO"
@@ -868,6 +867,8 @@ show_select_menu() {
     else
       use_current="NO"
     fi
+    show_comm=`echo ${COMMAND} | awk ' { print $1 } '`
+    set_show_term
     [ "${use_figlet}" ] && {
       select_font AsciiAppTerm
       show_figlet
@@ -900,6 +901,7 @@ show_select_menu() {
     [ "${have_retro}" ] && options+=("Retro Terminal         [${use_retro}]")
     [ "${have_tilix}" ] && options+=("Tilix Terminal         [${use_tilix}]")
     options+=("Current Terminal       [${use_current}]")
+    options+=("Run ${show_comm} in ${show_term}")
     [ "${have_jrnl}" ] && options+=("Journal Menu")
     [ "${have_showascii}" ] && options+=("Slideshow Menu")
     [ "${have_splash}" ] && options+=("Animations Menu")
@@ -1034,6 +1036,10 @@ show_select_menu() {
               RETRO=
               GNOME=
               XFCE4=
+              break
+              ;;
+          "Run ${show_comm} in ${show_term}",*|*,"Run ${show_comm} in ${show_term}")
+              make_it_so
               break
               ;;
           "Quit",*|*,"Quit"|"quit",*|*,"quit")

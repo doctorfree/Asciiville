@@ -25,14 +25,14 @@ The interactive menu interface provides three types of menu options. Some menu s
 
 Previously started tmux sessions and asciimatics scripts can be quickly and easily terminated by executing the `asciiville -k` command.
 
-Asciiville preferences are maintained in `$HOME/.config/asciiville/init`.
+Asciiville preferences are maintained in `$HOME/.config/asciiville/init`. Preferences set in interactive menu mode are preserved over invocations of `asciiville`. For example, if a command and terminal were selected in interactive menu mode then those selections will automatically be applied the next time `asciiville` is run.
 
 # COMMAND LINE OPTIONS
 
 *Terminal/Command options:*
 
 **-c 'command'**
-: Indicates run 'command' in selected terminal window. If *command* is one of the special keywords (*maps*, *moon*, *search*, *speed*, *translate*, *twitter*, *weather*) then display a map, the phase of the Moon, perform a web search, perform a speed test, run the `got` text based translation tool, run the command line twitter client, or display a weather report.
+: Indicates run 'command' in selected terminal window. If *command* is one of the special keywords (*maps*, *moon*, *news*, *search*, *speed*, *translate*, *twitter*, *weather*) then display a map, the phase of the Moon, run the `newsboat` RSS feed reader, perform a web search, perform a speed test, run the `got` text based translation tool, run the command line twitter client, or display a weather report.
 
 **-d**
 : Indicates use disk usage analyzer as command
@@ -163,6 +163,9 @@ Asciiville preferences are maintained in `$HOME/.config/asciiville/init`.
 
 **asciiville -c moon**
 : Displays the Phase of the Moon using `wttr.in`
+
+**asciiville -c news**
+: Launches the `newsboat` text based RSS feed reader in the current terminal
 
 **asciiville -c search**
 : Launches the `ddgr` command line web search in the current terminal window

@@ -294,6 +294,10 @@ The BB AAlib Demo is not required. It's just a fun demo.
 ## Configuration
 
 Asciiville preferences are maintained in `$HOME/.config/asciiville/init`.
+Preferences set in interactive menu mode are preserved over invocations
+of `asciiville`. For example, if a command and terminal were selected
+in interactive menu mode then those selections will automatically be
+applied the next time `asciiville` is run.
 
 After installing Asciiville, initialize Asciiville configuration and
 install additional features by executing the `ascinit` command as a normal
