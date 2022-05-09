@@ -52,6 +52,7 @@ The `asciiville` command can be used to invoke:
 * The lightweight character based system monitor, `btop`
 * The lightweight character based web browser, `w3m`
 * The lightweight character based mail client, `neomutt`
+* The lightweight character based RSS feed reader, `newsboat`
 * The lightweight character based FTP client, `cbftp`
 * The lightweight character based music player, `mpcplus`
 * The lightweight character based file manager, `ranger`
@@ -87,6 +88,7 @@ Integration is provided for:
 * [lynx](https://lynx.invisible-island.net/), character based web browser
 * [mutt](http://www.mutt.org/), character based email client
 * [neomutt](http://neomutt.org/), character based email client
+* [newsboat](https://github.com/newsboat/newsboat), character based RSS feed reader
 * [ranger](https://ranger.github.io/), character based file manager
 * [gdu](https://github.com/dundee/gdu#readme), character based disk usage analyzer
 * [got](https://github.com/fedeztk/got), text based translation tool
@@ -317,12 +319,13 @@ Generated configuration files include:
 
 * `$HOME/.config/btop/btop.conf` : Btop++ system monitor
 * `$HOME/.config/got/config.yml` : Got text translation tool
-* `$HOME/.mutt/muttrc` : Mutt email client
 * `$HOME/.config/neomutt/` : NeoMutt email client startup files
 * `$HOME/.config/neofetch/config.conf` : NeoFetch system info script
 * `$HOME/.config/jrnl/` : Journal command `jrnl` configuration file
-* `$HOME/.rainbow_config.json` : Rainbowstream Twitter client
 * `$HOME/.config/ranger/rifle.conf` : Rifle, Ranger's file opener
+* `$HOME/.mutt/muttrc` : Mutt email client
+* `$HOME/.newsboat/` : Newsboat RSS feed reader configuration files
+* `$HOME/.rainbow_config.json` : Rainbowstream Twitter client
 * `$HOME/.tmux.conf` : Tmux terminal multiplexer
 * `$HOME/.w3m/` : W3M web browser custom configuration
     * W3M web browser configured to act as a Markdown pager
@@ -529,6 +532,7 @@ Terminal/Command options:
 	-c 'command' indicates use 'command'
 		If 'command' is keyword 'maps' then display a map using mapscii
 		If 'command' is keyword 'moon' then display the phase of the Moon
+		If 'command' is keyword 'news' then run `newsboat` RSS feed reader
 		If 'command' is keyword 'search' then a web search is performed
 		If 'command' is keyword 'speed' then a speed test is performed
 		If 'command' is keyword 'translate' then the translation tool is run

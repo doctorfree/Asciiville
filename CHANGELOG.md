@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 # Asciiville-1.4.0r1 (2022-05-09)
 
+* Add `newsboat` RSS Feed reader
 * Maintain Asciiville preferences in `$HOME/.config/asciiville/init`
 * Beginning with version 1.4.0 a console-only setup is supported
     * No graphical utilities are installed if `ascinit -c` used

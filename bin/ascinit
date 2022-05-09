@@ -271,6 +271,14 @@ shift $(( OPTIND - 1 ))
   }
 }
 
+# Setup default newsboat configuration for this user unless one exists
+[ -d ${CONFDIR}/newsboat ] && {
+  [ -d ${HOME}/.newsboat ] || {
+    cp -a ${CONFDIR}/newsboat ${HOME}/.newsboat
+    chmod 600 ${HOME}/.newsboat/urls
+  }
+}
+
 # Setup default rifle configuration for this user unless one exists
 [ -f ${CONFDIR}/rifle.conf ] && {
   [ -f ${HOME}/.config/ranger/rifle.conf ] || {

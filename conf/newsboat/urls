@@ -1,0 +1,25 @@
+# To add URLs that have restricted access via username/password,
+# simply provide the username/password in the following way:
+#
+# http://username:password@hostname.domain.tld/feed.rss
+#
+#------------------------
+#-------NEWSFEEDS--------
+#------------------------
+http://rss.cnn.com/rss/cnn_topstories.rss
+http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml
+#-------------------------
+#-------YOUTUBE-----------
+#-------------------------
+https://www.youtube.com/feeds/videos.xml?channel_id=UCXuqSBlHAE6Xw-yeJA0Tunw "~YOUTUBE: Linus Tech Tips"
+#-------------------------
+#-------REDDIT------------
+#-------------------------
+https://www.reddit.com/r/asciiart.rss "~REDDIT: r/asciiart"
+https://www.reddit.com/r/commandline.rss "~REDDIT: r/commandline"
+https://www.reddit.com/r/linux.rss "~REDDIT: r/linux"
+https://www.reddit.com/r/opensource.rss "~REDDIT: r/opensource"
+#-------------------------
+#-------GIT_REPOS---------
+#-------------------------
+https://github.com/doctorfree.atom "~GITHUB: Doctorfree"

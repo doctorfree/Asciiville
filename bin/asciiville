@@ -64,6 +64,7 @@ usage() {
   printf "\n\t-c 'command' indicates use 'command'"
   printf "\n\t\tIf 'command' is keyword 'maps' then display a map using mapscii"
   printf "\n\t\tIf 'command' is keyword 'moon' then display the phase of the Moon"
+  printf "\n\t\tIf 'command' is keyword 'news' then display RSS news feeds"
   printf "\n\t\tIf 'command' is keyword 'search' then a web search is performed"
   printf "\n\t\tIf 'command' is keyword 'speed' then a speed test is performed"
   printf "\n\t\tIf 'command' is keyword 'translate' then the translation tool is run"
@@ -584,6 +585,7 @@ show_help_menu() {
     [ "${have_neomutt}" ] && options+=("NeoMutt Full Manual")
     [ "${have_nethack}" ] && options+=("NetHack Game Man Page")
     [ "${have_nethack}" ] && options+=("NetHack Guide Book")
+    [ "${have_newsboat}" ] && options+=("Newsboat RSS Feed Man Page")
     [ "${have_ranger}" ] && options+=("Ranger File Manager Man Page")
     [ "${have_ranger}" ] && options+=("Rifle File Opener Man Page")
     options+=("Show ASCII Art Man Page")
@@ -711,6 +713,10 @@ show_help_menu() {
           less /usr/games/lib/nethackdir/Guidebook
           break
           ;;
+        "News"*,*|*,"News"*)
+          man newsboat
+          break
+          ;;
         "Ranger"*,*|*,"Ranger"*)
           man ranger
           break
@@ -794,6 +800,7 @@ show_select_menu() {
     use_mpp="NO"
     use_mutt="NO"
     use_nethack="NO"
+    use_newsboat="NO"
     use_ranger="NO"
     use_w3m="NO"
     case "${COMMAND}" in
@@ -820,6 +827,9 @@ show_select_menu() {
         ;;
       nethack)
         use_nethack="YES"
+        ;;
+      newsboat)
+        use_newsboat="YES"
         ;;
       ranger)
         use_ranger="YES"
@@ -883,6 +893,7 @@ show_select_menu() {
       [ "${have_mutt}" ] && options+=("Mutt Mail Client       [${use_mutt}]")
     fi
     [ "${have_nethack}" ] && options+=("NetHack Dungeon Game   [${use_nethack}]")
+    [ "${have_newsboat}" ] && options+=("Newsboat RSS Feeds     [${use_newsboat}]")
     [ "${have_ranger}" ] && options+=("Ranger File Manager    [${use_ranger}]")
     [ "${have_xfce4}" ] && options+=("XFCE4 Terminal         [${use_xfce4}]")
     [ "${have_gnome}" ] && options+=("Gnome Terminal         [${use_gnome}]")
@@ -973,6 +984,11 @@ show_select_menu() {
           "NetHack"*,*|*,"NetHack"*)
               COMMAND=nethack
               MTITLE="NetHack Dungeon Game"
+              break
+              ;;
+          "News"*,*|*,"News"*)
+              COMMAND=newsboat
+              MTITLE="Newsboat RSS Feeds"
               break
               ;;
           "Ranger"*,*|*,"Ranger"*)
@@ -2620,6 +2636,7 @@ have_btop=`type -p btop`
 have_mutt=`type -p mutt`
 have_neomutt=`type -p neomutt`
 have_nethack=`type -p nethack`
+have_newsboat=`type -p newsboat`
 have_ranger=`type -p ranger`
 have_retro=`type -p cool-retro-term`
 have_asciiart=`type -p asciiart`
@@ -2742,6 +2759,30 @@ while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wWxXyYzZu" flag; do
           [ "${have_curl}" ] && {
             curl wttr.in/Moon?AF 2> /dev/null
             read -p "Press Enter to continue" answer
+          }
+          break
+          ;;
+      news|News)
+          MTITLE="Asciiville News"
+          [ "${have_newsboat}" ] || {
+            not_in_path newsboat -c
+            if [ "${have_btop}" ]
+            then
+              echo "Continuing, using btop rather than ${COMMAND}."
+              COMMAND=btop
+              MTITLE="Btop++ System Monitor"
+            else
+              if [ "${have_lynx}" ]
+              then
+                echo "Continuing, using lynx rather than ${COMMAND}."
+                COMMAND="lynx ${WEB_HOME}"
+                MTITLE="Lynx Web Browser"
+              else
+                echo "Continuing, using asciiart rather than ${COMMAND}."
+                COMMAND=asciiart
+                MTITLE="Asciiville ASCIImatics"
+              fi
+            fi
           }
           break
           ;;
