@@ -20,6 +20,10 @@ https://www.reddit.com/r/commandline.rss "~REDDIT: r/commandline"
 https://www.reddit.com/r/linux.rss "~REDDIT: r/linux"
 https://www.reddit.com/r/opensource.rss "~REDDIT: r/opensource"
 #-------------------------
+#-------TWITTER---------
+#-------------------------
+https://nitter.net/search/rss?f=tweets&q=ronrecord "~TWITTER: ronrecord"
+#-------------------------
 #-------GIT_REPOS---------
 #-------------------------
 https://github.com/doctorfree.atom "~GITHUB: Doctorfree"
