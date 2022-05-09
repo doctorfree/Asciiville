@@ -217,24 +217,27 @@ generate_art() {
 set_user_conf() {
   exitcode=$?
   [ -f ${CONFIG} ] && {
-    echo "COMMAND=${COMMAND}" > ${CONFIG}
-    echo "MTITLE=\"${MTITLE}\"" >> ${CONFIG}
-    echo "ARTDIR=${ARTDIR}" >> ${CONFIG}
+    echo "ARTDIR=${ARTDIR}" > ${CONFIG}
     echo "MUSEDIR=${MUSEDIR}" >> ${CONFIG}
     echo "SONG=${SONG}" >> ${CONFIG}
     echo "ALTSONG=${ALTSONG}" >> ${CONFIG}
     echo "" >> ${CONFIG}
     echo "AUDIO=${AUDIO}" >> ${CONFIG}
+    echo "BROWSER=${BROWSER}" >> ${CONFIG}
+    echo "COMMAND=${COMMAND}" >> ${CONFIG}
     echo "FULLSCREEN=${FULLSCREEN}" >> ${CONFIG}
-    echo "XFCE4=${XFCE4}" >> ${CONFIG}
-    echo "TILIX=${TILIX}" >> ${CONFIG}
+    echo "LOLCAT=\"${LOLCAT}\"" >> ${CONFIG}
+    echo "MTITLE=\"${MTITLE}\"" >> ${CONFIG}
+    echo "CURRENT=${CURRENT}" >> ${CONFIG}
     echo "GNOME=${GNOME}" >> ${CONFIG}
     echo "RETRO=${RETRO}" >> ${CONFIG}
-    echo "CURRENT=${CURRENT}" >> ${CONFIG}
-    echo "LOLCAT=\"${LOLCAT}\"" >> ${CONFIG}
+    echo "TILIX=${TILIX}" >> ${CONFIG}
+    echo "XFCE4=${XFCE4}" >> ${CONFIG}
     echo "" >> ${CONFIG}
     echo "use_lolcat=${use_lolcat}" >> ${CONFIG}
     echo "use_lol=${use_lol}" >> ${CONFIG}
+    echo "journal=\"${journal}\"" >> ${CONFIG}
+    echo "style=\"${style}\"" >> ${CONFIG}
   }
   exit ${exitcode}
 }
@@ -1782,7 +1785,7 @@ show_journal_menu() {
     [ ${numjrnls} -gt 1 ] && {
       options+=("Switch Journal        [${journal}]")
     }
-    options+=("Switch Display Format [${fancy}]")
+    options+=("Switch Display Format [${style}]")
     encrypted=
     jloc=`jrnl --list | grep '*' | grep ${journal} | awk ' { print $4 } '`
     first=${jloc:0:1}
@@ -1905,23 +1908,21 @@ show_journal_menu() {
               break
               ;;
           "Switch Display"*,*|*,"Switch Display"*)
-              if [ "${fancy}" == "pretty" ]
+              if [ "${style}" == "pretty" ]
               then
-                fancy="fancy"
+                style="fancy"
                 journal_pager=${PAGER}
-                formatarg="--format fancy"
               else
-                if [ "${fancy}" == "fancy" ]
+                if [ "${style}" == "fancy" ]
                 then
-                  fancy="markdown"
+                  style="markdown"
                   journal_pager="w3m -T text/markdown -o confirm_qq=false"
-                  formatarg="--format markdown"
                 else
-                  fancy="pretty"
+                  style="pretty"
                   journal_pager=${PAGER}
-                  formatarg="--format pretty"
                 fi
               fi
+              formatarg="--format ${style}"
               break
               ;;
           "Decrypt"*,*|*,"Decrypt"*)
@@ -2675,9 +2676,6 @@ else
 fi
 
 [ "${have_jrnl}" ] && {
-  fancy="pretty"
-  formatarg="--format pretty"
-  journal="default"
   [ "${PAGER}" ] || PAGER=more
   journal_pager=${PAGER}
   declare -a journals=()
@@ -2703,13 +2701,14 @@ else
   # We prefer W3M over Lynx
   if [ "${have_w3m}" ]
   then
-    [ "${BROWSER}" ] || export BROWSER=w3m
+    [ "${BROWSER}" ] || BROWSER=w3m
   else
     [ "${have_lynx}" ] && {
-      [ "${BROWSER}" ] || export BROWSER=lynx
+      [ "${BROWSER}" ] || BROWSER=lynx
     }
   fi
 fi
+export BROWSER
 
 cycle=
 noaudio=

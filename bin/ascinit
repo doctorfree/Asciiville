@@ -537,24 +537,27 @@ CONF="${HOME}/.config/asciiville/init"
 [ -d ${HOME}/.config/asciiville ] || mkdir ${HOME}/.config/asciiville
 [ -f ${CONF} ] || {
   touch ${CONF}
-  echo "COMMAND=btop" >> ${CONF}
-  echo 'MTITLE="Btop++ System Monitor"' >> ${CONF}
   echo "ARTDIR=/usr/share/asciiville/art" >> ${CONF}
   echo "MUSEDIR=/usr/share/asciiville/music" >> ${CONF}
-  echo 'SONG=${MUSEDIR}/Chronos.mp3' >> ${CONF}
-  echo 'ALTSONG=${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav' >> ${CONF}
+  echo "SONG=\"${MUSEDIR}/Chronos.mp3\"" >> ${CONF}
+  echo "ALTSONG=\"${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav\"" >> ${CONF}
   echo "" >> ${CONF}
   echo "AUDIO=1" >> ${CONF}
+  echo "BROWSER=w3m" >> ${CONF}
+  echo "COMMAND=btop" >> ${CONF}
   echo "FULLSCREEN=" >> ${CONF}
-  echo "XFCE4=" >> ${CONF}
-  echo "TILIX=" >> ${CONF}
+  echo "MTITLE=\"Btop++ System Monitor\"" >> ${CONF}
+  echo "CURRENT=1" >> ${CONF}
   echo "GNOME=" >> ${CONF}
   echo "RETRO=" >> ${CONF}
-  echo "CURRENT=1" >> ${CONF}
+  echo "TILIX=" >> ${CONF}
+  echo "XFCE4=" >> ${CONF}
   echo "LOLCAT=lolcat" >> ${CONF}
   echo "" >> ${CONF}
   echo "use_lolcat=1" >> ${CONF}
   echo "use_lol=YES" >> ${CONF}
+  echo "journal=\"default\"" >> ${CONF}
+  echo "style=\"pretty\"" >> ${CONF}
 }
 
 [ "${quiet}" ] || {
