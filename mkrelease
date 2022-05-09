@@ -40,6 +40,8 @@ shift $(( OPTIND - 1 ))
 [ "$CLEAN" ] && ./clean
 [ "$PACKAGE" ] && ./mkdeb
 
+cp pkg/Install-bin.sh releases/${VERSION}/Install-bin.sh
+
 ANNO="Asciiville Version ${VERSION} Release ${RELEASE}"
 gittag v${VERSION}r${RELEASE} ${ANNO}
 

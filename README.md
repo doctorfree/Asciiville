@@ -269,7 +269,7 @@ sudo dnf localinstall ./Asciiville_<version>-<release>.x86_64.rpm
 ```
 or
 ```console
-sudo rpm -i ./Asciiville_<version>-<release>.x86_64.rpm
+sudo yum localinstall ./Asciiville_<version>-<release>.x86_64.rpm
 ```
 
 ### BB AAlib Demo
@@ -899,7 +899,7 @@ package by executing the command:
 ```
 or
 ```console
-    sudo rpm -e Asciiville
+    sudo yum remove Asciiville
 ```
 
 The Asciiville package can be removed by executing the "Uninstall"

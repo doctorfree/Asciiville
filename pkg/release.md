@@ -82,6 +82,19 @@ sudo dnf update -y
 sudo dnf localinstall ./Asciiville-1.4.0-1.x86_64.rpm
 ```
 
+On systems for which neither the Debian or RPM packages will suffice,
+install manually by downloading the `Install-bin.sh` script and either
+the gzip'd distribution archive or the zip'd distribution archive.
+After downloading the installation script and distribution archive,
+execute the commands:
+
+```bash
+chmod 755 Install-bin.sh
+./Install-bin.sh /path/to/Asciiville_1.4.0-1.<arch>.tgz
+or
+./Install-bin.sh /path/to/Asciiville_1.4.0-1.<arch>.zip
+```
+
 ## Configuration
 
 * REQUIRED: execute the `ascinit` command to initialize *mutt/neomutt*, *tmux*, *ranger*, *rainbowstream*, and install terminal emulators

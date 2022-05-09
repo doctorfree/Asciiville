@@ -364,7 +364,7 @@ done
       tilix --full-screen \
             --profile=Asciiville \
             --window-style=borderless \
-            --command="make_ascii_art -i "${make_inp}" -o "${make_out}" \
+            --command="make_ascii_art -i \"${make_inp}\" -o \"${make_out}\"" \
               2> /dev/null &
     else
       if [ "${have_xfce4}" ]
@@ -374,7 +374,7 @@ done
             --hide-toolbar \
             --hide-scrollbar \
             --fullscreen \
-            --command="make_ascii_art -i "${make_inp}" -o "${make_out}" &
+            --command="make_ascii_art -i \"${make_inp}\" -o \"${make_out}\"" &
       else
         make_ascii_art -i "${make_inp}" -o "${make_out}" &
       fi
