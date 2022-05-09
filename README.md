@@ -291,7 +291,9 @@ The BB AAlib Demo is not required. It's just a fun demo.
 
 ## Configuration
 
-After installing Asciiville, initialize Asciiville configurations and
+Asciiville preferences are maintained in `$HOME/.config/asciiville/init`.
+
+After installing Asciiville, initialize Asciiville configuration and
 install additional features by executing the `ascinit` command as a normal
 user with `sudo` privilege. The `ascinit` command will customize the
 configuration of several Asciiville packages and install additional

@@ -1,5 +1,6 @@
 Version 1.4.0 adds support for:
 
+* Maintain Asciiville preferences in `$HOME/.config/asciiville/init`
 * Beginning with version 1.4.0 a console-only setup is supported
     * No graphical utilities are installed if `ascinit -c` used
     * Console screen used exclusively for display

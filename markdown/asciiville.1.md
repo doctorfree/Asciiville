@@ -25,6 +25,8 @@ The interactive menu interface provides three types of menu options. Some menu s
 
 Previously started tmux sessions and asciimatics scripts can be quickly and easily terminated by executing the `asciiville -k` command.
 
+Asciiville preferences are maintained in `$HOME/.config/asciiville/init`.
+
 # COMMAND LINE OPTIONS
 
 *Terminal/Command options:*

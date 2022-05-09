@@ -57,10 +57,18 @@ buildit=1
 }
 
 [ "${buildit}" ] && {
+  advice=`git config --get advice.detachedHead`
+  git config --global advice.detachedHead false
   [ -d build ] || mkdir build
   cd build
   cmake .. -DCMAKE_BUILD_TYPE=Release
   make -j
+  if [ "${advice}" ]
+  then
+    git config --global advice.detachedHead ${advice}
+  else
+    git config --global --unset advice.detachedHead
+  fi
 }
 
 [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install

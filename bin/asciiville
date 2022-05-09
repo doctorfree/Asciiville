@@ -42,6 +42,10 @@ MUSEDIR=/usr/share/asciiville/music
 SONG="${MUSEDIR}/Chronos.mp3"
 ALTSONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 
+# Some configuration can be maintained here
+CONFIG="${HOME}/.config/asciiville/init"
+[ -f ${CONFIG} ] && . ${CONFIG}
+
 if [ `echo $PATH | grep -c /usr/local/bin` -ne "1" ]
 then
   export PATH="$PATH:/usr/local/bin"
@@ -208,6 +212,31 @@ generate_art() {
       done
     }
   }
+}
+
+set_user_conf() {
+  exitcode=$?
+  [ -f ${CONFIG} ] && {
+    echo "COMMAND=${COMMAND}" > ${CONFIG}
+    echo "MTITLE=\"${MTITLE}\"" >> ${CONFIG}
+    echo "ARTDIR=${ARTDIR}" >> ${CONFIG}
+    echo "MUSEDIR=${MUSEDIR}" >> ${CONFIG}
+    echo "SONG=${SONG}" >> ${CONFIG}
+    echo "ALTSONG=${ALTSONG}" >> ${CONFIG}
+    echo "" >> ${CONFIG}
+    echo "AUDIO=${AUDIO}" >> ${CONFIG}
+    echo "FULLSCREEN=${FULLSCREEN}" >> ${CONFIG}
+    echo "XFCE4=${XFCE4}" >> ${CONFIG}
+    echo "TILIX=${TILIX}" >> ${CONFIG}
+    echo "GNOME=${GNOME}" >> ${CONFIG}
+    echo "RETRO=${RETRO}" >> ${CONFIG}
+    echo "CURRENT=${CURRENT}" >> ${CONFIG}
+    echo "LOLCAT=\"${LOLCAT}\"" >> ${CONFIG}
+    echo "" >> ${CONFIG}
+    echo "use_lolcat=${use_lolcat}" >> ${CONFIG}
+    echo "use_lol=${use_lol}" >> ${CONFIG}
+  }
+  exit ${exitcode}
 }
 
 select_alt_term() {
@@ -2543,11 +2572,15 @@ init_vars() {
 have_gnome=`type -p gnome-terminal`
 have_tilix=`type -p tilix`
 # Check if initialization has been run
-[ -f ${HOME}/.asciiville_init ] || {
+[ -f ${HOME}/.config/asciiville/init ] || {
   echo ""
   echo "Asciiville initialization needs to be run once."
   echo "Answer 'y' to initialize, 'n' to skip it for now,"
   echo "or 'i' to skip and ignore this in the future"
+  echo ""
+  echo "Note: console mode initialization needs to be done with the 'ascinit'"
+  echo "      command. On a headless system or system without X11 windowing,"
+  echo "      answer 'n' here, exit 'asciiville', and run 'ascinit -c'"
   echo ""
   while true
   do
@@ -2557,7 +2590,9 @@ have_tilix=`type -p tilix`
         printf "\nIgnoring initialization.\n"
         printf "\nInitialize Asciiville by executing the command 'ascinit'\n"
         read -p "Press Enter to continue" contans
-        touch ${HOME}/.asciiville_init
+        [ -d ${HOME}/.config ] || mkdir ${HOME}/.config
+        [ -d ${HOME}/.config/asciiville ] || mkdir ${HOME}/.config/asciiville
+        touch ${HOME}/.config/asciiville/init
         break
         ;;
       [Yy]* )
@@ -3160,8 +3195,11 @@ fi
   read -p "Press Enter to continue" answer
 }
 
-[ "${noaudio}" ] || {
-  AUDIO=1
+[ "${noaudio}" ] && {
+  AUDIO=
+  audarg=
+}
+[ "${AUDIO}" ] && {
   audarg="-P -S ${SONG}"
   ASCSPLASH="${ASCSPLASH} -a"
   ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
@@ -3205,6 +3243,7 @@ fi
   }
   set_show_term
   [ "${FULLSCREEN}" ] && add_fullscreen
+  trap 'set_user_conf' SIGINT SIGTERM SIGHUP EXIT
   clear
   echo ""
   show_main_menu
