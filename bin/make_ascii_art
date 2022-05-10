@@ -35,6 +35,8 @@ done
 
 [ -d ${OUT_DIR} ] || mkdir -p ${OUT_DIR}
 
+over_all=
+skip_all=
 for image in ${INP_DIR}/*
 do
   [ -d "${image}" ] && continue
@@ -74,26 +76,37 @@ do
           ;;
   esac
   [ -f ${OUT_DIR}/"${art_name}.asc" ] && {
-    echo "${OUT_DIR}/"${art_name}.asc" already exists."
-    echo "Choose whether you wish to 'Overwrite', 'Skip', or 'Quit'"
-    while true
-    do
-      read -p "Overwrite/Skip/Quit ('O' or 'o' / 'S' or 's' / 'Q' or 'q') " answer
-      case "${answer}" in
-        o|O)
-          break
-          ;;
-        s|S)
-          continue
-          ;;
-        q|Q)
-          exit 0
-          ;;
-        *)
-          echo "Please answer with 'O', 'S', or 'Q'"
-          ;;
-      esac
-    done
+    [ "${skip_all}" ] && continue
+    [ "${over_all}" ] || {
+      echo "${OUT_DIR}/"${art_name}.asc" already exists."
+      echo "Choose whether you wish to 'Overwrite All', 'overwrite', 'Skip All', 'skip', or 'Quit'"
+      while true
+      do
+        read -p "Overwrite/Skip/Quit ('O' or 'o' / 'S' or 's' / 'Q' or 'q') " answer
+        case "${answer}" in
+          o)
+            break
+            ;;
+          O)
+            over_all=1
+            break
+            ;;
+          s)
+            continue
+            ;;
+          W)
+            skip_all=1
+            continue
+            ;;
+          q|Q)
+            exit 0
+            ;;
+          *)
+            echo "Please answer with 'o', 'O', 's', 'S', or 'Q'"
+            ;;
+        esac
+      done
+    }
   }
   [ "${debug}" ] && {
     echo "Converting with:"
