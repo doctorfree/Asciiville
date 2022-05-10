@@ -1078,10 +1078,16 @@ Asciiville Space Slideshow Video:
 ## Screenshots
 
 <p float="left">
+Asciiville generated Ascii Art by Doctorwhen<br/>
+  <img src="screenshots/lightning_santa_cruz.png" style="width:800px;height:450px;">
+</p>
+
+<p float="left">
 Asciiville Main Menu<br/>
   <img src="screenshots/Asciiville-Welcome.png" style="width:800px;height:600px;">
   <img src="screenshots/Asciiville-MainMenu.png" style="width:800px;height:600px;">
 </p>
+
 <p float="left">
 Asciiville Sub-Menus: Ascii Art, Asciimatics Animations, MusicPlayerPlus, and RoonCommandLine<br/>
   <img src="screenshots/Asciiville-Art.png" style="width:800px;height:600px;">
@@ -1089,6 +1095,7 @@ Asciiville Sub-Menus: Ascii Art, Asciimatics Animations, MusicPlayerPlus, and Ro
   <img src="screenshots/Asciiville-Music.png" style="width:800px;height:600px;">
   <img src="screenshots/Asciiville-Roon.png" style="width:800px;height:600px;">
 </p>
+
 <p float="left">
 Ascii System Monitor, Maps, and Weather<br/>
   <img src="screenshots/Btop.png" style="width:800px;height:600px;">

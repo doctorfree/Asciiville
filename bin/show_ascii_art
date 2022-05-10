@@ -464,7 +464,7 @@ play_slide_show() {
       first=
     }
     clear
-    show_ascii ${art}
+    show_ascii "${art}"
     [ $? -eq 3 ] || sleep ${delay}
   done
 }
