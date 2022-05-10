@@ -1078,11 +1078,6 @@ Asciiville Space Slideshow Video:
 ## Screenshots
 
 <p float="left">
-Asciiville generated Ascii Art by Doctorwhen<br/>
-  <img src="screenshots/lightning_santa_cruz.png" style="width:800px;height:450px;">
-</p>
-
-<p float="left">
 Asciiville Main Menu<br/>
   <img src="screenshots/Asciiville-Welcome.png" style="width:800px;height:600px;">
   <img src="screenshots/Asciiville-MainMenu.png" style="width:800px;height:600px;">
