@@ -14,6 +14,6 @@ cd ../diagon
 rm -rf build
 rm -f tools/*.jar
 cd ../games/nethack
-make spotless
+[ -f Makefile ] && make spotless
 cd ../ninvaders
 rm -rf cmake_build

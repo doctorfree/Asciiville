@@ -131,7 +131,7 @@ build_nethack() {
   # chmod +x src/nethack
   #
   # Revised build with UnNetHack changes
-  ./configure --prefix=/usr/games/lib/nethack \
+  ./configure --prefix=/usr/games \
               --with-owner=games \
               --with-group=games \
               --enable-wizmode=doctorwhen
