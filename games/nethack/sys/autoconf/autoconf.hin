@@ -1,0 +1,336 @@
+/* sys/autoconf/autoconf.hin.  Generated from sys/autoconf/configure.ac by autoheader.  */
+
+#ifndef AUTOCONF_H
+#define AUTOCONF_H
+
+/* Exceptions to autopickup */
+#undef AUTOPICKUP_EXCEPTIONS
+
+/* Open doors by walking into them */
+#undef AUTO_OPEN
+
+/* Blackmarket */
+#undef BLACKMARKET
+
+/* Multiple bones per level */
+#undef BONES_POOL
+
+/* A BSD like system */
+#undef BSD
+
+/* Allow smaller screens */
+#undef CLIPPING
+
+/* Compression program */
+#undef COMPRESS
+
+/* Extension of compressed files */
+#undef COMPRESS_EXTENSION
+
+/* Options to pass to the compression program, if any */
+#undef COMPRESS_OPTIONS
+
+/* Convict class */
+#undef CONVICT
+
+/* Curses interface */
+#undef CURSES_GRAPHICS
+
+/* Unix on win32 */
+#undef CYGWIN32
+
+/* The default windowing system */
+#undef DEFAULT_WINDOW_SYS
+
+/* Pseudo random number device */
+#undef DEV_RANDOM
+
+/* Data librarian */
+#undef DLB
+
+/* Dummy graphics */
+#undef DUMMY_GRAPHICS
+
+/* Number of dumped messages */
+#undef DUMPMSGS
+
+/* Name of character dump file */
+#undef DUMP_FN
+
+/* CSS file should be included in the HTML dump */
+#undef DUMP_HTML_CSS_EMBEDDED
+
+/* Path to the css dump file */
+#undef DUMP_HTML_CSS_FILE
+
+/* Dump an HTML file */
+#undef DUMP_HTML_LOG
+
+/* Dumping character stats */
+#undef DUMP_LOG
+
+/* Dump a text file */
+#undef DUMP_TEXT_LOG
+
+/* Dungeon growth */
+#undef DUNGEON_GROWTH
+
+/* Engraving the E-word repels monsters */
+#undef ELBERETH
+
+/* Show experience on bottom line */
+#undef EXP_ON_BOTL
+
+/* Place files in different directories */
+#undef FILE_AREAS
+
+/* Location of bones files (rw) */
+#undef FILE_AREA_BONES
+
+/* Location of human-readable documentation */
+#undef FILE_AREA_DOC
+
+/* Location of level files (rw) */
+#undef FILE_AREA_LEVL
+
+/* Location of save files (rw) */
+#undef FILE_AREA_SAVE
+
+/* For read-only, architecture independent files */
+#undef FILE_AREA_SHARE
+
+/* For read-only, architecture dependent files */
+#undef FILE_AREA_UNSHARE
+
+/* Location of other files which may be modified */
+#undef FILE_AREA_VAR
+
+/* Gold is kept on object chains (experimental) */
+#undef GOLDOBJ
+
+/* Define to 1 if you have the <curses.h> header file. */
+#undef HAVE_CURSES_H
+
+/* Define to 1 if you have the declaration of `strncmpi', and to 0 if you
+   don't. */
+#undef HAVE_DECL_STRNCMPI
+
+/* Define to 1 if you have the declaration of `strnicmp', and to 0 if you
+   don't. */
+#undef HAVE_DECL_STRNICMP
+
+/* Define to 1 if you have the `fcntl' function. */
+#undef HAVE_FCNTL
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the <ncurses.h> header file. */
+#undef HAVE_NCURSES_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <termcap.h> header file. */
+#undef HAVE_TERMCAP_H
+
+/* Define this if you have the tparm function in an included lib. */
+#undef HAVE_TPARM
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to 1 if you have the <utime.h> header file. */
+#undef HAVE_UTIME_H
+
+/* Use UnNetHack's compression routines */
+#undef INTERNAL_COMP
+
+/* Keystone Kops */
+#undef KOPS
+
+/* GNU Linux */
+#undef LINUX
+
+/* Lisp interface */
+#undef LISP_GRAPHICS
+
+/* Live game progress logfile */
+#undef LIVELOGFILE
+
+/* Reporting killing of uniques and ghosts of former players */
+#undef LIVELOG_BONES_KILLER
+
+/* Shoutting into the live game logfile */
+#undef LIVELOG_SHOUT
+
+/* TTY graphics menu color */
+#undef MENU_COLOR
+
+/* Use regular expressions */
+#undef MENU_COLOR_REGEX
+
+/* GNU regex is available */
+#undef MENU_COLOR_REGEX_GNU
+
+/* Posix regex is available */
+#undef MENU_COLOR_REGEX_POSIX
+
+/* Microsoft Window's native graphics */
+#undef MSWIN_GRAPHICS
+
+/* No void type available */
+#undef NOVOID
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* Require some questions to be answered with 'yes' instead of 'y' */
+#undef PARANOID
+
+/* Compare High Score entries by user id instead of user name */
+#undef PERS_IS_UID
+
+/* Firing without anything quivered will ask you what to quiver */
+#undef QUIVER_FIRED
+
+/* QWERTZ keyboard layout support */
+#undef QWERTZ
+
+/* Shuffling order of Elemental Planes */
+#undef RANDOMIZED_PLANES
+
+/* Show elapsed time on bottom line */
+#undef REALTIME_ON_BOTL
+
+/* Redo last command */
+#undef REDO
+
+/* Special Rogue-like levels */
+#undef REINCARNATION
+
+/* Show score on bottom line */
+#undef SCORE_ON_BOTL
+
+/* Succubi/incubi seduction */
+#undef SEDUCE
+
+/* Start a shell from within the game */
+#undef SHELL
+
+/* Display number of created monsters at the end of game */
+#undef SHOW_BORN
+
+/* Display extinct monsters at the end of game */
+#undef SHOW_EXTINCT
+
+/* simple mail dgamelaunch support */
+#undef SIMPLE_MAIL
+
+/* Kitchen sinks */
+#undef SINKS
+
+/* The size of `unsigned int', as computed by sizeof. */
+#undef SIZEOF_UNSIGNED_INT
+
+/* The size of `unsigned long', as computed by sizeof. */
+#undef SIZEOF_UNSIGNED_LONG
+
+/* The size of `unsigned long long', as computed by sizeof. */
+#undef SIZEOF_UNSIGNED_LONG_LONG
+
+/* Sort item lists alphabetically by description. */
+#undef SORTLOOT
+
+/* TTY graphics status color */
+#undef STATUS_COLORS
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* Ability to ride monsters */
+#undef STEED
+
+/* Use strncmpi */
+#undef STRNCMPI
+
+/* A System V like system */
+#undef SYSV
+
+/* Using msleep */
+#undef TIMED_DELAY
+
+/* Tourist class */
+#undef TOURIST
+
+/* Console output */
+#undef TTY_GRAPHICS
+
+/* Allow user-defined mapping from messages to sounds) */
+#undef USER_SOUNDS
+
+/* Enable UTF-8 glyphs in TTY */
+#undef UTF8_GLYPHS
+
+/* Fancy mazes */
+#undef WALLIFIED_MAZE
+
+/* Log information about running games */
+#undef WHEREIS_FILE
+
+/* An MS-Windows system */
+#undef WIN32
+
+/* enable wizard mode for the specified user */
+#undef WIZARD
+
+/* X11 graphics */
+#undef X11_GRAPHICS
+
+/* More verbose logfile */
+#undef XLOGFILE
+
+/* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
+   `char[]'. */
+#undef YYTEXT_POINTER
+
+/* If not already defined, then define as a datatype of *exactly* 32 bits. */
+#undef uint32_t
+
+/* If not already defined, then define as a datatype of *exactly* 64 bits. */
+#undef uint64_t
+
+#endif /* AUTOCONF_H */

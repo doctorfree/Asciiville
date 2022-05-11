@@ -1,9 +1,10 @@
-/* NetHack 3.7	save.c	$NHDT-Date: 1651298444 2022/04/30 06:00:44 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.186 $ */
+/*	SCCS Id: @(#)save.c	3.4	2003/11/14	*/
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
-/*-Copyright (c) Michael Allison, 2009. */
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#include "lev.h"
+#include "quest.h"
 
 #ifndef NO_SIGNAL
 #include <signal.h>
@@ -12,965 +13,1020 @@
 #include <fcntl.h>
 #endif
 
-#ifdef MICRO
-int dotcnt, dotrow; /* also used in restore */
+#ifdef MFLOPPY
+long bytes_counted;
+static int count_only;
 #endif
 
-static void savelevchn(NHFILE *);
-static void savelevl(NHFILE *,boolean);
-static void savedamage(NHFILE *);
-static void save_bubbles(NHFILE *, xchar);
-static void save_stairs(NHFILE *);
-static void saveobj(NHFILE *,struct obj *);
-static void saveobjchn(NHFILE *,struct obj **);
-static void savemon(NHFILE *,struct monst *);
-static void savemonchn(NHFILE *,struct monst *);
-static void savetrapchn(NHFILE *,struct trap *);
-static void save_gamelog(NHFILE *);
-static void savegamestate(NHFILE *);
-static void savelev_core(NHFILE *, xchar);
-static void save_msghistory(NHFILE *);
+#ifdef MICRO
+int dotcnt, dotrow;	/* also used in restore */
+#endif
 
 #ifdef ZEROCOMP
-static void zerocomp_bufon(int);
-static void zerocomp_bufoff(int);
-static void zerocomp_bflush(int);
-static void zerocomp_bwrite(int, genericptr_t, unsigned int);
-static void zerocomp_bputc(int);
+STATIC_DCL void FDECL(bputc, (int));
+#endif
+STATIC_DCL void FDECL(savelevchn, (int,int));
+STATIC_DCL void FDECL(savedamage, (int,int));
+STATIC_DCL void FDECL(saveobjchn, (int,struct obj *,int));
+STATIC_DCL void FDECL(savemonchn, (int,struct monst *,int));
+STATIC_DCL void FDECL(savetrapchn, (int,struct trap *,int));
+STATIC_DCL void FDECL(savegamestate, (int,int));
+void FDECL(save_mongen_override, (int,struct mon_gen_override *, int));
+void FDECL(save_lvl_sounds, (int,struct lvl_sounds *, int));
+#ifdef MFLOPPY
+STATIC_DCL void FDECL(savelev0, (int,XCHAR_P,int));
+STATIC_DCL boolean NDECL(swapout_oldest);
+STATIC_DCL void FDECL(copyfile, (char *,char *));
+#endif /* MFLOPPY */
+#ifdef GCC_WARN
+static long nulls[10];
+#else
+#define nulls nul
 #endif
 
 #if defined(UNIX) || defined(VMS) || defined(__EMX__) || defined(WIN32)
-#define HUP if (!g.program_state.done_hup)
+#define HUP	if (!program_state.done_hup)
 #else
 #define HUP
 #endif
 
-/* the #save command */
-int
-dosave(void)
-{
-    clear_nhwindow(WIN_MESSAGE);
-    if (yn("Really save?") == 'n') {
-        clear_nhwindow(WIN_MESSAGE);
-        if (g.multi > 0)
-            nomul(0);
-    } else {
-        clear_nhwindow(WIN_MESSAGE);
-        pline("Saving...");
-#if defined(UNIX) || defined(VMS) || defined(__EMX__)
-        g.program_state.done_hup = 0;
+#ifdef MENU_COLOR
+extern struct menucoloring *menu_colorings;
 #endif
-        if (dosave0()) {
-            u.uhp = -1; /* universal game's over indicator */
-            /* make sure they see the Saving message */
-            display_nhwindow(WIN_MESSAGE, TRUE);
-            exit_nhwindows("Be seeing you...");
-            nh_terminate(EXIT_SUCCESS);
-        } else
-            (void) doredraw();
-    }
-    return ECMD_OK;
+
+#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
+extern const struct percent_color_option *hp_colors;
+extern const struct percent_color_option *pw_colors;
+extern const struct text_color_option *text_colors;
+#endif
+
+/* need to preserve these during save to avoid accessing freed memory */
+static unsigned ustuck_id = 0, usteed_id = 0;
+
+int
+dosave()
+{
+	clear_nhwindow(WIN_MESSAGE);
+	if(yn("Really save?") == 'n') {
+		clear_nhwindow(WIN_MESSAGE);
+		if(multi > 0) nomul(0, 0);
+	} else {
+		clear_nhwindow(WIN_MESSAGE);
+		pline("Saving...");
+#if defined(UNIX) || defined(VMS) || defined(__EMX__)
+		program_state.done_hup = 0;
+#endif
+		if(dosave0()) {
+#ifdef LIVELOGFILE
+			livelog_game_action("saved");
+#endif
+			program_state.something_worth_saving = 0;
+			u.uhp = -1;		/* universal game's over indicator */
+			/* make sure they see the Saving message */
+			display_nhwindow(WIN_MESSAGE, TRUE);
+			exit_nhwindows("Be seeing you...");
+			terminate(EXIT_SUCCESS);
+		} else (void)doredraw();
+	}
+	return 0;
 }
+
+
+#if defined(UNIX) || defined(VMS) || defined (__EMX__) || defined(WIN32)
+/*ARGSUSED*/
+void
+hangup(sig_unused)  /* called as signal() handler, so sent at least one arg */
+int sig_unused;
+{
+# ifdef NOSAVEONHANGUP
+	(void) signal(SIGINT, SIG_IGN);
+	clearlocks();
+#  ifndef VMS
+	terminate(EXIT_FAILURE);
+#  endif
+# else	/* SAVEONHANGUP */
+	if (!program_state.done_hup++) {
+	    if (program_state.something_worth_saving)
+		(void) dosave0();
+#  ifdef VMS
+	    /* don't call exit when already within an exit handler;
+	       that would cancel any other pending user-mode handlers */
+	    if (!program_state.exiting)
+#  endif
+	    {
+		clearlocks();
+		terminate(EXIT_FAILURE);
+	    }
+	}
+# endif
+	return;
+}
+#endif
 
 /* returns 1 if save successful */
 int
-dosave0(void)
+dosave0()
 {
-    const char *fq_save;
-    xchar ltmp;
-    char whynot[BUFSZ];
-    NHFILE *nhfp, *onhfp;
-    int res = 0;
+	const char *fq_save;
+	register int fd, ofd;
+	xchar ltmp;
+	d_level uz_save;
+	char whynot[BUFSZ];
 
-    g.program_state.saving++; /* inhibit status and perm_invent updates */
-    /* we may get here via hangup signal, in which case we want to fix up
-       a few of things before saving so that they won't be restored in
-       an improper state; these will be no-ops for normal save sequence */
-    u.uinvulnerable = 0;
-    if (iflags.save_uswallow)
-        u.uswallow = 1, iflags.save_uswallow = 0;
-    if (iflags.save_uinwater)
-        u.uinwater = 1, iflags.save_uinwater = 0; /* bypass set_uinwater() */
-    if (iflags.save_uburied)
-        u.uburied = 1, iflags.save_uburied = 0;
-    /* extra handling for hangup save or panic save; without this,
-       a thrown light source might trigger an "obj_is_local" panic;
-       if a thrown or kicked object is in transit, put it on the map;
-       when punished, make sure ball and chain are placed too */
-    done_object_cleanup(); /* maybe force some items onto map */
+#ifdef WHEREIS_FILE
+	delete_whereis();
+#endif
 
-    if (!g.program_state.something_worth_saving || !g.SAVEF[0])
-        goto done;
+	if (!SAVEF[0])
+		return 0;
+	fq_save = fqname(SAVEF, SAVEPREFIX, 1);	/* level files take 0 */
 
-    fq_save = fqname(g.SAVEF, SAVEPREFIX, 1); /* level files take 0 */
-#ifndef NO_SIGNAL
 #if defined(UNIX) || defined(VMS)
-    sethanguphandler((void (*)(int) ) SIG_IGN);
+	(void) signal(SIGHUP, SIG_IGN);
 #endif
-    (void) signal(SIGINT, SIG_IGN);
+#ifndef NO_SIGNAL
+	(void) signal(SIGINT, SIG_IGN);
 #endif
 
-    HUP if (iflags.window_inited) {
-        nh_uncompress(fq_save);
-        nhfp = open_savefile();
-        if (nhfp) {
-            close_nhfile(nhfp);
-            clear_nhwindow(WIN_MESSAGE);
-            There("seems to be an old save file.");
-            if (yn("Overwrite the old file?") == 'n') {
-                nh_compress(fq_save);
-                goto done;
-            }
-        }
-    }
+#if defined(MICRO) && defined(MFLOPPY)
+	if (!saveDiskPrompt(0)) return 0;
+#endif
 
-    HUP mark_synch(); /* flush any buffered screen output */
+	HUP if (iflags.window_inited) {
+	    uncompress_area(fq_save, SAVEF);
+	    fd = open_savefile();
+	    if (fd > 0) {
+		(void) close(fd);
+		clear_nhwindow(WIN_MESSAGE);
+		There("seems to be an old save file.");
+		if (yn("Overwrite the old file?") == 'n') {
+		    compress_area(fq_save, SAVEF);
+		    return 0;
+		}
+	    }
+	}
 
-    nhfp = create_savefile();
-    if (!nhfp) {
-        HUP pline("Cannot open save file.");
-        (void) delete_savefile(); /* ab@unido */
-        goto done;
-    }
+	HUP mark_synch();	/* flush any buffered screen output */
 
-    vision_recalc(2); /* shut down vision to prevent problems
-                         in the event of an impossible() call */
+	fd = create_savefile();
+	if(fd < 0) {
+		HUP pline("Cannot open save file.");
+		(void) delete_savefile();	/* ab@unido */
+		return(0);
+	}
 
-    /* undo date-dependent luck adjustments made at startup time */
-    if (flags.moonphase == FULL_MOON) /* ut-sally!fletcher */
-        change_luck(-1);              /* and unido!ab */
-    if (flags.friday13)
-        change_luck(1);
-    if (iflags.window_inited)
-        HUP clear_nhwindow(WIN_MESSAGE);
+	vision_recalc(2);	/* shut down vision to prevent problems
+				   in the event of an impossible() call */
+	
+	/* undo date-dependent luck adjustments made at startup time */
+	if(flags.moonphase == FULL_MOON)	/* ut-sally!fletcher */
+		change_luck(-1);		/* and unido!ab */
+	if(flags.friday13)
+		change_luck(1);
+	if(iflags.window_inited)
+	    HUP clear_nhwindow(WIN_MESSAGE);
 
 #ifdef MICRO
-    dotcnt = 0;
-    dotrow = 2;
-    curs(WIN_MAP, 1, 1);
-    if (!WINDOWPORT("X11"))
-        putstr(WIN_MAP, 0, "Saving:");
+	dotcnt = 0;
+	dotrow = 2;
+	curs(WIN_MAP, 1, 1);
+	if (strncmpi("X11", windowprocs.name, 3))
+	  putstr(WIN_MAP, 0, "Saving:");
 #endif
-    nhfp->mode = WRITING | FREEING;
-    store_version(nhfp);
-    store_savefileinfo(nhfp);
-    if (nhfp && nhfp->fplog)
-        (void) fprintf(nhfp->fplog, "# post-validation\n");
-    store_plname_in_file(nhfp);
-    g.ustuck_id = (u.ustuck ? u.ustuck->m_id : 0);
-    g.usteed_id = (u.usteed ? u.usteed->m_id : 0);
-    /* savelev() might save uball and uchain, releasing their memory if
-       FREEING, so we need to check their status now; if hero is swallowed,
-       uball and uchain will persist beyond saving map floor and inventory
-       so these copies of their pointers will be valid and savegamestate()
-       will know to save them separately (from floor and invent); when not
-       swallowed, uchain will be stale by then, and uball will be too if
-       ball is on the floor rather than carried */
-    g.looseball = BALL_IN_MON ? uball : 0;
-    g.loosechain = CHAIN_IN_MON ? uchain : 0;
-    savelev(nhfp, ledger_no(&u.uz));
-    savegamestate(nhfp);
+#ifdef MFLOPPY
+	/* make sure there is enough disk space */
+	if (iflags.checkspace) {
+	    long fds, needed;
 
-    /* While copying level files around, zero out u.uz to keep
-     * parts of the restore code from completely initializing all
-     * in-core data structures, since all we're doing is copying.
-     * This also avoids at least one nasty core dump.
-     * [g.uz_save is used by save_bubbles() as well as to restore u.uz]
-     */
-    g.uz_save = u.uz;
-    u.uz.dnum = u.uz.dlevel = 0;
-    /* these pointers are no longer valid, and at least u.usteed
-     * may mislead place_monster() on other levels
-     */
-    set_ustuck((struct monst *) 0);
-    u.usteed = (struct monst *) 0;
+	    savelev(fd, ledger_no(&u.uz), COUNT_SAVE);
+	    savegamestate(fd, COUNT_SAVE);
+	    needed = bytes_counted;
 
-    for (ltmp = (xchar) 1; ltmp <= maxledgerno(); ltmp++) {
-        if (ltmp == ledger_no(&g.uz_save))
-            continue;
-        if (!(g.level_info[ltmp].flags & LFILE_EXISTS))
-            continue;
+	    for (ltmp = 1; ltmp <= maxledgerno(); ltmp++)
+		if (ltmp != ledger_no(&u.uz) && level_info[ltmp].where)
+		    needed += level_info[ltmp].size + (sizeof ltmp);
+	    fds = freediskspace(fq_save);
+	    if (needed > fds) {
+		HUP {
+		    There("is insufficient space on SAVE disk.");
+		    pline("Require %ld bytes but only have %ld.", needed, fds);
+		}
+		flushout();
+		(void) close(fd);
+		(void) delete_savefile();
+		return 0;
+	    }
+
+	    co_false();
+	}
+#endif /* MFLOPPY */
+
+	store_version(fd);
+#ifdef STORE_PLNAME_IN_FILE
+	bwrite(fd, (genericptr_t) plname, PL_NSIZ);
+#endif
+	ustuck_id = (u.ustuck ? u.ustuck->m_id : 0);
+#ifdef STEED
+	usteed_id = (u.usteed ? u.usteed->m_id : 0);
+#endif
+
+	savelev(fd, ledger_no(&u.uz), WRITE_SAVE | FREE_SAVE);
+	savegamestate(fd, WRITE_SAVE | FREE_SAVE);
+
+	/* While copying level files around, zero out u.uz to keep
+	 * parts of the restore code from completely initializing all
+	 * in-core data structures, since all we're doing is copying.
+	 * This also avoids at least one nasty core dump.
+	 */
+	uz_save = u.uz;
+	u.uz.dnum = u.uz.dlevel = 0;
+	/* these pointers are no longer valid, and at least u.usteed
+	 * may mislead place_monster() on other levels
+	 */
+	u.ustuck = (struct monst *)0;
+#ifdef STEED
+	u.usteed = (struct monst *)0;
+#endif
+
+	for(ltmp = (xchar)1; ltmp <= maxledgerno(); ltmp++) {
+		if (ltmp == ledger_no(&uz_save)) continue;
+		if (!(level_info[ltmp].flags & LFILE_EXISTS)) continue;
 #ifdef MICRO
-        curs(WIN_MAP, 1 + dotcnt++, dotrow);
-        if (dotcnt >= (COLNO - 1)) {
-            dotrow++;
-            dotcnt = 0;
-        }
-        if (!WINDOWPORT("X11")) {
-            putstr(WIN_MAP, 0, ".");
-        }
-        mark_synch();
+		curs(WIN_MAP, 1 + dotcnt++, dotrow);
+		if (dotcnt >= (COLNO - 1)) {
+			dotrow++;
+			dotcnt = 0;
+		}
+		if (strncmpi("X11", windowprocs.name, 3)){
+		  putstr(WIN_MAP, 0, ".");
+		}
+		mark_synch();
 #endif
-        onhfp = open_levelfile(ltmp, whynot);
-        if (!onhfp) {
-            HUP pline1(whynot);
-            close_nhfile(nhfp);
-            (void) delete_savefile();
-            HUP Strcpy(g.killer.name, whynot);
-            HUP done(TRICKED);
-            goto done;
-        }
-        minit(); /* ZEROCOMP */
-        getlev(onhfp, g.hackpid, ltmp);
-        close_nhfile(onhfp);
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &ltmp, sizeof ltmp); /* lvl no. */
-        savelev(nhfp, ltmp);     /* actual level*/
-        delete_levelfile(ltmp);
-    }
-    close_nhfile(nhfp);
+		ofd = open_levelfile(ltmp, whynot);
+		if (ofd < 0) {
+		    HUP pline("%s", whynot);
+		    (void) close(fd);
+		    (void) delete_savefile();
+		    HUP killer = whynot;
+		    HUP done(TRICKED);
+		    return(0);
+		}
+		minit();	/* ZEROCOMP */
+		getlev(ofd, hackpid, ltmp, FALSE);
+		(void) close(ofd);
+		bwrite(fd, (genericptr_t) &ltmp, sizeof ltmp); /* level number*/
+		savelev(fd, ltmp, WRITE_SAVE | FREE_SAVE);     /* actual level*/
+		delete_levelfile(ltmp);
+	}
+	bclose(fd);
 
-    u.uz = g.uz_save;
-    g.uz_save.dnum = g.uz_save.dlevel = 0;
+	u.uz = uz_save;
 
-    /* get rid of current level --jgm */
-    delete_levelfile(ledger_no(&u.uz));
-    delete_levelfile(0);
-    nh_compress(fq_save);
-    /* this should probably come sooner... */
-    g.program_state.something_worth_saving = 0;
-    res = 1;
-
- done:
-    g.program_state.saving--;
-    return res;
+	/* get rid of current level --jgm */
+	delete_levelfile(ledger_no(&u.uz));
+	delete_levelfile(0);
+	compress_area(FILE_AREA_SAVE, fq_save);
+	return(1);
 }
 
-static void
-save_gamelog(NHFILE *nhfp)
+STATIC_OVL void
+savegamestate(fd, mode)
+register int fd, mode;
 {
-    struct gamelog_line *tmp = g.gamelog, *tmp2;
-    int slen;
+	int uid;
+#if defined(RECORD_REALTIME) || defined(REALTIME_ON_BOTL)
+	time_t realtime;
+#endif
 
-    while (tmp) {
-        tmp2 = tmp->next;
-        if (perform_bwrite(nhfp)) {
-            if (nhfp->structlevel) {
-                slen = Strlen(tmp->text);
-                bwrite(nhfp->fd, (genericptr_t) &slen, sizeof slen);
-                bwrite(nhfp->fd, (genericptr_t) tmp->text, slen);
-                bwrite(nhfp->fd, (genericptr_t) tmp,
-                       sizeof (struct gamelog_line));
-            }
-        }
-        if (release_data(nhfp)) {
-            free((genericptr_t) tmp->text);
-            free((genericptr_t) tmp);
-        }
-        tmp = tmp2;
-    }
-    if (perform_bwrite(nhfp)) {
-        if (nhfp->structlevel) {
-            slen = -1;
-            bwrite(nhfp->fd, (genericptr_t) &slen, sizeof slen);
-        }
-    }
-    if (release_data(nhfp))
-        g.gamelog = NULL;
-}
 
-static void
-savegamestate(NHFILE* nhfp)
-{
-    unsigned long uid;
-    struct obj *bc_objs = (struct obj *)0;
+#ifdef MFLOPPY
+	count_only = (mode & COUNT_SAVE);
+#endif
+	uid = getuid();
+	bwrite(fd, (genericptr_t) &uid, sizeof uid);
+	bwrite(fd, (genericptr_t) &flags, sizeof(struct flag));
+	bwrite(fd, (genericptr_t) &u, sizeof(struct you));
 
-    g.program_state.saving++; /* caller should/did already set this... */
-    uid = (unsigned long) getuid();
-    if (nhfp->structlevel) {
-        bwrite(nhfp->fd, (genericptr_t) &uid, sizeof uid);
-        bwrite(nhfp->fd, (genericptr_t) &g.context, sizeof g.context);
-        bwrite(nhfp->fd, (genericptr_t) &flags, sizeof flags);
-    }
-    urealtime.finish_time = getnow();
-    urealtime.realtime += timet_delta(urealtime.finish_time,
-                                      urealtime.start_timing);
-    if (nhfp->structlevel) {
-        bwrite(nhfp->fd, (genericptr_t) &u, sizeof u);
-        bwrite(nhfp->fd, yyyymmddhhmmss(ubirthday), 14);
-        bwrite(nhfp->fd, (genericptr_t) &urealtime.realtime,
-               sizeof urealtime.realtime);
-        bwrite(nhfp->fd, yyyymmddhhmmss(urealtime.start_timing), 14);
-    }
-    /* this is the value to use for the next update of urealtime.realtime */
-    urealtime.start_timing = urealtime.finish_time;
-    save_killers(nhfp);
+	/* must come before migrating_objs and migrating_mons are freed */
+	save_timers(fd, mode, RANGE_GLOBAL);
+	save_light_sources(fd, mode, RANGE_GLOBAL);
 
-    /* must come before g.migrating_objs and g.migrating_mons are freed */
-    save_timers(nhfp, RANGE_GLOBAL);
-    save_light_sources(nhfp, RANGE_GLOBAL);
+	saveobjchn(fd, invent, mode);
+	saveobjchn(fd, migrating_objs, mode);
+	savemonchn(fd, migrating_mons, mode);
+	if (release_data(mode)) {
+	    invent = 0;
+	    migrating_objs = 0;
+	    migrating_mons = 0;
+	}
+	bwrite(fd, (genericptr_t) mvitals, sizeof(mvitals));
 
-    /* when FREEING, deletes objects in invent and sets invent to Null;
-       pointers into invent (uwep, uarmg, uamul, &c) are set to Null too */
-    saveobjchn(nhfp, &g.invent);
+	save_dungeon(fd, (boolean)!!perform_bwrite(mode),
+			 (boolean)!!release_data(mode));
+	savelevchn(fd, mode);
+	bwrite(fd, (genericptr_t) &moves, sizeof moves);
+	bwrite(fd, (genericptr_t) &monstermoves, sizeof monstermoves);
+	bwrite(fd, (genericptr_t) &quest_status, sizeof(struct q_score));
+	bwrite(fd, (genericptr_t) spl_book,
+				sizeof(struct spell) * (MAXSPELL + 1));
+	save_artifacts(fd);
+	save_oracles(fd, mode);
+	if(ustuck_id)
+	    bwrite(fd, (genericptr_t) &ustuck_id, sizeof ustuck_id);
+#ifdef STEED
+	if(usteed_id)
+	    bwrite(fd, (genericptr_t) &usteed_id, sizeof usteed_id);
+#endif
+        bwrite(fd, (genericptr_t) pl_tutorial, sizeof pl_tutorial);
+	bwrite(fd, (genericptr_t) pl_character, sizeof pl_character);
+	bwrite(fd, (genericptr_t) pl_fruit, sizeof pl_fruit);
+	bwrite(fd, (genericptr_t) &current_fruit, sizeof current_fruit);
+	savefruitchn(fd, mode);
+	savenames(fd, mode);
+	save_waterlevel(fd, mode);
 
-    /* save ball and chain if they are currently dangling free (i.e. not
-       on floor or in inventory); 'looseball' and 'loosechain' have been
-       set up in caller because ball and chain will be gone by now if on
-       floor, or ball gone if carried; caveat: uball and uchain pointers
-       will be non-Null but stale (point to freed memory) in those cases */
-    bc_objs = (struct obj *) 0;
-    if (g.loosechain) {
-        g.loosechain->nobj = bc_objs; /* uchain */
-        bc_objs = g.loosechain;
-    }
-    if (g.looseball) {
-        g.looseball->nobj = bc_objs;
-        bc_objs = g.looseball;
-    }
-    saveobjchn(nhfp, &bc_objs); /* frees objs in list, sets bc_objs to Null */
-    g.looseball = g.loosechain = (struct obj *) 0;
+#ifdef RECORD_ACHIEVE
+	bwrite(fd, (genericptr_t) &achieve, sizeof achieve);
+#endif
+#if defined(RECORD_REALTIME) || defined(REALTIME_ON_BOTL)
+	realtime = get_realtime();
+	bwrite(fd, (genericptr_t) &realtime, sizeof realtime);
+#endif
 
-    saveobjchn(nhfp, &g.migrating_objs); /* frees objs and sets to Null */
-    savemonchn(nhfp, g.migrating_mons);
-    if (release_data(nhfp))
-        g.migrating_mons = (struct monst *) 0;
-    if (nhfp->structlevel)
-        bwrite(nhfp->fd, (genericptr_t) g.mvitals, sizeof g.mvitals);
-    save_dungeon(nhfp, (boolean) !!perform_bwrite(nhfp),
-                 (boolean) !!release_data(nhfp));
-    savelevchn(nhfp);
-    if (nhfp->structlevel) {
-        bwrite(nhfp->fd, (genericptr_t) &g.moves, sizeof g.moves);
-        bwrite(nhfp->fd, (genericptr_t) &g.quest_status, sizeof g.quest_status);
-        bwrite(nhfp->fd, (genericptr_t) g.spl_book,
-               sizeof (struct spell) * (MAXSPELL + 1));
-    }
-    save_artifacts(nhfp);
-    save_oracles(nhfp);
-    if (g.ustuck_id) {
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &g.ustuck_id, sizeof g.ustuck_id);
-    }
-    if (g.usteed_id) {
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &g.usteed_id, sizeof g.usteed_id);
-    }
-    if (nhfp->structlevel) {
-        bwrite(nhfp->fd, (genericptr_t) g.pl_character, sizeof g.pl_character);
-        bwrite(nhfp->fd, (genericptr_t) g.pl_fruit, sizeof g.pl_fruit);
-    }
-    savefruitchn(nhfp);
-    savenames(nhfp);
-    save_msghistory(nhfp);
-    save_gamelog(nhfp);
-    if (nhfp->structlevel)
-        bflush(nhfp->fd);
-    g.program_state.saving--;
-    return;
-}
-
-/* potentially called from goto_level(do.c) as well as savestateinlock() */
-boolean
-tricked_fileremoved(NHFILE* nhfp, char* whynot)
-{
-    if (!nhfp) {
-        pline1(whynot);
-        pline("Probably someone removed it.");
-        Strcpy(g.killer.name, whynot);
-        done(TRICKED);
-        return TRUE;
-    }
-    return FALSE;
+	bflush(fd);
 }
 
 #ifdef INSURANCE
 void
-savestateinlock(void)
+savestateinlock()
 {
-    int hpid = 0;
-    char whynot[BUFSZ];
-    NHFILE *nhfp;
+	int fd, hpid;
+	static boolean havestate = TRUE;
+	char whynot[BUFSZ];
 
-    g.program_state.saving++; /* inhibit status and perm_invent updates */
-    /* When checkpointing is on, the full state needs to be written
-     * on each checkpoint.  When checkpointing is off, only the pid
-     * needs to be in the level.0 file, so it does not need to be
-     * constantly rewritten.  When checkpointing is turned off during
-     * a game, however, the file has to be rewritten once to truncate
-     * it and avoid restoring from outdated information.
-     *
-     * Restricting g.havestate to this routine means that an additional
-     * noop pid rewriting will take place on the first "checkpoint" after
-     * the game is started or restored, if checkpointing is off.
-     */
-    if (flags.ins_chkpt || g.havestate) {
-        /* save the rest of the current game state in the lock file,
-         * following the original int pid, the current level number,
-         * and the current savefile name, which should not be subject
-         * to any internal compression schemes since they must be
-         * readable by an external utility
-         */
-        nhfp = open_levelfile(0, whynot);
-        if (tricked_fileremoved(nhfp, whynot)) {
-            g.program_state.saving--;
-            return;
-        }
+	/* When checkpointing is on, the full state needs to be written
+	 * on each checkpoint.  When checkpointing is off, only the pid
+	 * needs to be in the level.0 file, so it does not need to be
+	 * constantly rewritten.  When checkpointing is turned off during
+	 * a game, however, the file has to be rewritten once to truncate
+	 * it and avoid restoring from outdated information.
+	 *
+	 * Restricting havestate to this routine means that an additional
+	 * noop pid rewriting will take place on the first "checkpoint" after
+	 * the game is started or restored, if checkpointing is off.
+	 */
+	if (flags.ins_chkpt || havestate) {
+		/* save the rest of the current game state in the lock file,
+		 * following the original int pid, the current level number,
+		 * and the current savefile name, which should not be subject
+		 * to any internal compression schemes since they must be
+		 * readable by an external utility
+		 */
+		fd = open_levelfile(0, whynot);
+		if (fd < 0) {
+		    pline("%s", whynot);
+		    pline("Probably someone removed it.");
+		    killer = whynot;
+		    done(TRICKED);
+		    return;
+		}
 
-        if (nhfp->structlevel)
-            (void) read(nhfp->fd, (genericptr_t) &hpid, sizeof hpid);
-        if (g.hackpid != hpid) {
-            Sprintf(whynot, "Level #0 pid (%d) doesn't match ours (%d)!",
-                    hpid, g.hackpid);
-            goto giveup;
-        }
-        close_nhfile(nhfp);
+		(void) read(fd, (genericptr_t) &hpid, sizeof(hpid));
+		if (hackpid != hpid) {
+		    Sprintf(whynot,
+			    "Level #0 pid (%d) doesn't match ours (%d)!",
+			    hpid, hackpid);
+		    pline("%s", whynot);
+		    killer = whynot;
+		    done(TRICKED);
+		}
+		(void) close(fd);
 
-        nhfp = create_levelfile(0, whynot);
-        if (!nhfp) {
-            pline1(whynot);
- giveup:
-            Strcpy(g.killer.name, whynot);
-            /* done(TRICKED) will return when running in wizard mode;
-               clear the display-update-suppression flag before rather
-               than after so that screen updating behaves normally;
-               game data shouldn't be inconsistent yet, unlike it would
-               become midway through saving */
-            g.program_state.saving--;
-            done(TRICKED);
-            return;
-        }
-        nhfp->mode = WRITING;
-        if (nhfp->structlevel)
-            (void) write(nhfp->fd, (genericptr_t) &g.hackpid, sizeof g.hackpid);
-        if (flags.ins_chkpt) {
-            int currlev = ledger_no(&u.uz);
+		fd = create_levelfile(0, whynot);
+		if (fd < 0) {
+		    pline("%s", whynot);
+		    killer = whynot;
+		    done(TRICKED);
+		    return;
+		}
+		(void) write(fd, (genericptr_t) &hackpid, sizeof(hackpid));
+		if (flags.ins_chkpt) {
+		    int currlev = ledger_no(&u.uz);
 
-            if (nhfp->structlevel)
-                (void) write(nhfp->fd, (genericptr_t) &currlev, sizeof currlev);
-            save_savefile_name(nhfp);
-            store_version(nhfp);
-            store_savefileinfo(nhfp);
-            store_plname_in_file(nhfp);
-
-            g.ustuck_id = (u.ustuck ? u.ustuck->m_id : 0);
-            g.usteed_id = (u.usteed ? u.usteed->m_id : 0);
-            g.looseball = BALL_IN_MON ? uball : 0;
-            g.loosechain = CHAIN_IN_MON ? uchain : 0;
-            savegamestate(nhfp);
-        }
-        close_nhfile(nhfp);
-    }
-    g.program_state.saving--;
-    g.havestate = flags.ins_chkpt;
-    return;
+		    (void) write(fd, (genericptr_t) &currlev, sizeof(currlev));
+		    save_savefile_name(fd);
+		    store_version(fd);
+#ifdef STORE_PLNAME_IN_FILE
+		    bwrite(fd, (genericptr_t) plname, PL_NSIZ);
+#endif
+		    ustuck_id = (u.ustuck ? u.ustuck->m_id : 0);
+#ifdef STEED
+		    usteed_id = (u.usteed ? u.usteed->m_id : 0);
+#endif
+		    savegamestate(fd, WRITE_SAVE);
+		}
+		bclose(fd);
+	}
+	havestate = flags.ins_chkpt;
 }
 #endif
 
-void
-savelev(NHFILE *nhfp, xchar lev)
+#ifdef MFLOPPY
+boolean
+savelev(fd, lev, mode)
+int fd;
+xchar lev;
+int mode;
 {
-    boolean set_uz_save = (g.uz_save.dnum == 0 && g.uz_save.dlevel == 0);
-
-    /* caller might have already set up g.uz_save and zeroed u.uz;
-       if not, we need to set it for save_bubbles(); caveat: if the
-       player quits during character selection, u.uz won't be set yet
-       but we'll be called during run-down */
-    if (set_uz_save && perform_bwrite(nhfp)) {
-        if (u.uz.dnum == 0 && u.uz.dlevel == 0) {
-            g.program_state.something_worth_saving = 0;
-            panic("savelev: where are we?");
-        }
-        g.uz_save = u.uz;
-    }
-
-    savelev_core(nhfp, lev);
-
-    if (set_uz_save)
-        g.uz_save.dnum = g.uz_save.dlevel = 0; /* unset */
+	if (mode & COUNT_SAVE) {
+		bytes_counted = 0;
+		savelev0(fd, lev, COUNT_SAVE);
+		/* probably bytes_counted will be filled in again by an
+		 * immediately following WRITE_SAVE anyway, but we'll
+		 * leave it out of checkspace just in case */
+		if (iflags.checkspace) {
+			while (bytes_counted > freediskspace(levels))
+				if (!swapout_oldest())
+					return FALSE;
+		}
+	}
+	if (mode & (WRITE_SAVE | FREE_SAVE)) {
+		bytes_counted = 0;
+		savelev0(fd, lev, mode);
+	}
+	if (mode != FREE_SAVE) {
+		level_info[lev].where = ACTIVE;
+		level_info[lev].time = moves;
+		level_info[lev].size = bytes_counted;
+	}
+	return TRUE;
 }
 
-static void
-savelev_core(NHFILE *nhfp, xchar lev)
-{
-#ifdef TOS
-    short tlev;
-#endif
-
-    g.program_state.saving++; /* even if current mode is FREEING */
-
-    if (!nhfp)
-        panic("Save on bad file!"); /* impossible */
-    /*
-     *  Level file contents:
-     *    version info (handled by caller);
-     *    save file info (compression type; also by caller);
-     *    process ID;
-     *    internal level number (ledger number);
-     *    bones info;
-     *    actual level data.
-     *
-     *  If we're tearing down the current level without saving anything
-     *  (which happens at end of game or upon entrance to endgame or
-     *  after an aborted restore attempt) then we don't want to do any
-     *  actual I/O.  So when only freeing, we skip to the bones info
-     *  portion (which has some freeing to do), then jump quite a bit
-     *  further ahead to the middle of the 'actual level data' portion.
-     */
-    if (nhfp->mode != FREEING) {
-        /* WRITING (probably ORed with FREEING), or COUNTING */
-
-        /* purge any dead monsters (necessary if we're starting
-           a panic save rather than a normal one, or sometimes
-           when changing levels without taking time -- e.g.
-           create statue trap then immediately level teleport) */
-        if (iflags.purge_monsters)
-            dmonsfree();
-
-        if (lev >= 0 && lev <= maxledgerno())
-            g.level_info[lev].flags |= VISITED;
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &g.hackpid, sizeof g.hackpid);
-#ifdef TOS
-        tlev = lev;
-        tlev &= 0x00ff;
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &tlev, sizeof tlev);
+STATIC_OVL void
+savelev0(fd,lev,mode)
 #else
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &lev, sizeof lev);
-#endif
-    }
-
-    /* bones info comes before level data; the intent is for an external
-       program ('hearse') to be able to match a bones file with the
-       corresponding log file entry--or perhaps just skip that?--without
-       the guessing that was needed in 3.4.3 and without having to
-       interpret level data to find where to start; unfortunately it
-       still needs to handle all the data compression schemes */
-    savecemetery(nhfp, &g.level.bonesinfo);
-    if (nhfp->mode == FREEING) /* see above */
-        goto skip_lots;
-
-    savelevl(nhfp, ((sfsaveinfo.sfi1 & SFI1_RLECOMP) == SFI1_RLECOMP));
-    if (nhfp->structlevel) {
-        bwrite(nhfp->fd, (genericptr_t) g.lastseentyp, sizeof g.lastseentyp);
-        bwrite(nhfp->fd, (genericptr_t) &g.moves, sizeof g.moves);
-        save_stairs(nhfp);
-        bwrite(nhfp->fd, (genericptr_t) &g.updest, sizeof (dest_area));
-        bwrite(nhfp->fd, (genericptr_t) &g.dndest, sizeof (dest_area));
-        bwrite(nhfp->fd, (genericptr_t) &g.level.flags, sizeof g.level.flags);
-        bwrite(nhfp->fd, (genericptr_t) g.doors, sizeof g.doors);
-    }
-    save_rooms(nhfp); /* no dynamic memory to reclaim */
-
-    /* from here on out, saving also involves allocated memory cleanup */
- skip_lots:
-    /* timers and lights must be saved before monsters and objects */
-    save_timers(nhfp, RANGE_LEVEL);
-    save_light_sources(nhfp, RANGE_LEVEL);
-
-    savemonchn(nhfp, fmon);
-    save_worm(nhfp); /* save worm information */
-    savetrapchn(nhfp, g.ftrap);
-    saveobjchn(nhfp, &fobj);
-    saveobjchn(nhfp, &g.level.buriedobjlist);
-    saveobjchn(nhfp, &g.billobjs);
-    save_engravings(nhfp);
-    savedamage(nhfp); /* pending shop wall and/or floor repair */
-    save_regions(nhfp);
-    save_bubbles(nhfp, lev); /* for water and air */
-
-    if (nhfp->mode != FREEING) {
-        if (nhfp->structlevel)
-            bflush(nhfp->fd);
-    }
-    g.program_state.saving--;
-    if (release_data(nhfp)) {
-        clear_level_structures();
-        g.ftrap = 0;
-        g.billobjs = 0;
-        (void) memset(g.rooms, 0, sizeof(g.rooms));
-    }
-    return;
-}
-
-static void
-savelevl(NHFILE* nhfp, boolean rlecomp)
-{
-#ifdef RLECOMP
-    struct rm *prm, *rgrm;
-    int x, y;
-    uchar match;
-
-    if (rlecomp) {
-        /* perform run-length encoding of rm structs */
-
-        rgrm = &levl[0][0]; /* start matching at first rm */
-        match = 0;
-
-        for (y = 0; y < ROWNO; y++) {
-            for (x = 0; x < COLNO; x++) {
-                prm = &levl[x][y];
-                if (prm->glyph == rgrm->glyph && prm->typ == rgrm->typ
-                    && prm->seenv == rgrm->seenv
-                    && prm->horizontal == rgrm->horizontal
-                    && prm->flags == rgrm->flags && prm->lit == rgrm->lit
-                    && prm->waslit == rgrm->waslit
-                    && prm->roomno == rgrm->roomno && prm->edge == rgrm->edge
-                    && prm->candig == rgrm->candig) {
-                    match++;
-                    if (match > 254) {
-                        match = 254; /* undo this match */
-                        goto writeout;
-                    }
-                } else {
-                    /* run has been broken, write out run-length encoding */
- writeout:
-                    if (nhfp->structlevel) {
-                        bwrite(nhfp->fd, (genericptr_t) &match, sizeof match);
-                        bwrite(nhfp->fd, (genericptr_t) rgrm, sizeof *rgrm);
-                    }
-                    /* start encoding again. we have at least 1 rm
-                       in the next run, viz. this one. */
-                    match = 1;
-                    rgrm = prm;
-                }
-            }
-        }
-        if (match > 0) {
-            if (nhfp->structlevel) {
-                bwrite(nhfp->fd, (genericptr_t) &match, sizeof (uchar));
-                bwrite(nhfp->fd, (genericptr_t) rgrm, sizeof (struct rm));
-            }
-        }
-        return;
-    }
-#else /* !RLECOMP */
-    nhUse(rlecomp);
-#endif /* ?RLECOMP */
-    if (nhfp->structlevel) {
-        bwrite(nhfp->fd, (genericptr_t) levl, sizeof levl);
-    }
-    return;
-}
-
-/* save Plane of Water's air bubbles and Plane of Air's clouds */
-static void
-save_bubbles(NHFILE *nhfp, xchar lev)
-{
-    xchar bbubbly;
-
-    /* air bubbles and clouds used to be saved as part of game state
-       because restoring them needs dungeon data that isn't available
-       during the first pass of their levels; now that they are part of
-       the current level instead, we write a zero or non-zero marker
-       so that restore can determine whether they are present even when
-       u.uz and ledger_no() aren't available to it yet */
-    bbubbly = 0;
-    if (lev == ledger_no(&water_level) || lev == ledger_no(&air_level))
-        bbubbly = lev; /* non-zero */
-    if (nhfp->structlevel)
-        bwrite(nhfp->fd, (genericptr_t) &bbubbly, sizeof bbubbly);
-
-    if (bbubbly)
-        save_waterlevel(nhfp); /* save air bubbles or clouds */
-}
-
-/* used when saving a level and also when saving dungeon overview data */
 void
-savecemetery(NHFILE* nhfp, struct cemetery** cemeteryaddr)
+savelev(fd,lev,mode)
+#endif
+int fd;
+xchar lev;
+int mode;
 {
-    struct cemetery *thisbones, *nextbones;
-    int flag;
+#ifdef TOS
+	short tlev;
+#endif
 
-    flag = *cemeteryaddr ? 0 : -1;
-    if (perform_bwrite(nhfp)) {
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &flag, sizeof flag);
-    }
-    nextbones = *cemeteryaddr;
-    while ((thisbones = nextbones) != 0) {
-        nextbones = thisbones->next;
-        if (perform_bwrite(nhfp)) {
-            if (nhfp->structlevel)
-                bwrite(nhfp->fd, (genericptr_t) thisbones, sizeof *thisbones);
-        }
-        if (release_data(nhfp))
-            free((genericptr_t) thisbones);
-    }
-    if (release_data(nhfp))
-        *cemeteryaddr = 0;
+	/* if we're tearing down the current level without saving anything
+	   (which happens upon entrance to the endgame or after an aborted
+	   restore attempt) then we don't want to do any actual I/O */
+	if (mode == FREE_SAVE) goto skip_lots;
+	if (iflags.purge_monsters) {
+		/* purge any dead monsters (necessary if we're starting
+		 * a panic save rather than a normal one, or sometimes
+		 * when changing levels without taking time -- e.g.
+		 * create statue trap then immediately level teleport) */
+		dmonsfree();
+	}
+
+	if(fd < 0) panic("Save on bad file!");	/* impossible */
+#ifdef MFLOPPY
+	count_only = (mode & COUNT_SAVE);
+#endif
+	if (lev >= 0 && lev <= maxledgerno())
+	    level_info[lev].flags |= VISITED;
+	bwrite(fd,(genericptr_t) &hackpid,sizeof(hackpid));
+#ifdef TOS
+	tlev=lev; tlev &= 0x00ff;
+	bwrite(fd,(genericptr_t) &tlev,sizeof(tlev));
+#else
+	bwrite(fd,(genericptr_t) &lev,sizeof(lev));
+#endif
+#ifdef RLECOMP
+	{
+	    /* perform run-length encoding of rm structs */
+	    struct rm *prm, *rgrm;
+	    int x, y;
+	    uchar match;
+
+	    rgrm = &levl[0][0];		/* start matching at first rm */
+	    match = 0;
+
+	    for (y = 0; y < ROWNO; y++) {
+		for (x = 0; x < COLNO; x++) {
+		    prm = &levl[x][y];
+		    if (prm->glyph == rgrm->glyph
+			&& prm->typ == rgrm->typ
+			&& prm->seenv == rgrm->seenv
+			&& prm->horizontal == rgrm->horizontal
+			&& prm->flags == rgrm->flags
+			&& prm->lit == rgrm->lit
+			&& prm->waslit == rgrm->waslit
+			&& prm->roomno == rgrm->roomno
+			&& prm->edge == rgrm->edge
+			&& prm->stepped_on == rgrm->stepped_on) {
+			match++;
+			if (match > 254) {
+			    match = 254;	/* undo this match */
+			    goto writeout;
+			}
+		    } else {
+			/* the run has been broken,
+			 * write out run-length encoding */
+		    writeout:
+			bwrite(fd, (genericptr_t)&match, sizeof(uchar));
+			bwrite(fd, (genericptr_t)rgrm, sizeof(struct rm));
+			/* start encoding again. we have at least 1 rm
+			 * in the next run, viz. this one. */
+			match = 1;
+			rgrm = prm;
+		    }
+		}
+	    }
+	    if (match > 0) {
+		bwrite(fd, (genericptr_t)&match, sizeof(uchar));
+		bwrite(fd, (genericptr_t)rgrm, sizeof(struct rm));
+	    }
+	}
+#else
+	bwrite(fd,(genericptr_t) levl,sizeof(levl));
+#endif /* RLECOMP */
+
+	bwrite(fd,(genericptr_t) &monstermoves,sizeof(monstermoves));
+	bwrite(fd,(genericptr_t) &upstair,sizeof(stairway));
+	bwrite(fd,(genericptr_t) &dnstair,sizeof(stairway));
+	bwrite(fd,(genericptr_t) &upladder,sizeof(stairway));
+	bwrite(fd,(genericptr_t) &dnladder,sizeof(stairway));
+	bwrite(fd,(genericptr_t) &sstairs,sizeof(stairway));
+	bwrite(fd,(genericptr_t) &updest,sizeof(dest_area));
+	bwrite(fd,(genericptr_t) &dndest,sizeof(dest_area));
+	bwrite(fd,(genericptr_t) &level.flags,sizeof(level.flags));
+	bwrite(fd, (genericptr_t) doors, sizeof(doors));
+	save_rooms(fd);	/* no dynamic memory to reclaim */
+
+	/* from here on out, saving also involves allocated memory cleanup */
+ skip_lots:
+	/* must be saved before mons, objs, and buried objs */
+	save_timers(fd, mode, RANGE_LEVEL);
+	save_light_sources(fd, mode, RANGE_LEVEL);
+
+	savemonchn(fd, fmon, mode);
+	save_worm(fd, mode);	/* save worm information */
+	savetrapchn(fd, ftrap, mode);
+	saveobjchn(fd, fobj, mode);
+	saveobjchn(fd, level.buriedobjlist, mode);
+	saveobjchn(fd, billobjs, mode);
+	save_mongen_override(fd, level.mon_gen, mode);
+	save_lvl_sounds(fd, level.sounds, mode);
+	if (release_data(mode)) {
+	    fmon = 0;
+	    ftrap = 0;
+	    fobj = 0;
+	    level.buriedobjlist = 0;
+	    billobjs = 0;
+	    free(level.mon_gen);
+	    level.mon_gen = NULL;
+	    level.sounds = NULL;
+	}
+	save_engravings(fd, mode);
+	savedamage(fd, mode);
+	save_regions(fd, mode);
+	if (mode != FREE_SAVE) bflush(fd);
 }
 
-static void
-savedamage(NHFILE* nhfp)
-{
-    register struct damage *damageptr, *tmp_dam;
-    unsigned int xl = 0;
+#ifdef ZEROCOMP
+/* The runs of zero-run compression are flushed after the game state or a
+ * level is written out.  This adds a couple bytes to a save file, where
+ * the runs could be mashed together, but it allows gluing together game
+ * state and level files to form a save file, and it means the flushing
+ * does not need to be specifically called for every other time a level
+ * file is written out.
+ */
 
-    damageptr = g.level.damagelist;
-    for (tmp_dam = damageptr; tmp_dam; tmp_dam = tmp_dam->next)
-        xl++;
-    if (perform_bwrite(nhfp)) {
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &xl, sizeof xl);
+#define RLESC '\0'    /* Leading character for run of LRESC's */
+#define flushoutrun(ln) (bputc(RLESC), bputc(ln), ln = -1)
+
+#ifndef ZEROCOMP_BUFSIZ
+# define ZEROCOMP_BUFSIZ BUFSZ
+#endif
+static NEARDATA unsigned char outbuf[ZEROCOMP_BUFSIZ];
+static NEARDATA unsigned short outbufp = 0;
+static NEARDATA short outrunlength = -1;
+static NEARDATA int bwritefd;
+static NEARDATA boolean compressing = FALSE;
+
+/*dbg()
+{
+    HUP printf("outbufp %d outrunlength %d\n", outbufp,outrunlength);
+}*/
+
+STATIC_OVL void
+bputc(c)
+int c;
+{
+#ifdef MFLOPPY
+    bytes_counted++;
+    if (count_only)
+      return;
+#endif
+    if (outbufp >= sizeof outbuf) {
+	(void) write(bwritefd, outbuf, sizeof outbuf);
+	outbufp = 0;
     }
-    while (xl--) {
-        if (perform_bwrite(nhfp)) {
-            if (nhfp->structlevel)
-                bwrite(nhfp->fd, (genericptr_t) damageptr, sizeof *damageptr);
-        }
-        tmp_dam = damageptr;
-        damageptr = damageptr->next;
-        if (release_data(nhfp))
-            free((genericptr_t) tmp_dam);
-    }
-    if (release_data(nhfp))
-        g.level.damagelist = 0;
+    outbuf[outbufp++] = (unsigned char)c;
 }
 
-static void
-save_stairs(NHFILE* nhfp)
+/*ARGSUSED*/
+void
+bufon(fd)
+int fd;
 {
-    stairway *stway = g.stairs;
-    int buflen = (int) sizeof *stway;
-
-    while (stway) {
-        if (perform_bwrite(nhfp)) {
-            if (stway->tolev.dnum == u.uz.dnum) {
-                /* make dlevel relative to current level */
-                stway->tolev.dlevel -= u.uz.dlevel;
-            }
-            if (nhfp->structlevel) {
-                bwrite(nhfp->fd, (genericptr_t) &buflen, sizeof buflen);
-                bwrite(nhfp->fd, (genericptr_t) stway, sizeof *stway);
-            }
-            if (stway->tolev.dnum == u.uz.dnum) {
-                /* reset staiway dlevel back to absolute */
-                stway->tolev.dlevel += u.uz.dlevel;
-            }
-        }
-        stway = stway->next;
-    }
-    if (perform_bwrite(nhfp)) {
-        buflen = -1;
-        if (nhfp->structlevel) {
-            bwrite(nhfp->fd, (genericptr_t) &buflen, sizeof buflen);
-        }
-    }
+    compressing = TRUE;
+    return;
 }
 
-/* save one object;
-   caveat: this is only for perform_bwrite(); caller handles release_data() */
-static void
-saveobj(NHFILE* nhfp, struct obj* otmp)
+/*ARGSUSED*/
+void
+bufoff(fd)
+int fd;
 {
-    int buflen, zerobuf = 0;
-
-    buflen = (int) sizeof (struct obj);
-    if (nhfp->structlevel) {
-        bwrite(nhfp->fd, (genericptr_t) &buflen, sizeof buflen);
-        bwrite(nhfp->fd, (genericptr_t) otmp, buflen);
+    if (outbufp) {
+	outbufp = 0;
+	panic("closing file with buffered data still unwritten");
     }
-    if (otmp->oextra) {
-        buflen = ONAME(otmp) ? (int) strlen(ONAME(otmp)) + 1 : 0;
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &buflen, sizeof buflen);
-
-        if (buflen > 0) {
-            if (nhfp->structlevel)
-                bwrite(nhfp->fd, (genericptr_t) ONAME(otmp), buflen);
-        }
-        /* defer to savemon() for this one */
-        if (OMONST(otmp)) {
-            savemon(nhfp, OMONST(otmp));
-        } else {
-            if (nhfp->structlevel)
-                bwrite(nhfp->fd, (genericptr_t) &zerobuf, sizeof zerobuf);
-        }
-        /* extra info about scroll of mail */
-        buflen = OMAILCMD(otmp) ? (int) strlen(OMAILCMD(otmp)) + 1 : 0;
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &buflen, sizeof buflen);
-        if (buflen > 0) {
-            if (nhfp->structlevel)
-                  bwrite(nhfp->fd, (genericptr_t) OMAILCMD(otmp), buflen);
-        }
-        /* omid used to be indirect via a pointer in oextra but has
-           become part of oextra itself; 0 means not applicable and
-           gets saved/restored whenever any other oextra components do */
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &OMID(otmp), sizeof OMID(otmp));
-    }
+    outrunlength = -1;
+    compressing = FALSE;
+    return;
 }
 
-/* save an object chain; sets head of list to Null when done;
-   handles release_data() for each object in the list */
-static void
-saveobjchn(NHFILE* nhfp, struct obj** obj_p)
+void
+bflush(fd)  /* flush run and buffer */
+register int fd;
 {
-    register struct obj *otmp = *obj_p;
-    struct obj *otmp2;
-    boolean is_invent = (otmp && otmp == g.invent);
-    int minusone = -1;
+    bwritefd = fd;
+    if (outrunlength >= 0) {	/* flush run */
+	flushoutrun(outrunlength);
+    }
+#ifdef MFLOPPY
+    if (count_only) outbufp = 0;
+#endif
 
-    while (otmp) {
-        otmp2 = otmp->nobj;
-        if (perform_bwrite(nhfp)) {
-            saveobj(nhfp, otmp);
-        }
-        if (Has_contents(otmp))
-            saveobjchn(nhfp, &otmp->cobj);
-        if (release_data(nhfp)) {
-            /*
-             * If these are on the floor, the discarding could be
-             * due to game save, or we could just be changing levels.
-             * Always invalidate the pointer, but ensure that we have
-             * the o_id in order to restore the pointer on reload.
-             */
-            if (otmp == g.context.victual.piece) {
-                g.context.victual.o_id = otmp->o_id;
-                g.context.victual.piece = (struct obj *) 0;
-            }
-            if (otmp == g.context.tin.tin) {
-                g.context.tin.o_id = otmp->o_id;
-                g.context.tin.tin = (struct obj *) 0;
-            }
-            if (otmp == g.context.spbook.book) {
-                g.context.spbook.o_id = otmp->o_id;
-                g.context.spbook.book = (struct obj *) 0;
-            }
-            otmp->where = OBJ_FREE; /* set to free so dealloc will work */
-            otmp->nobj = NULL;      /* nobj saved into otmp2 */
-            otmp->cobj = NULL;      /* contents handled above */
-            otmp->timed = 0;        /* not timed any more */
-            otmp->lamplit = 0;      /* caller handled lights */
-            otmp->leashmon = 0;     /* mon->mleashed could still be set;
-                                     * unfortunately, we can't clear that
-                                     * until after the monster is saved */
-            otmp->owornmask = 0L;   /* no longer care */
-            dealloc_obj(otmp);
-        }
-        otmp = otmp2;
-    }
-    if (perform_bwrite(nhfp)) {
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &minusone, sizeof (int));
-    }
-    if (release_data(nhfp)) {
-        if (is_invent)
-            allunworn(); /* clear uwep, uarm, uball, &c pointers */
-        *obj_p = (struct obj *) 0;
-    }
-}
-
-static void
-savemon(NHFILE* nhfp, struct monst* mtmp)
-{
-    int buflen;
-
-    mtmp->mtemplit = 0; /* normally clear; if set here then a panic save
-                         * is being written while bhit() was executing */
-    buflen = (int) sizeof (struct monst);
-    if (nhfp->structlevel) {
-        bwrite(nhfp->fd, (genericptr_t) &buflen, sizeof buflen);
-        bwrite(nhfp->fd, (genericptr_t) mtmp, buflen);
-    }
-    if (mtmp->mextra) {
-        buflen = MGIVENNAME(mtmp) ? (int) strlen(MGIVENNAME(mtmp)) + 1 : 0;
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &buflen, sizeof buflen);
-        if (buflen > 0) {
-            if (nhfp->structlevel)
-                bwrite(nhfp->fd, (genericptr_t) MGIVENNAME(mtmp), buflen);
-        }
-        buflen = EGD(mtmp) ? (int) sizeof (struct egd) : 0;
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &buflen, sizeof buflen);
-        if (buflen > 0) {
-            if (nhfp->structlevel)
-                bwrite(nhfp->fd, (genericptr_t) EGD(mtmp), buflen);
-        }
-        buflen = EPRI(mtmp) ? (int) sizeof (struct epri) : 0;
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &buflen, sizeof buflen);
-        if (buflen > 0) {
-            if (nhfp->structlevel)
-                bwrite(nhfp->fd, (genericptr_t) EPRI(mtmp), buflen);
-        }
-        buflen = ESHK(mtmp) ? (int) sizeof (struct eshk) : 0;
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &buflen, sizeof (int));
-        if (buflen > 0) {
-            if (nhfp->structlevel)
-                bwrite(nhfp->fd, (genericptr_t) ESHK(mtmp), buflen);
-        }
-        buflen = EMIN(mtmp) ? (int) sizeof (struct emin) : 0;
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &buflen, sizeof (int));
-        if (buflen > 0) {
-            if (nhfp->structlevel)
-                bwrite(nhfp->fd, (genericptr_t) EMIN(mtmp), buflen);
-        }
-        buflen = EDOG(mtmp) ? (int) sizeof (struct edog) : 0;
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &buflen, sizeof (int));
-        if (buflen > 0) {
-            if (nhfp->structlevel)
-                bwrite(nhfp->fd, (genericptr_t) EDOG(mtmp), buflen);
-        }
-        /* mcorpsenm is inline int rather than pointer to something,
-           so doesn't need to be preceded by a length field */
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &MCORPSENM(mtmp),
-                   sizeof MCORPSENM(mtmp));
+    if (outbufp) {
+	if (write(fd, outbuf, outbufp) != outbufp) {
+#if defined(UNIX) || defined(VMS) || defined(__EMX__)
+	    if (program_state.done_hup)
+		terminate(EXIT_FAILURE);
+	    else
+#endif
+		bclose(fd);	/* panic (outbufp != 0) */
+	}
+	outbufp = 0;
     }
 }
 
-static void
-savemonchn(NHFILE* nhfp, register struct monst* mtmp)
+void
+bwrite(fd, loc, num)
+int fd;
+genericptr_t loc;
+register unsigned num;
 {
-    register struct monst *mtmp2;
-    int minusone = -1;
+    register unsigned char *bp = (unsigned char *)loc;
 
-    while (mtmp) {
-        mtmp2 = mtmp->nmon;
-        if (perform_bwrite(nhfp)) {
-            mtmp->mnum = monsndx(mtmp->data);
-            if (mtmp->ispriest)
-                forget_temple_entry(mtmp); /* EPRI() */
-            savemon(nhfp, mtmp);
-        }
-        if (mtmp->minvent)
-            saveobjchn(nhfp, &mtmp->minvent);
-        if (release_data(nhfp)) {
-            if (mtmp == g.context.polearm.hitmon) {
-                g.context.polearm.m_id = mtmp->m_id;
-                g.context.polearm.hitmon = NULL;
-            }
-            mtmp->nmon = NULL;  /* nmon saved into mtmp2 */
-            dealloc_monst(mtmp);
-        }
-        mtmp = mtmp2;
-    }
-    if (perform_bwrite(nhfp)) {
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &minusone, sizeof (int));
+    if (!compressing) {
+#ifdef MFLOPPY
+	bytes_counted += num;
+	if (count_only) return;
+#endif
+	if ((unsigned) write(fd, loc, num) != num) {
+#if defined(UNIX) || defined(VMS) || defined(__EMX__)
+	    if (program_state.done_hup)
+		terminate(EXIT_FAILURE);
+	    else
+#endif
+		panic("cannot write %u bytes to file #%d", num, fd);
+	}
+    } else {
+	bwritefd = fd;
+	for (; num; num--, bp++) {
+	    if (*bp == RLESC) {	/* One more char in run */
+		if (++outrunlength == 0xFF) {
+		    flushoutrun(outrunlength);
+		}
+	    } else {		/* end of run */
+		if (outrunlength >= 0) {	/* flush run */
+		    flushoutrun(outrunlength);
+		}
+		bputc(*bp);
+	    }
+	}
     }
 }
 
-/* save traps; g.ftrap is the only trap chain so the 2nd arg is superfluous */
-static void
-savetrapchn(NHFILE* nhfp, register struct trap* trap)
+void
+bclose(fd)
+int fd;
 {
-    static struct trap zerotrap;
-    register struct trap *trap2;
+    bufoff(fd);
+    (void) close(fd);
+    return;
+}
 
-    while (trap) {
-        trap2 = trap->ntrap;
-        if (perform_bwrite(nhfp)) {
-            if (nhfp->structlevel)
-                bwrite(nhfp->fd, (genericptr_t) trap, sizeof *trap);
-        }
-        if (release_data(nhfp))
-            dealloc_trap(trap);
-        trap = trap2;
+#else /* ZEROCOMP */
+
+static int bw_fd = -1;
+static FILE *bw_FILE = 0;
+static boolean buffering = FALSE;
+
+void
+bufon(fd)
+    int fd;
+{
+#ifdef UNIX
+    if(bw_fd >= 0)
+	panic("double buffering unexpected");
+    bw_fd = fd;
+    if((bw_FILE = fdopen(fd, "w")) == 0)
+	panic("buffering of file %d failed", fd);
+#endif
+    buffering = TRUE;
+}
+
+void
+bufoff(fd)
+int fd;
+{
+    bflush(fd);
+    buffering = FALSE;
+}
+
+void
+bflush(fd)
+    int fd;
+{
+#ifdef UNIX
+    if(fd == bw_fd) {
+	if(fflush(bw_FILE) == EOF)
+	    panic("flush of savefile failed!");
     }
-    if (perform_bwrite(nhfp)) {
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &zerotrap, sizeof zerotrap);
+#endif
+    return;
+}
+
+void
+bwrite(fd,loc,num)
+register int fd;
+register genericptr_t loc;
+register unsigned num;
+{
+	boolean failed;
+
+#ifdef MFLOPPY
+	bytes_counted += num;
+	if (count_only) return;
+#endif
+
+#ifdef UNIX
+	if (buffering) {
+	    if(fd != bw_fd)
+		panic("unbuffered write to fd %d (!= %d)", fd, bw_fd);
+
+	    failed = (fwrite(loc, (int)num, 1, bw_FILE) != 1);
+	} else
+#endif /* UNIX */
+	{
+/* lint wants the 3rd arg of write to be an int; lint -p an unsigned */
+#if defined(BSD) || defined(ULTRIX)
+	    failed = (write(fd, loc, (int)num) != (int)num);
+#else /* e.g. SYSV, __TURBOC__ */
+	    failed = (write(fd, loc, num) != num);
+#endif
+	}
+
+	if (failed) {
+#if defined(UNIX) || defined(VMS) || defined(__EMX__)
+	    if (program_state.done_hup)
+		terminate(EXIT_FAILURE);
+	    else
+#endif
+		panic("cannot write %u bytes to file #%d", num, fd);
+	}
+}
+
+void
+bclose(fd)
+    int fd;
+{
+    bufoff(fd);
+#ifdef UNIX
+    if (fd == bw_fd) {
+	(void) fclose(bw_FILE);
+	bw_fd = -1;
+	bw_FILE = 0;
+    } else
+#endif
+	(void) close(fd);
+    return;
+}
+#endif /* ZEROCOMP */
+
+STATIC_OVL void
+savelevchn(fd, mode)
+register int fd, mode;
+{
+	s_level	*tmplev, *tmplev2;
+	int cnt = 0;
+
+	for (tmplev = sp_levchn; tmplev; tmplev = tmplev->next) cnt++;
+	if (perform_bwrite(mode))
+	    bwrite(fd, (genericptr_t) &cnt, sizeof(int));
+
+	for (tmplev = sp_levchn; tmplev; tmplev = tmplev2) {
+	    tmplev2 = tmplev->next;
+	    if (perform_bwrite(mode))
+		bwrite(fd, (genericptr_t) tmplev, sizeof(s_level));
+	    if (release_data(mode))
+		free((genericptr_t) tmplev);
+	}
+	if (release_data(mode))
+	    sp_levchn = 0;
+}
+
+STATIC_OVL void
+savedamage(fd, mode)
+register int fd, mode;
+{
+	register struct damage *damageptr, *tmp_dam;
+	unsigned int xl = 0;
+
+	damageptr = level.damagelist;
+	for (tmp_dam = damageptr; tmp_dam; tmp_dam = tmp_dam->next)
+	    xl++;
+	if (perform_bwrite(mode))
+	    bwrite(fd, (genericptr_t) &xl, sizeof(xl));
+
+	while (xl--) {
+	    if (perform_bwrite(mode))
+		bwrite(fd, (genericptr_t) damageptr, sizeof(*damageptr));
+	    tmp_dam = damageptr;
+	    damageptr = damageptr->next;
+	    if (release_data(mode))
+		free((genericptr_t)tmp_dam);
+	}
+	if (release_data(mode))
+	    level.damagelist = 0;
+}
+
+void
+save_mongen_override(fd, or, mode)
+register int fd, mode;
+register struct mon_gen_override *or;
+{
+    struct mon_gen_tuple *mt;
+    struct mon_gen_tuple *prev;
+    int marker = 0;
+
+    if (!or) {
+	if (perform_bwrite(mode)) {
+	    marker = 0;
+	    bwrite(fd, (genericptr_t) &marker, sizeof(marker));
+	}
+    } else {
+	if (perform_bwrite(mode)) {
+	    marker = 1;
+	    bwrite(fd, (genericptr_t) &marker, sizeof(marker));
+	    bwrite(fd, (genericptr_t) or, sizeof(struct mon_gen_override));
+	}
+	mt = or->gen_chances;
+	while (mt) {
+	    if (perform_bwrite(mode)) {
+		bwrite(fd, (genericptr_t) mt, sizeof(struct mon_gen_tuple));
+	    }
+	    prev = mt;
+	    mt = mt->next;
+	    if (release_data(mode))
+		free(prev);
+	}
+	if (release_data(mode))
+	    or->gen_chances = NULL;
     }
+}
+
+void
+save_lvl_sounds(fd, or, mode)
+register int fd, mode;
+register struct lvl_sounds *or;
+{
+    int marker = 0;
+    int i;
+    int len;
+
+    if (!or) {
+	if (perform_bwrite(mode)) {
+	    marker = 0;
+	    bwrite(fd, (genericptr_t) &marker, sizeof(marker));
+	}
+    } else {
+	if (perform_bwrite(mode)) {
+	    marker = 1;
+	    bwrite(fd, (genericptr_t) &marker, sizeof(marker));
+	    bwrite(fd, (genericptr_t) or, sizeof(struct lvl_sounds));
+
+	    for (i = 0; i < or->n_sounds; i++) {
+		bwrite(fd, (genericptr_t)&(or->sounds[i].flags), sizeof(or->sounds[i].flags));
+		len = strlen(or->sounds[i].msg)+1;
+		bwrite(fd, (genericptr_t)&len, sizeof(len));
+		bwrite(fd, (genericptr_t)or->sounds[i].msg, len);
+	    }
+	}
+	if (release_data(mode)) {
+	    for (i = 0; i < or->n_sounds; i++)
+		free(or->sounds[i].msg);
+	    free(or->sounds);
+	    or->sounds = NULL;
+	    or->n_sounds = 0;
+	}
+    }
+}
+
+
+STATIC_OVL void
+saveobjchn(fd, otmp, mode)
+register int fd, mode;
+register struct obj *otmp;
+{
+	register struct obj *otmp2;
+	unsigned int xl;
+	int minusone = -1;
+
+	while(otmp) {
+	    otmp2 = otmp->nobj;
+	    if (perform_bwrite(mode)) {
+		xl = otmp->oxlth + otmp->onamelth;
+		bwrite(fd, (genericptr_t) &xl, sizeof(int));
+		bwrite(fd, (genericptr_t) otmp, xl + sizeof(struct obj));
+	    }
+	    if (Has_contents(otmp))
+		saveobjchn(fd,otmp->cobj,mode);
+	    if (release_data(mode)) {
+		if (otmp->oclass == FOOD_CLASS) food_disappears(otmp);
+		if (otmp->oclass == SPBOOK_CLASS) book_disappears(otmp);
+		otmp->where = OBJ_FREE;	/* set to free so dealloc will work */
+		otmp->timed = 0;	/* not timed any more */
+		otmp->lamplit = 0;	/* caller handled lights */
+		dealloc_obj(otmp);
+	    }
+	    otmp = otmp2;
+	}
+	if (perform_bwrite(mode))
+	    bwrite(fd, (genericptr_t) &minusone, sizeof(int));
+}
+
+STATIC_OVL void
+savemonchn(fd, mtmp, mode)
+register int fd, mode;
+register struct monst *mtmp;
+{
+	register struct monst *mtmp2;
+	unsigned int xl;
+	int minusone = -1;
+	struct permonst *monbegin = &mons[0];
+
+	if (perform_bwrite(mode))
+	    bwrite(fd, (genericptr_t) &monbegin, sizeof(monbegin));
+
+	while (mtmp) {
+	    mtmp2 = mtmp->nmon;
+	    if (perform_bwrite(mode)) {
+		xl = mtmp->mxlth + mtmp->mnamelth;
+		bwrite(fd, (genericptr_t) &xl, sizeof(int));
+		bwrite(fd, (genericptr_t) mtmp, xl + sizeof(struct monst));
+	    }
+	    if (mtmp->minvent)
+		saveobjchn(fd,mtmp->minvent,mode);
+	    if (release_data(mode))
+		dealloc_monst(mtmp);
+	    mtmp = mtmp2;
+	}
+	if (perform_bwrite(mode))
+	    bwrite(fd, (genericptr_t) &minusone, sizeof(int));
+}
+
+STATIC_OVL void
+savetrapchn(fd, trap, mode)
+register int fd, mode;
+register struct trap *trap;
+{
+	register struct trap *trap2;
+
+	while (trap) {
+	    trap2 = trap->ntrap;
+	    if (perform_bwrite(mode))
+		bwrite(fd, (genericptr_t) trap, sizeof(struct trap));
+	    if (release_data(mode))
+		dealloc_trap(trap);
+	    trap = trap2;
+	}
+	if (perform_bwrite(mode))
+	    bwrite(fd, (genericptr_t)nulls, sizeof(struct trap));
 }
 
 /* save all the fruit names and ID's; this is used only in saving whole games
@@ -979,235 +1035,255 @@ savetrapchn(NHFILE* nhfp, register struct trap* trap)
  * level routine marks nonexistent fruits by making the fid negative.
  */
 void
-savefruitchn(NHFILE* nhfp)
+savefruitchn(fd, mode)
+register int fd, mode;
 {
-    static struct fruit zerofruit;
-    register struct fruit *f2, *f1;
+	register struct fruit *f2, *f1;
 
-    f1 = g.ffruit;
-    while (f1) {
-        f2 = f1->nextf;
-        if (f1->fid >= 0 && perform_bwrite(nhfp)) {
-            if (nhfp->structlevel)
-                bwrite(nhfp->fd, (genericptr_t) f1, sizeof *f1);
-        }
-        if (release_data(nhfp))
-            dealloc_fruit(f1);
-        f1 = f2;
-    }
-    if (perform_bwrite(nhfp)) {
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &zerofruit, sizeof zerofruit);
-    }
-    if (release_data(nhfp))
-        g.ffruit = 0;
+	f1 = ffruit;
+	while (f1) {
+	    f2 = f1->nextf;
+	    if (f1->fid >= 0 && perform_bwrite(mode))
+		bwrite(fd, (genericptr_t) f1, sizeof(struct fruit));
+	    if (release_data(mode))
+		dealloc_fruit(f1);
+	    f1 = f2;
+	}
+	if (perform_bwrite(mode))
+	    bwrite(fd, (genericptr_t)nulls, sizeof(struct fruit));
+	if (release_data(mode))
+	    ffruit = 0;
 }
 
+#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
 
-
-static void
-savelevchn(NHFILE* nhfp)
+void
+free_percent_color_options(list_head)
+const struct percent_color_option *list_head;
 {
-    s_level *tmplev, *tmplev2;
-    int cnt = 0;
-
-    for (tmplev = g.sp_levchn; tmplev; tmplev = tmplev->next)
-        cnt++;
-    if (perform_bwrite(nhfp)) {
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &cnt, sizeof cnt);
-    }
-    for (tmplev = g.sp_levchn; tmplev; tmplev = tmplev2) {
-        tmplev2 = tmplev->next;
-        if (perform_bwrite(nhfp)) {
-            if (nhfp->structlevel)
-                bwrite(nhfp->fd, (genericptr_t) tmplev, sizeof *tmplev);
-        }
-        if (release_data(nhfp))
-            free((genericptr_t) tmplev);
-    }
-    if (release_data(nhfp))
-        g.sp_levchn = 0;
+	if (list_head == NULL) return;
+	free_percent_color_options(list_head->next);
+	free((genericptr_t)list_head);
 }
 
 void
-store_plname_in_file(NHFILE* nhfp)
+free_text_color_options(list_head)
+const struct text_color_option *list_head;
 {
-    int plsiztmp = PL_NSIZ;
-
-    if (nhfp->structlevel) {
-        bufoff(nhfp->fd);
-        /* bwrite() before bufon() uses plain write() */
-        bwrite(nhfp->fd, (genericptr_t) &plsiztmp, sizeof plsiztmp);
-        bwrite(nhfp->fd, (genericptr_t) g.plname, plsiztmp);
-        bufon(nhfp->fd);
-    }
-    return;
-}
-
-static void
-save_msghistory(NHFILE* nhfp)
-{
-    char *msg;
-    int msgcount = 0, msglen;
-    int minusone = -1;
-    boolean init = TRUE;
-
-    if (perform_bwrite(nhfp)) {
-        /* ask window port for each message in sequence */
-        while ((msg = getmsghistory(init)) != 0) {
-            init = FALSE;
-            msglen = Strlen(msg);
-            if (msglen < 1)
-                continue;
-            /* sanity: truncate if necessary (shouldn't happen);
-               no need to modify msg[] since terminator isn't written */
-            if (msglen > BUFSZ - 1)
-                msglen = BUFSZ - 1;
-            if (nhfp->structlevel) {
-                bwrite(nhfp->fd, (genericptr_t) &msglen, sizeof msglen);
-                bwrite(nhfp->fd, (genericptr_t) msg, msglen);
-            }
-            ++msgcount;
-        }
-        if (nhfp->structlevel)
-            bwrite(nhfp->fd, (genericptr_t) &minusone, sizeof (int));
-    }
-    debugpline1("Stored %d messages into savefile.", msgcount);
-    /* note: we don't attempt to handle release_data() here */
+	if (list_head == NULL) return;
+	free_text_color_options(list_head->next);
+	free((genericptr_t)list_head->text);
+	free((genericptr_t)list_head);
 }
 
 void
-store_savefileinfo(NHFILE* nhfp)
+free_status_colors()
 {
-    /* sfcap (decl.c) describes the savefile feature capabilities
-     * that are supported by this port/platform build.
-     *
-     * sfsaveinfo (decl.c) describes the savefile info that actually
-     * gets written into the savefile, and is used to determine the
-     * save file being written.
-     *
-     * sfrestinfo (decl.c) describes the savefile info that is
-     * being used to read the information from an existing savefile.
-     */
-
-    if (nhfp->structlevel) {
-        bufoff(nhfp->fd);
-        /* bwrite() before bufon() uses plain write() */
-        bwrite(nhfp->fd, (genericptr_t) &sfsaveinfo,
-               (unsigned) sizeof sfsaveinfo);
-        bufon(nhfp->fd);
-    }
-    return;
+	free_percent_color_options(hp_colors); hp_colors = NULL;
+	free_percent_color_options(pw_colors); pw_colors = NULL;
+	free_text_color_options(text_colors); text_colors = NULL;
 }
+#endif
 
 /* also called by prscore(); this probably belongs in dungeon.c... */
 void
-free_dungeons(void)
+free_dungeons()
 {
 #ifdef FREE_ALL_MEMORY
-    NHFILE tnhfp;
-
-    zero_nhfile(&tnhfp);    /* also sets fd to -1 */
-    tnhfp.mode = FREEING;
-    savelevchn(&tnhfp);
-    save_dungeon(&tnhfp, FALSE, TRUE);
-    free_luathemes(TRUE);
+	savelevchn(0, FREE_SAVE);
+	save_dungeon(0, FALSE, TRUE);
 #endif
-    return;
+	return;
 }
 
-/* free a lot of allocated memory which is ordinarily freed during save */
+#ifdef MENU_COLOR
 void
-freedynamicdata(void)
+free_menu_coloring()
 {
-    NHFILE tnhfp;
+    struct menucoloring *tmp = menu_colorings;
 
-#if defined(UNIX) && defined(MAIL)
-    free_maildata();
+    while (tmp) {
+	struct menucoloring *tmp2 = tmp->next;
+# ifdef MENU_COLOR_REGEX
+	(void) regfree(&tmp->match);
+# else
+	free(tmp->match);
+# endif
+	free(tmp);
+	tmp = tmp2;
+    }
+}
+#endif /* MENU_COLOR */
+
+void
+freedynamicdata()
+{
+#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
+	free_status_colors();
 #endif
-    zero_nhfile(&tnhfp);    /* also sets fd to -1 */
-    tnhfp.mode = FREEING;
-    free_menu_coloring();
-    free_invbuf();           /* let_to_name (invent.c) */
-    free_youbuf();           /* You_buf,&c (pline.c) */
-    msgtype_free();
-    tmp_at(DISP_FREEMEM, 0); /* temporary display effects */
+	unload_qtlist();
+	free_invbuf();	/* let_to_name (invent.c) */
+	free_youbuf();	/* You_buf,&c (pline.c) */
+	msgpline_free();
+#ifdef MENU_COLOR
+	free_menu_coloring();
+#endif
+	tmp_at(DISP_FREEMEM, 0);	/* temporary display effects */
 #ifdef FREE_ALL_MEMORY
-#define free_current_level() savelev(&tnhfp, -1)
-#define freeobjchn(X) (saveobjchn(&tnhfp, &X), X = 0)
-#define freemonchn(X) (savemonchn(&tnhfp, X), X = 0)
-#define freefruitchn() savefruitchn(&tnhfp)
-#define freenames() savenames(&tnhfp)
-#define free_killers() save_killers(&tnhfp)
-#define free_oracles() save_oracles(&tnhfp)
-#define free_waterlevel() save_waterlevel(&tnhfp)
-#define free_timers(R) save_timers(&tnhfp, R)
-#define free_light_sources(R) save_light_sources(&tnhfp, R)
-#define free_animals() mon_animal_list(FALSE)
-#define discard_gamelog() save_gamelog(&tnhfp);
+# define freeobjchn(X)	(saveobjchn(0, X, FREE_SAVE),  X = 0)
+# define freemonchn(X)	(savemonchn(0, X, FREE_SAVE),  X = 0)
+# define freetrapchn(X)	(savetrapchn(0, X, FREE_SAVE), X = 0)
+# define freefruitchn()	 savefruitchn(0, FREE_SAVE)
+# define freenames()	 savenames(0, FREE_SAVE)
+# define free_oracles()	save_oracles(0, FREE_SAVE)
+# define free_waterlevel() save_waterlevel(0, FREE_SAVE)
+# define free_worm()	 save_worm(0, FREE_SAVE)
+# define free_timers(R)	 save_timers(0, FREE_SAVE, R)
+# define free_light_sources(R) save_light_sources(0, FREE_SAVE, R);
+# define free_engravings() save_engravings(0, FREE_SAVE)
+# define freedamage()	 savedamage(0, FREE_SAVE)
+# define free_animals()	 mon_animal_list(FALSE)
 
-    /* move-specific data */
-    dmonsfree(); /* release dead monsters */
+	/* move-specific data */
+	dmonsfree();		/* release dead monsters */
 
-    /* level-specific data */
-    done_object_cleanup(); /* maybe force some OBJ_FREE items onto map */
-    free_current_level();
+	/* level-specific data */
+	free_timers(RANGE_LEVEL);
+	free_light_sources(RANGE_LEVEL);
+	freemonchn(fmon);
+	free_worm();		/* release worm segment information */
+	freetrapchn(ftrap);
+	freeobjchn(fobj);
+	freeobjchn(level.buriedobjlist);
+	freeobjchn(billobjs);
+	free_engravings();
+	freedamage();
 
-    /* game-state data [ought to reorganize savegamestate() to handle this] */
-    free_killers();
-    free_timers(RANGE_GLOBAL);
-    free_light_sources(RANGE_GLOBAL);
-    freeobjchn(g.invent);
-    freeobjchn(g.migrating_objs);
-    freemonchn(g.migrating_mons);
-    freemonchn(g.mydogs); /* ascension or dungeon escape */
-    /* freelevchn();  --  [folded into free_dungeons()] */
-    free_animals();
-    free_oracles();
-    freefruitchn();
-    freenames();
-    free_waterlevel();
-    free_dungeons();
-    free_CapMons();
-    free_rect();
+	/* game-state data */
+	free_timers(RANGE_GLOBAL);
+	free_light_sources(RANGE_GLOBAL);
+	freeobjchn(invent);
+	freeobjchn(migrating_objs);
+	freemonchn(migrating_mons);
+	freemonchn(mydogs);		/* ascension or dungeon escape */
+     /* freelevchn();	[folded into free_dungeons()] */
+	free_animals();
+	free_oracles();
+	freefruitchn();
+	freenames();
+	free_waterlevel();
+	free_dungeons();
 
-    /* some pointers in iflags */
-    if (iflags.wc_font_map)
-        free((genericptr_t) iflags.wc_font_map), iflags.wc_font_map = 0;
-    if (iflags.wc_font_message)
-        free((genericptr_t) iflags.wc_font_message),
-        iflags.wc_font_message = 0;
-    if (iflags.wc_font_text)
-        free((genericptr_t) iflags.wc_font_text), iflags.wc_font_text = 0;
-    if (iflags.wc_font_menu)
-        free((genericptr_t) iflags.wc_font_menu), iflags.wc_font_menu = 0;
-    if (iflags.wc_font_status)
-        free((genericptr_t) iflags.wc_font_status), iflags.wc_font_status = 0;
-    if (iflags.wc_tile_file)
-        free((genericptr_t) iflags.wc_tile_file), iflags.wc_tile_file = 0;
-    free_autopickup_exceptions();
-
-    /* miscellaneous */
-    /* free_pickinv_cache();  --  now done from really_done()... */
-    free_symsets();
-#ifdef USER_SOUNDS
-    release_sound_mappings();
+	/* some pointers in iflags */
+	if (iflags.wc_font_map) free(iflags.wc_font_map);
+	if (iflags.wc_font_message) free(iflags.wc_font_message);
+	if (iflags.wc_font_text) free(iflags.wc_font_text);
+	if (iflags.wc_font_menu) free(iflags.wc_font_menu);
+	if (iflags.wc_font_status) free(iflags.wc_font_status);
+	if (iflags.wc_tile_file) free(iflags.wc_tile_file);
+#ifdef AUTOPICKUP_EXCEPTIONS
+	free_autopickup_exceptions();
 #endif
-#ifdef DUMPLOG
-    dumplogfreemessages();
-#endif
-    discard_gamelog();
-    release_runtime_info(); /* build-time options and version stuff */
-#endif /* FREE_ALL_MEMORY */
 
-    if (VIA_WINDOWPORT())
-        status_finish();
+#endif	/* FREE_ALL_MEMORY */
+	return;
+}
 
-    /* last, because it frees data that might be used by panic() to provide
-       feedback to the user; conceivably other freeing might trigger panic */
-    sysopt_release(); /* SYSCF strings */
+#ifdef MFLOPPY
+boolean
+swapin_file(lev)
+int lev;
+{
+	char to[PATHLEN], from[PATHLEN];
+
+	Sprintf(from, "%s%s", permbones, alllevels);
+	Sprintf(to, "%s%s", levels, alllevels);
+	set_levelfile_name(from, lev);
+	set_levelfile_name(to, lev);
+	if (iflags.checkspace) {
+		while (level_info[lev].size > freediskspace(to))
+			if (!swapout_oldest())
+				return FALSE;
+	}
+# ifdef WIZARD
+	if (wizard) {
+		pline("Swapping in `%s'.", from);
+		wait_synch();
+	}
+# endif
+	copyfile(from, to);
+	(void) unlink(from);
+	level_info[lev].where = ACTIVE;
+	return TRUE;
+}
+
+STATIC_OVL boolean
+swapout_oldest() {
+	char to[PATHLEN], from[PATHLEN];
+	int i, oldest;
+	long oldtime;
+
+	if (!ramdisk)
+		return FALSE;
+	for (i = 1, oldtime = 0, oldest = 0; i <= maxledgerno(); i++)
+		if (level_info[i].where == ACTIVE
+		&& (!oldtime || level_info[i].time < oldtime)) {
+			oldest = i;
+			oldtime = level_info[i].time;
+		}
+	if (!oldest)
+		return FALSE;
+	Sprintf(from, "%s%s", levels, alllevels);
+	Sprintf(to, "%s%s", permbones, alllevels);
+	set_levelfile_name(from, oldest);
+	set_levelfile_name(to, oldest);
+# ifdef WIZARD
+	if (wizard) {
+		pline("Swapping out `%s'.", from);
+		wait_synch();
+	}
+# endif
+	copyfile(from, to);
+	(void) unlink(from);
+	level_info[oldest].where = SWAPPED;
+	return TRUE;
+}
+
+STATIC_OVL void
+copyfile(from, to)
+char *from, *to;
+{
+# ifdef TOS
+
+	if (_copyfile(from, to))
+		panic("Can't copy %s to %s", from, to);
+# else
+	char buf[BUFSIZ];	/* this is system interaction, therefore
+				 * BUFSIZ instead of NetHack's BUFSZ */
+	int nfrom, nto, fdfrom, fdto;
+
+	if ((fdfrom = open(from, O_RDONLY | O_BINARY, FCMASK)) < 0)
+		panic("Can't copy from %s !?", from);
+	if ((fdto = open(to, O_WRONLY | O_BINARY | O_CREAT | O_TRUNC, FCMASK)) < 0)
+		panic("Can't copy to %s", to);
+	do {
+		nfrom = read(fdfrom, buf, BUFSIZ);
+		nto = write(fdto, buf, nfrom);
+		if (nto != nfrom)
+			panic("Copyfile failed!");
+	} while (nfrom == BUFSIZ);
+	(void) close(fdfrom);
+	(void) close(fdto);
+# endif /* TOS */
+}
+
+void
+co_false()	    /* see comment in bones.c */
+{
+    count_only = FALSE;
     return;
 }
+
+#endif /* MFLOPPY */
 
 /*save.c*/

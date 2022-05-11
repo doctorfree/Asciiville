@@ -1,11 +1,10 @@
 #!/bin/sh
-# NetHack 3.7  nethack.sh	$NHDT-Date: 1596498294 2020/08/03 23:44:54 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.21 $
-# Copyright (c) 2015 by Kenneth Lorber, Kensington, Maryland
-# NetHack may be freely redistributed.  See license for details.
+#	SCCS Id: @(#)nethack.sh	3.4	1990/02/26
 
 HACKDIR=/usr/games/lib/nethackdir
 export HACKDIR
 HACK=$HACKDIR/nethack
+MAXNROFPLAYERS=4
 
 # Since Nethack.ad is installed in HACKDIR, add it to XUSERFILESEARCHPATH
 case "x$XUSERFILESEARCHPATH" in
@@ -16,11 +15,12 @@ x)	XUSERFILESEARCHPATH="$HACKDIR/%N.ad"
 esac
 export XUSERFILESEARCHPATH
 
-# Get font dir added, but only once (and only if there's an xset to be found).
-test -n "$DISPLAY" -a -f $HACKDIR/fonts.dir && xset p >/dev/null 2>&1 && (
-	xset fp- $HACKDIR >/dev/null 2>&1;
-	xset fp+ $HACKDIR
-)
+# copy default config file to home directory if none
+# exists for unnethack or vanilla
+if [ ! -e "$HOME/.unnethackrc" -a ! -e "$HOME/.nethackrc" ]
+then
+	cp "$HACKDIR/unnethackrc.default" "$HOME/.unnethackrc"
+fi
 
 # see if we can find the full path name of PAGER, so help files work properly
 # assume that if someone sets up a special variable (HACKPAGER) for NetHack,
@@ -65,4 +65,11 @@ fi
 
 
 cd $HACKDIR
-exec $HACK "$@"
+case $1 in
+	-s*)
+		exec $HACK "$@"
+		;;
+	*)
+		exec $HACK "$@" $MAXNROFPLAYERS
+		;;
+esac

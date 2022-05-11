@@ -1,0 +1,2290 @@
+#	SCCS Id: @(#)sokoban.des	3.4	1999/03/15
+#	Copyright (c) 1998-1999 by Kevin Hugo
+# NetHack may be freely redistributed.  See license for details.
+#
+# In case you haven't played the game Sokoban, you'll learn
+# quickly.  This branch isn't particularly difficult, just time
+# consuming.  Some players may wish to skip this branch.
+#
+# The following actions are currently permitted without penalty:
+#   Carrying or throwing a boulder already in inventory
+#     (player or nonplayer).
+#   Teleporting boulders.
+#   Digging in the floor.
+# The following actions are permitted, but with a luck penalty:
+#   Breaking boulders.
+#   Stone-to-fleshing boulders.
+#   Creating new boulders (e.g., with a scroll of earth).
+#   Jumping.
+#   Being pulled by a thrown iron ball.
+#   Hurtling through the air from Newton's 3rd law.
+#   Squeezing past boulders when naked or as a giant.
+# These actions are not permitted:
+#   Moving diagonally between two boulders and/or walls.
+#   Pushing a boulder diagonally.
+#   Picking up boulders (player or nonplayer).
+#   Digging or walking through walls.
+#   Teleporting within levels or between levels of this branch.
+#   Using cursed potions of gain level.
+#   Escaping a pit/hole (e.g., by flying, levitation, or
+#     passing a dexterity check).
+#   Bones files are not permitted.
+
+# Each sokoban map should call this.
+FUNCTION soko_loot()
+{
+  # Random objects
+  OBJECT:'%',random
+  OBJECT:'%',random
+  OBJECT:'%',random
+  OBJECT:'%',random
+  OBJECT:'=',random
+  OBJECT:'/',random
+}
+
+### Bottom (first) level of Sokoban ###
+LEVEL:"soko3-1"
+FLAGS:noteleport,hardfloor,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+#12345678901234567890123456789012345678901234567890
+MAP
+------  ----- 
+|....|  |...| 
+|....----...| 
+|...........| 
+|..|-|.|-|..| 
+---------|.---
+|......|.....|
+|..----|.....|
+--.|   |.....|
+ |.|---|.....|
+ |...........|
+ |..|---------
+ ----         
+ENDMAP
+BRANCH:(06,04,06,04),(0,0,0,0)
+STAIR:(06,06),up
+REGION:(00,00,13,12),lit,"ordinary"
+NON_DIGGABLE:(00,00,13,12)
+NON_PASSWALL:(00,00,13,12)
+
+# Boulders
+OBJECT:('`',"boulder"),(02,02)
+OBJECT:('`',"boulder"),(02,03)
+#
+OBJECT:('`',"boulder"),(10,02)
+OBJECT:('`',"boulder"),(09,03)
+OBJECT:('`',"boulder"),(10,04)
+#
+OBJECT:('`',"boulder"),(08,07)
+OBJECT:('`',"boulder"),(09,08)
+OBJECT:('`',"boulder"),(09,09)
+OBJECT:('`',"boulder"),(08,10)
+OBJECT:('`',"boulder"),(10,10)
+
+# Traps
+TRAP:"pit",(03,06)
+TRAP:"pit",(04,06)
+TRAP:"pit",(05,06)
+TRAP:"pit",(02,08)
+TRAP:"pit",(02,09)
+TRAP:"pit",(04,10)
+TRAP:"pit",(05,10)
+TRAP:"pit",(06,10)
+TRAP:"pit",(07,10)
+
+# A little help
+OBJECT:('?',"earth"),(02,11)
+[50%]: OBJECT:('?',"earth"),(03,11)
+
+soko_loot()
+
+
+LEVEL:"soko3-2"
+FLAGS:noteleport,hardfloor,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+#12345678901234567890123456789012345678901234567890
+MAP
+-------- ------
+|.|....|-|....|
+|.|-..........|
+|.||....|.....|
+|.||....|.....|
+|.|-----|.-----
+|.|    |......|
+|.-----|......|
+|.............|
+|..|---|......|
+----   --------
+ENDMAP
+BRANCH:(03,01,03,01),(0,0,0,0)
+STAIR:(01,01),up
+REGION:(00,00,14,10),lit,"ordinary"
+NON_DIGGABLE:(00,00,14,10)
+NON_PASSWALL:(00,00,14,10)
+
+# Boulders
+OBJECT:('`',"boulder"),(05,02)
+OBJECT:('`',"boulder"),(06,02)
+OBJECT:('`',"boulder"),(06,03)
+OBJECT:('`',"boulder"),(07,03)
+#
+OBJECT:('`',"boulder"),(09,05)
+OBJECT:('`',"boulder"),(10,03)
+OBJECT:('`',"boulder"),(11,02)
+OBJECT:('`',"boulder"),(12,03)
+#
+OBJECT:('`',"boulder"),(07,08)
+OBJECT:('`',"boulder"),(08,08)
+OBJECT:('`',"boulder"),(09,08)
+OBJECT:('`',"boulder"),(10,08)
+
+# Traps
+TRAP:"pit",(01,02)
+TRAP:"pit",(01,03)
+TRAP:"pit",(01,04)
+TRAP:"pit",(01,05)
+TRAP:"pit",(01,06)
+TRAP:"pit",(01,07)
+TRAP:"pit",(03,08)
+TRAP:"pit",(04,08)
+TRAP:"pit",(05,08)
+TRAP:"pit",(06,08)
+
+# A little help
+OBJECT:('?',"earth"),(01,09)
+[50%]: OBJECT:('?',"earth"),(02,09)
+
+soko_loot()
+
+
+### Second level ###
+LEVEL:"soko3-11"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+#12345678901234567890123456789012345678901234567890
+MAP
+-----------       -----------
+|....|....|--     |.........|
+|....|......|     |.........|
+|.........|--     |.........|
+|....|....|       |.........|
+|-.---------      |.........|
+|....|.....|      |.........|
+|....|.....|      |.........|
+|..........|      |.........|
+|....|.....|---------------+|
+|....|......................|
+-----------------------------
+ENDMAP
+BRANCH:(11,02,11,02),(0,0,0,0)
+STAIR:(23,04),up
+DOOR:locked,(27,09)
+REGION:(00,00,28,11),lit,"ordinary"
+NON_DIGGABLE:(00,00,28,11)
+NON_PASSWALL:(00,00,28,11)
+
+# Boulders
+OBJECT:('`',"boulder"),(03,02)
+OBJECT:('`',"boulder"),(04,02)
+#
+OBJECT:('`',"boulder"),(06,02)
+OBJECT:('`',"boulder"),(06,03)
+OBJECT:('`',"boulder"),(07,02)
+#
+OBJECT:('`',"boulder"),(03,06)
+OBJECT:('`',"boulder"),(02,07)
+OBJECT:('`',"boulder"),(03,07)
+OBJECT:('`',"boulder"),(03,08)
+OBJECT:('`',"boulder"),(02,09)
+OBJECT:('`',"boulder"),(03,09)
+OBJECT:('`',"boulder"),(04,09)
+#
+OBJECT:('`',"boulder"),(06,07)
+OBJECT:('`',"boulder"),(06,09)
+OBJECT:('`',"boulder"),(08,07)
+OBJECT:('`',"boulder"),(08,10)
+OBJECT:('`',"boulder"),(09,08)
+OBJECT:('`',"boulder"),(09,09)
+OBJECT:('`',"boulder"),(10,07)
+OBJECT:('`',"boulder"),(10,10)
+
+# Traps
+TRAP:"pit",(12,10)
+TRAP:"pit",(13,10)
+TRAP:"pit",(14,10)
+TRAP:"pit",(15,10)
+TRAP:"pit",(16,10)
+TRAP:"pit",(17,10)
+TRAP:"pit",(18,10)
+TRAP:"pit",(19,10)
+TRAP:"pit",(20,10)
+TRAP:"pit",(21,10)
+TRAP:"pit",(22,10)
+TRAP:"pit",(23,10)
+TRAP:"pit",(24,10)
+TRAP:"pit",(25,10)
+TRAP:"pit",(26,10)
+
+OBJECT:('?',"earth"),(03,10)
+[50%]: OBJECT:('?',"earth"),(04,10)
+
+soko_loot()
+
+
+LEVEL:"soko3-12"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+#12345678901234567890123456789012345678901234567890
+MAP
+ ----          -----------
+-|..|-------   |.........|
+|..........|   |.........|
+|..-----.-.|   |.........|
+|..|...|...|   |.........|
+|.........-|   |.........|
+|.......|..|   |.........|
+|.----..--.|   |.........|
+|........|.--  |.........|
+|.---.-.....------------+|
+|...|...-................|
+|.........----------------
+----|..|..|               
+    -------               
+ENDMAP
+BRANCH:(03,01,03,01),(0,0,0,0)
+STAIR:(20,04),up
+DOOR:locked,(24,09)
+REGION:(00,00,25,13),lit,"ordinary"
+NON_DIGGABLE:(00,00,25,13)
+NON_PASSWALL:(00,00,25,13)
+
+# Boulders
+OBJECT:('`',"boulder"),(02,03)
+OBJECT:('`',"boulder"),(08,03)
+OBJECT:('`',"boulder"),(09,04)
+OBJECT:('`',"boulder"),(02,05)
+OBJECT:('`',"boulder"),(04,05)
+OBJECT:('`',"boulder"),(09,05)
+OBJECT:('`',"boulder"),(02,06)
+OBJECT:('`',"boulder"),(05,06)
+OBJECT:('`',"boulder"),(06,07)
+OBJECT:('`',"boulder"),(03,08)
+OBJECT:('`',"boulder"),(07,08)
+OBJECT:('`',"boulder"),(05,09)
+OBJECT:('`',"boulder"),(10,09)
+OBJECT:('`',"boulder"),(07,10)
+OBJECT:('`',"boulder"),(10,10)
+OBJECT:('`',"boulder"),(03,11)
+
+# Traps
+TRAP:"pit",(12,10)
+TRAP:"pit",(13,10)
+TRAP:"pit",(14,10)
+TRAP:"pit",(15,10)
+TRAP:"pit",(16,10)
+TRAP:"pit",(17,10)
+TRAP:"pit",(18,10)
+TRAP:"pit",(19,10)
+TRAP:"pit",(20,10)
+TRAP:"pit",(21,10)
+TRAP:"pit",(22,10)
+TRAP:"pit",(23,10)
+
+OBJECT:('?',"earth"),(08,12)
+[50%]: OBJECT:('?',"earth"),(09,12)
+
+soko_loot()
+
+
+### Third level ###
+LEVEL:"soko2-1"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+#12345678901234567890123456789012345678901234567890
+MAP
+--------------------
+|........|...|.....|
+|.....-..|.-.|.....|
+|..|.....|...|.....|
+|-.|..-..|.-.|.....|
+|...--.......|.....|
+|...|...-...-|.....|
+|...|..|...--|.....|
+|-..|..|----------+|
+|..................|
+|...|..|------------
+--------            
+ENDMAP
+STAIR:(06,10),down
+STAIR:(16,04),up
+DOOR:locked,(18,08)
+REGION:(00,00,19,11),lit,"ordinary"
+NON_DIGGABLE:(00,00,19,11)
+NON_PASSWALL:(00,00,19,11)
+
+# Boulders
+OBJECT:('`',"boulder"),(02,02)
+OBJECT:('`',"boulder"),(03,02)
+#
+OBJECT:('`',"boulder"),(05,03)
+OBJECT:('`',"boulder"),(07,03)
+OBJECT:('`',"boulder"),(07,02)
+OBJECT:('`',"boulder"),(08,02)
+#
+OBJECT:('`',"boulder"),(10,03)
+OBJECT:('`',"boulder"),(11,03)
+#
+OBJECT:('`',"boulder"),(02,07)
+OBJECT:('`',"boulder"),(02,08)
+OBJECT:('`',"boulder"),(03,09)
+#
+OBJECT:('`',"boulder"),(05,07)
+OBJECT:('`',"boulder"),(06,06)
+
+# Traps
+TRAP:"hole",(08,09)
+TRAP:"hole",(09,09)
+TRAP:"hole",(10,09)
+TRAP:"hole",(11,09)
+TRAP:"hole",(12,09)
+TRAP:"hole",(13,09)
+TRAP:"hole",(14,09)
+TRAP:"hole",(15,09)
+TRAP:"hole",(16,09)
+TRAP:"hole",(17,09)
+
+soko_loot()
+
+
+LEVEL:"soko2-2"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+#12345678901234567890123456789012345678901234567890
+MAP
+  --------          
+--|.|....|          
+|........|----------
+|.-...-..|.|.......|
+|...-......|.......|
+|.-....|...|.......|
+|....-.--.-|.......|
+|..........|.......|
+|.--...|...|.......|
+|....-.|---|.......|
+--|....|----------+|
+  |................|
+  ------------------
+ENDMAP
+STAIR:(06,11),down
+STAIR:(15,06),up
+DOOR:locked,(18,10)
+REGION:(00,00,19,12),lit,"ordinary"
+NON_DIGGABLE:(00,00,19,12)
+NON_PASSWALL:(00,00,19,12)
+
+# Boulders
+OBJECT:('`',"boulder"),(04,02)
+OBJECT:('`',"boulder"),(04,03)
+OBJECT:('`',"boulder"),(05,03)
+OBJECT:('`',"boulder"),(07,03)
+OBJECT:('`',"boulder"),(08,03)
+OBJECT:('`',"boulder"),(02,04)
+OBJECT:('`',"boulder"),(03,04)
+OBJECT:('`',"boulder"),(05,05)
+OBJECT:('`',"boulder"),(06,06)
+OBJECT:('`',"boulder"),(09,06)
+OBJECT:('`',"boulder"),(03,07)
+OBJECT:('`',"boulder"),(04,07)
+OBJECT:('`',"boulder"),(07,07)
+OBJECT:('`',"boulder"),(06,09)
+OBJECT:('`',"boulder"),(05,10)
+OBJECT:('`',"boulder"),(05,11)
+
+# Traps
+TRAP:"hole",(07,11)
+TRAP:"hole",(08,11)
+TRAP:"hole",(09,11)
+TRAP:"hole",(10,11)
+TRAP:"hole",(11,11)
+TRAP:"hole",(12,11)
+TRAP:"hole",(13,11)
+TRAP:"hole",(14,11)
+TRAP:"hole",(15,11)
+TRAP:"hole",(16,11)
+TRAP:"hole",(17,11)
+
+soko_loot()
+
+
+### Top (last) level of Sokoban ###
+LEVEL:"soko1-1"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+#12345678901234567890123456789012345678901234567890
+MAP
+--------------------------
+|........................|
+|.......|---------------.|
+-------.------         |.|
+ |...........|         |.|
+ |...........|         |.|
+--------.-----         |.|
+|............|         |.|
+|............|         |.|
+-----.--------   ------|.|
+ |..........|  --|.....|.|
+ |..........|  |.+.....|.|
+ |.........|-  |-|.....|.|
+-------.----   |.+.....+.|
+|........|     |-|.....|--
+|........|     |.+.....|  
+|...|-----     --|.....|  
+-----            -------  
+ENDMAP
+$place = { (16,11),(16,13),(16,15) }
+SHUFFLE: $place
+STAIR:(01,01),down
+REGION:(00,00,25,17),lit,"ordinary"
+NON_DIGGABLE:(00,00,25,17)
+NON_PASSWALL:(00,00,25,17)
+
+# Boulders
+OBJECT:('`',"boulder"),(03,05)
+OBJECT:('`',"boulder"),(05,05)
+OBJECT:('`',"boulder"),(07,05)
+OBJECT:('`',"boulder"),(09,05)
+OBJECT:('`',"boulder"),(11,05)
+#
+OBJECT:('`',"boulder"),(04,07)
+OBJECT:('`',"boulder"),(04,08)
+OBJECT:('`',"boulder"),(06,07)
+OBJECT:('`',"boulder"),(09,07)
+OBJECT:('`',"boulder"),(11,07)
+#
+OBJECT:('`',"boulder"),(03,12)
+OBJECT:('`',"boulder"),(04,10)
+OBJECT:('`',"boulder"),(05,12)
+OBJECT:('`',"boulder"),(06,10)
+OBJECT:('`',"boulder"),(07,11)
+OBJECT:('`',"boulder"),(08,10)
+OBJECT:('`',"boulder"),(09,12)
+#
+OBJECT:('`',"boulder"),(03,14)
+
+# Traps
+TRAP:"hole",(08,01)
+TRAP:"hole",(09,01)
+TRAP:"hole",(10,01)
+TRAP:"hole",(11,01)
+TRAP:"hole",(12,01)
+TRAP:"hole",(13,01)
+TRAP:"hole",(14,01)
+TRAP:"hole",(15,01)
+TRAP:"hole",(16,01)
+TRAP:"hole",(17,01)
+TRAP:"hole",(18,01)
+TRAP:"hole",(19,01)
+TRAP:"hole",(20,01)
+TRAP:"hole",(21,01)
+TRAP:"hole",(22,01)
+TRAP:"hole",(23,01)
+
+MONSTER:('m',"giant mimic"), random, m_object "boulder"
+MONSTER:('m',"giant mimic"), random, m_object "boulder"
+
+soko_loot()
+
+# Rewards
+DOOR:locked,(23,13)
+DOOR:closed,(17,11)
+DOOR:closed,(17,13)
+DOOR:closed,(17,15)
+REGION:(18,10,22,16),lit,"zoo",filled,irregular
+#OBJECT:'(',"bag of holding",$place[0]
+ENGRAVING:$place[0],burn,"Elbereth"
+ENGRAVING:$place[1],burn,"Elbereth"
+ENGRAVING:$place[2],burn,"Elbereth"
+
+
+LEVEL:"soko1-2"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+#12345678901234567890123456789012345678901234567890
+MAP
+  ------------------------
+  |......................|
+  |..-------------------.|
+----.|    -----        |.|
+|..|.--  --...|        |.|
+|.....|--|....|        |.|
+|.....|..|....|        |.|
+--....|......--        |.|
+ |.......|...|   ------|.|
+ |....|..|...| --|.....|.|
+ |....|--|...| |.+.....|.|
+ |.......|..-- |-|.....|.|
+ ----....|.--  |.+.....+.|
+    ---.--.|   |-|.....|--
+     |.....|   |.+.....|  
+     |..|..|   --|.....|  
+     -------     -------  
+ENDMAP
+$place = { (16,10),(16,12),(16,14) }
+SHUFFLE: $place
+STAIR:(06,15),down
+REGION:(00,00,25,16),lit,"ordinary"
+NON_DIGGABLE:(00,00,25,16)
+NON_PASSWALL:(00,00,25,16)
+
+# Boulders
+OBJECT:('`',"boulder"),(04,04)
+OBJECT:('`',"boulder"),(02,06)
+OBJECT:('`',"boulder"),(03,06)
+OBJECT:('`',"boulder"),(04,07)
+OBJECT:('`',"boulder"),(05,07)
+OBJECT:('`',"boulder"),(02,08)
+OBJECT:('`',"boulder"),(05,08)
+OBJECT:('`',"boulder"),(03,09)
+OBJECT:('`',"boulder"),(04,09)
+OBJECT:('`',"boulder"),(03,10)
+OBJECT:('`',"boulder"),(05,10)
+OBJECT:('`',"boulder"),(06,12)
+#
+OBJECT:('`',"boulder"),(07,14)
+#
+OBJECT:('`',"boulder"),(11,05)
+OBJECT:('`',"boulder"),(12,06)
+OBJECT:('`',"boulder"),(10,07)
+OBJECT:('`',"boulder"),(11,07)
+OBJECT:('`',"boulder"),(10,08)
+OBJECT:('`',"boulder"),(12,09)
+OBJECT:('`',"boulder"),(11,10)
+
+# Traps
+TRAP:"hole",(05,01)
+TRAP:"hole",(06,01)
+TRAP:"hole",(07,01)
+TRAP:"hole",(08,01)
+TRAP:"hole",(09,01)
+TRAP:"hole",(10,01)
+TRAP:"hole",(11,01)
+TRAP:"hole",(12,01)
+TRAP:"hole",(13,01)
+TRAP:"hole",(14,01)
+TRAP:"hole",(15,01)
+TRAP:"hole",(16,01)
+TRAP:"hole",(17,01)
+TRAP:"hole",(18,01)
+TRAP:"hole",(19,01)
+TRAP:"hole",(20,01)
+TRAP:"hole",(21,01)
+TRAP:"hole",(22,01)
+
+MONSTER:('m',"giant mimic"), random, m_object "boulder"
+MONSTER:('m',"giant mimic"), random, m_object "boulder"
+
+soko_loot()
+
+# Rewards
+DOOR:locked,(23,12)
+DOOR:closed,(17,10)
+DOOR:closed,(17,12)
+DOOR:closed,(17,14)
+REGION:(18,09,22,15),lit,"zoo",filled,irregular
+#OBJECT:'"',"amulet of reflection",$place[0]
+ENGRAVING:$place[0],burn,"Elbereth"
+ENGRAVING:$place[1],burn,"Elbereth"
+ENGRAVING:$place[2],burn,"Elbereth"
+
+
+# Following Sokoban levels heavily modified for NetHack by Pasi Kallinen
+# The original authors are listed just before the maps
+#
+LEVEL:"soko3-3"
+FLAGS:noteleport, hardfloor,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "J Franklin Mentzer <wryter@aol.com>"
+MAP
+     -------
+     |..|..|     --------
+------.....--- ---......---
+|......---...| |..........|
+|.|.|......|.--|........|.---
+|.|.--..|..|...-F-F-F-F--...|
+|.......|...................|
+|.|.--..|..|...-F-F-F-F--...|
+|.|.|......|.--|........|.---
+|......---...| |..........|
+------.....--- ---......---
+     |..|..|     --------
+     -------
+ENDMAP
+BRANCH:(13,6,13,6),(0,0,0,0)
+STAIR:(26,6), up
+REGION:(00,00,28,12),lit,"ordinary"
+NON_DIGGABLE:(00,00,28,12)
+NON_PASSWALL:(00,00,28,12)
+OBJECT:('?',"earth"),(16,3)
+[50%]: OBJECT:('?',"earth"),(16,9)
+OBJECT:('`',"boulder"),(8,2)
+OBJECT:('`',"boulder"),(8,4)
+OBJECT:('`',"boulder"),(3,5)
+OBJECT:('`',"boulder"),(6,6)
+OBJECT:('`',"boulder"),(7,6)
+OBJECT:('`',"boulder"),(9,6)
+OBJECT:('`',"boulder"),(10,6)
+OBJECT:('`',"boulder"),(3,7)
+OBJECT:('`',"boulder"),(8,8)
+OBJECT:('`',"boulder"),(8,10)
+TRAP:"pit",(15,6)
+TRAP:"pit",(16,6)
+TRAP:"pit",(17,6)
+TRAP:"pit",(18,6)
+TRAP:"pit",(19,6)
+TRAP:"pit",(20,6)
+TRAP:"pit",(21,6)
+TRAP:"pit",(22,6)
+TRAP:"pit",(23,6)
+
+soko_loot()
+
+
+LEVEL:"soko3-4"
+FLAGS:noteleport, hardfloor,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "Joseph L Traub"
+MAP
+  -------------
+--|...........|
+|.+...........|
+|.|...........|----
+|.|FFFFFFFFFFF|...|
+|.F...........|...|
+|.F.--............|
+|.F..|.-----.--...|
+|.F..|.....|.||...|
+|.F.--.---.|.--...|
+|.F....---........|
+|.-FF-.......--...|
+|............|-----
+|..---.......|
+---- ------.--
+          ---
+ENDMAP
+BRANCH:(11,14,11,14),(0,0,0,0)
+STAIR:(12,2), up
+REGION:(00,00,18,15),lit,"ordinary"
+NON_DIGGABLE:(00,00,18,15)
+NON_PASSWALL:(00,00,18,15)
+DOOR:locked,(2,2)
+OBJECT:('?',"earth"),(1,13)
+[50%]: OBJECT:('?',"earth"),(2,13)
+OBJECT:('`',"boulder"),(8,6)
+OBJECT:('`',"boulder"),(10,6)
+OBJECT:('`',"boulder"),(15,6)
+OBJECT:('`',"boulder"),(16,6)
+OBJECT:('`',"boulder"),(16,7)
+OBJECT:('`',"boulder"),(6,8)
+OBJECT:('`',"boulder"),(7,8)
+OBJECT:('`',"boulder"),(12,8)
+OBJECT:('`',"boulder"),(16,8)
+OBJECT:('`',"boulder"),(15,9)
+OBJECT:('`',"boulder"),(11,10)
+OBJECT:('`',"boulder"),(13,10)
+TRAP:"pit",(1,3)
+TRAP:"pit",(1,4)
+TRAP:"pit",(1,5)
+TRAP:"pit",(1,6)
+TRAP:"pit",(1,7)
+TRAP:"pit",(1,8)
+TRAP:"pit",(1,9)
+TRAP:"pit",(1,10)
+TRAP:"pit",(3,12)
+TRAP:"pit",(4,12)
+TRAP:"pit",(5,12)
+
+soko_loot()
+
+
+LEVEL:"soko3-5"
+FLAGS:noteleport, hardfloor,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "Thinking Rabbit"
+MAP
+----
+|..|
+|..-------------
+|..............|
+|-.--FFFFFF---+|
+|..........F...|
+|...|......F...|
+---.|......F...|
+  |.|...|..F...|
+  |.|......F...|
+  |.|.|....F...|
+  |.|....-------
+  |.---..|
+  |....|.|
+  ----...|
+     -----
+ENDMAP
+BRANCH:(8,13,8,13),(0,0,0,0)
+STAIR:(13,10), up
+REGION:(00,00,15,15),lit,"ordinary"
+NON_DIGGABLE:(00,00,15,15)
+NON_PASSWALL:(00,00,15,15)
+DOOR:locked,(14,4)
+OBJECT:('?',"earth"),(1,1)
+[50%]: OBJECT:('?',"earth"),(2,1)
+OBJECT:('`',"boulder"),(2,4)
+OBJECT:('`',"boulder"),(2,5)
+OBJECT:('`',"boulder"),(4,5)
+OBJECT:('`',"boulder"),(6,7)
+OBJECT:('`',"boulder"),(7,7)
+OBJECT:('`',"boulder"),(9,7)
+OBJECT:('`',"boulder"),(9,8)
+OBJECT:('`',"boulder"),(6,9)
+OBJECT:('`',"boulder"),(7,9)
+OBJECT:('`',"boulder"),(8,10)
+OBJECT:('`',"boulder"),(9,10)
+OBJECT:('`',"boulder"),(7,11)
+TRAP:"pit",(3,3)
+TRAP:"pit",(4,3)
+TRAP:"pit",(5,3)
+TRAP:"pit",(6,3)
+TRAP:"pit",(7,3)
+TRAP:"pit",(8,3)
+TRAP:"pit",(9,3)
+TRAP:"pit",(10,3)
+TRAP:"pit",(11,3)
+TRAP:"pit",(12,3)
+TRAP:"pit",(13,3)
+
+soko_loot()
+
+
+LEVEL:"soko3-6"
+FLAGS:noteleport, hardfloor,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "Joseph L Traub"
+MAP
+-----------------
+|.......|...--..|
+|.-----.|.......|
+|.---...|.......|
+|...........--..|
+|......--...||..|
+|FFFFF-------|.-|
+|...........|-..|
+|.....-------...|
+|..L............|
+|.....-------...|
+|.....|     |...|
+-------     -----
+ENDMAP
+BRANCH:(1,5,1,5),(0,0,0,0)
+STAIR:(11,7), up
+REGION:(00,00,16,12),lit,"ordinary"
+NON_DIGGABLE:(00,00,16,12)
+NON_PASSWALL:(00,00,16,12)
+OBJECT:('?',"earth"),(14,1)
+[50%]: OBJECT:('?',"earth"),(15,1)
+OBJECT:('`',"boulder"),(12,2)
+OBJECT:('`',"boulder"),(6,3)
+OBJECT:('`',"boulder"),(12,3)
+OBJECT:('`',"boulder"),(6,4)
+OBJECT:('`',"boulder"),(7,4)
+OBJECT:('`',"boulder"),(14,4)
+OBJECT:('`',"boulder"),(14,7)
+OBJECT:('`',"boulder"),(12,9)
+OBJECT:('`',"boulder"),(13,9)
+OBJECT:('`',"boulder"),(14,10)
+TRAP:"pit",(6,7)
+TRAP:"pit",(7,7)
+TRAP:"pit",(8,7)
+TRAP:"pit",(9,7)
+TRAP:"pit",(10,7)
+TRAP:"pit",(6,9)
+TRAP:"pit",(7,9)
+TRAP:"pit",(8,9)
+TRAP:"pit",(9,9)
+TRAP:"pit",(10,9)
+
+soko_loot()
+
+
+LEVEL:"soko3-7"
+FLAGS:noteleport, hardfloor,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "J Franklin Mentzer <wryter@aol.com>"
+MAP
+-----------------------------
+|.............|.............|
+|....|...|....F.............|
+|...|..|..|...F.............|
+|..|..........F.............|
+|.......|..|..F.............|
+|.|....|....|.F.............|
+|..|..|.......F.............|
+|..........|..F.............|
+|...|..|..|...F.............|
+|....|...|....F.............|
+|.............|.............|
+|-.-FFFFFFFFF---FFFFFFFFF-+-|
+|...........................|
+|...........................|
+-----------------------------
+ENDMAP
+BRANCH:(13,11,13,11),(0,0,0,0)
+STAIR:(15,11), up
+REGION:(00,00,28,15),lit,"ordinary"
+NON_DIGGABLE:(00,00,28,15)
+NON_PASSWALL:(00,00,28,15)
+DOOR:locked,(26,12)
+OBJECT:('?',"earth"),(13,13)
+[50%]: OBJECT:('?',"earth"),(15,13)
+OBJECT:('`',"boulder"),(2,2)
+OBJECT:('`',"boulder"),(7,2)
+OBJECT:('`',"boulder"),(2,3)
+OBJECT:('`',"boulder"),(6,3)
+OBJECT:('`',"boulder"),(8,3)
+OBJECT:('`',"boulder"),(2,4)
+OBJECT:('`',"boulder"),(5,4)
+OBJECT:('`',"boulder"),(9,4)
+OBJECT:('`',"boulder"),(4,5)
+OBJECT:('`',"boulder"),(10,5)
+OBJECT:('`',"boulder"),(1,6)
+OBJECT:('`',"boulder"),(4,6)
+OBJECT:('`',"boulder"),(10,6)
+OBJECT:('`',"boulder"),(13,6)
+OBJECT:('`',"boulder"),(4,7)
+OBJECT:('`',"boulder"),(10,7)
+OBJECT:('`',"boulder"),(5,8)
+OBJECT:('`',"boulder"),(9,8)
+OBJECT:('`',"boulder"),(12,8)
+OBJECT:('`',"boulder"),(6,9)
+OBJECT:('`',"boulder"),(8,9)
+OBJECT:('`',"boulder"),(12,9)
+OBJECT:('`',"boulder"),(7,10)
+OBJECT:('`',"boulder"),(12,10)
+TRAP:"pit",(3,13)
+TRAP:"pit",(4,13)
+TRAP:"pit",(5,13)
+TRAP:"pit",(6,13)
+TRAP:"pit",(7,13)
+TRAP:"pit",(8,13)
+TRAP:"pit",(9,13)
+TRAP:"pit",(10,13)
+TRAP:"pit",(11,13)
+TRAP:"pit",(12,13)
+TRAP:"pit",(16,13)
+TRAP:"pit",(17,13)
+TRAP:"pit",(18,13)
+TRAP:"pit",(19,13)
+TRAP:"pit",(20,13)
+TRAP:"pit",(21,13)
+TRAP:"pit",(22,13)
+TRAP:"pit",(23,13)
+TRAP:"pit",(24,13)
+TRAP:"pit",(25,13)
+TRAP:"pit",(3,14)
+TRAP:"pit",(4,14)
+TRAP:"pit",(5,14)
+TRAP:"pit",(6,14)
+TRAP:"pit",(7,14)
+TRAP:"pit",(8,14)
+TRAP:"pit",(9,14)
+TRAP:"pit",(10,14)
+TRAP:"pit",(18,14)
+TRAP:"pit",(19,14)
+TRAP:"pit",(20,14)
+TRAP:"pit",(21,14)
+TRAP:"pit",(22,14)
+TRAP:"pit",(23,14)
+TRAP:"pit",(24,14)
+TRAP:"pit",(25,14)
+
+soko_loot()
+
+
+LEVEL:"soko3-8"
+FLAGS:noteleport, hardfloor,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "Thinking Rabbit" 
+MAP
+ --------
+ |......|
+ |......-----
+ |---.......|
+ |..--.|....|
+ |.....|.|.-----
+ |.--..........|
+--.||..|...|...|
+|..-------------
+|.........|
+-----------
+ENDMAP
+BRANCH:(6,5,6,5),(0,0,0,0)
+STAIR:(9,9), up
+REGION:(00,00,15,10),lit,"ordinary"
+NON_DIGGABLE:(00,00,15,10)
+NON_PASSWALL:(00,00,15,10)
+OBJECT:('?',"earth"),(14,6)
+[50%]: OBJECT:('?',"earth"),(14,7)
+OBJECT:('`',"boulder"),(4,2)
+OBJECT:('`',"boulder"),(8,3)
+OBJECT:('`',"boulder"),(6,4)
+OBJECT:('`',"boulder"),(9,4)
+OBJECT:('`',"boulder"),(6,6)
+OBJECT:('`',"boulder"),(8,6)
+OBJECT:('`',"boulder"),(10,6)
+OBJECT:('`',"boulder"),(11,6)
+TRAP:"pit",(2,6)
+TRAP:"pit",(2,7)
+TRAP:"pit",(4,9)
+TRAP:"pit",(5,9)
+TRAP:"pit",(6,9)
+TRAP:"pit",(7,9)
+TRAP:"pit",(8,9)
+
+soko_loot()
+
+
+LEVEL:"soko3-9"
+FLAGS:noteleport, hardfloor,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "Joseph L Traub"
+MAP
+       -----------
+       |.........|
+       |.........|
+------ |...-----.|
+|....-----....--.|
+|................|
+|-.|.......--.--.|
+|-.|---.----|.||.|
+|..------...|.--.--
+|...........F.....|
+---------...|.....|
+        -----------
+ENDMAP
+BRANCH:(7,7,7,7),(0,0,0,0)
+STAIR:(10,9), up
+REGION:(00,00,18,11),lit,"ordinary"
+NON_DIGGABLE:(00,00,18,11)
+NON_PASSWALL:(00,00,18,11)
+OBJECT:('?',"earth"),(1,8)
+[50%]: OBJECT:('?',"earth"),(1,9)
+OBJECT:('`',"boulder"),(12,2)
+OBJECT:('`',"boulder"),(14,2)
+OBJECT:('`',"boulder"),(9,3)
+OBJECT:('`',"boulder"),(11,4)
+OBJECT:('`',"boulder"),(16,4)
+OBJECT:('`',"boulder"),(8,5)
+OBJECT:('`',"boulder"),(10,5)
+OBJECT:('`',"boulder"),(14,9)
+TRAP:"pit",(2,6)
+TRAP:"pit",(2,7)
+TRAP:"pit",(4,9)
+TRAP:"pit",(5,9)
+TRAP:"pit",(6,9)
+TRAP:"pit",(7,9)
+TRAP:"pit",(8,9)
+
+soko_loot()
+
+
+LEVEL:"soko3-13"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "Thinking Rabbit" 
+MAP
+-----------------
+|........F......|
+|..--....F......|
+--.|.....F......|
+ |.---------.--.|
+ |...........||.|
+ |..------...--.--
+ ----    |.......|
+       ---.----.--
+       |........|
+       |....-----
+       --...|
+        -----
+ENDMAP
+BRANCH:(16,7,16,7),(0,0,0,0)
+STAIR:(4,3), up
+REGION:(00,00,17,12),lit,"ordinary"
+NON_DIGGABLE:(00,00,17,12)
+NON_PASSWALL:(00,00,17,12)
+OBJECT:('`',"boulder"),(12,2)
+OBJECT:('`',"boulder"),(14,2)
+OBJECT:('`',"boulder"),(11,3)
+OBJECT:('`',"boulder"),(13,3)
+OBJECT:('`',"boulder"),(11,6)
+OBJECT:('`',"boulder"),(12,6)
+OBJECT:('`',"boulder"),(11,7)
+OBJECT:('`',"boulder"),(9,9)
+OBJECT:('`',"boulder"),(11,9)
+OBJECT:('`',"boulder"),(10,10)
+TRAP:"pit",(3,1)
+TRAP:"pit",(4,1)
+TRAP:"pit",(2,3)
+TRAP:"pit",(2,4)
+TRAP:"pit",(4,5)
+TRAP:"pit",(5,5)
+TRAP:"pit",(6,5)
+TRAP:"pit",(7,5)
+TRAP:"pit",(8,5)
+TRAP:"pit",(9,5)
+
+OBJECT:('?',"earth"),(02,06)
+[50%]: OBJECT:('?',"earth"),(03,06)
+
+soko_loot()
+
+
+LEVEL:"soko3-14"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "Thinking Rabbit" 
+MAP
+          ----
+       ---|..----
+       |..|.....|---
+ ----  |.....|..|..|
+ |..----.|...|.....|
+ |...........|--...|
+ |.--F--...|.|....--
+ |.|...|-.-|......|
+ |.F...+...|......|
+--.|...|........---
+|..--F-----.|.---
+|.........|...|
+---------------
+ENDMAP
+BRANCH:(12,9,12,9),(0,0,0,0)
+STAIR:(9,11), up
+REGION:(00,00,19,12),lit,"ordinary"
+NON_DIGGABLE:(00,00,19,12)
+NON_PASSWALL:(00,00,19,12)
+DOOR:locked,(7,8)
+OBJECT:('`',"boulder"),(14,2)
+OBJECT:('`',"boulder"),(12,3)
+OBJECT:('`',"boulder"),(14,3)
+OBJECT:('`',"boulder"),(17,4)
+OBJECT:('`',"boulder"),(16,5)
+OBJECT:('`',"boulder"),(12,6)
+OBJECT:('`',"boulder"),(16,6)
+OBJECT:('`',"boulder"),(9,7)
+OBJECT:('`',"boulder"),(13,7)
+OBJECT:('`',"boulder"),(14,7)
+OBJECT:('`',"boulder"),(16,8)
+OBJECT:('`',"boulder"),(9,9)
+OBJECT:('`',"boulder"),(13,9)
+OBJECT:('`',"boulder"),(11,10)
+TRAP:"pit",(5,5)
+TRAP:"pit",(6,5)
+TRAP:"pit",(7,5)
+TRAP:"pit",(2,6)
+TRAP:"pit",(2,7)
+TRAP:"pit",(2,8)
+TRAP:"pit",(5,8)
+TRAP:"pit",(2,9)
+TRAP:"pit",(3,11)
+TRAP:"pit",(4,11)
+TRAP:"pit",(5,11)
+TRAP:"pit",(6,11)
+TRAP:"pit",(7,11)
+TRAP:"pit",(8,11)
+
+OBJECT:('?',"earth"),(02,04)
+[50%]: OBJECT:('?',"earth"),(03,04)
+
+soko_loot()
+
+
+LEVEL:"soko3-15"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "Joseph L Traub"
+MAP
+-------       --------
+|.....|-------|......|
+|.....|....|..--FF-..|
+|.....|........|..F.--
+|.....|....--..|..F.|
+|.....|-.......+..F.|
+|-.|..||.------|..F.|
+|-.|..--.......|..F.|
+|..|...........-FF-.|
+|...................|
+|.....--.|.....---..|
+---------------- ----
+ENDMAP
+BRANCH:(8,10,8,10),(0,0,0,0)
+STAIR:(15,1), up
+REGION:(00,00,21,11),lit,"ordinary"
+NON_DIGGABLE:(00,00,21,11)
+NON_PASSWALL:(00,00,21,11)
+DOOR:locked,(15,5)
+OBJECT:('`',"boulder"),(2,3)
+OBJECT:('`',"boulder"),(10,3)
+OBJECT:('`',"boulder"),(12,3)
+OBJECT:('`',"boulder"),(3,4)
+OBJECT:('`',"boulder"),(9,4)
+OBJECT:('`',"boulder"),(2,5)
+OBJECT:('`',"boulder"),(3,5)
+OBJECT:('`',"boulder"),(8,5)
+OBJECT:('`',"boulder"),(10,5)
+OBJECT:('`',"boulder"),(4,8)
+OBJECT:('`',"boulder"),(4,9)
+OBJECT:('`',"boulder"),(5,9)
+TRAP:"pit",(16,1)
+TRAP:"pit",(17,1)
+TRAP:"pit",(18,1)
+TRAP:"pit",(19,3)
+TRAP:"pit",(19,4)
+TRAP:"pit",(19,5)
+TRAP:"pit",(19,6)
+TRAP:"pit",(19,7)
+TRAP:"pit",(19,8)
+TRAP:"pit",(15,9)
+TRAP:"pit",(16,9)
+TRAP:"pit",(17,9)
+
+OBJECT:('?',"earth"),(18,10)
+[50%]: OBJECT:('?',"earth"),(19,10)
+
+soko_loot()
+
+
+LEVEL:"soko3-16"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "Joseph L Traub"
+MAP
+----------------
+|...|..|.|.--..|
+|.|.|..........---
+|.|....--FF--....---
+|...|..|....|......|
+--.-|.-|.FF.|......|
+ |.||.|-....--.--.--
+ |.FF.FL....LF.FF.|
+ |.||.|--..--|.||.|
+--.--.--|..|-|.||.|
+|......||..|--.--.--
+|......-|..|-......|
+|.......|..|..---..|
+-----..............|
+    |.|....|..|...--
+    ---------------
+ENDMAP
+BRANCH:(8,1,8,1),(0,0,0,0)
+STAIR:(10,4), up
+REGION:(00,00,19,15),lit,"ordinary"
+NON_DIGGABLE:(00,00,19,15)
+NON_PASSWALL:(00,00,19,15)
+OBJECT:('`',"boulder"),(7,2)
+OBJECT:('`',"boulder"),(12,2)
+OBJECT:('`',"boulder"),(14,3)
+OBJECT:('`',"boulder"),(15,4)
+OBJECT:('`',"boulder"),(16,4)
+OBJECT:('`',"boulder"),(2,5)
+OBJECT:('`',"boulder"),(5,5)
+OBJECT:('`',"boulder"),(14,10)
+OBJECT:('`',"boulder"),(17,10)
+OBJECT:('`',"boulder"),(3,11)
+OBJECT:('`',"boulder"),(4,11)
+OBJECT:('`',"boulder"),(2,12)
+OBJECT:('`',"boulder"),(5,12)
+OBJECT:('`',"boulder"),(7,13)
+OBJECT:('`',"boulder"),(11,13)
+OBJECT:('`',"boulder"),(16,13)
+TRAP:"pit",(8,5)
+TRAP:"pit",(11,5)
+TRAP:"pit",(8,6)
+TRAP:"pit",(9,6)
+TRAP:"pit",(10,6)
+TRAP:"pit",(11,6)
+TRAP:"pit",(8,7)
+TRAP:"pit",(9,7)
+TRAP:"pit",(10,7)
+TRAP:"pit",(11,7)
+TRAP:"pit",(9,8)
+TRAP:"pit",(10,8)
+TRAP:"pit",(9,9)
+TRAP:"pit",(10,9)
+TRAP:"pit",(9,10)
+TRAP:"pit",(10,10)
+TRAP:"pit",(9,11)
+TRAP:"pit",(10,11)
+
+OBJECT:('?',"earth"),(09,12)
+[50%]: OBJECT:('?',"earth"),(10,12)
+
+soko_loot()
+
+
+LEVEL:"soko3-10"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "Joseph L Traub" 
+MAP
+            ---------
+------------|.....+.|
+|...........|.....|.|
+|.---.......|.....|.|
+|...|.......|.....|.|
+|...|---.---|.....|.|
+|...--......|.....|.|
+|...........-------.|
+---.--...|..........|
+  |.--...|--------..|
+  |......|       ----
+  ---.----
+    ---
+ENDMAP
+BRANCH:(5,11,5,11),(0,0,0,0)
+STAIR:(15,5), up
+REGION:(00,00,20,12),lit,"ordinary"
+NON_DIGGABLE:(00,00,20,12)
+NON_PASSWALL:(00,00,20,12)
+DOOR:locked,(18,1)
+OBJECT:('`',"boulder"),(6,3)
+OBJECT:('`',"boulder"),(7,3)
+OBJECT:('`',"boulder"),(6,4)
+OBJECT:('`',"boulder"),(9,4)
+OBJECT:('`',"boulder"),(3,5)
+OBJECT:('`',"boulder"),(8,5)
+OBJECT:('`',"boulder"),(2,6)
+OBJECT:('`',"boulder"),(3,7)
+OBJECT:('`',"boulder"),(4,7)
+OBJECT:('`',"boulder"),(6,7)
+OBJECT:('`',"boulder"),(7,8)
+OBJECT:('`',"boulder"),(8,8)
+TRAP:"pit",(19,2)
+TRAP:"pit",(19,3)
+TRAP:"pit",(19,4)
+TRAP:"pit",(19,5)
+TRAP:"pit",(19,6)
+TRAP:"pit",(19,7)
+TRAP:"pit",(12,8)
+TRAP:"pit",(13,8)
+TRAP:"pit",(14,8)
+TRAP:"pit",(15,8)
+TRAP:"pit",(16,8)
+TRAP:"pit",(17,8)
+
+OBJECT:('?',"earth"),(18,09)
+[50%]: OBJECT:('?',"earth"),(19,09)
+
+soko_loot()
+
+
+LEVEL:"soko2-3"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "Thinking Rabbit"
+MAP
+       ------------
+-------|..........|
+|...|..|--------..|
+|......|..|    |.--
+--.--..|..-----|.|
+ |.....--...|..|.|
+ |.|....|......|.|
+ |...|.....---.|.|
+ |.....--..---.|.|
+ ---...|.......|.|
+   ---.|...--..|.|
+    |......||....|
+    |.....-----..|
+    -------   ----
+ENDMAP
+STAIR:(8,4), down
+STAIR:(8,1), up
+REGION:(00,00,18,13),lit,"ordinary"
+NON_DIGGABLE:(00,00,18,13)
+NON_PASSWALL:(00,00,18,13)
+OBJECT:('`',"boulder"),(2,3)
+OBJECT:('`',"boulder"),(5,4)
+OBJECT:('`',"boulder"),(4,5)
+OBJECT:('`',"boulder"),(6,5)
+OBJECT:('`',"boulder"),(9,5)
+OBJECT:('`',"boulder"),(6,6)
+OBJECT:('`',"boulder"),(10,6)
+OBJECT:('`',"boulder"),(3,7)
+OBJECT:('`',"boulder"),(6,7)
+OBJECT:('`',"boulder"),(10,8)
+OBJECT:('`',"boulder"),(5,9)
+OBJECT:('`',"boulder"),(10,9)
+OBJECT:('`',"boulder"),(10,10)
+OBJECT:('`',"boulder"),(7,11)
+OBJECT:('`',"boulder"),(8,11)
+TRAP:"hole",(9,1)
+TRAP:"hole",(10,1)
+TRAP:"hole",(11,1)
+TRAP:"hole",(12,1)
+TRAP:"hole",(13,1)
+TRAP:"hole",(14,1)
+TRAP:"hole",(15,1)
+TRAP:"hole",(16,3)
+TRAP:"hole",(16,4)
+TRAP:"hole",(16,5)
+TRAP:"hole",(16,6)
+TRAP:"hole",(16,7)
+TRAP:"hole",(16,8)
+TRAP:"hole",(16,9)
+TRAP:"hole",(16,10)
+
+soko_loot()
+
+
+LEVEL:"soko2-4"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "Joseph L Traub"
+MAP
+         ----------
+    -----|........|
+ ----...-|.-----..|
+ |.......---...|.--
+ |.............|.|
+ |.|.--------.-|.|
+ |.|.....|.....|.|
+ |.|.....|.|...|.|
+--.|...|.|.----|.|
+|..--....|.....|.|
+|......|.|.......|
+-----.--.........|
+   |.............|
+   |...---.......|
+   ----- ---------
+ENDMAP
+STAIR:(4,4), down
+STAIR:(10,2), up
+REGION:(00,00,18,14),lit,"ordinary"
+NON_DIGGABLE:(00,00,18,14)
+NON_PASSWALL:(00,00,18,14)
+OBJECT:('`',"boulder"),(4,3)
+OBJECT:('`',"boulder"),(3,4)
+OBJECT:('`',"boulder"),(5,4)
+OBJECT:('`',"boulder"),(7,4)
+OBJECT:('`',"boulder"),(12,4)
+OBJECT:('`',"boulder"),(4,5)
+OBJECT:('`',"boulder"),(6,6)
+OBJECT:('`',"boulder"),(5,7)
+OBJECT:('`',"boulder"),(7,7)
+OBJECT:('`',"boulder"),(6,8)
+OBJECT:('`',"boulder"),(5,10)
+OBJECT:('`',"boulder"),(5,12)
+TRAP:"hole",(11,1)
+TRAP:"hole",(12,1)
+TRAP:"hole",(13,1)
+TRAP:"hole",(14,1)
+TRAP:"hole",(15,1)
+TRAP:"hole",(16,3)
+TRAP:"hole",(16,4)
+TRAP:"hole",(16,5)
+TRAP:"hole",(16,6)
+TRAP:"hole",(16,7)
+TRAP:"hole",(16,8)
+TRAP:"hole",(16,9)
+
+soko_loot()
+
+
+LEVEL:"soko2-5"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "Joseph L Traub"
+MAP
+    ------------------
+ ----....|.........+.|
+ |....--.|.........|.|
+ |.......|.........|.|
+---.----.|.........|.|
+|........-F-F-F-F-F-.|
+|....................|
+|........--F-F-F-F-..|
+--.--.--.|...........|
+ |--.....|...........|
+ |.......|...........|
+ |....|..|...........|
+ ---------------------
+ENDMAP
+STAIR:(2,8), down
+STAIR:(11,3), up
+REGION:(00,00,21,12),lit,"ordinary"
+NON_DIGGABLE:(00,00,21,12)
+NON_PASSWALL:(00,00,21,12)
+DOOR:locked,(19,1)
+OBJECT:('`',"boulder"),(3,3)
+OBJECT:('`',"boulder"),(3,5)
+OBJECT:('`',"boulder"),(7,5)
+OBJECT:('`',"boulder"),(4,6)
+OBJECT:('`',"boulder"),(5,6)
+OBJECT:('`',"boulder"),(7,6)
+OBJECT:('`',"boulder"),(8,6)
+OBJECT:('`',"boulder"),(5,7)
+OBJECT:('`',"boulder"),(8,7)
+OBJECT:('`',"boulder"),(6,9)
+OBJECT:('`',"boulder"),(15,9)
+OBJECT:('`',"boulder"),(16,9)
+OBJECT:('`',"boulder"),(5,10)
+OBJECT:('`',"boulder"),(6,10)
+TRAP:"hole",(20,2)
+TRAP:"hole",(20,3)
+TRAP:"hole",(20,4)
+TRAP:"hole",(20,5)
+TRAP:"hole",(9,6)
+TRAP:"hole",(10,6)
+TRAP:"hole",(11,6)
+TRAP:"hole",(12,6)
+TRAP:"hole",(13,6)
+TRAP:"hole",(14,6)
+TRAP:"hole",(15,6)
+TRAP:"hole",(16,6)
+TRAP:"hole",(17,6)
+TRAP:"hole",(18,6)
+
+soko_loot()
+
+
+LEVEL:"soko2-6"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "Thinking Rabbit"
+MAP
+        ---------
+        |...|...----
+        |...+......|
+        |...|.|..|.|
+  -----------....|.|
+  |................|
+  |.|.|..--.|.|..|.|
+  |...|.....|....|.|
+ --.|...-------+-|.|
+--......|....|...|.|
+|....|..F....F...|.|
+|......-|....|...|.--
+|..-----|....|----..|
+|..|....+....+......|
+---------------------
+ENDMAP
+STAIR:(1,13), down
+STAIR:(4,13), up
+REGION:(00,00,20,14),lit,"ordinary"
+NON_DIGGABLE:(00,00,20,14)
+NON_PASSWALL:(00,00,20,14)
+DOOR:locked,(12,2)
+DOOR:locked,(15,8)
+DOOR:locked,(8,13)
+DOOR:locked,(13,13)
+OBJECT:('`',"boulder"),(10,2)
+OBJECT:('`',"boulder"),(13,3)
+OBJECT:('`',"boulder"),(18,4)
+OBJECT:('`',"boulder"),(9,5)
+OBJECT:('`',"boulder"),(8,6)
+OBJECT:('`',"boulder"),(7,7)
+OBJECT:('`',"boulder"),(3,8)
+OBJECT:('`',"boulder"),(6,8)
+OBJECT:('`',"boulder"),(5,9)
+OBJECT:('`',"boulder"),(4,10)
+OBJECT:('`',"boulder"),(15,10)
+OBJECT:('`',"boulder"),(3,11)
+OBJECT:('`',"boulder"),(2,12)
+TRAP:"hole",(18,6)
+TRAP:"hole",(18,7)
+TRAP:"hole",(18,8)
+TRAP:"hole",(18,9)
+TRAP:"hole",(18,10)
+TRAP:"hole",(18,11)
+TRAP:"hole",(5,13)
+TRAP:"hole",(6,13)
+TRAP:"hole",(7,13)
+TRAP:"hole",(14,13)
+TRAP:"hole",(15,13)
+TRAP:"hole",(16,13)
+TRAP:"hole",(17,13)
+
+soko_loot()
+
+
+LEVEL:"soko2-7"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "Thinking Rabbit"
+MAP
+           ----
+  ---------|..|
+---...|...--..|---
+|.....|.......|..|
+|.|...|...--.....|
+|.|...|....|..--.|
+|.|.----.|.--F--.|---
+|.|..|--.|..|.|..|..|
+|.|..|....|.|.|.....|
+|.........|.|.--F--.--
+|.|..---.--.|..|..|..|
+|.----......F..F.....|
+|......-----|..|.-----
+--------    |.--..|
+            |.....|
+            |..----
+            ----
+ENDMAP
+STAIR:(12,1), down
+STAIR:(13,7), up
+REGION:(00,00,21,16),lit,"ordinary"
+NON_DIGGABLE:(00,00,21,16)
+NON_PASSWALL:(00,00,21,16)
+OBJECT:('`',"boulder"),(12,2)
+OBJECT:('`',"boulder"),(3,3)
+OBJECT:('`',"boulder"),(4,3)
+OBJECT:('`',"boulder"),(12,3)
+OBJECT:('`',"boulder"),(12,4)
+OBJECT:('`',"boulder"),(8,5)
+OBJECT:('`',"boulder"),(9,5)
+OBJECT:('`',"boulder"),(3,7)
+OBJECT:('`',"boulder"),(6,9)
+TRAP:"hole",(14,4)
+TRAP:"hole",(16,5)
+TRAP:"hole",(16,6)
+TRAP:"hole",(17,8)
+TRAP:"hole",(19,9)
+TRAP:"hole",(18,11)
+TRAP:"hole",(16,12)
+TRAP:"hole",(13,13)
+TRAP:"hole",(15,14)
+
+soko_loot()
+
+
+LEVEL:"soko1-3"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "J Franklin Mentzer <wryter@aol.com>"
+MAP
+            ---------
+            |.......|
+ -------    |..----+--
+ |.....-------.|.....|
+-----........|.|.....|
+|...|-....--.|.|.....|
+|...|..--....|.|.....|
+|...|..-----.|.|.....|
+--.........|.|.|+----|
+ |.....---.|.|.F...+.|
+ |.|.....|.|.|.|...|-|
+ |.|.|.|...|.|.F...+.|
+--.---...|.|.|.|...|-|
+|.....----.|.|.F...+.|
+|..............|------
+----....|......|
+   |....|..-----
+   ---------
+ENDMAP
+$place = { (20,9),(20,11),(20,13) }
+SHUFFLE: $place
+STAIR:(2,3), down
+REGION:(00,00,21,17),lit,"ordinary"
+REGION:(16,03,19,07),lit,"zoo",filled,irregular
+NON_DIGGABLE:(00,00,21,17)
+NON_PASSWALL:(00,00,21,17)
+DOOR:locked,(19,2)
+DOOR:locked,(16,8)
+DOOR:locked,(19,9)
+DOOR:locked,(19,11)
+DOOR:locked,(19,13)
+OBJECT:('`',"boulder"),(6,4)
+OBJECT:('`',"boulder"),(2,6)
+OBJECT:('`',"boulder"),(2,7)
+OBJECT:('`',"boulder"),(3,8)
+OBJECT:('`',"boulder"),(6,8)
+OBJECT:('`',"boulder"),(3,9)
+OBJECT:('`',"boulder"),(5,9)
+OBJECT:('`',"boulder"),(6,10)
+OBJECT:('`',"boulder"),(6,11)
+OBJECT:('`',"boulder"),(3,13)
+OBJECT:('`',"boulder"),(5,14)
+OBJECT:('`',"boulder"),(10,14)
+OBJECT:('`',"boulder"),(4,15)
+OBJECT:('`',"boulder"),(7,15)
+OBJECT:('`',"boulder"),(10,15)
+TRAP:"hole",(15,1)
+TRAP:"hole",(16,1)
+TRAP:"hole",(17,1)
+TRAP:"hole",(18,1)
+TRAP:"hole",(14,3)
+TRAP:"hole",(14,4)
+TRAP:"hole",(14,5)
+TRAP:"hole",(14,6)
+TRAP:"hole",(14,7)
+TRAP:"hole",(14,8)
+TRAP:"hole",(14,9)
+TRAP:"hole",(14,10)
+TRAP:"hole",(14,11)
+TRAP:"hole",(14,12)
+TRAP:"hole",(14,13)
+
+soko_loot()
+
+#OBJECT:'(',"bag of holding",$place[0]
+ENGRAVING:$place[0],burn,"Elbereth"
+ENGRAVING:$place[1],burn,"Elbereth"
+ENGRAVING:$place[2],burn,"Elbereth"
+
+MONSTER:('m',"giant mimic"), random, m_object "boulder"
+MONSTER:('m',"giant mimic"), random, m_object "boulder"
+
+LEVEL:"soko1-4"
+FLAGS:noteleport,mazelevel,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# "J Franklin Mentzer <wryter@aol.com>"
+MAP
+------------
+|.+......+.|
+|-|......|--------
+|.+......+.......|
+|-|......|-----..|
+|.+......+.|  |.--
+|-------------|.|
+|.....|...|...|.|
+|.............|.|
+|....------.|.|.|
+|....|...|....|.|
+|....|.......-|.|
+-----|.--..---|.|
+ |...|.....+..F.|
+ |........-|..F.|
+ |-.----.---FF-.|
+ |..............|
+ |...|...-----..|
+ ---------   ----
+ENDMAP
+$place = { (1,1),(10,1),(1,3),(1,5),(10,5) }
+SHUFFLE: $place
+STAIR:(6,10), down
+REGION:(00,00,17,18),lit,"ordinary"
+REGION:(03,01,08,05),lit,"zoo",filled,irregular
+NON_DIGGABLE:(00,00,17,18)
+NON_PASSWALL:(00,00,17,18)
+DOOR:locked,(2,1)
+DOOR:locked,(9,1)
+DOOR:locked,(2,3)
+DOOR:locked,(9,3)
+DOOR:locked,(2,5)
+DOOR:locked,(9,5)
+DOOR:locked,(11,13)
+OBJECT:('`',"boulder"),(2,8)
+OBJECT:('`',"boulder"),(3,8)
+OBJECT:('`',"boulder"),(6,8)
+OBJECT:('`',"boulder"),(10,8)
+OBJECT:('`',"boulder"),(12,8)
+OBJECT:('`',"boulder"),(3,9)
+OBJECT:('`',"boulder"),(2,10)
+OBJECT:('`',"boulder"),(3,10)
+OBJECT:('`',"boulder"),(12,10)
+OBJECT:('`',"boulder"),(8,11)
+OBJECT:('`',"boulder"),(6,12)
+OBJECT:('`',"boulder"),(7,13)
+OBJECT:('`',"boulder"),(6,14)
+OBJECT:('`',"boulder"),(4,16)
+OBJECT:('`',"boulder"),(8,16)
+OBJECT:('`',"boulder"),(9,16)
+TRAP:"hole",(10,3)
+TRAP:"hole",(11,3)
+TRAP:"hole",(12,3)
+TRAP:"hole",(13,3)
+TRAP:"hole",(14,3)
+TRAP:"hole",(15,5)
+TRAP:"hole",(15,6)
+TRAP:"hole",(15,7)
+TRAP:"hole",(15,8)
+TRAP:"hole",(15,9)
+TRAP:"hole",(15,10)
+TRAP:"hole",(15,11)
+TRAP:"hole",(15,12)
+TRAP:"hole",(15,13)
+TRAP:"hole",(15,14)
+TRAP:"hole",(15,15)
+
+soko_loot()
+
+#OBJECT:'"',"amulet of reflection",$place[0]
+ENGRAVING:$place[0],burn,"Elbereth"
+ENGRAVING:$place[1],burn,"Elbereth"
+ENGRAVING:$place[2],burn,"Elbereth"
+
+MONSTER:('m',"giant mimic"), random, m_object "boulder"
+MONSTER:('m',"giant mimic"), random, m_object "boulder"
+
+
+LEVEL:"soko4-3"
+FLAGS:noteleport,hardfloor,premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center, center
+# Steve Melenchuk <smelenchuk@gmail.com>
+MAP
+        --- 
+----   --.--
+|..-----...|
+|..........|
+|.----.-...|
+|.----.|...|
+|.||...|...|
+|.||...-...|
+|.||.......|
+|.||..--...|
+------------
+ENDMAP
+BRANCH:(09,01,09,01),(0,0,0,0)
+STAIR:(01,09),up
+REGION:(00,00,11,10),lit,"ordinary"
+NON_DIGGABLE:(00,00,11,10)
+NON_PASSWALL:(00,00,11,10)
+
+# Boulders
+OBJECT:('`',"boulder"),(08,03)
+OBJECT:('`',"boulder"),(09,03)
+OBJECT:('`',"boulder"),(09,04)
+OBJECT:('`',"boulder"),(09,05)
+OBJECT:('`',"boulder"),(05,06)
+OBJECT:('`',"boulder"),(08,06)
+OBJECT:('`',"boulder"),(06,07)
+OBJECT:('`',"boulder"),(09,07)
+OBJECT:('`',"boulder"),(05,08)
+OBJECT:('`',"boulder"),(08,08)
+
+# Traps
+TRAP:"pit",(05,03)
+TRAP:"pit",(04,03)
+TRAP:"pit",(03,03)
+TRAP:"pit",(01,04)
+TRAP:"pit",(01,05)
+TRAP:"pit",(01,06)
+TRAP:"pit",(01,07)
+TRAP:"pit",(01,08)
+
+# A little help
+OBJECT:('?',"earth"),(01,02)
+[50%]: OBJECT:('?',"earth"),(02,02)
+
+soko_loot()
+
+
+LEVEL:"soko4-4"
+FLAGS:noteleport,hardfloor, premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center, center
+# Steve Melenchuk <smelenchuk@gmail.com>
+MAP
+------------- 
+|.|.....|..-- 
+|.|.....|...| 
+|.|-.......-- 
+|.||....-...| 
+|.|---.--...| 
+|.|  |.---.-- 
+|.|  |.---.---
+|.----.--....|
+|............|
+|..------....|
+----    |...--
+        ----- 
+ENDMAP
+BRANCH:(11,05,11,05),(0,0,0,0)
+STAIR:(01,01),up
+REGION:(00,00,13,12),lit,"ordinary"
+NON_DIGGABLE:(00,00,13,12)
+NON_PASSWALL:(00,00,13,12)
+
+# Boulders
+OBJECT:('`',"boulder"),(04,02)
+OBJECT:('`',"boulder"),(06,02)
+OBJECT:('`',"boulder"),(07,02)
+OBJECT:('`',"boulder"),(04,03)
+OBJECT:('`',"boulder"),(09,03)
+OBJECT:('`',"boulder"),(06,04)
+OBJECT:('`',"boulder"),(10,05)
+OBJECT:('`',"boulder"),(06,06)
+OBJECT:('`',"boulder"),(08,09)
+OBJECT:('`',"boulder"),(11,09)
+OBJECT:('`',"boulder"),(11,10)
+
+# Traps
+TRAP:"pit",(05,09)
+TRAP:"pit",(04,09)
+TRAP:"pit",(03,09)
+TRAP:"pit",(01,08)
+TRAP:"pit",(01,07)
+TRAP:"pit",(01,06)
+TRAP:"pit",(01,05)
+TRAP:"pit",(01,04)
+TRAP:"pit",(01,03)
+TRAP:"pit",(01,02)
+
+# A little help
+OBJECT:('?',"earth"),(01,10)
+[50%]: OBJECT:('?',"earth"),(02,10)
+
+soko_loot()
+
+
+LEVEL:"soko2-10"
+FLAGS:noteleport, premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# Steve Melenchuk <smelenchuk@gmail.com>
+MAP
+ ---------     
+ |...|...|     
+--.......|     
+|..--....-------
+|..--....|.....|
+|..|..-..|.....|
+|..|.--..|.....|
+|........|.....|
+----.--..|.....|
+   |.--..|.....|
+  --.--..|.....|
+  |..------+---|
+  |.........|
+  -----------
+ENDMAP
+STAIR:(04,06),down
+STAIR:(12,07),up
+DOOR:locked,(11,11)
+REGION:(00,00,15,13),lit,"ordinary"
+NON_DIGGABLE:(00,00,15,13)
+NON_PASSWALL:(00,00,15,13)
+
+# Boulders
+OBJECT:('`',"boulder"),(06,02)
+OBJECT:('`',"boulder"),(07,02)
+OBJECT:('`',"boulder"),(02,03)
+OBJECT:('`',"boulder"),(05,03)
+OBJECT:('`',"boulder"),(06,04)
+OBJECT:('`',"boulder"),(07,04)
+OBJECT:('`',"boulder"),(02,06)
+OBJECT:('`',"boulder"),(07,06)
+OBJECT:('`',"boulder"),(03,07)
+OBJECT:('`',"boulder"),(07,09)
+
+# Traps
+TRAP:"hole",(04,08)
+TRAP:"hole",(04,09)
+TRAP:"hole",(04,10)
+TRAP:"hole",(05,12)
+TRAP:"hole",(06,12)
+TRAP:"hole",(07,12)
+TRAP:"hole",(08,12)
+TRAP:"hole",(09,12)
+TRAP:"hole",(10,12)
+
+soko_loot()
+
+
+LEVEL:"soko2-11"
+FLAGS:noteleport, premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center, center
+# Steve Melenchuk <smelenchuk@gmail.com>
+MAP
+ ----           
+ |..|  ---------
+ |..----.|.....|
+ |.......|.....|
+ |..-....|.....|
+ |.....-.|.....|
+ |.......|.....|
+ |...-...|.....|
+--.-------.....|
+|..----------+--
+|.............| 
+--------------- 
+ENDMAP
+STAIR:(08,02),down
+STAIR:(12,05),up
+REGION:(00,00,15,11),lit,"ordinary"
+NON_DIGGABLE:(00,00,15,11)
+NON_PASSWALL:(00,00,15,11)
+
+DOOR:locked,(13,09)
+
+# Boulders
+OBJECT:('`',"boulder"),(03,03)
+OBJECT:('`',"boulder"),(06,03)
+OBJECT:('`',"boulder"),(02,04)
+OBJECT:('`',"boulder"),(05,04)
+OBJECT:('`',"boulder"),(07,04)
+OBJECT:('`',"boulder"),(03,06)
+OBJECT:('`',"boulder"),(04,06)
+OBJECT:('`',"boulder"),(05,06)
+OBJECT:('`',"boulder"),(06,06)
+OBJECT:('`',"boulder"),(07,06)
+OBJECT:('`',"boulder"),(02,07)
+
+# Traps
+TRAP:"hole",(03,10)
+TRAP:"hole",(04,10)
+TRAP:"hole",(05,10)
+TRAP:"hole",(06,10)
+TRAP:"hole",(07,10)
+TRAP:"hole",(08,10)
+TRAP:"hole",(09,10)
+TRAP:"hole",(10,10)
+TRAP:"hole",(11,10)
+TRAP:"hole",(12,10)
+
+soko_loot()
+
+
+LEVEL:"soko2-8"
+FLAGS:noteleport, premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# Steve Melenchuk <smelenchuk@gmail.com>
+MAP
+  --------------------
+  |..................|
+  |.....------------.|
+  --.----..--------|.|
+----.--...........||.|
+----....-.....-...||.|
+ |.....-..-...-----|.|
+ |.-......-.--------+|
+ |..-.--.....| |.....|
+ --......--.-- |.....|
+  --.........| |.....|
+   ---..---..- |.....|
+     ---- |..| |.....|
+          ---- |.....|
+               |.....|
+               -------
+ENDMAP
+STAIR:(07,11),down
+STAIR:(18,11),up
+DOOR:locked,(20,07)
+REGION:(00,00,21,15),lit,"ordinary"
+NON_DIGGABLE:(00,00,21,15)
+NON_PASSWALL:(00,00,21,15)
+
+# Boulders
+OBJECT:('`',"boulder"),(08,04)
+OBJECT:('`',"boulder"),(11,05)
+OBJECT:('`',"boulder"),(12,05)
+OBJECT:('`',"boulder"),(05,06)
+OBJECT:('`',"boulder"),(12,06)
+OBJECT:('`',"boulder"),(05,07)
+OBJECT:('`',"boulder"),(07,07)
+OBJECT:('`',"boulder"),(08,07)
+OBJECT:('`',"boulder"),(05,08)
+OBJECT:('`',"boulder"),(05,09)
+OBJECT:('`',"boulder"),(07,09)
+OBJECT:('`',"boulder"),(08,09)
+OBJECT:('`',"boulder"),(10,10)
+OBJECT:('`',"boulder"),(11,11)
+
+# Traps
+TRAP:"hole",(08,01)
+TRAP:"hole",(09,01)
+TRAP:"hole",(10,01)
+TRAP:"hole",(11,01)
+TRAP:"hole",(12,01)
+TRAP:"hole",(13,01)
+TRAP:"hole",(14,01)
+TRAP:"hole",(15,01)
+TRAP:"hole",(16,01)
+TRAP:"hole",(17,01)
+TRAP:"hole",(18,01)
+TRAP:"hole",(19,01)
+
+soko_loot()
+
+LEVEL:"soko2-9"
+FLAGS:noteleport, premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+#12345678901234567890123456789012345678901234567890
+# Steve Melenchuk <smelenchuk@gmail.com>
+MAP
+---------                
+|.......|                
+--.....--                
+ --...-------------------
+  --.--.................|
+  |......--------------+|
+  |..--..-----    |.....|
+  |.....--...|    |.....|
+ --...---....|    |.....|
+ |....|.....--    |.....|
+ |....-.....|     |.....|
+ --.........|     |.....|
+  |...-...---     |.....|
+  --..|...|       -------
+   |..-----              
+   ----                  
+ENDMAP
+
+STAIR:(04,05),down
+STAIR:(21,09),up
+DOOR:locked,(23,05)
+REGION:(00,00,24,15),lit,"ordinary"
+NON_DIGGABLE:(00,00,24,15)
+NON_PASSWALL:(00,00,24,15)
+
+# Boulders
+OBJECT:('`',"boulder"),(05,02)
+OBJECT:('`',"boulder"),(04,03)
+OBJECT:('`',"boulder"),(03,06)
+OBJECT:('`',"boulder"),(04,07)
+OBJECT:('`',"boulder"),(05,07)
+OBJECT:('`',"boulder"),(03,08)
+OBJECT:('`',"boulder"),(10,08)
+OBJECT:('`',"boulder"),(03,09)
+OBJECT:('`',"boulder"),(11,09)
+OBJECT:('`',"boulder"),(05,10)
+OBJECT:('`',"boulder"),(08,10)
+OBJECT:('`',"boulder"),(03,11)
+OBJECT:('`',"boulder"),(07,11)
+OBJECT:('`',"boulder"),(09,11)
+OBJECT:('`',"boulder"),(10,11)
+OBJECT:('`',"boulder"),(04,12)
+OBJECT:('`',"boulder"),(08,12)
+
+# Traps
+TRAP:"hole",(09,04)
+TRAP:"hole",(10,04)
+TRAP:"hole",(11,04)
+TRAP:"hole",(12,04)
+TRAP:"hole",(13,04)
+TRAP:"hole",(14,04)
+TRAP:"hole",(15,04)
+TRAP:"hole",(16,04)
+TRAP:"hole",(17,04)
+TRAP:"hole",(18,04)
+TRAP:"hole",(19,04)
+TRAP:"hole",(20,04)
+TRAP:"hole",(21,04)
+TRAP:"hole",(22,04)
+
+soko_loot()
+
+LEVEL:"soko1-5"
+FLAGS:noteleport, premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# Steve Melenchuk <smelenchuk@gmail.com>
+MAP
+    ----
+    -..--                   
+ ----...---------------------
+ |..-.......................|
+--...-..------------------|.|
+|.................|       |.|
+|..-....-...----.-| -------.|
+--.-..--...-......---.....|.|
+--.---..--.-..-...|.+.....|.|
+--.- -....---.-...---.....|.|
+--.---..-..-....--|.+.....+.|
+--.-..-.--......-----.....---
+|...........-....||.+.....|  
+|...-.....-......|---.....|  
+-----.........-..|  -------  
+    |..-..-..--..|           
+    --------------           
+ENDMAP
+
+$place = { (19,08),(19,10),(19,12) }
+SHUFFLE: $place
+STAIR:(15,15),down
+REGION:(00,00,28,16),lit,"ordinary"
+NON_DIGGABLE:(00,00,28,16)
+NON_PASSWALL:(00,00,28,16)
+
+# Boulders
+OBJECT:('`',"boulder"),(06,03)
+OBJECT:('`',"boulder"),(07,03)
+OBJECT:('`',"boulder"),(07,04)
+OBJECT:('`',"boulder"),(02,05)
+OBJECT:('`',"boulder"),(08,05)
+OBJECT:('`',"boulder"),(11,05)
+OBJECT:('`',"boulder"),(05,06)
+OBJECT:('`',"boulder"),(15,08)
+OBJECT:('`',"boulder"),(13,09)
+OBJECT:('`',"boulder"),(16,09)
+OBJECT:('`',"boulder"),(13,10)
+OBJECT:('`',"boulder"),(11,11)
+OBJECT:('`',"boulder"),(04,12)
+OBJECT:('`',"boulder"),(06,12)
+OBJECT:('`',"boulder"),(09,12)
+OBJECT:('`',"boulder"),(15,12)
+OBJECT:('`',"boulder"),(07,13)
+OBJECT:('`',"boulder"),(08,13)
+OBJECT:('`',"boulder"),(09,13)
+OBJECT:('`',"boulder"),(11,13)
+OBJECT:('`',"boulder"),(14,13)
+OBJECT:('`',"boulder"),(11,14)
+
+# Traps
+TRAP:"hole",(08,03)
+TRAP:"hole",(09,03)
+TRAP:"hole",(10,03)
+TRAP:"hole",(11,03)
+TRAP:"hole",(12,03)
+TRAP:"hole",(13,03)
+TRAP:"hole",(14,03)
+TRAP:"hole",(15,03)
+TRAP:"hole",(16,03)
+TRAP:"hole",(17,03)
+TRAP:"hole",(18,03)
+TRAP:"hole",(19,03)
+TRAP:"hole",(20,03)
+TRAP:"hole",(21,03)
+TRAP:"hole",(22,03)
+TRAP:"hole",(23,03)
+TRAP:"hole",(24,03)
+TRAP:"hole",(25,03)
+
+MONSTER:('m',"giant mimic"), random, m_object "boulder"
+MONSTER:('m',"giant mimic"), random, m_object "boulder"
+
+soko_loot()
+
+# Rewards
+DOOR:locked,(26,10)
+DOOR:closed,(20,08)
+DOOR:closed,(20,10)
+DOOR:closed,(20,12)
+REGION:(21,07,25,13),lit,"zoo",filled,irregular
+#OBJECT:'[',"cloak of magic resistance",place[0]
+ENGRAVING:$place[0],burn,"Elbereth"
+#OBJECT:'"',"amulet of reflection",place[1]
+ENGRAVING:$place[1],burn,"Elbereth"
+#OBJECT:'(',"bag of holding",place[2]
+ENGRAVING:$place[2],burn,"Elbereth"
+
+LEVEL:"soko1-6"
+FLAGS:noteleport, premapped
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+# Steve Melenchuk <smelenchuk@gmail.com>
+MAP
+  -----                        
+  |...------  -----   -------  
+  |........----...| ---.....|  
+ --..--.--.--.....| |.+.....|  
+ |................| ---.....|--
+--.....--.--....--- |.+.....+.|
+|...-----.-----.-   ---.....|.|
+|.....--..-----.--  |.+.....|.|
+--....---.---....|  ---.....|.|
+ ---..---...-....|    ------|.|
+   |......-......|          |.|
+   |..--...-.....|          |.|
+   ------..-----------------|.|
+       -......................|
+       -...--------------------
+       -----                   
+ENDMAP
+
+$place = { (21,03),(21,05),(21,07) }
+SHUFFLE: $place
+STAIR:(08,07),down
+REGION:(00,00,30,15),lit,"ordinary"
+NON_DIGGABLE:(00,00,30,15)
+NON_PASSWALL:(00,00,30,15)
+
+# Boulders
+OBJECT:('`',"boulder"),(04,02)
+OBJECT:('`',"boulder"),(06,02)
+OBJECT:('`',"boulder"),(08,02)
+OBJECT:('`',"boulder"),(16,03)
+OBJECT:('`',"boulder"),(03,04)
+OBJECT:('`',"boulder"),(06,04)
+OBJECT:('`',"boulder"),(12,04)
+OBJECT:('`',"boulder"),(14,04)
+OBJECT:('`',"boulder"),(14,05)
+OBJECT:('`',"boulder"),(02,06)
+OBJECT:('`',"boulder"),(03,06)
+OBJECT:('`',"boulder"),(15,07)
+OBJECT:('`',"boulder"),(04,08)
+OBJECT:('`',"boulder"),(09,08)
+OBJECT:('`',"boulder"),(15,08)
+OBJECT:('`',"boulder"),(15,09)
+OBJECT:('`',"boulder"),(05,10)
+OBJECT:('`',"boulder"),(06,10)
+OBJECT:('`',"boulder"),(12,10)
+OBJECT:('`',"boulder"),(14,10)
+OBJECT:('`',"boulder"),(15,10)
+
+# Traps
+TRAP:"hole",(11,13)
+TRAP:"hole",(12,13)
+TRAP:"hole",(13,13)
+TRAP:"hole",(14,13)
+TRAP:"hole",(15,13)
+TRAP:"hole",(16,13)
+TRAP:"hole",(17,13)
+TRAP:"hole",(18,13)
+TRAP:"hole",(19,13)
+TRAP:"hole",(20,13)
+TRAP:"hole",(21,13)
+TRAP:"hole",(22,13)
+TRAP:"hole",(23,13)
+TRAP:"hole",(24,13)
+TRAP:"hole",(25,13)
+TRAP:"hole",(26,13)
+TRAP:"hole",(27,13)
+TRAP:"hole",(28,13)
+
+MONSTER:('m',"giant mimic"), random, m_object "boulder"
+MONSTER:('m',"giant mimic"), random, m_object "boulder"
+
+soko_loot()
+
+# Rewards
+DOOR:locked,(28,05)
+DOOR:closed,(22,03)
+DOOR:closed,(22,05)
+DOOR:closed,(22,07)
+REGION:(23,02,27,08),lit,"zoo",filled,irregular
+#OBJECT:'[',"cloak of magic resistance",place[0]
+ENGRAVING:$place[0],burn,"Elbereth"
+#OBJECT:'"',"amulet of reflection",place[1]
+ENGRAVING:$place[1],burn,"Elbereth"
+#OBJECT:'(',"bag of holding",place[2]
+ENGRAVING:$place[2],burn,"Elbereth"

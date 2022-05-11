@@ -1,0 +1,89 @@
+# This editor is vi-like. Type ESC a couple times, then ':q!' (without quotes)
+# to exit if you get stuck. To save, hit ESC and then ZZ or type ':wq'
+# (without quotes.) To insert text, hit 'i' to enter insert mode.
+
+# Most options can be changed in-game by selecting the options menu
+# with 'O'.
+
+# Here are some examples of reasonable defaults:
+
+# Automatically pick up things onto which you move
+OPTIONS=autopickup
+
+# Specify the object types to be picked up when autopickup is on. 
+# For example "pickup_types:?!/" would pick up all scrolls, potions and wands.
+OPTIONS=pickup_types:$"?!=/
+
+# Prompt for confirmation before picking up items that will push the
+# character's encumbrance past a given level:
+# Valid values are: unencumbered, burdened, stressed, strained, or overtaxed
+OPTIONS=pickup_burden:burdened
+
+# German keyboard layout users can uncomment following option
+# to swap the 'y' and 'z' keys:
+OPTIONS=!qwertz_layout
+
+# Show descriptive dungeon names on bottom status line
+OPTIONS=show_dgn_name
+
+
+## Interface settings
+# display color for different monsters, objects, and dungeon features
+OPTIONS=color
+
+# Use DEC line-drawing characters. Won't work for all terminals.
+#OPTIONS=DECgraphics
+# Use IBM extended characters. Won't work for all terminals
+# http://nethackwiki.com/wiki/IBMgraphics
+#OPTIONS=IBMgraphics
+
+# Set the symbol used to display boulders. Default value is `
+OPTIONS=boulder:0
+
+# Distinguish visually between lit and unlit corridors
+OPTIONS=lit_corridor
+
+# Visually distinguish pets from similar animals
+OPTIONS=hilite_pet
+
+# Always show the "uncursed" label on objects
+OPTIONS=showbuc
+
+# Colorize individual rows on a menu based on what regular expressions match its text
+# http://nethackwiki.com/wiki/Menucolors
+OPTIONS=menucolors
+MENUCOLOR=" blessed "=green
+MENUCOLOR=" holy "=green
+MENUCOLOR=" uncursed "=yellow
+MENUCOLOR=" cursed "=red
+MENUCOLOR=" unholy "=red
+MENUCOLOR=" cursed .* (being worn)"=orange&underline
+
+MENUCOLOR="loadstone\|wand \(of\|called\) cancellation"=underline
+MENUCOLOR="Amulet of Yendor named"=magenta                           # color only the real Amulet
+MENUCOLOR="gold piece"=yellow
+
+MENUCOLOR=". -.* \[(Unskilled|Basic|Skilled|Expert|Master)"=white # skill slots
+MENUCOLOR="[a-zA-Z] - [a-zA-Z ]+[ ]+[0-9]+\*[ ]+[a-z]+[ ]+[0-9]+%"=magenta  # forgotten spell
+
+
+# Colorize the status line values
+## HP
+STATUSCOLOR=hp%100=green,hp%66=yellow,hp%50=orange
+STATUSCOLOR=hp%33=red&bold,hp%15:red&inverse,hp%0:red&inverse&blink
+## Pw
+STATUSCOLOR=pw%100=green,pw%66=yellow,pw%50:orange,pw%33=red&bold
+## Carry
+STATUSCOLOR=burdened:yellow,stressed:orange,strained:red&bold 
+STATUSCOLOR=overtaxed:red&inverse,overloaded:red&inverse&blink
+## Hunger
+STATUSCOLOR=satiated:yellow,hungry:orange,weak:red&bold
+STATUSCOLOR=fainting:red&inverse,fainted:red&inverse&blink
+## Mental
+STATUSCOLOR=hallu:yellow,conf:orange,stun:red&bold
+## Health
+STATUSCOLOR=ill:red&inverse,foodpois:red&inverse,slime:red&inverse
+## Other
+STATUSCOLOR=held:red&inverse,blind:red&inverse
+STATUSCOLOR=elbereth:green&inverse
+

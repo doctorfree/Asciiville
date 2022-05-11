@@ -1,0 +1,292 @@
+#       SCCS Id: @(#)caves.des  3.4     1993/02/23
+#       Copyright (c) 1989 by Jean-Christophe Collet
+#       Copyright (c) 1991 by M. Stephenson
+# NetHack may be freely redistributed.  See license for details.
+#
+#
+#       The "fill" level for the mines.
+#
+#       This level is used to fill out any levels not occupied by specific
+#       levels as defined above.
+#
+
+LEVEL: "drgnA"
+#MAZE: "drgnA", random
+
+GEOMETRY: center, center
+MAP
+                          -----...........---                 -----.........
+                        ---.................--             ----......TTTTTT.
+                      ---............TTTT....--         ----...........TT...
+                     --................TTT....--    -----...................
+                     |.....TTT............T....------.......................
+                    --...TTTT.....TT......T....................TT..........-
+                    |......TT...............................TTTTTT........--
+   ---------        |................T.........................TTT......--- 
+----TTTT...-----   --...................................................|   
+TTTTT..........-----T..................------..........................--   
+.........TT.......TTT................---    ----.......-----...........--   
+......TTT.T.........................--         ---------   ---..........--  
+..........TTT.................T....--                       --...........-- 
+...........TTTTT..........tttTT....|                    -----............T| 
+..............T..........ttTTT....--            ---------TTTT.........TTTT| 
+........................tttTT.....|            --M...tttt.............T---- 
+.................................--          ---MM................------    
+............T.---...............--          --PMMM............-----         
+...........T--- -----....ttt.----          --PPPMMTTT.........-----         
+....TTTT.TT--       ----------             |PPPPPMMTTT............-----     
+......TTTT--                               -PPPPPPPTTTT...............-     
+ENDMAP
+
+STAIR: random, up
+STAIR: random, down
+
+PORTAL:(01,00,75,20),(0,0,0,0),"valley"
+
+#
+OBJECT: '*', random
+OBJECT: '*', random
+OBJECT: '*', random
+OBJECT: '(', random
+OBJECT: random, random
+OBJECT: random, random
+OBJECT: random, random
+#
+LOOP [14] {
+  MONSTER: 'D', random, hostile
+}
+MONSTER: 'D', random, hostile
+MONSTER: 'D', random, hostile
+#MONSTER: 'D', "blue dragon", random, hostile
+#MONSTER: 'D', "red dragon", random, hostile
+LOOP [4] {
+  MONSTER: 'w', random, hostile
+}
+#
+LOOP [4] {
+  TRAP: random, random
+}
+
+
+LEVEL: "drgnB"
+#MAZE: "drgnB", random
+
+GEOMETRY: center, center
+MAP
+.......---         ----......-              -----.................-         
+.........---      --.........|  ----  -------M.................----         
+...........--------.........-- --TT----PPPPMMM................--            
+............................----TTPPPPPPPPMM..............T.---             
+...........................PPPPPPPPPPPPPPPMM.............TT--               
+.......................PPPPPPPPPPPPPPPPPPPM............TTTT--               
+....................PPP..PPPPPPPPPPP|PPPPMM.............TTTT---             
+..................PP....-----PPPPPP---PPPP..................TT--            
+................PP.....--   --TPPPP| ----P.....................|----------  
+..-------.....PP......--    ----PP--    ---....................--.|......|  
+---     --...P........|     |TTT---   -----.......................+......|  
+     --- --PP.........|     -----   ---...........................|......|  
+     |P---PPP.........---         ---............................---------  
+------PPPPPP............|        --TT...................TTT....T--          
+PPPPPPPPPPPP............|       --TT...................TTT...TTT|           
+PPPP----PPTT............--   ----T..................TTTTTT.--TT--           
+PPP--  --TTT.............-----TTT................-----TTTTT|----            
+PP--    --TTTT..............................------   -------                
+---      --T..............................---                               
+          --.............................--                                 
+           --------.....................--                                  
+ENDMAP
+
+NON_DIGGABLE: (64,06,75,15)
+REGION: (67,09,72,11),lit,"dragon shop"
+DOOR: open,(66,10)
+
+STAIR: (00,00,63,20),(0,0,0,0),up
+STAIR: (00,00,63,20),(0,0,0,0),down
+#STAIR: random, up
+#STAIR: random, down
+##
+LOOP [3] {
+  OBJECT: '*', random
+  OBJECT: random, random
+}
+OBJECT: '(', random
+#
+LOOP [14] {
+  MONSTER: 'D', random, hostile
+}
+MONSTER: 'D', random, hostile
+MONSTER: 'D', random, hostile
+MONSTER: 'D', random, hostile
+#MONSTER: 'D', "wyvern", random, hostile
+#MONSTER: 'D', "blue dragon", random, hostile
+#MONSTER: 'D', "deep dragon", random, hostile
+LOOP [4] {
+  MONSTER: 'w', random, hostile
+}
+#
+LOOP [4] {
+  TRAP: random, random
+}
+
+
+LEVEL: "drgnC"
+#MAZE: "drgnC", random
+#000000000111111111122222222223333333333444444444455555555556666666666777777
+#123456789012345678901234567890123456789012345678901234567890123456789012345
+GEOMETRY: center, center
+MAP
+PPPPPPPPPPP-        -----.......-      --MMM............---                 
+PPPPPPP-----       --...........|     --MMM...............-----             
+PPPPP---           |............|     |MMM....................---         --
+PPPPP|            --...........--     |M.--.......-------.......--     ----M
+PPP---            |..........---      ----|..T.----     --.......-------MMMM
+P---              |......-----          ---.TT--         |..........MMMMMMMM
+--        ----- ---....---            ---...TT|          --...............MM
+        ---...---.....--              |T....T--          --.................
+       --............--               |T..MM--          --..................
+       |.............-----            --.MMM--        ---...................
+---    |........--.......----         --MM..M--     ---T.......TT...........
+..--   |......---|...MMMMMMM|        --MMM...M|   ---TTT.......TT.}}}.......
+...|----......-----}}}}}}}}}--      --MM...MMM|   |TTT.........TTTTT}}......
+...--...........| -----}}}}}}--     |M.....MM--  --..........}}}}}TT}}......
+................|     ----}}}M--    |.....MM--  --............}}}}}}}MM.....
+...............--        --}MMM--   |......------.....---...}}}TT}MM.MMM....
+..............--          |..MMM|  --......---......-----..TTTTTTTTMMM......
+---..........--           --...M----........TTT.....----.....MMMMTTMMM......
+  ---.......--             --........--..............--.....MMMMMMMMMMMM....
+    --....---               --......--|..TT....---.......MMMMMMMMMMMMMMM....
+     ------                  -.....-- -...TTTT-- -.....MMMMMMTTTTTTTTT......
+ENDMAP
+STAIR: random, up
+STAIR: random, down
+#
+LOOP [3] {
+  OBJECT: '*', random
+  OBJECT: random, random
+}
+OBJECT: '(', random
+#
+LOOP [14] {
+  MONSTER: 'D', random, hostile
+}
+MONSTER: 'D', random, hostile
+MONSTER: 'D', random, hostile
+MONSTER: 'D', random, hostile
+#MONSTER: 'D', "deep dragon", random, hostile
+#MONSTER: 'D', "wyvern", random, hostile
+#MONSTER: 'D', "hydra", random, hostile
+LOOP [4] {
+  MONSTER: 'w', random, hostile
+}
+#
+LOOP [4] {
+  TRAP: random, random
+}
+
+
+LEVEL: "drgnD"
+#MAZE: "drgnD", ' '
+FLAGS: noteleport, hardfloor
+
+GEOMETRY: center, center
+MAP
+         -ttttt.......TTTtttTTtt--     -T}}}}}}}}}M----TTTTttttTTTTT--      
+-------  |TT.T..........TTTTT....----  |}}}}}}}}MMM||.TTTTTTttTTTTT..---    
+|.TttT-- --................TT.......-----}}}}}}MM.---....TTTTTT........---  
+|..TT..| --..........TT...............---}}}}}}M..||.......T.............---
+-..T...|--.....T........................}}}}}}MM..--.................T.....|
+T.TT...--TT...TTT.........---...........}}}}}}MM..............M............|
+...Tt..................TTT|--..........}}}}}}}MM......--......MM....T......|
+T...t...............-------|..........}}}}}}}}M......-------...MM..........-
+....T...TT---.....---      -----.....}}}}}}}}......--- -----...PPPM.....TT..
+T.......T----.....------  -------...}}}}}}}}.......-----.........PPP.....T..
+-T.......|--T........TT----...---...}}}}}}}}......................MM.....TT.
+|TT....---|..T.......TTTTT.......M.}}}}}}}}..----TT................M........
+--------  --........TTT..........M}}}}}}}}}-------........TTTT..............
+-------    --.......T.P.........MM}}}}}}}}}----T----.....TTTT...............
+-T....---------.....PPPM.......MM}}}M}}}}}}.......|--....TT......--T......--
+T.......--.TT--...MPPPPM......MM}}}}M}}}}}}......----...........--|T......--
+T................MM..MPP.....MMM}}}}..}}}}}......---............|--TT......-
+.....--...............PPPTTTMMM}}}}}M.}}}}.....................--|.T........
+.....--...T............TTTTTMM}}}}}MM.}}}}...........T........-- |..........
+-.........TT..........TttTTMMM}}}}MM.}}}}}..........TT.......--  --.........
+---.....TTTTTT...TTTTTttTTMMM}}}}MM.}}}}}}......tttTtTTTTT.---    ----......
+ENDMAP
+
+
+STAIR: (73,18),up
+
+# dragon hoard
+OBJECT:       '*', (01,02)
+GOLD: 600 + 12d100,(01,02)
+
+[60%]: OBJECT:  ('!', "gain ability"), (01,03)
+[80%]: OBJECT:   '=', (01,03)
+[40%]: OBJECT:   '"', (01,03)
+OBJECT:       '*', (01,03)
+GOLD: 600 + 10d100,(01,03)
+
+[60%]: OBJECT:  ('!',"gain level"), (02,03)
+[80%]: OBJECT:   '=', (02,03)
+[40%]: OBJECT:   '"', (02,03)
+OBJECT:       '*', (02,03)
+GOLD: 600 + 10d100,(02,03)
+
+[60%]: OBJECT:  ('!',"full healing"), (01,04)
+[80%]: OBJECT:   '=', (01,04)
+[40%]: OBJECT:   '"', (01,04)
+OBJECT:       '*', (01,04)
+GOLD: 600 + 10d100,(01,04)
+
+[60%]: OBJECT:  ('!',"enlightenment"), (02,04)
+[80%]: OBJECT:   '=', (02,04)
+[40%]: OBJECT:   '"', (02,04)
+OBJECT:       '*', (02,04)
+GOLD: 600 + 10d100,(02,04)
+
+GOLD: 400 + 10d100,(01,05)
+
+GOLD: 200 +  5d100,(00,06)
+GOLD: 200 +  5d100,(01,06)
+GOLD: 200 +  5d100,(02,06)
+GOLD: 100 +  5d100,(02,07)
+
+LOOP [ 2d10 ] {
+  GOLD:1d100, random
+}
+
+OBJECT: ('`',"boulder"),(01,05)
+
+LOOP [12] {
+  OBJECT: '*', random
+}
+LOOP [3] {
+  OBJECT: '(', random
+  OBJECT: ')', random
+  OBJECT: '!', random
+  OBJECT: '?', random
+}
+LOOP [5] {
+  OBJECT: random, random
+}
+#
+LOOP [22] {
+  MONSTER: 'D', random, hostile
+}
+#MONSTER: 'D', "black dragon", random, hostile
+#MONSTER: 'D', "grand red dragon", (01,07), hostile
+#MONSTER: 'D', "grand blue dragon", (02,07), hostile
+MONSTER: ('D', "chromatic dragon"), (01,07), hostile
+MONSTER: ('D', "chromatic dragon"), (02,06), hostile
+#MONSTER: 'D', "wyvern", random, hostile
+#MONSTER: 'D', "hydra", random, hostile
+#MONSTER: 'D',"Crassus the Young Ancient Dragon",(01,06)
+MONSTER: ('D',"chromatic dragon"), (01,06), hostile
+
+LOOP [6] {
+  MONSTER: 'w', random, hostile
+}
+#
+LOOP [4] {
+  TRAP: random, random
+}

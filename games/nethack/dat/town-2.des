@@ -1,0 +1,84 @@
+#
+# Angband-2
+# Copyright (c) 2009 by Patric Mueller
+#
+# NetHack may be freely redistributed.  See license for details.
+#
+LEVEL: "town-2"
+FLAGS: sky,noflip
+MESSAGE: "You reach the surface.  You hear the sounds of civilization."
+$place = { (4,6),(4,16),(18,2),(25,10),(40,13),(55,4),(58,12),(71,2),(73,15) }
+SHUFFLE: $place
+ROOM: "ordinary", lit, random, random, (76,17)
+{
+FOUNTAIN: (55,9)
+FOUNTAIN: (22,8)
+STAIR:$place[0],down
+ENGRAVING: $place[1], mark, "Welcome to the city of Angband!"
+SINK: $place[2]
+#
+#       The Shops
+#
+SUBROOM: "armor shop" [66%], lit, (7,5), (7,2)
+{
+ROOMDOOR: false, closed, random, random
+}
+
+SUBROOM: "weapon shop" [66%], lit, (28,3), (3,3)
+{
+ROOMDOOR: false, closed, random, random
+}
+
+SUBROOM: "music shop" [66%], lit, (44,5), (5,2)
+{
+ROOMDOOR: false, closed, random, random
+}
+
+SUBROOM: "pet shop" [66%], lit, (62,5), (7,2)
+{
+ROOMDOOR: false, closed, random, random
+}
+
+SUBROOM: "potion shop" [66%], lit, (13,11), (5,3)
+{
+ROOMDOOR: false, closed, random, random
+}
+
+SUBROOM: "tin shop", lit, (31,11), (4,3)
+{
+ROOMDOOR: false, closed, random, random
+}
+
+SUBROOM: "ring shop" [66%], lit, (46,12), (4,2)
+{
+ROOMDOOR: false, closed, random, random
+}
+#
+# a shop for sale?
+#
+SUBROOM: "ordinary", lit, (60,12), (6,1)
+{
+ROOMDOOR: false, closed, north, random
+}
+#
+#       The Town Watch.
+#
+MONSTER:('@', "watchman"), random, peaceful
+MONSTER:('@', "watchman"), random, peaceful
+MONSTER:('@', "watchman"), random, peaceful
+MONSTER:('@', "watchman"), random, peaceful
+MONSTER:('@', "watch captain"), random, peaceful
+MONSTER:('@', "watch captain"), random, peaceful
+MONSTER:('@', "watch captain"), random, peaceful
+#
+#       Some distracting townspeople
+#
+MONSTER:('@', "mugger"), random, hostile
+MONSTER:('@', "mugger"), random, hostile
+MONSTER:('@', "mugger"), random, hostile
+MONSTER:('@', "mugger"), random, hostile
+MONSTER:('r', "sewer rat"), random, hostile
+MONSTER:('r', "sewer rat"), random, hostile
+MONSTER:('f', "kitten"), random, hostile
+}
+

@@ -1,7 +1,4 @@
 /* vim:set cin ft=c sw=4 sts=4 ts=8 et ai cino=Ls\:0t0(0 : -*- mode:c;fill-column:80;tab-width:8;c-basic-offset:4;indent-tabs-mode:nil;c-file-style:"k&r" -*-*/
-/* NetHack 3.7 cursstat.h */
-/* Copyright (c) Karl Garrison, 2010.     */
-/* NetHack may be freely redistributed.  See license for details. */
 
 #ifndef CURSSTAT_H
 # define CURSSTAT_H
@@ -17,7 +14,7 @@
 
 /* Global declarations */
 
-void curses_update_stats(void);
+void curses_update_stats();
 void curses_decrement_highlights(boolean);
 attr_t curses_color_attr(int nh_color, int bg_color);
 

@@ -1,9 +1,0 @@
-* NH_filestag=(file%s_for_all_versions)
-wintty.h NH_filestag=(file%s_for_tty_versions)
-
-tile2x11.h NH_filestag=(file%s_for_X_versions)
-winX.h NH_filestag=>tile2x11.h
-xwindow.h NH_filestag=>tile2x11.h
-xwindowp.h NH_filestag=>tile2x11.h
-
-

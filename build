@@ -116,18 +116,26 @@ build_nethack() {
   # Repo: https://github.com/doctorfree/Asciiville
   #
   # Fork of Repo: https://github.com/NetHack/NetHack
+  # with bug fixes and enhancements from UnNetHack at
+  # https://github.com/UnNetHack/UnNetHack
   #
-
-  [ -f src/nethack ] || {
-    sys/unix/setup.sh sys/unix/hints/linux-asciiville
-    make fetch-lua
-    make
-    cd doc
-    make
-    cd ..
-  }
-  chmod +x src/nethack
-
+  # Initial build for NetHack
+  # [ -f src/nethack ] || {
+  #   sys/unix/setup.sh sys/unix/hints/linux-asciiville
+  #   make fetch-lua
+  #   make
+  #   cd doc
+  #   make
+  #   cd ..
+  # }
+  # chmod +x src/nethack
+  #
+  # Revised build with UnNetHack changes
+  ./configure --prefix=/usr/games/lib/nethack \
+              --with-owner=games \
+              --with-group=games \
+              --enable-wizmode=doctorwhen
+  make
   [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
 }
 

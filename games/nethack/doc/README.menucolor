@@ -1,0 +1,106 @@
+
+   This is version 1.5 of the menucolors patch.
+
+   This patch allows the user to define in what color menus are shown.
+   For example, putting
+
+   OPTIONS=menucolors
+   MENUCOLOR=" blessed "=green
+   MENUCOLOR=" holy "=green
+   MENUCOLOR=" cursed "=red
+   MENUCOLOR=" unholy "=red
+   MENUCOLOR=" cursed .* (being worn)"=orange&underline
+
+   in the configuration file makes all known blessed items
+   show up in green, all cursed items show up in red and
+   all cursed worn items show up in orange and underlined
+   when viewing inventory.
+
+   If you have regex.h but it is not GNU (e.g. DJGPP, *BSD), uncomment
+   #define MENU_COLOR_REGEX_POSIX in include/config.h
+
+   If you do not have regex.h, comment
+   #define MENU_COLOR_REGEX out from include/config.h
+   and replace the MENUCOLOR lines in your config file with these:
+
+   MENUCOLOR="* blessed *"=green
+   MENUCOLOR="* holy *"=green
+   MENUCOLOR="* cursed *"=red
+   MENUCOLOR="* unholy *"=red
+   MENUCOLOR="* cursed * (being worn)"=orange&underline
+
+
+   Colors: black, red, green, brown, blue, magenta, cyan, gray, orange,
+           lightgreen, yellow, lightblue, lightmagenta, lightcyan, white.
+   Attributes: none, bold, dim, underline, blink, inverse.
+
+   Note that the terminal is free to interpret the attributes however
+   it wants.
+
+
+   TODO/BUGS:
+
+    o Only works with TTY and Windows GUI.
+    o You can't use '=' or '&' in the match-string.
+    o Maybe add color-field to tty_menu_item in include/wintty.h
+      (so there's no need to find the color for the line again)
+    o Guidebook is not up to date
+    o Better place to put the functions, colornames[] and attrnames[]?
+    o Some menus do not need coloring; maybe add new parameter
+      to process_menu_window()?
+
+
+   FIXES:
+
+   v1.5:
+    o Partial support for Windows GUI windowport; supports colors,
+      but not attributes.
+
+   v1.4:
+    o Option to use standard instead of GNU regex functions.
+
+   v1.3:
+    o Updated to use 3.4.3 codebase.
+    o Added a text to #version to show menucolors is compiled in.
+
+   v1.2:
+    o Updated to use 3.4.2 codebase.
+
+   v1.1:
+    o Updated to use 3.4.1 codebase.
+    o replaced USE_REGEX_MATCH with MENU_COLOR_REGEX
+
+   v1.04:
+    o Oops! 1.03 worked only on *nixes... (GNU regex.h)
+    o Compile-time option USE_REGEX_MATCH: if it's defined, use regex,
+      otherwise use globbing. ('?' and '*' wildcards)
+
+   v1.03:
+
+    o Now using Nethack 3.4.0 codebase
+    o Compile-time option MENU_COLOR
+    o Strings match using regular expressions instead of globbing
+    o You can use attribute with color (attr must come after '&')
+    o Use ``MENUCOLOR="foo"=color'' instead of ``OPTIONS=menucolor=...''
+      (Both work, but OPTIONS complains if you define menucolor
+      more than once)
+
+   v1.02:
+
+    o Should now work with OS/2, thanks to Jukka Lahtinen
+    o Strings match now using simple globbing. ('?' and '*' wildcards)
+
+   v1.01:
+
+    o Moved 'menucolors' boolean option, so now the options-menu
+      is in alphabetical order.
+    o Fixed 'menucolor' description in dat/opthelp.
+    o menu_colorings is now initialized to null in src/decl.c.
+
+   v1.0:
+
+    o Initial release
+
+--
+ Pasi Kallinen
+ paxed@alt.org

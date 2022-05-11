@@ -1,0 +1,37 @@
+== Compilation instructions for UnNetHack ==
+
+Windows user need to install an development environment using Cygwin[2].
+Install the packages i686-w64-mingw32-gcc, gcc-core, flex, bison, make, and binutils.
+
+
+On Linux and MacOSX for a single-user installation (a Linux Debian
+ or Ubuntu system needs the packages gcc, flex, bison, make,
+ libncurses5-dev and autotools-dev installed):
+
+ ./configure --prefix=$HOME/unnethack --with-owner=`id -un` --with-group=`id -gn` --enable-wizmode=`id -un` && make && make install
+
+
+On Windows for a console build open the Cygwin shell:
+ ./configure --prefix=$HOME/unnethack --with-owner="`id -un`" --with-group="`id -gn`" --build=mingw32 --disable-file-areas --without-compression --enable-tty-graphics && make && make install
+
+ The game will be started with ~/unnethack/bin/unnethack
+
+On Window for a GUI build open the Cygwin shell:
+ env CC=i686-w64-mingw32-gcc CFLAGS= ./configure \
+            --prefix=`pwd`/builddir_mswin \
+            --with-owner="`id -un`" \
+            --with-group="`id -gn`" \
+            --build=i686-pc-mingw32 \
+            --without-compression --disable-file-areas \
+            --disable-status-color --enable-score-on-botl --enable-realtime-on-botl \
+            --enable-mswin-graphics --disable-tty-graphics \
+            && make install
+
+
+
+Please direct bugs and questions to <bhaak@gmx.net> or post them to the
+NetHack Newsgroup rec.games.roguelike.nethack[1].
+
+
+[1] Google Groups URL: http://groups.google.com/group/rec.games.roguelike.nethack
+[2] http://www.cygwin.com/install.html

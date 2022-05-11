@@ -1,7 +1,4 @@
 /* vim:set cin ft=c sw=4 sts=4 ts=8 et ai cino=Ls\:0t0(0 : -*- mode:c;fill-column:80;tab-width:8;c-basic-offset:4;indent-tabs-mode:nil;c-file-style:"k&r" -*-*/
-/* NetHack 3.7 cursmisc.c */
-/* Copyright (c) Karl Garrison, 2010. */
-/* NetHack may be freely redistributed.  See license for details. */
 
 #include "curses.h"
 #include "hack.h"
@@ -21,28 +18,33 @@ static int curs_y = -1;
 
 static int parse_escape_sequence(void);
 
+/* Macros for Control and Alt keys */
+
+#ifndef M
+# ifndef NHSTDC
+#  define M(c)          (0x80 | (c))
+# else
+#  define M(c)          ((c) - 128)
+# endif/* NHSTDC */
+#endif
+#ifndef C
+# define C(c)           (0x1f & (c))
+#endif
+
 
 /* Read a character of input from the user */
 
 int
-curses_read_char(void)
+curses_read_char()
 {
-    int ch;
-#if defined(ALT_0) || defined(ALT_9) || defined(ALT_A) || defined(ALT_Z)
-    int tmpch;
-#endif
-
-    /* cancel message suppression; all messages have had a chance to be read */
-    curses_got_input();
+    int ch, tmpch;
 
     ch = getch();
-#if defined(ALT_0) || defined(ALT_9) || defined(ALT_A) || defined(ALT_Z)
     tmpch = ch;
-#endif
     ch = curses_convert_keys(ch);
 
     if (ch == 0) {
-        ch = '\033'; /* map NUL to ESC since nethack doesn't expect NUL */
+        ch = DOESCAPE;          /* map NUL to ESC since nethack doesn't expect NUL */
     }
 #if defined(ALT_0) && defined(ALT_9)    /* PDCurses, maybe others */
     if ((ch >= ALT_0) && (ch <= ALT_9)) {
@@ -61,11 +63,11 @@ curses_read_char(void)
 #ifdef KEY_RESIZE
     /* Handle resize events via get_nh_event, not this code */
     if (ch == KEY_RESIZE) {
-        ch = C('r'); /* NetHack doesn't know what to do with KEY_RESIZE */
+        ch = DOESCAPE;          /* NetHack doesn't know what to do with KEY_RESIZE */
     }
 #endif
 
-    if (counting && !isdigit(ch)) { /* dismiss count window if necessary */
+    if (counting && !isdigit(ch)) {     /* Dismiss count window if necissary */
         curses_count_window(NULL);
         curses_refresh_nethack_windows();
     }
@@ -76,38 +78,31 @@ curses_read_char(void)
 /* Turn on or off the specified color and / or attribute */
 
 void
-curses_toggle_color_attr(WINDOW *win, int color, int attr, int onoff)
+curses_toggle_color_attr(WINDOW * win, int color, int attr, int onoff)
 {
 #ifdef TEXTCOLOR
     int curses_color;
 
-    /* if color is disabled, just show attribute */
-    if ((win == mapwin) ? !iflags.wc_color
-                        /* statuswin is for #if STATUS_HILITES
-                           but doesn't need to be conditional */
-                        : !(iflags.wc2_guicolor || win == statuswin)) {
-#endif
-        if (attr != NONE) {
-            if (onoff == ON)
-                wattron(win, attr);
-            else
-                wattroff(win, attr);
-        }
+    /* Map color disabled */
+    if ((!iflags.wc_color) && (win == mapwin)) {
         return;
-#ifdef TEXTCOLOR
+    }
+
+    /* GUI color disabled */
+    if ((!iflags.wc2_guicolor) && (win != mapwin)) {
+        return;
     }
 
     if (color == 0) {           /* make black fg visible */
 # ifdef USE_DARKGRAY
-        if (iflags.wc2_darkgray) {
-            if (COLORS > 16) {
-                /* colorpair for black is already darkgray */
-            } else {            /* Use bold for a bright black */
+        if (can_change_color() && (COLORS > 16)) {
+            /* colorpair for black is already darkgray */
+        } else {            /* Use bold for a bright black */
                 wattron(win, A_BOLD);
-            }
-        } else
+        }
+# else
+        color = CLR_BLUE;
 # endif/* USE_DARKGRAY */
-            color = CLR_BLUE;
     }
     curses_color = color + 1;
     if (COLORS < 16) {
@@ -135,7 +130,7 @@ curses_toggle_color_attr(WINDOW *win, int color, int attr, int onoff)
                 wattroff(win, A_BOLD);
             }
 # ifdef USE_DARKGRAY
-            if ((color == 0) && (COLORS <= 16)) {
+            if ((color == 0) && (!can_change_color() || (COLORS <= 16))) {
                 wattroff(win, A_BOLD);
             }
 # else
@@ -150,25 +145,7 @@ curses_toggle_color_attr(WINDOW *win, int color, int attr, int onoff)
             wattroff(win, attr);
         }
     }
-#else
-    nhUse(color);
 #endif /* TEXTCOLOR */
-}
-
-/* call curses_toggle_color_attr() with 'menucolors' instead of 'guicolor'
-   as the control flag */
-
-void
-curses_menu_color_attr(WINDOW *win, int color, int attr, int onoff)
-{
-    boolean save_guicolor = iflags.wc2_guicolor;
-
-    /* curses_toggle_color_attr() uses 'guicolor' to decide whether to
-       honor specified color, but menu windows have their own
-       more-specific control, 'menucolors', so override with that here */
-    iflags.wc2_guicolor = iflags.use_menu_color;
-    curses_toggle_color_attr(win, color, attr, onoff);
-    iflags.wc2_guicolor = save_guicolor;
 }
 
 
@@ -179,7 +156,7 @@ curses_bail(const char *mesg)
 {
     clearlocks();
     curses_exit_nhwindows(mesg);
-    nh_terminate(EXIT_SUCCESS);
+    terminate(EXIT_SUCCESS);
 }
 
 
@@ -188,9 +165,9 @@ curses_bail(const char *mesg)
 winid
 curses_get_wid(int type)
 {
+    winid ret;
     static winid menu_wid = 20; /* Always even */
     static winid text_wid = 21; /* Always odd */
-    winid ret;
 
     switch (type) {
     case NHW_MESSAGE:
@@ -206,8 +183,8 @@ curses_get_wid(int type)
         ret = text_wid;
         break;
     default:
-        impossible("curses_get_wid: unsupported window type");
-        ret = -1;
+        panic("curses_get_wid: unsupported window type");
+        ret = -1;               /* Not reached */
     }
 
     while (curses_window_exists(ret)) {
@@ -239,12 +216,12 @@ curses_copy_of(const char *s)
 {
     if (!s)
         s = "";
-    return dupstr(s);
+    return strcpy((char *) alloc((unsigned) (strlen(s) + 1)), s);
 }
 
 
 /* Determine the number of lines needed for a string for a dialog window
-   of the given width */
+of the given width */
 
 int
 curses_num_lines(const char *str, int width)
@@ -257,7 +234,7 @@ curses_num_lines(const char *str, int width)
     strncpy(substr, str, BUFSZ-1);
     substr[BUFSZ-1] = '\0';
 
-    while (strlen(substr) > (size_t) width) {
+    while (strlen(substr) > width) {
         last_space = 0;
 
         for (count = 0; count <= width; count++) {
@@ -268,7 +245,7 @@ curses_num_lines(const char *str, int width)
         if (last_space == 0) {  /* No spaces found */
             last_space = count - 1;
         }
-        for (count = (last_space + 1); count < (int) strlen(substr); count++) {
+        for (count = (last_space + 1); count < strlen(substr); count++) {
             tmpstr[count - (last_space + 1)] = substr[count];
         }
         tmpstr[count - (last_space + 1)] = '\0';
@@ -289,28 +266,12 @@ curses_break_str(const char *str, int width, int line_num)
     int last_space, count;
     char *retstr;
     int curline = 0;
-    int strsize = (int) strlen(str) + 1;
-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+    int strsize = strlen(str);
     char substr[strsize];
     char curstr[strsize];
     char tmpstr[strsize];
 
     strcpy(substr, str);
-#else
-#ifndef BUFSZ
-#define BUFSZ 256
-#endif
-    char substr[BUFSZ * 2];
-    char curstr[BUFSZ * 2];
-    char tmpstr[BUFSZ * 2];
-
-    if (strsize > (BUFSZ * 2) - 1) {
-        paniclog("curses", "curses_break_str() string too long.");
-        strncpy(substr, str, (BUFSZ * 2) - 2);
-        substr[(BUFSZ * 2) - 1] = '\0';
-    } else
-        strcpy(substr, str);
-#endif
 
     while (curline < line_num) {
         if (strlen(substr) == 0) {
@@ -336,7 +297,7 @@ curses_break_str(const char *str, int width, int line_num)
         if (substr[count] == '\0') {
             break;
         }
-        for (count = (last_space + 1); count < (int) strlen(substr); count++) {
+        for (count = (last_space + 1); count < strlen(substr); count++) {
             tmpstr[count - (last_space + 1)] = substr[count];
         }
         tmpstr[count - (last_space + 1)] = '\0';
@@ -361,26 +322,12 @@ curses_str_remainder(const char *str, int width, int line_num)
     int last_space, count;
     char *retstr;
     int curline = 0;
-    int strsize = strlen(str) + 1;
-#if __STDC_VERSION__ >= 199901L
+    int strsize = strlen(str);
     char substr[strsize];
+    char curstr[strsize];
     char tmpstr[strsize];
 
     strcpy(substr, str);
-#else
-#ifndef BUFSZ
-#define BUFSZ 256
-#endif
-    char substr[BUFSZ * 2];
-    char tmpstr[BUFSZ * 2];
-
-    if (strsize > (BUFSZ * 2) - 1) {
-        paniclog("curses", "curses_str_remainder() string too long.");
-        strncpy(substr, str, (BUFSZ * 2) - 2);
-        substr[(BUFSZ * 2) - 1] = '\0';
-    } else
-        strcpy(substr, str);
-#endif
 
     while (curline < line_num) {
         if (strlen(substr) == 0) {
@@ -399,10 +346,14 @@ curses_str_remainder(const char *str, int width, int line_num)
         if (last_space == 0) {  /* No spaces found */
             last_space = count - 1;
         }
-        if (substr[last_space] == '\0') {
+        for (count = 0; count < last_space; count++) {
+            curstr[count] = substr[count];
+        }
+        curstr[count] = '\0';
+        if (substr[count] == '\0') {
             break;
         }
-        for (count = (last_space + 1); count < (int) strlen(substr); count++) {
+        for (count = (last_space + 1); count < strlen(substr); count++) {
             tmpstr[count - (last_space + 1)] = substr[count];
         }
         tmpstr[count - (last_space + 1)] = '\0';
@@ -444,121 +395,64 @@ curses_is_text(winid wid)
     }
 }
 
-/* convert nethack's DECgraphics encoding into curses' ACS encoding */
+
+/* Replace certain characters with portable drawing characters if
+cursesgraphics option is enabled */
+
 int
 curses_convert_glyph(int ch, int glyph)
 {
-    /* The DEC line drawing characters use 0x5f through 0x7e instead
-       of the much more straightforward 0x60 through 0x7f, possibly
-       because 0x7f is effectively a control character (Rubout);
-       nethack ORs 0x80 to flag line drawing--that's stripped below */
-    static int decchars[33]; /* for chars 0x5f through 0x7f (95..127) */
+    int symbol;
 
-    ch &= 0xff; /* 0..255 only */
-    if (!(ch & 0x80))
-        return ch; /* no conversion needed */
-
-    /* this conversion routine is only called for SYMHANDLING(H_DEC) and
-       we decline to support special graphics symbols on the rogue level */
+#ifdef REINCARNATION
     if (Is_rogue_level(&u.uz)) {
-        /* attempting to use line drawing characters will end up being
-           rendered as lowercase gibberish */
-        ch &= ~0x80;
+        return ch;
+    }
+#endif
+
+    /* Save some processing time by returning if the glyph represents
+       an object that we don't have custom characters for */
+    if (!glyph_is_cmap(glyph)) {
         return ch;
     }
 
-    /*
-     * Curses has complete access to all characters that DECgraphics uses.
-     * However, their character value isn't consistent between terminals
-     * and implementations.  For actual DEC terminals and faithful emulators,
-     * line-drawing characters are specified as lowercase letters (mostly)
-     * and a control code is sent to the terminal telling it to switch
-     * character sets (that's how the tty interface handles them).
-     * Curses remaps the characters instead.
-     */
+    symbol = glyph_to_cmap(glyph);
 
-    /* one-time initialization; some ACS_x aren't compile-time constant */
-    if (!decchars[0]) {
-        /* [0] is non-breakable space; irrelevant to nethack */
-        decchars[0x5f - 0x5f] = ' '; /* NBSP */
-        decchars[0x60 - 0x5f] = ACS_DIAMOND; /* [1] solid diamond */
-        decchars[0x61 - 0x5f] = ACS_CKBOARD; /* [2] checkerboard */
-        /* several "line drawing" characters are two-letter glyphs
-           which could be substituted for invisible control codes;
-           nethack's DECgraphics doesn't use any of them so we're
-           satisfied with conversion to a simple letter;
-           [3] "HT" as one char, with small raised upper case H over
-           and/or preceding small lowered upper case T */
-        decchars[0x62 - 0x5f] = 'H'; /* "HT" (horizontal tab) */
-        decchars[0x63 - 0x5f] = 'F'; /* "FF" as one char (form feed) */
-        decchars[0x64 - 0x5f] = 'C'; /* "CR" as one (carriage return) */
-        decchars[0x65 - 0x5f] = 'L'; /* [6] "LF" as one (line feed) */
-        decchars[0x66 - 0x5f] = ACS_DEGREE; /* small raised circle */
-        /* [8] plus or minus sign, '+' with horizontal line below */
-        decchars[0x67 - 0x5f] = ACS_PLMINUS;
-        decchars[0x68 - 0x5f] = 'N'; /* [9] "NL" as one char (new line) */
-        decchars[0x69 - 0x5f] = 'V'; /* [10] "VT" as one (vertical tab) */
-        decchars[0x6a - 0x5f] = ACS_LRCORNER; /* lower right corner */
-        decchars[0x6b - 0x5f] = ACS_URCORNER; /* upper right corner, 7-ish */
-        decchars[0x6c - 0x5f] = ACS_ULCORNER; /* upper left corner */
-        decchars[0x6d - 0x5f] = ACS_LLCORNER; /* lower left corner, 'L' */
-        /* [15] center cross, like big '+' sign */
-        decchars[0x6e - 0x5f] = ACS_PLUS;
-        decchars[0x6f - 0x5f] = ACS_S1; /* very high horizontal line */
-        decchars[0x70 - 0x5f] = ACS_S3; /* medium high horizontal line */
-        decchars[0x71 - 0x5f] = ACS_HLINE; /* centered horizontal line */
-        decchars[0x72 - 0x5f] = ACS_S7; /* medium low horizontal line */
-        decchars[0x73 - 0x5f] = ACS_S9; /* very low horizontal line */
-        /* [21] left tee, 'H' with right-hand vertical stroke removed;
-           note on left vs right:  the ACS name (also DEC's terminal
-           documentation) refers to vertical bar rather than cross stroke,
-           nethack's left/right refers to direction of the cross stroke */
-        decchars[0x74 - 0x5f] = ACS_LTEE; /* ACS left tee, NH right tee */
-        /* [22] right tee, 'H' with left-hand vertical stroke removed */
-        decchars[0x75 - 0x5f] = ACS_RTEE; /* ACS right tee, NH left tee */
-        /* [23] bottom tee, '+' with lower half of vertical stroke
-           removed and remaining stroke pointed up (unside-down 'T');
-           nethack is inconsistent here--unlike with left/right, its
-           bottom/top directions agree with ACS */
-        decchars[0x76 - 0x5f] = ACS_BTEE; /* bottom tee, stroke up */
-        /* [24] top tee, '+' with upper half of vertical stroke removed */
-        decchars[0x77 - 0x5f] = ACS_TTEE; /* top tee, stroke down, 'T' */
-        decchars[0x78 - 0x5f] = ACS_VLINE; /* centered vertical line */
-        decchars[0x79 - 0x5f] = ACS_LEQUAL; /* less than or equal to */
-        /* [27] greater than or equal to, '>' with underscore */
-        decchars[0x7a - 0x5f] = ACS_GEQUAL;
-        /* [28] Greek pi ('n'-like; case is ambiguous: small size
-           suggests lower case but flat top suggests upper case) */
-        decchars[0x7b - 0x5f] = ACS_PI;
-        /* [29] not equal sign, combination of '=' and '/' */
-        decchars[0x7c - 0x5f] = ACS_NEQUAL;
-        /* [30] British pound sign (curly 'L' with embellishments) */
-        decchars[0x7d - 0x5f] = ACS_STERLING;
-        decchars[0x7e - 0x5f] = ACS_BULLET; /* [31] centered dot */
-        /* [32] is not used for DEC line drawing but is a potential
-           value for someone who assumes that 0x60..0x7f is the valid
-           range, so we're prepared to accept--and sanitize--it */
-        decchars[0x7f - 0x5f] = '?';
+    /* If user selected a custom character for this object, don't
+       override this. */
+    if (((glyph_is_cmap(glyph)) && (ch != showsyms[symbol]))) {
+        return ch;
     }
 
-    /* high bit set means special handling */
-    if (ch & 0x80) {
-        int convindx, symbol;
-
-        ch &= ~0x80; /* force plain ASCII for last resort */
-        convindx = ch - 0x5f;
-        /* if it's in the lower case block of ASCII (which includes
-           a few punctuation characters), use the conversion table */
-        if (convindx >= 0 && convindx < SIZE(decchars)) {
-            ch = decchars[convindx];
-            /* in case ACS_foo maps to 0 when current terminal is unable
-               to handle a particular character; if so, revert to default
-               rather than using DECgr value with high bit stripped */
-            if (!ch) {
-                symbol = glyph_to_cmap(glyph);
-                ch = (int) defsyms[symbol].sym;
-            }
-        }
+    switch (symbol) {
+    case S_vwall:
+        return ACS_VLINE;
+    case S_hwall:
+        return ACS_HLINE;
+    case S_tlcorn:
+        return ACS_ULCORNER;
+    case S_trcorn:
+        return ACS_URCORNER;
+    case S_blcorn:
+        return ACS_LLCORNER;
+    case S_brcorn:
+        return ACS_LRCORNER;
+    case S_crwall:
+        return ACS_PLUS;
+    case S_tuwall:
+        return ACS_BTEE;
+    case S_tdwall:
+        return ACS_TTEE;
+    case S_tlwall:
+        return ACS_RTEE;
+    case S_trwall:
+        return ACS_LTEE;
+    case S_tree:
+        return ACS_PLMINUS;
+    case S_corr:
+        return ACS_CKBOARD;
+    case S_litcorr:
+        return ACS_CKBOARD;
     }
 
     return ch;
@@ -595,9 +489,8 @@ curses_move_cursor(winid wid, int x, int y)
         curs_y++;
     }
 
-    if (x >= sx && x <= ex && y >= sy && y <= ey) {
-        /* map column #0 isn't used; shift column #1 to first screen column */
-        curs_x -= (sx + 1);
+    if ((x >= sx) && (x <= ex) && (y >= sy) && (y <= ey)) {
+        curs_x -= sx;
         curs_y -= sy;
 #ifdef PDCURSES
         move(curs_y, curs_x);
@@ -611,7 +504,7 @@ curses_move_cursor(winid wid, int x, int y)
 /* Perform actions that should be done every turn before nhgetch() */
 
 void
-curses_prehousekeeping(void)
+curses_prehousekeeping()
 {
 #ifndef PDCURSES
     WINDOW *win = curses_get_nhwin(MAP_WIN);
@@ -634,42 +527,52 @@ curses_prehousekeeping(void)
 /* Perform actions that should be done every turn after nhgetch() */
 
 void
-curses_posthousekeeping(void)
+curses_posthousekeeping()
 {
     curs_set(0);
-    /* curses_decrement_highlights(FALSE); */
+    curses_decrement_highlights(FALSE);
     curses_clear_unhighlight_message_window();
 }
 
 
+#ifdef FILE_AREAS
+void
+curses_view_file(const char* filearea, const char *filename, boolean must_exist)
+#else
 void
 curses_view_file(const char *filename, boolean must_exist)
+#endif
 {
     winid wid;
-    anything Id;
+    anything *identifier;
     char buf[BUFSZ];
     menu_item *selected = NULL;
+#ifdef FILE_AREAS
+    dlb *fp = dlb_fopen_area(filearea, filename, "r");
+#else
     dlb *fp = dlb_fopen(filename, "r");
+#endif
+    
+    if ((fp == NULL) && (must_exist)) {
+        pline("Cannot open %s for reading!", filename);
+    }
 
     if (fp == NULL) {
-        if (must_exist)
-            pline("Cannot open \"%s\" for reading!", filename);
         return;
     }
 
     wid = curses_get_wid(NHW_MENU);
-    curses_create_nhmenu(wid, 0UL);
-    Id = cg.zeroany;
+    curses_create_nhmenu(wid);
+    identifier = malloc(sizeof (anything));
+    identifier->a_void = NULL;
 
     while (dlb_fgets(buf, BUFSZ, fp) != NULL) {
-        curses_add_menu(wid, &nul_glyphinfo, &Id, 0, 0,
-                        A_NORMAL, buf, FALSE);
+        curses_add_menu(wid, NO_GLYPH, MENU_DEFCNT, identifier, 0, 0, A_NORMAL, buf, FALSE);
     }
 
     dlb_fclose(fp);
     curses_end_menu(wid, "");
     curses_select_menu(wid, PICK_NONE, &selected);
-    curses_del_wid(wid);
 }
 
 
@@ -679,8 +582,7 @@ curses_rtrim(char *str)
     char *s;
 
     for (s = str; *s != '\0'; ++s);
-    if (s > str)
-        for (--s; isspace(*s) && s > str; --s);
+    for (--s; isspace(*s) && s > str; --s);
     if (s == str)
         *s = '\0';
     else
@@ -691,42 +593,41 @@ curses_rtrim(char *str)
 /* Read numbers until non-digit is encountered, and return number
 in int form. */
 
-long
+int
 curses_get_count(int first_digit)
 {
+    long current_count = first_digit;
     int current_char;
-    long current_count = 0L;
 
-    /* use core's count routine; we have the first digit; if any more
-       are typed, get_count() will send "Count:123" to the message window;
-       curses's message window will display that in count window instead */
-    current_char = get_count(NULL, (char) first_digit,
-                             /* 0L => no limit on value unless it wraps
-                                to negative */
-                             0L, &current_count,
-                             /* default: don't put into message history,
-                                don't echo until second digit entered */
-                             GC_NOFLAGS);
+    current_char = curses_read_char();
+
+    while (isdigit(current_char)) {
+        current_count = (current_count * 10) + (current_char - '0');
+        if (current_count > LARGEST_INT) {
+            current_count = LARGEST_INT;
+        }
+
+        pline("Count: %ld", current_count);
+        current_char = curses_read_char();
+    }
 
     ungetch(current_char);
-    if (current_char == '\033') {     /* Cancelled with escape */
+
+    if (current_char == DOESCAPE) {     /* Cancelled with escape */
         current_count = -1;
     }
+
     return current_count;
 }
 
 
 /* Convert the given NetHack text attributes into the format curses
-   understands, and return that format mask. */
+understands, and return that format mask. */
 
 int
 curses_convert_attr(int attr)
 {
     int curses_attr;
-
-    /* first, strip off control flags masked onto the display attributes
-       (caller should have already done this...) */
-    attr &= ~(ATR_URGENT | ATR_NOHISTORY);
 
     switch (attr) {
     case ATR_NONE:
@@ -737,9 +638,6 @@ curses_convert_attr(int attr)
         break;
     case ATR_BOLD:
         curses_attr = A_BOLD;
-        break;
-    case ATR_DIM:
-        curses_attr = A_DIM;
         break;
     case ATR_BLINK:
         curses_attr = A_BLINK;
@@ -756,86 +654,44 @@ curses_convert_attr(int attr)
 
 
 /* Map letter attributes from a string to bitmask.  Return mask on
-   success (might be 0), or -1 if not found. */
+success, or 0 if not found */
 
 int
-curses_read_attrs(const char *attrs)
+curses_read_attrs(char *attrs)
 {
     int retattr = 0;
 
-    if (!attrs || !*attrs)
-        return A_NORMAL;
-
-    if (strchr(attrs, 'b') || strchr(attrs, 'B'))
-        retattr |= A_BOLD;
-    if (strchr(attrs, 'i') || strchr(attrs, 'I')) /* inverse */
-        retattr |= A_REVERSE;
-    if (strchr(attrs, 'u') || strchr(attrs, 'U'))
-        retattr |= A_UNDERLINE;
-    if (strchr(attrs, 'k') || strchr(attrs, 'K'))
-        retattr |= A_BLINK;
-    if (strchr(attrs, 'd') || strchr(attrs, 'D'))
-        retattr |= A_DIM;
+    if (strchr(attrs, 'b') || strchr(attrs, 'B')) {
+        retattr = retattr | A_BOLD;
+    }
+    if (strchr(attrs, 'i') || strchr(attrs, 'I')) {
+        retattr = retattr | A_REVERSE;
+    }
+    if (strchr(attrs, 'u') || strchr(attrs, 'U')) {
+        retattr = retattr | A_UNDERLINE;
+    }
+    if (strchr(attrs, 'k') || strchr(attrs, 'K')) {
+        retattr = retattr | A_BLINK;
+    }
 #ifdef A_ITALIC
-    if (strchr(attrs, 't') || strchr(attrs, 'T'))
-        retattr |= A_ITALIC;
-#endif
-#ifdef A_LEFTLINE
-    if (strchr(attrs, 'l') || strchr(attrs, 'L'))
-        retattr |= A_LEFTLINE;
+    if (strchr(attrs, 't') || strchr(attrs, 'T')) {
+        retattr = retattr | A_ITALIC;
+    }
 #endif
 #ifdef A_RIGHTLINE
-    if (strchr(attrs, 'r') || strchr(attrs, 'R'))
-        retattr |= A_RIGHTLINE;
-#endif
-    if (retattr == 0) {
-        /* still default; check for none/normal */
-        if (strchr(attrs, 'n') || strchr(attrs, 'N'))
-            retattr = A_NORMAL;
-        else
-            retattr = -1; /* error */
+    if (strchr(attrs, 'r') || strchr(attrs, 'R')) {
+        retattr = retattr | A_RIGHTLINE;
     }
+#endif
+#ifdef A_LEFTLINE
+    if (strchr(attrs, 'l') || strchr(attrs, 'L')) {
+        retattr = retattr | A_LEFTLINE;
+    }
+#endif
+
     return retattr;
 }
 
-/* format iflags.wc2_petattr into "+a+b..." for set bits a, b, ...
-   (used by core's 'O' command; return value points past leading '+') */
-char *
-curses_fmt_attrs(char *outbuf)
-{
-    int attr = iflags.wc2_petattr;
-
-    outbuf[0] = '\0';
-    if (attr == A_NORMAL) {
-        Strcpy(outbuf, "+N(None)");
-    } else {
-        if (attr & A_BOLD)
-            Strcat(outbuf, "+B(Bold)");
-        if (attr & A_REVERSE)
-            Strcat(outbuf, "+I(Inverse)");
-        if (attr & A_UNDERLINE)
-            Strcat(outbuf, "+U(Underline)");
-        if (attr & A_BLINK)
-            Strcat(outbuf, "+K(blinK)");
-        if (attr & A_DIM)
-            Strcat(outbuf, "+D(Dim)");
-#ifdef A_ITALIC
-        if (attr & A_ITALIC)
-            Strcat(outbuf, "+T(iTalic)");
-#endif
-#ifdef A_LEFTLINE
-        if (attr & A_LEFTLINE)
-            Strcat(outbuf, "+L(Left line)");
-#endif
-#ifdef A_RIGHTLINE
-        if (attr & A_RIGHTLINE)
-            Strcat(outbuf, "+R(Right line)");
-#endif
-    }
-    if (!*outbuf)
-        Sprintf(outbuf, "+unknown [%d]", attr);
-    return &outbuf[1];
-}
 
 /* Convert special keys into values that NetHack can understand.
 Currently this is limited to arrow keys, but this may be expanded. */
@@ -851,16 +707,6 @@ curses_convert_keys(int key)
 
     /* Handle arrow keys */
     switch (key) {
-    case KEY_BACKSPACE:
-        /* we can't distinguish between a separate backspace key and
-           explicit Ctrl+H intended to rush to the left; without this,
-           a value for ^H greater than 255 is passed back to core's
-           readchar() and stripping the value down to 0..255 yields ^G! */
-        ret = C('H');
-        break;
-#ifdef KEY_B1
-    case KEY_B1:
-#endif
     case KEY_LEFT:
         if (iflags.num_pad) {
             ret = '4';
@@ -868,9 +714,6 @@ curses_convert_keys(int key)
             ret = 'h';
         }
         break;
-#ifdef KEY_B3
-    case KEY_B3:
-#endif
     case KEY_RIGHT:
         if (iflags.num_pad) {
             ret = '6';
@@ -878,9 +721,6 @@ curses_convert_keys(int key)
             ret = 'l';
         }
         break;
-#ifdef KEY_A2
-    case KEY_A2:
-#endif
     case KEY_UP:
         if (iflags.num_pad) {
             ret = '8';
@@ -888,9 +728,6 @@ curses_convert_keys(int key)
             ret = 'k';
         }
         break;
-#ifdef KEY_C2
-    case KEY_C2:
-#endif
     case KEY_DOWN:
         if (iflags.num_pad) {
             ret = '2';
@@ -900,44 +737,40 @@ curses_convert_keys(int key)
         break;
 #ifdef KEY_A1
     case KEY_A1:
-#endif
-    case KEY_HOME:
         if (iflags.num_pad) {
             ret = '7';
         } else {
-            ret = !g.Cmd.swap_yz ? 'y' : 'z';
+            ret = 'y';
         }
         break;
+#endif /* KEY_A1 */
 #ifdef KEY_A3
     case KEY_A3:
-#endif
-    case KEY_PPAGE:
         if (iflags.num_pad) {
             ret = '9';
         } else {
             ret = 'u';
         }
         break;
+#endif /* KEY_A3 */
 #ifdef KEY_C1
     case KEY_C1:
-#endif
-    case KEY_END:
         if (iflags.num_pad) {
             ret = '1';
         } else {
             ret = 'b';
         }
         break;
+#endif /* KEY_C1 */
 #ifdef KEY_C3
     case KEY_C3:
-#endif
-    case KEY_NPAGE:
         if (iflags.num_pad) {
             ret = '3';
         } else {
             ret = 'n';
         }
         break;
+#endif /* KEY_C3 */
 #ifdef KEY_B2
     case KEY_B2:
         if (iflags.num_pad) {
@@ -952,20 +785,6 @@ curses_convert_keys(int key)
     return ret;
 }
 
-/*
- * We treat buttons 2 and 3 as equivalent so that it doesn't matter which
- * one is for right-click and which for middle-click.  The core uses CLICK_2
- * for right-click ("not left"-click) even though 2 might be middle button.
- *
- * BUTTON_CTRL was enabled at one point but was not working as intended.
- * Ctrl+left_click was generating pairs of duplicated events with Ctrl and
- * Report_mouse_position bits set (even though Report_mouse_position wasn't
- * enabled) but no button click bit set.  (It sort of worked because Ctrl+
- * Report_mouse_position wasn't a left click so passed along CLICK_2, but
- * the duplication made that too annoying to use.  Attempting to immediately
- * drain the second one wasn't working as intended either.)
- */
-#define MOUSEBUTTONS (BUTTON1_CLICKED | BUTTON2_CLICKED | BUTTON3_CLICKED)
 
 /* Process mouse events.  Mouse movement is processed until no further
 mouse movement events are available.  Returns 0 for a mouse click
@@ -980,21 +799,12 @@ curses_get_mouse(int *mousex, int *mousey, int *mod)
 #ifdef NCURSES_MOUSE_VERSION
     MEVENT event;
 
-    if (getmouse(&event) == OK) { /* True if user has clicked */
-        if ((event.bstate & MOUSEBUTTONS) != 0) {
-        /*
-         * The ncurses man page documents wmouse_trafo() incorrectly.
-         * It says that last argument 'TRUE' translates from screen
-         * to window and 'FALSE' translates from window to screen,
-         * but those are backwards.  The mouse_trafo() macro calls
-         * last argument 'to_screen', suggesting that the backwards
-         * implementation is the intended behavior and the man page
-         * is describing it wrong.
-         */
+    if (getmouse(&event) == OK) {       /* When the user clicks left mouse button */
+        if (event.bstate & BUTTON1_CLICKED) {
             /* See if coords are in map window & convert coords */
-            if (wmouse_trafo(mapwin, &event.y, &event.x, FALSE)) {
-                key = '\0'; /* core uses this to detect a mouse click */
-                *mousex = event.x + 1; /* +1: screen 0..78 is map 1..79 */
+            if (wmouse_trafo(mapwin, &event.y, &event.x, TRUE)) {
+                key = 0;        /* Flag mouse click */
+                *mousex = event.x;
                 *mousey = event.y;
 
                 if (curses_window_has_border(MAP_WIN)) {
@@ -1002,37 +812,15 @@ curses_get_mouse(int *mousex, int *mousey, int *mod)
                     (*mousey)--;
                 }
 
-                *mod = ((event.bstate & (BUTTON1_CLICKED | BUTTON_CTRL))
-                        == BUTTON1_CLICKED) ? CLICK_1 : CLICK_2;
+                *mod = CLICK_1;
             }
         }
     }
-#else
-    nhUse(mousex);
-    nhUse(mousey);
-    nhUse(mod);
 #endif /* NCURSES_MOUSE_VERSION */
 
     return key;
 }
 
-void
-curses_mouse_support(int mode) /* 0: off, 1: on, 2: alternate on */
-{
-#ifdef NCURSES_MOUSE_VERSION
-    mmask_t result, oldmask, newmask;
-
-    if (!mode)
-        newmask = 0;
-    else
-        newmask = MOUSEBUTTONS; /* buttons 1, 2, and 3 */
-
-    result = mousemask(newmask, &oldmask);
-    nhUse(result);
-#else
-    nhUse(mode);
-#endif
-}
 
 static int
 parse_escape_sequence(void)
@@ -1067,3 +855,29 @@ parse_escape_sequence(void)
 #endif /* !PDCURSES */
 }
 
+
+/* This is a kludge for the statuscolors patch which calls tty-specific
+functions, which causes a compiler error if TTY_GRAPHICS is not
+defined.  Adding stub functions to avoid this. */
+
+#if defined(STATUS_COLORS) && !defined(TTY_GRAPHICS)
+extern void
+term_start_color(int color)
+{
+}
+
+extern void
+term_start_attr(int attr)
+{
+}
+
+extern void
+term_end_color()
+{
+}
+
+extern void
+term_end_attr(int attr)
+{
+}
+#endif /* STATUS_COLORS && !TTY_GRAPGICS */

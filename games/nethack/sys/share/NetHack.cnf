@@ -1,7 +1,5 @@
-#	NetHack Copyright (c) NetHack PC Development Team 1993 - 2006
+#	NetHack Copyright (c) NetHack PC Development Team 1993, 1996, 1999
 #	NetHack may be freely redistributed.  See license for details.
-#
-# $NHDT-Date: 1524684112 2018/04/25 19:21:52 $  $NHDT-Branch: NetHack-3.6.0 $:$NHDT-Revision: 1.12 $
 #
 # A '#' at the beginning of a line means the rest of the line is a comment.
 #
@@ -12,24 +10,25 @@
 #
 # To change the configuration, comment out the unwanted lines, and
 # uncomment the configuration you want.
+#
+# Note: For blind players, please use the file NHAccess.nh as a template.
+#
 
 # *** OPTIONS ***
 #
 # The three options on this line should be used for most setups.  
 # If your machine isn't very IBM-compatible, and NetHack doesn't work, 
 # try commenting out this line.
-OPTIONS=rawio,BIOS,symset:IBMGraphics_2,roguesymset:RogueEpyx
-
-# Here is a suggested symbol set for use by blind NetHack players
-#OPTIONS=symset:plain
+OPTIONS=rawio,BIOS,IBMgraphics
 
 # To use VGA graphical tiles on an MS-DOS PC with VGA or better,uncomment 
 # this:
 #OPTIONS=video:autodetect
-# And to explicitly set the resolution:
-#OPTIONS=video_width:1024
-#OPTIONS=video_height:768
 
+# Some versions of NetHack use the pc speaker to play the notes given when
+# playing music instruments in NetHack.  To use this feature, if available,
+# uncomment the following line:
+#OPTIONS=soundcard:autodetect
 
 # If your machine is NEC PC-9800, use:
 #OPTIONS=rawio,BIOS,video:default
@@ -58,6 +57,7 @@ OPTIONS=boulder:0
 #
 # number_pad option can have an optional value of 0 (off), 1 (on), 
 # or 2(on,legacy-mode) which causes 5='g', alt-5='G', alt-0='I'
+#
 OPTIONS=time,noshowexp,number_pad:2,lit_corridor
 
 # Treat space bar as rest. Warning: may be dangerous for new players.
@@ -96,16 +96,64 @@ OPTIONS=time,noshowexp,number_pad:2,lit_corridor
 # is kept (default=HACKDIR, writeable)
 #TROUBLEDIR=c:\nethack\trouble
 #
+# *** CHARACTER GRAPHICS ***
+#
+# See the on-line help or the Guidebook for which symbols are in which
+# positions.
+#
+# If you merely set the IBMgraphics option as above, NetHack will use IBM
+# extended ASCII for dungeon characters.  If you don't like the selections,
+# you can make up your own via these graphics options, but you should still
+# set IBMgraphics if you are using IBM graphics characters to get the correct
+# processing.
+#
+# ================================================
+# The defaults using the IBM graphics character set:
+#DUNGEON = 032 179 196 218 191 192 217 197 193 194 \
+#          180 195 250 254 254 043 043 240 241 250 \
+#          176 177 243 242 060 062 095 124 092 035 \
+#          244 247 250 247 250 250 035 035 032 035 \
+#          247
+#
+# ================================================
+# Some alternatives:
+#DUNGEON=  032 186 205 201 187 200 188 206 202 203 \
+#	   185 204 249 239 239 254 254 240 241 249 \
+#	   177 177 060 062 060 062 095 124 092 035 \
+#	   244 247 249 247 042 042 179 196 046 035 \
+#	   247
+#
+#TRAPS=    094 094 094 094 094 094 094 094 094 094 \
+#	   094 094 094 094 094 034 094 094 094 094 \
+#	   094 094
 
 # ================================================
-# DEC Rainbow/ANSI line-drawing character set:
+# Here is a recommendation sent in by Michael Feir
+# for use by blind NetHack players.
+#
+#DUNGEON=  032 124 045 124 124 124 124 045 045 045 \
+#          124 124 046 045 124 043 043 046 035 035 \
+#          060 062 060 062 095 092 035 126 126 126 \
+#          126 042 042 035 035 032 035 126
+#
+#TRAPS=    094 094 094 094 094 094 094 094 094 094 \
+#          094 094 094 094 094 094 094 094 094 094 \
+#          094 094
+#
+#EFFECTS=  124 095 092 047 042 033 041 040         \
+#          048 035 064 042                         \
+#          047 045 092 058 058 092 045 047         \
+#          047 045 092 058 032 058 092 045 047
+
+# ================================================
+# Example using the DEC Rainbow/ANSI line-drawing character set:
 #
 # If you have compiled with TERMLIB, merely set the DECgraphics option as
 # above.  NetHack will then switch into the VTxxx line-drawing character set
 # (aka ANSI ruling character set '0') for dungeon characters.  If you don't
-# like the selections, you can make up your own via the SYMBOLS keyword,
+# like the selections, you can make up your own via the graphics options,
 # adding 128 to the value of any line-drawing character you want to use.
-# (But you should still set symset:DECgraphics to get the correct processing.)
+# (But you should still set DECgraphics to get the correct processing.)
 
 # =================================================
 # *** VIDEOCOLORS AND VIDEOSHADES ***
@@ -118,14 +166,3 @@ OPTIONS=time,noshowexp,number_pad:2,lit_corridor
 # DEC Rainbows will hang if rawio is set, so they should instead use:
 #OPTIONS=BIOS,DECgraphics
 
-# Colored menus.
-#OPTIONS=menucolors
-# Syntax is: MENUCOLOR="string_to_match"=color&attribute
-#  Colors: black, red, green, brown, blue, magenta, cyan, gray, orange,
-#          lightgreen, yellow, lightblue, lightmagenta, lightcyan, white.
-#  Attributes: none, bold, dim, underline, blink, inverse.
-#MENUCOLOR=" blessed "=green
-#MENUCOLOR=" holy "=green
-#MENUCOLOR=" cursed "=red
-#MENUCOLOR=" unholy "=red
-#MENUCOLOR=" cursed .* (being worn)"=orange&underline

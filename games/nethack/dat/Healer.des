@@ -1,0 +1,304 @@
+#	SCCS Id: @(#)Healer.des	3.4	1995/04/16
+#	Copyright (c) 1989 by Jean-Christophe Collet
+#	Copyright (c) 1991, 1993 by M. Stephenson, P. Winner
+# NetHack may be freely redistributed.  See license for details.
+#
+#	The "start" level for the quest.
+#
+#	Here you meet your (besieged) class leader, Hippocrates
+#	and receive your quest assignment.
+#
+LEVEL: "Hea-strt"
+FLAGS: noteleport,hardfloor,mazelevel,sky
+INIT_MAP:solidfill,' '
+MON_GENERATION:86%, (64,"giant rat"), (16,'r'), (16,"snake"), (4,'Y')
+GEOMETRY:center,center
+MAP
+PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+PPPP........PPPP.....PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP.P..PPPPP......PPPPPPPP
+PPP..........PPPP...PPPPP.........................PPPP..PPPPP........PPPPPPP
+PP............PPPPPPPP..............................PPP...PPPP......PPPPPPPP
+P.....PPPPPPPPPPPPPPP................................PPPPPPPPPPPPPPPPPPPPPPP
+PPPP....PPPPPPPPPPPP...................................PPPPP.PPPPPPPPPPPPPPP
+PPPP........PPPPP.........-----------------------........PP...PPPPPPP.....PP
+PPP............PPPPP....--|.|......S..........S.|--.....PPPP.PPPPPPP.......P
+PPPP..........PPPPP.....|.S.|......-----------|S|.|......PPPPPP.PPP.......PP
+PPPPPP......PPPPPP......|.|.|......|...|......|.|.|.....PPPPPP...PP.......PP
+PPPPPPPPPPPPPPPPPPP.....+.|.|......S.\.S......|.|.+......PPPPPP.PPPP.......P
+PPP...PPPPP...PPPP......|.|.|......|...|......|.|.|.......PPPPPPPPPPP.....PP
+PP.....PPP.....PPP......|.|S|-----------......|.S.|......PPPPPPPPPPPPPPPPPPP
+PPP..PPPPP...PPPP.......--|.S..........S......|.|--.....PPPPPPPPP....PPPPPPP
+PPPPPPPPPPPPPPPP..........-----------------------..........PPPPP..........PP
+PPPPPPPPPPPPPPPPP........................................PPPPPP............P
+PPP.............PPPP...................................PPP..PPPP..........PP
+PP...............PPPPP................................PPPP...PPPP........PPP
+PPP.............PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP....PPPPPP
+PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+ENDMAP
+# Dungeon Description
+REGION:(00,00,75,19),lit,"ordinary"
+# Stairs
+STAIR:(37,9),down
+# Portal arrival point
+BRANCH:(04,12,04,12),(0,0,0,0)
+# altar for the Temple
+ALTAR:(32,09),neutral,altar
+# Doors
+DOOR:locked,(24,10)
+DOOR:closed,(26,08)
+DOOR:closed,(27,12)
+DOOR:locked,(28,13)
+DOOR:closed,(35,07)
+DOOR:locked,(35,10)
+DOOR:locked,(39,10)
+DOOR:closed,(39,13)
+DOOR:locked,(46,07)
+DOOR:closed,(47,08)
+DOOR:closed,(48,12)
+DOOR:locked,(50,10)
+# Hippocrates
+MONSTER:('@',"Hippocrates"),(37,10) {
+  OBJECT:'/'
+  OBJECT:'/'
+  OBJECT:'/'
+  OBJECT:'/'
+  OBJECT:'?'
+  OBJECT:'?'
+  OBJECT:(')',"silver dagger"),1d4
+}
+# The treasure of Hippocrates
+OBJECT:('(',"chest"),(37,10)
+# intern guards for the audience chamber
+MONSTER:('@',"attendant"),(29,08)
+MONSTER:('@',"attendant"),(29,09)
+MONSTER:('@',"attendant"),(29,10)
+MONSTER:('@',"attendant"),(29,11)
+MONSTER:('@',"attendant"),(40,09)
+MONSTER:('@',"attendant"),(40,10)
+MONSTER:('@',"attendant"),(40,11)
+MONSTER:('@',"attendant"),(40,13)
+# Non diggable walls
+NON_DIGGABLE:(00,00,75,19)
+# Random traps
+LOOP [5 + 1d3] {
+  TRAP:random,random
+}
+# Monsters on siege duty.
+LOOP [8 + 1d6] {
+  MONSTER: ('r',"rabid rat"),random
+}
+MONSTER: (';',"giant eel"),random
+MONSTER: (';',"shark"),random
+MONSTER: ';', random
+LOOP [3 + 1d5] {
+  MONSTER: 'D',random,hostile
+}
+LOOP [3 + 1d5] {
+  MONSTER: 'S',random,hostile
+}
+#
+#	The "locate" level for the quest.
+#
+#	Here you have to find the Temple of Coeus to go
+#	further towards your assigned quest.
+#
+
+LEVEL: "Hea-loca"
+FLAGS: hardfloor,mazelevel
+#
+INIT_MAP: mines, '.' , 'P', true , true , lit , false
+MON_GENERATION:86%, (64,"giant rat"), (16,'r'), (16,"snake"), (4,'Y')
+GEOMETRY:center,center
+MAP
+PPPPPPPPPPPPP.......PPPPPPPPPPP
+PPPPPPPP...............PPPPPPPP
+PPPP.....-------------...PPPPPP
+PPPPP....|.S.........|....PPPPP
+PPP......+.|.........|...PPPPPP
+PPP......+.|.........|..PPPPPPP
+PPPP.....|.S.........|..PPPPPPP
+PPPPP....-------------....PPPPP
+PPPPPPPP...............PPPPPPPP
+PPPPPPPPPPP........PPPPPPPPPPPP
+ENDMAP
+# Dungeon Description
+REGION:(00,00,30,09),lit,"ordinary"
+REGION:(12,03,20,06),lit,"temple"
+# Doors
+DOOR:closed,(09,04)
+DOOR:closed,(09,05)
+DOOR:locked,(11,03)
+DOOR:locked,(11,06)
+# Stairs
+STAIR:(04,04),up
+STAIR:(20,06),down
+# Non diggable walls
+NON_DIGGABLE:(11,02,21,07)
+# Altar in the temple.
+ALTAR:(13,05), chaos, shrine
+# Objects
+LOOP [10 + 2d5] {
+  OBJECT:random,random
+}
+# Random traps
+LOOP [4 + 2d3] {
+  TRAP:random,random
+}
+# Random monsters.
+LOOP [8 + 2d4] {
+  MONSTER:('r',"rabid rat"),random
+  [50%]: MONSTER: (';',"giant eel"),random
+  [30%]: MONSTER: (';',"electric eel"),random
+}
+MONSTER:'r',random,hostile
+MONSTER:(';',"kraken"),random
+MONSTER:(';',"shark"),random
+MONSTER:(';',"shark"),random
+MONSTER:';',random, hostile
+MONSTER:';',random, hostile
+LOOP [3 + 1d6] {
+  MONSTER: 'D',random,hostile
+}
+LOOP [8 + 2d3] {
+  MONSTER: 'S',random,hostile
+}
+
+#
+#	The "goal" level for the quest.
+#
+#	Here you meet Cyclops your nemesis monster.  You have to
+#	defeat Cyclops in combat to gain the artifact you have
+#	been assigned to retrieve.
+#
+
+LEVEL: "Hea-goal"
+FLAGS:mazelevel
+#
+INIT_MAP: mines, '.' , 'P' , false , true , lit , false
+MON_GENERATION:86%, (64,"giant rat"), (16,'r'), (16,"snake"), (4,'Y')
+GEOMETRY:center,center
+MAP
+.P....................................PP.
+PP.......PPPPPPP....PPPPPPP....PPPP...PP.
+...PPPPPPP....PPPPPPP.....PPPPPP..PPP...P
+...PP..............................PPP...
+..PP..............................PP.....
+..PP..............................PPP....
+..PPP..............................PP....
+.PPP..............................PPPP...
+...PP............................PPP...PP
+..PPPP...PPPPP..PPPP...PPPPP.....PP...PP.
+P....PPPPP...PPPP..PPPPP...PPPPPPP...PP..
+PPP..................................PPP.
+ENDMAP
+# Dungeon Description
+REGION:(00,00,40,11),lit,"ordinary"
+# Stairs
+STAIR:(39,10),up
+# Non diggable walls
+NON_DIGGABLE:(00,00,40,11)
+# Objects
+OBJECT:(')',"quarterstaff"),(20,06),blessed,0,name:"The Staff of Aesculapius"
+OBJECT:('/',"lightning"),(20,06)
+LOOP [10 + 1d5] {
+  OBJECT:random,random
+}
+# Random traps
+LOOP [3 + 2d3] {
+  TRAP:random,random
+}
+# Random monsters.
+MONSTER:('H',"Cyclops"),(20,06),hostile {
+  OBJECT:('(', "Bell of Opening"),uncursed
+  OBJECT:'[',1d3
+}
+MONSTER:('r',"rabid rat"),random
+MONSTER:('r',"rabid rat"),random
+MONSTER:('r',"rabid rat"),random
+MONSTER:'r',random,hostile
+MONSTER:'r',random,hostile
+MONSTER:(';',"giant eel"),random
+MONSTER:(';',"giant eel"),random
+MONSTER:(';',"giant eel"),random
+MONSTER:(';',"giant eel"),random
+MONSTER:(';',"giant eel"),random
+MONSTER:(';',"giant eel"),random
+MONSTER:(';',"electric eel"),random
+MONSTER:(';',"electric eel"),random
+MONSTER:(';',"shark"),random
+MONSTER:(';',"shark"),random
+MONSTER:';',random, hostile
+LOOP [5 + 2d5] {
+  [90%]: MONSTER:  'D',random,hostile
+  MONSTER: 'S',random,hostile
+}
+
+#
+#	The "fill" levels for the quest.
+#
+#	These levels are used to fill out any levels not occupied by specific
+#	levels as defined above. "filla" is the upper filler, between the
+#	start and locate levels, and "fillb" the lower between the locate
+#	and goal levels.
+#
+
+LEVEL: "Hea-fila"
+FLAGS:mazelevel,noflip
+INIT_MAP: mines, '.' , 'P' , false , true , lit , false
+MON_GENERATION:86%, (64,"giant rat"), (16,'r'), (16,"snake"), (4,'Y')
+NOMAP
+#
+STAIR: random, up
+STAIR: random, down
+#
+LOOP [5 + 1d10] {
+  OBJECT: random, random
+}
+#
+MONSTER: ('r', "rabid rat"), random
+MONSTER: 'r', random, hostile
+MONSTER: 'r', random, hostile
+MONSTER: (';', "giant eel"), random
+MONSTER: (';', "giant eel"), random
+MONSTER: (';', "electric eel"), random
+LOOP [3 + 1d4] {
+  MONSTER: 'D',random,hostile
+  [90%]: MONSTER:  'S',random,hostile
+}
+#
+LOOP [3 + 1d3] {
+  TRAP: random, random
+}
+
+LEVEL: "Hea-filb"
+FLAGS:mazelevel,noflip
+INIT_MAP: mines, '.' , 'P' , false , true , lit , false
+MON_GENERATION:86%, (64,"giant rat"), (16,'r'), (16,"snake"), (4,'Y')
+NOMAP
+#
+STAIR: random, up
+STAIR: random, down
+#
+LOOP [5 + 1d10] {
+  OBJECT: random, random
+}
+#
+MONSTER: ('r', "rabid rat"), random
+MONSTER: ('r', "rabid rat"), random
+MONSTER: 'r', random, hostile
+MONSTER: 'r', random, hostile
+MONSTER: (';', "giant eel"), random
+MONSTER: (';', "giant eel"), random
+MONSTER: (';', "giant eel"), random
+MONSTER: (';', "giant eel"), random
+MONSTER: (';', "giant eel"), random
+MONSTER: (';', "electric eel"), random
+MONSTER: (';', "electric eel"), random
+LOOP [3 + 1d5] {
+  MONSTER: 'D',random,hostile
+  [90%]: MONSTER:  'S',random,hostile
+}
+#
+LOOP [3 + 1d3] {
+  TRAP: random, random
+}

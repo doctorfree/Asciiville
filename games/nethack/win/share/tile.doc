@@ -1,5 +1,3 @@
-NetHack 3.7  tile.doc	$NHDT-Date: 1596498338 2020/08/03 23:45:38 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.8 $
-
 Window ports can optionally make use of the tiles (pictures for NetHack
 symbols) found in this directory.  They are distributed in a text format
 with routines to help in converting them to a system's preferred format
@@ -57,10 +55,8 @@ boolean read_text_tile(pixel[TILE_Y][TILE_X]);
 boolean write_text_tile(pixel[TILE_Y][TILE_X]);
 	writes tile
 
-There are some additional shared routines provided for writers:
+There are two additional shared routines provided for writers:
 
-void set_grayscale(boolean g);
-	do grayscale color substitutions when reading the tile text file
 void init_colormap();
 	initialize the output colormap from the input one
 	must be called before opening output file as colormap is part of header
@@ -120,10 +116,10 @@ boolean read_gif_tile(pixel[TILE_Y][TILE_X]);
 Array provided by shared code for NetHack use, by compiling and running
 tilemap.c to form tile.c:
 
-glyph_map glyphmap[MAXGLYPH];
-	maps glyph number to tile number, ( and later to ttychar, symidx,
-        glyphflags) for display purposes, assuming (non-blank) tiles are
-        numbered sequentially through monsters/objects/other
+short glyph2tile[MAXGLYPH];
+	maps glyph number to tile number for display purposes, assuming
+	(non-blank) tiles are numbered sequentially through
+	monsters/objects/other
 
 tilemap.c (shudder) accounts for things disappearing due to compilation
 options -- there should be a tile for everything appearing under any

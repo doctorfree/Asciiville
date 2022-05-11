@@ -1,0 +1,326 @@
+2005-02-27    <katia_dilkina@verizon.net>
+
+	* winlisp.c (CMD_LISP): new define
+	(cmd_index): new "travel" command, new "options" command.
+	(lisp_coord): new macro
+	(lisp_boolean): likewise
+	(read_int): flush stdout.
+	(read_string): likewise
+	(get_options): new function
+	(lisp_nhgetch): hande CMD_LISP commands
+	(lisp_nhgetch): call impossible if the command is not a CMD_KEY or
+	CMD_EXT type.
+	(lisp_display_nhwindow): read a dummy string, not a menu string.
+
+2004-02-09  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* winlisp.c (lisp_yn_function): catch the chat prompt too.
+
+2003-09-19  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* winlisp.c: add extra element to lisp_procs (structure change in 3.4.2).
+
+2003-06-03  Shawn Betts  <sabetts@sfu.ca>
+
+	* winlisp.c (lisp_print_glyph): Pass special to the print-glyph
+	lisp function as a symbol. delete the MG_PET bit in special if
+	iflags.hilite_pet is not set.
+	(special_glyph_to_string): new function
+
+2003-05-14  Shawn Betts  <sabetts@sfu.ca>
+
+	* winlisp.c (lisp_string): Also escape the backslash character.
+
+2002-09-19  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* winlisp.c (lisp_cmd): nethack-api-* renamed to nhapi-*.
+
+2002-09-16  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* ../tty/termcap.c (has_color): Add condition for LISP_GRAPHICS
+	which returns TRUE.
+
+2002-09-12  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* winlisp.c (lisp_display_nhwindow): Add call to
+	`nethack-api-end'.
+
+	* ../../include/config.h: Default to LISP_GRAPHICS.
+
+	* ../../sys/unix/Makefile.src (WINSRC,WINOBJ,WINLIB): Set to
+	WINLISP* values.
+	(depend): Add winlisp.o dependancies.
+	
+	* winlisp.c (lisp_curs): Don't send winid.  Add error check.
+	(lisp_putstr): Call `nethack-api-message' or
+	`nethack-api-menu-putstr' when appropriate.
+	(lisp_nhgetch): Update error message call.
+	(lisp_create_nhwindow): Don't send winids when creating message,
+	map, or status windows.
+	(lisp_clear_nhwindow): Call clear-message or clear-map instead of
+	clear-nhwindow.
+	(lisp_display_nhwindow): Call display-menu instead of
+	display-nhwindow.  Call block when handling case of blocking on
+	displaying the map window.
+	(lisp_destroy_nhwindow): Use WIN_* values instead of hardcoded
+	numbers.
+	(lisp_print_glyph): Don't send winid.  Add error check for bad
+	winids.
+	(lisp_outrip): Change reference to Enethack to nethack-el.
+
+2002-04-23  Shawn  <sabetts@vcn.bc.ca>
+
+	* winlisp.c (lisp_player_selection): Update to use new 3.4.0
+	functionality.
+	(lisp_print_glyph): likewise
+
+2002-02-16  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* winlisp.c (read_string): take a pointer to a string as the
+	second argument. All callers updated. Rewritten to dynamically
+	resize the string in order to read an entire line.
+	(read_command): free the string returned from read_string
+	(lisp_askname): likewise
+	(lisp_display_nhwindow): likewise
+	(lisp_delay_output): likewise
+	(lisp_yn_function): likewise
+
+2002-02-14  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* winlisp.c (lisp_print_glyph): Handle warning glyphs.
+
+2002-01-27  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* winlisp.c (generate_status_line): Send flag values
+	individually.  Always send values for all attributes.
+
+2002-01-21  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* winlisp.c (lisp_add_menu): Add tile argument.
+
+2002-01-22  shawn  <sabetts@vcn.bc.ca>
+
+	* winlisp.c (lisp_player_selection): use the existing menu system
+	to select a player.
+	(lisp_menu_item_t): add a new member, accelerator.
+	(lisp_current_accelerator): new static global.
+	(lisp_add_menu): pick our own selector when ch is 0.
+	(lisp_start_menu): reset lisp_current_accelerator to 'a'.
+	(lisp_add_menu): remove the identifier argument to the lisp_cmd
+	"add_menu".
+	(lisp_get_menu_identifier): first argument is now a char.
+
+2002-01-20  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* winlisp.c (cmd_index): Add remaining functions.
+
+2002-01-16  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* winlisp.c (lisp_exit_nhwindows): Don't wait for a dummy return
+	value.
+	(lisp_destroy_nhwindow): Don't destroy the status, message or map
+	windows.
+
+2002-01-15  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* winlisp.c (lisp_exit_nhwindows): Don't wait for a dummy return
+	value.
+	
+2002-01-10  shawn  <sabetts@vcn.bc.ca>
+
+	* winlisp.c (win_lisp_init): new function
+
+2002-01-09  Ryan C Yeske  <rcyeske@sfu.ca>
+
+	* winlisp.c (cmd_index): Add redraw command.	
+	(C): New macro.
+
+2002-01-01  shawn  <sabetts@vcn.bc.ca>
+
+	* winlisp.c (winid_list): new static global
+	(winid_list_len): likewise
+	(winid_list_max): likewise
+	(find_empty_cell): new function
+	(winid_is_taken): likewise
+	(add_winid): likewise
+	(get_unique_winid): likewise
+	(return_winid): likewise
+	(init_winid_list): likewise
+
+2001-12-20  shawn  <sabetts@vcn.bc.ca>
+
+	* winlisp.c (read_command): return the command count as a string.
+	(num_digits): remove function
+	(power_of_ten): likewise
+	(lisp_nhgetch): command count works.
+	(enc_stat): extern reference
+	(hunger_stat): new constant
+	(generate_status_line): new function
+	(lisp_putstr): use generate_status_line to create the status line
+	call.
+
+2001-12-19  shawn  <sabetts@vcn.bc.ca>
+
+	* winlisp.c: add extern declaration for glyph2tile and
+	total_tiles_used.
+	(lisp_print_glyph): pass the glyph's graphics tile index as an argument.
+
+2001-12-02  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* winlisp.c (lisp_cmd, lisp_list, lisp_t, lisp_nil, lisp_literal)
+	(lisp_cons, lisp_int, lisp_string): Update macros.  Update all api
+	functions to use these macros.
+	(read_int, read_string, read_command): New functions.  Update all
+	api functions to use these functions.
+	(lisp_create_nhwindow): Send specific window creation commands.
+	(lisp_cliparound): Comment out body.
+
+2001-10-23  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* winlisp.c (lisp_nhgetch): Don't silently loop on invalid
+	commands, send back a warning.
+	(lisp_yn_function): Make sure special handling is done for all
+	direction questions.  Include prompt in call to
+	nethack-api-ask-direction.  Include up, down and self directions.
+	If no default is set for a direction question, return space.
+
+2001-10-19  shawn  <sabetts@vcn.bc.ca>
+
+	* winlisp.c (lisp_init_nhwindows): turn on showexp and time flags.
+
+2001-10-17  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* winlisp.c (lisp_display_nhwindow): Wait for a string if we are
+	blocking.
+
+2001-07-19  shawn  <sabetts@diggin.lamenet.tmp>
+
+	* winlisp.c (lisp_player_selection): terminate if we read a -1 as
+	a selection.
+
+2001-07-16  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* winlisp.c (lisp_delay_output): expect a return value from the
+	client.
+
+2001-07-14  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* winlisp.c (lisp_add_menu): Quote the attribute.
+	(lisp_outrip): Add a newline to output.
+
+2001-07-06  shawn  <sabetts@diggin.lamenet.tmp>
+
+	* winlisp.c (num_digits): new function
+	(power_of_ten): likewise
+	(lisp_nhgetch): handles repeated commands.
+
+2001-07-05  shawn  <sabetts@diggin.lamenet.tmp>
+
+	* winlisp.c (WINLISP_VOID_RETVAL): flushes stdout
+
+2001-07-04  Ryan Yeske  <rcyeske@van.gobasis.com>
+
+	* winlisp.c (lisp_add_menu): Convert printf to lisp_* macros,
+	fixing a string quote bug.
+
+2001-06-28  shawn  <sabetts@diggin.lamenet.tmp>
+
+	* winlisp.c (zap_color): new define
+	(cmap_color): likewise
+	(obj_color): likewise
+	(mon_color): likewise
+	(invis_color): likewise
+	(pet_color): likewise
+	(lisp_print_glyph): export the color. export the ascii character
+	as a number.
+
+2001-06-27  shawn  <sabetts@diggin.lamenet.tmp>
+
+	* winlisp.c: fix a typo cmd_index
+	(lisp_yn_function): pass characters as numbers instead of ascii
+	characters. specially handle the "In what direction?" question.
+	(lisp_outrip): prints a properly formed lisp expression.
+
+2001-06-21  Shawn Betts  <sabetts@van.gobasis.com>
+
+	* winlisp.c (lisp_add_menu): items that are not selectable are
+	sent with an identifier of -1.
+	(lisp_select_menu): handle failed memory
+	allocation.
+
+2001-05-06  shawn  <sabetts@diggin.lamenet.tmp>
+
+	* winlisp.c (LINESIZ): new define
+	(lisp_menu_item_t): new struct
+	(lisp_menu_item_list): new static global
+	(lisp_menu_list_size): likewise
+	(lisp_menu_list_num): likewise
+	(cmd_index): fixed ddrop entry
+	(read_int): new function
+	(lisp_player_selection): use read_int
+	(lisp_askname): read the entire line to a string and parse data
+	from it.
+	(lisp_nhgetch): likewise
+	(lisp_create_nhwindow): likewise
+	(lisp_getlin): likewise
+	(lisp_yn_function): likewise
+	(lisp_start_menu): set lisp_menu_list_num to 0
+	(lisp_add_menu): add an entry to lisp_menu_item_list
+	(lisp_add_menu): pass the item's ID to the client instead of the
+	actual identifier.
+	(lisp_get_menu_identifier): new function
+	(lisp_select_menu): parse the list of selected menu items
+	(lisp_print_glyph): escape backslashes in output
+
+2000-10-01  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* winlisp.c (cmd_index): renamed "ddoremarm" to "remarm" and
+	"ddoinv" to "inv".
+
+2000-09-25  Shawn  <sabetts@vcn.bc.ca>
+
+	* winlisp.c: Added more key commands.
+	(lisp_player_selection): honours default player selections as
+	specified in the nethackrc file.
+
+2000-09-22  Shawn  <sabetts@vcn.bc.ca>
+
+	* winlisp.c (lisp_nhgetch): changed while loop stop condition.
+
+2000-09-19  Ryan yeske  <rcyeske@van.gobasis.com>
+
+	* winlisp.c (lisp_nh_getch): renamed from lisp_nh_getcmd() since
+	this is really called by the core when nethack wants a key.
+	(cmd_index): added gowest, gosouth, gonorth, goeast.
+
+2000-09-12  shawn  <sabetts@gobasis.com>
+
+	* winlisp.c (lisp_nh_poskey): Added code to read in an x,y,mod
+	combination instead of calling lisp_nhgetcmd. Currently commented
+	out until the lisp side catches up.  added cmd_index structure to
+	translate incoming command strings to extended commands or
+	keystrokes. Changed lisp_nhgetch to lisp_nhgetcmd and changed the
+	lisp command it calls to 'nethack-get-command'.
+
+2000-09-11  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* winlisp.c (lisp_cmd, lisp_close_cmd, lisp_open, lisp_close,
+	lisp_quote, lisp_int, lisp_string, lisp_dot): created macros.
+
+2000-09-10  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* winlisp.c (lisp_outrip): added closing paren.
+
+2000-08-21  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* winlisp.c (lisp_nhgetch): change ch type to int from char.
+
+2000-08-20  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* winlisp.c (lisp_player_selection): role/race/gender/alignment
+	selection now sends (nethack-apix-choose-X ALIST) instead of
+	simply an alist.
+	(lisp_update_inventory):
+	s/nethack-api-updated-inventory/nethack-api-update-inventory/
+	(WINLISP_VOID_RETVAL): added macro, called for every void
+	function.

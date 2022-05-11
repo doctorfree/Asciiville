@@ -1,0 +1,4 @@
+Preferred way of compiling UnNetHack is by the configure script in the top
+directory.
+
+The old and unused build scripts have been moved to unsupported.

@@ -1,0 +1,19 @@
+language: c
+
+script: "./configure && make all"
+
+compiler:
+  - gcc
+  - clang
+
+sudo: false
+
+notifications:
+  irc:
+    channels: "chat.freenode.net#unnethack"
+    use_notice: true
+    skip_join: true
+  email:
+    recipients:
+      - bhaak@gmx.net
+    on_success: always

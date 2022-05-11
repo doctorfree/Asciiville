@@ -1,151 +1,96 @@
-#      NetHack Top-level Makefile.
-# NetHack 3.7  Makefile.top    $NHDT-Date: 1642630921 2022/01/19 22:22:01 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.72 $
-# Copyright (c) 2015 by Kenneth Lorber, Kensington, Maryland
-# NetHack may be freely redistributed.  See license for details.
+#	UnNetHack Makefile.
+#	SCCS Id: @(#)Makefile.top	3.4	1995/01/05
 
-#	Root of source tree:  (Note: dot is after setup.sh has been used
-#	to create the active Makefiles from sys/unix/Makefile.*.
-#	It isn't sys/unix/ where you might happen to be reading this.)
-NHSROOT=.
-
-#	Newer makes predefine $(MAKE) to 'make' and do smarter processing
-#	of recursive make calls if $(MAKE) is used.
-#	These makes allow $(MAKE) to be overridden by the environment if
-#	someone wants to (or has to) use something other than the standard
-#	make, so we do not want to unconditionally set $(MAKE) here.
+# newer makes predefine $(MAKE) to 'make' and do smarter processing of
+# recursive make calls if $(MAKE) is used
+# these makes allow $(MAKE) to be overridden by the environment if someone
+# wants to (or has to) use something other than the standard make, so we do
+# not want to unconditionally set $(MAKE) here
 #
-#	Unfortunately, some older makes do not predefine $(MAKE); if you
-#	have one of these, uncomment the following line.
-#	(You will know that you have one if you get complaints about unable
-#	to execute things like 'data' and 'rumors'.)
+# unfortunately, some older makes do not predefine $(MAKE); if you have one of
+# these, uncomment the following line
+# (you will know that you have one if you get complaints about unable to
+# execute things like 'data' and 'rumors')
 # MAKE = make
 
-#	make NetHack (as opposite to variants or such)
-#PREFIX	 = /usr
-GAME     = nethack
-# GAME     = nethack.exe
+# make UnNetHack
+PREFIX	 = /usr
+GAME     = unnethack
 # GAME     = nethack.prg
-#GAMEUID  = games
-#GAMEGRP  = bin
+GAMEUID  = games
+GAMEGRP  = bin
 
-#	Permissions - some places use setgid instead of setuid, for instance.
-#	See also the option "SECURE" in include/config.h.
-#GAMEPERM = 04755
+# Permissions - some places use setgid instead of setuid, for instance
+# See also the option "SECURE" in include/config.h
+GAMEPERM = 04755
 FILEPERM = 0644
-# VARFILEPERM = 0644
 EXEPERM  = 0755
 DIRPERM  = 0755
-# VARDIRPERM = 0755
 
-#	VARDIR may also appear in unixconf.h as "VAR_PLAYGROUND" else HACKDIR
+# GAMEDIR also appears in config.h as "HACKDIR".
+# VARDIR may also appear in unixconf.h as "VAR_PLAYGROUND" else GAMEDIR
 #
-#	Note well!  'make install' believes in creating a nice tidy HACKDIR
-#	for installation, free of debris from previous NetHack versions --
-#	therefore there should not be anything in HACKDIR that you want to
-#	keep (if there is, you'll have to do the installation by hand or
-#	modify the install commands below).
-#HACKDIR  = $(PREFIX)/games/lib/$(GAME)dir
-#VARDIR  = $(HACKDIR)
-#	Where nethack.sh is installed (as 'nethack').
-#	If this is not defined, the shell wrapper script is not used.
-#SHELLDIR = $(PREFIX)/games
+# note that 'make install' believes in creating a nice tidy GAMEDIR for
+# installation, free of debris from previous UnNetHack versions --
+# therefore there should not be anything in GAMEDIR that you want to keep
+# (if there is, you'll have to do the installation by hand or modify the
+# instructions)
+GAMEDIR  = $(PREFIX)/games/lib/$(GAME)dir
+VARDIR  = $(GAMEDIR)
+SHELLDIR = $(PREFIX)/games
 
-#	Extra data files depending upon the interface(s) built into nethack.
 # per discussion in Install.X11 and Install.Qt
-# Qt prefers nhtiles.bmp but can use x11tiles, and it ignores NetHack.ad.
-# X11 uses those last two.
-# Both can display a convential text map instead of tiles.
-#	tty and/or curses (no extra data files outside of the dlb container):
-#VARDATND =
-#	All X11 and/or Qt variations may also include tty or curses or both):
-#	X11 without Qt:
-# VARDATND = x11tiles NetHack.ad pet_mark.xbm pilemark.xbm
-#	X11 with GRAPHIC_TOMBSTONE (requires 'xpm'):
-# VARDATND = x11tiles NetHack.ad pet_mark.xbm pilemark.xbm rip.xpm
-#	both X11 and Qt:
-# VARDATND = x11tiles nhtiles.bmp NetHack.ad pet_mark.xbm pilemark.xbm rip.xpm
-#	Qt without X11; assumes GRAPHIC_TOMBSTONE:
-# VARDATND = nhtiles.bmp pet_mark.xbm pilemark.xbm rip.xpm
+VARDATND = 
+# VARDATND = x11tiles NetHack.ad pet_mark.xbm
+# VARDATND = x11tiles NetHack.ad pet_mark.xbm rip.xpm
+# for Atari/Gem
+# VARDATND = nh16.img title.img GEM_RSC.RSC rip.img
+# for BeOS
+# VARDATND = beostiles
+# for Gnome
+# VARDATND = x11tiles pet_mark.xbm rip.xpm mapbg.xpm
 
-VARDATD = bogusmon data engrave epitaph oracles options quest.lua rumors
+VARDATD = data oracles options quest.dat rumors
 VARDAT = $(VARDATD) $(VARDATND)
 
-#	Some versions of make use the SHELL environment variable as the
-#	shell for running commands.  We need this to be a Bourne shell.
+# Some versions of make use the SHELL environment variable as the shell
+# for running commands.  We need this to be a Bourne shell.
 # SHELL = /bin/sh
-# for Atari (obsolete)
+# for Atari
 # SHELL=E:/GEMINI2/MUPFEL.TTP
 
 # Commands for setting the owner and group on files during installation.
 # Some systems fail with one or the other when installing over NFS or for
 # other permission-related reasons.  If that happens, you may want to set the
-# command to "true", which is a no-op.  Note that disabling chown or chgrp
+# command to "true", which is a no-op. Note that disabling chown or chgrp
 # will only work if setuid (or setgid) behavior is not desired or required.
-#CHOWN = chown
-#CHGRP = chgrp
-
-# Lua version
-LUA_VERSION = 5.4.4
+CHOWN = chown
+CHGRP = chgrp
 
 #
 # end of configuration
 #
 
-DATHELP = help hh cmdhelp keyhelp history opthelp optmenu wizhelp
+DATHELP = help hh cmdhelp history opthelp wizhelp
 
-SPEC_LEVS = asmodeus.lua baalz.lua bigrm-*.lua castle.lua fakewiz?.lua \
-	juiblex.lua knox.lua medusa-?.lua minend-?.lua minefill.lua \
-	minetn-?.lua oracle.lua orcus.lua sanctum.lua soko?-?.lua \
-	tower?.lua valley.lua wizard?.lua nhcore.lua nhlib.lua themerms.lua \
-	astral.lua air.lua earth.lua fire.lua water.lua
-QUEST_LEVS = ???-goal.lua ???-fil?.lua ???-loca.lua ???-strt.lua
+SPEC_LEVS = asmod-?.lev baalz-?.lev bigrm-*.lev blkmar.lev castle-?.lev fakewiz?.lev \
+	juiblex.lev knox-?.lev town-?.lev medusa-?.lev minend-?.lev minefill.lev \
+	minetn-?.lev oracle.lev orcus-?.lev sanctum.lev soko?-*.lev \
+	hellfill.lev nymph.lev \
+	tower?.lev valley-?.lev wizard?.lev heck-?-?.lev \
+	sheolfil.lev palace_f.lev palace_e.lev sheolmid.lev \
+	astral.lev air.lev earth.lev fire.lev water.lev
+QUEST_LEVS = ???-goal.lev ???-fil?.lev ???-loca.lev ???-strt.lev
 
-DATNODLB = $(VARDATND) license symbols
-DATDLB = $(DATHELP) dungeon.lua tribute $(SPEC_LEVS) $(QUEST_LEVS) $(VARDATD)
+DATNODLB = $(VARDATND) license
+DATDLB = $(DATHELP) dungeon $(SPEC_LEVS) $(QUEST_LEVS) $(VARDATD)
 DAT = $(DATNODLB) $(DATDLB)
 
-LUAHEADERS = lib/lua-$(LUA_VERSION)/src
-LUATESTTARGET = $(LUAHEADERS)/lua.h
-LUATOP = $(LUAHEADERS)
-LUAMAKEFLAGS = CC='$(CC)' SYSCFLAGS='$(SYSCFLAGS)'
-LUA2NHTOP = ../../..
-TOPLUALIB = lib/lua/liblua.a
+$(GAME):
+	( cd src ; $(MAKE) )
 
-ALLDEP = $(GAME) recover Guidebook $(VARDAT) spec_levs check-dlb
-
-# first target is also the default target for 'make' without any arguments
-all:    $(ALLDEP)
-	true; $(MOREALL)
+all:	$(GAME) recover Guidebook $(VARDAT) dungeon spec_levs check-dlb
 	@echo "Done."
-
-$(GAME): lua_support
-	( cd src ; $(MAKE) $(GAME) )
-
-lua_support: include/nhlua.h
-	@true
-$(LUATOP)/liblua.a: $(LUAHEADERS)/lua.h
-	( cd $(LUATOP) \
-	  && make $(LUAMAKEFLAGS) a && cd $(LUA2NHTOP) )
-lib/lua/liblua.a: $(LUATOP)/liblua.a
-	@( if test -d lib/lua ; then true ; else mkdir -p lib/lua ; fi )
-	cp $(LUATOP)/liblua.a $@
-
-include/nhlua.h: $(TOPLUALIB)
-	echo '/* nhlua.h - generated by top Makefile */' > $@
-	@echo '#include "../$(LUAHEADERS)/lua.h"' >> $@
-	@sed -e '/(lua_error)/!d' -e '/(lua_error)/s/;/ NORETURN;/1' \
-		< $(LUAHEADERS)/lua.h >> $@
-	@echo '#include "../$(LUAHEADERS)/lualib.h"' >> $@
-	@echo '#include "../$(LUAHEADERS)/lauxlib.h"' >> $@
-	@echo '/*nhlua.h*/' >> $@
-# LUATESTTARGET is this by default
-lib/lua-$(LUA_VERSION)/src/lua.h:
-	@echo "Please do 'make fetch-lua' to obtain lua-$(LUA_VERSION)"
-	@false
-# hints file could set LUATESTTARGET to this if GITSUBMODULES is defined
-submodules/lua/lua.h:
-	git submodule init submodules/lua
-	git submodule update --remote submodules/lua
 
 # Note: many of the dependencies below are here to allow parallel make
 # to generate valid output
@@ -159,15 +104,6 @@ manpages:
 data: $(GAME)
 	( cd dat ; $(MAKE) data )
 
-engrave: $(GAME)
-	( cd dat ; $(MAKE) engrave )
-
-bogusmon: $(GAME)
-	( cd dat ; $(MAKE) bogusmon )
-
-epitaph: $(GAME)
-	( cd dat ; $(MAKE) epitaph )
-
 rumors: $(GAME)
 	( cd dat ; $(MAKE) rumors )
 
@@ -178,21 +114,25 @@ oracles: $(GAME)
 options: $(GAME)
 	( cd dat ; $(MAKE) options )
 
-quest.lua: $(GAME)
+quest.dat: $(GAME)
+	( cd dat ; $(MAKE) quest.dat )
 
-spec_levs:
+spec_levs: dungeon
+	( cd util ; $(MAKE) lev_comp )
 	( cd dat ; $(MAKE) spec_levs )
 	( cd dat ; $(MAKE) quest_levs )
 
+dungeon: $(GAME)
+	( cd util ; $(MAKE) dgn_comp )
+	( cd dat ; $(MAKE) dungeon )
+
 nhtiles.bmp: $(GAME)
-	( cd util ; $(MAKE) tile2bmp )
 	( cd dat ; $(MAKE) nhtiles.bmp )
 
 x11tiles: $(GAME)
 	( cd util ; $(MAKE) tile2x11 )
 	( cd dat ; $(MAKE) x11tiles )
 
-# obsolete
 beostiles: $(GAME)
 	( cd util ; $(MAKE) tile2beos )
 	( cd dat ; $(MAKE) beostiles )
@@ -202,9 +142,6 @@ NetHack.ad: $(GAME)
 
 pet_mark.xbm:
 	( cd dat ; $(MAKE) pet_mark.xbm )
-
-pilemark.xbm:
-	( cd dat ; $(MAKE) pilemark.xbm )
 
 rip.xpm:
 	( cd dat ; $(MAKE) rip.xpm )
@@ -235,12 +172,6 @@ dlb:
 	( cd util ; $(MAKE) dlb )
 	( cd dat ; LC_ALL=C ; ../util/dlb cf nhdat $(DATDLB) )
 
-wasm:
-	( cd src ; $(MAKE) CROSS_TO_WASM=1 ../targets/wasm/nethack.js )
-
-package: $(GAME) recover $(VARDAT) spec_levs
-	( cd src ;  $(MAKE) $(PACKAGE) )
-
 # recover can be used when INSURANCE is defined in include/config.h
 # and the checkpoint option is true
 recover: $(GAME)
@@ -254,126 +185,90 @@ dofiles:
 		-e '}' 					\
 	  	-e '$$s/.*/nodlb/p' < dat/options` ;	\
 	$(MAKE) dofiles-$${target-nodlb}
-	cp src/$(GAME) $(INSTDIR)
-	cp util/recover $(INSTDIR)
-	-if test -n '$(SHELLDIR)'; then rm -f $(SHELLDIR)/$(GAME); fi
-	if test -n '$(SHELLDIR)'; then \
-		sed -e 's;/usr/games/lib/nethackdir;$(HACKDIR);' \
+	cp src/$(GAME) $(GAMEDIR)
+	cp util/recover $(GAMEDIR)
+	-rm -f $(SHELLDIR)/$(GAME)
+	sed -e 's;/usr/games/lib/nethackdir;$(GAMEDIR);' \
 		-e 's;HACKDIR/nethack;HACKDIR/$(GAME);' \
 		< sys/unix/nethack.sh \
-		> $(SHELLDIR)/$(GAME) ; fi
+		> $(SHELLDIR)/$(GAME)
 # set up their permissions
-	-( cd $(INSTDIR) ; $(CHOWN) $(GAMEUID) $(GAME) recover ; \
+	-( cd $(GAMEDIR) ; $(CHOWN) $(GAMEUID) $(GAME) recover ; \
 			$(CHGRP) $(GAMEGRP) $(GAME) recover )
-	chmod $(GAMEPERM) $(INSTDIR)/$(GAME)
-	chmod $(EXEPERM) $(INSTDIR)/recover
-	-if test -n '$(SHELLDIR)'; then \
-		$(CHOWN) $(GAMEUID) $(SHELLDIR)/$(GAME); fi
-	if test -n '$(SHELLDIR)'; then \
-		$(CHGRP) $(GAMEGRP) $(SHELLDIR)/$(GAME); \
-		chmod $(EXEPERM) $(SHELLDIR)/$(GAME); fi
+	chmod $(GAMEPERM) $(GAMEDIR)/$(GAME)
+	chmod $(EXEPERM) $(GAMEDIR)/recover
+	-$(CHOWN) $(GAMEUID) $(SHELLDIR)/$(GAME)
+	$(CHGRP) $(GAMEGRP) $(SHELLDIR)/$(GAME)
+	chmod $(EXEPERM) $(SHELLDIR)/$(GAME)
 
 dofiles-dlb: check-dlb
-	( cd dat ; cp nhdat $(DATNODLB) $(INSTDIR) )
+	( cd dat ; cp nhdat $(DATNODLB) $(GAMEDIR) )
 # set up their permissions
-	-( cd $(INSTDIR) ; $(CHOWN) $(GAMEUID) nhdat $(DATNODLB) ; \
+	-( cd $(GAMEDIR) ; $(CHOWN) $(GAMEUID) nhdat $(DATNODLB) ; \
 			$(CHGRP) $(GAMEGRP) nhdat $(DATNODLB) ; \
 			chmod $(FILEPERM) nhdat $(DATNODLB) )
 
 dofiles-nodlb:
 # copy over the game files
-	( cd dat ; cp $(DAT) $(INSTDIR) )
+	( cd dat ; cp $(DAT) $(GAMEDIR) )
 # set up their permissions
-	-( cd $(INSTDIR) ; $(CHOWN) $(GAMEUID) $(DAT) ; \
+	-( cd $(GAMEDIR) ; $(CHOWN) $(GAMEUID) $(DAT) ; \
 			$(CHGRP) $(GAMEGRP) $(DAT) ; \
 			chmod $(FILEPERM) $(DAT) )
-#
-# This is not part of the dependency build hierarchy.
-# It requires an explicit "make fetch-Lua".
-fetch-lua: fetch-Lua
-	@true
 
-fetch-Lua:
-	( mkdir -p lib && cd lib && \
-	  curl -R -O http://www.lua.org/ftp/lua-$(LUA_VERSION).tar.gz && \
-	  tar zxf lua-$(LUA_VERSION).tar.gz && \
-	  rm -f lua-$(LUA_VERSION).tar.gz )
-# remove include/nhlua.h in case it was created for some other Lua version
-	@( if test -f include/nhlua.h ; then \
-	     rm -f include/nhlua.h && echo 'rm include/nhlua.h' ; fi )
-
-# 'make update' can be used to install a revised version after making
-# customizations or such.  Unlike 'make install', it doesn't delete everything
-# from the target directory to have a clean start.
-update: $(GAME) recover $(VARDAT) spec_levs
+update: $(GAME) recover $(VARDAT) dungeon spec_levs
 #	(don't yank the old version out from under people who're playing it)
-	-mv $(INSTDIR)/$(GAME) $(INSTDIR)/$(GAME).old
-	-mv $(INSTDIR)/nhdat $(INSTDIR)/nhdat.old
+	-mv $(GAMEDIR)/$(GAME) $(GAMEDIR)/$(GAME).old
+#	quest.dat is also kept open and has the same problems over NFS
+#	(quest.dat may be inside nhdat if dlb is in use)
+	-mv $(GAMEDIR)/quest.dat $(GAMEDIR)/quest.dat.old
+	-mv $(GAMEDIR)/nhdat $(GAMEDIR)/nhdat.old
 # set up new versions of the game files
 	( $(MAKE) dofiles )
-# should already be present, but make sure
+# touch time-sensitive files
+	-touch -c $(VARDIR)/bones* $(VARDIR)/?lock* $(VARDIR)/wizard*
+	-touch -c $(VARDIR)/save/*
 	touch $(VARDIR)/perm $(VARDIR)/record
 # and a reminder
 	@echo You may also want to install the man pages via the doc Makefile.
+	@echo
+	@echo 'Note: Preferred way of building UnNetHack is by using'
+	@echo '      the configure script in the top directory!'
 
-rootcheck:
-	@true; $(ROOTCHECK)
-
-install: rootcheck $(GAME) recover $(VARDAT) spec_levs
-	true; $(PREINSTALL)
+install: $(GAME) recover $(VARDAT) dungeon spec_levs
 # set up the directories
 # not all mkdirs have -p; those that don't will create a -p directory
-	-if test -n '$(SHELLDIR)'; then \
-		mkdir -p $(SHELLDIR); fi
-	rm -rf $(INSTDIR) $(VARDIR)
-	-mkdir -p $(INSTDIR) $(VARDIR) $(VARDIR)/save
-	if test -d ./-p; then rmdir ./-p; fi
-	-$(CHOWN) $(GAMEUID) $(INSTDIR) $(VARDIR) $(VARDIR)/save
-	$(CHGRP) $(GAMEGRP) $(INSTDIR) $(VARDIR) $(VARDIR)/save
-# order counts here:
-	chmod $(DIRPERM) $(INSTDIR)
-	chmod $(VARDIRPERM) $(VARDIR) $(VARDIR)/save
+	-mkdir -p $(SHELLDIR)
+	-rm -rf $(GAMEDIR) $(VARDIR)
+	-mkdir -p $(GAMEDIR) $(VARDIR) $(VARDIR)/save
+	-rmdir ./-p
+	-$(CHOWN) $(GAMEUID) $(GAMEDIR) $(VARDIR) $(VARDIR)/save
+	$(CHGRP) $(GAMEGRP) $(GAMEDIR) $(VARDIR) $(VARDIR)/save
+	chmod $(DIRPERM) $(GAMEDIR) $(VARDIR) $(VARDIR)/save
 # set up the game files
 	( $(MAKE) dofiles )
 # set up some additional files
-	touch $(VARDIR)/perm $(VARDIR)/record $(VARDIR)/logfile $(VARDIR)/xlogfile \
-         $(VARDIR)/livelog
-	-( cd $(VARDIR) ; $(CHOWN) $(GAMEUID) perm record logfile xlogfile livelog ; \
-			$(CHGRP) $(GAMEGRP) perm record logfile xlogfile livelog ; \
-			chmod $(VARFILEPERM) perm record logfile xlogfile livelog )
-	true; $(POSTINSTALL)
+	touch $(VARDIR)/perm $(VARDIR)/record $(VARDIR)/logfile
+	-( cd $(VARDIR) ; $(CHOWN) $(GAMEUID) perm record logfile ; \
+			$(CHGRP) $(GAMEGRP) perm record logfile ; \
+			chmod $(FILEPERM) perm record logfile )
 # and a reminder
 	@echo You may also want to reinstall the man pages via the doc Makefile.
+	@echo
+	@echo 'Note: Preferred way of building UnNetHack is by using'
+	@echo '      the configure script in the top directory!'
 
 
 # 'make clean' removes all the .o files, but leaves around all the executables
 # and compiled data files
-clean: clean-lib clean-keep-lib
-	@true
-
-clean-lib:
-	-( cd $(LUATOP) && $(MAKE) clean )
-
-clean-keep-lib:
+clean:
 	( cd src ; $(MAKE) clean )
 	( cd util ; $(MAKE) clean )
-	( cd dat ; $(MAKE) clean )
-	( cd doc ; $(MAKE) clean )
 
 # 'make spotless' returns the source tree to near-distribution condition.
 # it removes .o files, executables, and compiled data files
-spotless:: spotless-lib spotless-keep-lib
-	@true
-
-spotless-lib:: clean-lib
-	-( cd lib/lua && rm liblua.a )
-
-spotless-keep-lib: clean-keep-lib
+spotless:
 	( cd src ; $(MAKE) spotless )
 	( cd util ; $(MAKE) spotless )
 	( cd dat ; $(MAKE) spotless )
 	( cd doc ; $(MAKE) spotless )
-spotless-clean-submodule:
-	@( if test -f submodules/lua/lua.h ; then \
-	    git submodule deinit submodules/lua ; fi )
-

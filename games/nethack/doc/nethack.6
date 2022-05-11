@@ -1,16 +1,5 @@
-.\"DO NOT REMOVE NH_DATESUB .TH NETHACK 6 "DATE(%-d %B %Y)" NETHACK
-.TH NETHACK 6 "21 February 2022" NETHACK
-.\"DO NOT REMOVE NH_DATESUB .ds Nd DATE(%Y)
-.ds Nd 2022
-.de NB
-.ds Nb \\$2
-..
-.de NR
-.ds Nr \\$2
-..
-.NB $NHDT-Branch: NetHack-3.7 $
-.NR $NHDT-Revision: 1.23 $
-.ds Na Robert Patrick Rankin
+.TH NETHACK 6 "9 August 2002"
+.UC 4
 .SH NAME
 nethack \- Exploring The Mazes of Menace
 .SH SYNOPSIS
@@ -26,7 +15,7 @@ nethack \- Exploring The Mazes of Menace
 ]
 [
 .B \-p
-.I profession
+.I profession (role)
 ]
 [
 .B \-r
@@ -45,12 +34,6 @@ nethack \- Exploring The Mazes of Menace
 [
 .B \-ibm
 ]
-[
-.BR \-\-showpaths
-]
-[
-.BR \-\-version [ :paste ]
-]
 .PP
 .B nethack
 [
@@ -63,7 +46,7 @@ nethack \- Exploring The Mazes of Menace
 ]
 [
 .B \-p
-.I profession
+.I profession (role)
 ]
 [
 .B \-r
@@ -74,15 +57,14 @@ nethack \- Exploring The Mazes of Menace
 ]
 .ad
 .hy 14
-.\" Make sure path is not hyphenated below
-.hw nethackdir
 .SH DESCRIPTION
 .PP
 .I NetHack
 is a display oriented Dungeons & Dragons(tm) - like game.
 The standard tty display and command structure resemble rogue.
 .PP
-Other, more graphical display options exist for most platforms.
+Other, more graphical display options exist if you are using either a PC,
+or an X11 interface.
 .PP
 To get started you really only need to know two commands.  The command
 .B ?
@@ -94,11 +76,8 @@ will identify the things you see on the screen.
 To win the game (as opposed to merely playing to beat other people's high
 scores) you must locate the Amulet of Yendor which is somewhere below
 the 20th level of the dungeon and get it out.
-Few people achieve this; most never do.  Those who have done so go down
-in history as heroes among heroes - and then they find ways of making the
-game even harder.  See the
-.I Guidebook
-section on Conduct if this game has gotten too easy for you.
+Nobody has achieved this yet; anybody who does will probably go down
+in history as a hero among heros.
 .PP
 When the game ends, whether by your dying, quitting, or escaping
 from the caves,
@@ -158,15 +137,15 @@ option).  "rrr" are at least the first three letters of the character's
 race (this can also be specified using a separate 
 .B \-r
 .I race
-option).  "aaa" are at least the first three letters of the character's
+option).  "aaa" are at last the first three letters of the character's
 alignment, and "ggg" are at least the first three letters of the
 character's gender.  Any of the parts of the suffix may be left out.
 .PP
 .B \-p
 .I profession
-can be used to determine the character profession, also known as the role.
-You can specify either the male or female name for the character role, or
-the first three characters of the role as an abbreviation.
+can be used to determine the character role.  You can specify either the
+male or female name for the character role, or the first three characters
+of the role as an abbreviation.
 .B "\-p \@"
 has been retained to explicitly request that a random role be chosen.
 It may need to be quoted with a backslash (\\@) if @
@@ -224,21 +203,6 @@ The playground must contain several auxiliary files such as help files,
 the list of top scorers, and a subdirectory
 .I save
 where games are saved.
-.PP
-.B \-\-showpaths
-can be used to cause NetHack to show where it is expecting
-to find various configuration files.
-.PP
-.B \-\-version
-can be used to cause NetHack to show the version information it
-was compiled with, then exit. That will include the
-.I git
-commit hash if the information was available when the game was compiled.
-On some platforms, such as windows and macosx, a variation 
-.B \-\-version:paste
-can be used to cause NetHack to show the version information, then exit,
-while also leaving a copy of the version information in the paste buffer 
-or clipboard for potential insertion into things like bug reports.
 .SH AUTHORS
 .PP
 Jay Fenlason (+ Kenny Woodland, Mike Thome and Jon Payne) wrote the
@@ -258,17 +222,10 @@ development by the Usenet.  Andries Brouwer has made this request for the
 distinction, as he may eventually release a new version of his own.
 .SH FILES
 .PP
-Run-time configuration options were discussed above and use a platform
-specific name for a file in a platform specific location.  For Unix, the
-name is '.nethackrc' in the user's home directory.
-
-.br
-All other files are in the playground directory,
-normally /usr/games/lib/nethackdir.
+All files are in the playground, normally /usr/games/lib/nethackdir.
 If DLB was defined during the compile, the data files and special levels
 will be inside a larger file, normally nhdat, instead of being separate
 files.
-
 .br
 .DT
 .ta \w'cmdhelp, opthelp, wizhelp\ \ \ 'u
@@ -276,25 +233,15 @@ nethack		The program itself.
 .br
 data, oracles, rumors	Data files used by NetHack.
 .br
-bogusmon 	another data file.
+options, quest.dat	More data files.
 .br
-engrave, epitaph, tribute	Still more data files.
+help, hh	Help data files.
 .br
-symbols	Data file holding sets of specifications
+cmdhelp, opthelp, wizhelp	More help data files.
 .br
-	for how to display monsters, objects, and
+*.lev	Predefined special levels.
 .br
-	map features.
-.br
-options	Data file containing a description of the
-	build-time option settings.
-.br
-help, hh, cmdhelp	Help data files.
-.br
-opthelp, optmenu, wizhelp	More help data files.
-.br
-*.lua	Predefined special levels, dungeon control
-	for special levels, quest texts
+dungeon	Control file for special levels.
 .br
 history	A short history of NetHack.
 .br
@@ -302,63 +249,26 @@ license	Rules governing redistribution.
 .br
 record	The list of top scorers.
 .br
-logfile	An extended list of games played
+logfile	An extended list of games
 .br
-	(optional).
+	played.
 .br
-xlogfile	A more detailed version of 'logfile'
+xlock.nnn	Description of a dungeon level.
 .br
-	(also optional).
+perm	Lock file for xlock.dd.
 .br
-paniclog	Record of exceptional conditions
+bonesDD.nn	Descriptions of the ghost and
 .br
-	discovered during program execution.
+	belongings of a deceased
 .br
-xlock.nn	Description of dungeon level 'nn' of
+	adventurer.
 .br
-	active game 'x' if there's a limit on the
+save	A subdirectory containing the
 .br
-	number of simultaneously active games.
-.br
-UUcccccc.nn	Alternate form for dungeon level 'nn'
-.br
-	of active game by user 'UU' playing
-.br
-	character named 'cccccc' when there's no
-.br
-	limit on number of active games.
-.br
-perm	Lock file for xlock.0 or UUcccccc.0.
-.br
-bonesDD.nn	Descriptions of the ghost and belongings
-.br
-	of a deceased adventurer who met his
-.br
-	or her demise on level 'nn'.
-.br
-.\"following line should contain <space><tab>
- 	
-.br
-save/	A subdirectory containing saved games.
-.br
-.\"following line should contain <space><tab>
- 	
-.br
-sysconf	System-wide options.  Required if
-.br
-	program is built with 'SYSCF' option
-.br
-	enabled, ignored if not.
-.br
-
-The location of 'sysconf' is specified at build time and can't be changed
-except by updating source file "config.h" and rebuilding the program.
-.br
-
-In a perfect world, 'paniclog' would remain empty.
+	saved games.
 .SH ENVIRONMENT
 .DT
-.ta \w'NETHACKDIR or HACKDIR\ \ \ 'u
+.ta \w'HACKPAGER or PAGER\ \ \ 'u
 USER or LOGNAME	Your login name.
 .br
 HOME		Your home directory.
@@ -375,28 +285,21 @@ MAILREADER	Replacement for default reader
 .br
 	(probably /bin/mail or /usr/ucb/mail).
 .br
-NETHACKDIR or HACKDIR	Playground.
+NETHACKDIR	Playground.
 .br
 NETHACKOPTIONS	String predefining several NetHack
 .br
 	options.
 .br
 
-If the same option is specified in both NETHACKOPTIONS and .nethackrc,
-the value assigned in NETHACKOPTIONS takes precedence.
-.br
-
-SHOPTYPE and SPLEVTYPE can be used in debugging (wizard) mode.
-.br
-DEBUGFILES can be used if the program was built with 'DEBUG' enabled.
+In addition, SHOPTYPE is used in debugging (wizard) mode.
 .SH "SEE ALSO"
 .PP
-recover(6)
+dgn_comp(6), lev_comp(6), recover(6)
 .SH BUGS
 .PP
 Probably infinite.
-.SH COPYRIGHT
-This file is Copyright (C) \*(Na, \*(Nd for version \*(Nb:\*(Nr.
-NetHack may be freely redistributed.  See license for details.
+
+
 .PP
 Dungeons & Dragons is a Trademark of Wizards of the Coast, Inc.

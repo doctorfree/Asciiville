@@ -1,5 +1,0 @@
-Makefile.* NHSUBST
-*.com NHSUBST
-Install.vms NHSUBST
-sysconf NHSUBST
-* NH_filestag=(file%s_for_VMS_version)

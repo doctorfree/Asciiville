@@ -1,0 +1,666 @@
+2019-01-01  UnNetHack 5.2.0
+	* Support SOURCE_DATE_EPOCH for reproducible builds (patch from Debian)
+	* Players killed by Nazgul will arise as Barrow Wights in bones files
+	  (a slight change from the original mythology, we know)
+	* Reviving drained corpses sometimes won't work, and may destroy 
+	  the corpse. Partially drained corpses are more likely to revive.
+	* Wand wresting happens always when an empty wand is zapped with a chance
+	  depending on BUC state if an effect is produced
+	* Reproducible dungeon layout. Set OPTIONS=seed:number to get the same
+	  dungeon layout.
+	* Vault Guards get angry if you eat gold in front of them. (From Nethack 
+		 Development Code - used with permission)
+	* Several cosmetic changes - additional engravings, hallucinatory monsters, and funny messages.
+	* Picking up scrolls of scare monsters change BUC from blessed to
+	  uncursed to cursed
+	* Default to UTF8graphics on supporting terminals
+	* Putting blessed and uncursed scrolls of charging into a bag of
+	  tricks charges it
+
+	* item changes:
+	  - Decreased weight of all mithril armor, especially ones of elven make
+
+	* user interface improvements:
+	  - Added naming last broken object to #name menu (idea from AceHack/NH4)
+	  - Automatically identify scrolls of scare monster during pickup when
+	    turning to dust or changing known BUC state
+	  - Don't autopickup unpaid items (from NetHack 3.6)
+	  - Change default of shopkeeper sell prompt to 'n' (idea by aosdict)
+	  - Autoidentify wands of undead turning if engraving produces a message
+	  - Added stone, strangled, levitation, flying, and riding indicators
+	    to the status line
+	  - Status indicators on third statuslines
+	  - New option "statuslines" to force 2 or 3 status lines
+	  - Pressing > or < autotravels to the stairs if not already on
+	    the right kind of stairs
+
+	* dungeon layout:
+	  - Backyard of watery castle get trap doors to ensure player can
+	    descend to the VotD
+	  - Replaced lava with water on lava castle
+	  - Don't generate 1000 fountains in bigrm-13
+
+	* customizable colors:
+	  - Dark gray improved on terminals supporting 256 colors
+	  - Configurable system colors using RGB values
+	     For example, put "COLOR=light blue:5f00ff" into your config file
+	  - Find a close match for an arbitrary RGB value in 256 color mode
+	  - New extended command: show_colors
+	  - 24 bit color support by detecting COLORTERM=truecolor
+
+	* bug fixes
+	  - Fixed erroneous messages when remaining in stinking clouds
+	  - Shopkeeper stopping player from entering a shop when having crystal
+	    picks in the inventory
+	  - Fixed improper explosion behavior for wand of fire and wand of cold (reported by Stenno)
+	  - Fixed crash when drained troll corpse evaporated but rot timer was
+	    still set on invalid pointer
+	  - Correctly identify uncursed items in bags dropped on altars when hallucinating
+	  - Prevent potential endless when praying and using perma hallucination
+	  - Fixed crash with a configured nameempty option (found and fixed by tertium)
+	  - Fixed crash in X11 inventory
+	  - Fixed possible endless loop in autotravel on the Rogue level
+	  - Fixed lava breath related crash at the edges of the map
+	  - The chest in the Castle containing the wishing wand can never be
+	    trapped (from 3.6.0)
+	  - Picking up items with invweight shows weight of items including
+	    merged items in inventory (reported by aosdict)
+	  - Added missing extrinsic to chromatic dragon armor
+	  - Disallow wishing for any chromatic dragon related items
+
+	* vanilla bug fixes:
+	  - C343-439: Running NetHack in a terminal window with more than 255
+	              rows or columns produces display errors.
+	  - C343-320: Reading a Scroll of Mail no longer violates illiterate conduct
+
+2013-12-08  UnNetHack 5.1.0
+	* Mind flayer attacks only cause physical damage and int drain
+	* Wands and spells of digging are no longer restricted on maze levels
+	* Sokoban luck penalty removed and added tracking of solving Sokoban
+	  without any tricks
+	* Monster generation increasing with turn count (from SporkHack)
+	* Removed the Quest turn limit
+	* Player vampire gets a charisma bonus when wearing an opera cloak (by L)
+	* Some monster vampires get an opera cloak (from Slash'Em)
+	* Automatically identify potions of sickness, hallucination, and speed
+	  when inhaling their vapors
+	* Poison gas blasts leave a trail of stinking clouds (from UnNetHackPlus)
+	* Magical traps (except for magic portals and anti-magic fields) can be disarmed
+	  with a wand of cancellation (based on the patch by Malcolm Ryan)
+	* Applying zorkmids allows the player to flip a coin (code by Pasi Kallinen)
+	* Sokoban prizes are never cursed or have negative enchantment
+	* Automatically identify wand of cancellation after destroying a bag
+	  of holding with it
+	* Menucolors: setting a color or attribute doesn't remove a previously
+	  set attribute or color (by aaxelb)
+	* Regeneration only causes additional hunger when injured (by Adeon)
+	* Reinstated vanilla behavior for cursed scrolls of gold detection and
+	  adding some traps to the planes
+	* Tourists start with more darts to compensate for more training being
+	  needed to advance weapon skills
+	* Player can wish for up to 100 projectiles (from UnNetHackPlus)
+	* Increase range of properly fired missiles, and crossbow range no 
+	  longer depends on strength (from SporkHack)
+	* Require high strength for crossbow multishot, with a bonus for
+	  gnomes (from GruntHack)
+	* One-eyed Sam is tougher and it's harder to steal from the black market
+	* Nazgul scream attack added, with limited range (from UnNetHackPlus, based
+	  on code from SporkHack)
+	* Aleaxes are created with exact copies (barring artifacts) of your
+	  wielded weapons and armor (provided they are actual weapons); when
+	  your own god sends a hostile monster, it will always be an Aleax (by L)
+	* Remove bonus for role special spells
+	* It is impossible to know both the speed and location of a quantum mechanic
+	* It is possible to get vampire blood out of a sink; additionally, the
+	  random potions out of a sink can have any BUC, depending on luck
+	* Eating a disenchanter corpse cures hallucination and has a chance of
+	  removing a random intrinsic, 20% chance if hallucinating, 50% otherwise
+	* Elven/vampiric players do not regenerate health while touching iron/silver with
+	  bare skin (respectively), unless the iron/silver object is their quest artifact
+	* Let intelligent monsters pick up and use keys (idea by Christian Stegen)
+	* Confused monks get a bonus of 1 AC while confused as a reference to drunken boxing
+
+	* New config option for customizing monster letter in UTF8graphics:
+	  - MONSTERSYMBOL='horse':U+0127 # latin small letter h with stroke
+
+	* item changes:
+	  - Autoidentify BUC of products from BUC identified item generators (from UnNetHackPlus)
+	  - Wearing fedora increases luck of archaeologists (from UnNetHackPlus)
+	  - Applying certain wands has a chance of creating a related trap
+	  - Land mines and beartraps weigh less (from UnNetHackPlus)
+	  - Sokoban's Amulet of ESP replaced with an Amulet of Flying
+	  - Luckstones dramatically slow luck timeout instead of preventing it
+	      completely. Blessed luckstones slow the timeout of positive luck,
+	      cursed luckstones negative luck, and uncursed luckstones both.
+	  - Reading a Scroll of Light while confused summons some (black) lights
+	  - Reading a non-blessed scroll of punishment while confused summons a Punisher. BE CAREFUL
+	  - A horn of plenty has a *small* chance to produce potions of [vampire] blood
+	  
+	* artifact changes:
+	  - From SporkHack:
+	    - All the weapons below warn against and have 20% instakill chance 
+	      against their target monsters.
+	    - Dragonbane is now a dwarvish spear that conveys fire, cold, shock,
+	      acid, poison, acid, and disintegration resistance while wielded.
+	    - Giantslayer is now a sling that gives 18/** STR while wielded or
+	      in the alternate weapon slot.
+	    - Werebane conveys polymorph control while wielded.
+	    - Ogresmasher gives 25 CON while wielded.
+	    - Trollsbane prevents trolls from leaving corpses while wielded.
+	  - Other:
+	    - Luck Blade added, first sacrifice gift for Convicts
+	    - Grimtooth is the first sacrifice gift for Rogues; it is now
+	      permanently poisoned and grants poison resistance while wielded
+	    - The Longbow of Diana gives +1 multishot and +1 damage bonus when
+	      firing any type of arrow
+	    - Excalibur can be cleanly untrapped when embedded in dungeon
+	      features if at least devoutly lawful; it also tends to appear
+	      there when gifted or wished for
+	    - Replaced the Orb of Detection with Itlachiayaque as the Archeologist
+	      quest artifact: a shield of reflection that grants fire resistance,
+	      ESP, half spell damage, and produces stinking clouds when invoked (by L)
+
+	* livelog: report bag of holding explosions
+
+	* new role: Convict class, based on the patch by Karl Garrison
+
+	* removed monsters:
+	  - anti-matter vortices
+
+	* replaced monsters:
+	  - gold dragons replaced with glowing dragons
+
+	* new monsters:
+	  - Sheol-specific monsters:
+	    - blue slimes
+	    - crystal ice golems
+	    - chillbugs
+	    - ice golems
+	    - Punishers
+	    - white nagas
+	  - Moria-specific monsters:
+	    - deep orcs
+	  - Unique monsters:
+	    - Executioner (Sheol)
+	    - Durin's Bane (Moria)
+	    - Watcher in the Water (Moria)
+	    - Robert the Lifer (Convict quest leader)
+	    - Warden Arianna (Convict quest nemesis)
+	  - General monsters:
+	    - dark Angels
+	    - white naga hatchlings
+	    - locusts (from SporkHack)
+	    - weeping angels
+	    - weeping archangels
+	    - evil eyes
+	    - shambling horrors (from Sporkhack)
+	    - dungeon ferns, sprouts, and spores
+	    - arctic ferns, sprouts, and spores
+	    - blazing ferns, sprouts, and spores
+	    - swamp ferns, sprouts, and spores
+	    - Devil's Snare
+	    - uranium imps
+
+	* dungeon layout:
+	  - Length of Town branch reduced and special filler level added
+	  - Drastically increased generation probability of Fort Ludios portal
+	  - New branch: Sheol
+	  - New branch: The Ruins of Moria
+
+	* level changes:
+	  - Only the Sanctum and the Astral Plane are unmappable levels
+	  - Vlad's Tower contains "coffins" instead of chests, and coffins
+	      may be found in graves
+	  - Instead of two scrolls of earth, Sokoban levels have one scroll
+	      of earth with a 50% chance of a second one
+	  - Elemental Planes each have a scroll related to their element
+	      somewhere on the level
+	  - Monster generation on the Oracle level is different from vanilla
+
+	* new levels:
+	  - Black market version with One-eyed Sam promoted to management
+	  - Special non-persistent level in the Ruins of Moria branch
+
+	* options:
+	  - default of sortloot changed to 'loot'
+	  - Allow exact numbers in STATUSCOLOR settings (from NAO)
+	  - Permanent hallucination conduct option: perma_hallu
+	  - Disable death drops conduct option: deathdropless
+	  - Disable Elbereth conduct option: elberethignore
+	  - New options:
+	    - wound_message -- Healers can receive Crawl-style damage
+		messages indicating the current health of their foes
+	    - invweight -- Display current weight of your inventory
+		and the maximum amount you can carry on the status
+		line (from SLASH'EM 0.7)
+	    - showweight -- Display the weight of individial items in
+		your inventory (from SLASH'EM 0.7)
+	    - nameempty -- Automatically #name wands known to be empty
+		
+	* role differentiation:
+	  - Tourists get automatic type identification for shop items
+	  - Healers can see how wounded monsters are (by L)
+	  - Knights get a weight bonus for body armor heavier than
+	      studded leather armor
+	  - Archeologists can enchant fedoras to +7
+
+	* skill changes:
+	  - Galloping duration depends on riding skills (idea by Beolach,
+	      code by Pasi Kallinen)
+	  - Skill gain for spells is faster than skill gain for weapons
+	  - Riding skill is exercised more quickly, closer to vanilla
+
+	* extended commands:
+	  - #vanquished: Shows a list of all vanquished monsters
+	  - #tip: Tips over a container to empty it of its contents
+
+	* user interface improvements:
+	  - HP notify, showing HP changes in the message area (from NAO)
+	  - Menus made aware of the maximum count of an item (by heinrich5991)
+	  - Message for some monster cancellation events
+	  - When standing on Elbereth, show it in status lines
+	  - New paranoid options: paranoid_lava and paranoid_water, asks for
+	      confirmation before walking into known lava and water squares
+	      unless the player knows that worn water walking boots make it safe
+	  - Dump log: mark starting inventory items with a *
+	  - Automatically ask whether to unlock when #looting a locked container
+	      and carrying an unlocking tool (from UnNetHackPlus)
+	  - Show remaining memory in spellcasting menu as percentage (from AceHack)
+	  - Applying a spellbook allows the player to flip through the pages,
+	      providing an indication of how many more times it can be read
+	  - The #enhance menu indicates when skills require "just a little" more
+	      exercise before they may be enhanced
+	  - Blessed charging identifies how many charges an item has (from AceHack)
+	  - When targeting a coordinate, you can press @ to move cursor to
+	      yourself. (from NAO, idea from b_jonas)
+	  - Dragons auto-ID after observing breath attacks (from UnNetHackPlus)
+	  - Dragons auto-ID after being probed (from DynaHack)
+	  - You can level-port to levels based on their annotation
+	  - Rustproof/Erodeproof/Fixed is known by default (from DynaHack)
+	  
+	* bug fixes:
+	  - Fixed crash when player gets killed when entering a new level and
+	    a trap on the previous level causes a null pointer dereference
+	    when writing the HTML map (related to C343-20).
+	  - Really reduce occurrences of hint daemon to once per game
+	  - Fixed crash with ray beams at edges of maps
+	  - Fixed missing item name with traditional menustyle
+	  - Disabled chromatic dragon generation by monster summoning
+	  - Fixed sporadic crash with hitpointbar when hp was below 0
+	  - Clear dungeon overview info for bones files (reported by Christian
+	    Stegen)
+	  - Fixed crash when destroying bag of holding containing gold pieces
+	  - Fixed gold not merging in containers after container has been BUC
+	    tested on altars
+	  - Empty bag of tricks don't get destroyed by wands of cancellation
+	  - Fixed false warning in dungeon overview when encountering
+	    lighting shops
+	  - Blasts or potions of acid destroy iron bars
+	  - Metallivores can eat through iron bars
+
+	* vanilla bug fixes:
+	  - Prevent the Book of the Dead from being destroyed when the
+	    player falls into lava. (from GruntHack)
+	  - Fix security bug in options handler (reported by Matthew Daley,
+	    fixed by Pasi Kallinen)
+	  - Honor pickup_burden when picking up gold.
+	  - Fix TTY crashing when a location has more than 32k items (from NAO)
+	  - Correct article when choking on named artifacts
+	  - Fix crash while restoring game when riding and wielding an
+	    artifact with SPFX_WARN or SPFX_WARN_S (e.g. Sting or Dragonbane)
+	  - Fix crash when teleporting onto a sink while equipping levitation
+	    boots. (found by Alex Smith)
+	  - C343-8: Plural of Nazgul is Nazgul, not Nazguls
+	  - C343-52: Worn or wielded objects destroyed by dipping into lit
+	             potions of oil are not handled properly; this can result
+	             in odd game behavior.
+	  - C343-175: Chatting to prisoners may give an inappropriate message
+	    (from UnNetHackPlus, thanks to Reddit user Nuclear_Winterfell)
+	  - C343-162: Ungrammatical Magicbane hit messages (by Ray Chason)
+	  - C343-424: Unlit candelabrum becomes unlightable if candles have
+	              exactly one turn of fuel left and it was applied in the
+	              wrong location.
+
+2012-04-01  UnNetHack 4.0.0
+	* Uncursed and blessed scrolls of magic mapping reveal secret doors
+	* Blessed scrolls of magic mapping reveal objects
+	* Dump log: show same information on final dump as wizard mode
+	* Minotaurs respect Elbereth
+	* Bones level tracking
+	* Conduct: Racial armor tracking
+	* extra AC point per worn piece of racial armor
+	* Reduce occurrences of hint daemon to once per game
+	* Automatically identify rings dropped into a sink when message is
+	  shown
+	* Allow stethoscopes to identify egg types (unless hallucinating)
+	  (from SporkHack)
+	* Reduce AC of dragon scales to 1 and dragon scale mails to 5
+	* Killing your Quest leader opens up the stairs to the lower quest
+	  levels (from SporkHack)
+
+	* new branch:
+	  - the Dragon Caves (from NetHack Brass R/S)
+
+	* new dungeon features:
+	  - muddy swamp (from NetHack Brass)
+
+	* added items:
+	  - chromatic dragon scales and scale mail
+
+	* new monsters:
+	  - chromatic dragons
+	  - wax golems (providing candles as death drop) (from Slash'Em)
+	
+	* new levels:
+	  - Sokoban levels (from GruntHack)
+
+	* bug fixes:
+	  - Draw health bar in inverse when color is disabled (reported by
+	    Bernard Helyer)
+	  - Warn atheist player when trying to offering the Amulet of Yendor
+	  - Workaround for preventing the stairs to Vlad's tower appearing
+	    in the wizard's tower
+
+	* build fixes:
+	  - Compilation failed on openSUSE when trying to link with curses but
+	    tparm being present in ncurses (reported by Roger Koot)
+
+2012-02-05  UnNetHack 3.6.1
+	* Scatter contents of bag of holding explosion instead of
+	  destroying it (from SporkHack)
+	* Quest leaders can smash rocks when angry (from SporkHack)
+	* Blackmarket shopkeeper can smash rocks when angry
+	* Strength bonus for two-handed weaponry is doubled. (from SporkHack)
+	* Tins made from giant turtles are delicious and nutritious (by Bernard Helyer)
+	* Gauntlets of power give +7 damage bonus to differentiate
+	  from 18/** (from SporkHack)
+
+	* Win32:
+	  - Standard Windows GUI bundled
+	  - HTML dumps enabled
+
+	* New option: bones: allow player control of loading bones (partly
+	  from NAO)
+
+	* user interface improvements:
+	  - Monster Targeting v1.2 (by Pasi Kallinen)
+	  - Changed 'C' to present a menu (from NAO)
+	  - Hiding useless options in TTY mode
+	  - Display items in inventory list
+
+	* bug fixes:
+	  - Fixed crash when player polyed into gold dragon because of wearing
+	    a gold dragon armor and a bones file getting written and the gold
+	    armor getting removed during bones inventory trimming
+	  - replace "dungeon" when applying drum of earthquake with
+	    appropriate description depening on branch or level
+
+	* vanilla bug fixes:
+	  - C343-72:  You get confusing messages when you stop levitating
+	              while on a flying steed. (by Edoardo Spadolini)
+	  - C343-174: Drum of earthquake gives inappropriate message if hero
+	              or monster is in a pit.
+
+2011-10-08  UnNetHack 3.6.0
+	* changing color of monster with config line:
+	  MONSTERCOLOR=acid blob:lightcyan
+	* HTML dump: output IBMgraphics and DECgraphics characters
+	* Multiple bones files per level (not on Win32)
+	* Autoconf compliant installation directory variables
+	* added new tiles and fixed building of 16x16 tiles (by Stephan T. Lavavej)
+	* Curses GUI updated to last version
+	* Giantslayer grants STR 18/** when wielded
+	* Simple hint mode
+	* New config option for changing order of spells in spell menu:
+	  SPELLORDER=ZzqwertuiopasdfghjklyxcvbnmQWERTUIOPASDFGHJKLYXCVBNM
+	* Hallucination: fictional currencies
+
+	* more candles:
+	  - lighting shop in orcus town
+	  - Gnomes get candles (more likely in dark mines) (from AceHack)
+
+	* patches:
+	  - DYWYPISI? (adds identification details to dump) (by Jafet)
+	  - Grudge (some NPC monsters attacking each other) (by Nephi)
+	  - MSGTYPE option (by Pasi Kallinen)
+	  - Sortloot (by Jukka Lahtinen)
+	    * changed to sort by description, BUC and more
+	  - Quiver Fired Ammunition (by Jukka Lahtinen)
+
+	* user interface improvements:
+	  - Autoexplore (from AceHack)
+	  - New category menu option: "Unidentified items"
+	  - 'X' toggles twoweaponing, explore mode is on alt-x resp. #xplore
+	  - BUC items inside containers dropped on altars (from AceHack)
+	  - stairs leading to branches are colored yellow
+	  - inventory improvement: generic item usage menu (from AceHack)
+	  - visualized HP bar(hitpointbar) activated by default
+	  - visual indicator showing which spells can be refreshed (from K-Mod)
+	  - show level annotation when entering level (idea by Chris Smith)
+	  - refreshing spells is allowed at all time (with prompt) (from AceHack)
+	  - Automatically apply unlocking tool when trying to open a locked door
+	  - Options paranoid_hit and paranoid_quit on by default
+	  - Don't autopickup sokoban prizes
+	  - Auto-opening doors when using autotravel
+
+	* new dungeon features:
+	  - dead trees (from NetHack Brass)
+
+	* vanilla bug fixes:
+	  - C343-74:  Entering a long running, uninterruptible command after
+	              stoning starts will kill you.
+	  - C343-198: Playing in a 20 or 21 line window can cause the game to
+	              crash.
+	  - C343-171: Silver weapon damage message is sometimes missing when
+	              hero is polymorphed
+
+	* bug fixes:
+	  - HTML dump: fix crash if monster name is too long
+	  - Fixed crashes when attacking long worms on flipped levels
+	  - Fixed ctrl-e overwriting engraved engravings with dust messages
+	  - Workaround for preventing the stairs to Vlad's tower appearing
+	    in the wizard's tower
+	  - Fixed breaking of pacifist conduct when killing a monster with
+	    an unknown rolling boulder trap
+	  - Fixed crash in wizard mode when using extmenu set to true
+	  - Cheapskate shopkeepers calculated unknown gem prices as if they
+	    were known.
+	  - Enable entering pits with > on undiggable levels
+	  - Blackmarket shopkeeper not blocking player carrying a digging tool
+	  - Draining corpses shouldn't make your fingers slippery
+	  - Prevent player vampire from rising as other monster
+
+2010-10-10  UnNetHack 3.5.3-1
+	* bug fixes:
+	  - Quest nemesis not carrying bell of opening
+	  - Door being created in the corner of a room
+	  - Mine levels being lit too often
+
+2010-09-04  UnNetHack 3.5.3
+	* Conflict makes blackmarket shopkeeper angry
+	* Fully eroded armor gets destroyed
+	* Lowered the needed experience level for the quest
+	* HTML dump
+	* Pi day support
+	* Reduced Sokoban branch by one level
+	* Vampires as player selectable starting race (from Slash'Em)
+	* Remove instadeath poison, reduce hp and maxhp instead (from SporkHack)
+
+	* patches:
+	  - Conduct: Elbereth tracking (by Ray Kulhanek)
+	  - Dungeon Map Overview 3 (by Hojita Discordia)
+	  - Extended Conducts v2.3 (by Andreas Dorn)
+	  - Paranoid Patch (by various)
+	  - Splittable #adjust Patch (by Sam Dennis and Jukka Lahtinen)
+	  - Tutorial (by Alex Smith)
+
+	* user interface improvements:
+	  - auto-ID of rings of regeneration when hurt
+	  - automatically talk to monsters if only one is next to the player
+	  - Ctrl-e automatically writes resp. engraves "Elbereth"
+	  - multiple items on floor shown in reverse video
+	  - show price of items in shops without #chatting
+	  - Curses GUI
+	  - visualized HP bar
+	  - new Paranoid option: paranoid_trap, asks for confirmation before
+	      walking into known traps
+
+	* vanilla bug fixes:
+	  - C343-12:  You can't use '>' to enter a pit.
+	  - C343-94:  Probing a re-animated statue may cause a panic.
+	  - C343-189: Temple donations and protection lost to gremlin attack
+	              interact incorrectly.
+	  - C343-235: Casting spell of protection gives incorrect message if
+	              hero is swallowed or in rock.
+	  - SC343-8:  Re-animating a statue containing gold produces too much
+	              gold.
+	  - SC343-20: Hangup save while picking up gold in a shop may
+	              duplicate the gold.
+
+	* added items:
+	  - scroll of flood
+
+	* removed items:
+	  - scroll of amnesia
+
+	* new rooms:
+	  - instrument shop (adapted from NetHack Brass RS)
+	  - pet stores (from Slash'Em)
+	  - tin shops (from Slash'Em)
+
+	* new monster:
+	  - giant turtle (blocks vision) (from SporkHack)
+
+
+2010-01-10  UnNetHack 3.5.2-1
+	Crash bugfix: Prevent alchemizing not existing potions
+
+
+2009-12-09  UnNetHack 3.5.2
+	* Increased skill levels
+	* Blood-sucking and biting Vampires (from Slash'Em)
+	* New option: showdmg (only in wizmode)
+	* Trollsbane: grants hungerless regeneration
+	* Vorpal Blade: +1d8 special damage
+	* Prevent crash when rn2 <= 0 is called
+	* Vibrating square: messages when player is near
+
+	* new items:
+	  - potion of blood and vampire blood (from Slash'Em)
+
+	* Patches:
+	  - Bag of Tricks Enhancement Patch (by Nephi)
+	  - Breaking a camera may release a picture painting demon (by L)
+	  - Camera Demon (by L)
+	  - Cancellation Patch (by Malcolm Ryan)
+	  - Color alchemy Patch (by Nephi)
+	  - Free Fortune Cookie (by Nephi)
+	  - Litmus Patch (by Dylan O'Donnell)
+	  - Monk specific greeting and goodbye (by Haakon Studebaker)
+	  - Oily corpses (by L)
+	  - Qwertz_layout Patch (by Stanislav Traykov)
+	  - While Helpless (by Pasi Kallinen)
+
+	* vanilla bug fixes:
+	  - C343-55:  "Ulch" messages have inconsistent capitalization.
+	  - C343-116: Grammar error in messages related to choking on gold.
+	  - C343-136: A samurai quest guardian message uses "ninja" where
+	              "ronin" is intended.
+	  - C343-211: Engraving under water gives a poorly worded message.
+	  - C343-231: Time is distorted while sinking into lava.
+
+	* user interface improvements:
+	  - Interrupt a multi turn action if hit points or magical energy is restored 
+
+
+2009-06-13  UnNetHack 3.5.1
+	* new levels:
+	  - Fort Ludios levels
+	  - Sokoban levels (by Pasi Kallinen)
+	  - Medusa levels (by Pasi Kallinen)
+	  - Castle levels (by Pasi Kallinen)
+	  - Bigrooms (by Pasi Kallinen)
+	  - Heck² levels (by Kelly Bailey)
+	  - new mine town: Orcish Town (from SporkHack)
+	  - nymph level (from Slash'Em)
+	  - the Blackmarket (by Massimo Campostrini)
+	  - flipped levels patch (by Pasi Kallinen)
+
+	* new rooms:
+	  - garden
+	  - dilapidated armouries (by L)
+
+	* new items:
+	  - iron safes (from SporkHack)
+	  - rings of gain intelligence/wisdom/dexterity (from Slash'Em)
+	  - tinfoil hat (by L)
+
+	* item behaviour changes:
+	  - Amulet of Yendor may teleport away when dropped
+	  - Scrolls of gold detection: confused reading shows a random item class
+	  - Scrolls of genocide kill monster on level (uncursed) or globally (blessed) 
+
+
+	* Patches:
+	  - Astral Escape (via GruntHack from Chi)
+	  - Dump patch (by Jukka Lahtinen)
+	  - Dungeon growths (by Pasi Kallinen)
+	  - Exotic Pets (by Rob Ellwood)
+	  - Extinct and showborn patch (from Jukka Lahtinen)
+	  - Randomized Planes (by Patric Mueller)
+	  - Simple mail (from dgamelaunch)
+	  - xlogfile (by Aardvark Joe)
+
+	* vanilla bug fixes:
+	  - Astral Call Bug:
+	    SC343-11: It's possible to easily find the identity of a high
+	              priest on the Astral plane.
+	    SC343-12: Hero using telepathy can abuse Call on the Astral Plane.
+	  - C343-8:   Plural of Nazgul is Nazgul - not Nazguls.
+	  - C343-19:  Dipping acid in a fountain may not destroy the acid.
+	  - C343-100: Game may crash if thrown potion hits bars before a
+	              monster.
+	  - C343-179: If a monster is killed or tamed while over water (or by
+	              a drawbridge) while carrying a potion of acid, the game
+	              may panic.
+	  - C343-218: Applying a wielded cream pie can crash the game.
+	  - C343-258: Grammar error in samurai quest: "wakarimasu?" instead of
+	              "wakarimasu ka?"
+	  - C343-259: "Dr. Dolittle" is spelled incorrectly.
+	  - C343-268: Used up potion of acid may end up in bones file.
+	  - C343-275: If a lit, wielded, candle or potion of oil burns out,
+	              the game may crash.
+	  - C343-276: If a figurine auto-transforms while wielded or worn, the
+	              game may crash.
+	  - C343-298: Kicking at "empty space" uses no time.
+	  - C343-318: Opening or closing the castle drawbridge using music
+	              takes no time.
+	  - C343-324: Cutting a long worm in two will crash the game if the
+	              cut takes the worm to 1 HP or if long worms had become
+	              extinct.
+
+	* new monsters:
+	  - Cthulhu (from Slash'Em Lethe)
+	  - anti-matter vortex (from NetHack Brass)
+	  - disintegrator (from Nicholas Webbs biodiversity patch)
+	  - gold dragons (by Nephi)
+	  - snow ants (from Slash'Em)
+	  - vorpal jabberwock (by L)
+
+	* user interface improvements:
+	  - auto open doors (by Stefano Busti)
+	  - menucolors (by Pasi Kallinen)
+	  - pickup thrown objects (by Roderick Schertler)
+	  - status colors (by Shachaf & Oren Ben-Kiki)
+	  - window edge (by Pasi Kallinen)
+
+	* unlimited growing of scores prevented
+	* Bribable demons demand more money (from SporkHack)
+	* Prevent excessive pudding farming by halving max hp of puddings
+	* Choice of Sokoban prize (from NetHack Brass)
+	* Quest nemesis don't respect Elbereth
+	* Unique demons don't respect Elbereth
+	* The Heart of Ahriman gives displacement and energy regeneration 
+	* Throne: no wishes
+	* Towel day support
+	* Death talks in CAPITAL LETTERS

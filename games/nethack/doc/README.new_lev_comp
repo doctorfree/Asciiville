@@ -1,0 +1,146 @@
+What is this patch?
+---------------------
+Almost a total redesign of the special level code;
+the level compiler outputs a kind of a bytecode, which Nethack can
+read and execute. The output of the executed bytecode program
+is a dungeon level.
+Most of the changes are not visible to normal player.
+
+
+Visible changes:
+
+-New wizard-mode extended command #mazewalkmap, which shows the
+ MAZEWALK paths.
+
+Changes under the hood:
+
+-*.des file format change: If the level is LEVEL-type,
+ replace DOORs with ROOMDOORs.
+
+-"IF [xx%] THEN ... ENDIF;"
+ and
+ "IF [xx%] THEN ... ELSE ... ENDIF;"
+ (See dat/sokoban.des for an example)
+
+-It's much easier to shoot yourself in the foot when creating
+ new special levels.  For example, MAZE-level shops do not get
+ stocked, unless the shop areas are defined before the doors.
+ (This was evident in orcustown)
+
+
+Affected Files:
+-----------------
+include/mkroom.h
+include/sp_lev.h
+doc/README.new_lev_comp	(this file)
+src/cmd.c
+src/mkmaze.c
+src/sp_lev.c
+util/lev_comp.l
+util/lev_comp.y
+util/lev_main.c
+dat/*.des
+
+
+BUGS:
+-------
+-shops do not get stocked unless the shop area is defined before
+ the shop door.
+
+
+TODO, problems, ideas and other miscellany:
+---------------------------------------------
+-There may be some regressions, due to the fact that I basically took
+ the 3.3.1 new_lev_comp diff, and applied it by hand on to 3.4.2, but
+ I did check the incremental diffs, up to 3.4.2 and added the missing
+ new parts to the files changed by this patch.
+ (minetn-6 is buggy due to remove_rooms(), as in vanilla 3.4.2)
+
+-Due to the changes how MAZEWALKs are done and how they keep track which
+ parts of the level they should walk on, empty mazes may now get filled
+ with slightly fewer items/traps, etc.
+
+-sort_rooms() causes a problem with subroom door indexes.
+ You can tell when the problem shows up only because shops are
+ not filled correctly; eg. shopkeepers are out of their shops, etc.
+ Currently all I've done is remove sort_rooms() from the random
+ corridor creation, as this doesn't seem to cause any problems.
+
+-When doing ROOM-type level, there's no easy way to put monsters
+ or objects, etc, in a parent room on a random coord, because
+ subrooms come afterwards, and likely on top of them.
+ This causes eg. monsters to be inside subroom walls.
+ Could maybe make change the [sub]room definition,
+ ROOM: <blahblah>
+     <define room stuff here>
+     SUBROOM: <blahblah>
+	      <define subroom stuff here>
+     ENDROOM;
+     <define room stuff here>
+ ENDROOM;
+
+-maybe allow subrooms in a subroom? Need a stack where you push
+ the parent room, while doing the subroom, instead of using
+ mkr and mkrsub in sp_level_coder.
+ But this might complicate level creation a bit too much...
+
+-should be able to list room walls in the room door definition,
+ "ROOMDOOR:false, closed, north|south|west, random"
+ and the door is placed on one of those walls.
+ (then the coordinate must be random)
+
+-src/lev_comp.y: there is no easy way to put back the checks whether
+ mon/obj will be put in a wall, unless we run the special level through
+ the sp_level_coder(), with a flag that says it's a test run, or something.
+
+-Add a "transparent" map char, "x". eg.
+ MAP
+ xxLxx
+ xxLxx
+ LLLLL
+ xxLxx
+ xxLxx
+ ENDMAP;
+ puts a cross made out of lavapools, but doesn't change
+ the mapgrids in those places where there are any 'x'.
+
+-Allow x- and y-align in GEOMETRY and ROOM to be random, eg.
+ GEOMETRY: random, random;
+ Also, an explicitly set coordinates:
+ GEOMETRY: (60,8)
+
+-Allow setting of light-state for each MAP:
+ GEOMETRY: center,center;
+ MAPLIGHT:lit;
+ MAP
+ ...
+ .L.
+ ...
+ ENDMAP;
+ Parameters for MAPLIGHT:
+  "random"  	The map is either light or dark.
+  "lit"	    	The map is lighted.
+  "unlit"   	The map is dark.
+  "nolitchange" No change in the lighting.
+  "litreverse"  Reverse the lighting.
+
+-Add a new command, TERRAIN. For example
+ TERRAIN: (20, 10), 'L', lit;
+ Puts a lighted pool of lava on (20,10).
+
+-Add a new command, LINE. For example
+ LINE: (1,1), (40,10), 'T', lit, true;
+ Creates a lighted line of trees from (1,1) to (40,10). The last parameter
+ is optional. If it's true, the line doesn't have any 'holes' to walk
+ diagonally through.
+
+-Add new commands:
+ SHUFFLE_RANDOM_OBJS, which shuffles the objects given in RANDOM_OBJECTS,
+ SHUFFLE_RANDOM_MONS, which does the same for RANDOM_MONSTERS,
+ SHUFFLE_RANDOM_PLACES, which shuffles RANDOM_PLACES, and
+ EXIT, which exits from the level script immediately.
+
+
+-----
+Pasi Kallinen
+paxed@alt.org

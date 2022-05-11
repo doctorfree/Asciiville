@@ -1,0 +1,41 @@
+                Instructions for installing UnNetHack
+                 on a GNU autoconf supported system
+                =====================================
+
+1.  If your system is supported by GNU autoconf, then you should just be
+    able to change to the top level directory (the one containing the
+    sys and src directories, amoung others) and run:
+
+	% ./configure
+	% make
+	% su -
+	# make install
+
+    Notes:
+    
+    * You do _not_ need to have a copy of GNU autoconf to install UnNetHack.
+
+2.  If you do not like the default set of optional features, then you can
+    use the --enable-FEATURE and/or --disable-FEATURE flags to configure
+    as required. Use configure --help to get a list of the optional feaures
+    available and their default settings.
+
+3.  If the steps above fail for any reason, then your system is probably
+    not supported by GNU autoconf and you should use the system-specific
+    installation instructions in the relevent subdirectory of sys.
+
+4.  If you think you've found a bug in the automatic configuration system,
+    then please report it to <bhaak@gmx.net>.
+    If the problem is that configure exited with an error then, as well as
+    a cut & paste of the error message, please attach the relevant section
+    of config.log (or the whole thing if you're not sure).
+
+5.  If for some reason you need to recreate the configure script, then you
+    should use bootstrap.sh for this purpose. You will need autoconf,
+    automake and pkgconfig for this step.
+
+6.  config.guess and config.sub come from the GNU config package. They should
+    periodically be updated from the official copies. At the time of writing,
+    these can be found here:
+
+	http://savannah.gnu.org/projects/config/

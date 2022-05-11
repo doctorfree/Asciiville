@@ -1,0 +1,384 @@
+#	UnNetHack Makefile.
+#       @configure_input@
+#	SCCS Id: @(#)Makefile.top	3.4	1995/01/05
+
+VPATH=@srcdir@
+srcdir=@srcdir@
+
+# newer makes predefine $(MAKE) to 'make' and do smarter processing of
+# recursive make calls if $(MAKE) is used
+# these makes allow $(MAKE) to be overridden by the environment if someone
+# wants to (or has to) use something other than the standard make, so we do
+# not want to unconditionally set $(MAKE) here
+#
+# unfortunately, some older makes do not predefine $(MAKE); if you have one of
+# these, uncomment the following line
+# (you will know that you have one if you get complaints about unable to
+# execute things like 'data' and 'rumors')
+# MAKE = make
+
+# make UnNetHack
+
+PREFIX   = @prefix@
+prefix   = @prefix@
+
+datarootdir = @datarootdir@
+datadir = @datadir@
+docdir = @docdir@
+dvidir = @dvidir@
+exec_prefix = @exec_prefix@
+libdir = @libdir@
+localstatedir = @localstatedir@
+mkdir_p = mkdir -p --
+bindir = @bindir@
+
+EXEEXT	 = @EXEEXT@
+SCRIPT   = unnethack
+GAME     = unnethack$(EXEEXT)
+GAMEUID  = @OWNER@
+GAMEGRP  = @GROUP@
+
+# Permissions - some places use setgid instead of setuid, for instance
+# See also the option "SECURE" in include/config.h
+GAMEPERM = 04755
+FILEPERM = 0644
+EXEPERM  = 0755
+DIRPERM  = 0755
+VARFILEPERM = 0644
+VARDIRPERM  = 0755
+
+# GAMEDIR also appears in config.h as "HACKDIR".
+# VARDIR may also appear in unixconf.h as "VAR_PLAYGROUND" else GAMEDIR
+#
+# note that 'make install' believes in creating nice tidy directories for
+# installation, free of debris from previous UnNetHack versions --
+# therefore there should not be anything in GAMEDIR that you want to keep
+# (if there is, you'll have to do the installation by hand or modify the
+# instructions)
+# These must agree with the definitions in unixconf.h
+
+# Defs. for non file areas support.
+GAMEDIR = @FILE_AREA_VAR@
+VARDIR = @FILE_AREA_VAR@
+FILE_AREA_VAR = @FILE_AREA_VAR@
+FILE_AREA_SAVE = @FILE_AREA_SAVE@
+FILE_AREA_SHARE = @FILE_AREA_SHARE@
+FILE_AREA_UNSHARE = @FILE_AREA_UNSHARE@
+FILE_AREA_DOC = @FILE_AREA_DOC@
+FILE_AREA_BONES = @FILE_AREA_BONES@
+FILE_AREA_LEVL = @FILE_AREA_LEVL@
+SHELLDIR = $(bindir)
+
+# Shareable (architecture independent) data files which are not candidates
+# for inclusion in DLB libraries (ND) and which are (D). Port specific files
+# per discussions in Install.X11 and Install.Qt
+CNF_SHARE_QTND = x11tiles rip.xpm nhsplash.xpm
+CNF_SHARE_X11ND = x11tiles UnNetHack.ad pet_mark.xbm
+#CNF_SHARE_X11ND = x11tiles UnNetHack.ad pet_mark.xbm
+# CNF_SHARE_X11ND = x11tiles UnNetHack.ad pet_mark.xbm rip.xpm
+# for Atari/Gem
+CNF_SHARE_GEMND = nh16.img title.img GEM_RSC.RSC rip.img
+# for BeOS
+CNF_SHARE_BEND = beostiles
+# for SDL/GL window port
+CNF_SHARE_GLND = gltile16.png gltile32.png gltile64.png gllogo.png glrip.png \
+                 glfont8.png glfont14.png glfont20.png glfont22.png
+# for Gnome
+CNF_SHARE_GNOMEND = x11tiles pet_mark.xbm rip.xpm mapbg.xpm
+# for Proxy
+CNF_SHARE_PROXYND = gltile64.png gltile32.png gltile16.png \
+	gltile64.map gltile32.map gltile16.map
+
+# CNF_SHARE_DATND = $(CNF_SHARE_X11ND)
+# CNF_SHARE_DATND = $(CNF_SHARE_QTND)
+# CNF_SHARE_DATND = $(CNF_SHARE_GLND)
+# CNF_SHARE_DATND = $(CNF_SHARE_PROXYND)
+CNF_SHARE_DATND = @CNF_SHARE_DATND@
+
+CNF_SHARE_DATD = data oracles @OPTIONS_FILES@ quest.dat rumors vaults.dat
+CNF_SHARE_DAT = $(CNF_SHARE_DATD) $(CNF_SHARE_DATND)
+
+# Some versions of make use the SHELL environment variable as the shell
+# for running commands.  We need this to be a Bourne shell.
+# SHELL = /bin/sh
+# for Atari
+# SHELL=E:/GEMINI2/MUPFEL.TTP
+
+# Commands for setting the owner and group on files during installation.
+# Some systems fail with one or the other when installing over NFS or for
+# other permission-related reasons.  If that happens, you may want to set the
+# command to "true", which is a no-op. Note that disabling chown or chgrp
+# will only work if setuid (or setgid) behavior is not desired or required.
+CHOWN = @CHOWN@
+CHGRP = @CHGRP@
+CHMOD = @CHMOD@
+
+#
+# end of configuration
+#
+
+DATHELP = help hh cmdhelp history opthelp wizhelp
+
+SPEC_LEVS = asmod-?.lev baalz-?.lev bigrm-*.lev blkmar-?.lev castle-?.lev fakewiz?.lev \
+	vlt-*.lev \
+	juiblex.lev knox-?.lev town*.lev \
+	medusa-?.lev minend-?.lev minefill.lev minetn-?.lev \
+	oracle.lev orcus-?.lev sanctum.lev soko?-*.lev \
+	hellfill.lev nymph.lev drgn?.lev \
+	tower?.lev valley-?.lev wizard?.lev heck-?-?.lev \
+	sheolfil.lev palace_f.lev palace_e.lev sheolmid.lev \
+	advcal.lev moria?-*.lev \
+	astral.lev air.lev earth.lev fire.lev water.lev
+QUEST_LEVS = ???-goal.lev ???-fil?.lev ???-loca.lev ???-strt.lev
+
+SHARE_DATNODLB = $(CNF_SHARE_DATND)
+UNSHARE_DATNODLB =
+SHARE_DATDLB = $(DATHELP) $(CNF_SHARE_DATD)
+UNSHARE_DATDLB = dungeon $(SPEC_LEVS) $(QUEST_LEVS)
+SHARE_DAT = $(SHARE_DATNODLB) $(SHARE_DATDLB)
+UNSHARE_DAT = $(UNSHARE_DATNODLB) $(UNSHARE_DATDLB)
+
+
+$(GAME): include/autoconf_paths.h
+	( cd src ; $(MAKE) )
+
+all:	$(GAME) recover$(EXEEXT) @GUIDEBOOK@ $(CNF_SHARE_DAT) dungeon spec_levs check-dlb
+	@echo "Done."
+
+# Note: many of the dependencies below are here to allow parallel make
+# to generate valid output
+
+Guidebook:
+	( cd doc ; $(MAKE) Guidebook )
+
+manpages:
+	( cd doc ; $(MAKE) manpages )
+
+data: $(GAME)
+	( cd dat ; $(MAKE) data )
+
+rumors: $(GAME)
+	( cd dat ; $(MAKE) rumors )
+
+vaults.dat: spec_levs
+
+oracles: $(GAME)
+	( cd dat ; $(MAKE) oracles )
+
+#	Note: options should have already been made with make, but...
+@OPTIONS_FILE@: $(GAME)
+	( cd dat ; $(MAKE) options )
+
+quest.dat: $(GAME)
+	( cd dat ; $(MAKE) quest.dat )
+
+spec_levs: $(GAME)
+	( cd util ; $(MAKE) lev_comp )
+	( cd dat ; $(MAKE) spec_levs )
+	( cd dat ; $(MAKE) quest_levs )
+
+dungeon: $(GAME)
+	( cd util ; $(MAKE) dgn_comp )
+	( cd dat ; $(MAKE) dungeon )
+
+Guidebook.txt:
+	( cd doc; $(MAKE) Guidebook.txt )
+
+tiles.bmp: $(GAME)
+	( cd dat ; $(MAKE) tiles.bmp )
+
+x11tiles: $(GAME)
+	( cd util ; $(MAKE) tile2x11 )
+	( cd dat ; $(MAKE) x11tiles )
+
+beostiles: $(GAME)
+	( cd util ; $(MAKE) tile2beos )
+	( cd dat ; $(MAKE) beostiles )
+
+UnNetHack.ad: $(GAME)
+	( cd dat ; $(MAKE) UnNetHack.ad )
+
+pet_mark.xbm:
+	( cd dat ; $(MAKE) pet_mark.xbm )
+
+rip.xpm:
+	( cd dat ; $(MAKE) rip.xpm )
+
+mapbg.xpm:
+	(cd dat ; $(MAKE) mapbg.xpm )
+
+nhsplash.xpm:
+	( cd dat ; $(MAKE) nhsplash.xpm )
+
+nh16.img: $(GAME)
+	( cd util ; $(MAKE) tile2img.ttp )
+	( cd dat ; $(MAKE) nh16.img )
+
+rip.img:
+	( cd util ; $(MAKE) xpm2img.ttp )
+	( cd dat ; $(MAKE) rip.img )
+GEM_RSC.RSC:
+	( cd dat ; $(MAKE) GEM_RSC.RSC )
+
+title.img:
+	( cd dat ; $(MAKE) title.img )
+
+check-dlb: @OPTIONS_FILE@
+	@if egrep -s librarian dat/@OPTIONS_FILE@ ; then $(MAKE) dlb ; else true ; fi
+
+dlb: spec_levs
+	( cd util ; $(MAKE) dlb )
+	( cd dat ; LC_ALL=C ; ../util/dlb cf nhdat $(SHARE_DATDLB) $(UNSHARE_DATDLB) )
+
+
+# recover can be used when INSURANCE is defined in include/config.h
+# and the checkpoint option is true
+recover$(EXEEXT): $(GAME)
+	( cd util ; $(MAKE) recover$(EXEEXT) )
+
+dofiles:
+	target=`sed -n					\
+		-e '/librarian/{' 			\
+		-e	's/.*/dlb/p' 			\
+		-e	'q' 				\
+		-e '}' 					\
+	  	-e '$$s/.*/nodlb/p' < dat/@OPTIONS_FILE@` ;	\
+	$(MAKE) dofiles-$${target-nodlb}
+	(cd src; cp $(GAME) @EXTRA_UNSHARE@ $(DESTDIR)$(FILE_AREA_UNSHARE))
+	@HOST_MSWIN@cp $(srcdir)/sys/winnt/defaults.nh $(DESTDIR)$(FILE_AREA_UNSHARE)
+	@HOST_UNIX@cp $(srcdir)/sys/unix/defaults.nh $(DESTDIR)$(FILE_AREA_UNSHARE)/unnethackrc.default
+	cp util/recover$(EXEEXT) $(DESTDIR)$(FILE_AREA_UNSHARE)
+	if test -f $(srcdir)/doc/Guidebook.txt ; then \
+		cp $(srcdir)/doc/Guidebook.txt $(DESTDIR)$(FILE_AREA_DOC); \
+	fi
+	cp $(srcdir)/dat/license $(DESTDIR)$(FILE_AREA_DOC)
+	cp $(srcdir)/dat/unnethack_dump.css $(DESTDIR)$(FILE_AREA_UNSHARE)
+	@HOST_UNIX@-rm -f $(DESTDIR)$(SHELLDIR)/$(SCRIPT)
+	@HOST_UNIX@sed -e 's;/usr/games/lib/nethackdir;$(FILE_AREA_UNSHARE);' \
+	@HOST_UNIX@	-e 's;HACKDIR/nethack;HACKDIR/$(GAME);' \
+	@HOST_UNIX@	< $(srcdir)/sys/unix/nethack.sh \
+	@HOST_UNIX@	> $(DESTDIR)$(SHELLDIR)/$(SCRIPT)
+# set up their permissions
+	-( cd $(DESTDIR)$(FILE_AREA_UNSHARE) ; $(CHOWN) $(GAMEUID) $(GAME) recover$(EXEEXT) ; \
+			$(CHGRP) $(GAMEGRP) $(GAME) recover$(EXEEXT) )
+	chmod $(GAMEPERM) $(DESTDIR)$(FILE_AREA_UNSHARE)/$(GAME)
+	chmod $(EXEPERM) $(DESTDIR)$(FILE_AREA_UNSHARE)/recover$(EXEEXT)
+	-( cd $(DESTDIR)$(FILE_AREA_DOC) ; \
+			$(CHOWN) $(GAMEUID) license @GUIDEBOOK_TXT@ ; \
+			$(CHGRP) $(GAMEGRP) license @GUIDEBOOK_TXT@ ; \
+			chmod $(FILEPERM) license @GUIDEBOOK_TXT@ )
+	@HOST_UNIX@-$(CHOWN) $(GAMEUID) $(DESTDIR)$(SHELLDIR)/$(SCRIPT)
+	@HOST_UNIX@$(CHGRP) $(GAMEGRP) $(DESTDIR)$(SHELLDIR)/$(SCRIPT)
+	@HOST_UNIX@chmod $(EXEPERM) $(DESTDIR)$(SHELLDIR)/$(SCRIPT)
+
+dofiles-dlb: check-dlb
+	( cd dat ; cp nhdat $(SHARE_DATNODLB) $(DESTDIR)$(FILE_AREA_SHARE) )
+# set up their permissions
+	-( cd $(DESTDIR)$(FILE_AREA_SHARE) ; \
+			$(CHOWN) $(GAMEUID) nhdat $(SHARE_DATNODLB) ; \
+			$(CHGRP) $(GAMEGRP) nhdat $(SHARE_DATNODLB) ; \
+			chmod $(FILEPERM) nhdat $(SHARE_DATNODLB) )
+
+dofiles-nodlb:
+# copy over the game files
+	( cd dat ; cp $(SHARE_DAT) $(DESTDIR)$(FILE_AREA_SHARE) )
+	( cd dat ; cp $(UNSHARE_DAT) $(DESTDIR)$(FILE_AREA_UNSHARE) )
+# set up their permissions
+	-( cd $(DESTDIR)$(FILE_AREA_SHARE) ; $(CHOWN) $(GAMEUID) $(SHARE_DAT) ; \
+			$(CHGRP) $(GAMEGRP) $(SHARE_DAT) ; \
+			chmod $(FILEPERM) $(SHARE_DAT) )
+	-( cd $(DESTDIR)$(FILE_AREA_UNSHARE) ; $(CHOWN) $(GAMEUID) $(UNSHARE_DAT) ; \
+			$(CHGRP) $(GAMEGRP) $(UNSHARE_DAT) ; \
+			chmod $(FILEPERM) $(UNSHARE_DAT) )
+
+update: $(GAME) recover$(EXEEXT) $(CNF_SHARE_DAT) dungeon spec_levs @GUIDEBOOK_TXT@
+#	(don't yank the old version out from under people who're playing it)
+	-mv $(DESTDIR)$(FILE_AREA_UNSHARE)/$(GAME) $(DESTDIR)$(FILE_AREA_UNSHARE)/$(GAME).old
+#	quest.dat is also kept open and has the same problems over NFS
+#	(quest.dat may be inside nhushare if dlb is in use)
+	-mv $(DESTDIR)$(FILE_AREA_UNSHARE)/quest.dat $(DESTDIR)$(FILE_AREA_UNSHARE)/quest.dat.old
+	-mv $(DESTDIR)$(FILE_AREA_UNSHARE)/nhushare $(DESTDIR)$(FILE_AREA_UNSHARE)/nhushare.old
+# set up new versions of the game files
+	( $(MAKE) dofiles )
+# touch time-sensitive files
+	-touch -c $(DESTDIR)$(FILE_AREA_BONES)/bones* $(DESTDIR)$(FILE_AREA_VAR)/?lock*
+	-touch -c $(DESTDIR)$(FILE_AREA_VAR)/wizard* $(DESTDIR)$(FILE_AREA_SAVE)/*
+	touch $(DESTDIR)$(FILE_AREA_VAR)/perm $(DESTDIR)$(FILE_AREA_VAR)/record
+# and a reminder
+	@echo You may also want to install the man pages via the doc Makefile.
+
+install: $(GAME) recover$(EXEEXT) $(CNF_SHARE_DAT) dungeon spec_levs @GUIDEBOOK_TXT@
+# set up the directories
+# not all mkdirs have -p; those that don't will create a -p directory
+	-mkdir -p $(DESTDIR)$(GAMEDIR) $(DESTDIR)$(VARDIR)
+	-mkdir -p $(DESTDIR)$(SHELLDIR)
+	-mkdir -p $(DESTDIR)$(FILE_AREA_VAR) $(DESTDIR)$(FILE_AREA_BONES) $(DESTDIR)$(FILE_AREA_SAVE)
+	-mkdir -p $(DESTDIR)$(FILE_AREA_LEVL) $(DESTDIR)$(FILE_AREA_SHARE) $(DESTDIR)$(FILE_AREA_UNSHARE)
+	-mkdir -p $(DESTDIR)$(FILE_AREA_DOC)
+	-rmdir ./-p
+	-$(CHOWN) $(GAMEUID) $(DESTDIR)$(FILE_AREA_VAR) $(DESTDIR)$(FILE_AREA_BONES) $(DESTDIR)$(FILE_AREA_SAVE) $(DESTDIR)$(FILE_AREA_LEVL)
+	$(CHGRP) $(GAMEGRP) $(DESTDIR)$(FILE_AREA_VAR) $(DESTDIR)$(FILE_AREA_BONES) $(DESTDIR)$(FILE_AREA_SAVE) $(DESTDIR)$(FILE_AREA_LEVL)
+	chmod $(VARDIRPERM) $(DESTDIR)$(FILE_AREA_VAR) $(DESTDIR)$(FILE_AREA_BONES) $(DESTDIR)$(FILE_AREA_SAVE) $(DESTDIR)$(FILE_AREA_LEVL)
+	-$(CHOWN) $(GAMEUID) $(DESTDIR)$(FILE_AREA_SHARE) $(DESTDIR)$(FILE_AREA_UNSHARE)
+	$(CHGRP) $(GAMEGRP) $(DESTDIR)$(FILE_AREA_SHARE) $(DESTDIR)$(FILE_AREA_UNSHARE)
+	chmod $(DIRPERM) $(DESTDIR)$(FILE_AREA_SHARE) $(DESTDIR)$(FILE_AREA_UNSHARE)
+# set up the game files
+	( $(MAKE) dofiles )
+# set up some additional files
+	-( cd $(DESTDIR)$(FILE_AREA_VAR) ; touch perm record logfile @XLOGFILE@ @LIVELOGFILE@ )
+	-( cd $(DESTDIR)$(FILE_AREA_VAR) ; $(CHOWN) $(GAMEUID) perm record logfile @XLOGFILE@ @LIVELOGFILE@ ; \
+			$(CHGRP) $(GAMEGRP) perm record logfile @XLOGFILE@ @LIVELOGFILE@ ; \
+			chmod $(VARFILEPERM) perm record logfile @XLOGFILE@ @LIVELOGFILE@ )
+# and a reminder
+	@echo You may also want to reinstall the man pages via the doc Makefile.
+
+
+# 'make clean' removes all the .o files, but leaves around all the executables
+# and compiled data files
+clean:
+	( cd src ; $(MAKE) clean )
+	( cd util ; $(MAKE) clean )
+
+# 'make spotless' returns the source tree to near-distribution condition.
+# it removes .o files, executables, and compiled data files
+spotless:
+	( cd src ; $(MAKE) spotless )
+	( cd util ; $(MAKE) spotless )
+	( cd dat ; $(MAKE) spotless )
+	( cd doc ; $(MAKE) spotless )
+	-rm -f Makefile include/autoconf.h include/autoconf_paths.h include/win32api.h
+
+include/autoconf_paths.h: Makefile
+	echo '#ifndef AUTOCONF_PATH_H'  >$@
+	echo '#undef AUTOCONF_PATH_H'  >>$@
+	echo '#define AUTOCONF_PATH_H' >>$@
+	echo '#define AUTOCONF_PREFIX  "$(prefix)"' >>$@
+	echo '#define AUTOCONF_LOCALSTATEDIR  "$(localstatedir)"' >>$@
+	echo '#define AUTOCONF_DATADIR "$(datadir)"' >>$@
+	echo '#define AUTOCONF_DATAROOTDIR "$(datarootdir)"' >>$@
+	echo '#define AUTOCONF_DOCDIR "$(docdir)"' >>$@
+	echo '#endif' >>$@
+
+RELEASEVERSION = $(shell grep VERSION_STRING include/date.h | cut -f 2 -d \")
+UNNETHACK_WIN32_DIR = $(DESTDIR)$(prefix)/unnethack-win32-$(RELEASEVERSION)
+UNNETHACK_RELEASE_ARCHIVE_PREFIX = unnethack-$(RELEASEVERSION)
+UNNETHACK_RELEASE_ARCHIVE = $(DESTDIR)$(prefix)/$(UNNETHACK_RELEASE_ARCHIVE_PREFIX).tar.gz
+
+release_archive: $(GAME)
+	rm -f $(UNNETHACK_RELEASE_ARCHIVE)
+	git ls-files | tar cfz $(UNNETHACK_RELEASE_ARCHIVE) --mtime=now --transform 's,^,$(UNNETHACK_RELEASE_ARCHIVE_PREFIX)/,' -T -
+
+win32_release: $(GAME)
+	cp $(srcdir)/ChangeLog  $(DESTDIR)$(GAMEDIR)/ChangeLog.txt
+	cp $(srcdir)/README $(DESTDIR)$(GAMEDIR)/README.txt
+	touch $(GAMEDIR)/News
+	cp $(srcdir)/dat/*.ttf $(DESTDIR)$(GAMEDIR)/
+	convert -verbose $(srcdir)/tilesets/unchozo32b.png $(DESTDIR)$(GAMEDIR)/unchozo32b.bmp
+	vim -c "set fileformat=dos" -c w -c q $(DESTDIR)$(GAMEDIR)/News
+	vim -c "set fileformat=dos" -c w -c q $(DESTDIR)$(GAMEDIR)/defaults.nh
+	vim -c "set fileformat=dos" -c w -c q $(DESTDIR)$(GAMEDIR)/license
+	vim -c "set fileformat=dos" -c w -c q $(DESTDIR)$(GAMEDIR)/ChangeLog.txt
+	vim -c "set fileformat=dos" -c w -c q $(DESTDIR)$(GAMEDIR)/README.txt
+	vim -c "set fileformat=dos" -c w -c q $(DESTDIR)$(GAMEDIR)/Guidebook.txt
+	mv $(DESTDIR)$(GAMEDIR) $(UNNETHACK_WIN32_DIR)
+	cd $(UNNETHACK_WIN32_DIR) && zip -r $(UNNETHACK_WIN32_DIR).zip `echo * | sort -f`

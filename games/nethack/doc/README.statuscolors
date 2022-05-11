@@ -1,0 +1,62 @@
+Statuscolors is a patch for Nethack (version 3.4.3) that attempts to generalize
+the hpmon patch to be more like the menucolor patch. As of v1.2, the
+statuscolors patch may be applied after the menucolor patch (but not before
+it). Unlike menucolor, it does not use regexps. Instead, it provides the
+following options:
+
+To enable statuscolors:
+    OPTIONS=statuscolors
+
+To specify statuscolor options, write:
+    STATUSCOLOR=<option>,<option>
+
+Numeric options have the format <field>%<max-percent>:<color-option>. For
+example:
+    STATUSCOLOR=hp%15:red&bold,pw%100=green
+
+Text options have the format <text>:<color-option>. Text is case-insensitive.
+For example:
+    STATUSCOLOR=hallu:orange,foodpois:red&inverse&blink
+
+A color option is a <color> followed by an optional sequence of &<attr>. Color
+and attribute names are case insensitive. Valid colors are:
+    black blue brown cyan gray green lightblue lightcyan lightgreen
+    lightmagenta magenta none orange red white yellow
+
+Valid attributes are:
+    blink bold dim inverse none underline
+
+A reasonable set of defaults might be:
+    # HP
+    STATUSCOLOR=hp%100=green,hp%66=yellow,hp%50=orange
+    STATUSCOLOR=hp%33=red&bold,hp%15:red&inverse,hp%0:red&inverse&blink
+    # Pw
+    STATUSCOLOR=pw%100=green,pw%66=yellow,pw%50:orange,pw%33=red&bold
+    # Carry
+    STATUSCOLOR=burdened:yellow,stressed:orange,strained:red&bold
+    STATUSCOLOR=overtaxed:red&inverse,overloaded:red&inverse&blink
+    # Hunger
+    STATUSCOLOR=satiated:yellow,hungry:orange,weak:red&bold
+    STATUSCOLOR=fainting:red&inverse,fainted:red&inverse&blink
+    # Mental
+    STATUSCOLOR=hallu:yellow,conf:orange,stun:red&bold
+    # Health
+    STATUSCOLOR=ill:red&inverse,foodpois:red&inverse,slime:red&inverse
+    # Other
+    STATUSCOLOR=held:red&inverse,blind:red&inverse
+
+Changelog:
+
+    v1.2:
+      - Menucolor compatibility.
+
+    v1.1:
+      - Fixed several shameful bugs.
+
+    v1.0:
+      - Initial release.
+
+---
+Shachaf & Oren Ben-Kiki
+shachaf+nethack@gmail.com
+nethack-oren@ben-kiki.org

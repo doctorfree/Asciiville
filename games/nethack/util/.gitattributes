@@ -1,9 +1,0 @@
-*.pl NHSUBST
-*.[ly] NHSUBST
-* NH_filestag=(file%s_for_all_versions)
-
-..files NH_filegenerated=uudecode.exe,tiletxt.c
-uudecode.exe NH_filesgentag=(file%s_generated_for_windows_at_compile_time)
-tiletxt.c NH_filesgentag=(file%s_generated_for_unix_at_compile_time_if_various_tiles_utilities_are_built)
-
-

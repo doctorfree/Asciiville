@@ -1,0 +1,29 @@
+unnethack (5.0.2) unstable; urgency=low
+
+  * New major release.
+
+ -- Patric Mueller <bhaak@gmx.net>  Fri, 15 Jul 2013 22:51:48 +0200
+
+unnethack (4.0.0) lucid; urgency=low
+
+  * New major release.
+
+ -- Patric Mueller <bhaak@gmx.net>  Sun, 01 Apr 2012 16:24:35 +0200
+
+unnethack (3.6.0) lucid; urgency=low
+
+  * New major release.
+
+ -- Patric Mueller <bhaak@gmx.net>  Sat, 08 Oct 2011 18:28:34 +0200
+
+unnethack (3.5.3-0ubuntu3) maverick; urgency=low
+
+  * Fixed build.
+
+ -- Patric Mueller <bhaak@gmx.net>  Sun, 10 Apr 2011 10:54:31 +0200
+
+unnethack (3.5.3-0ubuntu1) maverick; urgency=low
+
+  * Initial release.
+
+ -- Benjamin Rubin <bnrubin@ubuntu.com>  Thu, 11 Nov 2010 18:06:45 -0500

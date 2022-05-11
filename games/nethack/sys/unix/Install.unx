@@ -1,8 +1,6 @@
-                Instructions for installing NetHack 3.7
+                Instructions for installing NetHack 3.4
                            on a UNIX system
                 =======================================
-NB: We are gradually replacing this process with the process documented in
-the file NewInstall.unx.
 
 0.  Read this entire file before starting, and come back to the Notes
     below if you have any problems.  If you are trying to use X11,
@@ -27,10 +25,10 @@ the file NewInstall.unx.
     in Files, which should be in the top directory.)
 
 2.  Your Makefiles may still be in sys/unix with tags on the end of them.
-    If so, run "sh setup.sh hints/unix" in that directory to
-    distribute the Makefiles to places they can do their work.  (If
-    later official patches change these Makefiles, setup.sh should
-    be rerun to make sure you use the current copies.)
+    If so, run "sh setup.sh" in that directory to distribute the Makefiles
+    to places they can do their work.  (If later official patches change
+    these Makefiles, setup.sh should be rerun to make sure you use the
+    current copies.)
 
 3.  Go to the include subdirectory and edit config.h according to the
     comments to match your system and desired set of features.  Similarly
@@ -50,15 +48,15 @@ the file NewInstall.unx.
 6.  Edit the top sections of the src and util Makefiles.  (If you are doing
     a full recompile, or if you got your files from someplace besides the
     official distribution, type 'touch makedefs.c' to make sure certain files
-    get remade instead of relying on the potentially troublesome timestamps.)
-    Then type 'make' in src and go get a cup of
+    (onames.h, pm.h) get remade instead of relying on the potentially
+    troublesome timestamps.)  Then type 'make' in src and go get a cup of
     coffee or take a nap, depending on the speed of your system.  You should
     now have created the game executable.
 
 7.  Go back to the top directory and edit that Makefile, explaining where
     you want everything to be installed.
 
-    Make sure that you follow the comments about setting HACKDIR -- the
+    Make sure that you follow the comments about setting GAMEDIR -- the
     installation process will wipe out the contents of the directory you
     point it at, under the assumption that it's debris from an old version
     of NetHack.  If this is not the case, you'll want to install somewhere
@@ -82,34 +80,12 @@ the file NewInstall.unx.
 8.  Read doc/recover.man or doc/recover.txt to learn how to use the recover
     program.  The recover program can be used in case of a crash to recover
     a game that was in progress.  The recover command is installed in the
-    HACKDIR by default.
-
-9.  If you specified SYSCF (and SYSCF_FILE) in config.h, create the file
-    defined as SYSCF_FILE and fill in any of the following values if you
-    wish to override the compiled-in defaults:
-	WIZARDS= a space-separated list of usernames who can use -D
-		If the first character is '*' then any user can use -D.
-	SUPPORT= one line, probably starting with a verb, telling how to
-		contact your local support person/group for NetHack.  If there
-		is no local support, do not use this line.  Some sample values:
-			call Joan at +1 312 555-1234.
-			email support@example.com
-			visit http://www.example.com/game-support
-	RECOVER= instructions for running recover.  If RECOVER is not
-		available, do not use this line.  Some sample values:
-			To get your game recovered, contact support.
-			Run /usr/local/bin/nh-recover to recover your game.
-			
-		
-    This is a standard config file, so blank lines and lines starting with
-    pound signs are ignored; while other, standard options (such as catname)
-    can be specified in this file, this is considered a bug and may be changed
-    in the future.
+    GAMEDIR by default.
 
 Notes:
 
 1.  Save files and bones files from previous versions will not work with
-    NetHack 3.7.  Don't bother trying to keep them.
+    NetHack 3.4.  Don't bother trying to keep them.
 
 2.  To install an update of this version of NetHack after changing something,
     type 'make update' from the main directory.  If you created the new
@@ -210,7 +186,25 @@ Notes:
     and -xenix.  The cc problems are old enough that a new, working
     version may have been released by this time.
 
-10. Yes, Virginia, you compile NetHack for a NeXT as if it ran UNIX instead
+10. Xenix/286's lex generates a faulty lexical analyser from lev_comp.l.
+    The beta-release of flex 2.3 (available from uunet, osu-cis,
+    prep.ai.mit.edu, etc.) can be used to generate the lexer.
+    The only change to flex is to change "#define yyleng (yy_cp - yy_bp)"
+    to "#define yyleng (int)(yy_cp - yy_bp)" in flex.skel.
+    Flex is not needed with Xenix/386, as its lex generates a proper lexical
+    analyser.  [Xenix instructions by J.T. Conklin]
+
+11. If your system does not have a lex/yacc or flex/bison combination
+    capable of producing the dungeon and level compilers, lex and yacc
+    output from one of our development systems can be found in sys/share.
+    Unfortunately, this output is less portable than the rest of the code,
+    as it contains skeleton parsing code provided by the specific vendor
+    who has no particular incentive to make such skeletons portable, but
+    the output works on most systems.  To try it on yours, copy dgn_comp.h
+    and lev_comp.h to include and dgn_lex.c, dgn_yacc.c, lev_lex.c, and
+    lev_yacc.c to util.
+
+12. Yes, Virginia, you compile NetHack for a NeXT as if it ran UNIX instead
     of Mach.  Just tell NetHack you're a BSD system (Mach is extremely
     close to BSD UNIX for traditional system calls, so this is also a
     likely thing to try for any other programs you want to compile).
@@ -219,7 +213,7 @@ Notes:
     not allowed", you might want to re-install using the setgid option instead
     (see Note 7 above, and the setgid comment in the toplevel Makefile).
 
-11. If you are using Solaris 2.x (aka SunOS 5.x) you shouldn't have to
+13. If you are using Solaris 2.x (aka SunOS 5.x) you shouldn't have to
     do any system configuration -- this is the default.  In case it is
     messed up, follow these instructions.
 
@@ -229,7 +223,7 @@ Notes:
 	config.h: UNIX, TTY_GRAPHICS
 	unixconf.h: SYSV, SVR4, TERMINFO, POSIX_JOB_CONTROL, POSIX_TYPES
 
-    X11_GRAPHICS does work.  You may safely define
+    X11_GRAPHICS does work.  Do not define OPENWINBUG.  You may safely define
     NETWORK, TEXTCOLOR if desired.  Other #defines in these files may be
     defined too, as needed.  Just make sure that the set mentioned here are
     not misdefined, or your compile will fail (do _not_ define BSD or SUNOS4).
@@ -240,16 +234,35 @@ Notes:
     compiler, /usr/bin/cc, or gcc, but _not_ ucbcc.  The lattermost will
     not work.  After this, you should get a clean compile.
 
-12. If you are trying to cross-compile for another system, see the file
-    Cross-compiling.
+    Also, it is recommended that you use FLEX instead of the standard
+    lex bundled with Solaris 2.x (even if that last one should work ;-).
 
-13. If you get a compiler warning about 'get_colors()' being implicitly
-    declared, try uncommenting NEED_GET_COLORS_DECL in unixconf.h.
-    If you get a compiler complaint about tparmdecl() having conflicting
-    declarations, add '#define NOTPARMDECL' to unixconf.h or '-DNOTPARMDECL'
-    to CFLAGS in src/Makefile.  (The hints files for Mac OSX already do the
-    latter.)
+14. If your machine is a 286, 386, or 486 running an appropriate OS, you
+    may wish to use the console speaker driver included in
+    sys/unix/snd86unx.shr.  This will allow audible music to be played
+    on your console speaker in certain appropriate game situations.  The only
+    modification to the main-line code needed to enable use of the driver
+    is defining UNIX386MUSIC or VPIX_MUSIC in unixconf.h.
 
-# NetHack 3.7  Install.unx       $NHDT-Date: 1577568915 2019/12/28 21:35:15 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.14 $
-# Copyright (c) 2012 by Kenneth Lorber, Kensington, Maryland
-# NetHack may be freely redistributed.  See license for details.
+15. If you are trying to cross-compile for another system, there is some
+    support in the src and util Makefiles, but there are still other
+    complications.  It may well be best to make another copy of util,
+    util2, to compile target copies of makedefs, lev_comp, and recover
+    (duplicating the cross-compilation settings from the src Makefile)
+    without disturbing the main build.
+
+    You can use the host makedefs for everything but "makedefs -v", which
+    creates include/date.h, which provides various sanity-checking values
+    for making sure files read by NetHack at run-time are compatible.
+    These values depend on the endianness of your processor, its type
+    sizes, and its compiler's idea of struct packing.  Your host and target
+    computers may disagree on these things, so you'll need to build a target
+    version of makedefs, run "makedefs -v" on your target, and bring the
+    resulting date.h back for the builds on the host.  (Making sure the host
+    makedefs doesn't decide it needs to overwrite it for you. :-)
+
+    You also need a target version of lev_comp, and to provide it with all
+    the dat/*.des files, and copy all the resulting *.lev files back for
+    packaging on the host.
+
+    For recover, you just want the target binary to install on the target.

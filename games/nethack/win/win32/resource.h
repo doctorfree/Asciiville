@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by NetHackW.rc
+// Microsoft Developer Studio generated include file.
+// Used by winhack.rc
 //
 #define IDC_MYICON                      2
 #define IDD_WINHACK_DIALOG              102
@@ -29,7 +29,6 @@
 #define IDB_SPLASH                      146
 #define IDB_RIP                         147
 #define IDD_SPLASH                      148
-#define IDB_PILEMARK                    149
 #define IDC_TEXT_VIEW                   1000
 #define IDC_TEXT_CONTROL                1000
 #define IDC_CMD_MOVE_NW                 1001
@@ -103,22 +102,17 @@
 #define IDC_GETLIN_EDIT                 1309
 #define IDC_EXTCMD_LIST                 1310
 #define IDC_PLSEL_NAME                  1314
-#define IDC_PLSEL_RANDOM                1315
+#define IDC_PLSEL_ROLE_RANDOM           1315
+#define IDC_PLSEL_RACE_RANDOM           1318
+#define IDC_PLSEL_GENDER_RANDOM         1319
+#define IDC_PLSEL_ALIGN_RANDOM          1320
+#define IDC_PLSEL_ROLE_LIST             1323
+#define IDC_PLSEL_RACE_LIST             1324
+#define IDC_PLSEL_ALIGN_LIST            1325
+#define IDC_PLSEL_GENDER_LIST           1326
 #define IDC_ABOUT_VERSION               1327
 #define IDC_ABOUT_COPYRIGHT             1328
 #define IDC_EXTRAINFO                   1331
-#define IDC_PLSEL_ROLE_LIST             1332
-#define IDC_PLSEL_RACE_LIST             1333
-#define IDC_PLSEL_ALIGN_LAWFUL          1334
-#define IDC_PLSEL_ALIGN_NEUTRAL         1335
-#define IDC_PLSEL_ALIGN_CHAOTIC         1336
-#define IDC_PLSEL_GENDER_MALE           1337
-#define IDC_PLSEL_GENDER_FEMALE         1338
-#define IDC_PLSEL_NAME_GROUP            1339
-#define IDC_PLSEL_ROLE_GROUP            1340
-#define IDC_PLSEL_RACE_GROUP            1341
-#define IDC_PLSEL_ALIGNMENT_GROUP       1342
-#define IDC_PLSEL_GENDER_GROUP          1343
 #define IDM_SAVE                        32771
 #define IDM_HELP_LONG                   32772
 #define IDM_HELP_COMMANDS               32773
@@ -143,20 +137,15 @@
 #define IDM_MAP_FIT_TO_SCREEN           32792
 #define IDM_NHMODE                      32794
 #define IDM_CLEARSETTINGS               32795
-#define IDM_SETTING_AUTOLAYOUT          32796
-#define IDM_SETTING_LOCKWINDOWS         32797
-#define IDM_SETTING_SCREEN_TO_CLIPBOARD 32798
-#define IDM_SETTING_SCREEN_TO_FILE      32799
-#define IDM_FUZZ                        32800
 #define IDC_STATIC                      -1
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        146
-#define _APS_NEXT_COMMAND_VALUE         32801
-#define _APS_NEXT_CONTROL_VALUE         1341
+#define _APS_NEXT_RESOURCE_VALUE        145
+#define _APS_NEXT_COMMAND_VALUE         32796
+#define _APS_NEXT_CONTROL_VALUE         1332
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
 #endif

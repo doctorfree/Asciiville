@@ -1,4 +1,4 @@
-/* NetHack 3.7	Window.c	$NHDT-Date: 1596498371 2020/08/03 23:46:11 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.12 $ */
+/*	SCCS Id: @(#)Window.c	3.4	1993/02/02	*/
 /* Copyright (c) Dean Luick, 1992				  */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -8,10 +8,10 @@
  */
 
 #ifndef SYSV
-#define PRESERVE_NO_SYSV /* X11 include files may define SYSV */
+#define PRESERVE_NO_SYSV	/* X11 include files may define SYSV */
 #endif
 
-#ifdef MSDOS /* from compiler */
+#ifdef MSDOS			/* from compiler */
 #define SHORT_FILENAMES
 #endif
 
@@ -23,159 +23,148 @@
 #include <X11/StringDefs.h>
 
 #ifdef PRESERVE_NO_SYSV
-#ifdef SYSV
-#undef SYSV
-#endif
-#undef PRESERVE_NO_SYSV
+# ifdef SYSV
+#  undef SYSV
+# endif
+# undef PRESERVE_NO_SYSV
 #endif
 
 #include "xwindowp.h"
 
-#include "config.h" /* #define for const for non __STDC__ compilers */
-#include "lint.h"   /* for nethack's nhStr() macro */
-#include "winX.h"   /* to make sure protoypes match corresponding functions */
+#include "config.h"
 
 static XtResource resources[] = {
 #define offset(field) XtOffset(WindowWidget, window.field)
     /* {name, class, type, size, offset, default_type, default_addr}, */
-    { nhStr(XtNrows), nhStr(XtCRows), XtRDimension, sizeof(Dimension),
-      offset(rows), XtRImmediate, (XtPointer) 21 },
-    { nhStr(XtNcolumns), nhStr(XtCColumns), XtRDimension, sizeof(Dimension),
-      offset(columns), XtRImmediate, (XtPointer) 80 },
-    { nhStr(XtNforeground), XtCForeground, XtRPixel, sizeof(Pixel),
-      offset(foreground), XtRString, (XtPointer) XtDefaultForeground },
+    { XtNrows, XtCRows, XtRDimension, sizeof(Dimension),
+	  offset(rows), XtRImmediate, (XtPointer) 21},
+    { XtNcolumns, XtCColumns, XtRDimension, sizeof(Dimension),
+	  offset(columns), XtRImmediate, (XtPointer) 80},
+    { XtNforeground, XtCForeground, XtRPixel, sizeof(Pixel),
+	  offset(foreground), XtRString, XtDefaultForeground },
 
-    { nhStr(XtNblack), XtCColor, XtRPixel, sizeof(Pixel), offset(black),
-      XtRString, (XtPointer) "black" },
-    { nhStr(XtNred), XtCColor, XtRPixel, sizeof(Pixel), offset(red),
-      XtRString, (XtPointer) "red" },
-    { nhStr(XtNgreen), XtCColor, XtRPixel, sizeof(Pixel), offset(green),
-      XtRString, (XtPointer) "pale green" },
-    { nhStr(XtNbrown), XtCColor, XtRPixel, sizeof(Pixel), offset(brown),
-      XtRString, (XtPointer) "brown" },
-    { nhStr(XtNblue), XtCColor, XtRPixel, sizeof(Pixel), offset(blue),
-      XtRString, (XtPointer) "blue" },
-    { nhStr(XtNmagenta), XtCColor, XtRPixel, sizeof(Pixel), offset(magenta),
-      XtRString, (XtPointer) "magenta" },
-    { nhStr(XtNcyan), XtCColor, XtRPixel, sizeof(Pixel), offset(cyan),
-      XtRString, (XtPointer) "light cyan" },
-    { nhStr(XtNgray), XtCColor, XtRPixel, sizeof(Pixel), offset(gray),
-      XtRString, (XtPointer) "gray" },
-    { nhStr(XtNorange), XtCColor, XtRPixel, sizeof(Pixel), offset(orange),
-      XtRString, (XtPointer) "orange" },
-    { nhStr(XtNbright_green), XtCColor, XtRPixel, sizeof(Pixel),
-      offset(bright_green), XtRString, (XtPointer) "green" },
-    { nhStr(XtNyellow), XtCColor, XtRPixel, sizeof(Pixel), offset(yellow),
-      XtRString, (XtPointer) "yellow" },
-    { nhStr(XtNbright_blue), XtCColor, XtRPixel, sizeof(Pixel),
-      offset(bright_blue), XtRString, (XtPointer) "royal blue" },
-    { nhStr(XtNbright_magenta), XtCColor, XtRPixel, sizeof(Pixel),
-      offset(bright_magenta), XtRString, (XtPointer) "violet" },
-    { nhStr(XtNbright_cyan), XtCColor, XtRPixel, sizeof(Pixel),
-      offset(bright_cyan), XtRString, (XtPointer) "cyan" },
-    { nhStr(XtNwhite), XtCColor, XtRPixel, sizeof(Pixel), offset(white),
-      XtRString, (XtPointer) "white" },
+    { XtNblack, XtCColor, XtRPixel, sizeof(Pixel),
+	  offset(black), XtRString, "black"},
+    { XtNred, XtCColor, XtRPixel, sizeof(Pixel),
+	  offset(red), XtRString, "red" },
+    { XtNgreen, XtCColor, XtRPixel, sizeof(Pixel),
+	  offset(green), XtRString, "pale green" },
+    { XtNbrown, XtCColor, XtRPixel, sizeof(Pixel),
+	  offset(brown), XtRString, "brown" },
+    { XtNblue, XtCColor, XtRPixel, sizeof(Pixel),
+	  offset(blue), XtRString, "blue" },
+    { XtNmagenta, XtCColor, XtRPixel, sizeof(Pixel),
+	  offset(magenta), XtRString, "magenta" },
+    { XtNcyan, XtCColor, XtRPixel, sizeof(Pixel),
+	  offset(cyan), XtRString, "light cyan" },
+    { XtNgray, XtCColor, XtRPixel, sizeof(Pixel),
+	  offset(gray), XtRString, "gray" },
+    { XtNorange, XtCColor, XtRPixel, sizeof(Pixel),
+	  offset(orange), XtRString, "orange" },
+    { XtNbright_green, XtCColor, XtRPixel, sizeof(Pixel),
+	  offset(bright_green), XtRString, "green" },
+    { XtNyellow, XtCColor, XtRPixel, sizeof(Pixel),
+	  offset(yellow), XtRString, "yellow" },
+    { XtNbright_blue, XtCColor, XtRPixel, sizeof(Pixel),
+	  offset(bright_blue), XtRString, "royal blue" },
+    { XtNbright_magenta, XtCColor, XtRPixel, sizeof(Pixel),
+	  offset(bright_magenta), XtRString, "violet" },
+    { XtNbright_cyan, XtCColor, XtRPixel, sizeof(Pixel),
+	  offset(bright_cyan), XtRString, "cyan" },
+    { XtNwhite, XtCColor, XtRPixel, sizeof(Pixel),
+	  offset(white), XtRString, "white" },
 
-    { nhStr(XtNfont), XtCFont, XtRFontStruct, sizeof(XFontStruct *),
-      offset(font), XtRString, (XtPointer) XtDefaultFont },
-    { nhStr(XtNexposeCallback), XtCCallback, XtRCallback,
-      sizeof(XtCallbackList), offset(expose_callback), XtRCallback,
-      (char *) 0 },
-    { nhStr(XtNcallback), XtCCallback, XtRCallback, sizeof(XtCallbackList),
-      offset(input_callback), XtRCallback, (char *) 0 },
-    { nhStr(XtNresizeCallback), XtCCallback, XtRCallback,
-      sizeof(XtCallbackList), offset(resize_callback), XtRCallback,
-      (char *) 0 },
+    { XtNfont, XtCFont, XtRFontStruct, sizeof(XFontStruct *),
+	  offset(font), XtRString, XtDefaultFont },
+    { XtNexposeCallback, XtCCallback, XtRCallback, sizeof(XtCallbackList),
+	  offset(expose_callback), XtRCallback, (char *)0 },
+    { XtNcallback, XtCCallback, XtRCallback, sizeof(XtCallbackList),
+	  offset(input_callback), XtRCallback, (char *)0 },
+    { XtNresizeCallback, XtCCallback, XtRCallback, sizeof(XtCallbackList),
+	  offset(resize_callback), XtRCallback, (char *)0 },
 #undef offset
 };
 
 /* ARGSUSED */
-static void
-no_op(Widget w,             /* unused */
-      XEvent *event,        /* unused */
-      String *params,       /* unused */
-      Cardinal *num_params) /* unused */
+static void no_op(w, event, params, num_params)
+    Widget   w;			/* unused */
+    XEvent   *event;		/* unused */
+    String   *params;		/* unused */
+    Cardinal *num_params;	/* unused */
 {
-    nhUse(w);
-    nhUse(event);
-    nhUse(params);
-    nhUse(num_params);
-
-    return;
 }
 
-static XtActionsRec actions[] = {
-    { nhStr("no-op"), no_op },
+static XtActionsRec actions[] =
+{
+    {"no-op",	no_op},
 };
 
-static char translations[] = "<BtnDown>:     input() \
+static char translations[] =
+"<BtnDown>:     input() \
 ";
 
 /* ARGSUSED */
-static void
-Redisplay(Widget w, XEvent *event, Region region /* unused */)
+static void Redisplay(w, event, region)
+    Widget w;
+    XEvent *event;
+    Region region;	/* unused */
 {
-    nhUse(region);
-
     /* This isn't correct - we need to call the callback with region. */
-    XtCallCallbacks(w, XtNexposeCallback, (XtPointer)event);
+    XtCallCallbacks(w, XtNexposeCallback, (caddr_t) event);
 }
 
 /* ARGSUSED */
-static void
-Resize(Widget w)
+static void Resize(w)
+    Widget w;
 {
-    XtCallCallbacks(w, XtNresizeCallback, (XtPointer) 0);
+    XtCallCallbacks(w, XtNresizeCallback, (caddr_t) 0);
 }
+
 
 WindowClassRec windowClassRec = {
-    { /* core fields */
-      /* superclass		*/ (WidgetClass) &widgetClassRec,
-      /* class_name		*/ nhStr("Window"),
-      /* widget_size		*/ sizeof(WindowRec),
-      /* class_initialize		*/ 0,
-      /* class_part_initialize	*/ 0,
-      /* class_inited		*/ FALSE,
-      /* initialize		*/ 0,
-      /* initialize_hook		*/ 0,
-      /* realize			*/ XtInheritRealize,
-      /* actions			*/ actions,
-      /* num_actions		*/ XtNumber(actions),
-      /* resources		*/ resources,
-      /* num_resources		*/ XtNumber(resources),
-      /* xrm_class		*/ NULLQUARK,
-      /* compress_motion		*/ TRUE,
-      /* compress_exposure	*/ TRUE,
-      /* compress_enterleave	*/ TRUE,
-      /* visible_interest		*/ FALSE,
-      /* destroy			*/ 0,
-      /* resize			*/ Resize,
-      /* expose			*/ Redisplay,
-      /* set_values		*/ 0,
-      /* set_values_hook		*/ 0,
-      /* set_values_almost	*/ XtInheritSetValuesAlmost,
-      /* get_values_hook		*/ 0,
-      /* accept_focus		*/ 0,
-      /* version			*/ XtVersion,
-      /* callback_private		*/ 0,
-      /* tm_table			*/ translations,
-      /* query_geometry		*/ XtInheritQueryGeometry,
-      /* display_accelerator	*/ XtInheritDisplayAccelerator,
-      /* extension		*/ 0 },
-    { /* window fields */
-      /* empty			*/ 0 }
+  { /* core fields */
+    /* superclass		*/	(WidgetClass) &widgetClassRec,
+    /* class_name		*/	"Window",
+    /* widget_size		*/	sizeof(WindowRec),
+    /* class_initialize		*/	0,
+    /* class_part_initialize	*/	0,
+    /* class_inited		*/	FALSE,
+    /* initialize		*/	0,
+    /* initialize_hook		*/	0,
+    /* realize			*/	XtInheritRealize,
+    /* actions			*/	actions,
+    /* num_actions		*/	XtNumber(actions),
+    /* resources		*/	resources,
+    /* num_resources		*/	XtNumber(resources),
+    /* xrm_class		*/	NULLQUARK,
+    /* compress_motion		*/	TRUE,
+    /* compress_exposure	*/	TRUE,
+    /* compress_enterleave	*/	TRUE,
+    /* visible_interest		*/	FALSE,
+    /* destroy			*/	0,
+    /* resize			*/	Resize,
+    /* expose			*/	Redisplay,
+    /* set_values		*/	0,
+    /* set_values_hook		*/	0,
+    /* set_values_almost	*/	XtInheritSetValuesAlmost,
+    /* get_values_hook		*/	0,
+    /* accept_focus		*/	0,
+    /* version			*/	XtVersion,
+    /* callback_private		*/	0,
+    /* tm_table			*/	translations,
+    /* query_geometry		*/	XtInheritQueryGeometry,
+    /* display_accelerator	*/	XtInheritDisplayAccelerator,
+    /* extension		*/	0
+  },
+  { /* window fields */
+    /* empty			*/	0
+  }
 };
 
-WidgetClass windowWidgetClass = (WidgetClass) &windowClassRec;
+WidgetClass windowWidgetClass = (WidgetClass)&windowClassRec;
 
 Font
-WindowFont(Widget w)
-{
-    return ((WindowWidget) w)->window.font->fid;
-}
+WindowFont(w) Widget w; { return ((WindowWidget)w)->window.font->fid; }
 
 XFontStruct *
-WindowFontStruct(Widget w)
-{
-    return ((WindowWidget) w)->window.font;
-}
+WindowFontStruct(w) Widget w; { return ((WindowWidget)w)->window.font; }

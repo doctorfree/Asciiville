@@ -1,0 +1,21 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	dh_auto_configure -- --with-gamesdir=/var/games/unnethack --bindir=/usr/games --with-unsharedir=/usr/lib/unnethack
+
+override_dh_fixperms:
+	dh_fixperms
+	for filename in perm record logfile xlogfile bones level saves; do \
+		chmod g+w debian/unnethack/var/games/unnethack/$$filename; \
+	done
+	chmod g+w debian/unnethack/var/games/unnethack
+	chgrp -R games debian/unnethack/var/games/unnethack debian/unnethack/usr/lib/unnethack
+	chmod 02755 debian/unnethack/usr/lib/unnethack/unnethack
+

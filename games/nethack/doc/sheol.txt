@@ -1,0 +1,40 @@
+Sheol - The icy cold netherworld.
+(c) 2012 Mikko Juola
+
+    Sheol is a branch in Gehennom that features more danger and less
+    tediousness.
+    ---------------------------------------------------------------------
+
+    It adds:
+
+    - Ice walls and crystal ice walls
+      They act like normal walls but can be melted with a wand
+      of fire. Crystal ice walls are immune to everything except
+      fire and crystal picks. Ice walls can be shattered with
+      a mattock or a pick-axe but wands of digging don't work
+      on them.
+
+    - Ice traps
+      Like fire traps but ice you instead. Protect your potions!
+
+    - New monsters:
+      Crystal ice golem, ice golem, black angel, chillbug, Punisher,
+      white naga and the Executioner. Many of these have abilities
+      not seen in vanilla. Some are highly dangerous!
+
+    - New items:
+      crystal pick
+      It can dig crystal ice walls and has high damage.
+
+    - New levels:
+      Sheol has a new map generator and some hand-made levels.
+
+      Vlad has been put inside Sheol. It will be found somewhere below or at
+      the middle level of Sheol.
+
+    ---------------------------------------------------------------------
+    This branch is aimed at experienced players who think Gehennom is too
+    easy or too tedious. It provides a refreshing change to all those
+    mazes.
+
+

@@ -1,0 +1,149 @@
+#
+# This is the black market
+# Massimo Campostrini (campo@sunthpi3.difi.unipi.it)
+#
+LEVEL: "blkmar-1"
+FLAGS: noteleport, hardfloor, noflip, nommap
+GEOMETRY: center, center
+MAP
+---------------------------------------------------------------------------
+|.|.......................................................................|
+|.|.......................................................................|
+|.|.......................................................................|
+|.|.......................................................................|
+|.|.......................................................................|
+|.|.......................................................................|
+|.|.......................................................................|
+|.|.......................................................................|
+|.|.......................................................................|
+|.|.......................................................................|
+|.|.......................................................................|
+|.|.......................................................................|
+|.|.......................................................................|
+|.+.......................................................................|
+|.|.......................................................................|
+|.|.......................................................................|
+---------------------------------------------------------------------------
+ENDMAP
+NON_DIGGABLE: (00,00,74,17)
+NON_PASSWALL: (00,00,74,17)
+REGION: (03,01,73,16), lit, "black market", filled
+BRANCH: (01,01,01,01), (0,0,0,0)
+DOOR: open, (02,14)
+ENGRAVING: (01,03), engrave, "Pets are not allowed in the shop"
+ENGRAVING: (01,05), engrave, "Thieves will be killed."
+ENGRAVING: (01,07), engrave, "Sorry about the mess. Remember, ask if you need help!"
+ENGRAVING: (01,09), engrave, "Don't even think about stealing anything."
+
+# black marketeer's assistants:
+# from The Hobbit (Tolkien)
+MONSTER:('T', "rock troll"),  (03,03), "William", asleep, peaceful
+MONSTER:('T', "rock troll"),  (03,12), "Thomas", asleep, peaceful
+# from the Bible
+MONSTER:('H', "frost giant"), (03,16), "Goliath", asleep, peaceful
+# from Greek mythology & high-energy physics
+MONSTER:('n', "wood nymph"),  (03,09), "Daphne",  asleep, peaceful
+# Add your favorite monsters here.  Make them peaceful and named,
+# otherwise they will not behave like assistants.
+MONSTER:('&', "balrog"),  (03,04), "Njalnohaar",  asleep, peaceful
+MONSTER:('&', "pit fiend"),  (03,02), "Hilvuuloth",  asleep, peaceful
+MONSTER:('c', "cockatrice"),  (03,13), "Wilbur",  asleep, peaceful
+MONSTER:('c', "cockatrice"),  (03,08), "Simon",  asleep, peaceful
+MONSTER:(':', "salamander"),  (03,11), "Izzy",  asleep, peaceful
+
+
+LEVEL: "blkmar-2"
+FLAGS: noteleport, hardfloor, noflip, nommap
+GEOMETRY: center, center
+MAP
+                           -------------------------------------------------
+         -----------       |.......|...............|.........|.............|
+      ---|.........|---    |.......|...............|.........|.............|
+    --|...............|--  |.......|...............|.........|.............|
+   -|...................|- |.......|..-----------..|......-------..........|
+  -|.....................|-|.......|..|.........|..|......|.....|..........|
+ -|.......................||.......|BB|.........|..|......|..{..-----------|
+ |.........................---------..|.........|..--------......|.........|
+ |....................................|.........|................|.........|
+ |....................................|.........|.............{..|.........|
+ |....................................|---------|...--------.....|.........|
+ |.........................---------..|.........|..--......--....|.........|
+ -|.......................||.......|BB|.........|..|........|..------------|
+  -|.....................|-|.......|..|.........|..|........|..|...........|
+   -|...................|- |.......|..|.........|..|........|..|...........|
+    --|...............|----|.......|..-----.....|..--......--..|...........|
+      ---|.........|---|...|.......|......|.....|...--------...|...........|
+         -S---------###S...|.......|......|.....|..............|...........|
+          ###########  -----------------------------------------------------
+ENDMAP
+NON_DIGGABLE: (00,00,75,18)
+NON_PASSWALL: (00,00,75,18)
+BRANCH: (05,05,13,13), (08,08,10,10)
+
+REGION: (09,09,09,09), lit, "black market foyer", unfilled, irregular
+
+MONSTER:('@', "One-eyed Sam"), (14,09), peaceful
+
+$shops = { 
+  (30,02,30,02), 
+  (30,13,30,13), 
+  (42,05,42,05), 
+  (42,12,42,12), 
+  (55,05,55,05), 
+  (55,12,55,12), 
+  (67,03,67,03), 
+  (67,09,67,09), 
+  (67,15,67,15)
+}
+$shopdoors = { (29,07), (35,13), (38,08), (38,11), (58,06), (51,12),
+  (62,04), (65,08), (63,13) }
+
+SHUFFLE: $shops
+
+REGION: $shops[0], lit, "shop", filled, irregular
+REGION: $shops[1], lit, "scroll shop", filled, irregular
+REGION: $shops[2], lit, "potion shop", filled, irregular
+REGION: $shops[3], lit, "wand shop", filled, irregular
+REGION: $shops[4], lit, "ring shop", filled, irregular
+REGION: $shops[5], lit, "armor shop", filled, irregular
+REGION: $shops[6], lit, "tool shop", filled, irregular
+REGION: $shops[7], lit, "weapon shop", filled, irregular
+REGION: $shops[8], lit, "book shop", filled, irregular
+
+FOR $x = 0 TO 9 {
+  IF [80%] {
+    DOOR: closed, $shopdoors[$x]
+  } ELSE {
+    DOOR: open, $shopdoors[$x]
+  }
+}
+
+$assistants = { (10,02), (07,03), (05,04), (03,06), (02,09),
+                (10,16), (07,15), (05,14), (03,12) }
+SHUFFLE: $assistants
+
+# black marketeer's assistants:
+# from The Hobbit (Tolkien)
+MONSTER:('T', "rock troll"),  $assistants[0], "William", asleep, peaceful
+MONSTER:('T', "rock troll"),  $assistants[1], "Thomas", asleep, peaceful
+# from the Bible
+MONSTER:('H', "frost giant"), $assistants[2], "Goliath", asleep, peaceful
+# from Greek mythology & high-energy physics
+MONSTER:('n', "wood nymph"),  $assistants[3], "Daphne",  asleep, peaceful
+# Add your favorite monsters here.  Make them peaceful and named,
+# otherwise they will not behave like assistants.
+MONSTER:('&', "balrog"),  $assistants[4], "Njalnohaar",  asleep, peaceful
+MONSTER:('&', "pit fiend"),  $assistants[5], "Hilvuuloth",  asleep, peaceful
+MONSTER:('c', "cockatrice"),  $assistants[6], "Wilbur",  asleep, peaceful
+MONSTER:('c', "cockatrice"),  $assistants[7], "Simon",  asleep, peaceful
+MONSTER:(':', "salamander"),  $assistants[8], "Izzy",  asleep, peaceful
+
+REGION: (10,17,10,17), lit, "ordinary"
+MONSTER:('&', "succubus"),  (25,16), asleep, peaceful
+MONSTER:('&', "succubus"),  (26,17), asleep, peaceful
+MONSTER:('&', "incubus"),  (25,17), asleep, peaceful
+MONSTER:('&', "incubus"),  (26,16), asleep, peaceful
+
+MONSTER:('@', "mugger"), (41,16)
+MONSTER:('@', "mugger"), (47,03)
+MONSTER:('@', "mugger"), (60,16)

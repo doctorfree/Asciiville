@@ -1,6 +1,3 @@
-$NHDT-Date: 1524689294 2018/04/25 20:48:14 $  $NHDT-Branch: NetHack-3.6.0 $:$NHDT-Revision: 1.11 $
-# Copyright (c) 2003 by David Cohrs
-# NetHack may be freely redistributed.  See license for details.
 
 This document describes the installation of NetHack with an X11 interface.
 
@@ -90,17 +87,19 @@ and then use the symbol mappings found in nethack.rc.  The fonts are found
 in nh10.bdf and ibm.bdf.  You first need to convert the bdf files to whatever
 form your X11 server recognizes (usually using a command called bdftosnf
 for R4 servers or bdftopcf for R5 servers).  Then run mkfontdir on the
-directory containing your font files (you might want to copy them to HACKDIR,
+directory containing your font files (you might want to copy them to GAMEDIR,
 from the top Makefile, after you've done "make install").  If these commands
 aren't familiar, talk to your local X11 guru and read the man pages.
-
-nethack.sh automatically adds HACKDIR to your font search path.  If
+Finally, add that directory to your font search path (e.g. xset fp+ GAMEDIR,
+setting GAMEDIR to the value of GAMEDIR in the top Makefile).  Alternatively,
 you (assuming you are a system administrator) can install the fonts in your
-standard X11 font directory the relevent lines in nethack.sh can be removed.
-Alternatively, all persons playing nethack must add that "xset fp+"
+standard X11 font directory.  If you do not install the fonts in the standard
+X11 font directory, all persons playing nethack must add that "xset fp+"
 command to their .xinitrc file, or whatever file they execute when starting
-X11.  See the note below for the alternative installation procedure
-for Sun's OpenWindows.
+X11.  Adding the "xset" command to the nethack.sh is also an alternative,
+though it may clutter your X11 font search path after playing several games,
+so this method is not recommended.  See the note below for the alternative
+installation procedure for Sun's OpenWindows.
 
 
 If your X11 include files and libraries are not installed in a standard
@@ -128,6 +127,39 @@ support is only a small, optional, part of nethack, and the Makefile is
 needed for systems that don't use X11.
 
 
+Notes for Sun's OpenWindows:
+    1.	For OpenWindows 3.0 (NOT 2.x), define OPENWINBUG in include/unixconf.h.
+	The library bug from SunOS 4.1.x is fixed in Solaris 2.x (or when
+	proper Sun patches have been applied to 4.1.x), so it is also
+	unnecessary there.  (Defining it when unnecessary causes the same
+	problem being avoided when it is necessary. :-)
+
+    2.  In addition to the changes suggested by the comments in src/Makefile,
+
+	-- for OpenWindows 2.x and 3.0 (NOT 3.1) (i.e., versions for SunOS 4.x),
+	   add -I/usr/openwin/include to CFLAGS, -L/usr/openwin/lib to LFLAGS,
+	   and -lm to WINX11LIB in src/Makefile.
+
+	-- for OpenWindows 3.1 (i.e., versions for Solaris 2.x), add
+	   -I/usr/openwin/include to CFLAGS, -L/usr/openwin/lib -L/usr/ccs/lib
+	   -R/usr/openwin/lib to LFLAGS, and -lsocket -lnsl -lm
+	   to WINX11LIB in src/Makefile.
+
+	(Naturally, if your OpenWindows is installed elsewhere, adapt the
+	openwin paths.)  This will allow you to create a game executable.
+
+    3.	Run the fonts through convertfont and run bldfamily on the directory.
+	Now you must let your X server know where to find the fonts.  For a
+	personal installation, the simplest thing is to include the directory
+	of the fonts in the environment variable FONTPATH, as set in your
+	.profile or .login before starting the server.  For a multi-user
+	installation, you have the various "xset fp+" options outlined
+	above for standard X.
+
+    4.  Something must still be done with the NetHack.ad file -- all three
+	of the possibilities mentioned for standard X11 should work.
+
+
 Notes for AIX 3.2:
     1.  AIX 3.2 includes the Athena Widget Toolkit library (and other things)
 	under the /usr/lpp/X11/Xamples tree, so you will have to add
@@ -137,7 +169,8 @@ Notes for AIX 3.2:
 
 Notes for XFree86 - (on linux and BSD386 platforms)
 
-    1.  Edit src/Makefile for linux/BSD386. Use the
+    1.  Edit src/Makefile for linux/BSD386. Even though you use the 
+	Open Look Window manager, do not define OPENWINBUG.  Use the 
 	standard X11 object and library options.
 
     2.  Follow the standard installation directions defined above.
@@ -165,6 +198,5 @@ dialogs.c	- A better dialog widget.  Original code (modified slightly
 		  Theisen.  This is from his Ghostview program (which is under
 		  the GNU public license, v2 or higher).
 pet_mark.xbm	- A pet indicator bitmap for tiles.
-pilemark.xbm	- Item pile indicator for tiles.
 rip.xpm		- A graphical tombstone.
 tile2x11.c	- Converts win/share tiles for X11 use.

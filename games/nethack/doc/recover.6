@@ -1,16 +1,5 @@
-.\"DO NOT REMOVE NH_DATESUB .TH RECOVER 6 "DATE(%-d %B %Y)" NETHACK
-.TH RECOVER 6 "8 February 2022" NETHACK
-.\"DO NOT REMOVE NH_DATESUB .ds Nd DATE(%Y)
-.ds Nd 2022
-.de NB
-.ds Nb \\$2
-..
-.de NR
-.ds Nr \\$2
-..
-.NB $NHDT-Branch: NetHack-3.7 $
-.NR $NHDT-Revision: 1.12 $
-.ds Na Kenneth Lorber
+.TH RECOVER 6 "9 January 1993"
+.UC 4
 .SH NAME
 recover \- recover a NetHack game interrupted by disaster
 .SH SYNOPSIS
@@ -44,26 +33,11 @@ It overrides the value from NETHACKDIR, HACKDIR, or the directory
 specified by the game administrator during compilation
 (usually /usr/games/lib/nethackdir).
 .PP
-^?ALLDOCS
 For recovery to be possible,
 .I nethack
 must have been compiled with the INSURANCE option, and the run-time option
 .I checkpoint
 must also have been on.
-^:
-^?INSURANCE
-For recovery to be possible,
-.I nethack
-must have been compiled with the INSURANCE option (this configuration was),
-and the run-time option
-.I checkpoint
-must also have been on.
-^:
-This configuration of
-.I nethack
-was created without support for recovery.
-^.
-^.
 NetHack normally writes out files for levels as the player leaves them,
 so they will be ready for return visits.
 When checkpointing, NetHack also writes out the level entered and
@@ -140,6 +114,3 @@ determine.
 .I recover
 should be taught to use the nethack playground locking mechanism to
 avoid conflicts.
-.SH COPYRIGHT
-This file is Copyright (C) \*(Na, \*(Nd for version \*(Nb:\*(Nr.
-NetHack may be freely redistributed.  See license for details.

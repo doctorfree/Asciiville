@@ -1,0 +1,186 @@
+Extended logfile patch for Nethack 3.4.3
+Version 3
+
+This patch creates a new, more verbose logfile of all of the games
+completed, in order to make interpreting the logfile easier, as well as
+providing a simple way to add new fields to the log.  A new file (named, by
+default, 'xlogfile') is created, with each line representing a completed
+game.  The format looks something like:
+
+version=3.4.3:points=24978:deathdnum=4:deathlev=8:maxlvl=12:hp=-4:maxhp=95:death
+s=1:deathdate=20051215:birthdate=20051215:uid=1000:role=Bar:race=Hum:gender=Mal:
+align=Neu:name=aardvark:death=killed by a gargoyle, while helpless:conduct=0xf80
+:turns=5925:achieve=0x200:realtime=1414:starttime=1134705144:endtime=1134706562
+
+The standard record and logfile both work the same as usual.
+
+All of the information from the standard logfile is stored in the extended
+logfile.  In addition, code to record some extra game data is included.
+
+version   - the version of nethack (eg '3.4.3')
+points    - the final score
+deathdnum - death dungeon number
+deathlev  - death level
+maxlvl    - max dungeon level
+hp        - final hit points
+maxhp     - max hit points
+deaths    - number of deaths
+deathdate - the date that the game ended (eg '20041130' is Nov 30, 2004)
+birthdate - the date that the game started
+uid       - the player's UID
+role      - the player's role (3-letter abbreviation, eg 'Sam')
+race      - the player's race (3-letter abbreviation, eg 'Hum')
+gender    - the player's gender (3-letter abbreviation, eg 'Mal')
+align     - the player's alignment (3-letter abbreviation, eg 'Law')
+name      - the player's name
+death     - the death string (eg 'killed by a woodchuck')
+
+* turns   - The number of turns elapsed during the game
+
+* conduct - The conducts followed during the game
+  The conducts are encoded as a bitfield, with each bit representing one
+  conduct.  If a bit is set, then the corresponding conduct was followed
+  during the game.  (Note: this is backwards from my original conduct
+  patch, but it seems more natural this way.)
+
+  Bit 1  (0x0001) - Went without food
+  Bit 2  (0x0002) - Strict vegan diet
+  Bit 3  (0x0004) - Vegetarian diet
+  Bit 4  (0x0008) - Atheist
+  Bit 5  (0x0010) - Never hit with a wielded weapon
+  Bit 6  (0x0020) - Pacifist
+  Bit 7  (0x0040) - Illiterate
+  Bit 8  (0x0080) - Never polymorphed an object
+  Bit 9  (0x0100) - Never changed form
+  Bit 10 (0x0200) - Used no wishes
+  Bit 11 (0x0400) - Did not wish for any artifacts
+  Bit 12 (0x0800) - Never genocided any monsters
+
+* realtime - The amount of time spent playing the game
+  Records the time (in seconds) actually spent playing the game.  (Or, more
+  accurately, all of the time that nethack is loaded and running the game.)
+  Specifically, the timer is started right before giving the welcome
+  message, and stopped when you save or when the game is over.
+
+  Note that this will invalidate save files, because the current value of
+  the timer is recorded in the save file.  Bones files should not be
+  invalidated.
+  
+* achieve - Whether or not the player reached certain milestones
+  This is another bitfield that records whether or not certain things were
+  achieved.
+
+  Achievement bitfield:
+  bit  meaning
+   1   obtained the Bell of Opening
+   2   entered gehennom (by any means)
+   3   obtained the Candelabrum of Invocation
+   4   obtained the Book of the Dead
+   5   performed the invocation ritual
+   6   obtained the amulet
+   7   entered elemental planes
+   8   entered astral plane
+   9   ascended (not "escaped in celestial disgrace!")
+   10  obtained the luckstone from the Mines
+   11  obtained the sokoban prize
+   12  defeated Medusa (killed her by any means)
+
+  This will also invalidate save files, as a structure (u_achieve)
+  containing flags corresponding to a few of these achievements is added
+  to the savefile.  Bones files should not be invalidated.
+
+* starttime - The time the game was started, as obtained from time(2).
+              (That is, stored as a 32-bit integer number of seconds
+              since 00:00:00 UTC, January 1, 1970.)  This is the same 
+              time as "birthdate" above, but with greater precision.
+
+* endtime - The time the game ended; it is the same time as "deathdate"
+            above.
+
+* gender0 - The player's original gender (3 letter abbreviation, eg 'Mal')
+
+* align0 - The player's original alignment (3 letter abbreviation, eg 'Law')
+
+The file sys/unix/Makefile.top is modified to add xlogfile to the install
+target.  If you are using a different system, you may need to either initially
+create xlogfile, or modify your makefiles appropriately.
+
+Also included in this patch is an option to display the actual elapsed time
+(the time that RECORD_REALTIME logs) on the status line.  It is disabled
+by default, so to enable it you can uncomment the definition of
+REALTIME_ON_BOTL in config.h (and then set the flag showrealtime in either
+nethackrc or via the options menu.)  
+
+The REALTIME_ON_BOTL option does not depend on XLOGFILE being defined; I
+just added it to the same patch because they share most of the same code.
+It does break savefile compatibility for the same reasons that
+RECORD_REALTIME does.
+
+Breakdown of files changed:
+include/config.h
+  Added a definition for XLOGFILE, the extended logfile filename
+  Added definition of REALTIME_ON_BOTL
+  Added definitions for RECORD_CONDUCT, RECORD_TURNS, RECORD_ACHIEVE,
+  RECORD_REALTIME, RECORD_START_END_TIME, RECORD_GENDER0, RECORD_ALIGN0 
+  in order to give fine-grained control of what should be logged.
+include/decl.h
+  add d_mineend_level and d_sokoend_level to dungeon_topology structure
+  declaration of u_achieve structure and extern definition of achieve
+  declaration of realtime_data structure and extern definition
+include/dungeon.h
+  add definitions of Is_mineend_level() and Is_sokoend_level()
+include/extern.h
+  declaration of get_realtime function
+include/flag.h
+  added showrealtime to iflags structure
+include/obj.h
+  add definition of "record_achieve_special" as "corpsenm"
+src/allmain.c
+  update the status line whenever the number of elapsed minutes changes
+  start the realtime timer and store the time that the game started
+  add get_realtime() function to calculate elapsed time
+src/botl.c
+  display elapsed time
+src/decl.c
+  declaration of globals achieve, realtime_data
+src/do.c
+  set enter_gehennom=1 when the player enters gehennom
+src/dungeon.c
+  add the mine end and sokoban end levels to the level_map list
+src/end.c
+  update the realtime counter when the game ends
+src/invent.c
+  set get_amulet=1, get_candelabrum=1, get_bell=1, and get_book=1 when the
+  corresponding item enters your inventory
+  set get_luckstone and finish_sokoban when the mines luckstone or sokoban
+  prize enters your inventory
+src/mklev.c
+  set perform_invocation=1 when you successfully perform the invocation
+  ritual
+src/mon.c
+  set killed_medusa=1 when Medusa is killed
+src/options.c
+  add "showrealtime" option
+src/pray.c
+  set ascended=1 when ascending
+src/restore.c
+  read the stored value of the realtime timer from the savefile, and set the
+  restore time properly
+src/save.c
+  write the elapsed time to the savefile
+src/sp_lev.c
+  set otmp->record_achieve_special = 1 when generating mines luckstone and
+  sokoban prize
+src/topten.c
+  add definition of deathtime
+  add munge_xlstring to convert any ':' in a string to '_'
+  add write_xlentry which writes a single xlogfile entry
+  add encodeconduct which converts the current player's conduct to a number
+  add encodeachieve which converts the game achievements to a number
+  store the time to deathtime when deathdate is calculated
+  open and write to the xlogfile just after writing to the logfile
+sys/unix/Makefile.top
+  create and set permissions on xlogfile when doing a 'make install'
+util/makedefs.c
+  add entries for XLOGFILE, RECORD_*, and REALTIME_ON_BOTL to
+  build_opts[] list

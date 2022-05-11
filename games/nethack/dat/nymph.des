@@ -1,0 +1,81 @@
+#
+# Nymph level
+#
+
+LEVEL: "nymph"
+ROOM: "ordinary", unlit, random, random, (12,7)
+{
+TRAP:"board",random
+TRAP:"board",random
+[10%]: TERRAIN: random, 'T'
+OBJECT:('(',"chest"),random
+OBJECT:('(',"chest"),random
+OBJECT:('(',"chest"),random
+OBJECT:('(',"chest"),random
+OBJECT:'=', random
+OBJECT:'=', random
+OBJECT:'=', random
+OBJECT:'=', random
+OBJECT:'*', random
+OBJECT:'*', random
+OBJECT:'*', random
+OBJECT:'*', random
+OBJECT:'*', random
+OBJECT:random, random
+OBJECT:random, random
+OBJECT:random, random
+OBJECT:random, random
+MONSTER: 'n', random, hostile
+MONSTER: 'n', random, hostile
+MONSTER: 'n', random, hostile
+MONSTER: 'n', random, hostile
+MONSTER: 'n', random, hostile
+MONSTER:('n',"Aphrodite"), random, hostile
+}
+
+ROOM: "ordinary", random, random, random, random
+{
+STAIR: random, up
+TRAP:"board",random
+OBJECT:random,random
+MONSTER: 'n', random, hostile
+TERRAIN: random, 'T'
+}
+
+ROOM: "ordinary", random, random, random, random
+{
+STAIR: random, down
+TRAP:"board",random
+OBJECT:random, random
+TRAP: random, random
+MONSTER: 'n', random, hostile
+[30%]: TERRAIN: random, 'T'
+}
+
+ROOM: "ordinary", random, random, random, random
+{
+TRAP:"board",random
+OBJECT:random, random
+OBJECT:random, random
+MONSTER: 'n', random, hostile
+[20%]: TERRAIN: random, 'T'
+}
+
+ROOM: "ordinary", random, random, random, random
+{
+TRAP:"board",random
+OBJECT:random, random
+TRAP: random, random
+MONSTER: 'n', random, hostile
+[5%]: TERRAIN: random, 't'
+}
+
+ROOM: "ordinary", random, random, random, random
+{
+TRAP:"board",random
+OBJECT:random, random
+TRAP: random, random
+MONSTER: 'n', random, hostile
+}
+
+RANDOM_CORRIDORS

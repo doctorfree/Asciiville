@@ -1,11 +1,10 @@
-/* NetHack 3.7	panic.c	$NHDT-Date: 1596498262 2020/08/03 23:44:22 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.13 $ */
+/*	SCCS Id: @(#)panic.c	3.4	1994/03/02	*/
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
-/*-Copyright (c) Robert Patrick Rankin, 2015. */
 /* NetHack may be freely redistributed.  See license for details. */
 
 /*
- *      This code was adapted from the code in end.c to run in a standalone
- *      mode for the makedefs / drg code.
+ *	This code was adapted from the code in end.c to run in a standalone
+ *	mode for the makedefs / drg code.
  */
 
 #define NEED_VARARGS
@@ -15,43 +14,36 @@
 #define abort() exit()
 #endif
 #ifdef VMS
-extern void vms_abort(void);
+extern void NDECL(vms_abort);
 #endif
 
 /*VARARGS1*/
 boolean panicking;
-void panic(const char *, ...);
+void VDECL(panic, (char *,...));
 
-DISABLE_WARNING_FORMAT_NONLITERAL
-DISABLE_WARNING_UNREACHABLE_CODE
-
-void panic
-VA_DECL(const char *, str)
-{
-    VA_START(str);
-    VA_INIT(str, char *);
-    if (panicking++)
+void
+panic VA_DECL(char *,str)
+	VA_START(str);
+	VA_INIT(str, char *);
+	if(panicking++)
 #ifdef SYSV
-        (void)
+	    (void)
 #endif
-            abort(); /* avoid loops - this should never happen*/
+		abort();    /* avoid loops - this should never happen*/
 
-    (void) fputs(" ERROR:  ", stderr);
-    Vfprintf(stderr, str, VA_ARGS);
-    (void) fflush(stderr);
+	(void) fputs(" ERROR:  ", stderr);
+	Vfprintf(stderr, str, VA_ARGS);
+	(void) fflush(stderr);
 #if defined(UNIX) || defined(VMS)
-#ifdef SYSV
-    (void)
+# ifdef SYSV
+		(void)
+# endif
+		    abort();	/* generate core dump */
 #endif
-        abort(); /* generate core dump */
-#endif
-    VA_END();
-    /* UNREACHABLE_CODE */
-    exit(EXIT_FAILURE); /* redundant */
+	VA_END();
+	exit(EXIT_FAILURE);		/* redundant */
+	return;
 }
-
-RESTORE_WARNING_UNREACHABLE_CODE
-RESTORE_WARNING_FORMAT_NONLITERAL
 
 #ifdef ALLOCA_HACK
 /*
@@ -59,10 +51,10 @@ RESTORE_WARNING_FORMAT_NONLITERAL
  * have it then just use malloc() instead.  This may not work on some
  * systems, but they should either use yacc or get a real alloca routine.
  */
-long *
-alloca(unsigned int cnt)
+long *alloca(cnt)
+unsigned cnt;
 {
-    return cnt ? alloc(cnt) : (long *) 0;
+	return cnt ? alloc(cnt) : (long *)0;
 }
 #endif
 

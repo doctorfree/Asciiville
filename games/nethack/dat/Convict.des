@@ -1,0 +1,417 @@
+#
+#	The "start" level for the quest.
+#
+#	Here you meet your (besieged) class leader, Robert the Lifer
+#	and receive your quest assignment.
+#
+LEVEL:"Con-strt"
+FLAGS:noteleport,hardfloor,mazelevel
+INIT_MAP:solidfill,' '
+GEOMETRY:left,top
+#123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+|--------------------------------------------------------|-----------------|
+|....|...|...|...|...|...|...|...|...|...|...|...|...|...|................K|
+|....|...|...|...|...|...|...|...|...|...|...|...|...|...|.................|
+|---.---.---.---.---.---.---.---.---.---.---.---.---.---.|.................|
+|..........................................................................|
+|..........................................................................|
+|....|.---.---.---.---.---.---.---.---.---.---.---.---.--------------..----|
+|....|...|...|...|...|...|...|...|...|...|...|...|...|...|.................|
+|....|...|...|...|...|...|...|...|...|...|...|...|...|...|.................|
+|....|---------------------------------------------------|.................|
+|....|...|...|...|...|...|...|...|...|...|...|...|...|...|.................|
+|....|...|...|...|...|...|...|...|...|...|...|...|...|...|.................|
+|....|--.---.---.---.---.---.---.---.---.---.---.---.---.|-----------------|
+|..........................................................................|
+|..........................................................................|
+|..........................................................................|
+|.----.---.---.---.---.---.---.---.---.---.---.---.---.--|.................|
+|....|...|...|...|...|...|...|...|...|...|...|...|...|...|.................|
+|....|...|...|...|...|...|...|...|...|...|...|...|...|...|.................|
+|--------------------------------------------------------|-----------------|
+ENDMAP
+# Dungeon Description
+REGION:(00,00,75,19),lit,"ordinary"
+# Stairs
+STAIR:(64,08),down
+# Portal arrival point
+BRANCH:(71,03,71,03),(0,0,0,0)
+# Altar
+ALTAR:(70,16),chaos,shrine
+# Robert the Lifer
+MONSTER:('@',"Robert the Lifer"),(74,18)
+# fellow prisoners
+MONSTER:('@',"inmate"),random
+MONSTER:('@',"inmate"),random
+MONSTER:('@',"inmate"),random
+MONSTER:('@',"inmate"),random
+MONSTER:('@',"inmate"),random
+MONSTER:('@',"inmate"),random
+# Corrupt guards
+[50%]: MONSTER: ('@',"prison guard"),random
+[50%]: MONSTER: ('@',"prison guard"),random
+[50%]: MONSTER: ('@',"prison guard"),random
+[50%]: MONSTER: ('@',"prison guard"),random
+[50%]: MONSTER: ('@',"prison guard"),random
+[50%]: MONSTER: ('@',"prison guard"),random
+# Good `ol mimics
+MONSTER:('m',"giant mimic"), (74,05), m_feature "staircase up"
+# Random traps
+TRAP:"web",random
+TRAP:"web",random
+TRAP:"web",random
+TRAP:"web",random
+# Prison debris
+[75%]: OBJECT: ('_', "iron chain"), random
+[75%]: OBJECT: ('_', "iron chain"), random
+[75%]: OBJECT: ('_', "iron chain"), random
+[75%]: OBJECT: ('_', "iron chain"), random
+[75%]: OBJECT: ('_', "iron chain"), random
+[50%]: OBJECT: ('0', "heavy iron ball"), random
+[50%]: OBJECT: ('0', "heavy iron ball"), random
+# Non diggable walls
+NON_DIGGABLE:(00,00,75,19)
+
+#
+#	The "locate" level for the quest.
+#
+#	Here you have to find the exit from the Royal Dungeons
+#	to go further towards your assigned quest.
+#
+
+LEVEL:"Con-loca"
+FLAGS:noteleport,hardfloor,mazelevel
+INIT_MAP:solidfill,' '
+GEOMETRY:left,top
+#123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+---------------                                              ---------------
+|.....F.......| #################################            |............K|
+|.....F.......+##              #                #############+.............|
+|.....F.......|                #                #            |.............|
+|.....+.......|                #                #            |.............|
+|.....F.......|                #                #            |.............|
+|.....F.......|              ###                #            |.............|
+|.....F.......|             ##                  #            |FFFFFFFFFFFFF|
+|--------------     #########                   #            |......|......|
+                    #      |S-------|           #            |......|......|
+                    #      |........|      ######            |-------------|
+    #################      |........|      #    H                           
+    #                      |........+#######    #                           
+    #                      |----S---|           #            |----------|   
+ |--+-------|                   #               #####        |..........|   
+ |..........|                   #               #   #        |..........|   
+ |..........|                   #     |------|  #   #########+..........|   
+ |..........|                   ######S......+###            |..........|   
+ |----------|                         |......|               |----------|   
+                                      |------|                              
+ENDMAP
+# Dungeon Description
+REGION:(01,01,13,07),lit,"ordinary"
+REGION:(02,15,11,17),lit,"ordinary"
+REGION:(62,01,74,09),lit,"ordinary"
+REGION:(62,14,71,17),lit,"shop"
+REGION:(28,10,35,12),lit,"barracks"
+REGION:(39,17,44,18),lit,"ordinary"
+# Stairs
+STAIR:(02,03),up
+STAIR:(39,17),down
+# Non diggable walls
+NON_DIGGABLE:(00,00,75,19)
+DOOR:locked,(04,14)
+DOOR:locked,(06,04)
+DOOR:open,(14,02)
+DOOR:closed,(61,16)
+DOOR:closed,(45,17)
+DOOR:locked,(36,12)
+DOOR:closed,(61,02)
+# Police station kops
+MONSTER:('@',"inmate"),(63,08)
+MONSTER:('@',"inmate"),(70,08)
+MONSTER:('K',"Keystone Kop"),(62,01),asleep
+MONSTER:('K',"Keystone Kop"),(65,01),asleep
+MONSTER:('K',"Keystone Kop"),(66,01),asleep
+MONSTER:('K',"Keystone Kop"),(74,02),asleep
+MONSTER:('K',"Kop Sergeant"),(63,03),asleep
+MONSTER:('K',"Kop Sergeant"),(72,03),asleep
+MONSTER:('K',"Kop Lieutenant"),(71,04),asleep
+MONSTER:('K',"Kop Lieutenant"),(68,05),asleep
+MONSTER:('K',"Kop Kaptain"),(64,06),asleep
+# Iron golem in supply room
+MONSTER:(''',"iron golem"),(11,17),asleep
+# Supply room junk
+OBJECT:('_', "iron chain"), (2,15)
+OBJECT:('_', "iron chain"), (2,15)
+OBJECT:('_', "iron chain"), (3,15)
+OBJECT:('_', "iron chain"), (3,15)
+OBJECT:('_', "iron chain"), (4,15)
+OBJECT:('0', "heavy iron ball"), (4,15)
+OBJECT:('_', "iron chain"), (4,15)
+OBJECT:('_', "iron chain"), (5,15)
+OBJECT:('_', "iron chain"), (5,15)
+OBJECT:('_', "iron chain"), (6,15)
+OBJECT:('_', "iron chain"), (6,15)
+OBJECT:('_', "iron chain"), (6,15)
+OBJECT:('_', "iron chain"), (7,15)
+OBJECT:('0', "heavy iron ball"), (7,15)
+OBJECT:('_', "iron chain"), (8,15)
+OBJECT:('_', "iron chain"), (8,15)
+OBJECT:('_', "iron chain"), (9,15)
+OBJECT:('_', "iron chain"), (9,15)
+OBJECT:('_', "iron chain"), (9,15)
+OBJECT:('_', "iron chain"), (10,15)
+OBJECT:('_', "iron chain"), (10,15)
+OBJECT:('_', "iron chain"), (10,15)
+OBJECT:('_', "iron chain"), (11,15)
+OBJECT:('_', "iron chain"), (11,15)
+OBJECT:('0', "heavy iron ball"), (11,15)
+OBJECT:('_', "iron chain"), (2,16)
+OBJECT:('0', "heavy iron ball"), (2,16)
+OBJECT:('_', "iron chain"), (3,16)
+OBJECT:('_', "iron chain"), (3,16)
+OBJECT:('_', "iron chain"), (3,16)
+OBJECT:('_', "iron chain"), (4,16)
+OBJECT:('_', "iron chain"), (4,16)
+OBJECT:('_', "iron chain"), (5,16)
+OBJECT:('_', "iron chain"), (6,16)
+OBJECT:('_', "iron chain"), (6,16)
+OBJECT:('_', "iron chain"), (6,16)
+OBJECT:('_', "iron chain"), (7,16)
+OBJECT:('_', "iron chain"), (7,16)
+OBJECT:('0', "heavy iron ball"), (7,16)
+OBJECT:('_', "iron chain"), (7,16)
+OBJECT:('_', "iron chain"), (8,16)
+OBJECT:('_', "iron chain"), (8,16)
+OBJECT:('_', "iron chain"), (9,16)
+OBJECT:('_', "iron chain"), (9,16)
+OBJECT:('_', "iron chain"), (9,16)
+OBJECT:('_', "iron chain"), (10,16)
+OBJECT:('_', "iron chain"), (10,16)
+OBJECT:('_', "iron chain"), (11,16)
+OBJECT:('_', "iron chain"), (2,17)
+OBJECT:('_', "iron chain"), (3,17)
+OBJECT:('_', "iron chain"), (3,17)
+OBJECT:('_', "iron chain"), (3,17)
+OBJECT:('_', "iron chain"), (4,17)
+OBJECT:('0', "heavy iron ball"), (4,17)
+OBJECT:('_', "iron chain"), (4,17)
+OBJECT:('_', "iron chain"), (4,17)
+OBJECT:('0', "heavy iron ball"), (4,17)
+OBJECT:('_', "iron chain"), (5,17)
+OBJECT:('_', "iron chain"), (6,17)
+OBJECT:('_', "iron chain"), (7,17)
+OBJECT:('_', "iron chain"), (7,17)
+OBJECT:('_', "iron chain"), (7,17)
+OBJECT:('_', "iron chain"), (8,17)
+OBJECT:('0', "heavy iron ball"), (8,17)
+OBJECT:('_', "iron chain"), (9,17)
+OBJECT:('_', "iron chain"), (9,17)
+OBJECT:('0', "heavy iron ball"), (9,17)
+OBJECT:('_', "iron chain"), (9,17)
+OBJECT:('_', "iron chain"), (10,17)
+OBJECT:('_', "iron chain"), (10,17)
+OBJECT:('_', "iron chain"), (10,17)
+OBJECT:('0', "heavy iron ball"), (10,17)
+OBJECT:('_', "iron chain"), (11,17)
+
+
+#
+#	The "goal" level for the quest.
+#
+#	Here you meet Warden Arianna, your nemesis monster.  You have to
+#	defeat Warden Arianna in combat to gain the artifact you have
+#	been assigned to retrieve.
+#
+
+LEVEL:"Con-goal"
+FLAGS:hardfloor,mazelevel
+INIT_MAP:solidfill,' '
+GEOMETRY:left,top
+#123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+---------------------------------------------------------
+|...|        |............................|             |
+|...|       --............................|             |
+|...|       |.............................|             |
+|...|      --.............................|             |
+|...|      |..............................|             |
+|...|     --...................L..........|             |
+|...|     |....................L..........|             |
+|...|    --...................L.L.........|             |
+|...|    |..............L.L.L.L.L.L.L.L...|             |
+|...|-----................L..L...L..L.....|             |
+|...........................L.L.L.L.......|             |
+|...........................L.L.L.L.......|             |
+|..........................L.L...L.L......|             |
+|.........................................|-------------|
+|.........................................|.............|
+|.........................................S.............|
+|.........................................|.............|
+|.........................................|.............|
+---------------------------------------------------------
+ENDMAP
+# Dungeon Description
+REGION:(00,00,56,19),lit,"ordinary"
+# Stairs
+STAIR:(02,02),up
+# Non diggable walls
+NON_DIGGABLE:(00,00,56,19)
+# Random traps
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+TRAP:"fire",random
+# Lava demons
+MONSTER:('&',"lava demon"),(30,05),hostile,awake
+MONSTER:('&',"lava demon"),(23,09),hostile,awake
+MONSTER:('&',"lava demon"),(39,09),hostile,awake
+MONSTER:('&',"lava demon"),(36,14),hostile,awake
+MONSTER:('&',"lava demon"),(26,14),hostile,awake
+# Elite guard
+MONSTER:(''',"iron golem"),(04,13),hostile
+# Objects
+OBJECT:('0',"heavy iron ball"),(31,10),blessed,0,name:"The Iron Ball of Liberation"
+OBJECT:('(',"chest"),(55,18),blessed,2
+# Warden Arianna
+MONSTER:('@',"Warden Arianna"),(31,10),hostile {
+  OBJECT:('(', "Bell of Opening"),uncursed
+}
+
+#
+#       The "fill" levels for the quest.
+#
+#       These levels are used to fill out any levels not occupied by specific
+#       levels as defined above. "filla" is the upper filler, between the
+#       start and locate levels, and "fillb" the lower between the locate
+#       and goal levels.
+#
+
+LEVEL:"Con-fila"
+FLAGS:hardfloor,mazelevel
+INIT_MAP:solidfill,' '
+GEOMETRY:left,top
+#123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+----------------------------------------------------------------------------
+|....................---------.......................---------.............|
+|....................F...|...|.......................F...|...|.............|
+|....................|...|...F.......................|...|...F.............|
+|....|---|---|.......|---|---|.......|---|---|.......|---|---|.............|
+|....F...|...|.......F...|...|.......F...|...|.......F...|...|.............|
+|....|...|...F.......|...|...F.......|...|...F.......|...|...F.............|
+|....|---|---|.......|---|---|.......|---|---|.......|---|---|.............|
+|....F...|...|.......F...|...|.......F...|...|.......F...|...|.............|
+|....|...|...F.......|...|...F.......|...|...F.......|...|...F.............|
+|....|---|---|.......|---|---|.......|---|---|.......|---|---|.............|
+|........|...|.......F...|...|.......F...|...|.......F...|...|.............|
+|....|...|...F.......|...|...F.......|...|...F.......|...|...F.............|
+|....|---|---|.......|---|---|.......|---|---|.......|---|---|.............|
+|....F...|...|.......F...|...|.......F...|...|.......F...|...|.............|
+|....|...|...F.......|...|...........|...|...F.......|...|...F.............|
+|....|---|---|.......|---|---|.......|---|---|.......|---|---|.............|
+|........|...|.......................F...|...|.............................|
+|....|...|...F.......................|...|...F.............................|
+|--------------------------------------------------------------------------|
+ENDMAP
+# Dungeon Description
+REGION:(00,00,75,19),lit,"ordinary"
+# Stairs
+STAIR:(74,03),up
+STAIR:(03,17),down
+# Non diggable walls
+NON_DIGGABLE:(00,00,75,19)
+# "Regular" prisoners
+MONSTER:('@',"inmate"),(59,02)
+MONSTER:('@',"inmate"),(55,08)
+MONSTER:('@',"inmate"),(43,14)
+MONSTER:('@',"inmate"),(38,05)
+MONSTER:('@',"inmate"),(27,02)
+MONSTER:('@',"inmate"),(23,08)
+MONSTER:('@',"inmate"),(11,14)
+MONSTER:('@',"inmate"),(06,05)
+# Undead prisoners
+MONSTER:(' ',"ghost"),(42,17),"Orzo the Inmate"
+[50%]: MONSTER: (' ',"ghost"),(40,18),"Fredgar the Inmate"
+[50%]: MONSTER: (' ',"ghost"),(06,12),"Rastilon the Inmate"
+MONSTER:('Z',"skeleton"),(28,15),awake
+# Bugs and snakes
+MONSTER:('S',"pit viper"),(06,17)
+MONSTER:('x',"xan"),random
+# Corrupt guards
+[50%]: MONSTER: ('@',"prison guard"),random
+[50%]: MONSTER: ('@',"prison guard"),random
+[50%]: MONSTER: ('@',"prison guard"),random
+[50%]: MONSTER: ('@',"prison guard"),random
+# Random traps
+TRAP:"web",random
+TRAP:"web",random
+TRAP:"web",random
+TRAP:"web",random
+# Prison debris
+[75%]: OBJECT: ('_', "iron chain"), random
+[75%]: OBJECT: ('_', "iron chain"), random
+[75%]: OBJECT: ('_', "iron chain"), random
+[75%]: OBJECT: ('_', "iron chain"), random
+[75%]: OBJECT: ('_', "iron chain"), random
+[50%]: OBJECT: ('0', "heavy iron ball"), random
+[50%]: OBJECT: ('0', "heavy iron ball"), random
+
+
+LEVEL:"Con-filb"
+FLAGS:hardfloor,mazelevel
+INIT_MAP: mines, '#' , ' ', true, true, unlit, true
+MESSAGE: "This appears to be a prison level that is still under construction"
+NOMAP
+#
+STAIR: random, up
+STAIR: random, down
+# Peaceful miners
+MONSTER:('@',"miner"),random,peaceful
+MONSTER:('@',"miner"),random,peaceful
+MONSTER:('@',"miner"),random,peaceful
+MONSTER:('@',"miner"),random,peaceful
+MONSTER:('@',"miner"),random,peaceful
+MONSTER:('@',"miner"),random,peaceful
+MONSTER:('@',"miner"),random,peaceful
+MONSTER:('@',"miner"),random,peaceful
+# Earth creatures
+MONSTER:('X',"xorn"),random
+MONSTER:('E',"earth elemental"),random
+MONSTER:('X',"xorn"),random
+MONSTER:('E',"earth elemental"),random
+# Other nasties
+[50%]: MONSTER: ('t',"lurker above"),random
+[50%]: MONSTER: ('t',"trapper"),random
+[50%]: MONSTER: ('t',"lurker above"),random
+[50%]: MONSTER: ('t',"trapper"),random
+[50%]: MONSTER: ('p',"rock piercer"),random
+[50%]: MONSTER: ('p',"rock piercer"),random
+[50%]: MONSTER: ('p',"iron piercer"),random
+[50%]: MONSTER: ('p',"iron piercer"),random
+[50%]: MONSTER: ('p',"glass piercer"),random
+[50%]: MONSTER: ('p',"glass piercer"),random
+# Tools and corpses
+[50%]: OBJECT: ('(', "pick-axe"), random
+[75%]: OBJECT: ('(', "brass lantern"), random
+[50%]: OBJECT: '(', random
+[25%]: OBJECT: ('%', "corpse"), random, montype:"miner", 0
+[25%]: OBJECT: ('%', "corpse"), random, montype:"miner", 0
+[25%]: OBJECT: ('%', "corpse"), random, montype:"miner", 0
+[25%]: OBJECT: ('%', "corpse"), random, montype:"miner", 0
+# Natural cavern hazards
+TRAP: "pit", random
+TRAP: "pit", random
+TRAP: "pit", random
+TRAP: "pit", random
+TRAP: "pit", random
+TRAP: "pit", random
+TRAP: "falling rock", random
+TRAP: "falling rock", random
+TRAP: "falling rock", random
+TRAP: "falling rock", random
+TRAP: "web", random
+TRAP: "web", random
+

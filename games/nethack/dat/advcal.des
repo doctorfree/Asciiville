@@ -1,0 +1,175 @@
+#	SCCS Id: @(#)advcal.des	3.4
+#	Copyright (c) 2008-2009 Patric Mueller
+# NetHack may be freely redistributed.  See license for details.
+#
+
+LEVEL:"advcal"
+FLAGS:noteleport,noflipx,noflipy
+GEOMETRY:center,center
+MAP
+...........................................................................
+...---...---...---...---...---...---...---...---...---...---...---...---...
+...|.|...|.|...|.|...|.|...|.|...|.|...|.|...|.|...|.|...|.|...|.|...|.|...
+...-+-...-+-...-+-...-+-...-+-...-+-...-+-...-+-...-+-...-+-...-+-...-+-...
+...........................................................................
+...........................................................................
+...........................T...............................................
+...........................................................................
+............................................................T..............
+......T....................................................................
+...........................................................................
+...........................................................................
+...........................................................................
+...........................................................................
+.....................T..................................T..................
+...........................................................................
+...........................................................................
+...-+-...-+-...-+-...-+-...-+-...-+-...-+-...-+-...-+-...-+-...-+-...-+-...
+...|.|...|.|...|.|...|.|...|.|...|.|...|.|...|.|...|.|...|.|...|.|...|.|...
+...---...---...---...---...---...---...---...---...---...---...---...---...
+...........................................................................
+ENDMAP
+
+# Dungeon Description
+REGION:(00,00,74,20),lit,"ordinary"
+# Non diggable walls
+NON_DIGGABLE:(00,00,74,20)
+NON_PASSWALL:(00,00,74,20)
+# Branch location
+BRANCH:(00,04,74,16),(0,0,0,0)
+# Doors
+DOOR:locked,(04,03)
+DOOR:locked,(10,03)
+DOOR:locked,(16,03)
+DOOR:locked,(22,03)
+DOOR:locked,(28,03)
+DOOR:locked,(34,03)
+DOOR:locked,(40,03)
+DOOR:locked,(46,03)
+DOOR:locked,(52,03)
+DOOR:locked,(58,03)
+DOOR:locked,(64,03)
+DOOR:locked,(70,03)
+DOOR:locked,(04,17)
+DOOR:locked,(10,17)
+DOOR:locked,(16,17)
+DOOR:locked,(22,17)
+DOOR:locked,(28,17)
+DOOR:locked,(34,17)
+DOOR:locked,(40,17)
+DOOR:locked,(46,17)
+DOOR:locked,(52,17)
+DOOR:locked,(58,17)
+DOOR:locked,(64,17)
+DOOR:locked,(70,17)
+## 64 gems in christmas colors
+OBJECT:('*',"worthless piece of violet glass"),random
+OBJECT:('*',"worthless piece of violet glass"),random
+OBJECT:('*',"worthless piece of violet glass"),random
+OBJECT:('*',"worthless piece of violet glass"),random
+OBJECT:('*',"worthless piece of violet glass"),random
+OBJECT:('*',"worthless piece of violet glass"),random
+OBJECT:('*',"worthless piece of violet glass"),random
+OBJECT:('*',"worthless piece of violet glass"),random
+
+OBJECT:('*',"worthless piece of green glass"),random
+OBJECT:('*',"worthless piece of green glass"),random
+OBJECT:('*',"worthless piece of green glass"),random
+OBJECT:('*',"worthless piece of green glass"),random
+OBJECT:('*',"worthless piece of green glass"),random
+OBJECT:('*',"worthless piece of green glass"),random
+OBJECT:('*',"worthless piece of green glass"),random
+
+OBJECT:('*',"worthless piece of red glass"),random
+OBJECT:('*',"worthless piece of red glass"),random
+OBJECT:('*',"worthless piece of red glass"),random
+OBJECT:('*',"worthless piece of red glass"),random
+OBJECT:('*',"worthless piece of red glass"),random
+OBJECT:('*',"worthless piece of red glass"),random
+OBJECT:('*',"worthless piece of red glass"),random
+OBJECT:('*',"worthless piece of red glass"),random
+OBJECT:('*',"worthless piece of red glass"),random
+OBJECT:('*',"worthless piece of red glass"),random
+OBJECT:('*',"worthless piece of red glass"),random
+OBJECT:('*',"worthless piece of red glass"),random
+OBJECT:('*',"worthless piece of red glass"),random
+OBJECT:('*',"worthless piece of red glass"),random
+OBJECT:('*',"worthless piece of red glass"),random
+OBJECT:('*',"worthless piece of red glass"),random
+
+OBJECT:('*',"worthless piece of white glass"),random
+OBJECT:('*',"worthless piece of white glass"),random
+OBJECT:('*',"worthless piece of white glass"),random
+OBJECT:('*',"worthless piece of white glass"),random
+OBJECT:('*',"worthless piece of white glass"),random
+OBJECT:('*',"worthless piece of white glass"),random
+OBJECT:('*',"worthless piece of white glass"),random
+OBJECT:('*',"worthless piece of white glass"),random
+OBJECT:('*',"worthless piece of white glass"),random
+OBJECT:('*',"worthless piece of white glass"),random
+OBJECT:('*',"worthless piece of white glass"),random
+OBJECT:('*',"worthless piece of white glass"),random
+OBJECT:('*',"worthless piece of white glass"),random
+OBJECT:('*',"worthless piece of white glass"),random
+OBJECT:('*',"worthless piece of white glass"),random
+OBJECT:('*',"worthless piece of white glass"),random
+
+OBJECT:('*',"worthless piece of yellow glass"),random
+OBJECT:('*',"worthless piece of yellow glass"),random
+OBJECT:('*',"worthless piece of yellow glass"),random
+OBJECT:('*',"worthless piece of yellow glass"),random
+OBJECT:('*',"worthless piece of yellowish brown glass"),random
+OBJECT:('*',"worthless piece of yellowish brown glass"),random
+OBJECT:('*',"worthless piece of yellowish brown glass"),random
+OBJECT:('*',"worthless piece of yellowish brown glass"),random
+OBJECT:('*',"worthless piece of blue glass"),random
+OBJECT:('*',"worthless piece of blue glass"),random
+OBJECT:('*',"worthless piece of blue glass"),random
+OBJECT:('*',"worthless piece of blue glass"),random
+OBJECT:('*',"worthless piece of orange glass"),random
+OBJECT:('*',"worthless piece of orange glass"),random
+OBJECT:('*',"worthless piece of orange glass"),random
+OBJECT:('*',"worthless piece of orange glass"),random
+
+[40%]: OBJECT: ('*',"jade"),random
+[40%]: OBJECT: ('*',"agate"),random
+[40%]: OBJECT: ('*',"fluorite"),random
+[40%]: OBJECT: ('*',"jasper"),random
+[40%]: OBJECT: ('*',"amethyst"),random
+[40%]: OBJECT: ('*',"garnet"),random
+[40%]: OBJECT: ('*',"chrysoberyl"),random
+[40%]: OBJECT: ('*',"opal"),random
+
+
+LEVEL:"advcal-2"
+FLAGS:noteleport,noflipx,noflipy
+GEOMETRY:center,center
+MAP
+...........................................................................
+...................---...........---.......................................
+.......---.........-.-...........-.-.............---............---........
+.......-.-.........---...........---.............-.-............-.-....---.
+.......---.................T.....................---............---....-.-.
+---..............................---...................................---.
+-.-..............................+.-........................T..............
+---...T.........-+-..............---.......................................
+................-.-..........................................---...........
+.......---......---.........-+-..............................-.-...........
+.......-.-..................-.-..........---.......---.......---...........
+.......---..................---..........-.-.......-.-..................---
+.........................................---.......---..................-.-
+............---......T..................................T...............---
+.---........-.-..................---..........---..............---.........
+.-.-........---......---.........-.-..........-.-..............-.-.........
+.---.................-.-.........---..........---..............---.........
+.....................---...................................................
+ENDMAP
+
+# Dungeon Description
+REGION:(00,00,74,17),lit,"ordinary"
+# Non diggable walls
+NON_DIGGABLE:(00,00,74,17)
+# Objects
+LOOP [64] {
+  OBJECT:'*',random
+}

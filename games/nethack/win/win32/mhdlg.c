@@ -1,1042 +1,758 @@
-/* NetHack 3.7	mhdlg.c	$NHDT-Date: 1596498347 2020/08/03 23:45:47 $  $NHDT-Branch: NetHack-3.7 $:$NHDT-Revision: 1.36 $ */
-/* Copyright (C) 2001 by Alex Kompel 	 */
+/* Copyright (C) 2001 by Alex Kompel <shurikk@pacbell.net> */
 /* NetHack may be freely redistributed.  See license for details. */
 
 /* various dialog boxes are defined here */
 
-#include "win10.h"
 #include "winMS.h"
 #include "hack.h"
 #include "func_tab.h"
 #include "resource.h"
 #include "mhdlg.h"
 
-#include <assert.h>
-
-
 /*---------------------------------------------------------------*/
 /* data for getlin dialog */
 struct getlin_data {
-    const char *question;
-    char *result;
-    size_t result_size;
+	const char*	question;
+	char*		result;
+	size_t		result_size;
 };
 
-INT_PTR CALLBACK GetlinDlgProc(HWND, UINT, WPARAM, LPARAM);
+BOOL CALLBACK	GetlinDlgProc(HWND, UINT, WPARAM, LPARAM);
 
-int
-mswin_getlin_window(const char *question, char *result, size_t result_size)
+int mswin_getlin_window (
+	const char *question, 
+	char *result, 
+	size_t result_size
+)
 {
-    if (iflags.debug_fuzzer) {
-        random_response(result, (int) result_size);
-        if (result[0] != '\0')
-            return IDOK;
-        else
-            return IDCANCEL;
-    }
+	int ret;
+	struct getlin_data data;
 
-    INT_PTR ret;
-    struct getlin_data data;
+	/* initilize dialog data */
+	ZeroMemory(&data, sizeof(data));
+	data.question = question;
+	data.result = result;
+	data.result_size = result_size;
 
-    /* initilize dialog data */
-    ZeroMemory(&data, sizeof(data));
-    data.question = question;
-    data.result = result;
-    data.result_size = result_size;
+	/* create modal dialog window */
+	ret = DialogBoxParam(
+			GetNHApp()->hApp,
+			MAKEINTRESOURCE(IDD_GETLIN),
+			GetNHApp()->hMainWnd,
+			GetlinDlgProc,
+			(LPARAM)&data
+	);
+	if( ret==-1 ) panic("Cannot create getlin window");
+	
+	return ret;
+}
+    
+BOOL CALLBACK GetlinDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	struct getlin_data* data;
+	RECT   main_rt, dlg_rt;
+	SIZE   dlg_sz;
+	TCHAR  wbuf[BUFSZ];
+	HDC WindowDC;
+	HWND ControlHWND;
+	SIZE   WindowExtents;
+	SIZE   ViewPortExtents;
+	RECT   ControlRect;
+	RECT   ClientRect;
+	LONG   Division;
+	LONG   ButtonOffset;
 
-    /* create modal dialog window */
-    ret = DialogBoxParam(GetNHApp()->hApp, MAKEINTRESOURCE(IDD_GETLIN),
-                         GetNHApp()->hMainWnd, GetlinDlgProc, (LPARAM) &data);
-    if (ret == -1)
-        panic("Cannot create getlin window");
+	switch (message) 
+	{
+	case WM_INITDIALOG:
+		data = (struct getlin_data*)lParam;
+		SetWindowText(hWnd, NH_A2W(data->question, wbuf, sizeof(wbuf)));
+		SetWindowLong(hWnd, GWL_USERDATA, lParam);
 
-    return (int) ret;
+		/* center dialog in the main window */
+		GetWindowRect(hWnd, &dlg_rt);
+		GetWindowRect(GetNHApp()->hMainWnd, &main_rt);
+		WindowDC = GetWindowDC(hWnd);
+
+		if (!GetWindowExtEx(WindowDC, &WindowExtents) ||
+			!GetViewportExtEx(WindowDC, &ViewPortExtents) ||
+			!GetTextExtentPoint32(GetWindowDC (hWnd), wbuf, _tcslen(wbuf), &dlg_sz))
+		{
+			dlg_sz.cx = 0;
+		}
+		else
+		{
+			/* I think we need to do the following scaling */
+			dlg_sz.cx *= ViewPortExtents.cx; dlg_sz.cx /= WindowExtents.cx;
+			/* Add the size of the various items in the caption bar */
+			dlg_sz.cx += GetSystemMetrics(SM_CXSIZE) +
+				2 * (GetSystemMetrics (SM_CXBORDER) + GetSystemMetrics(SM_CXFRAME));
+		}
+
+		if (dlg_sz.cx < dlg_rt.right - dlg_rt.left)
+			dlg_sz.cx = dlg_rt.right - dlg_rt.left;
+		dlg_sz.cy = dlg_rt.bottom - dlg_rt.top;
+		dlg_rt.left = (main_rt.left+main_rt.right-dlg_sz.cx)/2;
+		dlg_rt.right = dlg_rt.left + dlg_sz.cx;
+		dlg_rt.top = (main_rt.top+main_rt.bottom-dlg_sz.cy)/2;
+		dlg_rt.bottom = dlg_rt.top + dlg_sz.cy;
+		MoveWindow( hWnd,
+					(main_rt.left+main_rt.right-dlg_sz.cx)/2,
+					(main_rt.top+main_rt.bottom-dlg_sz.cy)/2,
+					dlg_sz.cx,
+					dlg_sz.cy,
+					TRUE );
+
+		/* set focus and size of the edit control */
+		ControlHWND = GetDlgItem(hWnd, IDC_GETLIN_EDIT);
+		SetFocus(ControlHWND);
+		GetClientRect (hWnd, &ClientRect);
+		GetWindowRect (ControlHWND, &ControlRect);
+		MoveWindow (ControlHWND, 0, 0,
+			ClientRect.right - ClientRect.left,
+			ControlRect.bottom - ControlRect.top, TRUE);
+		ButtonOffset = ControlRect.bottom - ControlRect.top;
+
+		/* Now get the OK and CANCEL buttons */
+		ControlHWND = GetDlgItem(hWnd, IDOK);
+		GetWindowRect (ControlHWND, &ControlRect);
+		Division = ((ClientRect.right - ClientRect.left) -
+			2 * (ControlRect.right - ControlRect.left)) / 3;
+		MoveWindow (ControlHWND, Division,
+			ButtonOffset,
+			ControlRect.right - ControlRect.left,
+			ControlRect.bottom - ControlRect.top, TRUE);
+		ControlHWND = GetDlgItem(hWnd, IDCANCEL);
+		MoveWindow (ControlHWND,
+			Division * 2 + ControlRect.right - ControlRect.left,
+			ButtonOffset,
+			ControlRect.right - ControlRect.left,
+			ControlRect.bottom - ControlRect.top, TRUE);
+
+		/* tell windows that we've set the focus */
+		return FALSE; 
+	break;
+
+	case WM_COMMAND: 
+	{
+		TCHAR wbuf[BUFSZ];
+
+		switch (LOWORD(wParam)) 
+        { 
+			/* OK button was pressed */
+			case IDOK:
+		      data = (struct getlin_data*)GetWindowLong(hWnd, GWL_USERDATA);
+			  SendDlgItemMessage(hWnd, IDC_GETLIN_EDIT, WM_GETTEXT, (WPARAM)sizeof(wbuf), (LPARAM)wbuf );
+			  NH_W2A(wbuf, data->result, data->result_size);
+
+			  /* Fall through. */
+
+			/* cancel button was pressed */
+			case IDCANCEL: 
+				EndDialog(hWnd, wParam); 
+			return TRUE;
+		}
+	} break;
+	
+	} /* end switch (message) */
+	return FALSE;
 }
 
-INT_PTR CALLBACK
-GetlinDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    struct getlin_data *data;
-    RECT main_rt, dlg_rt;
-    SIZE dlg_sz;
-    TCHAR wbuf[BUFSZ];
-    HDC WindowDC;
-    HWND ControlHWND;
-    SIZE WindowExtents;
-    SIZE ViewPortExtents;
-    RECT ControlRect;
-    RECT ClientRect;
-    LONG Division;
-    LONG ButtonOffset;
-
-    switch (message) {
-    case WM_INITDIALOG:
-        data = (struct getlin_data *) lParam;
-        SetWindowText(hWnd, NH_A2W(data->question, wbuf, sizeof(wbuf)));
-        SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR) data);
-
-        /* center dialog in the main window */
-        GetWindowRect(hWnd, &dlg_rt);
-        GetWindowRect(GetNHApp()->hMainWnd, &main_rt);
-        WindowDC = GetWindowDC(hWnd);
-
-        if (!GetWindowExtEx(WindowDC, &WindowExtents)
-            || !GetViewportExtEx(WindowDC, &ViewPortExtents)
-            || !GetTextExtentPoint32(GetWindowDC(hWnd), wbuf, _tcslen(wbuf),
-                                     &dlg_sz)) {
-            dlg_sz.cx = 0;
-        } else {
-            /* I think we need to do the following scaling */
-            dlg_sz.cx *= ViewPortExtents.cx;
-            dlg_sz.cx /= WindowExtents.cx;
-            /* Add the size of the various items in the caption bar */
-            dlg_sz.cx += GetSystemMetrics(SM_CXSIZE)
-                         + 2 * (GetSystemMetrics(SM_CXBORDER)
-                                + GetSystemMetrics(SM_CXFRAME));
-        }
-
-        if (dlg_sz.cx < dlg_rt.right - dlg_rt.left)
-            dlg_sz.cx = dlg_rt.right - dlg_rt.left;
-        dlg_sz.cy = dlg_rt.bottom - dlg_rt.top;
-        dlg_rt.left = (main_rt.left + main_rt.right - dlg_sz.cx) / 2;
-        dlg_rt.right = dlg_rt.left + dlg_sz.cx;
-        dlg_rt.top = (main_rt.top + main_rt.bottom - dlg_sz.cy) / 2;
-        dlg_rt.bottom = dlg_rt.top + dlg_sz.cy;
-        MoveWindow(hWnd, (main_rt.left + main_rt.right - dlg_sz.cx) / 2,
-                   (main_rt.top + main_rt.bottom - dlg_sz.cy) / 2, dlg_sz.cx,
-                   dlg_sz.cy, TRUE);
-
-        /* set focus and size of the edit control */
-        ControlHWND = GetDlgItem(hWnd, IDC_GETLIN_EDIT);
-        SetFocus(ControlHWND);
-        GetClientRect(hWnd, &ClientRect);
-        GetWindowRect(ControlHWND, &ControlRect);
-        MoveWindow(ControlHWND, 0, 0, ClientRect.right - ClientRect.left,
-                   ControlRect.bottom - ControlRect.top, TRUE);
-        ButtonOffset = ControlRect.bottom - ControlRect.top;
-
-        /* Now get the OK and CANCEL buttons */
-        ControlHWND = GetDlgItem(hWnd, IDOK);
-        GetWindowRect(ControlHWND, &ControlRect);
-        Division = ((ClientRect.right - ClientRect.left)
-                    - 2 * (ControlRect.right - ControlRect.left)) / 3;
-        MoveWindow(ControlHWND, Division, ButtonOffset,
-                   ControlRect.right - ControlRect.left,
-                   ControlRect.bottom - ControlRect.top, TRUE);
-        ControlHWND = GetDlgItem(hWnd, IDCANCEL);
-        MoveWindow(ControlHWND,
-                   Division * 2 + ControlRect.right - ControlRect.left,
-                   ButtonOffset, ControlRect.right - ControlRect.left,
-                   ControlRect.bottom - ControlRect.top, TRUE);
-
-        /* tell windows that we've set the focus */
-        return FALSE;
-        break;
-
-    case WM_COMMAND: {
-        TCHAR wbuf2[BUFSZ];
-
-        switch (LOWORD(wParam)) {
-        /* OK button was pressed */
-        case IDOK:
-            data =
-                (struct getlin_data *) GetWindowLongPtr(hWnd, GWLP_USERDATA);
-            SendDlgItemMessage(hWnd, IDC_GETLIN_EDIT, WM_GETTEXT,
-                               (WPARAM) sizeof(wbuf2), (LPARAM) wbuf2);
-            NH_W2A(wbuf2, data->result, data->result_size);
-
-        /* Fall through. */
-
-        /* cancel button was pressed */
-        case IDCANCEL:
-            EndDialog(hWnd, wParam);
-            return TRUE;
-        }
-    } break;
-
-    } /* end switch (message) */
-    return FALSE;
-}
 
 /*---------------------------------------------------------------*/
 /* dialog data for the list of extended commands */
 struct extcmd_data {
-    int *selection;
+	int*		selection;
 };
 
-INT_PTR CALLBACK ExtCmdDlgProc(HWND, UINT, WPARAM, LPARAM);
+BOOL CALLBACK	ExtCmdDlgProc(HWND, UINT, WPARAM, LPARAM);
 
-int
-mswin_ext_cmd_window(int *selection)
+int mswin_ext_cmd_window (int* selection)
 {
-    if (iflags.debug_fuzzer) {
-        *selection = rnd_extcmd_idx();
+	int ret;
+	struct extcmd_data data;
+	
+	/* init dialog data */
+	ZeroMemory(&data, sizeof(data));
+	*selection = -1;
+	data.selection = selection;
 
-        if (*selection != -1)
-            return IDOK;
-        else
-            return IDCANCEL;
-    }
-
-    INT_PTR ret;
-    struct extcmd_data data;
-
-    /* init dialog data */
-    ZeroMemory(&data, sizeof(data));
-    *selection = -1;
-    data.selection = selection;
-
-    /* create modal dialog window */
-    ret = DialogBoxParam(GetNHApp()->hApp, MAKEINTRESOURCE(IDD_EXTCMD),
-                         GetNHApp()->hMainWnd, ExtCmdDlgProc, (LPARAM) &data);
-    if (ret == -1)
-        panic("Cannot create extcmd window");
-    return (int) ret;
+	/* create modal dialog window */
+	ret = DialogBoxParam(
+			GetNHApp()->hApp,
+			MAKEINTRESOURCE(IDD_EXTCMD),
+			GetNHApp()->hMainWnd,
+			ExtCmdDlgProc,
+			(LPARAM)&data
+	);
+	if( ret==-1 ) panic("Cannot create extcmd window");
+	return ret;
 }
-
-INT_PTR CALLBACK
-ExtCmdDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+    
+BOOL CALLBACK ExtCmdDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    struct extcmd_data *data;
-    RECT main_rt, dlg_rt;
-    SIZE dlg_sz;
-    int i;
-    TCHAR wbuf[255];
+	struct extcmd_data* data;
+	RECT   main_rt, dlg_rt;
+	SIZE   dlg_sz;
+	int    i;
+	const char *ptr;
+	TCHAR wbuf[255];
 
-    switch (message) {
-    case WM_INITDIALOG:
-        data = (struct extcmd_data *) lParam;
-        SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR) data);
+	switch (message) 
+	{
+	case WM_INITDIALOG:
+		data = (struct extcmd_data*)lParam;
+		SetWindowLong(hWnd, GWL_USERDATA, lParam);
 
-        /* center dialog in the main window */
-        GetWindowRect(GetNHApp()->hMainWnd, &main_rt);
-        GetWindowRect(hWnd, &dlg_rt);
-        dlg_sz.cx = dlg_rt.right - dlg_rt.left;
-        dlg_sz.cy = dlg_rt.bottom - dlg_rt.top;
+		/* center dialog in the main window */
+		GetWindowRect(GetNHApp()->hMainWnd, &main_rt);
+		GetWindowRect(hWnd, &dlg_rt);
+		dlg_sz.cx = dlg_rt.right - dlg_rt.left;
+		dlg_sz.cy = dlg_rt.bottom - dlg_rt.top;
 
-        dlg_rt.left = (main_rt.left + main_rt.right - dlg_sz.cx) / 2;
-        dlg_rt.right = dlg_rt.left + dlg_sz.cx;
-        dlg_rt.top = (main_rt.top + main_rt.bottom - dlg_sz.cy) / 2;
-        dlg_rt.bottom = dlg_rt.top + dlg_sz.cy;
-        MoveWindow(hWnd, (main_rt.left + main_rt.right - dlg_sz.cx) / 2,
-                   (main_rt.top + main_rt.bottom - dlg_sz.cy) / 2, dlg_sz.cx,
-                   dlg_sz.cy, TRUE);
+		dlg_rt.left = (main_rt.left+main_rt.right-dlg_sz.cx)/2;
+		dlg_rt.right = dlg_rt.left + dlg_sz.cx;
+		dlg_rt.top = (main_rt.top+main_rt.bottom-dlg_sz.cy)/2;
+		dlg_rt.bottom = dlg_rt.top + dlg_sz.cy;
+		MoveWindow( hWnd,
+					(main_rt.left+main_rt.right-dlg_sz.cx)/2,
+					(main_rt.top+main_rt.bottom-dlg_sz.cy)/2,
+					dlg_sz.cx,
+					dlg_sz.cy,
+					TRUE );
 
-        /* fill combobox with extended commands */
-        for (i = 0; extcmdlist[i].ef_txt; i++) {
-            SendDlgItemMessage(
-                hWnd, IDC_EXTCMD_LIST, LB_ADDSTRING, (WPARAM) 0,
-                (LPARAM) NH_A2W(extcmdlist[i].ef_txt, wbuf, sizeof(wbuf)));
-        }
+		/* fill combobox with extended commands */
+		for(i=0; (ptr=extcmdlist[i].ef_txt); i++) {
+			SendDlgItemMessage(hWnd, IDC_EXTCMD_LIST, LB_ADDSTRING, (WPARAM)0, (LPARAM)NH_A2W(ptr, wbuf, sizeof(wbuf)) );
+		}
 
-        /* set focus to the list control */
-        SetFocus(GetDlgItem(hWnd, IDC_EXTCMD_LIST));
+		/* set focus to the list control */
+		SetFocus(GetDlgItem(hWnd, IDC_EXTCMD_LIST));
 
-        /* tell windows we set the focus */
-        return FALSE;
-        break;
+		/* tell windows we set the focus */
+		return FALSE;
+	break;
 
-    case WM_COMMAND:
-        data = (struct extcmd_data *) GetWindowLongPtr(hWnd, GWLP_USERDATA);
-        switch (LOWORD(wParam)) {
-        /* OK button ws clicked */
-        case IDOK:
-            *data->selection = (int) SendDlgItemMessage(
-                hWnd, IDC_EXTCMD_LIST, LB_GETCURSEL, (WPARAM) 0, (LPARAM) 0);
-            if (*data->selection == LB_ERR)
-                *data->selection = -1;
-        /* Fall through. */
+	case WM_COMMAND:
+        data = (struct extcmd_data*)GetWindowLong(hWnd, GWL_USERDATA);
+		switch (LOWORD(wParam)) 
+        { 
+		  /* OK button ws clicked */
+          case IDOK:
+			  *data->selection = SendDlgItemMessage(hWnd, IDC_EXTCMD_LIST, LB_GETCURSEL, (WPARAM)0, (LPARAM)0 );
+			  if( *data->selection==LB_ERR )
+				  *data->selection = -1;
+			  /* Fall through. */
 
-        /* CANCEL button ws clicked */
-        case IDCANCEL:
-            EndDialog(hWnd, wParam);
-            return TRUE;
+		  /* CANCEL button ws clicked */
+		  case IDCANCEL:
+				EndDialog(hWnd, wParam); 
+		  return TRUE;
 
-        /* list control events */
-        case IDC_EXTCMD_LIST:
-            switch (HIWORD(wParam)) {
-            case LBN_DBLCLK:
-                /* double click within the list
-                       wParam
-                         The low-order word is the list box identifier.
-                         The high-order word is the notification message.
-                       lParam
-                         Handle to the list box
-                      */
-                *data->selection = (int) SendMessage(
-                    (HWND) lParam, LB_GETCURSEL, (WPARAM) 0, (LPARAM) 0);
-                if (*data->selection == LB_ERR)
-                    *data->selection = -1;
-                EndDialog(hWnd, IDOK);
-                return TRUE;
-            }
-            break;
-        }
-    }
-    return FALSE;
+		  /* list control events */
+		  case IDC_EXTCMD_LIST:
+				switch(HIWORD(wParam)) {
+
+				case LBN_DBLCLK: 
+				  /* double click within the list 
+					 wParam 
+					   The low-order word is the list box identifier. 
+					   The high-order word is the notification message. 
+					 lParam 
+					   Handle to the list box
+					*/
+				   *data->selection = SendMessage((HWND)lParam, LB_GETCURSEL, (WPARAM)0, (LPARAM)0);
+				   if( *data->selection==LB_ERR )
+					   *data->selection = -1;
+				   EndDialog(hWnd, IDOK); 
+		   	       return TRUE;
+				}
+		  break;
+		}
+	}
+	return FALSE;
 }
 
 /*---------------------------------------------------------------*/
-/* player selector dialog */
-
-/* NOTE: this enumeration is in control tab order */
-enum player_selector_control {
-    psc_name_group,
-    psc_role_group,
-    psc_race_group,
-    psc_alignment_group,
-    psc_gender_group,
-    psc_name_box,
-    psc_role_list,
-    psc_race_list,
-    psc_lawful_button,
-    psc_neutral_button,
-    psc_chaotic_button,
-    psc_male_button,
-    psc_female_button,
-    psc_play_button,
-    psc_random_button,
-    psc_quit_button,
-    psc_control_count
+/* player selector dialog data */
+struct plsel_data {
+	int*	selection;
 };
 
-static const int s_psc_id[psc_control_count] = {
-    IDC_PLSEL_NAME_GROUP,
-    IDC_PLSEL_ROLE_GROUP,
-    IDC_PLSEL_RACE_GROUP,
-    IDC_PLSEL_ALIGNMENT_GROUP,
-    IDC_PLSEL_GENDER_GROUP,
-    IDC_PLSEL_NAME,
-    IDC_PLSEL_ROLE_LIST,
-    IDC_PLSEL_RACE_LIST,
-    IDC_PLSEL_ALIGN_LAWFUL,
-    IDC_PLSEL_ALIGN_NEUTRAL,
-    IDC_PLSEL_ALIGN_CHAOTIC,
-    IDC_PLSEL_GENDER_MALE,
-    IDC_PLSEL_GENDER_FEMALE,
-    IDOK,
-    IDC_PLSEL_RANDOM,
-    IDCANCEL
-};
+BOOL CALLBACK	PlayerSelectorDlgProc(HWND, UINT, WPARAM, LPARAM);
+static void 		plselInitDialog(HWND hWnd);
+static void			plselAdjustLists(HWND hWnd, int changed_opt);
+static int			plselFinalSelection(HWND hWnd, int* selection);
 
-typedef struct {
-    int     id;
-    POINT   pos;
-    SIZE    size;
-    HWND    hWnd;
-} control_t;
-
-typedef struct plsel_data {
-    HWND dialog;
-    HWND focus;
-    control_t controls[psc_control_count];
-    SIZE client_size;
-    int config_race;
-    int config_role;
-    int config_gender;
-    int config_alignment;
-    int role_count;
-    int race_count;
-} plsel_data_t;
-
-INT_PTR CALLBACK PlayerSelectorDlgProc(HWND, UINT, WPARAM, LPARAM);
-static void plselAdjustSelections(HWND hWnd);
-static boolean plselRandomize(plsel_data_t * data);
-static BOOL plselDrawItem(HWND hWnd, WPARAM wParam, LPARAM lParam);
-
-boolean
-mswin_player_selection_window(void)
+int mswin_player_selection_window ( int* selection )
 {
-    INT_PTR ret;
-    plsel_data_t data;
-    boolean ok = TRUE;
+	int ret;
+	struct plsel_data data;
 
-    /* save away configuration settings */
-    data.config_role = flags.initrole;
-    data.config_race = flags.initrace;
-    data.config_gender = flags.initgend;
-    data.config_alignment = flags.initalign;
+	/* init dialog data */
+	ZeroMemory(&data, sizeof(data));
+	data.selection = selection;
 
-    if (!plselRandomize(&data)) {
-        /* create modal dialog */
-        ret = DialogBoxParam(
-            GetNHApp()->hApp, MAKEINTRESOURCE(IDD_PLAYER_SELECTOR),
-            GetNHApp()->hMainWnd, PlayerSelectorDlgProc, (LPARAM) &data);
-        if (ret == -1)
-            panic("Cannot create getlin window");
-        ok = (ret == IDOK);
-    }
-
-    return ok;
+	/* create modal dialog */
+	ret = DialogBoxParam(
+			GetNHApp()->hApp,
+			MAKEINTRESOURCE(IDD_PLAYER_SELECTOR),
+			GetNHApp()->hMainWnd,
+			PlayerSelectorDlgProc,
+			(LPARAM)&data
+	);
+	if( ret==-1 ) panic("Cannot create getlin window");
+	
+	return ret;
 }
 
-int
-list_view_height(HWND hWnd, int count)
+BOOL CALLBACK PlayerSelectorDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    return (ListView_ApproximateViewRect(hWnd, -1, -1, count)) >> 16;
+	struct plsel_data* data;
+	RECT   main_rt, dlg_rt;
+	SIZE   dlg_sz;
+
+	switch (message) 
+	{
+	case WM_INITDIALOG:
+		data = (struct plsel_data*)lParam;
+		SetWindowLong(hWnd, GWL_USERDATA, lParam);
+
+		/* center dialog in the main window */
+		GetWindowRect(GetNHApp()->hMainWnd, &main_rt);
+		GetWindowRect(hWnd, &dlg_rt);
+		dlg_sz.cx = dlg_rt.right - dlg_rt.left;
+		dlg_sz.cy = dlg_rt.bottom - dlg_rt.top;
+
+		dlg_rt.left = (main_rt.left+main_rt.right-dlg_sz.cx)/2;
+		dlg_rt.right = dlg_rt.left + dlg_sz.cx;
+		dlg_rt.top = (main_rt.top+main_rt.bottom-dlg_sz.cy)/2;
+		dlg_rt.bottom = dlg_rt.top + dlg_sz.cy;
+		MoveWindow( hWnd,
+					(main_rt.left+main_rt.right-dlg_sz.cx)/2,
+					(main_rt.top+main_rt.bottom-dlg_sz.cy)/2,
+					dlg_sz.cx,
+					dlg_sz.cy,
+					TRUE );
+
+		/* init dialog */
+		plselInitDialog(hWnd);
+
+		/* set focus on the role checkbox (random) field */
+		SetFocus(GetDlgItem(hWnd, IDC_PLSEL_ROLE_RANDOM));
+
+		/* tell windows we set the focus */
+		return FALSE;
+	break;
+
+	case WM_COMMAND:
+        data = (struct plsel_data*)GetWindowLong(hWnd, GWL_USERDATA);
+		switch (LOWORD(wParam)) { 
+
+		/* OK button was clicked */
+		case IDOK:
+			if( plselFinalSelection(hWnd, data->selection) ) {
+				EndDialog(hWnd, wParam); 
+			} else {
+				NHMessageBox(hWnd, TEXT("Cannot match this role. Try something else."), MB_ICONSTOP | MB_OK );
+			}
+		return TRUE;
+
+		/* CANCEL button was clicked */
+		case IDCANCEL:
+			*data->selection = -1;
+			EndDialog(hWnd, wParam); 
+		return TRUE;
+
+		/* following are events from dialog controls: 
+		   "random" checkboxes send BN_CLICKED messages;
+		   role/race/... combo-boxes send CBN_SELENDOK 
+		   if something was selected;
+		*/
+		case IDC_PLSEL_ROLE_RANDOM:
+			if( HIWORD(wParam)==BN_CLICKED ) {
+				/* enable corresponding list window if "random"
+				   checkbox was "unchecked" */
+				EnableWindow(
+					GetDlgItem(hWnd, IDC_PLSEL_ROLE_LIST), 
+					SendMessage((HWND)lParam, BM_GETCHECK, 0, 0)==BST_UNCHECKED
+				  );
+			}
+		break;
+
+		case IDC_PLSEL_RACE_RANDOM:
+			if( HIWORD(wParam)==BN_CLICKED ) {
+				EnableWindow(
+					GetDlgItem(hWnd, IDC_PLSEL_RACE_LIST), 
+					SendMessage((HWND)lParam, BM_GETCHECK, 0, 0)==BST_UNCHECKED
+				  );
+			}
+		break;
+
+		case IDC_PLSEL_GENDER_RANDOM:
+			if( HIWORD(wParam)==BN_CLICKED ) {
+				EnableWindow(
+					GetDlgItem(hWnd, IDC_PLSEL_GENDER_LIST), 
+					SendMessage((HWND)lParam, BM_GETCHECK, 0, 0)==BST_UNCHECKED
+				  );
+			}
+		break;
+
+		case IDC_PLSEL_ALIGN_RANDOM:
+			if( HIWORD(wParam)==BN_CLICKED ) {
+				EnableWindow(
+					GetDlgItem(hWnd, IDC_PLSEL_ALIGN_LIST), 
+					SendMessage((HWND)lParam, BM_GETCHECK, 0, 0)==BST_UNCHECKED
+				  );
+			}
+		break;
+
+		case IDC_PLSEL_ROLE_LIST:
+			if( HIWORD(wParam)==CBN_SELENDOK ) {
+				/* filter out invalid options if 
+				   the selection was made */
+				plselAdjustLists( hWnd, LOWORD(wParam) );
+			}
+		break;
+
+		case IDC_PLSEL_RACE_LIST:
+			if( HIWORD(wParam)==CBN_SELENDOK ) {
+				plselAdjustLists( hWnd, LOWORD(wParam) );
+			}
+		break;
+
+		case IDC_PLSEL_GENDER_LIST:
+			if( HIWORD(wParam)==CBN_SELENDOK ) {
+				plselAdjustLists( hWnd, LOWORD(wParam) );
+			}
+		break;
+
+		case IDC_PLSEL_ALIGN_LIST:
+			if( HIWORD(wParam)==CBN_SELENDOK ) {
+				plselAdjustLists( hWnd, LOWORD(wParam) );
+			}
+		break;
+		}
+	break;
+	}
+	return FALSE;
 }
 
-/* calculate the size and position of the controls taking into account
-   the per-monitor DPI expressed as a scaling factor on sizes at 96 DPI */
-void 
-calculate_player_selector_layout(plsel_data_t * data)
+void setComboBoxValue(HWND hWnd, int combo_box, int value)
 {
-    MonitorInfo monitorInfo;
-    win10_monitor_info(data->dialog, &monitorInfo);
-
-    double scale = monitorInfo.scale;
-
-    /* Note these hard coded sizes are in 96DPI pixels and must be 
-       scaled by the per-monitor DPI scaling factor */
-    int list_width = (int) (120 * scale);
-    int group_border = (int) (16 * scale);
-    int client_border = (int) (16 * scale);
-    int group_spacing = (int) (16 * scale);
-    int button_width = (int) (80 * scale);
-    int button_height = (int) (28 * scale);
-
-    /* set control sizes */
-    control_t * name_box = &data->controls[psc_name_box];
-    name_box->size.cx = (int) (280 * scale);
-    name_box->size.cy = (int) (24 * scale);
-
-    control_t * role_list = &data->controls[psc_role_list];
-    /* NOTE: we dont' scale the list view reported height as it appears these
-             values are the actual size the control will be drawn at using the
-             existing DPI value */
-    role_list->size.cy = list_view_height(role_list->hWnd, data->role_count);
-    role_list->size.cx = list_width;
-
-    control_t * race_list = &data->controls[psc_race_list];
-    race_list->size.cy = list_view_height(race_list->hWnd, data->race_count);
-    race_list->size.cx = list_width;
-
-    for(int i = psc_lawful_button; i <= psc_quit_button; i++) {
-        data->controls[i].size.cx = button_width;
-        data->controls[i].size.cy = button_height;
-    }
-
-    for(int i = 0; i < 3; i++) {
-        control_t * group_control = &data->controls[psc_name_group + i];
-        control_t * inner_control = &data->controls[psc_name_box + i];
-        group_control->size.cx = inner_control->size.cx + (2 * group_border);
-        group_control->size.cy = inner_control->size.cy + (2 * group_border);
-    }
-
-    control_t * alignment_group = &data->controls[psc_alignment_group];
-    alignment_group->size.cx = button_width + (2 * group_border);
-    alignment_group->size.cy = (3 * button_height) + (2 * group_border);
-
-    control_t * gender_group = &data->controls[psc_gender_group];
-    gender_group->size.cx = button_width + (2 * group_border);
-    gender_group->size.cy = (2 * button_height) + (2 * group_border);
-
-    /* set control positions */
-    control_t * name_group = &data->controls[psc_name_group];
-    name_group->pos.x = client_border;
-    name_group->pos.y = client_border;
-
-    control_t * role_group = &data->controls[psc_role_group];
-    role_group->pos.x = client_border;
-    role_group->pos.y = name_group->pos.y + name_group->size.cy + group_spacing;
-
-    control_t * race_group = &data->controls[psc_race_group];
-    race_group->pos.x = role_group->pos.x + role_group->size.cx + group_spacing;
-    race_group->pos.y = role_group->pos.y;
-
-    for(int i = 0; i < 3; i++) {
-        control_t * group_control = &data->controls[psc_name_group + i];
-        control_t * inner_control = &data->controls[psc_name_box + i];
-        inner_control->pos.x = group_control->pos.x + group_border;
-        inner_control->pos.y = group_control->pos.y + group_border;
-    }
-
-    alignment_group->pos.x = race_group->pos.x + race_group->size.cx + group_spacing;
-    alignment_group->pos.y = race_group->pos.y;
-
-    for(int i = psc_lawful_button; i <= psc_chaotic_button; i++) {
-        data->controls[i].pos.x = alignment_group->pos.x + group_border;
-        data->controls[i].pos.y = alignment_group->pos.y + group_border + 
-                                  ((i -psc_lawful_button) * button_height);
-    }
-
-    gender_group->pos.x = alignment_group->pos.x;
-    gender_group->pos.y = alignment_group->pos.y + alignment_group->size.cy + group_spacing;
-
-    for(int i = psc_male_button; i <= psc_female_button; i++) {
-        data->controls[i].pos.x = gender_group->pos.x + group_border;
-        data->controls[i].pos.y = gender_group->pos.y + group_border + 
-                                  ((i - psc_male_button)  * button_height);
-    }
-
-    int group_bottom = role_group->pos.y + role_group->size.cy;
-    if (group_bottom < race_group->pos.y + race_group->size.cy) 
-        group_bottom = race_group->pos.y + race_group->size.cy;
-    if (group_bottom < gender_group->pos.y + gender_group->size.cy) 
-        group_bottom = gender_group->pos.y + gender_group->size.cy;
-
-    control_t * play_button = &data->controls[psc_play_button];
-    play_button->pos.y = group_bottom + group_spacing;
-    play_button->pos.x = role_group->pos.x;
-
-    control_t * random_button = &data->controls[psc_random_button];
-    random_button->pos.y = play_button->pos.y;
-    random_button->pos.x = race_list->pos.x;
-
-    control_t * quit_button = &data->controls[psc_quit_button];
-    quit_button->pos.y = play_button->pos.y;
-    quit_button->pos.x = data->controls[psc_female_button].pos.x;
-
-    data->client_size.cx = alignment_group->pos.x + alignment_group->size.cx;
-    data->client_size.cy = quit_button->pos.y + quit_button->size.cy;
-    data->client_size.cx += client_border;
-    data->client_size.cy += client_border;
-}
-
-void 
-get_rect_size(RECT * rect, SIZE * size)
-{
-    size->cx = rect->right - rect->left + 1;
-    size->cy = rect->bottom - rect->top + 1;
-}
-
-/* center given dialog in the main window */
-void 
-center_dialog(HWND dialog)
-{
-    RECT main_rect;
-    SIZE main_size;
-    RECT dialog_rect;
-    SIZE dialog_size;
-    POINT pos;
-
-    GetWindowRect(GetNHApp()->hMainWnd, &main_rect);
-    get_rect_size(&main_rect, &main_size);
-
-    GetWindowRect(dialog, &dialog_rect);
-    get_rect_size(&dialog_rect, &dialog_size);
-
-    pos.x = main_rect.left + (main_size.cx - dialog_size.cx) / 2;
-    pos.y = main_rect.top + (main_size.cy - dialog_size.cy) / 2;
-
-    MoveWindow(dialog, pos.x, pos.y, dialog_size.cx,  dialog_size.cy,
-        TRUE);
-}
-
-/* size the dialog such that it has the given client rect size */
-void 
-size_dialog(HWND dialog, SIZE new_client_size)
-{
-    RECT dialog_rect;
-    SIZE dialog_size;
-    RECT client_rect;
-    SIZE client_size;
-
-    GetWindowRect(dialog, &dialog_rect);
-    get_rect_size(&dialog_rect, &dialog_size);
-
-    GetClientRect(dialog, &client_rect);
-    get_rect_size(&client_rect, &client_size);
-
-    dialog_size.cx += new_client_size.cx - client_size.cx;
-    dialog_size.cy += new_client_size.cy - client_size.cy;
-
-    MoveWindow(dialog, dialog_rect.left, dialog_rect.top,
-                       dialog_size.cx,  dialog_size.cy, TRUE);
-}
-
-/* helper routine to move all controls according to there position
-   and size information */
-void 
-move_controls(control_t * controls, int count)
-{
-    control_t * control = controls;
-    while(count-- > 0) {
-        MoveWindow(control->hWnd, control->pos.x, control->pos.y,
-            control->size.cx, control->size.cy, TRUE);
-        control++;
-    }
-}
-
-/* adjust the size and positions of all controls in the player
-   selection dialog taking into account the per-monitor DPI. */
-void
-do_player_selector_layout(plsel_data_t * data)
-{
-    calculate_player_selector_layout(data);
-    move_controls(data->controls, psc_control_count);
-    size_dialog(data->dialog, data->client_size);
+	int index_max = SendDlgItemMessage(hWnd, combo_box, CB_GETCOUNT, 0, 0);
+	int index;
+	int value_to_set = LB_ERR;
+	for (index = 0; index < index_max; index++) {
+	    if (SendDlgItemMessage(hWnd, combo_box, CB_GETITEMDATA, (WPARAM)index, 0) == value) {
+		value_to_set = index;
+		break;
+	    }
+	}
+	SendDlgItemMessage(hWnd, combo_box, CB_SETCURSEL, (WPARAM)value_to_set, 0);
 }
 
 /* initialize player selector dialog */
-void
-plselInitDialog(struct plsel_data * data)
+void plselInitDialog(HWND hWnd)
 {
-    TCHAR wbuf[BUFSZ];
-    LVCOLUMN lvcol;
+	TCHAR wbuf[BUFSZ];
 
-    SetWindowLongPtr(data->dialog, GWLP_USERDATA, (LONG_PTR) data);
+	/* set player name */
+	SetDlgItemText(hWnd, IDC_PLSEL_NAME, NH_A2W(plname, wbuf, sizeof(wbuf)));
 
-    for(int i = 0; i < psc_control_count; i++) {
-        data->controls[i].id = s_psc_id[i];
-        data->controls[i].hWnd = GetDlgItem(data->dialog, s_psc_id[i]);
-    }
+	/* check flags for consistency */
+	if( flags.initrole>=0 ) {
+		if (flags.initrace>=0 && !validrace(flags.initrole, flags.initrace)) {
+			flags.initrace = ROLE_NONE;
+		}
 
-    control_t * role_list = &data->controls[psc_role_list];
+		if (flags.initgend>=0 && !validgend(flags.initrole, flags.initrace, flags.initgend)) {
+			flags.initgend = ROLE_NONE;
+		}
 
-    ZeroMemory(&lvcol, sizeof(lvcol));
-    lvcol.mask = LVCF_WIDTH;
-    lvcol.cx = 1024;
+		if (flags.initalign>=0 && !validalign(flags.initrole, flags.initrace, flags.initalign)) {
+			flags.initalign = ROLE_NONE;
+		}
+	}
 
-    /* build role list */
-    ListView_InsertColumn(role_list->hWnd, 0, &lvcol);
-    data->role_count = 0;
-    for (int i = 0; roles[i].name.m; i++) {
-        LVITEM lvitem;
-        ZeroMemory(&lvitem, sizeof(lvitem));
+	/* populate select boxes */
+	plselAdjustLists(hWnd, -1);
 
-        lvitem.mask = LVIF_STATE | LVIF_TEXT;
-        lvitem.iItem = i;
-        lvitem.iSubItem = 0;
-        lvitem.state = 0;
-        lvitem.stateMask = LVIS_FOCUSED;
-        if (flags.female && roles[i].name.f)
-            lvitem.pszText = NH_A2W(roles[i].name.f, wbuf, BUFSZ);
-        else
-            lvitem.pszText = NH_A2W(roles[i].name.m, wbuf, BUFSZ);
-        if (ListView_InsertItem(role_list->hWnd, &lvitem) == -1) {
-            panic("cannot insert menu item");
-        }
-        data->role_count++;
-    }
+	/* intialize roles list */
+	if( flags.initrole<0 || !ok_role(flags.initrole, ROLE_NONE, ROLE_NONE, ROLE_NONE)) {
+		CheckDlgButton(hWnd, IDC_PLSEL_ROLE_RANDOM, BST_CHECKED);
+		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_ROLE_LIST), FALSE);
+	} else {
+		CheckDlgButton(hWnd, IDC_PLSEL_ROLE_RANDOM, BST_UNCHECKED);
+		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_ROLE_LIST), TRUE);
+		setComboBoxValue(hWnd, IDC_PLSEL_ROLE_LIST, flags.initrole);
+	}
 
-    /* build race list */
-    control_t * race_list = &data->controls[psc_race_list];
-    ListView_InsertColumn(race_list->hWnd, 0, &lvcol);
-    data->race_count = 0;
-    for (int i = 0; races[i].noun; i++) {
-        LVITEM lvitem;
-        ZeroMemory(&lvitem, sizeof(lvitem));
+	/* intialize races list */
+	if( flags.initrace<0 || !ok_race(flags.initrole, flags.initrace, ROLE_NONE, ROLE_NONE) ) {
+		CheckDlgButton(hWnd, IDC_PLSEL_RACE_RANDOM, BST_CHECKED);
+		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_RACE_LIST), FALSE);
+	} else {
+		CheckDlgButton(hWnd, IDC_PLSEL_RACE_RANDOM, BST_UNCHECKED);
+		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_RACE_LIST), TRUE);
+		setComboBoxValue(hWnd, IDC_PLSEL_RACE_LIST, flags.initrace);
+	}
 
-        lvitem.mask = LVIF_STATE | LVIF_TEXT;
-        lvitem.iItem = i;
-        lvitem.iSubItem = 0;
-        lvitem.state = 0;
-        lvitem.stateMask = LVIS_FOCUSED;
-        lvitem.pszText = NH_A2W(races[i].noun, wbuf, BUFSZ);
-        if (ListView_InsertItem(race_list->hWnd, &lvitem) == -1) {
-            panic("cannot insert menu item");
-        }
-        data->race_count++;
-    }
+	/* intialize genders list */
+	if( flags.initgend<0 || !ok_gend(flags.initrole, flags.initrace, flags.initgend, ROLE_NONE)) {
+		CheckDlgButton(hWnd, IDC_PLSEL_GENDER_RANDOM, BST_CHECKED);
+		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_GENDER_LIST), FALSE);
+	} else {
+		CheckDlgButton(hWnd, IDC_PLSEL_GENDER_RANDOM, BST_UNCHECKED);
+		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_GENDER_LIST), TRUE);
+		setComboBoxValue(hWnd, IDC_PLSEL_GENDER_LIST, flags.initgend);
+	}
 
-    /* set gender radio button state */
-    control_t * gender_buttons = &data->controls[psc_male_button];
-    for (int i = 0; i < ROLE_GENDERS; i++)
-        Button_Enable(gender_buttons[i].hWnd, TRUE);
-
-    Button_SetCheck(data->controls[psc_male_button].hWnd, BST_CHECKED);
-
-    /* set alignment radio button state */
-    control_t * alignment_buttons = &data->controls[psc_lawful_button];
-    for (int i = 0; i < ROLE_ALIGNS; i++)
-        Button_Enable(alignment_buttons[i].hWnd, TRUE);
-
-    Button_SetCheck(data->controls[psc_lawful_button].hWnd, BST_CHECKED);
-
-    /* set player name */
-    control_t * name_box = &data->controls[psc_name_box];
-    SetDlgItemText(data->dialog, name_box->id, NH_A2W(g.plname, wbuf, sizeof(wbuf)));
-
-    plselRandomize(data);
-
-    /* populate select boxes */
-    plselAdjustSelections(data->dialog);
-
-    /* set tab order */
-    control_t * control = &data->controls[psc_quit_button];
-    for(int i = psc_quit_button; i >= psc_name_box; i--, control++)
-        SetWindowPos(control->hWnd, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-
-    do_player_selector_layout(data);
-
-    center_dialog(data->dialog);
+	/* intialize alignments list */
+	if( flags.initalign<0 || !ok_align(flags.initrole, flags.initrace, flags.initgend, flags.initalign) ) {
+		CheckDlgButton(hWnd, IDC_PLSEL_ALIGN_RANDOM, BST_CHECKED);
+		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_ALIGN_LIST), FALSE);
+	} else {
+		CheckDlgButton(hWnd, IDC_PLSEL_ALIGN_RANDOM, BST_UNCHECKED);
+		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_ALIGN_LIST), TRUE);
+		setComboBoxValue(hWnd, IDC_PLSEL_ALIGN_LIST, flags.initalign);
+	}
 }
 
-INT_PTR CALLBACK
-PlayerSelectorDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+/* adjust role/race/alignment/gender list - filter out
+   invalid combinations 
+   changed_sel points to the list where selection occured
+   (-1 if unknown)
+*/
+void  plselAdjustLists(HWND hWnd, int changed_sel)
 {
-    plsel_data_t *data;
+	HWND control_role, control_race, control_gender, control_align;
+	int  initrole, initrace, initgend, initalign;
+	int i;
+	int ind;
+	int valid_opt;
+	TCHAR wbuf[255];
 
-    switch (message) {
-    case WM_INITDIALOG:
+	/* get control handles */
+	control_role = GetDlgItem(hWnd, IDC_PLSEL_ROLE_LIST);
+	control_race = GetDlgItem(hWnd, IDC_PLSEL_RACE_LIST);
+	control_gender = GetDlgItem(hWnd, IDC_PLSEL_GENDER_LIST);
+	control_align = GetDlgItem(hWnd, IDC_PLSEL_ALIGN_LIST);
 
-        data = (plsel_data_t *) lParam;
-        data->dialog = hWnd;
+	/* get current selections */	
+	ind = SendMessage(control_role, CB_GETCURSEL, 0, 0);
+	initrole = (ind==LB_ERR)? flags.initrole : SendMessage(control_role, CB_GETITEMDATA, ind, 0);
 
-        plselInitDialog(data);
+	ind = SendMessage(control_race, CB_GETCURSEL, 0, 0);
+	initrace = (ind==LB_ERR)? flags.initrace : SendMessage(control_race, CB_GETITEMDATA, ind, 0);
 
-        /* tell windows to set the focus */
-        return TRUE;
+	ind = SendMessage(control_gender, CB_GETCURSEL, 0, 0);
+	initgend = (ind==LB_ERR)? flags.initgend : SendMessage(control_gender, CB_GETITEMDATA, ind, 0);
 
-    case WM_DRAWITEM:
-        if (wParam == IDC_PLSEL_ROLE_LIST ||  wParam == IDC_PLSEL_RACE_LIST)
-            return plselDrawItem(hWnd, wParam, lParam);
-        break;
+	ind = SendMessage(control_align, CB_GETCURSEL, 0, 0);
+	initalign = (ind==LB_ERR)? flags.initalign : SendMessage(control_align, CB_GETITEMDATA, ind, 0);
 
-    case WM_NOTIFY:
-        {
-            LPNMHDR nmhdr = (LPNMHDR)lParam;
-            HWND control = nmhdr->hwndFrom;
+	/* intialize roles list */
+	if( changed_sel==-1 ) {
+		valid_opt = 0;
 
-            data = (struct plsel_data *) GetWindowLongPtr(hWnd, GWLP_USERDATA);
+		/* reset content and populate the list */
+		SendMessage(control_role, CB_RESETCONTENT, 0, 0); 
+		for (i = 0; roles[i].name.m; i++) {
+			if (initgend>=0 && flags.female && roles[i].name.f)
+				ind = SendMessage(control_role, CB_ADDSTRING, (WPARAM)0, (LPARAM)NH_A2W(roles[i].name.f, wbuf, sizeof(wbuf)) );
+			else 
+				ind = SendMessage(control_role, CB_ADDSTRING, (WPARAM)0, (LPARAM)NH_A2W(roles[i].name.m, wbuf, sizeof(wbuf)) );
 
-            control_t * role_control = &data->controls[psc_role_list];
-            control_t * race_control = &data->controls[psc_race_list];
+			SendMessage(control_role, CB_SETITEMDATA, (WPARAM)ind, (LPARAM)i );
+			if( i==initrole ) { 
+				SendMessage(control_role, CB_SETCURSEL, (WPARAM)ind, (LPARAM)0 );
+				valid_opt = 1;
+			}
+		}
+		
+		/* set selection to the previously selected role
+		   if it is still valid */
+		if( !valid_opt ) {
+			initrole = ROLE_NONE;
+			initrace = ROLE_NONE;
+			initgend = ROLE_NONE;
+			initalign = ROLE_NONE;
+			SendMessage(control_role, CB_SETCURSEL, (WPARAM)-1, (LPARAM)0 );
+		}
 
-            switch (nmhdr->code) {
-            case LVN_KEYDOWN:
-                {
-                    LPNMLVKEYDOWN lpnmkeydown = (LPNMLVKEYDOWN) lParam;
+		/* trigger change of the races list */
+		changed_sel=IDC_PLSEL_ROLE_LIST;
+	}
 
-                    if (lpnmkeydown->wVKey == ' ') {
-                        if (control == role_control->hWnd) {
-                            int i = ListView_GetNextItem(control, -1, LVNI_FOCUSED);
-                            assert(i == -1 || ListView_GetNextItem(control, i, LVNI_FOCUSED) == -1);
-                            flags.initrole = i;
-                            plselAdjustSelections(hWnd);
-                        } else if (control == race_control->hWnd) {
-                            int i = ListView_GetNextItem(control, -1, LVNI_FOCUSED);
-                            assert(i == -1 || ListView_GetNextItem(control, i, LVNI_FOCUSED) == -1);
-                            if (ok_race(flags.initrole, i, ROLE_RANDOM, ROLE_RANDOM)) {
-                                flags.initrace = i;
-                                plselAdjustSelections(hWnd);
-                            }
-                        }
-                    }
-                }
-            break;
-            case NM_CLICK:
-                {
-                    LPNMLISTVIEW lpnmitem = (LPNMLISTVIEW)lParam;
-                    int i = lpnmitem->iItem;
-                    if (i == -1)
-                        return FALSE;
-                    if (control == role_control->hWnd) {
-                        flags.initrole = i;
-                        plselAdjustSelections(hWnd);
-                    } else if(control == race_control->hWnd) {
-                        if (ok_race(flags.initrole, i, ROLE_RANDOM, ROLE_RANDOM)) {
-                            flags.initrace = i;
-                            plselAdjustSelections(hWnd);
-                        }
-                    }
-                }
-                break;
-            case NM_KILLFOCUS:
-                {
-                    if (data->focus == race_control->hWnd) {
-                        data->focus = NULL;
-                        ListView_RedrawItems(race_control->hWnd, 0, data->race_count - 1);
-                    } else if (data->focus == role_control->hWnd) {
-                        data->focus = NULL;
-                        ListView_RedrawItems(role_control->hWnd, 0, data->role_count - 1);
-                    }
-                }
-                break;
-            case NM_SETFOCUS:
-                {
-                    data->focus = control;
+	/* intialize races list */
+	if( changed_sel==IDC_PLSEL_ROLE_LIST ) {
+		valid_opt = 0;
 
-                    if (control == race_control->hWnd) {
-                        data->focus = control;
-                        plselAdjustSelections(hWnd);
-                    } else if (control == role_control->hWnd) {
-                        data->focus = control;
-                        plselAdjustSelections(hWnd);
-                    }
-                }
-                break;
-            }
-        }
-        break;
+		/* reset content and populate the list */
+		SendMessage(control_race, CB_RESETCONTENT, 0, 0); 
+		for (i = 0; races[i].noun; i++)
+			if (ok_race(initrole, i, ROLE_NONE, ROLE_NONE)) {
+				ind = SendMessage(control_race, CB_ADDSTRING, (WPARAM)0, (LPARAM)NH_A2W(races[i].noun, wbuf, sizeof(wbuf)) ); 
+				SendMessage(control_race, CB_SETITEMDATA, (WPARAM)ind, (LPARAM)i ); 
+				if( i==initrace ) { 
+					SendMessage(control_race, CB_SETCURSEL, (WPARAM)ind, (LPARAM)0 );
+					valid_opt = 1;
+				}
+			}
 
-    case WM_COMMAND:
-        data = (struct plsel_data *) GetWindowLongPtr(hWnd, GWLP_USERDATA);
-        switch (LOWORD(wParam)) {
-        /* OK button was clicked */
-        case IDOK:
-            EndDialog(hWnd, wParam);
-            return TRUE;
+		/* set selection to the previously selected race
+		   if it is still valid */
+		if( !valid_opt ) {
+			initrace = ROLE_NONE;
+			initgend = ROLE_NONE;
+			initalign = ROLE_NONE;
+			SendMessage(control_race, CB_SETCURSEL, (WPARAM)-1, (LPARAM)0 );
+		}
 
-        /* CANCEL button was clicked */
-        case IDCANCEL:
-            EndDialog(hWnd, wParam);
-            return TRUE;
+		/* trigger change of the genders list */
+		changed_sel=IDC_PLSEL_RACE_LIST;
+	}
 
-        case IDC_PLSEL_RANDOM:
-            plselRandomize(data);
-            plselAdjustSelections(hWnd);
-            return TRUE;
+	/* intialize genders list */
+	if( changed_sel==IDC_PLSEL_RACE_LIST ) {
+		valid_opt = 0;
 
-        case IDC_PLSEL_GENDER_MALE:
-        case IDC_PLSEL_GENDER_FEMALE:
-            if (HIWORD(wParam) == BN_CLICKED) {
-                int i = LOWORD(wParam) - IDC_PLSEL_GENDER_MALE;
-                if (ok_gend(flags.initrole, flags.initrace, i, ROLE_RANDOM)) {
-                    flags.initgend = i;
-                    plselAdjustSelections(hWnd);
-                }
-            }
-            break;
+		/* reset content and populate the list */
+		SendMessage(control_gender, CB_RESETCONTENT, 0, 0); 
+		for (i = 0; i < ROLE_GENDERS; i++)
+			if (ok_gend(initrole, initrace, i, ROLE_NONE)) {
+				ind = SendMessage(control_gender, CB_ADDSTRING, (WPARAM)0, (LPARAM)NH_A2W(genders[i].adj, wbuf, sizeof(wbuf)) ); 
+				SendMessage(control_gender, CB_SETITEMDATA, (WPARAM)ind, (LPARAM)i ); 
+				if( i==initgend ) { 
+					SendMessage(control_gender, CB_SETCURSEL, (WPARAM)ind, (LPARAM)0 );
+					valid_opt = 1;
+				}
+			}
 
+		/* set selection to the previously selected gender
+		   if it is still valid */
+		if( !valid_opt ) {
+			initgend = ROLE_NONE;
+			initalign = ROLE_NONE;
+			SendMessage(control_gender, CB_SETCURSEL, (WPARAM)-1, (LPARAM)0 );
+		}
 
-        case IDC_PLSEL_ALIGN_LAWFUL:
-        case IDC_PLSEL_ALIGN_NEUTRAL:
-        case IDC_PLSEL_ALIGN_CHAOTIC:
-            if (HIWORD(wParam) == BN_CLICKED) {
-                int i = LOWORD(wParam) - IDC_PLSEL_ALIGN_LAWFUL;
-                if (ok_align(flags.initrole, flags.initrace, flags.initgend, i)) {
-                    flags.initalign = i;
-                    plselAdjustSelections(hWnd);
-                }
-            }
-            break;
+		/* trigger change of the alignments list */
+		changed_sel=IDC_PLSEL_GENDER_LIST;
+	}
 
-        }
-        break;
+	/* intialize alignments list */
+	if( changed_sel==IDC_PLSEL_GENDER_LIST ) {
+		valid_opt = 0;
 
-    case WM_DPICHANGED:
-        {
-            data = (struct plsel_data *) GetWindowLongPtr(hWnd, GWLP_USERDATA);
+		/* reset content and populate the list */
+		SendMessage(control_align, CB_RESETCONTENT, 0, 0); 
+		for (i = 0; i < ROLE_ALIGNS; i++)
+			if (ok_align(initrole, initrace, initgend, i)) {
+				ind = SendMessage(control_align, CB_ADDSTRING, (WPARAM)0, (LPARAM)NH_A2W(aligns[i].adj, wbuf, sizeof(wbuf)) ); 
+				SendMessage(control_align, CB_SETITEMDATA, (WPARAM)ind, (LPARAM)i ); 
+				if( i==initalign ) { 
+					SendMessage(control_align, CB_SETCURSEL, (WPARAM)ind, (LPARAM)0 );
+					valid_opt = 1;
+				}
+			}
 
-            do_player_selector_layout(data);
-
-            InvalidateRect(hWnd, NULL, TRUE);
-        } break;
-    }
-
-    return FALSE;
+		/* set selection to the previously selected alignment
+		   if it is still valid */
+		if( !valid_opt ) {
+			initalign = ROLE_NONE;
+			SendMessage(control_align, CB_SETCURSEL, (WPARAM)-1, (LPARAM)0 );
+		}
+	}
 }
 
-
-void
-plselAdjustSelections(HWND hWnd)
+/* player made up his mind - get final selection here */ 
+int	plselFinalSelection(HWND hWnd, int* selection)
 {
-    struct plsel_data * data = (plsel_data_t *) GetWindowLongPtr(hWnd, GWLP_USERDATA);
+	int ind;
 
-    control_t * role_control = &data->controls[psc_role_list];
-    control_t * race_control = &data->controls[psc_race_list];
+	/* get current selections */
+	if( SendDlgItemMessage(hWnd, IDC_PLSEL_ROLE_RANDOM, BM_GETCHECK, 0, 0)==BST_CHECKED ) {
+		flags.initrole = ROLE_RANDOM;
+	} else {
+		ind = SendDlgItemMessage(hWnd, IDC_PLSEL_ROLE_LIST, CB_GETCURSEL, 0, 0);
+		flags.initrole = (ind==LB_ERR)? ROLE_RANDOM : SendDlgItemMessage(hWnd, IDC_PLSEL_ROLE_LIST, CB_GETITEMDATA, ind, 0);
+	}
 
-    if (!ok_race(flags.initrole, flags.initrace, ROLE_RANDOM, ROLE_RANDOM))
-        flags.initrace = pick_race(flags.initrole, ROLE_RANDOM, ROLE_RANDOM, ROLE_RANDOM);
+	if( SendDlgItemMessage(hWnd, IDC_PLSEL_RACE_RANDOM, BM_GETCHECK, 0, 0)==BST_CHECKED ) {
+		flags.initrace = ROLE_RANDOM;
+	} else {
+		ind = SendDlgItemMessage(hWnd, IDC_PLSEL_RACE_LIST, CB_GETCURSEL, 0, 0);
+		flags.initrace = (ind==LB_ERR)? ROLE_RANDOM : SendDlgItemMessage(hWnd, IDC_PLSEL_RACE_LIST, CB_GETITEMDATA, ind, 0);
+	}
 
-    if (!ok_gend(flags.initrole, flags.initrace, flags.initgend, ROLE_RANDOM))
-        flags.initgend = pick_gend(flags.initrole, flags.initrace, ROLE_RANDOM , ROLE_RANDOM);
+	if( SendDlgItemMessage(hWnd, IDC_PLSEL_GENDER_RANDOM, BM_GETCHECK, 0, 0)==BST_CHECKED ) {
+		flags.initgend = ROLE_RANDOM;
+	} else {
+		ind = SendDlgItemMessage(hWnd, IDC_PLSEL_GENDER_LIST, CB_GETCURSEL, 0, 0);
+		flags.initgend = (ind==LB_ERR)? ROLE_RANDOM : SendDlgItemMessage(hWnd, IDC_PLSEL_GENDER_LIST, CB_GETITEMDATA, ind, 0);
+	}
 
-    if (!ok_align(flags.initrole, flags.initrace, flags.initgend, flags.initalign))
-        flags.initalign = pick_align(flags.initrole, flags.initrace, flags.initgend , ROLE_RANDOM);
+	if( SendDlgItemMessage(hWnd, IDC_PLSEL_ALIGN_RANDOM, BM_GETCHECK, 0, 0)==BST_CHECKED ) {
+		flags.initalign = ROLE_RANDOM;
+	} else {
+		ind = SendDlgItemMessage(hWnd, IDC_PLSEL_ALIGN_LIST, CB_GETCURSEL, 0, 0);
+		flags.initalign = (ind==LB_ERR)? ROLE_RANDOM : SendDlgItemMessage(hWnd, IDC_PLSEL_ALIGN_LIST, CB_GETITEMDATA, ind, 0);
+	}
+	
 
-    ListView_RedrawItems(role_control->hWnd, 0, data->role_count - 1);
-    ListView_RedrawItems(race_control->hWnd, 0, data->race_count - 1);
+	/* check the role */
+	if( flags.initrole==ROLE_RANDOM ) {
+		flags.initrole = pick_role(flags.initrace, flags.initgend, flags.initalign, PICK_RANDOM);
+		if (flags.initrole < 0) {
+			NHMessageBox(hWnd, TEXT("Incompatible role!"), MB_ICONSTOP | MB_OK);
+			return FALSE;
+		}
+	}
 
-    /* set gender radio button state */
-    for (int i = 0; i < ROLE_GENDERS; i++) {
-        HWND button = data->controls[psc_male_button+i].hWnd;
-        BOOL enable = ok_gend(flags.initrole, flags.initrace, i, flags.initalign);
-        Button_Enable(button, enable);
-        LRESULT state = Button_GetCheck(button);
-        if (state == BST_CHECKED && flags.initgend != i)
-            Button_SetCheck(button, BST_UNCHECKED);
-        if (state == BST_UNCHECKED && flags.initgend == i)
-            Button_SetCheck(button, BST_CHECKED);
-    }
+	/* Select a race, if necessary */
+	/* force compatibility with role */
+	if (flags.initrace==ROLE_RANDOM || !validrace(flags.initrole, flags.initrace)) {
+		/* pre-selected race not valid */
+		if (flags.initrace == ROLE_RANDOM) {
+			flags.initrace = pick_race(flags.initrole, flags.initgend, flags.initalign, PICK_RANDOM);
+		}
+		
+		if (flags.initrace < 0) {
+			NHMessageBox(hWnd, TEXT("Incompatible race!"), MB_ICONSTOP | MB_OK);
+			return FALSE;
+		}
+	}
 
-    /* set alignment radio button state */
-    for (int i = 0; i < ROLE_ALIGNS; i++) {
-        HWND button = data->controls[psc_lawful_button+i].hWnd;
-        BOOL enable = ok_align(flags.initrole, flags.initrace, flags.initgend, i);
-        Button_Enable(button, enable);
-        LRESULT state = Button_GetCheck(button);
-        if (state == BST_CHECKED && flags.initalign != i)
-            Button_SetCheck(button, BST_UNCHECKED);
-        if (state == BST_UNCHECKED && flags.initalign == i)
-            Button_SetCheck(button, BST_CHECKED);
-    }
+	/* Select a gender, if necessary */
+	/* force compatibility with role/race, try for compatibility with
+	 * pre-selected alignment */
+	if (flags.initgend < 0 || 
+		!validgend(flags.initrole, flags.initrace, flags.initgend)) {
+	    /* pre-selected gender not valid */
+	    if (flags.initgend == ROLE_RANDOM) {
+			flags.initgend = pick_gend(flags.initrole, flags.initrace, flags.initalign, PICK_RANDOM);
+		}
+		
+		if (flags.initgend < 0) {
+			NHMessageBox(hWnd, TEXT("Incompatible gender!"), MB_ICONSTOP | MB_OK);
+			return FALSE;
+		}
+	}
 
-}
+	/* Select an alignment, if necessary */
+	/* force compatibility with role/race/gender */
+	if (flags.initalign < 0 || 
+		!validalign(flags.initrole, flags.initrace,	flags.initalign)) {
+		/* pre-selected alignment not valid */
+		if (flags.initalign == ROLE_RANDOM) {
+			flags.initalign = pick_align(flags.initrole, flags.initrace, flags.initgend, PICK_RANDOM);
+		} else {
+			NHMessageBox(hWnd, TEXT("Incompatible alignment!"), MB_ICONSTOP | MB_OK);
+			return FALSE;
+		}
+	}
 
-/* player made up his mind - get final selection here */
-int
-plselFinalSelection(HWND hWnd)
-{
-    int role, race, gender, alignment;
-
-    nhUse(role);
-    nhUse(race);
-    nhUse(gender);
-    nhUse(alignment);
-    role = flags.initrole;
-    race = flags.initrace;
-    gender = flags.initgend;
-    alignment = flags.initalign;
-    assert(role != ROLE_RANDOM && role != ROLE_NONE);
-    assert(race != ROLE_RANDOM && race != ROLE_NONE);
-    assert(gender != ROLE_RANDOM && gender != ROLE_NONE);
-    assert(alignment != ROLE_RANDOM && alignment != ROLE_NONE);
-    assert(ok_role(role, race, gender, alignment));
-    assert(ok_race(role, race, gender, alignment));
-    assert(ok_gend(role, race, gender, alignment));
-    assert(ok_align(role, race, gender, alignment));
-
-    return TRUE;
-}
-
-static boolean plselRandomize(plsel_data_t * data)
-{
-    int role, race, gender, alignment;
-    boolean fully_specified = TRUE;
-
-    // restore back to configuration settings
-    flags.initrole = data->config_role;
-    flags.initrace = data->config_race;
-    flags.initgend = data->config_gender;
-    flags.initalign = data->config_alignment;
-
-    if (!flags.randomall) {
-        if(flags.initrole == ROLE_NONE || flags.initrace == ROLE_NONE
-            || flags.initgend == ROLE_NONE || flags.initalign == ROLE_NONE)
-            fully_specified = FALSE;
-    }
-
-    if (flags.initrole == ROLE_NONE)
-        flags.initrole = ROLE_RANDOM;
-    if (flags.initrace == ROLE_NONE)
-        flags.initrace = ROLE_RANDOM;
-    if (flags.initgend == ROLE_NONE)
-        flags.initgend = ROLE_RANDOM;
-    if (flags.initalign == ROLE_NONE)
-        flags.initalign = ROLE_RANDOM;
-
-    rigid_role_checks();
-
-    role = flags.initrole;
-    race = flags.initrace;
-    gender = flags.initgend;
-    alignment = flags.initalign;
-
-    assert(role != ROLE_RANDOM && role != ROLE_NONE);
-    assert(race != ROLE_RANDOM && race != ROLE_NONE);
-    assert(gender != ROLE_RANDOM && gender != ROLE_NONE);
-    assert(alignment != ROLE_RANDOM && alignment != ROLE_NONE);
-
-    if (!ok_role(role, race, gender, alignment)) {
-        fully_specified = FALSE;
-        flags.initrole = ROLE_RANDOM;
-    }
-
-    if (!ok_race(role, race, gender, alignment)) {
-        fully_specified = FALSE;
-        flags.initrace = ROLE_RANDOM;
-    }
-
-    if (!ok_gend(role, race, gender, alignment)) {
-        fully_specified = FALSE;
-        flags.initgend = ROLE_RANDOM;
-    }
-
-    if(!ok_align(role, race, gender, alignment))
-    {
-        fully_specified = FALSE;
-        flags.initalign = ROLE_RANDOM;
-    }
-
-    rigid_role_checks();
-
-    role = flags.initrole;
-    race = flags.initrace;
-    gender = flags.initgend;
-    alignment = flags.initalign;
-
-    assert(role != ROLE_RANDOM && role != ROLE_NONE);
-    assert(race != ROLE_RANDOM && race != ROLE_NONE);
-    assert(gender != ROLE_RANDOM && gender != ROLE_NONE);
-    assert(alignment != ROLE_RANDOM && alignment != ROLE_NONE);
-    assert(ok_role(role, race, gender, alignment));
-    assert(ok_race(role, race, gender, alignment));
-    assert(ok_gend(role, race, gender, alignment));
-    assert(ok_align(role, race, gender, alignment));
-
-    return fully_specified;
-}
-
-/*-----------------------------------------------------------------------------*/
-BOOL
-plselDrawItem(HWND hWnd, WPARAM wParam, LPARAM lParam)
-{
-     LPDRAWITEMSTRUCT lpdis = (LPDRAWITEMSTRUCT) lParam;
-    struct plsel_data * data = (plsel_data_t *) GetWindowLongPtr(hWnd, GWLP_USERDATA);
-
-    /* If there are no list box items, skip this message. */
-    if (lpdis->itemID < 0)
-        return FALSE;
-
-    HWND control = GetDlgItem(hWnd, (int) wParam);
-    int i = lpdis->itemID;
-
-    const char * string;
-
-    boolean ok = TRUE;
-    boolean selected;
-
-    if (wParam == IDC_PLSEL_ROLE_LIST) {
-        if (flags.female && roles[i].name.f)
-            string = roles[i].name.f;
-        else
-            string = roles[i].name.m;
-        selected = (flags.initrole == i);
-    } else {
-        assert(wParam == IDC_PLSEL_RACE_LIST);
-        ok = ok_race(flags.initrole, i, ROLE_RANDOM, ROLE_RANDOM);
-        string = races[i].noun;
-        selected = (flags.initrace == i);
-    }
-
-    SetBkMode(lpdis->hDC, OPAQUE);
-    HBRUSH brush;
-    if (selected) {
-        brush = CreateSolidBrush(RGB(0, 0, 0));
-        SetTextColor(lpdis->hDC, RGB(255, 255, 255));
-        SetBkColor(lpdis->hDC, RGB(0, 0, 0));
-    } else {
-        brush = CreateSolidBrush(RGB(255, 255, 255));
-        if (!ok)
-            SetTextColor(lpdis->hDC, RGB(220, 0, 0));
-        else
-            SetTextColor(lpdis->hDC, RGB(0, 0, 0));
-        SetBkColor(lpdis->hDC, RGB(255, 255, 255));
-    }
-
-    FillRect(lpdis->hDC, &lpdis->rcItem, brush);
-    RECT rect = lpdis->rcItem;
-    rect.left += 5;
-    DrawTextA(lpdis->hDC, string, strlen(string), &rect,
-        DT_LEFT | DT_SINGLELINE | DT_VCENTER);
-
-    if (data->focus == control) {
-        if (lpdis->itemState & LVIS_FOCUSED) {
-            /* draw focus rect */
-            RECT client_rt;
-
-            GetClientRect(lpdis->hwndItem, &client_rt);
-            SetRect(&rect, client_rt.left, lpdis->rcItem.top,
-                    client_rt.left + ListView_GetColumnWidth(lpdis->hwndItem, 0),
-                    lpdis->rcItem.bottom);
-            DrawFocusRect(lpdis->hDC, &rect);
-        }
-    }
-
-    DeleteObject(brush);
-
-    return TRUE;
+	return TRUE;
 }

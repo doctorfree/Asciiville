@@ -1,4 +1,4 @@
-        Welcome to NetHack!                ( description of version 3.6 )
+        Welcome to NetHack!                ( description of version 3.4 )
 
         NetHack is a Dungeons and Dragons like game where you (the adventurer)
 descend into the depths of the dungeon in search of the Amulet of Yendor,
@@ -62,35 +62,29 @@ b j n   1 2 3           g<dir>:   run in direction <dir> until something
                                     case means the Control key, not a caret)
  >  down                m<dir>:   move without picking up objects
                         F<dir>:   fight even if you don't sense a monster
+                With the qwertz_layout option, the y and z keys are swapped
+                (this requires option QWERTZ to be set at compile-time).
                 If the number_pad option is set, the number keys move instead.
                 Depending on the platform, Shift number (on the numberpad),
                 Meta number, or Alt number will invoke the YUHJKLBN commands.
                 Control <dir> may or may not work when number_pad is enabled,
                 depending on the platform's capabilities.
-                Digit '5' acts as 'G' prefix, unless number_pad is set to 2
-                in which case it acts as 'g' instead.
-                If number_pad is set to 3, the roles of 1,2,3 and 7,8,9 are
-                reversed; when set to 4, behaves same as 3 combined with 2.
-                If number_pad is set to -1, alphabetic movement commands are
-                used but 'y' and 'z' are swapped.
 
 Commands:
         NetHack knows the following commands:
         ?       Help menu.
-        /       What-is, tell what a symbol represents.  You may choose to
-                specify a location or give a symbol argument.  Enabling the
-                autodescribe option will give information about the symbol
-                at each location you move the cursor onto.
+        /       Tell what a symbol represents.  You may choose to specify
+                a location or give a symbol argument.
         &       Tell what a command does.
         <       Go up a staircase (if you are standing on it).
         >       Go down a staircase (if you are standing on it).
         .       Rest, do nothing for one turn.
-        _       Travel via a shortest-path algorithm to a point on the map.
-        a       Apply (use) a tool (pick-axe, key, lamp...).
+        _       Travel via a shortest-path algorithm to a point on the map 
+        a       Apply (use) a tool (pick-axe, key, lamp...)
         A       Remove all armor.
-        ^A      Redo the previous command.
+        ^A      Redo the previous command
         c       Close a door.
-        C       Call (name) monster, individual object, or type of object.
+        C       Call (name) an individual monster.
         d       Drop something.  d7a:  drop seven items of object a.
         D       Drop multiple items.  This command is implemented in two
                 different ways.  One way is:
@@ -112,6 +106,7 @@ Commands:
         e       Eat food.
         E       Engrave a message on the floor.
                 E- - write in the dust with your fingers.
+        ^E      Write "Elbereth" onto the ground.
         f       Fire ammunition from quiver.
         F       Followed by direction, fight a monster (even if you don't
                 sense it).
@@ -125,24 +120,21 @@ Commands:
         O       Review current options and possibly change them.
                 A menu displaying the option settings will be displayed
                 and most can be changed by simply selecting their entry.
-                Options are usually set before the game with NETHACKOPTIONS
-                environment variable or via a configuration file (defaults.nh,
-                NetHack Defaults, nethack.cnf, ~/.nethackrc, etc.) rather
-                than with the 'O' command.
+                Options are usually set before the game with a NETHACKOPTIONS
+                environment variable, or via a config file (defaults.nh,
+                NetHack Defaults, nethack.cnf, .nethackrc, etc.), not with 
+                the 'O' command.
         p       Pay your shopping bill.
         P       Put on an accessory (ring, amulet, etc).
         ^P      Repeat last message (subsequent ^P's repeat earlier messages).
                 The behavior can be varied via the msg_window option.
         q       Drink (quaff) something (potion, water, etc).
         Q       Select ammunition for quiver.
-        #quit   Exit the program without saving the current game.
         r       Read a scroll or spellbook.
         R       Remove an accessory (ring, amulet, etc).
         ^R      Redraw the screen.
         s       Search for secret doors and traps around you.
-        S       Save the game.  Also exits the program.
-                [To restore, just play again and use the same character name.]
-                [There is no "save current data but keep playing" capability.]
+        S       Save the game.
         t       Throw an object or shoot a projectile.
         T       Take off armor.
         ^T      Teleport, if you are able.
@@ -152,14 +144,11 @@ Commands:
         w       Wield weapon.  w- means wield nothing, use bare hands.
         W       Wear armor.
         x       Swap wielded and secondary weapons.
-        X       Toggle two-weapon combat.
+        X       Switch the game to explore (discovery) mode.
         ^X      Show your attributes.
-        #explore  Switch to Explore Mode (aka Discovery Mode) where dying and
-                deleting the save file during restore can both be overridden.
-        z       Zap a wand.  (Use y instead of z if number_pad is -1.)
-        Z       Cast a spell.  (Use Y instead of Z if number_pad is -1.)
-        ^Z      Suspend the game.  (^Y instead of ^Z if number_pad is -1.)
-                [To resume, use the shell command 'fg'.]
+        z       Zap a wand. (y if qwertz_layout is set)
+        Z       Cast a spell. (Y if qwertz_layout is set)
+        ^Z      Suspend the game. (^Y if qwertz_layout is set)
         :       Look at what is here.
         ;       Look at what is somewhere else.
         ,       Pick up some things.
@@ -174,9 +163,7 @@ Commands:
         $       Count your gold pieces.
         +       List the spells you know; also rearrange them if desired.
         \       Show what types of objects have been discovered.
-        `       Show discovered types for one class of objects.
         !       Escape to a shell, if supported in your version and OS.
-                [To resume play, terminate the shell subprocess via 'exit'.]
         #       Introduces one of the "extended" commands.  To get a list of
                 the commands you can use with "#" type "#?".  The extended
                 commands you can use depends upon what options the game was
@@ -194,12 +181,12 @@ Commands:
         j       Jump to another location.
         k       Kick (for doors, usually).
         l       Loot a box on the floor.
-        n       followed by number of times to repeat the next command.
-        N       Name a monster, an individual object, or a type of object.
+        n       followed by number of times to repeat the next command
+        N       Name an object or type of object.
         u       Untrap a trapped object or door.
 
         You can put a number before a command to repeat it that many times,
-        as in "40." or "20s".  If you have the number_pad option set, you
+        as in "40." or "20s.".  If you have the number_pad option set, you
         must type 'n' to prefix the count, as in "n40." or "n20s".
 
 
