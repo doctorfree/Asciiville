@@ -239,7 +239,10 @@ ${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/sysconf
 
 ${SUDO} cp doc/Guidebook ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir
 ${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/Guidebook
-cd ../..
+cd ..
+${SUDO} cp ninvaders/cmake_build/ninvaders ${OUT_DIR}/${DESTDIR}/games/ninvaders
+${SUDO} chmod 0755 ${OUT_DIR}/${DESTDIR}/games/ninvaders
+cd ..
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
 ${SUDO} cp -a conf/got ${OUT_DIR}/${DESTDIR}/share/${PKG}/got
