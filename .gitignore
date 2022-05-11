@@ -87,7 +87,10 @@ missing
 stamp-h1
 archive/*
 dist/*
-games/*
+games/asciisector
+games/lib/AsciiSector
+games/ninvaders/bin
+games/ninvaders/obj
 pics/*
 releases/*
 tmp/*

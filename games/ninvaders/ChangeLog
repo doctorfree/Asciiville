@@ -1,0 +1,382 @@
+2003-10-14  Alexander Hollinger <alexander.hollinger@gmx.net>
+	* LICENSE: renamed gpl.txt to LICENSE
+	* added configure-script: Makefile.in, config.h.in, configure
+	  configure.in
+
+
+2003-09-21  Alexander Hollinger <alexander.hollinger@gmx.net>
+
+	* view.c (titleScreenDisplay): changed MAX_NUMBER_HIGHSCORE_ENTRIES
+          to MAX_HIGHSCORE_ENTRIES.
+
+	* highscore.c: changed writing / reading highscore from binary 
+	  mode to ascii mode for compatibility issues when porting 
+	  highscore from litte-endian to big-endian machines.
+
+	* highscore.h: adjusted declarations
+
+	* file.c: removed from cvs-repository
+
+	* file.h: removed from cvs-repository
+
+
+2003-09-18  Sebastian Gutsfeld  <segoh@gmx.net>
+
+	* nInvaders.c: included highscore.h
+
+	* nInvaders.c (readInput): added addEntry test in case
+	GAME_HIGHSCORE
+
+	* nInvaders.c (main): added reading of highscore file as startup
+	and saving of highscore at programm end
+
+	* view.c: included highscore.h
+
+	* view.c (titleScreenDisplay): added WINDOW wHighscore for
+	highscore display and changed whole function to display highscore
+	between alien frames
+
+	* highscore.c: renamed from score.c to highscore.c; added a few
+	functions (don't ask me which)
+
+	* highscore.h: headerfile for highscore.c
+	
+
+2003-05-26  Alexander Hollinger <alexander.hollinger@gmx.net>
+
+	* file.c (writeHighScore): writes highscore in binary mode
+	  hacking highscore file is more difficult now - and writing
+	  and reading much easier ;o)
+	  
+	* file.c (readHighScore): reads highscore from file.
+	  if no file exists or file seems corrupt or of wrong 
+	  version, some standard values are used.
+	  
+	* file.c (getStandardHighScore): some stanard values
+	
+
+2003-05-19  Alexander Hollinger <alexander.hollinger@gmx.net>
+	
+	* file.c: added file.c to test functionality with writing
+	  highscore. may be removed later.
+	  
+
+****** Release 0.1.1 ******
+
+2003-04-22  Alexander Hollinger <alexander.hollinger@gmx.net>
+	
+	* globas.c: changed version from 0.0.11 to 0.1.1
+
+2003-05-06  Sebastian Gutsfeld  <segoh@gmx.net>
+
+	* aliens.c (aliensMissileMove): added test if there is an alien
+	ship left when starting a new missile; this was the bug which is
+	responsible for freezing the game when shooting at the last alien
+
+2003-05-05  Sebastian Gutsfeld  <segoh@gmx.net>
+
+	* nInvaders.c (readInput): updated readInput for reading input in
+	different states (see status var)
+
+	* nInvaders.c (handleTimer): added code for status GAME_HIGHSCORE
+	so a title screen with animation is shown; updated status
+	GAME_OVER
+
+	* nInvaders.c (main): updated status initialisation from
+	GAME_NEXTLEVEL to GAME_HIGHSCORE
+
+	* view.c: added WINDOW wTitleScreen; added titleScreenInit; added
+	titleScreenDisplay; added titleScreenClear; added battleFieldClear
+
+	* view.c (aliensRefresh): formatted some code
+
+	* view.c (ufoRefresh): fixed array length
+
+	* view.c (gameOverDisplay): simpified function
+
+	* view.c (graphicEngineInit): updated with titleScreenInit
+
+	* view.h: sorted function declarations; updated gameOverDisplay,
+	titleScreenClear, titleScreenDisplay and battleFieldClear
+
+2003-04-22  Alexander Hollinger <alexander.hollinger@gmx.net>
+
+	* globals.c (doSleep): added again. still needed in 
+	  view.c. added "#ifdef win32" instruction again.
+
+2003-04-22  Alexander Hollinger <alexander.hollinger@gmx.net>
+	
+	* globals.c (doSleep): deleted method. not used any more.
+
+	* globals.c: incremented version number from 0.0.10 to 0.0.11
+	
+	* globals.c: removed '#ifdef win32' instruction.
+	
+	* *.c, *.h: added license notice to each file
+	
+	* renamed ToDo to TODO
+
+2003-04-18  Alexander Hollinger <alexander.hollinger@gmx.net>
+
+	* nInvaders.c (finish): "barely mediocre" and "show promise"
+	  both "< 10000". Changed latter to "< 12500"
+
+2003-04-17  Alexander Hollinger <alexander.hollinger@gmx.net>
+
+	* view.c (statusDisplay): modified so that buffer is written
+	  to wBattleField. new variable WINDOW* wStatus. added method
+	  (statusInit) which does initialisation of WINDOW wStatus.
+	  Problem: Alien missiles go right to the bottom of screen, 
+	  where status is located and overwritten with missile sprite.
+	  Fix: see next point
+	  Changed behaviour of display of lives. Now the _remaining_
+	  lives are displayed. i.e. at the beginning you will see
+	  two little spaceshuttles, because you have two lives left.
+	  
+	* aliens.c (aliensMissileMove): added some checking, if missile
+	  reached bottom where player moves. if so, do not move further
+	  and reload missile. this reduces number of missiles which have
+	  to be hit-tested each round, yet made it necessary to change
+	  the shot-threshold otherwise too many missiles would have been
+	  coming down. Not limiting ALIENS_MAX_MISSILES from 50 to 10 is
+	  possible, because missiles are reloaded when they reach the 
+	  bottom. 10 concurrent missiles should be quite hard to manage..
+	  Removed ALIENS_MAX_MISSILES-definition from view.h. Was defined
+	  twice, now only in aliens.h.
+	  optimized threshold-checking. calculation outside for-
+	  instruction, and only comparison within.
+
+
+2003-04-17  Alexander Hollinger <alexander.hollinger@gmx.net>
+
+	* nInvaders.c (readInput): removed (ch==27) for exit 
+          sequence. as dettus pointed out there would be problems
+	  on some terminals. pressing some keys too long will send
+	  an KEY_ESC and quit the game.
+
+2003-04-17  Alexander Hollinger <alexander.hollinger@gmx.net>
+
+	* nInvaders.c (setUpTimer): changed method to call handleTimer.
+	  The call signal(SIG_ALRM, handleTimer) didn't work on irix.
+	  There, the timer was only fired once and then the programm
+	  exited. Now using call to sigaction() with flag SA_RESTART. 
+
+2003-04-16  Alexander Hollinger <alexander.hollinger@gmx.net>
+
+	* nInvaders.c: added a real-time timer that does 50 fps. if you
+	  want it slower toggle the constant FPS. the higher the slower.
+	  A timer is created and does all the gaming stuff while key
+	  checking is still done in (main). Gamehandling is done by
+	  simulating a deterministic finite automaton by setting the 
+	  'status'-attribute to e.g. GAME_LOOP, GAME_PAUSED, GAME_EXIT.
+	  the following methods were modified/ added:
+	  (setUpTimer): creates and initializes timer
+	  (handleTimer): this method is called every 1/FPS seconds and 
+	                 contains most code from old (main)
+	  (readInput): changed so that the 'status'-variable is affected.
+	               pressing of 'p' now changes 'status'
+	  (main): most code moved to (handleTimer), calls setUpTimer and 
+	  	  sets 'status' to GAME_NEXTLEVEL
+	  (gameOver): completely moved to handleTimer
+	 
+	 * view.c (graphicEngineInit): removed 'timeout(0);' no longer 
+	   needed as we now hava a timer. another advantage: call to
+	   (readInput) in nInvaders.c no longer called permanently. 
+	   in (readInput) the getch()-call waits till a key is pressed.
+	   doSleep(1) no longer needed in nInvaders.c (readInput).
+
+2003-04-08  Sebastian Gutsfeld  <segoh@gmx.net>
+
+	* ufo.c:replaced 'u' with 'ufo' (see ufo.h) and 'a' with 'aliens'
+
+	* ufo.h: added typedef for Ufo and renamed 'u' into 'ufo',
+
+	* player.c: added typedef for Player and renamed 'p' into 'player',
+	replaced 'p' with 'player and 'a' with 'aliens'
+
+	* aliens.c: replaced 'a' with 'aliens' (see aliens.h)
+
+	* aliens.h: added typedef for Aliens and renamed 'a' into 'aliens'
+
+	* globals.c (RELEASE): updated release number
+	
+2003-04-07  Sebastian Gutsfeld  <segoh@gmx.net>
+
+	* view.c (ufoRefresh): reverted 'frame' assignement
+
+	* nInvaders.c (main): reverted to old ufo speed from revision 1.3
+
+2003-04-06  Alexander Hollinger <alexander.hollinger@gmx.net>
+	
+	* nInvaders.c (resetPlayer): added a call to playerMisisleClear();
+	
+	* view.c (aliensRefresh): fully encapsulated. access to aliens-Array
+	  by pointer.
+	  
+	* aliens.c (*HitCheck): moved hit_alien_test and hit_bunker_test to
+	  aliens.c and renamed to aliensHitCheck and bunkersHitCheck. Added
+	  comments and did improvement of bunkersHitCheck-Algorithm 
+	  (shoty < BUNKERY + BUNKERHEIGHT instead of <=).
+	  
+	* nInvaders.c (finish): moved short version of GPL to globals.c 
+	  (showGplShort)
+	  
+	* view.c (gameOverInit): fixed color code
+	
+	* player.h: removed lives from structPlayer. This variable belongs
+	  more to the gamehandling in nInvaders.c that to the model of the 
+	  player in player.c. This is done because of better encapsulation 
+	  of player.c.
+	
+	* player.c (playerReset): added a playerDisplay. Removed playerDisplay
+	  from nInvaders.c just before refreshScreen() and added another
+	  playerDisplay in the player.c (playerMissileMove) so that the 
+	  playerMissileClear does not clear the middle of the player when
+	  a new shot is fired.
+	  
+	* aliens.c (aliensHitCheck): added support for return of alienType so 
+	  that different scoring according to type of aliens is possible. 
+	  had to change values für alien_type constants in nInvaders.h and 
+	  the order of scores in the points-array in nInvaders.c (doScoring).
+	  ufo gets 500pt, aliens 100pt, 150pt or 200pt.
+	  
+	* aliens.c (aliensReset): clears missiles of aliens, if any 
+	
+	* nInvaders.c (main): changed some variable names (*_counter) and
+	  contracted some if-statements.
+	 
+	* view.c (playerExplosionDisplay): renamed from playerExplode. Added
+	  player.c (playerExplode) which calls playerExplosionDisplay and
+	  playerDisplay. Thus, I could remove the playerExplode(p.posX, p.posY)
+	  from nInvaders.c and add a playerExplode(). All Elements of the 
+	  structure structPlayer now are "private".
+	  
+
+2003-04-05  Sebastian Gutsfeld  <segoh@gmx.net>
+
+	* Makefile: Updated file for ufo
+
+	* aliens.c (aliensMissileMove): fixed comment
+
+	* aliens.h: fixed indentation
+
+	* globals.h: fixed indentation
+
+	* nInvaders.c: included ufo.h, fixed some comments and linebreaks
+
+	* nInvaders.c (initlevel): added initialisation for ufo
+
+	* nInvaders.c (main): added code for ufo
+
+	* nInvaders.c (doScoring): different score for different alien types
+
+	* nInvaders.h: added constants for alien types needed by
+	nInvaders.c (doScoring), fixed declaration of doScoring, fixed
+	Indentation
+
+	* player.c: included ufo.h (needed for playerMoveMissile)
+
+	* player.c (playerMoveMissile): added code needed for ufo, fixed
+	doScoring for alien type
+
+	* player.h: fixed indentation, fixed declaration of doScoring
+
+	* view.c: added WINDOW *wUfo, void ufoRefresh, static void ufoInit,
+	void ufoDisplay and void ufoClear
+
+	* view.c (aliensRefresh): fixed indentation and color codes
+
+	* view.c (graphicEngineInit): added ufoInit to last init section
+
+	* view.h: fixed indentation, added constans UFOWIDTH and UFOPOSY, added
+	declarations of ufoDisplay, ufoRefresh and ufoClear
+
+	* ufo.c: files for ufo handling (initial import into cvs)
+
+	* ufo.h: header file for ufo.c (initial import into cvs)
+	
+2003-04-04  Sebastian Gutsfeld  <segoh@gmx.net>
+
+	* nInvaders.h, player.c: updated every occurance of hit_player_test
+	to hit_alientest
+
+	* nInvaders.c (hit_alien_test): renamed from 'hit_player_test'
+
+2003-04-05 Alexander Hollinger <alexander.hollinger@gmx.net>
+
+	* [view.c] (bunkersDisplay): now fully encapsulated using pointer 
+	  *pBunker to get access to bunker-array. Method is called from 
+	  [aliens.c] (bunkersReset) instead of [aliens.c] (render) thus 
+	  saving some cpu-time. The bunker has to be displayed only at the 
+	  beginning of a new level. Then we use bunkerClearElement or 
+	  bunkerClear to remove bunker elements. No need why it was in 
+	  [aliens.c] (render).
+
+2003-04-04  Sebastian Gutsfeld  <segoh@gmx.net>
+
+	* nInvaders.c (readInput): draw new number of lives in live-cheat
+
+	* aliens.c (aliensReset): put declaration of 'level' at
+	beginning of function
+
+2003-04-04 Alexander Hollinger <alexander.hollinger@gmx.net>
+
+	* [nInvaders.c] added a new cheat: "L" gives player one new life
+	  for better testing
+	* [aliens.c, player.c] (*Reset) forgot to reset alien-block and 
+	  bunkers-block. Now there is a bunkersReset in aliens.c
+	* [view.c] added method graphicEngineInit()
+	* [view.c] (refreshScreen) fixed problem with graphic display on some 
+	  terminals. bunker and player are now displayed at startup.  
+	* removed init.c and init.h from project 
+	* [globals.c] some minor changes to names of methods. moved code for 
+	  displaying version from nInvaders.c to globals.c. Added code to 
+	  redefine usleep for WIN32-platforms, this should hopefully fix the
+	  bug that the game was too fast there.
+
+2003-04-03 Alexander Hollinger <alexander.hollinger@gmx.net>
+	
+	* removed deprecated multi-line-strings in globals.c and nInvaders.c
+
+2003-04-02 Alexander Hollinger <alexander.hollinger@gmx.net>
+
+	* view.c now contains all methods which do graphical display
+	  (by using ncurses)
+	  
+	* added file aliens.c and aliens.h. Perhaps these can later melt
+	  with player.c and player.h.
+
+2003-04-01  Sebastian Gutsfeld  <segoh@gmx.net>
+
+	* *.c (*): formatted with 'indent -kr -i8 -l90' and fixed
+	some linebreaks
+
+2003-03-30 Alexander Hollinger <alexander.hollinger@gmx.net>
+
+	* added file "ToDo": put feature-requests and alike in here
+
+	* player.c (player*Missile*): processing of missiles moved to these
+	functions to reduce size of main().
+
+
+2003-03-29  Sebastian Gutsfeld  <segoh@gmx.net>
+
+	* init.c (initplayer): fixed comment
+
+	* player.c (playerInit): put declaration of 'playerSprite' at beginning
+	of function
+
+	* init.c (initshots): put declaration of 'a' at beginning of function
+
+2003-03-29 Alexander Hollinger <alexander.hollinger@gmx.net>
+
+	* added more comments and added player.c which is intended to hold all 
+	functions concearning the player
+
+	* added method playerLaunchMissile in player.c	
+	
+2003-03-28 Alexander Hollinger <alexander.hollinger@gmx.net>
+
+	* added some comments and split up some functions, especially in init.c.
+
+

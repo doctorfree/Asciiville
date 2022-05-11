@@ -1,0 +1,231 @@
+#!/bin/bash
+#
+build_btop() {
+  # Repo: https://github.com/doctorfree/Asciiville
+  #
+  # Fork of Repo: https://github.com/aristocratos/btop
+  #
+  # Build Dependencies:
+  # On Ubuntu 20.04
+  #   sudo apt update -y
+  #   sudo apt upgrade -y
+  #   sudo apt install coreutils git make tar zstd
+  #   sudo apt install -y build-essential
+  #   sudo apt install -y gcc-10 g++-10 cpp-10
+  #   sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 \
+  #                            --slave /usr/bin/g++ g++ /usr/bin/g++-10 \
+  #                            --slave /usr/bin/gcov gcov /usr/bin/gcov-10
+  #
+  # Usage: ./build-btop.sh [-i]
+  # Where -i indicates install btop after compiling
+
+  [ -f bin/btop ] || make STATIC=true STRIP=true
+  chmod +x bin/btop
+
+  [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
+}
+
+build_cbftp() {
+  #
+  # Repo: https://github.com/doctorfree/Asciiville
+  #
+  # Fork of Repo: https://github.com/cbftp/cbftp-2022
+  #
+  # Linux build dependencies: make g++ libssl-dev libncursesw5-dev
+  # On Ubuntu 20.04
+  #   sudo apt update -y
+  #   sudo apt upgrade -y
+  #   sudo apt install make g++ libssl-dev libncursesw5-dev
+  #
+  # Usage: ./build-cbftp.sh [-i]
+  # Where -i indicates install cbftp after compiling
+
+  [ -f bin/cbftp ] || make
+  chmod +x bin/*
+
+  [ "${INSTALL}" ] && {
+    [ -d ${PREFIX}/usr ] || sudo mkdir -p ${PREFIX}/usr
+    [ -d ${PREFIX}/usr/bin ] || sudo mkdir -p ${PREFIX}/usr/bin
+    sudo cp bin/* ${PREFIX}/usr/bin
+  }
+}
+
+build_diagon() {
+  #
+  # Repo: https://github.com/doctorfree/diagon
+  #
+  # Fork of Repo: https://github.com/ArthurSonzogni/Diagon
+  #
+  # Build Dependencies:
+  # On Ubuntu 20.04
+  #   sudo apt update -y
+  #   sudo apt upgrade -y
+  #   sudo apt install make uuid-dev libboost-graph-dev cmake default-jdk
+  #
+  # Usage: ./build-diagon.sh [-i]
+  # Where -i indicates install diagon after compiling
+
+  buildit=1
+  [ -L build/diagon ] && {
+    diagonpath=`realpath build/diagon`
+    [ -f ${diagonpath} ] && buildit=
+  }
+
+  [ "${buildit}" ] && {
+    advice=`git config --get advice.detachedHead`
+    git config --global advice.detachedHead false
+    [ -d build ] || mkdir build
+    cd build
+    cmake .. -DCMAKE_BUILD_TYPE=Release
+    make -j
+    if [ "${advice}" ]
+    then
+      git config --global advice.detachedHead ${advice}
+    else
+      git config --global --unset advice.detachedHead
+    fi
+    cd ..
+  }
+
+  [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
+}
+
+build_jp2a() {
+  #
+  # Repo: https://github.com/doctorfree/Asciiville
+  #
+  # Fork of Repo: https://github.com/cslarsen/jp2a
+  #
+  # Usage: ./build-jp2a.sh [-i]
+  # Where -i indicates install jp2a after compiling
+  [ -f src/jp2a ] || {
+    prefix="--prefix=/usr"
+    [ "${PREFIX}" ] && prefix="--prefix=${PREFIX}"
+    autoreconf -vi
+    ./configure ${prefix} --enable-curl --enable-termlib
+    make -j
+  }
+
+  chmod +x src/jp2a
+
+  [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
+}
+
+build_nethack() {
+  #
+  # Repo: https://github.com/doctorfree/Asciiville
+  #
+  # Fork of Repo: https://github.com/NetHack/NetHack
+  #
+
+  [ -f src/nethack ] || {
+    sys/unix/setup.sh sys/unix/hints/linux-asciiville
+    make fetch-lua
+    make
+    cd doc
+    make
+    cd ..
+  }
+  chmod +x src/nethack
+
+  [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
+}
+
+build_ninvaders() {
+  cd games/ninvaders
+  cmake -B cmake_build
+  cmake --build cmake_build -j2
+  cd ../..
+}
+
+usage() {
+    printf "\nUsage: ./build [-i] [-p prefix] [-u] project [project2 ...]"
+    printf "\nWhere:"
+    printf "\n\t-i indicates install"
+    printf "\n\t-p prefix specifies installation prefix (default /usr)"
+    printf "\n\t-u displays this usage message and exits\n"
+    printf "\nNo arguments: build btop, configure with prefix=/usr, build\n"
+    printf "\n'project' can be one or more of 'btop', 'cbftp', 'jp2a',"
+    printf "\n'diagon', 'nethack', and 'ninvaders'\n"
+    exit 1
+}
+
+PROJ=btop
+INSTALL=
+PREFIX=/usr
+while getopts "ip:u" flag; do
+    case $flag in
+        i)
+            INSTALL=1
+            ;;
+        p)
+            PREFIX="$OPTARG"
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+for project in $*
+do
+  case "${project}" in
+    btop)
+      PROJ=btop
+      [ -d ${PROJ} ] && {
+        cd ${PROJ}
+        build_btop
+        cd ..
+      }
+      ;;
+    cbftp)
+      PROJ=cbftp
+      [ -d ${PROJ} ] && {
+        cd ${PROJ}
+        build_cbftp
+        cd ..
+      }
+      ;;
+    jp2a)
+      PROJ=jp2a
+      [ -d ${PROJ} ] && {
+        cd ${PROJ}
+        build_jp2a
+        cd ..
+      }
+      ;;
+    diagon)
+      PROJ=diagon
+      [ -d ${PROJ} ] && {
+        cd ${PROJ}
+        build_diagon
+        cd ..
+      }
+      ;;
+    nethack)
+      PROJ=games/nethack
+      [ -d ${PROJ} ] && {
+        cd ${PROJ}
+        build_nethack
+        cd ../..
+      }
+      ;;
+    ninvaders)
+      PROJ=games/ninvaders
+      [ -d ${PROJ} ] && {
+        cd ${PROJ}
+        build_ninvaders
+        cd ../..
+      }
+      ;;
+    *)
+      echo "Unsupported project build: ${project}"
+      continue
+      ;;
+  esac
+  [ -d ${PROJ} ] || {
+    echo "$PROJ does not exist or is not a directory."
+    echo "Run: git clone https://github.com/doctorfree/Asciiville"
+  }
+done
