@@ -68,9 +68,9 @@ else
 endif
 endif
 
-.PHONY: all info deb rpm btop cbftp diagon jp2a nethack clean
+.PHONY: all info deb rpm btop cbftp diagon jp2a nethack ninvaders clean
 
-all: btop cbftp diagon jp2a nethack deb rpm
+all: btop cbftp diagon jp2a nethack ninvaders deb rpm
 
 info:
 	@$(FIG_CMD)
@@ -79,19 +79,22 @@ info:
 	@printf "\033[1;93mCXX        \033[1;93m?| \033[0m$(CXX) \033[1;93m(\033[97m$(CXX_VERSION)\033[93m)\n"
 
 btop: info
-	@./build-btop.sh
+	@./build btop
 
 cbftp: info
-	@./build-cbftp.sh
+	@./build cbftp
 
 diagon: info
-	@./build-diagon.sh
+	@./build diagon
 
 jp2a: info
-	@./build-jp2a.sh
+	@./build jp2a
 
 nethack: info
-	@./build-nethack.sh
+	@./build nethack
+
+ninvaders: info
+	@./build ninvaders
 
 deb: info
 	@./mkdeb

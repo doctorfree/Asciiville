@@ -34,9 +34,9 @@ OUT_DIR="${SRC}/${SRC_NAME}/dist/${PKG_NAME}_${PKG_VER}"
 cd "${SRC}/${SRC_NAME}"
 
 # Build btop
-if [ -x build-btop.sh ]
+if [ -x build ]
 then
-  ./build-btop.sh
+  ./build btop
 else
   cd btop
   make distclean
@@ -45,10 +45,43 @@ else
   cd ..
 fi
 
-# Build jp2a
-if [ -x build-jp2a.sh ]
+# Build cbftp
+if [ -x build ]
 then
-  ./build-jp2a.sh
+  ./build cbftp
+else
+  cd cbftp
+  make clean
+  make
+  chmod +x bin/*
+  cd ..
+fi
+
+# Build diagon
+if [ -x build ]
+then
+  ./build diagon
+else
+  cd diagon
+  advice=`git config --get advice.detachedHead`
+  git config --global advice.detachedHead false
+  [ -d build ] || mkdir build
+  cd build
+  cmake .. -DCMAKE_BUILD_TYPE=Release
+  make -j
+  if [ "${advice}" ]
+  then
+    git config --global advice.detachedHead ${advice}
+  else
+    git config --global --unset advice.detachedHead
+  fi
+  cd ../..
+fi
+
+# Build jp2a
+if [ -x build ]
+then
+  ./build jp2a
 else
   cd jp2a
   autoreconf -vi
@@ -59,28 +92,27 @@ else
   cd ..
 fi
 
-# Build cbftp
-if [ -x build-cbftp.sh ]
-then
-  ./build-cbftp.sh
-else
-  cd cbftp
-  make clean
-  make
-  chmod +x bin/*
-  cd ..
-fi
-
 # Build nethack
-if [ -x build-nethack.sh ]
+if [ -x build ]
 then
-  ./build-nethack.sh
+  ./build nethack
 else
-  cd nethack
+  cd games/nethack
   sys/unix/setup.sh sys/unix/hints/linux-asciiville
   make fetch-lua
   make
-  cd ..
+  cd ../..
+fi
+
+# Build ninvaders
+if [ -x build ]
+then
+  ./build ninvaders
+else
+  cd games/ninvaders
+  cmake -B cmake_build
+  cmake --build cmake_build -j2
+  cd ../..
 fi
 
 ${SUDO} rm -rf dist
@@ -117,7 +149,7 @@ ${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir \
                     ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/save
 ${SUDO} chmod 0755 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir \
                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/save
-cd nethack/dat
+cd games/nethack/dat
 ${SUDO} LC_ALL=C ../util/dlb cf nhdat help hh cmdhelp keyhelp history opthelp optmenu wizhelp dungeon.lua tribute asmodeus.lua baalz.lua bigrm-*.lua castle.lua fakewiz?.lua juiblex.lua knox.lua medusa-?.lua minend-?.lua minefill.lua minetn-?.lua oracle.lua orcus.lua sanctum.lua soko?-?.lua tower?.lua valley.lua wizard?.lua nhcore.lua nhlib.lua themerms.lua astral.lua air.lua earth.lua fire.lua water.lua ???-goal.lua ???-fil?.lua ???-loca.lua ???-strt.lua bogusmon data engrave epitaph oracles options quest.lua rumors
 ${SUDO} cp nhdat   license symbols ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir
 ${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/nhdat \
@@ -173,7 +205,7 @@ ${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/sysconf
 
 ${SUDO} cp doc/Guidebook ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir
 ${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/Guidebook
-cd ..
+cd ../..
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
 ${SUDO} cp -a conf/got ${OUT_DIR}/${DESTDIR}/share/${PKG}/got
@@ -218,8 +250,8 @@ ${SUDO} cp jp2a/man/jp2a.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
 [ -d ${OUT_DIR}/${DESTDIR}/share/man/man7 ] || {
   ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/man/man7
 }
-${SUDO} cp nethack/doc/*.6 ${OUT_DIR}/${DESTDIR}/share/man/man6
-${SUDO} cp nethack/doc/*.7 ${OUT_DIR}/${DESTDIR}/share/man/man7
+${SUDO} cp games/nethack/doc/*.6 ${OUT_DIR}/${DESTDIR}/share/man/man6
+${SUDO} cp games/nethack/doc/*.7 ${OUT_DIR}/${DESTDIR}/share/man/man7
 
 ${SUDO} cp -a share/menu "${OUT_DIR}/${DESTDIR}/share/menu"
 ${SUDO} cp -a share/figlet-fonts "${OUT_DIR}/${DESTDIR}/share/figlet-fonts"
