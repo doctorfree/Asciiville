@@ -31,9 +31,11 @@
  *
  **************************************************************************************************/
 
-#define HIGHSCORE_FILE "highscore" /* filename of highscore             */
+/* filename of highscore             */
+#define HIGHSCORE_FILE "/usr/games/lib/ninvaders/highscore"
+/* header for highscore file         */
 #define HIGHSCORE_ID                                                           \
-  "nInvaders Highscore"         /* header for highscore file         */
+  "nInvaders Highscore"
 #define HIGHSCORE_VERSION "0.1" /* version number for highscore file */
 
 HighScore highscore; /* todo: not a global variable! */

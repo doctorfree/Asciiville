@@ -157,7 +157,8 @@ for dir in "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/share/doc/${PKG}" "${DESTDIR}/share/btop" \
            "${DESTDIR}/share/${PKG}" "${DESTDIR}/games" \
            "${DESTDIR}/games/lib" "${DESTDIR}/games/lib/nethackdir" \
-           "${DESTDIR}/games/lib/nethackdir/save"
+           "${DESTDIR}/games/lib/nethackdir/save" \
+           "${DESTDIR}/games/lib/ninvaders"
 do
     [ -d ${OUT_DIR}/${dir} ] || ${SUDO} mkdir ${OUT_DIR}/${dir}
     ${SUDO} chown root:root ${OUT_DIR}/${dir}
@@ -183,6 +184,7 @@ ${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir \
                     ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/save
 ${SUDO} chmod 0755 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir \
                    ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/save
+
 cd games/nethack/dat
 ${SUDO} LC_ALL=C ../util/dlb cf nhdat help hh cmdhelp keyhelp history opthelp optmenu wizhelp dungeon.lua tribute asmodeus.lua baalz.lua bigrm-*.lua castle.lua fakewiz?.lua juiblex.lua knox.lua medusa-?.lua minend-?.lua minefill.lua minetn-?.lua oracle.lua orcus.lua sanctum.lua soko?-?.lua tower?.lua valley.lua wizard?.lua nhcore.lua nhlib.lua themerms.lua astral.lua air.lua earth.lua fire.lua water.lua ???-goal.lua ???-fil?.lua ???-loca.lua ???-strt.lua bogusmon data engrave epitaph oracles options quest.lua rumors
 ${SUDO} cp nhdat   license symbols ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir
@@ -240,8 +242,21 @@ ${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/sysconf
 ${SUDO} cp doc/Guidebook ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir
 ${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/nethackdir/Guidebook
 cd ..
+
+${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders
+${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders
+${SUDO} chmod 0755 ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders
+${SUDO} touch ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/highscore
+${SUDO} cp ninvaders/LICENSE ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders
+${SUDO} cp ninvaders/README.md ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders
+${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/highscore
+${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/highscore
+${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/*
+
 ${SUDO} cp ninvaders/cmake_build/ninvaders ${OUT_DIR}/${DESTDIR}/games/ninvaders
-${SUDO} chmod 0755 ${OUT_DIR}/${DESTDIR}/games/ninvaders
+${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/ninvaders
+${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/ninvaders
+${SUDO} chmod 04755 ${OUT_DIR}/${DESTDIR}/games/ninvaders
 cd ..
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
