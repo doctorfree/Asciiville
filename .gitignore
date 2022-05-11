@@ -89,8 +89,7 @@ archive/*
 dist/*
 games/asciisector
 games/lib/AsciiSector
-games/ninvaders/bin
-games/ninvaders/obj
+games/ninvaders/cmake_build
 pics/*
 releases/*
 tmp/*
