@@ -8,11 +8,11 @@
 #
 # You can list all the properties that can be configured:
 # gsettings list-keys \
-#    ${T_PROF}:${T_PATH}${TERM_PROF}/
+#    ${T_PROF}:${T_PATH}:${TERM_PROF}/
 #
 # If you want to see the current value for a setting you can use:
 # gsettings get \
-#    ${T_PROF}:${T_PATH}${TERM_PROF}/ foreground-color
+#    ${T_PROF}:${T_PATH}:${TERM_PROF}/ foreground-color
 #
 CONF_DIR="${HOME}/.config"
 SAVE_DIR="${CONF_DIR}/asciiville"
@@ -174,15 +174,15 @@ else
   #
   # Save the current font and use-system-font
   USE_SYSTEM_FONT=`gsettings get \
-      ${T_PROF}:${T_PATH}${TERM_PROF}/ use-system-font`
+      ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-system-font`
   CURR_FONT=`gsettings get \
-      ${T_PROF}:${T_PATH}${TERM_PROF}/ font`
+      ${T_PROF}:${T_PATH}:${TERM_PROF}/ font`
   USE_THEME=`gsettings get \
-      ${T_PROF}:${T_PATH}${TERM_PROF}/ use-theme-colors`
+      ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-theme-colors`
   USE_BACK=`gsettings get \
-      ${T_PROF}:${T_PATH}${TERM_PROF}/ background-color`
+      ${T_PROF}:${T_PATH}:${TERM_PROF}/ background-color`
   USE_FORE=`gsettings get \
-      ${T_PROF}:${T_PATH}${TERM_PROF}/ foreground-color`
+      ${T_PROF}:${T_PATH}:${TERM_PROF}/ foreground-color`
   if [ "${SHOW_LIST}" ]
   then
     echo "Current settings for ${PROF_NAME} profile in ${TERM_NAME}:"
@@ -200,7 +200,7 @@ fi
 # Next, we can use gsettings to change the properties we care about.
 #
 gsettings set \
-   ${T_PROF}:${T_PATH}:${TERM_PROF}/ font "${FONT_NAME} ${FONT_SIZE}"
+   ${T_PROF}:${T_PATH}:${TERM_PROF}/ font "'${FONT_NAME} ${FONT_SIZE}'"
 gsettings set \
    ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-system-font false
 gsettings set \
