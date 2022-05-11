@@ -58,15 +58,15 @@ HighScore getStandardHighScore() {
   for (n = MAX_HIGHSCORE_ENTRIES; n > 0; n--) {
 
     hs_b->score = n * 1000;
-    strcpy(hs_b->name, "hollinge");
+    strcpy(hs_b->name, "doctorfree");
     hs_b++;
 
     hs_n->score = n * 1000;
-    strcpy(hs_n->name, "sen_hoss");
+    strcpy(hs_n->name, "doctorwhen");
     hs_n++;
 
     hs_e->score = n * 1000;
-    strcpy(hs_e->name, "segoh");
+    strcpy(hs_e->name, "doctorthen");
     hs_e++;
   }
 
