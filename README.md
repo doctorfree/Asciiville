@@ -101,6 +101,7 @@ Integration is provided for:
 * [mapscii](https://github.com/rastapasta/mapscii#readme), zoomable map of the world
 * [cmatrix](https://github.com/abishekvashok/cmatrix), screen from "The Matrix"
 * [nethack](https://en.wikipedia.org/wiki/NetHack), ASCII text dungeon game
+* [ninvaders](https://en.wikipedia.org/wiki/Space_Invaders), ASCII text version of Space Invaders
 * [tmux](https://github.com/tmux/tmux/wiki), a terminal multiplexer
 * [wttr.in](https://github.com/chubin/wttr.in), console-oriented weather report
 * Enhanced key bindings for extended control of terminal windows
@@ -532,13 +533,13 @@ line options:
 Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]
 	[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N]
 	[-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T]
-	[-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]
+	[-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
 		If 'command' is keyword 'maps' then display a map using mapscii
 		If 'command' is keyword 'moon' then display the phase of the Moon
-		If 'command' is keyword 'news' then run `newsboat` RSS feed reader
+		If 'command' is keyword 'news' then display RSS news feeds
 		If 'command' is keyword 'search' then a web search is performed
 		If 'command' is keyword 'speed' then a speed test is performed
 		If 'command' is keyword 'translate' then the translation tool is run
@@ -555,6 +556,7 @@ Terminal/Command options:
 	-L 'level' use lolcat coloring, 'level' can be '1' or '2' (animate)
 	-r indicates use retro terminal emulator
 	-t indicates use tilix terminal emulator
+	-U indicates set command to Ninvaders
 	-w indicates use w3m web browser as the default command
 	-W indicates use cmatrix as the default command
 	-x indicates use xfce4 terminal emulator

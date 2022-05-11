@@ -10,7 +10,7 @@ asciiville - Launch a terminal emulator and specified character based command, a
 and character based utilities
 
 # SYNOPSIS
-**asciiville** [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]
+**asciiville** [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]
 
 Invoked without any arguments or with the `-i` argument, `asciiville` displays an interactive dialog menu.
 
@@ -61,8 +61,14 @@ Asciiville preferences are maintained in `$HOME/.config/asciiville/init`. Prefer
 **-t**
 : Indicates use tilix terminal emulator
 
+**-U**
+: Indicates set command to Ninvaders
+
 **-w**
 : Indicates use w3m web browser as the default command
+
+**-W**
+: Indicates use cmatrix as the default command
 
 **-x**
 : Indicates use xfce4 terminal emulator
@@ -72,6 +78,9 @@ Asciiville preferences are maintained in `$HOME/.config/asciiville/init`. Prefer
 
 **-y**
 : Indicates use ranger file manager as the default command
+
+**-Y**
+: Indicates use NetHack dungeon game as the default command
 
 **-z**
 : Indicates use neomutt email client as the default command

@@ -59,7 +59,7 @@ usage() {
   printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]"
   printf "\n\t[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N]"
   printf "\n\t[-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T]"
-  printf "\n\t[-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]\n"
+  printf "\n\t[-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]\n"
   printf "\nTerminal/Command options:"
   printf "\n\t-c 'command' indicates use 'command'"
   printf "\n\t\tIf 'command' is keyword 'maps' then display a map using mapscii"
@@ -81,6 +81,7 @@ usage() {
   printf "\n\t-L 'level' use lolcat coloring, 'level' can be '1' or '2' (animate)"
   printf "\n\t-r indicates use retro terminal emulator"
   printf "\n\t-t indicates use tilix terminal emulator"
+  printf "\n\t-U indicates set command to Ninvaders"
   printf "\n\t-w indicates use w3m web browser as the default command"
   printf "\n\t-W indicates use cmatrix as the default command"
   printf "\n\t-x indicates use xfce4 terminal emulator"
@@ -799,6 +800,7 @@ show_select_menu() {
     use_mpp="NO"
     use_mutt="NO"
     use_nethack="NO"
+    use_ninvaders="NO"
     use_newsboat="NO"
     use_ranger="NO"
     use_w3m="NO"
@@ -829,6 +831,9 @@ show_select_menu() {
         ;;
       newsboat)
         use_newsboat="YES"
+        ;;
+      ninvaders)
+        use_ninvaders="YES"
         ;;
       ranger)
         use_ranger="YES"
@@ -894,6 +899,7 @@ show_select_menu() {
       [ "${have_mutt}" ] && options+=("Mutt Mail Client       [${use_mutt}]")
     fi
     [ "${have_nethack}" ] && options+=("NetHack Dungeon Game   [${use_nethack}]")
+    [ "${have_ninvaders}" ] && options+=("Ninvaders Video Game   [${use_ninvaders}]")
     [ "${have_newsboat}" ] && options+=("Newsboat RSS Feeds     [${use_newsboat}]")
     [ "${have_ranger}" ] && options+=("Ranger File Manager    [${use_ranger}]")
     [ "${have_xfce4}" ] && options+=("XFCE4 Terminal         [${use_xfce4}]")
@@ -991,6 +997,11 @@ show_select_menu() {
           "News"*,*|*,"News"*)
               COMMAND=newsboat
               MTITLE="Newsboat RSS Feeds"
+              break
+              ;;
+          "Ninvaders"*,*|*,"Ninvaders"*)
+              COMMAND=ninvaders
+              MTITLE="Ninvaders Video Game"
               break
               ;;
           "Ranger"*,*|*,"Ranger"*)
@@ -2643,6 +2654,7 @@ have_mutt=`type -p mutt`
 have_neomutt=`type -p neomutt`
 have_nethack=`type -p nethack`
 have_newsboat=`type -p newsboat`
+have_ninvaders=`type -p ninvaders`
 have_ranger=`type -p ranger`
 have_retro=`type -p cool-retro-term`
 have_asciiart=`type -p asciiart`
@@ -2737,7 +2749,7 @@ cycle=
 noaudio=
 show_neofetch=
 SLIDESHOW=
-while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wWxXyYzZu" flag; do
+while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
   case $flag in
     A)
       ASCSPLASH="${ASCSPLASH} -i"
@@ -3054,6 +3066,15 @@ while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTvV:wWxXyYzZu" flag; do
       ;;
     T)
       TMUX=1
+      ;;
+    U)
+      if [ "${have_ninvaders}" ]
+      then
+        COMMAND=ninvaders
+        MTITLE="Ninvaders Video Game"
+      else
+        not_in_path ninvaders -U
+      fi
       ;;
     v)
       [ -f "/usr/share/doc/asciiville/VERSION" ] || {
