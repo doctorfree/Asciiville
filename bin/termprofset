@@ -1,0 +1,213 @@
+#!/bin/bash
+#
+# termprofset - manipulate the settings of Gnome and Tilix profiles
+#
+# Written May, 2020 by Ronald Record <ronaldrecord@gmail.com>
+#
+# From https://ncona.com/2019/11/configuring-gnome-terminal-programmatically/
+#
+# You can list all the properties that can be configured:
+# gsettings list-keys \
+#    ${T_PROF}:${T_PATH}${TERM_PROF}/
+#
+# If you want to see the current value for a setting you can use:
+# gsettings get \
+#    ${T_PROF}:${T_PATH}${TERM_PROF}/ foreground-color
+#
+CONF_DIR="${HOME}/.config"
+SAVE_DIR="${CONF_DIR}/asciiville"
+SAVE_GNOME="${SAVE_DIR}/gnome"
+SAVE_TILIX="${SAVE_DIR}/tilix"
+
+GNOME_PROF="org.gnome.Terminal.Legacy.Profile"
+GNOME_PATH="/org/gnome/terminal/legacy/profiles:/"
+GNOME_LIST="org.gnome.Terminal.ProfilesList"
+
+TILIX_PROF="com.gexperts.Tilix.Profile"
+TILIX_PATH="/com/gexperts/Tilix/profiles/"
+TILIX_LIST="com.gexperts.Tilix.ProfilesList"
+
+usage() {
+  printf "\nUsage: termprofset [-f fontname] [-s fontsize] [-p profile] [-glrtu]"
+  printf "\nWhere:"
+  printf "\n\t-f 'fontname' specifies the font name to set terminal's font to"
+  printf "\n\t-s 'fontsize' specifies the font size to set terminal's font to"
+  printf "\n\t-p 'profile' specifies the terminal profile to manipulate"
+  printf "\n\t-r indicates restore saved settings"
+  printf "\n\t-g indicates use Gnome terminal emulator"
+  printf "\n\t-l indicates list current profile settings and exit"
+  printf "\n\t-t indicates use Tilix terminal emulator"
+  printf "\n\t-u displays this usage message and exits"
+  printf "\n\nDefault terminal emulator is Gnome"
+  printf "\nDefault terminal profile is Asciiville"
+  printf "\nDefault font is Monospace"
+  printf "\nDefault font size is 4\n"
+  exit 1
+}
+
+rest_settings() {
+  [ -f "${T_SAVE}" ] && {
+    . "${T_SAVE}"
+    gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
+              font "${current_font}"
+    gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
+              use-system-font ${use_system_font}
+    gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
+              use-theme-colors ${use_theme}
+    gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
+              background-color "${background}"
+    gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
+              foreground-color "${foreground}"
+  }
+}
+
+save_settings() {
+  [ -d "${CONF_DIR}" ] || mkdir "${CONF_DIR}"
+  [ -d "${SAVE_DIR}" ] || mkdir "${SAVE_DIR}"
+  echo "current_font=\"${CURR_FONT}\"" > ${T_SAVE}
+  echo "use_system_font=${USE_SYSTEM_FONT}" >> ${T_SAVE}
+  echo "use_theme=${USE_THEME}" >> ${T_SAVE}
+  echo "background=\"${USE_BACK}\"" >> ${T_SAVE}
+  echo "foreground=\"${USE_FORE}\"" >> ${T_SAVE}
+}
+
+FONT_NAME="Monospace"
+FONT_SIZE=4
+PROF_NAME="Asciiville"
+RESTORE=
+USE_GNOME=1
+TERM_NAME=Gnome
+USE_TILIX=
+SHOW_LIST=
+while getopts "gf:lp:rs:tu" flag; do
+  case $flag in
+    g)
+      USE_TILIX=
+      USE_GNOME=1
+      ;;
+    f)
+      FONT_NAME="${OPTARG}"
+      ;;
+    l)
+      SHOW_LIST=1
+      ;;
+    p)
+      PROF_NAME="${OPTARG}"
+      ;;
+    r)
+      RESTORE=1
+      ;;
+    s)
+      FONT_SIZE="${OPTARG}"
+      ;;
+    t)
+      USE_TILIX=1
+      USE_GNOME=
+      TERM_NAME=Tilix
+      ;;
+    u)
+      usage
+      ;;
+  esac
+done
+
+# Which terminal are we using?
+if [ "${USE_GNOME}" ]
+then
+  T_PROF="${GNOME_PROF}"
+  T_PATH="${GNOME_PATH}"
+  T_LIST="${GNOME_LIST}"
+  T_SAVE="${SAVE_GNOME}"
+else
+  if [ "${USE_TILIX}" ]
+  then
+    T_PROF="${TILIX_PROF}"
+    T_PATH="${TILIX_PATH}"
+    T_LIST="${TILIX_LIST}"
+    T_SAVE="${SAVE_TILIX}"
+  else
+    echo "Unknown/Unsupported terminal emulator. Exiting."
+    usage
+  fi
+fi
+
+[ "${SHOW_LIST}" ] && RESTORE=
+
+# Save/Restore the current terminal settings
+if [ "${RESTORE}" ]
+then
+  rest_settings
+  exit 0
+else
+  # Get the terminal profile id
+  TERM_PROF=
+  if [ "${PROF_NAME}" == "default" ]
+  then
+    TERM_PROF=`gsettings get ${T_LIST} default | awk -F \' '{print $2}'`
+  else
+    profiles=($(gsettings get ${T_LIST} list | tr -d "[]\',"))
+    if [ "$profiles" = "" ]
+    then
+      echo "No profiles detected. Exiting."
+      usage
+    else
+      if [ "${USE_GNOME}" ]
+      then
+        P_PATH="${T_PATH}:"
+      else
+        P_PATH="${T_PATH}"
+      fi
+      for i in ${!profiles[*]}
+      do
+        visname="$(dconf read ${P_PATH}${profiles[i]}/visible-name)"
+        [ "${visname}" == "'${PROF_NAME}'" ] && {
+          TERM_PROF="${profiles[i]}"
+          break
+        }
+      done
+    fi
+    [ "${TERM_PROF}" ] || {
+      echo "Could not locate ${PROF_NAME} profile. Exiting."
+      usage
+    }
+  fi
+  #
+  # Save the current font and use-system-font
+  USE_SYSTEM_FONT=`gsettings get \
+      ${T_PROF}:${T_PATH}${TERM_PROF}/ use-system-font`
+  CURR_FONT=`gsettings get \
+      ${T_PROF}:${T_PATH}${TERM_PROF}/ font`
+  USE_THEME=`gsettings get \
+      ${T_PROF}:${T_PATH}${TERM_PROF}/ use-theme-colors`
+  USE_BACK=`gsettings get \
+      ${T_PROF}:${T_PATH}${TERM_PROF}/ background-color`
+  USE_FORE=`gsettings get \
+      ${T_PROF}:${T_PATH}${TERM_PROF}/ foreground-color`
+  if [ "${SHOW_LIST}" ]
+  then
+    echo "Current settings for ${PROF_NAME} profile in ${TERM_NAME}:"
+    echo "font=${CURR_FONT}"
+    echo "use-system-font=${USE_SYSTEM_FONT}"
+    echo "use-theme-colors=${USE_THEME}"
+    echo "background-color=${USE_BACK}"
+    echo "foreground-color=${USE_FORE}"
+    exit 0
+  else
+    save_settings
+  fi
+fi
+#
+# Next, we can use gsettings to change the properties we care about.
+#
+gsettings set \
+   ${T_PROF}:${T_PATH}:${TERM_PROF}/ font "${FONT_NAME} ${FONT_SIZE}"
+gsettings set \
+   ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-system-font false
+gsettings set \
+   ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-theme-colors false
+gsettings set \
+   ${T_PROF}:${T_PATH}:${TERM_PROF}/ background-color '#000000'
+gsettings set \
+   ${T_PROF}:${T_PATH}:${TERM_PROF}/ foreground-color '#AFAFAF'
+
+exit 0

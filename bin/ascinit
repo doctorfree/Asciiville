@@ -440,16 +440,8 @@ create_new_profile() {
   then
     dconf write $profile_path/background-transparency-percent "0" 2> /dev/null
   fi
-  # Do we need to set the font in the profile?
-  # FONT="Monospace Regular"
-  # SIZE=12
   dconf write $profile_path/use-system-font "false" 2> /dev/null
-  if [ "${proname}" == "${small_profile_name}" ]
-  then
-    dconf write $profile_path/font "'Monospace 4'" 2> /dev/null
-  else
-    dconf write $profile_path/font "'Monospace 12'" 2> /dev/null
-  fi
+  dconf write $profile_path/font "'Monospace 18'" 2> /dev/null
 }
 
 [ "${console}" ] || {
@@ -460,10 +452,8 @@ create_new_profile() {
   # If no gnome-terminal Asciiville profile exists, create one
   declare -a profiles
   profile_name="Asciiville"
-  small_profile_name="Asciiville_Small"
 
   profile_exists=
-  small_profile_exists=
   dconfdir=/org/gnome/terminal/legacy/profiles:
 
   # profiles=($(gconftool-2 -R $gconfdir | grep $gconfdir | cut -d/ -f5 |  \
@@ -473,14 +463,12 @@ create_new_profile() {
   if [ "$profiles" = "" ]
   then
     create_new_profile gnome ${profile_name}
-    create_new_profile gnome ${small_profile_name}
   else
     for i in ${!profiles[*]}
     do
       visname="$(dconf read $dconfdir/:${profiles[i]}/visible-name)"
       [ "${visname}" == "'${profile_name}'" ] && profile_exists=1
-      [ "${visname}" == "'${small_profile_name}'" ] && small_profile_exists=1
-      [ "$profile_exists" ] && [ "$small_profile_exists" ] && break
+      [ "$profile_exists" ] && break
     done
   fi
 
@@ -488,14 +476,9 @@ create_new_profile() {
     # Create an Asciiville profile in gnome-terminal for this user
     create_new_profile gnome ${profile_name}
   }
-  [ "$small_profile_exists" ] || {
-    # Create a Small Asciiville profile in gnome-terminal for this user
-    create_new_profile gnome ${small_profile_name}
-  }
 
   # Create Asciiville Tilix profile, similar to Gnome-terminal's
   profile_exists=
-  small_profile_exists=
   dconfdir=/com/gexperts/Tilix/profiles
 
   profiles=($(gsettings get com.gexperts.Tilix.ProfilesList list | tr -d "[]\',"))
@@ -503,24 +486,18 @@ create_new_profile() {
   if [ "$profiles" = "" ]
   then
     create_new_profile tilix ${profile_name}
-    create_new_profile tilix ${small_profile_name}
   else
     for i in ${!profiles[*]}
     do
-      visname="$(dconf read $dconfdir/:${profiles[i]}/visible-name)"
+      visname="$(dconf read $dconfdir/${profiles[i]}/visible-name)"
       [ "${visname}" == "'${profile_name}'" ] && profile_exists=1
-      [ "${visname}" == "'${small_profile_name}'" ] && small_profile_exists=1
-      [ "$profile_exists" ] && [ "$small_profile_exists" ] && break
+      [ "$profile_exists" ] && break
     done
   fi
 
   [ "$profile_exists" ] || {
     # Create an Asciiville profile in Tilix for this user
     create_new_profile tilix ${profile_name}
-  }
-  [ "$small_profile_exists" ] || {
-    # Create a Small Asciiville profile in Tilix for this user
-    create_new_profile tilix ${small_profile_name}
   }
 }
 

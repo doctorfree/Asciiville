@@ -140,6 +140,7 @@ Asciiville adds the following commands to your system:
 * **show_moon** : display the phase of the Moon
 * **show_weather** : display a weather report
 * **tdraw** : ASCII drawing tool (only added if `go` is installed)
+* **termprofset** : set/restore default profile settings for the Gnome and Tilix terminals
 
 Additional detail and info can be found in the
 [Asciiville Wiki](https://github.com/doctorfree/Asciiville/wiki).
@@ -493,6 +494,8 @@ bring up the interactive menu interface.
 - [**asciijulia**](markdown/asciijulia.1.md) : asciimatics animation of a Julia Set
 - [**asciimpplus**](markdown/asciimpplus.1.md) : asciimatics animation of Asciiville intro
 - [**asciiplasma**](markdown/asciiplasma.1.md) : asciimatics animation with Plasma effect
+- [**asciisplash-tmux**](markdown/asciisplash-tmux.1.md) : Asciiville asciimatics animations in a tmux session
+- [**asciisplash**](markdown/asciisplash.1.md) : Asciiville asciimatics animations
 - [**mpcinit**](markdown/mpcinit.1.md) : Asciiville initialization
 - [**btop-tmux**](markdown/btop-tmux.1.md) : Asciiville in a tmux session
 - [**btop**](markdown/btop.1.md) : Asciiville system monitor
@@ -501,8 +504,7 @@ bring up the interactive menu interface.
 - [**show_ascii_art**](markdown/show_ascii_art.1.md) : Display ascii art, convert images to ascii art
 - [**show_moon**](markdown/show_moon.1.md) : Display the phase of the Moon
 - [**show_weather**](markdown/show_weather.1.md) : Display a weather report
-- [**asciisplash-tmux**](markdown/asciisplash-tmux.1.md) : Asciiville asciimatics animations in a tmux session
-- [**asciisplash**](markdown/asciisplash.1.md) : Asciiville asciimatics animations
+- [**termprofset**](markdown/termprofset.1.md) : Manipulate default terminal profile settings
 
 ### Usage
 

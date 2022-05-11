@@ -510,7 +510,7 @@ play_slide_show() {
     if [ "${XFCE4}" ]
     then
       xfce4-terminal --fullscreen \
-                     --font="Monospace Regular" \
+                     --font="Monospace Regular 4" \
                      --color-bg=Black \
                      --command="show_ascii_art ${showargs} -s ${showname}"
     else

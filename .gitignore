@@ -88,6 +88,7 @@ stamp-h1
 archive/*
 dist/*
 games/*
+pics/*
 releases/*
 tmp/*
 tools/*

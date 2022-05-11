@@ -25,3 +25,4 @@ For example, the man page output for the `asciiville` command would be found at
 - [**show_ascii_art.1.md**](show_ascii_art.1.md) - Markdown input for auto-generation of the show_ascii_art man page
 - [**show_moon.1.md**](show_moon.1.md) - Markdown input for auto-generation of the show_moon man page
 - [**show_weather.1.md**](show_weather.1.md) - Markdown input for auto-generation of the show_weather man page
+- [**termprofset.1.md**](termprofset.1.md) - Markdown input for auto-generation of the termprofset man page

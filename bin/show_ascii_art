@@ -355,17 +355,21 @@ done
   if [ "${have_gnome}" ]
   then
     echo "Invoking gnome-terminal to convert ${make_inp} to ${make_out}"
-    gnome-terminal --window --full-screen --profile=Asciiville_Small \
+    termprofset
+    gnome-terminal --window --geometry=320x100 --profile=Asciiville \
                    -- make_ascii_art -i "${make_inp}" -o "${make_out}" &
+    termprofset -r
   else
     if [ "${have_tilix}" ]
     then
       echo "Invoking Tilix to convert ${make_inp} to ${make_out}"
-      tilix --full-screen \
-            --profile=Asciiville_Small \
+      termprofset -t
+      tilix --geometry=320x100 \
+            --profile=Asciiville \
             --window-style=borderless \
             --command="make_ascii_art -i \"${make_inp}\" -o \"${make_out}\"" \
               2> /dev/null &
+      termprofset -t -r
     else
       if [ "${have_xfce4}" ]
       then
@@ -374,7 +378,7 @@ done
             --hide-toolbar \
             --hide-scrollbar \
             --font="Monospace Regular 4" \
-            --fullscreen \
+            --geometry=320x100 \
             --command="make_ascii_art -i \"${make_inp}\" -o \"${make_out}\"" &
       else
         make_ascii_art -i "${make_inp}" -o "${make_out}" &
