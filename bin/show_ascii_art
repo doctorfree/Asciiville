@@ -109,6 +109,7 @@ set_tabs() {
 #   third is a command to use in a pipe (optional)
 show_ascii() {
   [ -f "$1" ] || {
+    termprofset -r
     echo "File: $1 does not exist"
     echo "Exiting"
     exit 1
@@ -414,6 +415,7 @@ fade_audio() {
 goodbye() {
   clear
   [ "${quiet}" ] || {
+    termprofset -s 20
     printf "\n\n\n"
     if [ "${have_lolcat}" ]
     then
@@ -430,6 +432,7 @@ goodbye() {
       figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Ascii Art !"
     fi
     sleep $((delay / 2))
+    termprofset -r
   }
 }
 
@@ -451,6 +454,7 @@ play_slide_show() {
     }
     [ "${first}" ] && {
       [ "${quiet}" ] || {
+        termprofset -s 20
         printf "\n\n\n"
         if [ "${have_lolcat}" ]
         then
@@ -465,12 +469,15 @@ play_slide_show() {
         fi
         figlet -c -d "${FIG_FONTS}" -f "Digital" -k -t "Ctrl-c  Exits"
         sleep ${delay}
+        termprofset -r
       }
       first=
     }
     clear
+    termprofset -s 4
     show_ascii "${art}"
     [ $? -eq 3 ] || sleep ${delay}
+    termprofset -r
   done
 }
 
@@ -635,11 +642,14 @@ fi
 
 clear
 [ "${quiet}" ] || {
+  termprofset -s 20
   figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME}
   figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII}
   sleep ${delay}
+  termprofset -r
 }
 
+termprofset -s 4
 if [ "${input_image}" ]
 then
   image_name=`basename "${input_image}"`
@@ -655,11 +665,12 @@ then
     [ "${suf}" == "JPEG" ] || {
       if [ "${have_convert}" ]
       then
-          convert "${input_image}" /tmp/${image_name}$$.jpg
+        convert "${input_image}" /tmp/${image_name}$$.jpg
       else
-          echo "The 'convert' command is not installed or not in PATH"
-          echo "Cannot convert ${input_image} to ascii art"
-          exit 1
+        termprofset -r
+        echo "The 'convert' command is not installed or not in PATH"
+        echo "Cannot convert ${input_image} to ascii art"
+        exit 1
       fi
     }
     [ -f /tmp/${image_name}$$.jpg ] || {
@@ -687,6 +698,7 @@ else
         then
           show_ascii "${art}" "${tabs}"
         else
+          termprofset -r
           echo "Cannot locate ${art}"
         fi
       fi
@@ -698,6 +710,7 @@ fi
   sleep ${delay}
   if [ "${have_lolcat}" ]
   then
+    termprofset -s 20
     figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME} | ${LOLCAT}
     figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII} | ${LOLCAT}
   fi
@@ -706,6 +719,8 @@ fi
 if [ "${have_lolcat}" ]
 then
   sleep ${delay}
+  termprofset -r
+  termprofset -s 4
   if [ "${input_image}" ]
   then
     show_ascii "/tmp/${image_name}$$.asc" "${tabs}" ${LOLCAT}
@@ -731,6 +746,7 @@ then
     fi
   fi
 fi
+termprofset -r
 
 [ -f "/tmp/${image_name}$$.asc" ] && {
   if [ "${save_art}" ]
