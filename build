@@ -131,21 +131,25 @@ build_nethack() {
   # chmod +x src/nethack
   #
   # Revised build with UnNetHack changes
-  cd sys/autoconf
-  ./bootstrap.sh
-  cd ../..
-  chmod 755 configure
-  ./configure --prefix=/usr/games \
-              --with-owner=games \
-              --with-group=games \
-              --enable-wizmode=doctorwhen
-  make
+  [ -f src/nethack ] || {
+    cd sys/autoconf
+    ./bootstrap.sh
+    cd ../..
+    chmod 755 configure
+    ./configure --prefix=/usr/games \
+                --with-owner=games \
+                --with-group=games \
+                --enable-wizmode=doctorwhen
+    make
+  }
   [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
 }
 
 build_ninvaders() {
-  cmake -B cmake_build
-  cmake --build cmake_build -j2
+  [ -f cmake_build/ninvaders ] || {
+    cmake -B cmake_build
+    cmake --build cmake_build -j2
+  }
 }
 
 usage() {
