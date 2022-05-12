@@ -127,7 +127,7 @@ for dir in "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
            "${DESTDIR}/share/doc/${PKG}" "${DESTDIR}/share/btop" \
            "${DESTDIR}/share/${PKG}" "${DESTDIR}/games" "${DESTDIR}/games/bin" \
-           "${DESTDIR}/games/lib" "${DESTDIR}/games/lib/ninvaders
+           "${DESTDIR}/games/lib" "${DESTDIR}/games/lib/ninvaders"
 do
     [ -d ${OUT_DIR}/${dir} ] || ${SUDO} mkdir ${OUT_DIR}/${dir}
     ${SUDO} chown root:root ${OUT_DIR}/${dir}
