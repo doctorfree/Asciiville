@@ -61,6 +61,7 @@ jp2a/Makefile
 jp2a/src/Makefile
 jp2a/src/jp2a
 jp2a/config.*
+jp2a/install-sh
 
 ddgr/build/
 ddgr/dist/
@@ -91,6 +92,7 @@ games/asciisector
 games/lib/AsciiSector
 games/ninvaders/cmake_build
 games/nethack/compile
+games/nethack/src/nethack
 
 # games/nethack/
 games/nethack/Makefile
