@@ -131,6 +131,10 @@ build_nethack() {
   # chmod +x src/nethack
   #
   # Revised build with UnNetHack changes
+  cd sys/autoconf
+  ./bootstrap.sh
+  cd ../..
+  chmod 755 configure
   ./configure --prefix=/usr/games \
               --with-owner=games \
               --with-group=games \

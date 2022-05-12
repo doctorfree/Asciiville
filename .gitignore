@@ -78,11 +78,11 @@ compile
 configure
 depcomp
 **/.dirstamp
-install-sh
+#install-sh
 libtool
 ltmain.sh
 missing
-**.m4
+#**.m4
 **/.deps/
 stamp-h1
 archive/*
