@@ -14,7 +14,7 @@
 
 #define NETHACK_CURSES      1
 #define SLASHEM_CURSES      2
-#define UNNETHACK_CURSES    3
+#define NETHACK_CURSES    3
 #define SPORKHACK_CURSES    4
 #define GRUNTHACK_CURSES    5
 #define DNETHACK_CURSES     6
@@ -80,22 +80,22 @@ nhrgb orig_hiwhite;
 #define SLASHEM_SPLASH_F \
 "|_____/ |_| \\__,_||___/|_| |_|  |______||_|  |_|"
 
-#define UNNETHACK_SPLASH_A \
+#define NETHACK_SPLASH_A \
 " _    _         _   _        _    _    _               _"
 
-#define UNNETHACK_SPLASH_B \
+#define NETHACK_SPLASH_B \
 "| |  | |       | \\ | |      | |  | |  | |             | |"
 
-#define UNNETHACK_SPLASH_C \
+#define NETHACK_SPLASH_C \
 "| |  | | _ __  |  \\| |  ___ | |_ | |__| |  __ _   ___ | | __"
 
-#define UNNETHACK_SPLASH_D \
+#define NETHACK_SPLASH_D \
 "| |  | || '_ \\ | . ` | / _ \\| __||  __  | / _` | / __|| |/ /"
 
-#define UNNETHACK_SPLASH_E \
+#define NETHACK_SPLASH_E \
 "| |__| || | | || |\\  ||  __/| |_ | |  | || (_| || (__ |   <"
 
-#define UNNETHACK_SPLASH_F \
+#define NETHACK_SPLASH_F \
 " \\____/ |_| |_||_| \\_| \\___| \\__||_|  |_| \\__,_| \\___||_|\\_\\"
 
 #define SPORKHACK_SPLASH_A \
@@ -567,7 +567,7 @@ curses_choose_character()
         flags.randomall = TRUE;
     }
 #ifdef TUTORIAL_MODE
-    else if (pick4u == 't') {   /* Tutorial mode in UnNetHack */
+    else if (pick4u == 't') {   /* Tutorial mode in NetHack */
         clear();
         mvaddstr(0, 1, "Choose a character");
         refresh();
@@ -999,7 +999,7 @@ curses_display_splash_window()
 
 #ifdef GAME_SHORT_NAME
     if (strcmp(GAME_SHORT_NAME, "UNH") == 0) {
-        which_variant = UNNETHACK_CURSES;
+        which_variant = NETHACK_CURSES;
     }
 #endif
 
@@ -1037,13 +1037,13 @@ curses_display_splash_window()
             mvaddstr(y_start + 5, x_start, SLASHEM_SPLASH_F);
             y_start += 7;
             break;
-        case UNNETHACK_CURSES:
-            mvaddstr(y_start, x_start, UNNETHACK_SPLASH_A);
-            mvaddstr(y_start + 1, x_start, UNNETHACK_SPLASH_B);
-            mvaddstr(y_start + 2, x_start, UNNETHACK_SPLASH_C);
-            mvaddstr(y_start + 3, x_start, UNNETHACK_SPLASH_D);
-            mvaddstr(y_start + 4, x_start, UNNETHACK_SPLASH_E);
-            mvaddstr(y_start + 5, x_start, UNNETHACK_SPLASH_F);
+        case NETHACK_CURSES:
+            mvaddstr(y_start, x_start, NETHACK_SPLASH_A);
+            mvaddstr(y_start + 1, x_start, NETHACK_SPLASH_B);
+            mvaddstr(y_start + 2, x_start, NETHACK_SPLASH_C);
+            mvaddstr(y_start + 3, x_start, NETHACK_SPLASH_D);
+            mvaddstr(y_start + 4, x_start, NETHACK_SPLASH_E);
+            mvaddstr(y_start + 5, x_start, NETHACK_SPLASH_F);
             y_start += 7;
             break;
         case SPORKHACK_CURSES:

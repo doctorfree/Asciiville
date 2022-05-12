@@ -144,7 +144,7 @@ int prob2;
 		if (rnf(prob1, prob2)) {
 			/* Don't remove dragon scales or scale mails when player
 			 * is polyed into this dragon type.
-			 * Also, UnNetHack will crash because not deleting the
+			 * Also, NetHack will crash because not deleting the
 			 * associated light source if these are gold and get
 			 * removed. */
 			if (!(otmp == uskin && Is_dragon_armor(uskin->otyp))) {

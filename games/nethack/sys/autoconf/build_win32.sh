@@ -1,10 +1,10 @@
 #!/bin/bash -xe
 
-INSTALL=/tmp/unnethack_win32
-DESTDIR=/tmp/unnethack_destdir
+INSTALL=/tmp/nethack_win32
+DESTDIR=/tmp/nethack_destdir
 mkdir -p $DESTDIR $INSTALL
 
-function compile_unnethack {
+function compile_nethack {
 	env CFLAGS='-O2 -Wall' ./configure \
 		--host i686-w64-mingw32 \
 		--prefix=$INSTALL \
@@ -17,17 +17,17 @@ function compile_unnethack {
 		&& make install
 }
 
-rm -rf $INSTALL/share/unnethack $DESTDIR/unnethack-win32-*
+rm -rf $INSTALL/share/nethack $DESTDIR/nethack-win32-*
 
 GRAPHICS="--disable-mswin-graphics --enable-tty-graphics"
-compile_unnethack
-mv $INSTALL/share/unnethack/unnethack.exe $INSTALL/share/unnethack/UnNetHack.exe
+compile_nethack
+mv $INSTALL/share/nethack/nethack.exe $INSTALL/share/nethack/NetHack.exe
 
 GRAPHICS="--enable-mswin-graphics --disable-tty-graphics"
-compile_unnethack
-mv $INSTALL/share/unnethack/unnethack.exe $INSTALL/share/unnethack/UnNetHackW.exe
+compile_nethack
+mv $INSTALL/share/nethack/nethack.exe $INSTALL/share/nethack/NetHackW.exe
 
-rm -f $INSTALL/share/unnethack/unnethack.exe.old
+rm -f $INSTALL/share/nethack/nethack.exe.old
 
 make win32_release
 make release_archive

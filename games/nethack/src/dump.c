@@ -469,9 +469,9 @@ const char *title;
 	dump_html("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n","");
 	dump_html("<html xmlns=\"http://www.w3.org/1999/xhtml\">\n", "");
 	dump_html("<head>\n", "");
-	dump_html("<title>UnNetHack " VERSION_STRING ": %s</title>\n", title);
+	dump_html("<title>NetHack " VERSION_STRING ": %s</title>\n", title);
 	dump_html("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n", "");
-	dump_html("<meta name=\"generator\" content=\"UnNetHack " VERSION_STRING "\" />\n", "");
+	dump_html("<meta name=\"generator\" content=\"NetHack " VERSION_STRING "\" />\n", "");
 	dump_html("<meta name=\"date\" content=\"%s\" />\n", iso8601(0));
 #ifdef DUMP_HTML_CSS_FILE
 # ifndef DUMP_HTML_CSS_EMBEDDED

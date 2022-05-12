@@ -1,4 +1,4 @@
-#	UnNetHack Makefile.
+#	NetHack Makefile.
 #       @configure_input@
 #	SCCS Id: @(#)Makefile.top	3.4	1995/01/05
 
@@ -17,7 +17,7 @@ srcdir=@srcdir@
 # execute things like 'data' and 'rumors')
 # MAKE = make
 
-# make UnNetHack
+# make NetHack
 
 PREFIX   = @prefix@
 prefix   = @prefix@
@@ -33,8 +33,8 @@ mkdir_p = mkdir -p --
 bindir = @bindir@
 
 EXEEXT	 = @EXEEXT@
-SCRIPT   = unnethack
-GAME     = unnethack$(EXEEXT)
+SCRIPT   = nethack
+GAME     = nethack$(EXEEXT)
 GAMEUID  = @OWNER@
 GAMEGRP  = @GROUP@
 
@@ -51,7 +51,7 @@ VARDIRPERM  = 0755
 # VARDIR may also appear in unixconf.h as "VAR_PLAYGROUND" else GAMEDIR
 #
 # note that 'make install' believes in creating nice tidy directories for
-# installation, free of debris from previous UnNetHack versions --
+# installation, free of debris from previous NetHack versions --
 # therefore there should not be anything in GAMEDIR that you want to keep
 # (if there is, you'll have to do the installation by hand or modify the
 # instructions)
@@ -73,9 +73,9 @@ SHELLDIR = $(bindir)
 # for inclusion in DLB libraries (ND) and which are (D). Port specific files
 # per discussions in Install.X11 and Install.Qt
 CNF_SHARE_QTND = x11tiles rip.xpm nhsplash.xpm
-CNF_SHARE_X11ND = x11tiles UnNetHack.ad pet_mark.xbm
-#CNF_SHARE_X11ND = x11tiles UnNetHack.ad pet_mark.xbm
-# CNF_SHARE_X11ND = x11tiles UnNetHack.ad pet_mark.xbm rip.xpm
+CNF_SHARE_X11ND = x11tiles NetHack.ad pet_mark.xbm
+#CNF_SHARE_X11ND = x11tiles NetHack.ad pet_mark.xbm
+# CNF_SHARE_X11ND = x11tiles NetHack.ad pet_mark.xbm rip.xpm
 # for Atari/Gem
 CNF_SHARE_GEMND = nh16.img title.img GEM_RSC.RSC rip.img
 # for BeOS
@@ -195,8 +195,8 @@ beostiles: $(GAME)
 	( cd util ; $(MAKE) tile2beos )
 	( cd dat ; $(MAKE) beostiles )
 
-UnNetHack.ad: $(GAME)
-	( cd dat ; $(MAKE) UnNetHack.ad )
+NetHack.ad: $(GAME)
+	( cd dat ; $(MAKE) NetHack.ad )
 
 pet_mark.xbm:
 	( cd dat ; $(MAKE) pet_mark.xbm )
@@ -246,13 +246,13 @@ dofiles:
 	$(MAKE) dofiles-$${target-nodlb}
 	(cd src; cp $(GAME) @EXTRA_UNSHARE@ $(DESTDIR)$(FILE_AREA_UNSHARE))
 	@HOST_MSWIN@cp $(srcdir)/sys/winnt/defaults.nh $(DESTDIR)$(FILE_AREA_UNSHARE)
-	@HOST_UNIX@cp $(srcdir)/sys/unix/defaults.nh $(DESTDIR)$(FILE_AREA_UNSHARE)/unnethackrc.default
+	@HOST_UNIX@cp $(srcdir)/sys/unix/defaults.nh $(DESTDIR)$(FILE_AREA_UNSHARE)/nethackrc.default
 	cp util/recover$(EXEEXT) $(DESTDIR)$(FILE_AREA_UNSHARE)
 	if test -f $(srcdir)/doc/Guidebook.txt ; then \
 		cp $(srcdir)/doc/Guidebook.txt $(DESTDIR)$(FILE_AREA_DOC); \
 	fi
 	cp $(srcdir)/dat/license $(DESTDIR)$(FILE_AREA_DOC)
-	cp $(srcdir)/dat/unnethack_dump.css $(DESTDIR)$(FILE_AREA_UNSHARE)
+	cp $(srcdir)/dat/nethack_dump.css $(DESTDIR)$(FILE_AREA_UNSHARE)
 	@HOST_UNIX@-rm -f $(DESTDIR)$(SHELLDIR)/$(SCRIPT)
 	@HOST_UNIX@sed -e 's;/usr/games/lib/nethackdir;$(FILE_AREA_UNSHARE);' \
 	@HOST_UNIX@	-e 's;HACKDIR/nethack;HACKDIR/$(GAME);' \
@@ -360,13 +360,13 @@ include/autoconf_paths.h: Makefile
 	echo '#endif' >>$@
 
 RELEASEVERSION = $(shell grep VERSION_STRING include/date.h | cut -f 2 -d \")
-UNNETHACK_WIN32_DIR = $(DESTDIR)$(prefix)/unnethack-win32-$(RELEASEVERSION)
-UNNETHACK_RELEASE_ARCHIVE_PREFIX = unnethack-$(RELEASEVERSION)
-UNNETHACK_RELEASE_ARCHIVE = $(DESTDIR)$(prefix)/$(UNNETHACK_RELEASE_ARCHIVE_PREFIX).tar.gz
+NETHACK_WIN32_DIR = $(DESTDIR)$(prefix)/nethack-win32-$(RELEASEVERSION)
+NETHACK_RELEASE_ARCHIVE_PREFIX = nethack-$(RELEASEVERSION)
+NETHACK_RELEASE_ARCHIVE = $(DESTDIR)$(prefix)/$(NETHACK_RELEASE_ARCHIVE_PREFIX).tar.gz
 
 release_archive: $(GAME)
-	rm -f $(UNNETHACK_RELEASE_ARCHIVE)
-	git ls-files | tar cfz $(UNNETHACK_RELEASE_ARCHIVE) --mtime=now --transform 's,^,$(UNNETHACK_RELEASE_ARCHIVE_PREFIX)/,' -T -
+	rm -f $(NETHACK_RELEASE_ARCHIVE)
+	git ls-files | tar cfz $(NETHACK_RELEASE_ARCHIVE) --mtime=now --transform 's,^,$(NETHACK_RELEASE_ARCHIVE_PREFIX)/,' -T -
 
 win32_release: $(GAME)
 	cp $(srcdir)/ChangeLog  $(DESTDIR)$(GAMEDIR)/ChangeLog.txt
@@ -380,5 +380,5 @@ win32_release: $(GAME)
 	vim -c "set fileformat=dos" -c w -c q $(DESTDIR)$(GAMEDIR)/ChangeLog.txt
 	vim -c "set fileformat=dos" -c w -c q $(DESTDIR)$(GAMEDIR)/README.txt
 	vim -c "set fileformat=dos" -c w -c q $(DESTDIR)$(GAMEDIR)/Guidebook.txt
-	mv $(DESTDIR)$(GAMEDIR) $(UNNETHACK_WIN32_DIR)
-	cd $(UNNETHACK_WIN32_DIR) && zip -r $(UNNETHACK_WIN32_DIR).zip `echo * | sort -f`
+	mv $(DESTDIR)$(GAMEDIR) $(NETHACK_WIN32_DIR)
+	cd $(NETHACK_WIN32_DIR) && zip -r $(NETHACK_WIN32_DIR).zip `echo * | sort -f`

@@ -16,10 +16,10 @@ esac
 export XUSERFILESEARCHPATH
 
 # copy default config file to home directory if none
-# exists for unnethack or vanilla
-if [ ! -e "$HOME/.unnethackrc" -a ! -e "$HOME/.nethackrc" ]
+# exists for nethack or vanilla
+if [ ! -e "$HOME/.nethackrc" -a ! -e "$HOME/.nethackrc" ]
 then
-	cp "$HACKDIR/unnethackrc.default" "$HOME/.unnethackrc"
+	cp "$HACKDIR/nethackrc.default" "$HOME/.nethackrc"
 fi
 
 # see if we can find the full path name of PAGER, so help files work properly

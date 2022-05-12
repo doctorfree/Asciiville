@@ -1230,7 +1230,7 @@ static const char * const bogusmons[] = {
 	"winged grizzly",
 	"yellow wight",
 
-	/* from UnNetHack */
+	/* from NetHack */
 	"apostrophe golem", "Bob the angry flower",
 	"bonsai-kitten", "Boxxy", "lonelygirl15",
 	"tie-thulu", "Domo-kun", "nyan cat",
@@ -1280,7 +1280,7 @@ static const char * const bogusmons[] = {
 	"Magnus Burnsides the Fighter", "Taako the Wizard", "Merle Highchurch the Cleric", /* The Adventure Zone */
     "rubber duck", /* rubber ducks are a programmer's best friend */
 
-	/* bogus UnNetHack monsters */
+	/* bogus NetHack monsters */
 	"weeping angle",
 	"gelatinous sphere", "gelatinous pyramid",
 	"gelatinous Klein bottle", "gelatinous Mandelbrot set",

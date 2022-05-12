@@ -180,7 +180,7 @@ moveloop()
     monstr_init();	/* monster strengths */
     objects_init();
     dragons_init();
-    doredraw(); /* partial workaround to http://sourceforge.net/apps/trac/unnethack/ticket/2 */
+    doredraw(); /* partial workaround to http://sourceforge.net/apps/trac/nethack/ticket/2 */
     shop_selection_init();
 
 #ifdef WIZARD
@@ -806,7 +806,7 @@ newgame()
 	return;
 }
 
-/* show "welcome [back] to unnethack" message at program startup */
+/* show "welcome [back] to nethack" message at program startup */
 void
 welcome(new_game)
 boolean new_game;	/* false => restoring an old game */
@@ -833,8 +833,8 @@ boolean new_game;	/* false => restoring an old game */
 	Sprintf(eos(buf), " %s", genders[currentgend].adj);
 
     role_name = (currentgend && urole.name.f) ? urole.name.f : urole.name.m;
-    pline(new_game ? "%s %s, welcome to UnNetHack!  You are a%s %s %s."
-		   : "%s %s, the%s %s %s, welcome back to UnNetHack!",
+    pline(new_game ? "%s %s, welcome to NetHack!  You are a%s %s %s."
+		   : "%s %s, the%s %s %s, welcome back to NetHack!",
 	  Hello((struct monst *) 0), plname, buf, urace.adj, role_name);
 #ifdef LIVELOGFILE
     /* Start live reporting */

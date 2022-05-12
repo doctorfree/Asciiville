@@ -85,7 +85,7 @@
 #define BEOS_GRAPHICS /* (optional) */
 #define DEFAULT_WINDOW_SYS "BeOS"  /* "tty" */
 #ifndef HACKDIR	/* override the default hackdir below */
-# define HACKDIR "/boot/apps/UnNetHack"
+# define HACKDIR "/boot/apps/NetHack"
 #endif
 #endif
 
@@ -117,7 +117,7 @@
 # ifndef DEFAULT_WINDOW_SYS
 #  define DEFAULT_WINDOW_SYS "mswin"
 # endif
-# define HACKDIR "\\unnethack"
+# define HACKDIR "\\nethack"
 #endif
 
 #ifdef CURSES_GRAPHICS
@@ -225,7 +225,7 @@
  * otherwise it will be the current directory.
  */
 # ifndef HACKDIR
-#  define HACKDIR "/usr/games/lib/unnethackdir"
+#  define HACKDIR "/usr/games/lib/nethackdir"
 # endif
 
 /*
@@ -462,7 +462,7 @@ typedef long glyph_t;
  *
  * These defines must be defined.
  * They come from patches that have been unconditionally incorporated
- * into UnNetHack.
+ * into NetHack.
  */
 #define WEBB_DISINT /* Disintegrator - Nicholas Webb */
 #define ASTRAL_ESCAPE /* Allow escape from Astral plane (with the Amulet) - CWC */

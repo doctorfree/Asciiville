@@ -1785,15 +1785,15 @@ const char *filearea, *filename;
 
 const char* configfile =
 #ifdef UNIX
-			".unnethackrc";
+			".nethackrc";
 #else
 # if defined(MAC) || defined(__BEOS__)
-			"UnNetHack Defaults";
+			"NetHack Defaults";
 # else
 #  if defined(MSDOS) || defined(WIN32)
 			"defaults.unh";
 #  else
-			"UnNetHack.cnf";
+			"NetHack.cnf";
 #  endif
 # endif
 #endif

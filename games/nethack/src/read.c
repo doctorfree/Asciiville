@@ -139,7 +139,7 @@ doread()
     "Pudding Farmer",
     "Vegetarian",
     "I plan to go to Astral",
-    /* UnNetHack */
+    /* NetHack */
     "I made a NetHack fork and all I got was this lousy T-shirt!",	/* galehar */
 	    };
 	    char buf[BUFSZ];

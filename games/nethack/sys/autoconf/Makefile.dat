@@ -1,4 +1,4 @@
-#	UnNetHack Makefile.
+#	NetHack Makefile.
 #       @configure_input@
 #	SCCS Id: @(#)Makefile.dat	3.4	1992/09/18
 
@@ -224,14 +224,14 @@ rip.bmp: ../util/uudecode$(EXEEXT) $(srcdir)/../win/win32/rip.uu
 petmark.bmp: ../util/uudecode$(EXEEXT) $(srcdir)/../win/win32/petmark.uu
 	../util/uudecode$(EXEEXT) $(srcdir)/../win/win32/petmark.uu
 
-UnNetHack.ico: ../util/uudecode$(EXEEXT) $(srcdir)/../sys/winnt/nhico.uu
+NetHack.ico: ../util/uudecode$(EXEEXT) $(srcdir)/../sys/winnt/nhico.uu
 	../util/uudecode$(EXEEXT) $(srcdir)/../sys/winnt/nhico.uu
 
 splash.bmp: ../util/uudecode$(EXEEXT) $(srcdir)/../win/win32/splash.uu
 	../util/uudecode$(EXEEXT) $(srcdir)/../win/win32/splash.uu
 
-UnNetHack.ad: $(srcdir)/../win/X11/UnNetHack.ad
-	cp $(srcdir)/../win/X11/UnNetHack.ad UnNetHack.ad
+NetHack.ad: $(srcdir)/../win/X11/NetHack.ad
+	cp $(srcdir)/../win/X11/NetHack.ad NetHack.ad
 
 pet_mark.xbm: $(srcdir)/../win/X11/pet_mark.xbm
 	cp $(srcdir)/../win/X11/pet_mark.xbm pet_mark.xbm
@@ -245,7 +245,7 @@ mapbg.xpm: $(srcdir)/../win/gnome/mapbg.xpm
 nhsplash.xpm: $(srcdir)/../win/Qt/nhsplash.xpm
 	cp $(srcdir)/../win/Qt/nhsplash.xpm nhsplash.xpm
 
-unnethack.icns: $(srcdir)/../win/Qt/nhicns.uu
+nethack.icns: $(srcdir)/../win/Qt/nhicns.uu
 	$(UUDECODE) $(srcdir)/../win/Qt/nhicns.uu
 
 Info.plist: $(srcdir)/../win/Qt/Info.pli
@@ -351,9 +351,9 @@ dungeon: $(srcdir)/dungeon.def ../util/makedefs ../util/dgn_comp
 spotless:
 	-rm -f spec_levs quest_levs *.lev $(VARDAT) dungeon dungeon.pdf vaults.dat
 	-rm -f nhdat x11tiles beostiles pet_mark.xbm rip.xpm mapbg.xpm
-	-rm -f rip.img GEM_RSC.RSC title.img nh16.img UnNetHack.ad
+	-rm -f rip.img GEM_RSC.RSC title.img nh16.img NetHack.ad
 	-rm -f options guioptions ttyoptions
-	-rm -f rip.bmp mnselcnt.bmp mnunsel.bmp tiles.bmp unnethack.ico splash.bmp mnsel.bmp petmark.bmp
+	-rm -f rip.bmp mnselcnt.bmp mnunsel.bmp tiles.bmp nethack.ico splash.bmp mnsel.bmp petmark.bmp
 	-rm -f ../win/share/monmag.txt ../win/share/mon32.txt
 	-rm -f ../win/share/objmag.txt ../win/share/obj32.txt
 	-rm -f ../win/share/othmag.txt ../win/share/oth32.txt

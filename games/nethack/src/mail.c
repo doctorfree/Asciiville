@@ -441,7 +441,7 @@ struct obj *otmp;
 {
     static char *junk[] = {
     "Please disregard previous letter.",
-    "Welcome to UnNetHack.",
+    "Welcome to NetHack.",
 #ifdef AMIGA
     "Only Amiga makes it possible.",
     "CATS have all the answers.",
@@ -450,10 +450,10 @@ struct obj *otmp;
     "Invitation: Visit the NetHack web site at http://www.nethack.org!",
 
     /* testimonials */
-    "Thanks for playing UnNetHack.  As usual, you've been a real pantload!", /* Space Quest 4 death message, paraphrased */
-    "Can't ascend NetHack? UnNetHack is the easy variant for people who suck!",
-    "\"UnNetHack is the continuation of NetHack by other means\" Rod von Yendowiz",
-    "\"UnNetHack is the last survivor of the NetHack Variant Wars\" Sigmund wan Leiber",
+    "Thanks for playing NetHack.  As usual, you've been a real pantload!", /* Space Quest 4 death message, paraphrased */
+    "Can't ascend NetHack? NetHack is the easy variant for people who suck!",
+    "\"NetHack is the continuation of NetHack by other means\" Rod von Yendowiz",
+    "\"NetHack is the last survivor of the NetHack Variant Wars\" Sigmund wan Leiber",
     };
 
     if (Blind) {
@@ -711,7 +711,7 @@ struct obj *otmp;
 #ifdef SIMPLE_MAIL
 		/* public server hints */
 		"If you need advice, #shout, somebody might mail you help.",
-		"Visit IRC channel #unnethack on freenode.",
+		"Visit IRC channel #nethack on freenode.",
 		"To opt out of these hints, put OPTIONS=nohint into your options.",
 #endif
 	};

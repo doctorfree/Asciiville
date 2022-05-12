@@ -1,5 +1,5 @@
-dnl	UNNETHACK autoconf template
-AC_INIT(UNNETHACK, 5.1.0, bhaak@gmx.net)
+dnl	NETHACK autoconf template
+AC_INIT(NETHACK, 5.1.0, bhaak@gmx.net)
 dnl Avoid AC_REVISION() because we check configure into CVS
 dnl and it will cause confusing revision numbers to be included
 dnl in configure if developers forget to check in configure.ac
@@ -27,7 +27,7 @@ dnl  ----- Window systems
 nethack_default_win=""
 # Note: Order is important: The last listed enabled port will be the default.
 NETHACK_WIN_ENABLE(dummy, no, [dummy graphics for unit tests])
-NETHACK_WIN_ENABLE(lisp, no, [enable playing UnNetHack in Emacs])
+NETHACK_WIN_ENABLE(lisp, no, [enable playing NetHack in Emacs])
 NETHACK_WIN_ENABLE(curses, no, [use curses interface])
 NETHACK_WIN_ENABLE(tty, auto)
 NETHACK_WIN_ENABLE(x11, no)
@@ -81,14 +81,14 @@ AC_SUBST(SYSSRC)
 AC_SUBST(SYSOBJ)
 
 if test $host_os = mingw32; then
-    AC_MSG_CHECKING([for how to build UnNetHack key dynamic libraries])
+    AC_MSG_CHECKING([for how to build NetHack key dynamic libraries])
     if test "$GCC" = yes; then
 	AC_MSG_RESULT([gcc])
 	AC_SUBST(NHKEYDLL_GCC,[])
     else
 	AC_MSG_RESULT([unknown])
 	if test "$enable_tty_graphics" = yes; then
-	    AC_MSG_ERROR([Don't know how to build UnNetHack key DLLs with $CC])
+	    AC_MSG_ERROR([Don't know how to build NetHack key DLLs with $CC])
 	else
 	    AC_MSG_WARN([Can't enable tty graphics (key dynamic libraries)])
 	    NETHACK_AUTO_WIN_DISABLE(tty)
@@ -472,7 +472,7 @@ if test "$enable_dump" != "no" ; then
 	NETHACK_ARG(dump-text,[Dump a text file],DUMP_TEXT_LOG,yes)
 	NETHACK_ARG(dump-html,[Dump an HTML file],DUMP_HTML_LOG,no)
 	if test "$enable_dump_html" != "no" ; then
-		NETHACK_ARG_WITH_PARAM(dump-html-css-file,[Path to the css dump file],DUMP_HTML_CSS_FILE,yes,FILE,"unnethack_dump.css")
+		NETHACK_ARG_WITH_PARAM(dump-html-css-file,[Path to the css dump file],DUMP_HTML_CSS_FILE,yes,FILE,"nethack_dump.css")
 		NETHACK_ARG(dump-html-css-embedded,[CSS file should be included in the HTML dump],DUMP_HTML_CSS_EMBEDDED,no)
 	fi
 fi
@@ -542,9 +542,9 @@ AC_DEFUN([NETHACK_DIR_SET],
    else
      # set default value if FILE_AREAS is not defined
      if test "$6" != "FILE_AREA_SAVE" ; then
-       tmp_installdir=[${datadir}/unnethack]
+       tmp_installdir=[${datadir}/nethack]
      else
-       tmp_installdir=[${datadir}/unnethack/save]
+       tmp_installdir=[${datadir}/nethack/save]
      fi
      AC_SUBST($6,[${tmp_installdir}])
      AC_MSG_RESULT([default value: ${tmp_installdir}])
@@ -553,17 +553,17 @@ AC_DEFUN([NETHACK_DIR_SET],
 
 # set doc directory manually
 if test "$enable_file_areas" != "no" ; then
-  AC_SUBST(FILE_AREA_DOC,[${docdir}/unnethack])
-  AC_DEFINE_UNQUOTED(FILE_AREA_DOC, [AUTOCONF_DOCDIR"/unnethack"],
+  AC_SUBST(FILE_AREA_DOC,[${docdir}/nethack])
+  AC_DEFINE_UNQUOTED(FILE_AREA_DOC, [AUTOCONF_DOCDIR"/nethack"],
     [Location of human-readable documentation])
 else
   # ignore ${docdir} if FILE_AREAS is not defined
-  AC_SUBST(FILE_AREA_DOC,[${datadir}/unnethack])
+  AC_SUBST(FILE_AREA_DOC,[${datadir}/nethack])
 fi
 
-NETHACK_DIR_SET(gamesdir, gamesdir, [LOCALSTATEDIR/unnethack],
-		[${localstatedir}/unnethack],
-		[AUTOCONF_LOCALSTATEDIR"/unnethack"],
+NETHACK_DIR_SET(gamesdir, gamesdir, [LOCALSTATEDIR/nethack],
+		[${localstatedir}/nethack],
+		[AUTOCONF_LOCALSTATEDIR"/nethack"],
 		FILE_AREA_VAR, [Location of other files which may be modified])
 
 NETHACK_DIR_SET(bonesdir, bones, [GAMESDIR/bones],
@@ -581,14 +581,14 @@ NETHACK_DIR_SET(leveldir, level, [GAMESDIR/level],
 		[FILE_AREA_VAR"/level"],
 		FILE_AREA_LEVL, [Location of level files (rw)])
 
-NETHACK_DIR_SET(sharedir, share, [DATADIR/unnethack],
-		[${datadir}/unnethack],
-		[AUTOCONF_DATADIR"/unnethack"],
+NETHACK_DIR_SET(sharedir, share, [DATADIR/nethack],
+		[${datadir}/nethack],
+		[AUTOCONF_DATADIR"/nethack"],
 		FILE_AREA_SHARE, [For read-only, architecture independent files])
 
-NETHACK_DIR_SET(unsharedir, unshare, [DATADIR/unnethack],
-		[${datadir}/unnethack],
-		[AUTOCONF_DATADIR"/unnethack"],
+NETHACK_DIR_SET(unsharedir, unshare, [DATADIR/nethack],
+		[${datadir}/nethack],
+		[AUTOCONF_DATADIR"/nethack"],
 		FILE_AREA_UNSHARE, [For read-only, architecture dependent files])
 
 

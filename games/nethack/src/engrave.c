@@ -64,7 +64,7 @@ static const char *random_mesg[] = {
 	"X marks the spot",
 	"X <--- You are here.",
 	"You are the one millionth visitor to this place!  Please wait 200 turns for your wand of wishing.",
-	/* From UnNetHack */
+	/* From NetHack */
 	"She's watching you!", /* Portal */
 	"The cake is a lie!", /* Portal */
 	"cjohnson/tier3", /* Portal */
@@ -72,7 +72,7 @@ static const char *random_mesg[] = {
 	"What's the sitch?", /* Kim Possible */
 	"So not the drama.", /* Kim Possible */
 	"Sudden decompression sucks!", /* Space Quest 3 death message */
-	"Thanks for playing UnNetHack.  As usual, you've been a real pantload!", /* Space Quest 4 death message, paraphrased */
+	"Thanks for playing NetHack.  As usual, you've been a real pantload!", /* Space Quest 4 death message, paraphrased */
 	"Colorless green ideas sleep furiously.", /* Noam Chomsky */
 	"Time flies like an arrow.", "Fruit flies like a banana.", /* linguistic humor */
 	"Buffalo buffalo Buffalo buffalo buffalo buffalo Buffalo buffalo.",
@@ -1512,12 +1512,12 @@ static const char *epitaphs[] = {
 	"Rest In Pieces",
 	"You said it wasn't poisonous!",
 
-	/* from UnNetHack */
+	/* from NetHack */
 	"Hack 1984-1985",
 	"NetHack 1987-2003?",
 	"American Democracy 1776-2016",
 
-	/* from UnNetHackPlus */
+	/* from NetHackPlus */
 	"SporkHack 2007-2010",
 	"SLASH'EM 1997-2006",
 };

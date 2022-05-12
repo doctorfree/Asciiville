@@ -2,7 +2,7 @@
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
-/* UnNetHack 5.0.0 */
+/* NetHack 5.0.0 */
 #define GAME_SHORT_NAME	"UNH"
 #define VERSION_MAJOR	5
 #define VERSION_MINOR	2
@@ -17,7 +17,7 @@
 #define EDITLEVEL	0
 
 /*
- * UnNetHack follows a more modern approach regarding version numbers:
+ * NetHack follows a more modern approach regarding version numbers:
  * major.minor.patchlevel[-revision]
  *
  * Odd-numbered minor versions are for development releases with no guarantees
@@ -32,7 +32,7 @@
 /*#define VERSION_REVISION	1*/
 
 #define COPYRIGHT_BANNER_A \
-"UnNetHack 5, Copyright 2009-2019"
+"NetHack 5, Copyright 2009-2019"
 
 #define COPYRIGHT_BANNER_B \
 "    Based on NetHack, Copyright 1985-2003 by Stichting Mathematisch"
@@ -53,7 +53,7 @@
 
 
 /*****************************************************************************/
-/* Old vanilla ChangeLog. See top level file ChangeLog for UnNetHack */
+/* Old vanilla ChangeLog. See top level file ChangeLog for NetHack */
 /* Version 3.4.x */
 
 /*  Patch 3, December 7, 2003

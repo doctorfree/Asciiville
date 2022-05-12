@@ -1,15 +1,15 @@
 #!/usr/bin/env ruby
 
-require 'lib/unnethack'
+require 'lib/nethack'
 
 def wish_for(wish, check)
 	wished = @u.wish_for wish
 	wished.should =~ check
 end
 
-describe UnNetHack do
+describe NetHack do
 	before(:all) do
-		@u = UnNetHack.new
+		@u = NetHack.new
 	end
 
 	after(:all) do

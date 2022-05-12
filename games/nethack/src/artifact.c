@@ -1757,7 +1757,7 @@ arti_speak(obj)
 
 	line = getrumor(bcsign(obj), buf, TRUE);
 	if (!*line)
-		line = "UnNetHack rumors file closed for renovation.";
+		line = "NetHack rumors file closed for renovation.";
 	pline("%s:", Tobjnam(obj, "whisper"));
 	verbalize("%s", line);
 	return;

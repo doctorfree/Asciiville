@@ -56,7 +56,7 @@ START_TEST (test_parse_object_symbol)
 
 Suite *test_suite(void)
 {
-	Suite *s = suite_create("UnNetHack Unicode functions");
+	Suite *s = suite_create("NetHack Unicode functions");
 	TCase *tc_core = tcase_create("functions");
 
 	suite_add_tcase (s, tc_core);

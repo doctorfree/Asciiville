@@ -3,16 +3,16 @@
 require 'pty'
 require 'logger'
 
-class UnNetHack
+class NetHack
 
 def initialize()
 	ENV["NETHACKOPTIONS"]="windowtype:dummy"
 
 	raise "Environment variable HACKDIR is not set" if not ENV["HACKDIR"]
 
-	@logger = Logger.new "logs/unnethack.log", "daily"
+	@logger = Logger.new "logs/nethack.log", "daily"
 
-	@stdin, @stdout, @pid = PTY.spawn("#{ENV['HACKDIR']}/unnethack -D")
+	@stdin, @stdout, @pid = PTY.spawn("#{ENV['HACKDIR']}/nethack -D")
 	@logger.info @pid
 
 	l=""
@@ -27,7 +27,7 @@ def initialize()
 			@stdout.puts "n"
 		elsif (l =~ /Window type dummy not recognized/) then
 			@stdout.puts "\x16\x3" # ctrl-c
-			raise "Window type 'dummy' not compiled into UnNetHack"
+			raise "Window type 'dummy' not compiled into NetHack"
 		end
 	end
 	@stdin.sync = true

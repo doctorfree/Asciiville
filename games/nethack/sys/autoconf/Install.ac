@@ -1,4 +1,4 @@
-                Instructions for installing UnNetHack
+                Instructions for installing NetHack
                  on a GNU autoconf supported system
                 =====================================
 
@@ -13,7 +13,7 @@
 
     Notes:
     
-    * You do _not_ need to have a copy of GNU autoconf to install UnNetHack.
+    * You do _not_ need to have a copy of GNU autoconf to install NetHack.
 
 2.  If you do not like the default set of optional features, then you can
     use the --enable-FEATURE and/or --disable-FEATURE flags to configure

@@ -1,16 +1,16 @@
-Source: unnethack
+Source: nethack
 Section: games
 Priority: extra
 Maintainer: Patric Mueller <bhaak@gmx.net>
 Build-Depends: debhelper (>= 8.0.0), autotools-dev, flex, bison, libncurses5-dev
 Standards-Version: 3.8.4
-Homepage: https://unnethack.wordpress.com/
-Vcs-Git: https://github.com/UnNetHack/UnNetHack.git
-Vcs-Browser: https://github.com/unnethack/unnethack
+Homepage: https://nethack.wordpress.com/
+Vcs-Git: https://github.com/NetHack/NetHack.git
+Vcs-Browser: https://github.com/nethack/nethack
 
-Package: unnethack
+Package: nethack
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: UnNetHack is a variant of NetHack.
- UnNetHack is a variant of NetHack. 
+Description: NetHack is a variant of NetHack.
+ NetHack is a variant of NetHack. 
  It features more randomness, more levels, more challenges and more fun than vanilla NetHack.

@@ -28,13 +28,13 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "FileDescription", "UnNetHack for Windows - TTY Interface\0"
+            VALUE "FileDescription", "NetHack for Windows - TTY Interface\0"
             VALUE "FileVersion", "5.1.0\0"
-            VALUE "InternalName", "UnNetHack\0"
+            VALUE "InternalName", "NetHack\0"
             VALUE "LegalCopyright", "Copyright (C) 1985 - 2003.  By Stichting Mathematisch Centrum and M. Stephenson.  See license for details.\0"
-            VALUE "OriginalFilename", "UnNetHack.exe\0"
+            VALUE "OriginalFilename", "NetHack.exe\0"
             VALUE "PrivateBuild", "131208\0"
-            VALUE "ProductName", "UnNetHack\0"
+            VALUE "ProductName", "NetHack\0"
             VALUE "ProductVersion", "5.1.0\0"
         END
     END

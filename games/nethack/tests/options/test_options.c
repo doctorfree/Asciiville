@@ -25,7 +25,7 @@ START_TEST (test_parse_color_definition)
 
 Suite *test_suite(void)
 {
-    Suite *s = suite_create("UnNetHack options");
+    Suite *s = suite_create("NetHack options");
     TCase *tc_core = tcase_create("functions");
 
     suite_add_tcase (s, tc_core);

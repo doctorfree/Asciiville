@@ -1,4 +1,4 @@
-#	UnNetHack Makefile.
+#	NetHack Makefile.
 #	SCCS Id: @(#)Makefile.doc	3.4	1996/03/23
 
 # for Atari
@@ -39,7 +39,7 @@ Guidebook.ps:	Guidebook.mn
 Guidebook.dvi:	Guidebook.tex
 	latex Guidebook.tex
 
-GAME    = unnethack
+GAME    = nethack
 MANDIR	= /usr/man/man6
 MANEXT	= 6
 

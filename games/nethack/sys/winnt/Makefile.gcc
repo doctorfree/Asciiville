@@ -2,7 +2,7 @@
 #   Copyright (c) NetHack PC Development Team 1993-2003
 #   Copyright (c) Patric Mueller 2010
 #
-#   UnNetHack Makefile for MinGW
+#   NetHack Makefile for MinGW
 #
 #   Win32 Compilers Tested:
 #                  - MinGW 5.1.4 (gcc (GCC) 3.4.5 (mingw-vista special r3)) (console version only)
@@ -10,11 +10,11 @@
 #   If you don't have this compiler, you can get it at:
 #       http://www.mingw.org/
 #
-#   This is used for building two versions of UnNetHack:
+#   This is used for building two versions of NetHack:
 #   A tty port utilizing the Win32 Console I/O subsystem, Console
-#       UnNetHack;
-#   A Win32 native port built on the Windows API, Graphical UnNetHack or
-#       UnNetHackW. (untested at the moment)
+#       NetHack;
+#   A Win32 native port built on the Windows API, Graphical NetHack or
+#       NetHackW. (untested at the moment)
 #
 #   In addition to your C compiler,
 #
@@ -63,10 +63,10 @@ endif
 
 ifeq  "$(GRAPHICAL)" "Y"
 # Game Name
-GAME    = UnNetHackW
+GAME    = NetHackW
 else
 # Game Name
-GAME    = UnNetHack
+GAME    = NetHack
 endif
 # Game directory
 GAMEDIR = ../binary

@@ -20,7 +20,7 @@ START_TEST (test_wishing_for_chromatic_dragon_eggs)
 
 Suite *test_suite(void)
 {
-	Suite *s = suite_create("UnNetHack Wishing");
+	Suite *s = suite_create("NetHack Wishing");
 	TCase *tc_core = tcase_create("wishing");
 
 	suite_add_tcase (s, tc_core);

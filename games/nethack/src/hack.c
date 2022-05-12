@@ -3025,7 +3025,7 @@ maybe_wail()
 }
 
 /** Print the amount n of damage inflicted.
- * In contrast to Slash'Em, in UnNetHack the damage is only shown in
+ * In contrast to Slash'Em, in NetHack the damage is only shown in
  * Wizard mode.
  */
 void

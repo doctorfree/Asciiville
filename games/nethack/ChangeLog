@@ -1,4 +1,4 @@
-2019-01-01  UnNetHack 5.2.0
+2019-01-01  NetHack 5.2.0
 	* Support SOURCE_DATE_EPOCH for reproducible builds (patch from Debian)
 	* Players killed by Nazgul will arise as Barrow Wights in bones files
 	  (a slight change from the original mythology, we know)
@@ -73,7 +73,7 @@
 	              rows or columns produces display errors.
 	  - C343-320: Reading a Scroll of Mail no longer violates illiterate conduct
 
-2013-12-08  UnNetHack 5.1.0
+2013-12-08  NetHack 5.1.0
 	* Mind flayer attacks only cause physical damage and int drain
 	* Wands and spells of digging are no longer restricted on maze levels
 	* Sokoban luck penalty removed and added tracking of solving Sokoban
@@ -84,7 +84,7 @@
 	* Some monster vampires get an opera cloak (from Slash'Em)
 	* Automatically identify potions of sickness, hallucination, and speed
 	  when inhaling their vapors
-	* Poison gas blasts leave a trail of stinking clouds (from UnNetHackPlus)
+	* Poison gas blasts leave a trail of stinking clouds (from NetHackPlus)
 	* Magical traps (except for magic portals and anti-magic fields) can be disarmed
 	  with a wand of cancellation (based on the patch by Malcolm Ryan)
 	* Applying zorkmids allows the player to flip a coin (code by Pasi Kallinen)
@@ -98,13 +98,13 @@
 	  adding some traps to the planes
 	* Tourists start with more darts to compensate for more training being
 	  needed to advance weapon skills
-	* Player can wish for up to 100 projectiles (from UnNetHackPlus)
+	* Player can wish for up to 100 projectiles (from NetHackPlus)
 	* Increase range of properly fired missiles, and crossbow range no 
 	  longer depends on strength (from SporkHack)
 	* Require high strength for crossbow multishot, with a bonus for
 	  gnomes (from GruntHack)
 	* One-eyed Sam is tougher and it's harder to steal from the black market
-	* Nazgul scream attack added, with limited range (from UnNetHackPlus, based
+	* Nazgul scream attack added, with limited range (from NetHackPlus, based
 	  on code from SporkHack)
 	* Aleaxes are created with exact copies (barring artifacts) of your
 	  wielded weapons and armor (provided they are actual weapons); when
@@ -124,10 +124,10 @@
 	  - MONSTERSYMBOL='horse':U+0127 # latin small letter h with stroke
 
 	* item changes:
-	  - Autoidentify BUC of products from BUC identified item generators (from UnNetHackPlus)
-	  - Wearing fedora increases luck of archaeologists (from UnNetHackPlus)
+	  - Autoidentify BUC of products from BUC identified item generators (from NetHackPlus)
+	  - Wearing fedora increases luck of archaeologists (from NetHackPlus)
 	  - Applying certain wands has a chance of creating a related trap
-	  - Land mines and beartraps weigh less (from UnNetHackPlus)
+	  - Land mines and beartraps weigh less (from NetHackPlus)
 	  - Sokoban's Amulet of ESP replaced with an Amulet of Flying
 	  - Luckstones dramatically slow luck timeout instead of preventing it
 	      completely. Blessed luckstones slow the timeout of positive luck,
@@ -264,7 +264,7 @@
 	      unless the player knows that worn water walking boots make it safe
 	  - Dump log: mark starting inventory items with a *
 	  - Automatically ask whether to unlock when #looting a locked container
-	      and carrying an unlocking tool (from UnNetHackPlus)
+	      and carrying an unlocking tool (from NetHackPlus)
 	  - Show remaining memory in spellcasting menu as percentage (from AceHack)
 	  - Applying a spellbook allows the player to flip through the pages,
 	      providing an indication of how many more times it can be read
@@ -273,7 +273,7 @@
 	  - Blessed charging identifies how many charges an item has (from AceHack)
 	  - When targeting a coordinate, you can press @ to move cursor to
 	      yourself. (from NAO, idea from b_jonas)
-	  - Dragons auto-ID after observing breath attacks (from UnNetHackPlus)
+	  - Dragons auto-ID after observing breath attacks (from NetHackPlus)
 	  - Dragons auto-ID after being probed (from DynaHack)
 	  - You can level-port to levels based on their annotation
 	  - Rustproof/Erodeproof/Fixed is known by default (from DynaHack)
@@ -315,13 +315,13 @@
 	             potions of oil are not handled properly; this can result
 	             in odd game behavior.
 	  - C343-175: Chatting to prisoners may give an inappropriate message
-	    (from UnNetHackPlus, thanks to Reddit user Nuclear_Winterfell)
+	    (from NetHackPlus, thanks to Reddit user Nuclear_Winterfell)
 	  - C343-162: Ungrammatical Magicbane hit messages (by Ray Chason)
 	  - C343-424: Unlit candelabrum becomes unlightable if candles have
 	              exactly one turn of fuel left and it was applied in the
 	              wrong location.
 
-2012-04-01  UnNetHack 4.0.0
+2012-04-01  NetHack 4.0.0
 	* Uncursed and blessed scrolls of magic mapping reveal secret doors
 	* Blessed scrolls of magic mapping reveal objects
 	* Dump log: show same information on final dump as wizard mode
@@ -365,7 +365,7 @@
 	  - Compilation failed on openSUSE when trying to link with curses but
 	    tparm being present in ncurses (reported by Roger Koot)
 
-2012-02-05  UnNetHack 3.6.1
+2012-02-05  NetHack 3.6.1
 	* Scatter contents of bag of holding explosion instead of
 	  destroying it (from SporkHack)
 	* Quest leaders can smash rocks when angry (from SporkHack)
@@ -401,7 +401,7 @@
 	  - C343-174: Drum of earthquake gives inappropriate message if hero
 	              or monster is in a pit.
 
-2011-10-08  UnNetHack 3.6.0
+2011-10-08  NetHack 3.6.0
 	* changing color of monster with config line:
 	  MONSTERCOLOR=acid blob:lightcyan
 	* HTML dump: output IBMgraphics and DECgraphics characters
@@ -470,13 +470,13 @@
 	  - Draining corpses shouldn't make your fingers slippery
 	  - Prevent player vampire from rising as other monster
 
-2010-10-10  UnNetHack 3.5.3-1
+2010-10-10  NetHack 3.5.3-1
 	* bug fixes:
 	  - Quest nemesis not carrying bell of opening
 	  - Door being created in the corner of a room
 	  - Mine levels being lit too often
 
-2010-09-04  UnNetHack 3.5.3
+2010-09-04  NetHack 3.5.3
 	* Conflict makes blackmarket shopkeeper angry
 	* Fully eroded armor gets destroyed
 	* Lowered the needed experience level for the quest
@@ -532,11 +532,11 @@
 	  - giant turtle (blocks vision) (from SporkHack)
 
 
-2010-01-10  UnNetHack 3.5.2-1
+2010-01-10  NetHack 3.5.2-1
 	Crash bugfix: Prevent alchemizing not existing potions
 
 
-2009-12-09  UnNetHack 3.5.2
+2009-12-09  NetHack 3.5.2
 	* Increased skill levels
 	* Blood-sucking and biting Vampires (from Slash'Em)
 	* New option: showdmg (only in wizmode)
@@ -573,7 +573,7 @@
 	  - Interrupt a multi turn action if hit points or magical energy is restored 
 
 
-2009-06-13  UnNetHack 3.5.1
+2009-06-13  NetHack 3.5.1
 	* new levels:
 	  - Fort Ludios levels
 	  - Sokoban levels (by Pasi Kallinen)

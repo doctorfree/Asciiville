@@ -3,24 +3,24 @@ Shawn Betts, hosted at http://savannah.gnu.org/projects/nethack-el.  It is
 released under a modified BSD license.  The license text is attached at the end
 of this file.
 
-This port enables playing UnNetHack in Emacs.  To setup, follow these steps:
+This port enables playing NetHack in Emacs.  To setup, follow these steps:
 
-1. Build UnNetHack with lisp graphics enabled.  This is done by adding the
+1. Build NetHack with lisp graphics enabled.  This is done by adding the
    `--enable-lisp-graphics' option to the configure script, e.g.:
 
-     ./configure --prefix=$HOME/unnethack \
+     ./configure --prefix=$HOME/nethack \
                  --with-owner=`id -un` \
 		 --with-group=`id -gn` \
 		 --enable-wizmode=`id -un` \
 		 --enable-lisp-graphics
 
-   Then build and install UnNetHack as usual.
+   Then build and install NetHack as usual.
 
 2. Install nethack-el.  Please refer to nethack-el's manual for details.
 
 3. In ~/.emacs, add these lines after loading nethack:
 
-     (setq nethack-program "/PATH/TO/unnethack")
+     (setq nethack-program "/PATH/TO/nethack")
      (setenv "NETHACKOPTIONS" "windowtype=lisp")
 
 4. Finally, M-x nethack RET to begin playing.

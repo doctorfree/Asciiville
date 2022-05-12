@@ -321,11 +321,11 @@ AC_DEFUN([NETHACK_PROG_COMPRESS], [
 	AC_DEFINE_UNQUOTED(COMPRESS, ["$COMPRESS"], [Compression program])
 	COMPRESS_OPTIONS=""
 	if test "$COMPRESS" = ":"; then
-	    AC_DEFINE(INTERNAL_COMP, [1], [Use UnNetHack's compression routines])
+	    AC_DEFINE(INTERNAL_COMP, [1], [Use NetHack's compression routines])
 	fi
     elif test "$with_compression" = "no" ; then
 	COMPRESS=":"
-	AC_DEFINE(INTERNAL_COMP, [1], [Use UnNetHack's compression routines])
+	AC_DEFINE(INTERNAL_COMP, [1], [Use NetHack's compression routines])
     else
 	AC_DEFINE_UNQUOTED(COMPRESS, ["$COMPRESS"], [Compression program])
 	set dummy $with_compression

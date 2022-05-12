@@ -1,4 +1,4 @@
-#	Makefile for UnNetHack's utility programs.
+#	Makefile for NetHack's utility programs.
 #	SCCS Id: @(#)Makefile.utl	3.4	1997/04/19
 
 # newer makes predefine $(MAKE) to 'make' and do smarter processing of
@@ -137,7 +137,7 @@ UTILSRCS = $(MAKESRC) panic.c $(SPLEVSRC) $(DGNCOMPSRC) $(RECOVSRC) $(DLBSRC)
 # files that define all monsters and objects
 CMONOBJ = ../src/monst.c ../src/objects.c
 OMONOBJ = $(OBJDIR)/monst.o $(OBJDIR)/objects.o
-# files that provide access to UnNetHack's names
+# files that provide access to NetHack's names
 CNAMING = ../src/drawing.c ../src/decl.c $(CMONOBJ)
 ONAMING = $(OBJDIR)/drawing.o $(OBJDIR)/decl.o $(OMONOBJ)
 # dynamic memory allocation

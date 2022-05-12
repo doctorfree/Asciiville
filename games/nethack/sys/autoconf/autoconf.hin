@@ -161,7 +161,7 @@
 /* Define to 1 if you have the <utime.h> header file. */
 #undef HAVE_UTIME_H
 
-/* Use UnNetHack's compression routines */
+/* Use NetHack's compression routines */
 #undef INTERNAL_COMP
 
 /* Keystone Kops */

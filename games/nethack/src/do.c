@@ -1044,7 +1044,7 @@ currentlevel_rewrite()
 	if (!savelev(fd, ledger_no(&u.uz), COUNT_SAVE)) {
 		(void) close(fd);
 		delete_levelfile(ledger_no(&u.uz));
-		pline("UnNetHack is out of disk space for making levels!");
+		pline("NetHack is out of disk space for making levels!");
 		You("can save, quit, or continue playing.");
 		return -1;
 	}

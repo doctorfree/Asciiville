@@ -66,7 +66,7 @@ BEGIN
     END
     POPUP "Windows &Settings"
     BEGIN
-        MENUITEM "UnNetHack Mode",                IDM_NHMODE
+        MENUITEM "NetHack Mode",                IDM_NHMODE
         MENUITEM SEPARATOR
         MENUITEM "&Clear All Settings",         IDM_CLEARSETTINGS
     END
@@ -75,14 +75,14 @@ BEGIN
         MENUITEM "&About ...",                  IDM_ABOUT
         MENUITEM "&Long description of the game", IDM_HELP_LONG
         MENUITEM "List of &commands",           IDM_HELP_COMMANDS
-        MENUITEM "&History of UnNetHack",         IDM_HELP_HISTORY
+        MENUITEM "&History of NetHack",         IDM_HELP_HISTORY
         MENUITEM "&Info on a character",        IDM_HELP_INFO_CHAR
         MENUITEM "Info on what a given &key does", IDM_HELP_INFO_KEY
         MENUITEM "List of game &options",       IDM_HELP_OPTIONS
         MENUITEM "&Longer list of game options", IDM_HELP_OPTIONS_LONG
         MENUITEM "List of e&xtended commands",  IDM_HELP_EXTCMD
         MENUITEM "The &NetHack license",        IDM_HELP_LICENSE
-        MENUITEM "UnNetHack for &Windows help",   IDM_HELP_PORTHELP
+        MENUITEM "NetHack for &Windows help",   IDM_HELP_PORTHELP
     END
 END
 
@@ -109,7 +109,7 @@ STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
 CAPTION "About"
 FONT 8, "System"
 BEGIN
-    LTEXT           "UnNetHack",IDC_ABOUT_VERSION,10,10,170,15,SS_NOPREFIX
+    LTEXT           "NetHack",IDC_ABOUT_VERSION,10,10,170,15,SS_NOPREFIX
     LTEXT           "Copyright",IDC_ABOUT_COPYRIGHT,10,30,210,40
     DEFPUSHBUTTON   "OK",IDOK,195,6,30,11,WS_GROUP
 END
@@ -199,7 +199,7 @@ END
 
 IDD_SPLASH DIALOG DISCARDABLE  0, 0, 281, 257
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Welcome to UnNetHack"
+CAPTION "Welcome to NetHack"
 FONT 8, "MS Sans Serif"
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,224,236,50,14
@@ -335,13 +335,13 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "FileDescription", "UnNetHack\0"
+            VALUE "FileDescription", "NetHack\0"
             VALUE "FileVersion", "5.1.0\0"
-            VALUE "InternalName", "UnNetHackW\0"
+            VALUE "InternalName", "NetHackW\0"
             VALUE "LegalCopyright", "Copyright (C) 1985 - 2003.  By Stichting Mathematisch Centrum and M. Stephenson.  See license for details.\0"
-            VALUE "OriginalFilename", "UnNetHackW.exe\0"
+            VALUE "OriginalFilename", "NetHackW.exe\0"
             VALUE "PrivateBuild", "131208\0"
-            VALUE "ProductName", "UnNetHack\0"
+            VALUE "ProductName", "NetHack\0"
             VALUE "ProductVersion", "5.1.0\0"
         END
     END
@@ -358,9 +358,9 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_APP_TITLE           "UnNetHack"
+    IDS_APP_TITLE           "NetHack"
     IDC_NETHACKW            "NETHACKW"
-    IDS_APP_TITLE_SHORT     "UnNetHack"
+    IDS_APP_TITLE_SHORT     "NetHack"
 END
 
 #endif    // English (U.S.) resources

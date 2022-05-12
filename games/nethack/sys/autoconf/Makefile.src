@@ -1,4 +1,4 @@
-#	UnNetHack Makefile.
+#	NetHack Makefile.
 #       @configure_input@
 #	SCCS Id: @(#)Makefile.src	3.4	2002/03/02
 
@@ -154,8 +154,8 @@ WINLIB = @WINLIB@
 
 LIBS =
 
-# make UnNetHack
-GAME     = unnethack$(EXEEXT)
+# make NetHack
+GAME     = nethack$(EXEEXT)
 
 RANDOBJ =
 
@@ -169,7 +169,7 @@ MAKEDEFS = ../util/makedefs
 CONFIG_H = ../src/config.h-t
 HACK_H	= ../src/hack.h-t
 
-# all .c that are part of the main UnNetHack program and are not operating- or
+# all .c that are part of the main NetHack program and are not operating- or
 # windowing-system specific
 HACKCSRC = $(srcdir)/allmain.c $(srcdir)/alloc.c $(srcdir)/apply.c \
 	$(srcdir)/artifact.c $(srcdir)/attrib.c $(srcdir)/ball.c \
@@ -309,7 +309,7 @@ SysV-AT:	DUMB.Setup $(HOBJ) Makefile
 SysBe: $(HOBJ) Makefile
 	@echo "Loading ..."
 	@$(LINK) $(LFLAGS) -o $(GAME) $(HOBJ) $(WINLIB) $(LIBS)
-	@xres -o $(GAME) $(srcdir)/../win/BeOS/unnethack.rsrc
+	@xres -o $(GAME) $(srcdir)/../win/BeOS/nethack.rsrc
 	@mimeset -f $(GAME)
 	@touch SysBe
 
@@ -382,11 +382,11 @@ qttableview.moc: ../include/qttableview.h
 winres.o: $(srcdir)/../win/win32/winhack.rc ../dat/tiles.bmp
 	(cd ../util; make uudecode$(EXEEXT))
 	(cd ../dat; $(MAKE) mnsel.bmp mnselcnt.bmp mnunsel.bmp rip.bmp)
-	(cd ../dat; $(MAKE) petmark.bmp UnNetHack.ico splash.bmp)
+	(cd ../dat; $(MAKE) petmark.bmp NetHack.ico splash.bmp)
 	$(WINDRES) -o$@ --include-dir=../dat -DNODEBUG -i \
 		$(srcdir)/../win/win32/winhack.rc
 
-# UnNetHack windows library for modules needed by more than one windows
+# NetHack windows library for modules needed by more than one windows
 # interface.
 nhwin.a:	tile.o
 	$(AR) cr nhwin.a tile.o

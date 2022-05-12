@@ -1,4 +1,4 @@
-#	UnNetHack Makefile.
+#	NetHack Makefile.
 #	SCCS Id: @(#)Makefile.top	3.4	1995/01/05
 
 # newer makes predefine $(MAKE) to 'make' and do smarter processing of
@@ -13,9 +13,9 @@
 # execute things like 'data' and 'rumors')
 # MAKE = make
 
-# make UnNetHack
+# make NetHack
 PREFIX	 = /usr
-GAME     = unnethack
+GAME     = nethack
 # GAME     = nethack.prg
 GAMEUID  = games
 GAMEGRP  = bin
@@ -31,7 +31,7 @@ DIRPERM  = 0755
 # VARDIR may also appear in unixconf.h as "VAR_PLAYGROUND" else GAMEDIR
 #
 # note that 'make install' believes in creating a nice tidy GAMEDIR for
-# installation, free of debris from previous UnNetHack versions --
+# installation, free of debris from previous NetHack versions --
 # therefore there should not be anything in GAMEDIR that you want to keep
 # (if there is, you'll have to do the installation by hand or modify the
 # instructions)
@@ -232,7 +232,7 @@ update: $(GAME) recover $(VARDAT) dungeon spec_levs
 # and a reminder
 	@echo You may also want to install the man pages via the doc Makefile.
 	@echo
-	@echo 'Note: Preferred way of building UnNetHack is by using'
+	@echo 'Note: Preferred way of building NetHack is by using'
 	@echo '      the configure script in the top directory!'
 
 install: $(GAME) recover $(VARDAT) dungeon spec_levs
@@ -255,7 +255,7 @@ install: $(GAME) recover $(VARDAT) dungeon spec_levs
 # and a reminder
 	@echo You may also want to reinstall the man pages via the doc Makefile.
 	@echo
-	@echo 'Note: Preferred way of building UnNetHack is by using'
+	@echo 'Note: Preferred way of building NetHack is by using'
 	@echo '      the configure script in the top directory!'
 
 
