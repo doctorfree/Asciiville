@@ -126,7 +126,7 @@ mkdir ${OUT_DIR}
 for dir in "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
            "${DESTDIR}/share/doc/${PKG}" "${DESTDIR}/share/btop" \
-           "${DESTDIR}/share/${PKG}" "${DESTDIR}/games" \
+           "${DESTDIR}/share/${PKG}" "${DESTDIR}/games" "${DESTDIR}/games/bin" \
            "${DESTDIR}/games/lib" "${DESTDIR}/games/lib/ninvaders
 do
     [ -d ${OUT_DIR}/${dir} ] || ${SUDO} mkdir ${OUT_DIR}/${dir}
@@ -215,6 +215,7 @@ ${SUDO} make DESTDIR=${OUT_DIR} install
 ${SUDO} cp dat/license ${OUT_DIR}/${DESTDIR}/games/share/nethack/license
 cd doc
 ${SUDO} make DESTDIR=${OUT_DIR} manpages
+${SUDO} ln -r -s ${OUT_DIR}/${DESTDIR}/games/bin/nethack ${OUT_DIR}/${DESTDIR}/games/nethack
 cd ../..
 
 ${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders
@@ -231,6 +232,7 @@ ${SUDO} cp ninvaders/cmake_build/ninvaders ${OUT_DIR}/${DESTDIR}/games/ninvaders
 ${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/ninvaders
 ${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/ninvaders
 ${SUDO} chmod 04755 ${OUT_DIR}/${DESTDIR}/games/ninvaders
+${SUDO} ln -r -s ${OUT_DIR}/${DESTDIR}/games/bin/ninvaders ${OUT_DIR}/${DESTDIR}/games/ninvaders
 cd ..
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
