@@ -308,6 +308,7 @@ make_it_so() {
       then
         if [ "${TILIX}" ]
         then
+          termprofset -t -s 20
           tilix --title="${MTITLE}" \
                 --full-screen \
                 --window-style=borderless \
@@ -324,6 +325,7 @@ make_it_so() {
                 --fullscreen \
                 --command="${AVCOMM}" &
           else
+            termprofset -g -s 20
             gnome-terminal -t "${MTITLE}" \
                 --hide-menubar \
                 --full-screen \
@@ -334,6 +336,7 @@ make_it_so() {
       else
         if [ "${TILIX}" ]
         then
+          termprofset -t -s 20
           tilix --title="${MTITLE}" \
                 --window-style=borderless \
                 --geometry=90x28+150+25 \
@@ -350,6 +353,7 @@ make_it_so() {
               --geometry 90x28+150+25 \
               --command="${AVCOMM}" &
           else
+            termprofset -g -s 20
             gnome-terminal -t "${MTITLE}" \
                 --hide-menubar \
                 --geometry 90x28+150+25 \
@@ -517,14 +521,16 @@ play_slide_show() {
     else
       if [ "${TILIX}" ]
       then
+        termprofset -t -s 20
         tilix --full-screen \
               --window-style=borderless \
               --profile=Asciiville \
-              --command="show_ascii_art ${showargs} -s ${showname}"
+              --command="show_ascii_art -e tilix ${showargs} -s ${showname}"
       else
+        termprofset -g -s 20
         gnome-terminal --window --full-screen \
                        --profile=Asciiville \
-                       -- show_ascii_art ${showargs} -s ${showname}
+                       -- show_ascii_art -e gnome ${showargs} -s ${showname}
       fi
     fi
   fi
@@ -1177,7 +1183,7 @@ show_art_menu() {
       [ "${ascii_dir_name}" == "Dragonflies" ] && ascii_dir_name="Dragonfly"
       options+=("${ascii_dir_name} Art Slideshow")
     done
-    options+=("Mixed Art Slideshow")
+    # options+=("Mixed Art Slideshow")
     options+=("Cycle Slideshow       [${cyclestat}]")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring   [${use_lol}]")
     options+=("Use Audio             [${audiostat}]")
