@@ -246,6 +246,7 @@ ${SUDO} cp "${diagonpath}" ${OUT_DIR}/${DESTDIR}/bin/diagon
 # Revised NetHack install using UnNetHack mods
 cd games/nethack
 ${SUDO} make DESTDIR=${OUT_DIR} install
+${SUDO} cp dat/license ${OUT_DIR}/${DESTDIR}/games/share/nethack/license
 cd doc
 ${SUDO} make DESTDIR=${OUT_DIR} manpages
 cd ../..
@@ -260,7 +261,8 @@ ${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/highscore
 ${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/highscore
 ${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/*
 
-${SUDO} cp ninvaders/cmake_build/ninvaders ${OUT_DIR}/${DESTDIR}/games/ninvaders
+${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/games/bin
+${SUDO} cp ninvaders/cmake_build/ninvaders ${OUT_DIR}/${DESTDIR}/games/bin
 ${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/ninvaders
 ${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/ninvaders
 ${SUDO} chmod 04755 ${OUT_DIR}/${DESTDIR}/games/ninvaders
@@ -308,11 +310,8 @@ ${SUDO} cp jp2a/man/jp2a.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
 [ -d ${OUT_DIR}/${DESTDIR}/share/man/man6 ] || {
   ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/man/man6
 }
-[ -d ${OUT_DIR}/${DESTDIR}/share/man/man7 ] || {
-  ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/man/man7
-}
-# ${SUDO} cp games/nethack/doc/*.6 ${OUT_DIR}/${DESTDIR}/share/man/man6
-# ${SUDO} cp games/nethack/doc/*.7 ${OUT_DIR}/${DESTDIR}/share/man/man7
+${SUDO} cp games/nethack/dat/license ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-nethack
+${SUDO} cp games/nethack/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-nethack
 
 ${SUDO} cp -a share/menu "${OUT_DIR}/${DESTDIR}/share/menu"
 ${SUDO} cp -a share/figlet-fonts "${OUT_DIR}/${DESTDIR}/share/figlet-fonts"
