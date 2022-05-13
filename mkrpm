@@ -246,7 +246,7 @@ ${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/highscore
 ${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/highscore
 ${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/*
 
-${SUDO} cp ninvaders/cmake_build/ninvaders ${OUT_DIR}/${DESTDIR}/games/ninvaders
+${SUDO} cp ninvaders/cmake_build/ninvaders ${OUT_DIR}/${DESTDIR}/games/bin
 ${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/bin/ninvaders
 ${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/bin/ninvaders
 ${SUDO} chmod 04755 ${OUT_DIR}/${DESTDIR}/games/bin/ninvaders
