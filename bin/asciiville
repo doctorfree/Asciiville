@@ -317,6 +317,7 @@ make_it_so() {
         else
           if [ "${XFCE4}" ]
           then
+            termprofset -x -s 20
             xfce4-terminal --title "${MTITLE}" \
                 --icon=audio-player \
                 --hide-menubar \
@@ -345,6 +346,7 @@ make_it_so() {
         else
           if [ "${XFCE4}" ]
           then
+            termprofset -x -s 20
             xfce4-terminal --title "${MTITLE}" \
               --icon=audio-player \
               --hide-menubar \
@@ -514,10 +516,10 @@ play_slide_show() {
   else
     if [ "${XFCE4}" ]
     then
+      termprofset -x -s 20
       xfce4-terminal --fullscreen \
-                     --font="Monospace Regular 4" \
-                     --color-bg=Black \
-                     --command="show_ascii_art ${showargs} -s ${showname}"
+             --color-bg=Black \
+             --command="show_ascii_art -e xfce4 ${showargs} -s ${showname}"
     else
       if [ "${TILIX}" ]
       then
@@ -717,7 +719,7 @@ show_help_menu() {
           break
           ;;
         "NetHack Guide"*,*|*,"NetHack Guide"*)
-          less /usr/games/lib/nethackdir/Guidebook
+          less /usr/games/share/doc/nethack/Guidebook.txt
           break
           ;;
         "News"*,*|*,"News"*)
@@ -1196,9 +1198,6 @@ show_art_menu() {
     options+=("Use Tmux              [${usetmux}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session   [${recordstat}]")
     options+=("Generate ASCII Art")
-    [ "${have_jrnl}" ] && options+=("Journal Menu")
-    [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
-    [ "${have_roon}" ] && options+=("RoonCommandLine Menu")
     [ "${have_splash}" ] && options+=("Animations Menu")
     options+=("Main Menu" "Quit")
     select opt in "${options[@]}"
@@ -1209,28 +1208,6 @@ show_art_menu() {
               printf "\n"
               show_help_menu
               break
-              ;;
-          "MusicPlayerPlus"*,*|*,"MusicPlayerPlus"*)
-              [ "${use_figlet}" ] && {
-                select_font MusicPlayer
-                show_figlet
-              }
-              mpplus -i
-              clear
-              break
-              ;;
-          "RoonCommandLine"*,*|*,"RoonCommandLine"*)
-              [ "${use_figlet}" ] && {
-                select_font Roon
-                show_figlet
-              }
-              roon
-              clear
-              break
-              ;;
-          "Journal"*,*|*,"Journal"*)
-              journal_menu=1
-              break 2
               ;;
           "Animations"*,*|*,"Animations"*)
               animation_menu=1

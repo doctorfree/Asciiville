@@ -18,15 +18,17 @@
 .hy
 .SH NAME
 .PP
-termprofset - manipulate the profiles of a Gnome or Tilix terminal
+termprofset - manipulate the profiles of a Gnome or Tilix terminal, or
+the font setting of an XFCE4 terminal
 .SH SYNOPSIS
 .PP
-\f[B]termprofset\f[R] [-f fontname] [-s fontsize] [-p profile] [-glrtu]
+\f[B]termprofset\f[R] [-f fontname] [-s fontsize] [-p profile] [-glrtxu]
 .SH DESCRIPTION
 .PP
 The \f[I]termprofset\f[R] command can be used to set or restore profile
 settings of a Gnome or Tilix terminal emulator (\f[V]gnome-terminal\f[R]
-and \f[V]tilix\f[R] commands).
+and \f[V]tilix\f[R] commands), or the font setting of an XFCE4 terminal
+emulator (\f[V]xfce4-terminal\f[R] command).
 Profile settings that can be configured by \f[I]termprofset\f[R] are:
 .IP \[bu] 2
 font (font name and font size)
@@ -58,16 +60,18 @@ foreground-color \[aq]#AFAFAF\[aq]
 The font name and font size can be specified on the command line using
 the \f[V]-f fontname\f[R] and \f[V]-s fontsize\f[R] options.
 .PP
-In addition to setting profile settings, \f[I]termprofset\f[R] can be
-used to restore profile settings saved from a previous invocation.
+In addition to setting profile settings or font setting,
+\f[I]termprofset\f[R] can be used to restore profile settings or font
+setting saved from a previous invocation.
 Use the \f[V]-r\f[R] command line option to indicate restore saved
-profile settings.
+profile settings or font setting.
 In this way, \f[I]termprofset\f[R] can be used to manipulate a profile
-temporarily.
-Display ascii art with a customized profile then restore the original
-profile settings.
+or font temporarily.
+Display ascii art with a customized profile or font then restore the
+original profile or font settings.
 .PP
-Current profile settings can be listed with the \f[V]-l\f[R] option.
+Current profile or font settings can be listed with the \f[V]-l\f[R]
+option.
 .SH COMMAND LINE OPTIONS
 .TP
 \f[B]-f \[aq]fontname\[aq]\f[R]
@@ -91,6 +95,9 @@ indicates list current profile settings and exit
 \f[B]-t\f[R]
 indicates use Tilix terminal emulator
 .TP
+\f[B]-x\f[R]
+indicates use Xfce4 terminal emulator
+.TP
 \f[B]-u\f[R]
 displays this usage message and exits
 .PP
@@ -109,6 +116,9 @@ Monospace font and font size 4
 .TP
 \f[B]termprofset -t -s 8\f[R]
 Sets the Asciiville Tilix profile with a Monospace font and font size 8
+.TP
+\f[B]termprofset -x -s 18\f[R]
+Sets the XFCE4 terminal with a Monospace font and font size 18
 .TP
 \f[B]termprofset -r -t\f[R]
 Restores the Asciiville Tilix profile with settings saved from a

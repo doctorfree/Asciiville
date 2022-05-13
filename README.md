@@ -136,12 +136,13 @@ Asciiville adds the following commands to your system:
 * **mapscii** : character based zoomable map of the world
 * **nethack** : character based dungeon game
 * **rainbowstream** : command line Twitter client
+* **set_xfce_font** : sets an xfce4-terminal window's font and font size
 * **set_xfce_trans** : sets an xfce4-terminal window's transparency level
 * **show_ascii_art** : display ascii art, convert images to ascii art
 * **show_moon** : display the phase of the Moon
 * **show_weather** : display a weather report
 * **tdraw** : ASCII drawing tool (only added if `go` is installed)
-* **termprofset** : set/restore default profile settings for the Gnome and Tilix terminals
+* **termprofset** : set/restore default profile or font settings for the Gnome, Xfce4, and Tilix terminals
 
 Additional detail and info can be found in the
 [Asciiville Wiki](https://github.com/doctorfree/Asciiville/wiki).
@@ -505,7 +506,7 @@ bring up the interactive menu interface.
 - [**show_ascii_art**](markdown/show_ascii_art.1.md) : Display ascii art, convert images to ascii art
 - [**show_moon**](markdown/show_moon.1.md) : Display the phase of the Moon
 - [**show_weather**](markdown/show_weather.1.md) : Display a weather report
-- [**termprofset**](markdown/termprofset.1.md) : Manipulate default terminal profile settings
+- [**termprofset**](markdown/termprofset.1.md) : Manipulate default terminal profile or font settings
 
 ### Usage
 

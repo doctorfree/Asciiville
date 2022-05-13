@@ -1,0 +1,102 @@
+#!/bin/bash
+#
+# set_term_font - set the XFCE4 terminal window font and font size
+#
+# Run with no arguments to get the current font setting
+
+CONF_DIR="${HOME}/.config"
+SAVE_DIR="${CONF_DIR}/asciiville"
+SAVE_XFCE="${SAVE_DIR}/xfce4"
+RC="${CONF_DIR}/xfce4/terminal/terminalrc"
+FN="FontName"
+
+usage() {
+  printf "\nUsage: set_xfce_font [-f fontname] [-s fontsize] [-ru]"
+  printf "\nWhere:"
+  printf "\n\t-f 'fontname' specifies the font name to set terminal's font to"
+  printf "\n\t-s 'fontsize' specifies the font size to set terminal's font to"
+  printf "\n\t-r indicates restore saved settings"
+  printf "\n\t-u displays this usage message and exits"
+  printf "\nNo arguments indicates list current font setting and exit"
+  printf "\nDefault font is Monospace Regular"
+  printf "\nDefault font size is 20\n"
+  exit 1
+}
+
+save_settings() {
+  [ -d "${CONF_DIR}" ] || mkdir "${CONF_DIR}"
+  [ -d "${SAVE_DIR}" ] || mkdir "${SAVE_DIR}"
+  cp "${RC}" "${SAVE_XFCE}"
+}
+
+is_number() {
+    num=$1
+
+    re='^[0-9]+$'
+    if ! [[ $num =~ $re ]] ; then
+        echo "Requested font size ${num} is not a number"
+        echo "Exiting"
+        exit 1
+    fi
+}
+
+set_font() {
+    font=`grep ${FN} ${RC} | awk -F '=' ' { print $2 } '`
+    [ "${font}" == "${NF}" ] || {
+        cat ${RC} | sed -e "s/${FN}=.*/${FN}=${NF}/" > /tmp/font$$
+        cp /tmp/font$$ ${RC}
+        rm -f /tmp/font$$
+    }
+}
+
+RESTORE=
+FONT_NAME="Monospace Regular"
+FONT_SIZE=20
+[ $# -eq 0 ] && {
+    grep ${FN} ${RC}
+    exit 0
+}
+
+while getopts "f:rs:u" flag; do
+  case $flag in
+    f)
+      FONT_NAME="${OPTARG}"
+      ;;
+    r)
+      RESTORE=1
+      ;;
+    s)
+      FONT_SIZE="${OPTARG}"
+      ;;
+    u)
+      usage
+      ;;
+  esac
+done
+NF="${FONT_NAME} ${FONT_SIZE}"
+
+[ "${RESTORE}" ] && {
+    [ -f "${SAVE_XFCE}" ] && cp "${SAVE_XFCE}" "${RC}"
+    exit 0
+}
+
+[ -f ${RC} ] || {
+    echo "Cannot find ${RC}"
+    echo "Exiting without changing font size"
+    exit 1
+}
+
+if grep ${FN} ${RC} > /dev/null
+then
+    is_number ${FONT_SIZE}
+    save_settings
+    set_font
+else
+    if [ $# -eq 0 ]
+    then
+        echo "No ${FN} setting"
+    else
+        save_settings
+        echo "${FN}=${NF}" >> ${RC}
+    fi
+fi

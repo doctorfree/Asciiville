@@ -46,7 +46,7 @@ usage() {
   printf "\n\t-d 'font_dir' specifies the path to the figlet fonts"
   printf "\n\t-D 'seconds' specifies the delay, in seconds, between screens"
   printf "\n\t-e 'term' specifies the terminal in which execution occurs"
-  printf "\n\t\t'term' can be one of 'gnome' or 'tilix'"
+  printf "\n\t\t'term' can be one of 'gnome', 'xfce4', or 'tilix'"
   printf "\n\t-g convert image to grayscale"
   printf "\n\t-i 'image' specifies an image file to convert to ascii art"
   printf "\n\t-I 'input_dir' generates ascii art from all images in 'input_dir'"
@@ -231,7 +231,12 @@ while getopts "a:A:bBcCD:d:e:gh:i:I:l:LF:f:n:N:oO:Pp:qrs:S:t:T:w:zu" flag; do
             then
               termarg="-t"
             else
-              termarg=
+              if [ "${execute}" == "xfce4" ]
+              then
+                termarg="-x"
+              else
+                termarg=
+              fi
             fi
           fi
           ;;
@@ -370,7 +375,7 @@ done
     echo "Invoking gnome-terminal to convert ${make_inp} to ${make_out}"
     termprofset -g -s 4
     gnome-terminal --window --geometry=320x100 --profile=Asciiville \
-                   -- make_ascii_art -i "${make_inp}" -o "${make_out}" &
+                   -- make_ascii_art -i "${make_inp}" -o "${make_out}"
     termprofset -g -r
   else
     if [ "${have_tilix}" ]
@@ -381,7 +386,7 @@ done
             --profile=Asciiville \
             --window-style=borderless \
             --command="make_ascii_art -i \"${make_inp}\" -o \"${make_out}\"" \
-              2> /dev/null &
+              2> /dev/null
       termprofset -t -r
     else
       if [ "${have_xfce4}" ]
@@ -392,7 +397,7 @@ done
             --hide-scrollbar \
             --font="Monospace Regular 4" \
             --geometry=320x100 \
-            --command="make_ascii_art -i \"${make_inp}\" -o \"${make_out}\"" &
+            --command="make_ascii_art -i \"${make_inp}\" -o \"${make_out}\""
       else
         make_ascii_art -i "${make_inp}" -o "${make_out}" &
       fi
@@ -408,9 +413,9 @@ have_lolcat=
 
 termprofset ${termarg} -s 4
 sleep 1
-termwide=`stty size | awk '{print $2}'`
 termhigh=`stty size | awk '{print $1}'`
-termprofset ${termarg} -s 20
+termwide=`stty size | awk '{print $2}'`
+termprofset ${termarg} -r
 
 fade_audio() {
   vol=75
