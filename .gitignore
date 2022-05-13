@@ -146,6 +146,8 @@ games/nethack/src/vis_tab.c
 games/nethack/src/monstr.c
 games/nethack/src/tile.c
 
+games/nethack/sys/autoconf/autoconf.hin
+
 # games/nethack/util/
 games/nethack/util/*.o
 games/nethack/util/Makefile
