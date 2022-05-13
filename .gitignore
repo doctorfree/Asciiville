@@ -151,10 +151,12 @@ games/nethack/util/*.o
 games/nethack/util/Makefile
 games/nethack/util/dgn_comp
 games/nethack/util/dgn_lex.c
+games/nethack/util/dgn.tab.h
 games/nethack/util/dgn_yacc.c
 games/nethack/util/dlb
 games/nethack/util/lev_comp
 games/nethack/util/lev_lex.c
+games/nethack/util/lev.tab.h
 games/nethack/util/lev_yacc.c
 games/nethack/util/makedefs
 games/nethack/util/recover
