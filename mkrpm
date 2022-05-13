@@ -346,7 +346,9 @@ find ${OUT_DIR}/${DESTDIR}/share/${PKG} -type f | while read f
 do
   ${SUDO} chmod 644 "${f}"
 done
-${SUDO} chown -R root:root ${OUT_DIR}/${DESTDIR}
+${SUDO} chown -R root:root ${OUT_DIR}/${DESTDIR}/share
+${SUDO} chown -R root:root ${OUT_DIR}/${DESTDIR}/bin
+${SUDO} chown -R games:games ${OUT_DIR}/${DESTDIR}/games/var
 
 echo "Building ${PKG_NAME}_${PKG_VER} rpm package"
 
