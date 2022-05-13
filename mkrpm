@@ -307,6 +307,8 @@ ${SUDO} cp cbftp/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-cbftp
 ${SUDO} cp jp2a/COPYING ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/COPYING-jp2a
 ${SUDO} cp jp2a/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-jp2a
 ${SUDO} cp jp2a/LICENSES ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSES-jp2a
+${SUDO} cp games/tetris/licence.txt ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/license-tetris
+${SUDO} cp games/tetris/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-tetris
 ${SUDO} gzip -9 ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/CHANGELOG.md
 
 ${SUDO} cp -a art "${OUT_DIR}/${DESTDIR}/share/${PKG}/art"

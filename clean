@@ -18,6 +18,6 @@ cd ../games/nethack
 rm -f config.log config.status configure doc/Guidebook.txt sys/share/Makefile.lib
 cd ../ninvaders
 rm -rf cmake_build
-cd ../vitetris
+cd ../tetris
 make clean
 rm -f tetris gameserver src/config.h
