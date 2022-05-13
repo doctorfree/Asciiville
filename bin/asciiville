@@ -811,6 +811,7 @@ show_select_menu() {
     use_ninvaders="NO"
     use_newsboat="NO"
     use_ranger="NO"
+    use_tetris="NO"
     use_w3m="NO"
     case "${COMMAND}" in
       btop)
@@ -845,6 +846,9 @@ show_select_menu() {
         ;;
       ranger)
         use_ranger="YES"
+        ;;
+      tetris)
+        use_tetris="YES"
         ;;
       w3m*)
         use_w3m="YES"
@@ -908,6 +912,7 @@ show_select_menu() {
     fi
     [ "${have_nethack}" ] && options+=("NetHack Dungeon Game   [${use_nethack}]")
     [ "${have_ninvaders}" ] && options+=("Ninvaders Video Game   [${use_ninvaders}]")
+    [ "${have_tetris}" ] && options+=("Tetris Video Game      [${use_tetris}]")
     [ "${have_newsboat}" ] && options+=("Newsboat RSS Feeds     [${use_newsboat}]")
     [ "${have_ranger}" ] && options+=("Ranger File Manager    [${use_ranger}]")
     [ "${have_xfce4}" ] && options+=("XFCE4 Terminal         [${use_xfce4}]")
@@ -1015,6 +1020,11 @@ show_select_menu() {
           "Ranger"*,*|*,"Ranger"*)
               COMMAND=ranger
               MTITLE="Ranger File Manager"
+              break
+              ;;
+          "Tetris"*,*|*,"Tetris"*)
+              COMMAND=tetris
+              MTITLE="Tetris Video Game"
               break
               ;;
           "XFCE4"*,*|*,"XFCE4"*)
@@ -2640,6 +2650,7 @@ have_newsboat=`type -p newsboat`
 have_ninvaders=`type -p ninvaders`
 have_ranger=`type -p ranger`
 have_retro=`type -p cool-retro-term`
+have_tetris=`type -p tetris`
 have_asciiart=`type -p asciiart`
 have_asciijulia=`type -p asciijulia`
 have_asciiplasma=`type -p asciiplasma`
