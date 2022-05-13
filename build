@@ -154,7 +154,7 @@ build_ninvaders() {
 
 build_tetris() {
   [ -f tetris ] || {
-    ./configure --prefix=/usr/games --enable-xlib=no --enable-curses=yes
+    ./configure.sh --prefix=/usr/games --enable-xlib=no --enable-curses=yes
     make
     make gameserver
   }

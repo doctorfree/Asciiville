@@ -138,7 +138,7 @@ then
 else
   cd games/vitetris
   [ -f tetris ] || {
-    ./configure --prefix=/usr/games --enable-xlib=no --enable-curses=yes
+    ./configure.sh --prefix=/usr/games --enable-xlib=no --enable-curses=yes
     make
     make gameserver
   }
