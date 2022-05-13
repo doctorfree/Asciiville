@@ -167,7 +167,6 @@ games/nethack/win/*/*.o
 games/vitetris/gameserver
 games/vitetris/tetris
 games/vitetris/src/config.h
-games/vitetris/src/src-conf.mk
 
 pics/*
 releases/*
