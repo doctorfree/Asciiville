@@ -152,6 +152,15 @@ build_ninvaders() {
   }
 }
 
+build_tetris() {
+  [ -f tetris ] || {
+    ./configure --prefix=/usr/games --enable-xlib=no --enable-curses=yes
+    make
+    make gameserver
+  }
+  [ "${INSTALL}" ] && sudo make install
+}
+
 usage() {
     printf "\nUsage: ./build [-i] [-p prefix] [-u] project [project2 ...]"
     printf "\nWhere:"
@@ -160,7 +169,7 @@ usage() {
     printf "\n\t-u displays this usage message and exits\n"
     printf "\nNo arguments: build btop, configure with prefix=/usr, build\n"
     printf "\n'project' can be one or more of 'btop', 'cbftp', 'jp2a',"
-    printf "\n'diagon', 'nethack', and 'ninvaders'\n"
+    printf "\n'diagon', 'nethack', 'ninvaders', and 'tetris'\n"
     exit 1
 }
 
@@ -230,6 +239,14 @@ do
       [ -d ${PROJ} ] && {
         cd ${PROJ}
         build_ninvaders
+        cd ../..
+      }
+      ;;
+    tetris|vitetris)
+      PROJ=games/vitetris
+      [ -d ${PROJ} ] && {
+        cd ${PROJ}
+        build_tetris
         cd ../..
       }
       ;;
