@@ -249,13 +249,13 @@ select_alt_term() {
   then
     GNOME=1
   else
-    if [ "${have_xfce4}" ]
+    if [ "${have_tilix}" ]
     then
-      XFCE4=1
+      TILIX=1
     else
-      if [ "${have_tilix}" ]
+      if [ "${have_xfce4}" ]
       then
-        TILIX=1
+        XFCE4=1
       else
         if [ "${have_retro}" ]
         then
@@ -3229,9 +3229,9 @@ done
   fi
 }
 
-# If no terminal was specified on the command line, use current window
-[ "${TILIX}" ] || [ "${RETRO}" ] || [ "${GNOME}" ] || [ "${XFCE4}" ] || {
-  CURRENT=1
+# If no terminal was specified on the command line, use gnome if available
+[ "${GNOME}" ] || [ "${TILIX}" ] || [ "${RETRO}" ] || [ "${CURRENT}" ] || [ "${XFCE4}" ] || {
+  select_alt_term
 }
 
 # Make sure only one terminal is selected

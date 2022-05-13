@@ -551,11 +551,41 @@ CONF="${HOME}/.config/asciiville/init"
   echo "COMMAND=btop" >> ${CONF}
   echo "FULLSCREEN=" >> ${CONF}
   echo "MTITLE=\"Btop++ System Monitor\"" >> ${CONF}
-  echo "CURRENT=1" >> ${CONF}
-  echo "GNOME=" >> ${CONF}
-  echo "RETRO=" >> ${CONF}
-  echo "TILIX=" >> ${CONF}
-  echo "XFCE4=" >> ${CONF}
+  have_gnome=`type -p gnome-terminal`
+  if [ "${have_gnome}" ]
+  then
+    echo "CURRENT=" >> ${CONF}
+    echo "GNOME=1" >> ${CONF}
+    echo "RETRO=" >> ${CONF}
+    echo "TILIX=" >> ${CONF}
+    echo "XFCE4=" >> ${CONF}
+  else
+    have_tilix=`type -p tilix`
+    if [ "${have_tilix}" ]
+    then
+      echo "CURRENT=" >> ${CONF}
+      echo "GNOME=" >> ${CONF}
+      echo "RETRO=" >> ${CONF}
+      echo "TILIX=1" >> ${CONF}
+      echo "XFCE4=" >> ${CONF}
+    else
+      have_xfce4=`type -p xfce4-terminal`
+      if [ "${have_xfce4}" ]
+      then
+        echo "CURRENT=" >> ${CONF}
+        echo "GNOME=" >> ${CONF}
+        echo "RETRO=" >> ${CONF}
+        echo "TILIX=" >> ${CONF}
+        echo "XFCE4=1" >> ${CONF}
+      else
+        echo "CURRENT=1" >> ${CONF}
+        echo "GNOME=" >> ${CONF}
+        echo "RETRO=" >> ${CONF}
+        echo "TILIX=" >> ${CONF}
+        echo "XFCE4=" >> ${CONF}
+      fi
+    fi
+  fi
   echo "LOLCAT=lolcat" >> ${CONF}
   echo "" >> ${CONF}
   echo "use_lolcat=1" >> ${CONF}

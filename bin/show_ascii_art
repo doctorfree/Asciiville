@@ -116,15 +116,16 @@ show_ascii() {
     echo "Exiting"
     exit 1
   }
+  asciiart="$1"
 
   prep="\n${2}"
   numlines=0
   [ "${center}" ] && {
-    firstline=`head -1 $1`
+    firstline=`head -1 "${asciiart}"`
     echo "${firstline}" | grep "^+-------" > /dev/null && {
       # ascii art with boundary, we know its width
       awide=`echo "${firstline}" | wc -c`
-      ahigh=`cat "$1" | wc -l`
+      ahigh=`cat "${asciiart}" | wc -l`
       h_margin="$((termwide - awide))"
       [ ${h_margin} -lt 0 ] && return 3
       v_margin="$((termhigh - ahigh))"
@@ -154,23 +155,15 @@ show_ascii() {
   done
   if [ "$3" ]
   then
-    # /bin/cat "$1" | while read l
-    # do
-    #   printf "${prep}$l"
-    # done | $3
     while read l
     do 
       printf "${prep}$l"
-    done < <(/bin/cat "$1") | $3
+    done < <(/bin/cat "${asciiart}") | $3
   else
-    # /bin/cat "$1" | while read l
-    # do
-    #   printf "${prep}$l"
-    # done
     while read l
     do 
       printf "${prep}$l"
-    done < <(/bin/cat "$1")
+    done < <(/bin/cat "${asciiart}")
   fi
   printf "\n"
 }

@@ -199,15 +199,35 @@ fi
 #
 # Next, we can use gsettings to change the properties we care about.
 #
-gsettings set \
-   ${T_PROF}:${T_PATH}:${TERM_PROF}/ font "'${FONT_NAME} ${FONT_SIZE}'"
-gsettings set \
-   ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-system-font false
-gsettings set \
-   ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-theme-colors false
-gsettings set \
-   ${T_PROF}:${T_PATH}:${TERM_PROF}/ background-color '#000000'
-gsettings set \
-   ${T_PROF}:${T_PATH}:${TERM_PROF}/ foreground-color '#AFAFAF'
+if [ "${USE_GNOME}" ]
+then
+  gsettings set \
+    ${T_PROF}:${T_PATH}:${TERM_PROF}/ font "'${FONT_NAME} ${FONT_SIZE}'"
+  gsettings set \
+    ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-system-font false
+  gsettings set \
+    ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-theme-colors false
+  gsettings set \
+    ${T_PROF}:${T_PATH}:${TERM_PROF}/ background-color '#000000'
+  gsettings set \
+    ${T_PROF}:${T_PATH}:${TERM_PROF}/ foreground-color '#AFAFAF'
+else
+  if [ "${USE_TILIX}" ]
+  then
+    gsettings set \
+      ${T_PROF}:${T_PATH}${TERM_PROF}/ font "'${FONT_NAME} ${FONT_SIZE}'"
+    gsettings set \
+      ${T_PROF}:${T_PATH}${TERM_PROF}/ use-system-font false
+    gsettings set \
+      ${T_PROF}:${T_PATH}${TERM_PROF}/ use-theme-colors false
+    gsettings set \
+      ${T_PROF}:${T_PATH}${TERM_PROF}/ background-color '#000000'
+    gsettings set \
+      ${T_PROF}:${T_PATH}${TERM_PROF}/ foreground-color '#AFAFAF'
+  else
+    echo "Unknown/Unsupported terminal emulator. Exiting."
+    usage
+  fi
+fi
 
 exit 0
