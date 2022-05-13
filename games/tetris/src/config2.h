@@ -15,14 +15,14 @@
 #endif
 
 #if UNIX
-#define CONFIG_FILENAME ".vitetris"
+#define CONFIG_FILENAME ".tetris"
 #else
-#define CONFIG_FILENAME "vitetris.cfg"
+#define CONFIG_FILENAME "tetris.cfg"
 #endif
  
 /* Only used if UNIX */
 #ifndef HISCORE_FILENAME
-#define HISCORE_FILENAME "/var/games/vitetris-hiscores"
+#define HISCORE_FILENAME "/usr/games/var/tetris-hiscores"
 #endif
 
 #if __DJGPP__ || __TURBOC__

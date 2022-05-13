@@ -1,7 +1,7 @@
 extern char tetrom_colors[7];
 
 void draw_tetris_logo(int x, int y);
-void print_vitetris_ver(int x, int y);
+void print_tetris_ver(int x, int y);
 
 #ifdef TWOPLAYER
 int board_x(int pl, int col);

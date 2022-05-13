@@ -167,10 +167,10 @@ games/nethack/util/tilemap
 # games/nethack/win/
 games/nethack/win/*/*.o
 
-# games/vitetris/
-games/vitetris/gameserver
-games/vitetris/tetris
-games/vitetris/src/config.h
+# games/tetris/
+games/tetris/gameserver
+games/tetris/tetris
+games/tetris/src/config.h
 
 pics/*
 releases/*

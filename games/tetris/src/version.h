@@ -1,0 +1,4 @@
+#define VERSION_NO "0.60.1"
+#define VERSION_DATE "20220513"
+
+#define VITETRIS_VER "tetris "VERSION_NO

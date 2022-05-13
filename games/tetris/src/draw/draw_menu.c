@@ -19,7 +19,7 @@ void draw_tetris_logo(int x, int y)
 	setattr_normal();
 }
 
-void print_vitetris_ver(int x, int y)
+void print_tetris_ver(int x, int y)
 {
 	setcurs(x, y);
 	setattr_bold();

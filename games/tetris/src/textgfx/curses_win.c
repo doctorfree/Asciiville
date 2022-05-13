@@ -102,7 +102,7 @@ void textgfx_entermenu()
 	window = newwin(term_height-1, term_width-x, 1, x);
 	wins[0] = window;
 	draw_tetris_logo(0, 0);
-	print_vitetris_ver(19, 4);
+	print_tetris_ver(19, 4);
 }
 
 static void print_ver_author()
@@ -111,7 +111,7 @@ static void print_ver_author()
 	if (_HEIGHT_24L && margin_x > 14) {
 		window = stdscr;
 		attrset(A_NORMAL);
-		print_vitetris_ver(-margin_x, 0);
+		print_tetris_ver(-margin_x, 0);
 	}
 }
 #endif

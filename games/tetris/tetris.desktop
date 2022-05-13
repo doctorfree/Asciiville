@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
-Name=vitetris
+Name=tetris
 GenericName=Text-mode Tetris
 Exec=tetris -w 80
-Icon=vitetris
+Icon=tetris
 Categories=Game;BlocksGame;
 Terminal=true
 Comment=Terminal-based Tetris game

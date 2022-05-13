@@ -7,7 +7,7 @@ VITETRIS - Virtual terminal *tris clone
   possible to play at higher levels.  (It does not make it possible to
   prevent the piece from ever locking by abusing lock delay resets.)
 
-  vitetris comes with more features and options than might be expected from
+  Tetris comes with more features and options than might be expected from
   a simple text mode game.  Full input control, customizable appearance,
   netplay where both players can choose difficulty (level and height) --
   unless you must have sound (or just don't like Tetris), you won't be
@@ -109,7 +109,7 @@ Gamepad Start Button
 --------------------
 
   The START button on a gamepad can be mapped to act like the ENTER key.
-  Add the following line below [js0] or [js1] in .vitetris (or vitetris.cfg):
+  Add the following line below [js0] or [js1] in .tetris (or tetris.cfg):
 
 	start=NUM
 

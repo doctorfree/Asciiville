@@ -101,13 +101,13 @@ static void load_pc8x16_font()
 	p = getenv("ALLEGRO");
 	if (p) {
 		strncpy(fname, p, sizeof(fname));
-		append_filename(fname, fname, "vitetris", sizeof(fname));
+		append_filename(fname, fname, "tetris", sizeof(fname));
 		set_allegro_resource_path(5, fname);
 	}
 #ifdef UNIX
-	set_allegro_resource_path(4, "/usr/share/allegro/vitetris");
+	set_allegro_resource_path(4, "/usr/share/allegro/tetris");
 	set_allegro_resource_path(3, "/usr/share/allegro");
-	set_allegro_resource_path(2, "/usr/local/share/allegro/vitetris");
+	set_allegro_resource_path(2, "/usr/local/share/allegro/tetris");
 	set_allegro_resource_path(1, "/usr/local/share/allegro");
 #endif
 	if (find_allegro_resource(fname, "pc8x16.fnt", 0,0,0,0,0,
@@ -221,8 +221,8 @@ static int printline(char *line)
 void textgfx_init()
 {
 #ifdef UNIX
-	strcpy(_xwin.application_name, "vitetris");
-	strcpy(_xwin.application_class, "Vitetris");
+	strcpy(_xwin.application_name, "tetris");
+	strcpy(_xwin.application_class, "Tetris");
 #endif
 	if (install_allegro(SYSTEM_AUTODETECT, &errno, NULL) != 0)
 		exit(1);

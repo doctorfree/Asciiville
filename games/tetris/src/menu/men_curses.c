@@ -84,7 +84,7 @@ int gamemenu()
 	if (!i) {
 		setcurs(1, 4);
 		wclrtobot(window);
-		print_vitetris_ver(19, 4);
+		print_tetris_ver(19, 4);
 	}
 #else
 	while (1) {

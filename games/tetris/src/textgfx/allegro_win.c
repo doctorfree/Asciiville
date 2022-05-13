@@ -87,7 +87,7 @@ void textgfx_entermenu()
 	margin_x = getmargin_x();
 	win_y = 1;
 	draw_tetris_logo(0, 0);
-	print_vitetris_ver(19, 4);
+	print_tetris_ver(19, 4);
 }
 
 void textgfx_entergame()

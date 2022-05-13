@@ -20,7 +20,7 @@ Linux, *BSD, Mac OS X, etc.
   If you build with Xlib the game will pause automatically when your terminal
   window loses focus.
 
-  By default, vitetris.xpm is installed in pixmapdir and vitetris.desktop
+  By default, tetris.xpm is installed in pixmapdir and tetris.desktop
   in desktopdir.  If you don't want them, set those dirs to empty strings
   with configure or uncomment them in config.mk.  That is:
 

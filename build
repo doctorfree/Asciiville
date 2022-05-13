@@ -243,7 +243,7 @@ do
       }
       ;;
     tetris|vitetris)
-      PROJ=games/vitetris
+      PROJ=games/tetris
       [ -d ${PROJ} ] && {
         cd ${PROJ}
         build_tetris

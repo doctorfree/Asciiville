@@ -11,7 +11,7 @@
 int startupmenu(int i)
 {
 	while (1) {
-		print_vitetris_ver(19, 4);
+		print_tetris_ver(19, 4);
 
 		i = startup_menu(i-1, 1, 4);
 # ifndef TTY_SOCKET

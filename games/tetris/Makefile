@@ -3,7 +3,7 @@ include config.mk
 PROGNAME = tetris$(EXE)
 
 # Uncomment to change the default.  (Only used in Unix-like systems.)
-#HISCORE_FILENAME = /var/games/vitetris-hiscores
+#HISCORE_FILENAME = /usr/games/var/tetris-hiscores
 
 INSTALL = install
 
@@ -59,10 +59,10 @@ install: $(PROGNAME)
 	$(INSTALL) -m644 README licence.txt $(DESTDIR)$(docdir)
 	if [ -n "$(pixmapdir)" ]; then \
   $(INSTALL) -d $(DESTDIR)$(pixmapdir) && \
-  $(INSTALL) -m644 vitetris.xpm $(DESTDIR)$(pixmapdir); fi
+  $(INSTALL) -m644 tetris.xpm $(DESTDIR)$(pixmapdir); fi
 	if [ -n "$(desktopdir)" ]; then \
   $(INSTALL) -d $(DESTDIR)$(desktopdir) && \
-  $(INSTALL) -m644 vitetris.desktop $(DESTDIR)$(desktopdir); fi
+  $(INSTALL) -m644 tetris.desktop $(DESTDIR)$(desktopdir); fi
 	if [ -n "$(ALLEGRO)" ]; then \
   $(INSTALL) -d $(DESTDIR)$(datadir) && \
   $(INSTALL) -m644 pc8x16.fnt $(DESTDIR)$(datadir); fi
@@ -72,7 +72,7 @@ install: $(PROGNAME)
 
 install-hiscores:
 	@HS_FN=$(HISCORE_FILENAME); \
-	if [ -z "$$HS_FN" ]; then HS_FN=/var/games/vitetris-hiscores; fi; \
+	if [ -z "$$HS_FN" ]; then HS_FN=/usr/games/var/tetris-hiscores; fi; \
 	HS_FN="$(DESTDIR)$$HS_FN"; \
 	echo $(INSTALL) -d $${HS_FN%/*};  $(INSTALL) -d "$${HS_FN%/*}" && \
 	echo touch $$HS_FN &&             touch "$$HS_FN" && \
@@ -84,9 +84,9 @@ uninstall:
 	rm -f $(docdir)/README
 	rm -f $(docdir)/licence.txt
 	rmdir $(docdir)
-	test -z "$(pixmapdir)" || rm -f $(pixmapdir)/vitetris.xpm
+	test -z "$(pixmapdir)" || rm -f $(pixmapdir)/tetris.xpm
 	-rmdir "$(pixmapdir)"
-	test -z "$(desktopdir)" || rm -f $(desktopdir)/vitetris.desktop
+	test -z "$(desktopdir)" || rm -f $(desktopdir)/tetris.desktop
 	-rmdir "$(desktopdir)"
 	-rm -f $(datadir)/pc8x16.fnt
 	-rmdir $(datadir)
