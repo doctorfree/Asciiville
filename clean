@@ -20,4 +20,4 @@ cd ../ninvaders
 rm -rf cmake_build
 cd ../vitetris
 make clean
-rm -f tetris gameserver config.mk src/config.h src/src-conf.mk
+rm -f tetris gameserver src/config.h src/src-conf.mk
