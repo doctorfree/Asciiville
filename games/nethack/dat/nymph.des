@@ -8,6 +8,7 @@ ROOM: "ordinary", unlit, random, random, (12,7)
 TRAP:"board",random
 TRAP:"board",random
 [10%]: TERRAIN: random, 'T'
+[50%]: TERRAIN: random, 'T'
 OBJECT:('(',"chest"),random
 OBJECT:('(',"chest"),random
 OBJECT:('(',"chest"),random
@@ -40,6 +41,7 @@ TRAP:"board",random
 OBJECT:random,random
 MONSTER: 'n', random, hostile
 TERRAIN: random, 'T'
+[50%]: TERRAIN: random, 'T'
 }
 
 ROOM: "ordinary", random, random, random, random
@@ -50,6 +52,7 @@ OBJECT:random, random
 TRAP: random, random
 MONSTER: 'n', random, hostile
 [30%]: TERRAIN: random, 'T'
+[50%]: TERRAIN: random, 'T'
 }
 
 ROOM: "ordinary", random, random, random, random
@@ -59,6 +62,7 @@ OBJECT:random, random
 OBJECT:random, random
 MONSTER: 'n', random, hostile
 [20%]: TERRAIN: random, 'T'
+[50%]: TERRAIN: random, 'T'
 }
 
 ROOM: "ordinary", random, random, random, random
@@ -67,6 +71,7 @@ TRAP:"board",random
 OBJECT:random, random
 TRAP: random, random
 MONSTER: 'n', random, hostile
+[50%]: TERRAIN: random, 'T'
 [5%]: TERRAIN: random, 't'
 }
 

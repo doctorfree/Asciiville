@@ -80,7 +80,14 @@ void FDECL(savetoken, (char *));
 void NDECL(newline);
 void FDECL(advancepos, (char *));
 
-extern char FDECL(core_func_retval, (int idx));
+extern void VDECL(lc_error, (const char *, ...));
+
+extern char FDECL(core_func_retval, (int));
+extern int FDECL(is_core_func, (char *));
+extern int FDECL(core_func_idx, (char *));
+
+extern int NDECL(yyparse);
+extern void FDECL(yyerror, (const char *));
 
 /*
  * This doesn't always get put in lev_comp.h
@@ -317,6 +324,10 @@ shroud		{ savetoken(yytext); yylval.i=SHROUD; return FLAG_TYPE; }
 stormy		{ savetoken(yytext); yylval.i=STORMY; return FLAG_TYPE; }
 graveyard	{ savetoken(yytext); yylval.i=GRAVEYARD; return FLAG_TYPE; }
 sky		{ savetoken(yytext); yylval.i=SKYMAP; return FLAG_TYPE; }
+icedpools     { savetoken(yytext); yylval.i=ICEDPOOLS; return FLAG_TYPE; }
+solidify      { savetoken(yytext); yylval.i=SOLIDIFY; return FLAG_TYPE; }
+corrmaze      { savetoken(yytext); yylval.i=CORRMAZE; return FLAG_TYPE; }
+inaccessibles { savetoken(yytext); yylval.i=CHECK_INACCESSIBLES; return FLAG_TYPE; }
 [0-9]+d[0-9]+	{ char *p = strchr(yytext, 'd');
 		  savetoken(yytext);
 		  if (p) {
@@ -380,8 +391,10 @@ FILE *input_f;
 	    yyrestart(input_f);
 	else
 #endif
+    {
 	    yyin = input_f;
 	    if (!orig_yyin) orig_yyin = yyin;
+    }
 }
 /* analogous routine (for completeness) */
 void init_yyout( output_f )
@@ -436,7 +449,9 @@ include_pop()
 int
 yywrap()
 {
-    if (doing_included_file >= 0) include_pop();
+    if (doing_included_file > 0) {
+        include_pop();
+    }
     return 1;
 }
 

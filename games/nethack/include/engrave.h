@@ -1,4 +1,4 @@
-/*	SCCS Id: @(#)engrave.h	3.4	1991/07/31	*/
+/*  SCCS Id: @(#)engrave.h  3.4 1991/07/31  */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -6,16 +6,16 @@
 #define ENGRAVE_H
 
 struct engr {
-	struct engr *nxt_engr;
-	char *engr_txt;
-	xchar engr_x, engr_y;
-	unsigned engr_lth;	/* for save & restore; not length of text */
-	long engr_time;		/* moment engraving was (will be) finished */
-	xchar engr_type;
-#define DUST	   1
+    struct engr *nxt_engr;
+    char *engr_txt;
+    xchar engr_x, engr_y;
+    unsigned engr_lth;  /* for save & restore; not length of text */
+    long engr_time;     /* moment engraving was (will be) finished */
+    xchar engr_type;
+#define DUST       1
 #define ENGRAVE    2
-#define BURN	   3
-#define MARK	   4
+#define BURN       3
+#define MARK       4
 #define ENGR_BLOOD 5
 #define HEADSTONE  6
 #define N_ENGRAVE  6

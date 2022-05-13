@@ -1,24 +1,157 @@
+20XX-XX-XX  NetHack 6.X.X
+	* Add info about pre-seeded games to dumplog
+	* Seed is encoded as Crockford base32 string
+	* Set color default to false if env variable NO_COLOR is present
+	* Add Marathon mode (start game with 999 HP and never heal), enabled
+	  with OPTIONS=marathon
+	* Monster generation rate increases slower and more linearly with turn
+	  count
+	* Enable GOLDOBJ unconditionally and remove obsolete code
+	* Rename the Dark One to Anaraxis the Black (from xNetHack)
+	* Show bones level in dungeon overview
+
+	* Config changes:
+	  - Switched from pmatch to regexp engine for AUTOPICKUP_EXCEPTIONS
+	  - Statuscolors and menucolors defaults in sysconf
+
+	* Monster changes:
+	  - Foocubi switch gender after successful seduction attack
+
+	* Ported NetHack 3.6 improvements, non exhaustive list:
+	  - Automatic fuzzer for debugging
+	  - Statues as monster symbols
+	  - Improved internal monster extra structures
+	  - Improved container menu
+	  - Wet towel handling
+	  - Vibrating square implemented as trap
+	  - Improved role/race/gender/alignment selection
+	  - AUTOCOMPLETE option to disable or enable autocompletion for
+	    extended commands
+	  - Interactive extended command list
+	  - Allow vampires to transform into fog clouds to pass closed doors
+	  - Regexp engine for string matching
+	  - Support changing key bindings with BIND
+	  - Menucolors management in options menu
+
+	* item changes:
+	  - Candle light radius is square root, not logarithmic anymore (from NetHack 3.7)
+	  - Wielding Demonbane makes demons angry (from NetHack 3.6)
+	  - Autoidentify scroll of remove curse when a known BUC state changes (from xNetHack)
+	  - Ensure all color alchemy potions exist in any given game
+
+	* artifact changes:
+	  - Removed artifact wish failure due to the number of existing artifacts
+
+	* dungeon layout:
+	  - Disable the rogue tribute level
+	  - Adjust monster distribution for dilapidated armories
+	  - Blackmarket: new entrance area for the classic design
+	  - Themed rooms:
+	    - Prevent giant spiders appearing out of depth
+	    - Spider nests might have cave spiders on low levels
+	  - Prevent dungeon feature generation on stairs
+	  - Level with trees have a chance of an additional axe
+	  - Fix pacman level connectivity to the rest of the level
+	  - Remove random secret doors
+	  - Generate Fort Ludios portal on Medusa if it hasn't been generated
+	     already (idea by RojjaCebolla)
+	  - Water caves levels between Medusa and Castle (from DynaHack)
+
+	* Sokoban:
+	  - Sokoban's level difficulty is equal to Sokoban's entrance level
+	  - Solving Sokoban without breaking any rules increases luck
+	  - Give feedback when player breaks Sokoban rules for the first time
+	  - Remove Sokoban restrictions after solving the top Sokoban level
+
+	* user interface improvements:
+	  - Optimized placement of menu windows in TTY port
+	  - Mark vibrating square automatically as trap after being found
+	  - Show statues underlined in tty and curses
+	  - Add inventory weight/carrycap and n/52 items display (from xNetHack)
+	  - Show maximal skill enhancement level in enhance menu
+	  - Allow player with both hands cursed to use containers if they have a head
+	  - The '$' command reports the gold in the containers of the player
+	  - Show total weight of object classes with invweight
+	  - List lamps and lanterns in charging prompt
+	  - Autoidentify magic lamps and oil lamps when rubbing
+	  - Give feedback if lamps or lanterns are full after charging
+	  - Show "empty" on known empty lamps and lanterns
+	  - Wallclock and play time duration on status line
+	  - Support UTF8graphics on curses
+	  - Use bright colors on supporting terminals in tty port
+	  - Monster and object information database
+	  - Reduce message spam when healers sense injuries
+	  - Output "You begin awkwardly bashing" for currently unskilled but
+	    skillable weapons
+
+	* skill changes:
+	  - Allow convicts to become skilled in broadsword (reported by RojjaCebolla)
+
+	* Xlogfile changes:
+	  - Use TAB as separator in xlogfile
+	  - Record number of normal, magical, and artifact wishes
+
+	* Other:
+	  - Port XP curve from FIQHack
+	  - Adjusted quantity formula when wishing for stackable items
+	  - 'Readable' Hawaiian shirt designs (by Michael Meyer)
+	  - Dragon scales and unicorn horns don't drop from repeatedly revived monsters
+	  - Reduced chance of dropping chromatic dragon scales
+
+	* Imported NetHack 3.7 features
+	  - Mild Zombie Apocalypse (monsters killed by zombies might rise as zombies)
+
+	* bug fixes:
+	  - Fix over-escaping of characters on HTML dump map
+	  - Fix crash when /dev/(u)random can't be opened
+	  - Properly randomize rumors (found by Andrio Celos)
+	  - Fix map overdrawing statuslines on screens with 24 lines (found by Mandevil)
+	  - Fix crash when changing statuslines to 3 on screens with 24
+	  - Show Elbereth statusline indicator when blind and flying
+	  - OPTIONS=truecolor_separator was incorrectly parsed
+	  - Bag of holding explosion also scatters contents of inserted container
+	  - Fix some bit shift warnings
+	  - Fix several out of bounds memory accesses
+	  - Fix chatting at the edge of the map
+	  - Fix several potential memory corruption bugs
+	  - Prevent buffer underflow for strprepend() with corpses
+	  - Fix warning when bribing a prison guard with an amount but no gold in
+	    inventory
+	  - Fix crash when trying to delete a worn item when saving bones
+	  - Gold field in xlogfile didn't include stashed gold for GOLDOBJ
+	  - Observing tamed dragon's breathing didn't identify the dragon (reported by Thidwick)
+	  - MONSTERCOLOR could be used to reveal identity of Riders (reported by Nicole Kleinhoff)
+	  - Don't reveal description of spellbook when writing it blind
+	  - Fix statuscolors crash due to incorrect color name parsing
+	  - Empty bag of tricks were considered magical bags
+
+	* build fixes:
+	  - Fix compiling with -fno-common
+	  - Fix compilation with bison 3.7
+
 2019-01-01  NetHack 5.2.0
 	* Support SOURCE_DATE_EPOCH for reproducible builds (patch from Debian)
 	* Players killed by Nazgul will arise as Barrow Wights in bones files
 	  (a slight change from the original mythology, we know)
-	* Reviving drained corpses sometimes won't work, and may destroy 
+	* Reviving drained corpses sometimes won't work, and may destroy
 	  the corpse. Partially drained corpses are more likely to revive.
-	* Wand wresting happens always when an empty wand is zapped with a chance
-	  depending on BUC state if an effect is produced
 	* Reproducible dungeon layout. Set OPTIONS=seed:number to get the same
 	  dungeon layout.
-	* Vault Guards get angry if you eat gold in front of them. (From Nethack 
+	* Vault Guards get angry if you eat gold in front of them. (From Nethack
 		 Development Code - used with permission)
 	* Several cosmetic changes - additional engravings, hallucinatory monsters, and funny messages.
-	* Picking up scrolls of scare monsters change BUC from blessed to
-	  uncursed to cursed
 	* Default to UTF8graphics on supporting terminals
-	* Putting blessed and uncursed scrolls of charging into a bag of
-	  tricks charges it
 
 	* item changes:
 	  - Decreased weight of all mithril armor, especially ones of elven make
+	  - Wand wresting happens always when an empty wand is zapped with a
+	    chance depending on BUC state if an effect is produced
+	  - Putting blessed and uncursed scrolls of charging into a bag of
+	    tricks charges it
+	  - Picking up scrolls of scare monsters change BUC from blessed to
+	    uncursed to cursed
+	  - Picked up scrolls of scare monsters only turn to dust if they are
+	    cursed
 
 	* user interface improvements:
 	  - Added naming last broken object to #name menu (idea from AceHack/NH4)
@@ -33,6 +166,8 @@
 	  - New option "statuslines" to force 2 or 3 status lines
 	  - Pressing > or < autotravels to the stairs if not already on
 	    the right kind of stairs
+	  - Improved BUC identification in containers dropped on altars (from xNetHack)
+	  - Co-aligned altars are highlighted in white color
 
 	* dungeon layout:
 	  - Backyard of watery castle get trap doors to ensure player can
@@ -99,7 +234,7 @@
 	* Tourists start with more darts to compensate for more training being
 	  needed to advance weapon skills
 	* Player can wish for up to 100 projectiles (from NetHackPlus)
-	* Increase range of properly fired missiles, and crossbow range no 
+	* Increase range of properly fired missiles, and crossbow range no
 	  longer depends on strength (from SporkHack)
 	* Require high strength for crossbow multishot, with a bonus for
 	  gnomes (from GruntHack)
@@ -135,18 +270,19 @@
 	  - Reading a Scroll of Light while confused summons some (black) lights
 	  - Reading a non-blessed scroll of punishment while confused summons a Punisher. BE CAREFUL
 	  - A horn of plenty has a *small* chance to produce potions of [vampire] blood
-	  
+
 	* artifact changes:
 	  - From SporkHack:
-	    - All the weapons below warn against and have 20% instakill chance 
+	    - All the weapons below warn against and have 20% instakill chance
 	      against their target monsters.
 	    - Dragonbane is now a dwarvish spear that conveys fire, cold, shock,
-	      acid, poison, acid, and disintegration resistance while wielded.
+	      acid, poison, and disintegration resistance while wielded.
 	    - Giantslayer is now a sling that gives 18/** STR while wielded or
 	      in the alternate weapon slot.
 	    - Werebane conveys polymorph control while wielded.
 	    - Ogresmasher gives 25 CON while wielded.
 	    - Trollsbane prevents trolls from leaving corpses while wielded.
+
 	  - Other:
 	    - Luck Blade added, first sacrifice gift for Convicts
 	    - Grimtooth is the first sacrifice gift for Rogues; it is now
@@ -236,7 +372,7 @@
 	    - showweight -- Display the weight of individial items in
 		your inventory (from SLASH'EM 0.7)
 	    - nameempty -- Automatically #name wands known to be empty
-		
+
 	* role differentiation:
 	  - Tourists get automatic type identification for shop items
 	  - Healers can see how wounded monsters are (by L)
@@ -277,7 +413,7 @@
 	  - Dragons auto-ID after being probed (from DynaHack)
 	  - You can level-port to levels based on their annotation
 	  - Rustproof/Erodeproof/Fixed is known by default (from DynaHack)
-	  
+
 	* bug fixes:
 	  - Fixed crash when player gets killed when entering a new level and
 	    a trap on the previous level causes a null pointer dereference
@@ -350,7 +486,7 @@
 	* new monsters:
 	  - chromatic dragons
 	  - wax golems (providing candles as death drop) (from Slash'Em)
-	
+
 	* new levels:
 	  - Sokoban levels (from GruntHack)
 
@@ -570,7 +706,7 @@
 	  - C343-231: Time is distorted while sinking into lava.
 
 	* user interface improvements:
-	  - Interrupt a multi turn action if hit points or magical energy is restored 
+	  - Interrupt a multi turn action if hit points or magical energy is restored
 
 
 2009-06-13  NetHack 3.5.1
@@ -598,8 +734,7 @@
 	* item behaviour changes:
 	  - Amulet of Yendor may teleport away when dropped
 	  - Scrolls of gold detection: confused reading shows a random item class
-	  - Scrolls of genocide kill monster on level (uncursed) or globally (blessed) 
-
+	  - Scrolls of genocide kill monster on level (uncursed) or globally (blessed)
 
 	* Patches:
 	  - Astral Escape (via GruntHack from Chi)
@@ -660,7 +795,7 @@
 	* Choice of Sokoban prize (from NetHack Brass)
 	* Quest nemesis don't respect Elbereth
 	* Unique demons don't respect Elbereth
-	* The Heart of Ahriman gives displacement and energy regeneration 
+	* The Heart of Ahriman gives displacement and energy regeneration
 	* Throne: no wishes
 	* Towel day support
 	* Death talks in CAPITAL LETTERS

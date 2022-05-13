@@ -1046,19 +1046,19 @@ FLAGS: noteleport,mazelevel
 INIT_MAP:mazegrid,'-'
 GEOMETRY:right,center
 MAP
--------------------------------------------------
-|                    ---               ----      
-|          ----      |   ------------  |         
-| ------      |  --------|..........|---         
-| |....|  -------|...........--------------      
----....|--|..................S............|----  
-....--....S..----------------|............S...|  
----....|--|..................|............|----  
-| |....|  -------|...........-----S--------      
-| ------      |  --------|..........|---         
-|          ----     |    ------------  |         
-|                   ---                ----      
--------------------------------------------------
+LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLLLLLLL---LLLLLLLLLLLLLLL----LLLLLL
+LLLLLLLLLLL----LLLLLL|LLL------------LL|LLLLLLLLL
+LL------LLLLLL|LL--------|..........|---LLLLLLLLL
+LLF....|LL-------|...........--------------LLLLLL
+---....|--|..................S............|----LL
+....--....S..----------------|............S...|LL
+---....|--|..................|............|----LL
+LLF....|LL-------|...........-----S--------LLLLLL
+LL------LLLLLL|LL--------|..........|---LLLLLLLLL
+LLLLLLLLLLL----LLLLL|LLLL------------LL|LLLLLLLLL
+LLLLLLLLLLLLLLLLLLLL---LLLLLLLLLLLLLLLL----LLLLLL
+LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
 ENDMAP
 STAIR:levregion(01,00,15,20),levregion(15,1,70,16),up
 BRANCH:levregion(01,00,15,20),levregion(15,1,70,16)
@@ -1066,6 +1066,13 @@ TELEPORT_REGION:levregion(01,00,15,20),levregion(15,1,70,16)
 NON_DIGGABLE:(00,00,46,12)
 MAZEWALK:(00,06),west
 STAIR:(44,06),down
+IF [50%] {
+  TERRAIN:(34,08),'-'
+  TERRAIN:(34,04),'S'
+  TERRAIN:(29,05),'|'
+  TERRAIN:(29,07),'S'
+}
+
 # The fellow in residence
 MONSTER:('&',"Baalzebub"),(35,06)
 # Some random weapons and armor.

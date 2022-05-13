@@ -64,6 +64,10 @@ delete_text(w, event, params, num_params)
     struct xwindow *wp;
     struct text_info_t *text_info;
 
+    nhUse(event);
+    nhUse(params);
+    nhUse(num_params);
+
     wp = find_widget(w);
     text_info = wp->text_information;
 
@@ -91,6 +95,10 @@ dismiss_text(w, event, params, num_params)
 {
     struct xwindow *wp;
     struct text_info_t *text_info;
+
+    nhUse(event);
+    nhUse(params);
+    nhUse(num_params);
 
     wp = find_widget(w);
     text_info = wp->text_information;
@@ -139,6 +147,8 @@ add_to_text_window(wp, attr, str)
 {
     struct text_info_t *text_info = wp->text_information;
     int width;
+
+    nhUse(attr);
 
     append_text_buffer(&text_info->text, str, FALSE);
 
@@ -290,7 +300,7 @@ create_text_window(wp)
 		XtParseTranslationTable(text_translations));	num_args++;
 
     wp->w = XtCreateManagedWidget(
-		killer && WIN_MAP == WIN_ERR ?
+		killer.name[0] && WIN_MAP == WIN_ERR ?
 				  "tombstone" : "text_text", /* name */
 		asciiTextWidgetClass,
 		form,			/* parent widget */
@@ -468,11 +478,7 @@ calculate_rip_text(int how)
 
 	/* Put $ on stone */
 	Sprintf(rip_line[GOLD_LINE], "%ld Au",
-#ifndef GOLDOBJ
-		u.ugold);
-#else
 		done_money);
-#endif
 	/* Put together death description */
 	switch (killer_format) {
 		default: impossible("bad killer format?");

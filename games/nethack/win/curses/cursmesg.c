@@ -261,22 +261,21 @@ curses_prev_mesg()
     int count;
     winid wid;
     long turn = 0;
-    anything *identifier;
+    anything identifier;
     nhprev_mesg *mesg;
     menu_item *selected = NULL;
 
     wid = curses_get_wid(NHW_MENU);
     curses_create_nhmenu(wid);
-    identifier = malloc(sizeof (anything));
-    identifier->a_void = NULL;
+    identifier = zeroany;
 
     for (count = 0; count < num_messages; count++) {
         mesg = get_msg_line(TRUE, count);
         if ((turn != mesg->turn) && (count != 0)) {
-            curses_add_menu(wid, NO_GLYPH, MENU_DEFCNT, identifier, 0, 0, A_NORMAL,
+            curses_add_menu(wid, NO_GLYPH, MENU_DEFCNT, &identifier, 0, 0, A_NORMAL,
                             "---", FALSE);
         }
-        curses_add_menu(wid, NO_GLYPH, MENU_DEFCNT, identifier, 0, 0, A_NORMAL,
+        curses_add_menu(wid, NO_GLYPH, MENU_DEFCNT, &identifier, 0, 0, A_NORMAL,
                         mesg->str, FALSE);
         turn = mesg->turn;
     }
@@ -292,61 +291,71 @@ window, depending on the user's settings */
 void
 curses_count_window(const char *count_text)
 {
-    int startx, starty, winx, winy;
-    int messageh, messagew;
     static WINDOW *countwin = NULL;
+    int winx, winy;
+    int messageh, messagew, border;
 
-    if ((count_text == NULL) && (countwin != NULL)) {
-        delwin(countwin);
-        countwin = NULL;
+    if (!count_text) {
+        if (countwin) {
+            delwin(countwin);
+            countwin = NULL;
+        }
         counting = FALSE;
         return;
     }
 
-    counting = TRUE;
+    /* position of message window, not current position within message window
+       (so <0,0> for align_message:Top but will vary for other alignings) */
+    curses_get_window_xy(MESSAGE_WIN, &winx, &winy);
+    /* size of message window, with space for borders already subtracted */
+    curses_get_window_size(MESSAGE_WIN, &messageh, &messagew);
 
-    if (iflags.wc_popup_dialog) {       /* Display count in popup window */
-        startx = 1;
-        starty = 1;
+    /* decide where to put the one-line counting window */
+    border = curses_window_has_border(MESSAGE_WIN) ? 1 : 0;
+    winx += border; /* first writeable message column */
+    winy += border + (messageh - 1); /* last writable message line */
 
-        if (countwin == NULL) {
-            countwin = curses_create_window(25, 1, UP);
+    /* if most recent message (probably prompt leading to this instance of
+       counting window) is going to be covered up, scroll mesgs up a line */
+    if (!counting && my == border + (messageh - 1) && mx > border) {
+        scroll_window(MESSAGE_WIN);
+        if (messageh > 1) {
+            /* handling for next message will behave as if we're currently
+               positioned at the end of next to last line of message window */
+            my = border + (messageh - 1) - 1;
+            mx = border + (messagew - 1); /* (0 + 80 - 1) or (1 + 78 - 1) */
+        } else {
+            /* for a one-line window, use beginning of only line instead */
+            my = mx = border; /* 0 or 1 */
         }
-
-    } else {                    /* Display count at bottom of message window */
-
-        curses_get_window_xy(MESSAGE_WIN, &winx, &winy);
-        curses_get_window_size(MESSAGE_WIN, &messageh, &messagew);
-
-        if (curses_window_has_border(MESSAGE_WIN)) {
-            winx++;
-            winy++;
-        }
-
-        winy += messageh - 1;
-
-        if (countwin == NULL) {
-            pline("#");
-#ifndef PDCURSES
-            countwin = newwin(1, 25, winy, winx);
-#endif /* !PDCURSES */
-        }
-#ifdef PDCURSES
-        else {
-            curses_destroy_win(countwin);
-        }
-
-        countwin = newwin(1, 25, winy, winx);
-#endif /* PDCURSES */
-        startx = 0;
-        starty = 0;
+        /* wmove(curses_get_nhwin(MESSAGE_WIN), my, mx); -- not needed */
+    }
+    /* in case we're being called from clear_nhwindow(MESSAGE_WIN)
+       which gets called for every command keystroke; it sends an
+       empty string to get the scroll-up-one-line effect above and
+       we want to avoid the curses overhead for the operations below... */
+    if (!*count_text) {
+        return;
     }
 
-    mvwprintw(countwin, starty, startx, "%s", count_text);
+    counting = TRUE;
+#ifdef PDCURSES
+    if (countwin) {
+        curses_destroy_win(countwin), countwin = NULL;
+    }
+#endif /* PDCURSES */
+    /* this used to specify a width of 25; that was adequate for 'Count: 123'
+       but not for dolook's autodescribe when it refers to a named monster */
+    if (!countwin) {
+        countwin = newwin(1, messagew, winy, winx);
+    }
+    werase(countwin);
+
+    mvwprintw(countwin, 0, 0, "%s", count_text);
     wrefresh(countwin);
 }
 
-	/* Gets a "line" (buffer) of input. */
+/* Gets a "line" (buffer) of input. */
 void
 curses_message_win_getline(const char *prompt, char *answer, int buffer)
 {
@@ -458,21 +467,29 @@ curses_message_win_getline(const char *prompt, char *answer, int buffer)
             break;
         case ERR: /* should not happen */
             *answer = '\0';
-            free(tmpbuf);
-            free(linestarts);
-            curs_set(orig_cursor);
-            curses_toggle_color_attr(win, NONE, A_BOLD, OFF);
-            return;
+            goto alldone;
+
         case '\r':
         case '\n':
-            free(linestarts);
-            strncpy(answer, p_answer, buffer);
-            strcpy(toplines, tmpbuf);
-            mesg_add_line((char *) tmpbuf);
-            free(tmpbuf);
-            curs_set(orig_cursor);
-            curses_toggle_color_attr(win, NONE, A_BOLD, OFF);
-            return;
+            (void) strncpy(answer, p_answer, buffer);
+            answer[buffer - 1] = '\0';
+            Strcpy(toplines, tmpbuf);
+            mesg_add_line(tmpbuf);
+#if 1
+            /* position at end of current line so next message will be
+               written on next line regardless of whether it could fit here */
+            mx = border_space ? (width + 1) : (width - 1);
+            wmove(win, my, mx);
+#else       /* after various other changes, this resulted in getline()
+             * prompt+answer being following by a blank message line */
+            if (++my > maxy) {
+                scroll_window(MESSAGE_WIN);
+                my--;
+            }
+            mx = border_space;
+#endif /*0*/
+            goto alldone;
+
         case '\b':
         case KEY_BACKSPACE:
             if (len < 1) {
@@ -502,6 +519,13 @@ curses_message_win_getline(const char *prompt, char *answer, int buffer)
             p_answer[len] = '\0';
         }
     }
+
+ alldone:
+    free(linestarts);
+    free(tmpbuf);
+    curses_toggle_color_attr(win, NONE, A_BOLD, OFF);
+    curs_set(orig_cursor);
+    return;
 }
 
 /* Scroll lines upward in given window, or clear window if only one line. */
@@ -575,11 +599,11 @@ mesg_add_line(char *mline)
     current_mesg->prev_mesg = last_mesg;
     last_mesg = current_mesg;
 
-
     if (num_messages < max_messages) {
         num_messages++;
     } else {
         tmp_mesg = first_mesg->next_mesg;
+        free(first_mesg->str);
         free(first_mesg);
         first_mesg = tmp_mesg;
     }

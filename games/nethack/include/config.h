@@ -1,4 +1,4 @@
-/*	SCCS Id: @(#)config.h	3.4	2003/12/06	*/
+/*  SCCS Id: @(#)config.h   3.4 2003/12/06  */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -7,35 +7,35 @@
 
 
 /*
- * Section 1:	Operating and window systems selection.
- *		Select the version of the OS you are using.
- *		For "UNIX" select BSD, ULTRIX, SYSV, or HPUX in unixconf.h.
- *		A "VMS" option is not needed since the VMS C-compilers
- *		provide it (no need to change sec#1, vmsconf.h handles it).
+ * Section 1:   Operating and window systems selection.
+ *      Select the version of the OS you are using.
+ *      For "UNIX" select BSD, ULTRIX, SYSV, or HPUX in unixconf.h.
+ *      A "VMS" option is not needed since the VMS C-compilers
+ *      provide it (no need to change sec#1, vmsconf.h handles it).
  */
 
-#define UNIX		/* delete if no fork(), exec() available */
+#define UNIX        /* delete if no fork(), exec() available */
 
-/* #define MSDOS */	/* in case it's not auto-detected */
+/* #define MSDOS */ /* in case it's not auto-detected */
 
-/* #define OS2 */	/* define for OS/2 */
+/* #define OS2 */   /* define for OS/2 */
 
-/* #define TOS */	/* define for Atari ST/TT */
+/* #define TOS */   /* define for Atari ST/TT */
 
-/* #define STUPID */	/* avoid some complicated expressions if
-			   your C compiler chokes on them */
+/* #define STUPID */    /* avoid some complicated expressions if
+               your C compiler chokes on them */
 /* #define MINIMAL_TERM */
-			/* if a terminal handles highlighting or tabs poorly,
-			   try this define, used in pager.c and termcap.c */
+/* if a terminal handles highlighting or tabs poorly,
+   try this define, used in pager.c and termcap.c */
 /* #define ULTRIX_CC20 */
-			/* define only if using cc v2.0 on a DECstation */
+/* define only if using cc v2.0 on a DECstation */
 /* #define ULTRIX_PROTO */
-			/* define for Ultrix 4.0 (or higher) on a DECstation;
-			 * if you get compiler errors, don't define this. */
-			/* Hint: if you're not developing code, don't define
-			   ULTRIX_PROTO. */
+/* define for Ultrix 4.0 (or higher) on a DECstation;
+ * if you get compiler errors, don't define this. */
+/* Hint: if you're not developing code, don't define
+   ULTRIX_PROTO. */
 
-#include "config1.h"	/* should auto-detect MSDOS, MAC, AMIGA, and WIN32 */
+#include "config1.h"    /* should auto-detect MSDOS, MAC, AMIGA, and WIN32 */
 
 #ifdef AUTOCONF
 # include "autoconf_paths.h"
@@ -47,64 +47,64 @@
  * Define all of those you want supported in your binary.
  * Some combinations make no sense.  See the installation document.
  */
-/* #define TTY_GRAPHICS */	/* good old tty based graphics */
-/* #define CURSES_GRAPHICS */	/* Proper curses interface */
-/* #define X11_GRAPHICS */	/* X11 interface */
-/* #define QT_GRAPHICS */	/* Qt interface */
-/* #define GNOME_GRAPHICS */	/* Gnome interface */
-/* #define MSWIN_GRAPHICS */	/* Windows NT, CE, Graphics */
-/* #define LISP_GRAPHICS */	/* lisp interface */
+/* #define TTY_GRAPHICS */  /* good old tty based graphics */
+/* #define CURSES_GRAPHICS */   /* Proper curses interface */
+/* #define X11_GRAPHICS */  /* X11 interface */
+/* #define QT_GRAPHICS */   /* Qt interface */
+/* #define GNOME_GRAPHICS */    /* Gnome interface */
+/* #define MSWIN_GRAPHICS */    /* Windows NT, CE, Graphics */
+/* #define LISP_GRAPHICS */ /* lisp interface */
 
 /*
  * Define the default window system.  This should be one that is compiled
  * into your system (see defines above).  Known window systems are:
  *
- *	tty, X11, mac, amii, BeOS, Qt, Gem, Gnome, lisp
+ *  tty, X11, mac, amii, BeOS, Qt, Gem, Gnome, lisp
  */
 
 /* MAC also means MAC windows */
 #ifdef MAC
-# ifndef	AUX
+# ifndef    AUX
 #  define DEFAULT_WINDOW_SYS "mac"
 # endif
 #endif
 
 /* Amiga supports AMII_GRAPHICS and/or TTY_GRAPHICS */
 #ifdef AMIGA
-# define AMII_GRAPHICS			/* (optional) */
-# define DEFAULT_WINDOW_SYS "amii"	/* "amii", "amitile" or "tty" */
+# define AMII_GRAPHICS          /* (optional) */
+# define DEFAULT_WINDOW_SYS "amii"  /* "amii", "amitile" or "tty" */
 #endif
 
 /* Atari supports GEM_GRAPHICS and/or TTY_GRAPHICS */
 #ifdef TOS
-# define GEM_GRAPHICS			/* Atari GEM interface (optional) */
-# define DEFAULT_WINDOW_SYS "Gem"	/* "Gem" or "tty" */
+# define GEM_GRAPHICS           /* Atari GEM interface (optional) */
+# define DEFAULT_WINDOW_SYS "Gem"   /* "Gem" or "tty" */
 #endif
 
 #ifdef __BEOS__
 #define BEOS_GRAPHICS /* (optional) */
 #define DEFAULT_WINDOW_SYS "BeOS"  /* "tty" */
-#ifndef HACKDIR	/* override the default hackdir below */
+#ifndef HACKDIR /* override the default hackdir below */
 # define HACKDIR "/boot/apps/NetHack"
 #endif
 #endif
 
 #ifdef QT_GRAPHICS
 # define DEFAULT_WC_TILED_MAP   /* Default to tiles if users doesn't say wc_ascii_map */
-# define USER_SOUNDS		/* Use sounds */
+# define USER_SOUNDS        /* Use sounds */
 # ifndef __APPLE__
 #  define USER_SOUNDS_REGEX
 # endif
-# define USE_XPM		/* Use XPM format for images (required) */
-# define GRAPHIC_TOMBSTONE	/* Use graphical tombstone (rip.ppm) */
+# define USE_XPM        /* Use XPM format for images (required) */
+# define GRAPHIC_TOMBSTONE  /* Use graphical tombstone (rip.ppm) */
 # ifndef DEFAULT_WINDOW_SYS
 #  define DEFAULT_WINDOW_SYS "Qt"
 # endif
 #endif
 
 #ifdef GNOME_GRAPHICS
-# define USE_XPM		/* Use XPM format for images (required) */
-# define GRAPHIC_TOMBSTONE	/* Use graphical tombstone (rip.ppm) */
+# define USE_XPM        /* Use XPM format for images (required) */
+# define GRAPHIC_TOMBSTONE  /* Use graphical tombstone (rip.ppm) */
 # ifndef DEFAULT_WINDOW_SYS
 #  define DEFAULT_WINDOW_SYS "Gnome"
 # endif
@@ -139,22 +139,22 @@
  * would allow:
  *  xpmtoppm <x11tiles.xpm | pnmscale 1.25 | ppmquant 90 >x11tiles_big.xpm
  */
-/* # define USE_XPM */		/* Disable if you do not have the XPM library */
+/* # define USE_XPM */      /* Disable if you do not have the XPM library */
 # ifdef USE_XPM
-#  define GRAPHIC_TOMBSTONE	/* Use graphical tombstone (rip.xpm) */
+#  define GRAPHIC_TOMBSTONE /* Use graphical tombstone (rip.xpm) */
 # endif
 #endif
 
 
 /*
- * Section 2:	Some global parameters and filenames.
- *		Commenting out WIZARD, LOGFILE, NEWS or PANICLOG removes that
- *		feature from the game; otherwise set the appropriate wizard
- *		name.  LOGFILE, NEWS and PANICLOG refer to files in the
- *		playground.
+ * Section 2:   Some global parameters and filenames.
+ *      Commenting out WIZARD, LOGFILE, NEWS or PANICLOG removes that
+ *      feature from the game; otherwise set the appropriate wizard
+ *      name.  LOGFILE, NEWS and PANICLOG refer to files in the
+ *      playground.
  */
 
-#ifndef WIZARD		/* allow for compile-time or Makefile changes */
+#ifndef WIZARD      /* allow for compile-time or Makefile changes */
 # ifndef KR1ED
 #  define WIZARD  "wizard" /* the person allowed to use the -D option */
 # else
@@ -163,60 +163,63 @@
 # endif
 #endif
 
-#define LOGFILE "logfile"	/* larger file for debugging purposes */
+#define LOGFILE "logfile"   /* larger file for debugging purposes */
 #define LOGAREA FILE_AREA_VAR
 /* #define XLOGFILE "xlogfile" */ /* even larger logfile */
-#define NEWS "news"		/* the file containing the latest hack news */
+#define NEWS "news"     /* the file containing the latest hack news */
 #define NEWS_AREA FILE_AREA_SHARE
-#define PANICLOG "paniclog"	/* log of panic and impossible events */
+#define PANICLOG "paniclog" /* log of panic and impossible events */
 /* #define LIVELOGFILE "livelog" */ /* live game progress log file */
 
 /* #define LIVELOG_SHOUT */
+/* LL_flags defined in global.h. */
+/* #define LIVELOG_DETAIL (LL_WISH | LL_ACHIEVE | LL_UMONST) */
+#define LIVELOG_DETAIL 0x1FFF
 
 /*
- *	If COMPRESS is defined, it should contain the full path name of your
- *	'compress' program.  Defining INTERNAL_COMP causes NetHack to do
- *	simpler byte-stream compression internally.  Both COMPRESS and
- *	INTERNAL_COMP create smaller bones/level/save files, but require
- *	additional code and time.  Currently, only UNIX fully implements
- *	COMPRESS; other ports should be able to uncompress save files a
- *	la unixmain.c if so inclined.
- *	If you define COMPRESS, you must also define COMPRESS_EXTENSION
- *	as the extension your compressor appends to filenames after
- *	compression.
+ *  If COMPRESS is defined, it should contain the full path name of your
+ *  'compress' program.  Defining INTERNAL_COMP causes NetHack to do
+ *  simpler byte-stream compression internally.  Both COMPRESS and
+ *  INTERNAL_COMP create smaller bones/level/save files, but require
+ *  additional code and time.  Currently, only UNIX fully implements
+ *  COMPRESS; other ports should be able to uncompress save files a
+ *  la unixmain.c if so inclined.
+ *  If you define COMPRESS, you must also define COMPRESS_EXTENSION
+ *  as the extension your compressor appends to filenames after
+ *  compression.
  */
 
 #ifndef AUTOCONF
 #ifdef UNIX
 /* path and file name extension for compression program */
-/* #define COMPRESS "/usr/bin/compress" */	/* Lempel-Ziv compression */
-/* #define COMPRESS_EXTENSION ".Z"	*/	/* compress's extension */
+/* #define COMPRESS "/usr/bin/compress" */  /* Lempel-Ziv compression */
+/* #define COMPRESS_EXTENSION ".Z"  */  /* compress's extension */
 /* An example of one alternative you might want to use: */
-#define COMPRESS "/bin/gzip"	/* FSF gzip compression */
-#define COMPRESS_EXTENSION ".gz"		/* normal gzip extension */
+#define COMPRESS "/bin/gzip"    /* FSF gzip compression */
+#define COMPRESS_EXTENSION ".gz"        /* normal gzip extension */
 #endif
 
 #ifndef COMPRESS
-# define INTERNAL_COMP	/* control use of NetHack's compression routines */
+# define INTERNAL_COMP  /* control use of NetHack's compression routines */
 #endif
 #endif
 
 /*
- *	Data librarian.  Defining DLB places most of the support files into
- *	a tar-like file, thus making a neater installation.  See *conf.h
- *	for detailed configuration.
+ *  Data librarian.  Defining DLB places most of the support files into
+ *  a tar-like file, thus making a neater installation.  See *conf.h
+ *  for detailed configuration.
  */
-/* #define DLB */	/* not supported on all platforms */
+/* #define DLB */   /* not supported on all platforms */
 
 /*
- *	Defining INSURANCE slows down level changes, but allows games that
- *	died due to program or system crashes to be resumed from the point
- *	of the last level change, after running a utility program.
+ *  Defining INSURANCE slows down level changes, but allows games that
+ *  died due to program or system crashes to be resumed from the point
+ *  of the last level change, after running a utility program.
  */
-#define INSURANCE	/* allow crashed game recovery */
+#define INSURANCE   /* allow crashed game recovery */
 
 #ifndef MAC
-# define CHDIR		/* delete if no chdir() available */
+# define CHDIR      /* delete if no chdir() available */
 #endif
 
 #ifdef CHDIR
@@ -231,11 +234,11 @@
 /*
  * Some system administrators are stupid enough to make Hack suid root
  * or suid daemon, where daemon has other powers besides that of reading or
- * writing Hack files.	In such cases one should be careful with chdir's
+ * writing Hack files.  In such cases one should be careful with chdir's
  * since the user might create files in a directory of his choice.
  * Of course SECURE is meaningful only if HACKDIR is defined.
  */
-/* #define SECURE */	/* do setuid(getuid()) after chdir() */
+/* #define SECURE */    /* do setuid(getuid()) after chdir() */
 
 /*
  * If it is desirable to limit the number of people that can play Hack
@@ -247,9 +250,9 @@
 
 
 /*
- * Section 3:	Definitions that may vary with system type.
- *		For example, both schar and uchar should be short ints on
- *		the AT&T 3B2/3B5/etc. family.
+ * Section 3:   Definitions that may vary with system type.
+ *      For example, both schar and uchar should be short ints on
+ *      the AT&T 3B2/3B5/etc. family.
  */
 
 /*
@@ -257,44 +260,44 @@
  * 'void' type (and thus would give all sorts of compile errors without
  * this definition).
  */
-/* #define NOVOID */			/* define if no "void" data type. */
+/* #define NOVOID */            /* define if no "void" data type. */
 
 /*
  * Uncomment the following line if your compiler falsely claims to be
  * a standard C compiler (i.e., defines __STDC__ without cause).
  * Examples are Apollo's cc (in some versions) and possibly SCO UNIX's rcc.
  */
-/* #define NOTSTDC */			/* define for lying compilers */
+/* #define NOTSTDC */           /* define for lying compilers */
 
 #include "tradstdc.h"
 
 /*
  * type schar: small signed integers (8 bits suffice) (eg. TOS)
  *
- *	typedef char	schar;
+ *  typedef char    schar;
  *
- *	will do when you have signed characters; otherwise use
+ *  will do when you have signed characters; otherwise use
  *
- *	typedef short int schar;
+ *  typedef short int schar;
  */
 #ifdef AZTEC
-# define schar	char
+# define schar  char
 #else
-typedef signed char	schar;
+typedef signed char schar;
 #endif
 
 /*
  * type uchar: small unsigned integers (8 bits suffice - but 7 bits do not)
  *
- *	typedef unsigned char	uchar;
+ *  typedef unsigned char   uchar;
  *
- *	will be satisfactory if you have an "unsigned char" type;
- *	otherwise use
+ *  will be satisfactory if you have an "unsigned char" type;
+ *  otherwise use
  *
- *	typedef unsigned short int uchar;
+ *  typedef unsigned short int uchar;
  */
-#ifndef _AIX32		/* identical typedef in system file causes trouble */
-typedef unsigned char	uchar;
+#ifndef _AIX32      /* identical typedef in system file causes trouble */
+typedef unsigned char uchar;
 #endif
 
 /* Type used for outputting DECgraphics and IBMgraphics characters into
@@ -320,9 +323,9 @@ typedef long glyph_t;
  * allocate a separate character for each bitfield.  (The bitfields used never
  * have more than 7 bits, and most are only 1 bit.)
  */
-#define BITFIELDS	/* Good bitfield handling */
+#define BITFIELDS   /* Good bitfield handling */
 
-/* #define STRNCMPI */	/* compiler/library has the strncmpi function */
+/* #define STRNCMPI */  /* compiler/library has the strncmpi function */
 
 /*
  * There are various choices for the NetHack vision system.  There is a
@@ -340,7 +343,7 @@ typedef long glyph_t;
 /* #define VISION_TABLES */ /* use vision tables generated at compile time */
 #ifndef VISION_TABLES
 # ifndef NO_MACRO_CPATH
-#  define MACRO_CPATH	/* use clear_path macros instead of functions */
+#  define MACRO_CPATH   /* use clear_path macros instead of functions */
 # endif
 #endif
 
@@ -356,27 +359,27 @@ typedef long glyph_t;
 
 #ifndef AUTOCONF
 /* dungeon features */
-#define SINKS		/* Kitchen sinks - Janet Walz */
+#define SINKS       /* Kitchen sinks - Janet Walz */
 /* dungeon levels */
-#define WALLIFIED_MAZE	/* Fancy mazes - Jean-Christophe Collet */
-#define REINCARNATION	/* Special Rogue-like levels */
+#define WALLIFIED_MAZE  /* Fancy mazes - Jean-Christophe Collet */
+#define REINCARNATION   /* Special Rogue-like levels */
 /* monsters & objects */
-#define KOPS		/* Keystone Kops by Scott R. Turner */
-#define SEDUCE		/* Succubi/incubi seduction, by KAA, suggested by IM */
-#define STEED		/* Riding steeds */
-#define TOURIST		/* Tourist players with cameras and Hawaiian shirts */
-#define CONVICT		/* Convict player with heavy iron ball */
+#define KOPS        /* Keystone Kops by Scott R. Turner */
+#define SEDUCE      /* Succubi/incubi seduction, by KAA, suggested by IM */
+#define STEED       /* Riding steeds */
+#define TOURIST     /* Tourist players with cameras and Hawaiian shirts */
+#define CONVICT     /* Convict player with heavy iron ball */
 
 /* difficulty */
-#define ELBERETH	/* Engraving the E-word repels monsters */
+#define ELBERETH    /* Engraving the E-word repels monsters */
 /* I/O */
-#define REDO		/* support for redoing last command - DGK */
+#define REDO        /* support for redoing last command - DGK */
 #if !defined(MAC)
-# define CLIPPING	/* allow smaller screens -- ERS */
+# define CLIPPING   /* allow smaller screens -- ERS */
 #endif
 
-#define EXP_ON_BOTL	/* Show experience on bottom line */
-/* #define SCORE_ON_BOTL */	/* added by Gary Erickson (erickson@ucivax) */
+#define EXP_ON_BOTL /* Show experience on bottom line */
+/* #define SCORE_ON_BOTL */ /* added by Gary Erickson (erickson@ucivax) */
 #endif /* AUTOCONF */
 
 #ifdef REDO
@@ -384,7 +387,7 @@ typedef long glyph_t;
 #endif
 
 /* #define REALTIME_ON_BOTL */  /* Show elapsed time on bottom line.  Note:
-                                 * this breaks savefile compatibility. */
+ * this breaks savefile compatibility. */
 
 /* The options in this section require the extended logfile support */
 #ifdef XLOGFILE
@@ -414,17 +417,14 @@ typedef long glyph_t;
 #ifndef AUTOCONF
 
 #define RANDOMIZED_PLANES /* Elemental Planes order is randomized - Patric Mueller (4 Jan 2009) */
-#define BLACKMARKET	/* Massimo Campostrini (campo@sunthpi3.difi.unipi.it) */
+#define BLACKMARKET /* Massimo Campostrini (campo@sunthpi3.difi.unipi.it) */
 
 
 #if defined(TTY_GRAPHICS) || defined(MSWIN_GRAPHICS) || \
- defined(CURSES_GRAPHICS)
+    defined(CURSES_GRAPHICS)
 # define MENU_COLOR
 /*# define MENU_COLOR_REGEX*/
-/*# define MENU_COLOR_REGEX_POSIX */
-/* if MENU_COLOR_REGEX is defined, use regular expressions (regex.h,
- * GNU specific functions by default, POSIX functions with
- * MENU_COLOR_REGEX_POSIX).
+/* if MENU_COLOR_REGEX is defined, use regular expressions (regex.h)
  * otherwise use pmatch() to match menu color lines.
  * pmatch() provides basic globbing: '*' and '?' wildcards.
  */
@@ -433,27 +433,30 @@ typedef long glyph_t;
 #define STATUS_COLORS /* Shachaf & Oren Ben-Kiki */
 
 #define DUNGEON_GROWTH /* Makes the dungeons feel a bit more living - Pasi Kallinen*/
-/*#define GOLDOBJ */	/* Gold is kept on obj chains - Helge Hafting */
 /*#define AUTOPICKUP_EXCEPTIONS */ /* exceptions to autopickup */
 #define DUMP_LOG        /* Dump game end information to a file */
 /* #define DUMP_FN "/tmp/%n.nh" */      /* Fixed dumpfile name, if you want
-                                         * to prevent definition by users */
+ * to prevent definition by users */
 #define DUMP_TEXT_LOG   /* Dump game end information in a plain text form */
 /*#define DUMP_HTML_LOG*/   /* Dump game end information to a html file */
 #define DUMPMSGS 30     /* Number of latest messages in the dump file  */
 
-#define AUTO_OPEN	/* open doors by walking into them - Stefano Busti */
+#define AUTO_OPEN   /* open doors by walking into them - Stefano Busti */
 
 /* #define WHEREIS_FILE "./whereis/%n.whereis" */ /* Write out player's current location to player.whereis */
 
 #endif /* AUTOCONF */
 
 #ifdef TTY_GRAPHICS
-# define WIN_EDGE	/* windows aligned left&top */
+# define WIN_EDGE   /* windows aligned left&top */
 # define VIDEOSHADES    /* Slash'Em like colors */
 #endif
 
 #define ADVENT_CALENDAR
+
+/* FREE_ALL_MEMORY is neither experimental nor inadequately tested,
+   but it isn't necessary for successful operation of the program */
+#define FREE_ALL_MEMORY /* free all memory at exit */
 
 /* End of Section 5 */
 
@@ -467,13 +470,13 @@ typedef long glyph_t;
 #define WEBB_DISINT /* Disintegrator - Nicholas Webb */
 #define ASTRAL_ESCAPE /* Allow escape from Astral plane (with the Amulet) - CWC */
 /* #define LIVELOG_BONES_KILLER */ /* Report if a ghost of a former player is
-                                    * killed - Patric Mueller (15 Aug 2009) */
+ * killed - Patric Mueller (15 Aug 2009) */
 #define ADJSPLIT /* splittable #adjust - Sam Dennis, conditionalized by Jukka Lahtinen */
 #define TUTORIAL_MODE /* Alex Smith */
 #define ELBERETH_CONDUCT /* Track the number of times the player engraves Elbereth. - Ray Kulhanek */
 #define SHOW_WEIGHT
 /* End of Section 6 */
 
-#include "global.h"	/* Define everything else according to choices above */
+#include "global.h" /* Define everything else according to choices above */
 
 #endif /* CONFIG_H */

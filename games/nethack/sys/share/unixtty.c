@@ -378,6 +378,7 @@ init_sco_cons()
 
 #ifdef __linux__		/* via Jesse Thilo and Ben Gertzfield */
 # include <sys/vt.h>
+# include <sys/ioctl.h>
 
 int linux_flag_console = 0;
 
@@ -438,6 +439,7 @@ init_linux_cons()
 /*VARARGS1*/
 void
 error VA_DECL(const char *,s)
+{
 	VA_START(s);
 	VA_INIT(s, const char *);
 	if(settty_needed)
@@ -450,7 +452,6 @@ error VA_DECL(const char *,s)
 #endif /* !__begui__ */
 
 #ifdef UTF8_GLYPHS
-int supports_utf8=0;
 void
 check_utf8_console()
 {
@@ -483,7 +484,7 @@ check_utf8_console()
             /* column == 3 means UTF-8 is supported,
              * non-supporting terminals will report the cursor position
              * in column 5 */
-            supports_utf8 = c == '3' ? TRUE : FALSE;
+            iflags.supports_utf8 = c == '3' ? TRUE : FALSE;
 
             /* disable read timeout */
             raw.c_cc[VTIME] = 0;

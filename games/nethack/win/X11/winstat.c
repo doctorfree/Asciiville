@@ -598,11 +598,7 @@ update_fancy_status(wp)
 
 	    case F_NAME:	val = (long) 0L; break;	/* special */
 	    case F_DLEVEL:	val = (long) 0L; break;	/* special */
-#ifndef GOLDOBJ
-	    case F_GOLD:	val = (long) u.ugold; break;
-#else
 	    case F_GOLD:	val = money_cnt(invent); break;
-#endif
 	    case F_HP:		val = (long) (u.mtimedone ?
 					      (u.mh  > 0 ? u.mh  : 0):
 					      (u.uhp > 0 ? u.uhp : 0)); break;
@@ -831,6 +827,7 @@ init_column(name, parent, top, left, col_indices)
 				parent, args, num_args);
 
     max_width1 = max_width2 = 0;
+    width1 = width2 = 0;
     for (ip = col_indices; *ip >= 0; ip++) {
 	sv = &shown_stats[*ip];
 	create_widget(form, sv, *ip);	/* will set init width */

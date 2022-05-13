@@ -158,7 +158,7 @@ GNOMEINC=-I/usr/lib/glib/include -I/usr/lib/gnome-libs/include -I../win/gnome
 # CFLAGS = -g -I../include
 
 CFLAGS = -O -I../include
-LFLAGS = 
+LFLAGS =
 
 # The Qt and Be window systems are written in C++, while the rest of
 # NetHack is standard C.  If using Qt, uncomment the LINK line here to get
@@ -273,7 +273,7 @@ WINGNOMELIB = -lgnomeui -lgnome -lart_lgpl -lgtk -lgdk -lpopt
 # libraries for Gem port
 WINGEMLIB = -le_gem -lgem
 #
-# libraries for BeOS 
+# libraries for BeOS
 WINBELIB = -lbe
 
 WINLIB = $(WINTTYLIB)
@@ -379,8 +379,8 @@ CSOURCES = $(HACKCSRC) $(SYSSRC) $(WINCSRC) $(GENCSRC)
 #
 HACKINCL = align.h amiconf.h artifact.h artilist.h attrib.h beconf.h color.h \
 	config.h config1.h coord.h decl.h def_os2.h display.h dlb.h dungeon.h \
-	edog.h emin.h engrave.h epri.h eshk.h extern.h flag.h func_tab.h \
-	global.h hack.h lev.h macconf.h mfndpos.h micro.h mkroom.h \
+	emin.h engrave.h epri.h eshk.h extern.h flag.h func_tab.h \
+	global.h hack.h lev.h macconf.h mextra.h mfndpos.h micro.h mkroom.h \
 	monattk.h mondata.h monflag.h monst.h monsym.h obj.h objclass.h \
 	os2conf.h patchlevel.h pcconf.h permonst.h prop.h rect.h region.h rm.h \
 	sp_lev.h spell.h system.h tcap.h timeout.h tosconf.h tradstdc.h \
@@ -590,7 +590,7 @@ $(HACK_H): ../include/hack.h $(CONFIG_H) ../include/align.h \
 		../include/wintype.h ../include/decl.h ../include/quest.h \
 		../include/qtext.h ../include/spell.h ../include/color.h \
 		../include/obj.h ../include/you.h ../include/attrib.h \
-		../include/monst.h ../include/skills.h ../include/onames.h \
+		../include/monst.h ../include/mextra.h ../include/skills.h ../include/onames.h \
 		../include/timeout.h ../include/trap.h ../include/flag.h \
 		../include/rm.h ../include/vision.h ../include/display.h \
 		../include/engrave.h ../include/rect.h ../include/region.h \
@@ -746,7 +746,7 @@ monstr.o: monstr.c $(CONFIG_H)
 vis_tab.o: vis_tab.c $(CONFIG_H) ../include/vis_tab.h
 allmain.o: allmain.c $(HACK_H)
 alloc.o: alloc.c $(CONFIG_H)
-apply.o: apply.c $(HACK_H) ../include/edog.h
+apply.o: apply.c $(HACK_H)
 artifact.o: artifact.c $(HACK_H) ../include/artifact.h ../include/artilist.h
 attrib.o: attrib.c $(HACK_H)
 ball.o: ball.c $(HACK_H)
@@ -756,16 +756,16 @@ cmd.o: cmd.c $(HACK_H) ../include/func_tab.h
 dbridge.o: dbridge.c $(HACK_H)
 decl.o: decl.c $(HACK_H)
 detect.o: detect.c $(HACK_H) ../include/artifact.h
-dig.o: dig.c $(HACK_H) ../include/edog.h
+dig.o: dig.c $(HACK_H)
 display.o: display.c $(HACK_H)
 dlb.o: dlb.c $(CONFIG_H) ../include/dlb.h
 do.o: do.c $(HACK_H) ../include/lev.h
 do_name.o: do_name.c $(HACK_H)
 do_wear.o: do_wear.c $(HACK_H)
-dog.o: dog.c $(HACK_H) ../include/edog.h
-dogmove.o: dogmove.c $(HACK_H) ../include/mfndpos.h ../include/edog.h
+dog.o: dog.c $(HACK_H)
+dogmove.o: dogmove.c $(HACK_H) ../include/mfndpos.h
 dokick.o: dokick.c $(HACK_H) ../include/eshk.h
-dothrow.o: dothrow.c $(HACK_H) ../include/edog.h
+dothrow.o: dothrow.c $(HACK_H)
 drawing.o: drawing.c $(HACK_H) ../include/tcap.h
 dump.o: dump.c $(HACK_H) ../include/date.h
 dungeon.o: dungeon.c $(HACK_H) ../include/dgn_file.h ../include/dlb.h
@@ -784,19 +784,18 @@ light.o: light.c $(HACK_H) ../include/lev.h
 livelog.o: livelog.c $(HACK_H)
 lock.o: lock.c $(HACK_H)
 mail.o: mail.c $(HACK_H) ../include/mail.h
-makemon.o: makemon.c $(HACK_H) ../include/epri.h ../include/emin.h \
-		../include/edog.h
+makemon.o: makemon.c $(HACK_H) ../include/epri.h ../include/emin.h
 mapglyph.o: mapglyph.c $(HACK_H)
 mcastu.o: mcastu.c $(HACK_H)
-mhitm.o: mhitm.c $(HACK_H) ../include/artifact.h ../include/edog.h
-mhitu.o: mhitu.c $(HACK_H) ../include/artifact.h ../include/edog.h
+mhitm.o: mhitm.c $(HACK_H) ../include/artifact.h
+mhitu.o: mhitu.c $(HACK_H) ../include/artifact.h
 minion.o: minion.c $(HACK_H) ../include/emin.h ../include/epri.h
 mklev.o: mklev.c $(HACK_H)
 mkmap.o: mkmap.c $(HACK_H) ../include/sp_lev.h
 mkmaze.o: mkmaze.c $(HACK_H) ../include/sp_lev.h ../include/lev.h
 mkobj.o: mkobj.c $(HACK_H)
 mkroom.o: mkroom.c $(HACK_H)
-mon.o: mon.c $(HACK_H) ../include/mfndpos.h ../include/edog.h
+mon.o: mon.c $(HACK_H) ../include/mfndpos.h
 mondata.o: mondata.c $(HACK_H) ../include/eshk.h ../include/epri.h
 monmove.o: monmove.c $(HACK_H) ../include/mfndpos.h ../include/artifact.h \
 		../include/epri.h
@@ -806,7 +805,7 @@ monst.o: monst.c $(CONFIG_H) ../include/permonst.h ../include/align.h \
 		../include/epri.h ../include/color.h
 mplayer.o: mplayer.c $(HACK_H)
 mthrowu.o: mthrowu.c $(HACK_H)
-muse.o: muse.c $(HACK_H) ../include/edog.h
+muse.o: muse.c $(HACK_H)
 music.o: music.c $(HACK_H) #interp.c
 o_init.o: o_init.c $(HACK_H) ../include/lev.h
 objects.o: objects.c $(CONFIG_H) ../include/obj.h ../include/objclass.h \
@@ -816,7 +815,7 @@ options.o: options.c $(CONFIG_H) ../include/objclass.h ../include/flag.h \
 		$(HACK_H) ../include/tcap.h
 pager.o: pager.c $(HACK_H) ../include/dlb.h
 pickup.o: pickup.c $(HACK_H)
-pline.o: pline.c $(HACK_H) ../include/epri.h ../include/edog.h
+pline.o: pline.c $(HACK_H) ../include/epri.h
 polyself.o: polyself.c $(HACK_H)
 potion.o: potion.c $(HACK_H)
 pray.o: pray.c $(HACK_H) ../include/epri.h
@@ -836,7 +835,7 @@ save.o: save.c $(HACK_H) ../include/lev.h
 shk.o: shk.c $(HACK_H) ../include/eshk.h
 shknam.o: shknam.c $(HACK_H) ../include/eshk.h
 sit.o: sit.c $(HACK_H) ../include/artifact.h
-sounds.o: sounds.c $(HACK_H) ../include/edog.h
+sounds.o: sounds.c $(HACK_H)
 sp_lev.o: sp_lev.c $(HACK_H) ../include/dlb.h ../include/sp_lev.h
 spell.o: spell.c $(HACK_H)
 steal.o: steal.c $(HACK_H)

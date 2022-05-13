@@ -19,7 +19,7 @@ void ghack_status_window_cursor_to(GtkWidget *win, int x, int y, gpointer data);
 void ghack_status_window_put_string(GtkWidget *win, int attr, const char* text, gpointer data);
 
 static void ghack_fade_highlighting();
-static void ghack_highlight_widget( GtkWidget* widget, GtkStyle* oldStyle, 
+static void ghack_highlight_widget( GtkWidget* widget, GtkStyle* oldStyle,
 	GtkStyle* newStyle);
 
 /* some junk to handle when to fade the highlighting */
@@ -103,7 +103,7 @@ static int lastPOW;
 static int lastMPOW;
 static int lastAC;
 static int lastExp;
-static aligntyp lastAlignment;  
+static aligntyp lastAlignment;
 static unsigned lastHungr;
 static long lastConf;
 static long lastBlind;
@@ -150,7 +150,7 @@ GtkWidget* ghack_init_status_window ()
     GtkWidget *wisVBox, *conVBox, *chaVBox;
     GtkWidget *alignVBox, *hungerVBox, *sickVBox, *blindVBox;
     GtkWidget *stunVBox, *halluVBox, *confuVBox, *encumbVBox;
-   
+
     /* Set up a (ridiculous) initial state */
     lastDepth = 9999;
     lastStr = 9999;
@@ -182,8 +182,8 @@ GtkWidget* ghack_init_status_window ()
 
 
     /* Begin the first row of the table -- the title */
-    titleLabel = gtk_label_new( _("GnomeHack!")); 
-    gtk_table_attach( GTK_TABLE( statTable), titleLabel, 
+    titleLabel = gtk_label_new( _("GnomeHack!"));
+    gtk_table_attach( GTK_TABLE( statTable), titleLabel,
 	    0, 8, 0, 1, GTK_FILL, 0, 0, 0);
     if (!normalStyle)
       normalStyle = gtk_style_copy (
@@ -216,16 +216,16 @@ GtkWidget* ghack_init_status_window ()
       bigStyle->font = gdk_font_load ("-misc-fixed-*-*-*-*-20-*-*-*-*-*-*-*");
     }
     gtk_widget_set_style (GTK_WIDGET (titleLabel), bigStyle);
-    
+
     /* Begin the second row */
-    dgnLevelLabel = gtk_label_new (_ ("Nethack for Gnome")); 
-    gtk_table_attach (GTK_TABLE (statTable), dgnLevelLabel, 
+    dgnLevelLabel = gtk_label_new (_ ("Nethack for Gnome"));
+    gtk_table_attach (GTK_TABLE (statTable), dgnLevelLabel,
 	    0, 8, 1, 2, GTK_FILL, 0, 0, 0);
     gtk_widget_set_style (GTK_WIDGET (dgnLevelLabel), bigStyle);
-    
+
     /* Begin the third row */
-    horizSep0 = gtk_hseparator_new (); 
-    gtk_table_attach (GTK_TABLE (statTable), horizSep0, 
+    horizSep0 = gtk_hseparator_new ();
+    gtk_table_attach (GTK_TABLE (statTable), horizSep0,
 	    0, 8, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
 
 
@@ -275,61 +275,61 @@ GtkWidget* ghack_init_status_window ()
     gtk_box_pack_start (GTK_BOX (chaVBox), chaPix, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX (chaVBox), chaLabel, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX(statsHBox), GTK_WIDGET(chaVBox), TRUE, TRUE, 2);
-    
-    gtk_table_attach( GTK_TABLE( statTable),  GTK_WIDGET(statsHBox), 
+
+    gtk_table_attach( GTK_TABLE( statTable),  GTK_WIDGET(statsHBox),
 	    0, 8, 3, 4, GTK_FILL, 0, 0, 0);
 
     /* Begin the fifth row */
-    horizSep1 = gtk_hseparator_new(); 
-    gtk_table_attach( GTK_TABLE( statTable), horizSep1, 
+    horizSep1 = gtk_hseparator_new();
+    gtk_table_attach( GTK_TABLE( statTable), horizSep1,
 	    0, 8, 4, 5, GTK_FILL, GTK_FILL, 0, 0);
 
     /* Begin the sixth row */
     hpLabel = gtk_label_new( "HP: ");
-    gtk_table_attach( GTK_TABLE( statTable), hpLabel, 
+    gtk_table_attach( GTK_TABLE( statTable), hpLabel,
 	    0, 1, 5, 6, GTK_FILL, 0, 0, 0);
-	
+
     acLabel = gtk_label_new( "AC: ");
-    gtk_table_attach( GTK_TABLE( statTable), acLabel, 
+    gtk_table_attach( GTK_TABLE( statTable), acLabel,
 	    2, 3, 5, 6, GTK_FILL, 0, 0, 0);
-    
+
     powLabel = gtk_label_new( "Power: ");
-    gtk_table_attach( GTK_TABLE( statTable), powLabel, 
+    gtk_table_attach( GTK_TABLE( statTable), powLabel,
 	    4, 5, 5, 6, GTK_FILL, 0, 0, 0);
-    
+
     goldLabel = gtk_label_new( "Au: ");
-    gtk_table_attach( GTK_TABLE( statTable), goldLabel, 
+    gtk_table_attach( GTK_TABLE( statTable), goldLabel,
 	    6, 7, 5, 6, GTK_FILL, 0, 0, 0);
-    
+
 
     /* Begin the seventh row */
-    horizSep2 = gtk_hseparator_new(); 
-    gtk_table_attach( GTK_TABLE( statTable), horizSep2, 
+    horizSep2 = gtk_hseparator_new();
+    gtk_table_attach( GTK_TABLE( statTable), horizSep2,
 	    0, 8, 6, 7, GTK_FILL, GTK_FILL, 0, 0);
 
-    
+
     /* Begin the eigth row */
     levlLabel = gtk_label_new( "Level: ");
-    gtk_table_attach( GTK_TABLE( statTable), levlLabel, 
+    gtk_table_attach( GTK_TABLE( statTable), levlLabel,
 	    0, 1, 7, 8, GTK_FILL, 0, 0, 0);
-	
+
     expLabel = gtk_label_new( "Exp: ");
-    gtk_table_attach( GTK_TABLE( statTable), expLabel, 
+    gtk_table_attach( GTK_TABLE( statTable), expLabel,
 	    2, 3, 7, 8, GTK_FILL, 0, 0, 0);
-   
+
     timeLabel = gtk_label_new( "Time: ");
-    gtk_table_attach( GTK_TABLE( statTable), timeLabel, 
+    gtk_table_attach( GTK_TABLE( statTable), timeLabel,
 	    4, 5, 7, 8, GTK_FILL, 0, 0, 0);
-    
+
     scoreLabel = gtk_label_new( "Score: ");
-    gtk_table_attach( GTK_TABLE( statTable), scoreLabel, 
+    gtk_table_attach( GTK_TABLE( statTable), scoreLabel,
 	    6, 7, 7, 8, GTK_FILL, 0, 0, 0);
-    
+
     /* Begin the ninth row */
-    horizSep3 = gtk_hseparator_new(); 
-    gtk_table_attach( GTK_TABLE( statTable), horizSep3, 
+    horizSep3 = gtk_hseparator_new();
+    gtk_table_attach( GTK_TABLE( statTable), horizSep3,
 	    0, 8, 8, 9, GTK_FILL, GTK_FILL, 0, 0);
-    
+
     /* Begin the tenth and last row */
     statHBox = gtk_hbox_new (FALSE, 0);
 
@@ -339,49 +339,49 @@ GtkWidget* ghack_init_status_window ()
     gtk_box_pack_start (GTK_BOX (alignVBox), alignPix, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX (alignVBox), alignLabel, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX(statHBox), GTK_WIDGET(alignVBox), TRUE, FALSE, 2);
-    
+
     hungerVBox = gtk_vbox_new (FALSE, 0);
     hungerPix =  gnome_pixmap_new_from_xpm_d( hungry_xpm);
     hungerLabel = gtk_label_new( "Hungry");
     gtk_box_pack_start (GTK_BOX (hungerVBox), hungerPix, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX (hungerVBox), hungerLabel, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX(statHBox), GTK_WIDGET(hungerVBox), TRUE, FALSE, 2);
-    
+
     sickVBox = gtk_vbox_new (FALSE, 0);
     sickPix =  gnome_pixmap_new_from_xpm_d( sick_fp_xpm);
     sickLabel = gtk_label_new( "FoodPois");
     gtk_box_pack_start (GTK_BOX (sickVBox), sickPix, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX (sickVBox), sickLabel, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX(statHBox), GTK_WIDGET(sickVBox), TRUE, FALSE, 2);
-    
+
     blindVBox = gtk_vbox_new (FALSE, 0);
     blindPix =  gnome_pixmap_new_from_xpm_d( blind_xpm);
     blindLabel = gtk_label_new( "Blind");
     gtk_box_pack_start (GTK_BOX (blindVBox), blindPix, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX (blindVBox), blindLabel, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX(statHBox), GTK_WIDGET(blindVBox), TRUE, FALSE, 2);
-    
+
     stunVBox = gtk_vbox_new (FALSE, 0);
     stunPix =  gnome_pixmap_new_from_xpm_d( stunned_xpm);
     stunLabel = gtk_label_new( "Stun");
     gtk_box_pack_start (GTK_BOX (stunVBox), stunPix, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX (stunVBox), stunLabel, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX(statHBox), GTK_WIDGET(stunVBox), TRUE, FALSE, 2);
-    
+
     confuVBox = gtk_vbox_new (FALSE, 0);
     confuPix =  gnome_pixmap_new_from_xpm_d( confused_xpm);
     confuLabel = gtk_label_new( "Confused");
     gtk_box_pack_start (GTK_BOX (confuVBox), confuPix, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX (confuVBox), confuLabel, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX(statHBox), GTK_WIDGET(confuVBox), TRUE, FALSE, 2);
-    
+
     halluVBox = gtk_vbox_new (FALSE, 0);
     halluPix =  gnome_pixmap_new_from_xpm_d( hallu_xpm);
     halluLabel = gtk_label_new( "Hallu");
     gtk_box_pack_start (GTK_BOX (halluVBox), halluPix, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX (halluVBox), halluLabel, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX(statHBox), GTK_WIDGET(halluVBox), TRUE, FALSE, 2);
-    
+
     encumbVBox = gtk_vbox_new (FALSE, 0);
     encumbPix =  gnome_pixmap_new_from_xpm_d( slt_enc_xpm);
     encumbLabel = gtk_label_new( "Burdened");
@@ -389,32 +389,32 @@ GtkWidget* ghack_init_status_window ()
     gtk_box_pack_start (GTK_BOX (encumbVBox), encumbLabel, TRUE, TRUE, 2);
     gtk_box_pack_start (GTK_BOX(statHBox), GTK_WIDGET(encumbVBox), TRUE, FALSE, 2);
 
-    gtk_table_attach( GTK_TABLE( statTable), GTK_WIDGET(statHBox), 
+    gtk_table_attach( GTK_TABLE( statTable), GTK_WIDGET(statHBox),
 	    0, 8, 9, 10, GTK_FILL, GTK_FILL, 0, 0);
-    
+
     /* Set up the necessary signals */
-    gtk_signal_connect (GTK_OBJECT (statTable), 
-	    "ghack_fade_highlight", 
-	    GTK_SIGNAL_FUNC (ghack_fade_highlighting), 
+    gtk_signal_connect (GTK_OBJECT (statTable),
+	    "ghack_fade_highlight",
+	    GTK_SIGNAL_FUNC (ghack_fade_highlighting),
 	    NULL);
 
-    gtk_signal_connect (GTK_OBJECT (statTable), 
-	    "ghack_putstr", 
-	    GTK_SIGNAL_FUNC (ghack_status_window_put_string), 
+    gtk_signal_connect (GTK_OBJECT (statTable),
+	    "ghack_putstr",
+	    GTK_SIGNAL_FUNC (ghack_status_window_put_string),
 	    NULL);
 
-    gtk_signal_connect (GTK_OBJECT (statTable), 
-	    "ghack_clear", 
-	    GTK_SIGNAL_FUNC (ghack_status_window_clear), 
+    gtk_signal_connect (GTK_OBJECT (statTable),
+	    "ghack_clear",
+	    GTK_SIGNAL_FUNC (ghack_status_window_clear),
 	    NULL);
 
-    gtk_signal_connect (GTK_OBJECT (statTable), 
-	    "ghack_curs", 
-	    GTK_SIGNAL_FUNC (ghack_status_window_cursor_to), 
+    gtk_signal_connect (GTK_OBJECT (statTable),
+	    "ghack_curs",
+	    GTK_SIGNAL_FUNC (ghack_status_window_cursor_to),
 	    NULL);
-    gtk_signal_connect(GTK_OBJECT (statTable), 
+    gtk_signal_connect(GTK_OBJECT (statTable),
 	    "gnome_delay_output",
-	    GTK_SIGNAL_FUNC(ghack_delay), 
+	    GTK_SIGNAL_FUNC(ghack_delay),
 	    NULL);
 
     /* Lastly, show the status window and everything in it */
@@ -432,9 +432,7 @@ void ghack_status_window_update_stats()
     const char* hung;
     const char* enc;
     static int firstTime=TRUE;
-#ifdef GOLDOBJ
     long umoney;
-#endif
 
     /* First, fill in the player name and the dungeon level */
     strcpy(buf, plname);
@@ -513,7 +511,7 @@ void ghack_status_window_update_stats()
     }
     lastInt = ACURR(A_INT);
     gtk_label_set( GTK_LABEL( intLabel), buf);
-    
+
     sprintf(buf,"WIS:%d",ACURR(A_WIS));
     if (lastWis < ACURR(A_WIS) && firstTime==FALSE) {
 	/* Ok, this changed so add it to the highlighing list */
@@ -525,7 +523,7 @@ void ghack_status_window_update_stats()
     }
     lastWis = ACURR(A_WIS);
     gtk_label_set( GTK_LABEL( wisLabel), buf);
-    
+
     sprintf(buf,"DEX:%d",ACURR(A_DEX));
     if (lastDex < ACURR(A_DEX) && firstTime==FALSE) {
 	/* Ok, this changed so add it to the highlighing list */
@@ -537,7 +535,7 @@ void ghack_status_window_update_stats()
     }
     lastDex = ACURR(A_DEX);
     gtk_label_set( GTK_LABEL( dexLabel), buf);
-    
+
     sprintf(buf,"CON:%d",ACURR(A_CON));
     if (lastCon < ACURR(A_CON) && firstTime==FALSE) {
 	/* Ok, this changed so add it to the highlighing list */
@@ -549,7 +547,7 @@ void ghack_status_window_update_stats()
     }
     lastCon = ACURR(A_CON);
     gtk_label_set( GTK_LABEL( conLabel), buf);
-    
+
     sprintf(buf,"CHA:%d",ACURR(A_CHA));
     if (lastCha < ACURR(A_CHA) && firstTime==FALSE) {
 	/* Ok, this changed so add it to the highlighing list */
@@ -561,34 +559,24 @@ void ghack_status_window_update_stats()
     }
     lastCha = ACURR(A_CHA);
     gtk_label_set( GTK_LABEL( chaLabel), buf);
-    
+
     /* Now do the non-pixmaped stats (gold and such) */
-#ifndef GOLDOBJ
-    sprintf(buf,"Au:%ld", u.ugold);
-    if (lastAu < u.ugold && firstTime==FALSE) {
-#else
     umoney = money_cnt(invent);
     sprintf(buf,"Au:%ld", umoney);
     if (lastAu < umoney && firstTime==FALSE) {
-#endif
+
 	/* Ok, this changed so add it to the highlighing list */
 	ghack_highlight_widget( goldLabel, normalStyle, greenStyle);
     }
-#ifndef GOLDOBJ
-    else if (lastAu > u.ugold && firstTime==FALSE) {
-#else
     else if (lastAu > umoney && firstTime==FALSE) {
-#endif
+
 	/* Ok, this changed so add it to the highlighing list */
 	ghack_highlight_widget( goldLabel, normalStyle, redStyle);
     }
-#ifndef GOLDOBJ
-    lastAu = u.ugold;
-#else
     lastAu = umoney;
-#endif
+
     gtk_label_set( GTK_LABEL( goldLabel), buf);
-    
+
     if (u.mtimedone) {
         /* special case: when polymorphed, show "HD", disable exp */
 	sprintf(buf,"HP:%d/%d", ( (u.mh  > 0)? u.mh  : 0), u.mhmax);
@@ -616,7 +604,7 @@ void ghack_status_window_update_stats()
 	lastMHP = u.uhpmax;
     }
     gtk_label_set( GTK_LABEL( hpLabel), buf);
-    
+
     if (u.mtimedone) {
         /* special case: when polymorphed, show "HD", disable exp */
 	sprintf(buf,"HD:%d", mons[u.umonnum].mlevel);
@@ -655,7 +643,7 @@ void ghack_status_window_update_stats()
     lastPOW = u.uen;
     lastMPOW = u.uenmax;
     gtk_label_set( GTK_LABEL( powLabel), buf);
-    
+
     sprintf(buf,"AC:%d", u.uac);
     if (lastAC > u.uac && firstTime==FALSE) {
 	/* Ok, this changed so add it to the highlighing list */
@@ -667,7 +655,7 @@ void ghack_status_window_update_stats()
     }
     lastAC = u.uac;
     gtk_label_set( GTK_LABEL( acLabel), buf);
-    
+
 #ifdef EXP_ON_BOTL
     if (flags.showexp) {
 	sprintf(buf,"Exp:%ld", u.uexp);
@@ -725,7 +713,7 @@ void ghack_status_window_update_stats()
 	    gnome_pixmap_load_xpm_d( GNOME_PIXMAP(alignPix), lawful_xpm);
 	}
     }
-    
+
     hung=hu_stat[u.uhs];
     if (lastHungr != u.uhs) {
 	if (firstTime==FALSE) {
@@ -737,7 +725,7 @@ void ghack_status_window_update_stats()
 	if (hung[0]==' ') {
 	    gtk_label_set( GTK_LABEL( hungerLabel), "      ");
 	    gnome_pixmap_load_xpm_d( GNOME_PIXMAP(hungerPix), nothing_xpm);
-	} else 
+	} else
 	  if (u.uhs == 0 /* SATIATED */) {
 	    gtk_label_set( GTK_LABEL( hungerLabel), hung);
 	    gnome_pixmap_load_xpm_d( GNOME_PIXMAP(hungerPix), satiated_xpm);
@@ -758,7 +746,7 @@ void ghack_status_window_update_stats()
 	    gtk_label_set( GTK_LABEL( confuLabel), "Confused");
 	    gnome_pixmap_load_xpm_d( GNOME_PIXMAP(confuPix), confused_xpm);
 	}
-	else { 
+	else {
 	    gtk_label_set( GTK_LABEL( confuLabel), "        ");
 	    gnome_pixmap_load_xpm_d( GNOME_PIXMAP(confuPix), nothing_xpm);
 	}
@@ -775,7 +763,7 @@ void ghack_status_window_update_stats()
 	    gtk_label_set( GTK_LABEL( blindLabel), "Blind");
 	    gnome_pixmap_load_xpm_d( GNOME_PIXMAP(blindPix), blind_xpm);
 	}
-	else { 
+	else {
 	    gtk_label_set( GTK_LABEL( blindLabel), "     ");
 	    gnome_pixmap_load_xpm_d( GNOME_PIXMAP(blindPix), nothing_xpm);
 	}
@@ -791,12 +779,12 @@ void ghack_status_window_update_stats()
 	    gtk_label_set( GTK_LABEL( stunLabel), "Stun");
 	    gnome_pixmap_load_xpm_d( GNOME_PIXMAP(stunPix), stunned_xpm);
 	}
-	else { 
+	else {
 	    gtk_label_set( GTK_LABEL( stunLabel), "    ");
 	    gnome_pixmap_load_xpm_d( GNOME_PIXMAP(stunPix), nothing_xpm);
 	}
     }
-    
+
     if (lastHalu != Hallucination) {
 	if (firstTime==FALSE) {
 	    /* Ok, this changed so add it to the highlighing list */
@@ -808,7 +796,7 @@ void ghack_status_window_update_stats()
 	    gtk_label_set( GTK_LABEL( halluLabel), "Hallu");
 	    gnome_pixmap_load_xpm_d( GNOME_PIXMAP(halluPix), hallu_xpm);
 	}
-	else { 
+	else {
 	    gtk_label_set( GTK_LABEL( halluLabel), "     ");
 	    gnome_pixmap_load_xpm_d( GNOME_PIXMAP(halluPix), nothing_xpm);
 	}
@@ -885,7 +873,7 @@ static void ghack_fade_highlighting()
 	highlt = (Highlight*) item->data;
 	if (highlt) {
 	    if ( highlt->nTurnsLeft <= 0) {
-		gtk_widget_set_style(  GTK_WIDGET( highlt->widget), 
+		gtk_widget_set_style(  GTK_WIDGET( highlt->widget),
 			highlt->oldStyle);
 		s_HighLightList = g_list_remove_link(s_HighLightList, item);
 		g_free( highlt);
@@ -903,12 +891,12 @@ static void ghack_fade_highlighting()
 }
 
 /* Widget changed, so add it to the highlighing list */
-static void ghack_highlight_widget( GtkWidget* widget, GtkStyle* oldStyle, 
+static void ghack_highlight_widget( GtkWidget* widget, GtkStyle* oldStyle,
 	GtkStyle* newStyle)
 {
     Highlight *highlt;
     GList *item;
-    
+
     /* Check if this widget is already in the queue.  If so then
      * remove it, so we will only have the new entry in the queue  */
     for (item = g_list_first( s_HighLightList) ; item ; ) {
@@ -927,7 +915,7 @@ static void ghack_highlight_widget( GtkWidget* widget, GtkStyle* oldStyle,
 	    break;
     }
 
-    /* Ok, now highlight this widget and add it into the fade 
+    /* Ok, now highlight this widget and add it into the fade
      * highlighting queue  */
     highlt = g_new( Highlight, 1);
     highlt->nTurnsLeft=NUM_TURNS_HIGHLIGHTED;
@@ -935,7 +923,7 @@ static void ghack_highlight_widget( GtkWidget* widget, GtkStyle* oldStyle,
     highlt->widget=widget;
     s_HighLightList = g_list_prepend (s_HighLightList, highlt);
     gtk_widget_set_style(  GTK_WIDGET( widget), newStyle);
-    
-} 
-    
-    
+
+}
+
+

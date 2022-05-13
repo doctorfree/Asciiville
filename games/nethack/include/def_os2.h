@@ -1,11 +1,11 @@
-/*	SCCS Id: @(#)def_os2.h	3.4	1993/01/19	*/
-/* Copyright (c) Timo Hakulinen, 1990, 1991, 1992, 1993.	  */
+/*  SCCS Id: @(#)def_os2.h  3.4 1993/01/19  */
+/* Copyright (c) Timo Hakulinen, 1990, 1991, 1992, 1993.      */
 /* NetHack may be freely redistributed.  See license for details. */
 
 /*
- *	Only a small portion of all OS/2 defines are needed, so the
- *	actual include files often need not be used.  In fact,
- *	including the full headers may stall the compile in DOS.
+ *  Only a small portion of all OS/2 defines are needed, so the
+ *  actual include files often need not be used.  In fact,
+ *  including the full headers may stall the compile in DOS.
  */
 
 #ifdef OS2_USESYSHEADERS
@@ -87,12 +87,12 @@ typedef char * DAT PSZ;
 # pragma pack(2)
 
 typedef struct {
-	UCHAR  chChar;
-	UCHAR  chScan;
-	UCHAR  fbStatus;
-	UCHAR  bNlsShift;
-	USHORT fsState;
-	ULONG  time;
+    UCHAR chChar;
+    UCHAR chScan;
+    UCHAR fbStatus;
+    UCHAR bNlsShift;
+    USHORT fsState;
+    ULONG time;
 } KBDKEYINFO;
 
 typedef KBDKEYINFO * DAT16 PKBDKEYINFO;
@@ -100,48 +100,48 @@ typedef KBDKEYINFO * DAT16 PKBDKEYINFO;
 /* File time and date types */
 
 typedef struct {
-	UINT twosecs : 5;
-	UINT minutes : 6;
-	UINT hours   : 5;
+    UINT twosecs : 5;
+    UINT minutes : 6;
+    UINT hours   : 5;
 } FTIME;
 
 typedef struct {
-	UINT day     : 5;
-	UINT month   : 4;
-	UINT year    : 7;
+    UINT day     : 5;
+    UINT month   : 4;
+    UINT year    : 7;
 } FDATE;
 
 # ifdef OS2_32BITAPI
 
 typedef struct {
-	ULONG oNextEntryOffset;
-	FDATE fdateCreation;
-	FTIME ftimeCreation;
-	FDATE fdateLastAccess;
-	FTIME ftimeLastAccess;
-	FDATE fdateLastWrite;
-	FTIME ftimeLastWrite;
-	ULONG cbFile;
-	ULONG cbFileAlloc;
-	ULONG attrFile;
-	UCHAR cchName;
-	CHAR  achName[CCHMAXPATHCOMP];
+    ULONG oNextEntryOffset;
+    FDATE fdateCreation;
+    FTIME ftimeCreation;
+    FDATE fdateLastAccess;
+    FTIME ftimeLastAccess;
+    FDATE fdateLastWrite;
+    FTIME ftimeLastWrite;
+    ULONG cbFile;
+    ULONG cbFileAlloc;
+    ULONG attrFile;
+    UCHAR cchName;
+    CHAR achName[CCHMAXPATHCOMP];
 } FILEFINDBUF3;
 
 # else
 
 typedef struct {
-	FDATE  fdateCreation;
-	FTIME  ftimeCreation;
-	FDATE  fdateLastAccess;
-	FTIME  ftimeLastAccess;
-	FDATE  fdateLastWrite;
-	FTIME  ftimeLastWrite;
-	ULONG  cbFile;
-	ULONG  cbFileAlloc;
-	USHORT attrFile;
-	UCHAR  cchName;
-	CHAR   achName[CCHMAXPATHCOMP];
+    FDATE fdateCreation;
+    FTIME ftimeCreation;
+    FDATE fdateLastAccess;
+    FTIME ftimeLastAccess;
+    FDATE fdateLastWrite;
+    FTIME ftimeLastWrite;
+    ULONG cbFile;
+    ULONG cbFileAlloc;
+    USHORT attrFile;
+    UCHAR cchName;
+    CHAR achName[CCHMAXPATHCOMP];
 } FILEFINDBUF;
 
 typedef FILEFINDBUF * DAT16 PFILEFINDBUF;
@@ -149,38 +149,38 @@ typedef FILEFINDBUF * DAT16 PFILEFINDBUF;
 # endif /* OS2_32BITAPI */
 
 typedef struct {
-	ULONG  idFileSystem;
-	ULONG  cSectorUnit;
-	ULONG  cUnit;
-	ULONG  cUnitAvail;
-	USHORT cbSector;
+    ULONG idFileSystem;
+    ULONG cSectorUnit;
+    ULONG cUnit;
+    ULONG cUnitAvail;
+    USHORT cbSector;
 } FSALLOCATE;
 
 typedef struct {
-	USHORT cb;
-	USHORT fsMask;
-	USHORT chTurnAround;
-	USHORT fsInterim;
-	USHORT fsState;
+    USHORT cb;
+    USHORT fsMask;
+    USHORT chTurnAround;
+    USHORT fsInterim;
+    USHORT fsState;
 } KBDINFO;
 
 typedef KBDINFO * DAT16 PKBDINFO;
 
 typedef struct {
-	USHORT cb;
-	UCHAR  fbType;
-	UCHAR  color;
-	USHORT col;
-	USHORT row;
-	USHORT hres;
-	USHORT vres;
-	UCHAR  fmt_ID;
-	UCHAR  attrib;
-	ULONG  buf_addr;
-	ULONG  buf_length;
-	ULONG  full_length;
-	ULONG  partial_length;
-	PCH    ext_data_addr;
+    USHORT cb;
+    UCHAR fbType;
+    UCHAR color;
+    USHORT col;
+    USHORT row;
+    USHORT hres;
+    USHORT vres;
+    UCHAR fmt_ID;
+    UCHAR attrib;
+    ULONG buf_addr;
+    ULONG buf_length;
+    ULONG full_length;
+    ULONG partial_length;
+    PCH ext_data_addr;
 } VIOMODEINFO;
 
 typedef VIOMODEINFO * DAT16 PVIOMODEINFO;

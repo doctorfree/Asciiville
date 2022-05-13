@@ -105,6 +105,7 @@ curses_line_input_dialog(const char *prompt, char *answer, int buffer)
                 height++;
             }
         }
+        free(tmpstr);
     }
 
     if (iflags.window_inited) {
@@ -317,11 +318,12 @@ curses_ext_cmd()
     if (iflags.extmenu) {
         return extcmd_via_menu();
     }
-    
+
     startx = 0;
     starty = 0;
     if (iflags.wc_popup_dialog) { /* Prompt in popup window */
         int x0, y0, w, h; /* bounding coords of popup */
+
         extwin2 = curses_create_window(25, 1, UP);
         wrefresh(extwin2);
         /* create window inside window to prevent overwriting of border */
@@ -329,6 +331,7 @@ curses_ext_cmd()
         getmaxyx(extwin2,h,w);
         extwin = newwin(1, w-2, y0+1, x0+1);
         if (w - 4 < maxlen) maxlen = w - 4;
+        nhUse(h); /* needed only to give getmaxyx three arguments */
     } else {
         curses_get_window_xy(MESSAGE_WIN, &winx, &winy);
         curses_get_window_size(MESSAGE_WIN, &messageh, &messagew);
@@ -386,6 +389,10 @@ curses_ext_cmd()
             break;
         }
 
+        /* DEL/Rubout */
+        if (letter == '\177') {
+            letter = '\b';
+        }
         if ((letter == '\b') || (letter == KEY_BACKSPACE)) {
             if (prompt_width == 0) {
                 ret = -1;
@@ -402,8 +409,12 @@ curses_ext_cmd()
             ret = -1;
         }
         for (count = 0; extcmdlist[count].ef_txt; count++) {
-            /* Un has no autocomplete (yet) so autocomp everything.
-             * if (!extcmdlist[count].autocomplete) continue; */
+            if (!wizard && (extcmdlist[count].flags & WIZMODECMD)) {
+                continue;
+            }
+            if (!(extcmdlist[count].flags & AUTOCOMPLETE)) {
+                continue;
+            }
             if (strlen(extcmdlist[count].ef_txt) > prompt_width) {
                 if (strncasecmp(cur_choice, extcmdlist[count].ef_txt,
                                 prompt_width) == 0) {
@@ -445,15 +456,22 @@ curses_create_nhmenu(winid wid)
         if (menu_item_ptr != NULL) {
             while (menu_item_ptr->next_item != NULL) {
                 tmp_menu_item = menu_item_ptr->next_item;
+                free((char *) menu_item_ptr->str);
                 free(menu_item_ptr);
                 menu_item_ptr = tmp_menu_item;
             }
-            free(menu_item_ptr);        /* Last entry */
+            free((char *) menu_item_ptr->str);
+            free(menu_item_ptr); /* Last entry */
             new_menu->entries = NULL;
         }
         if (new_menu->prompt != NULL) { /* Reusing existing menu */
             free((char *) new_menu->prompt);
+            new_menu->prompt = NULL;
         }
+        new_menu->num_pages = 0;
+        new_menu->height = 0;
+        new_menu->width = 0;
+        new_menu->reuse_accels = FALSE;
         return;
     }
 
@@ -491,6 +509,12 @@ curses_add_nhmenu_item(winid wid, int glyph, const ANY_P * identifier,
     nhmenu_item *new_item, *current_items, *menu_item_ptr;
     nhmenu *current_menu = get_menu(wid);
 
+    if (current_menu == NULL) {
+        impossible
+            ("curses_add_nhmenu_item: attempt to add item to nonexistent menu");
+        return;
+    }
+
     if (str == NULL) {
         return;
     }
@@ -512,11 +536,6 @@ curses_add_nhmenu_item(winid wid, int glyph, const ANY_P * identifier,
     new_item->num_lines = 0;
     new_item->count = -1;
     new_item->next_item = NULL;
-
-    if (current_menu == NULL) {
-        panic
-            ("curses_add_nhmenu_item: attempt to add item to nonexistant menu");
-    }
 
     current_items = current_menu->entries;
     menu_item_ptr = current_items;
@@ -542,19 +561,19 @@ curses_finalize_nhmenu(winid wid, const char *prompt)
 {
     int count = 0;
     nhmenu *current_menu = get_menu(wid);
-    nhmenu_item *menu_item_ptr = current_menu->entries;
 
     if (current_menu == NULL) {
-        panic("curses_finalize_nhmenu: attempt to finalize nonexistant menu");
+        impossible("curses_finalize_nhmenu: attempt to finalize nonexistent menu");
+        return;
     }
 
+    nhmenu_item *menu_item_ptr = current_menu->entries;
     while (menu_item_ptr != NULL) {
         menu_item_ptr = menu_item_ptr->next_item;
         count++;
     }
 
     current_menu->num_entries = count;
-
     current_menu->prompt = curses_copy_of(prompt);
 }
 
@@ -573,13 +592,15 @@ curses_display_nhmenu(winid wid, int how, MENU_ITEM_P ** _selected)
     *_selected = NULL;
 
     if (current_menu == NULL) {
-        panic("curses_display_nhmenu: attempt to display nonexistant menu");
+        impossible("curses_display_nhmenu: attempt to display nonexistent menu");
+        return '\033';
     }
 
     menu_item_ptr = current_menu->entries;
 
     if (menu_item_ptr == NULL) {
-        panic("curses_display_nhmenu: attempt to display empty menu");
+        impossible("curses_display_nhmenu: attempt to display empty menu");
+        return '\033';
     }
 
     /* Reset items to unselected to clear out selections from previous
@@ -597,7 +618,6 @@ curses_display_nhmenu(winid wid, int how, MENU_ITEM_P ** _selected)
         win = curses_create_window(current_menu->width,
                                    current_menu->height, CENTER);
     } else { /* Display during-game menus on the right out of the way */
-
         win = curses_create_window(current_menu->width,
                                    current_menu->height, RIGHT);
     }
@@ -606,7 +626,7 @@ curses_display_nhmenu(winid wid, int how, MENU_ITEM_P ** _selected)
     curses_destroy_win(win);
 
     if (num_chosen > 0) {
-        selected = (MENU_ITEM_P *) malloc(num_chosen * sizeof (MENU_ITEM_P));
+        selected = (MENU_ITEM_P *) alloc((unsigned) (num_chosen * sizeof (MENU_ITEM_P)));
         count = 0;
 
         menu_item_ptr = current_menu->entries;
@@ -614,8 +634,9 @@ curses_display_nhmenu(winid wid, int how, MENU_ITEM_P ** _selected)
         while (menu_item_ptr != NULL) {
             if (menu_item_ptr->selected) {
                 if (count == num_chosen) {
-                    panic("curses_display_nhmenu: Selected items "
+                    impossible("curses_display_nhmenu: Selected items "
                           "exceeds expected number");
+                     break;
                 }
                 selected[count].item = menu_item_ptr->identifier;
                 selected[count].count = menu_item_ptr->count;
@@ -625,8 +646,7 @@ curses_display_nhmenu(winid wid, int how, MENU_ITEM_P ** _selected)
         }
 
         if (count != num_chosen) {
-            panic("curses_display_nhmenu: Selected items less than "
-                  "expected number");
+            impossible("curses_display_nhmenu: Selected items less than expected number");
         }
     }
 
@@ -666,9 +686,11 @@ curses_del_menu(winid wid)
     if (menu_item_ptr != NULL) {
         while (menu_item_ptr->next_item != NULL) {
             tmp_menu_item = menu_item_ptr->next_item;
+            free((void *)menu_item_ptr->str);
             free(menu_item_ptr);
             menu_item_ptr = tmp_menu_item;
         }
+        free((void *)menu_item_ptr->str);
         free(menu_item_ptr);    /* Last entry */
         current_menu->entries = NULL;
     }
@@ -685,6 +707,9 @@ curses_del_menu(winid wid)
         tmpmenu->prev_menu = current_menu->prev_menu;
     }
 
+    if (current_menu->prompt) {
+        free((char *) current_menu->prompt);
+    }
     free(current_menu);
 
     curses_del_wid(wid);
@@ -831,30 +856,38 @@ static void
 menu_win_size(nhmenu *menu)
 {
     int width, height, maxwidth, maxheight, curentrywidth, lastline;
-    int maxentrywidth = strlen(menu->prompt);
-    int maxheaderwidth = 0;
-    nhmenu_item *menu_item_ptr = menu->entries;
+    int maxentrywidth = 0;
+    int maxheaderwidth = menu->prompt ? (int) strlen(menu->prompt) : 0;
+    nhmenu_item *menu_item_ptr;
 
-    maxwidth = 38;              /* Reasonable minimum usable width */
-
-    if ((term_cols / 2) > maxwidth) {
-        maxwidth = (term_cols / 2);     /* Half the screen */
+    if (program_state.gameover) {
+        /* for final inventory disclosure, use full width */
+        maxwidth = term_cols - 2; /* +2: borders assumed */
+    } else {
+        /* this used to be 38, which is 80/2 - 2 (half a 'normal' sized
+           screen minus room for a border box), but some data files
+           have been manually formatted for 80 columns (usually limited
+           to 78 but sometimes 79, rarely 80 itself) and using a value
+           less that 40 meant that a full line would wrap twice:
+           1..38, 39..76, and 77..80 */
+        maxwidth = 40; /* Reasonable minimum usable width */
+        if ((term_cols / 2) > maxwidth) {
+            maxwidth = (term_cols / 2); /* Half the screen */
+        }
     }
-
     maxheight = menu_max_height();
 
     /* First, determine the width of the longest menu entry */
-    while (menu_item_ptr != NULL)
-    {
+    for (menu_item_ptr = menu->entries; menu_item_ptr != NULL;
+         menu_item_ptr = menu_item_ptr->next_item) {
+        curentrywidth = (int) strlen(menu_item_ptr->str);
         if (menu_item_ptr->identifier.a_void == NULL) {
-            curentrywidth = strlen(menu_item_ptr->str);
-
             if (curentrywidth > maxheaderwidth) {
                 maxheaderwidth = curentrywidth;
             }
         } else {
-            /* Add space for accelerator */
-            curentrywidth = strlen(menu_item_ptr->str) + 4;
+            /* Add space for accelerator (selector letter) */
+            curentrywidth += 4;
             if (menu_item_ptr->glyph != NO_GLYPH
                         && !iflags.vanilla_ui_behavior)
                 curentrywidth += 2;
@@ -862,22 +895,24 @@ menu_win_size(nhmenu *menu)
         if (curentrywidth > maxentrywidth) {
             maxentrywidth = curentrywidth;
         }
-        menu_item_ptr = menu_item_ptr->next_item;
     }
 
-    /* If the widest entry is smaller than maxwidth, reduce maxwidth accordingly */
-    if (maxentrywidth < maxwidth) {
-        maxwidth = maxentrywidth;
+    /*
+     * 3.6.3: This used to set maxwidth to maxheaderwidth when that was
+     * bigger but only set it to maxentrywidth if the latter was smaller,
+     * so entries wider than the default would always wrap unless at
+     * least one header or separator line was long, even when there was
+     * lots of space available to display them without wrapping.  The
+     * reason to force narrow menus isn't known.  It may have been to
+     * reduce the amount of map rewriting when menu is dismissed, but if
+     * so, that was an issue due to excessive screen writing for the map
+     * (output was flushed for each character) which was fixed long ago.
+     */
+    maxwidth = max(maxentrywidth, maxheaderwidth);
+    if (maxwidth > term_cols - 2) {
+        /* -2: space for left and right borders */
+        maxwidth = term_cols - 2;
     }
-
-    /* Try not to wrap headers/normal text lines if possible.  We can
-       go wider than half the screen for this purpose if need be */
-
-    if ((maxheaderwidth > maxwidth) && (maxheaderwidth < (term_cols - 2))) {
-        maxwidth = maxheaderwidth;
-    }
-
-    width = maxwidth;
 
     /* Possibly reduce height if only 1 page */
     if (!menu_is_multipage(menu, maxwidth, maxheight)) {
@@ -892,16 +927,16 @@ menu_win_size(nhmenu *menu)
         if (lastline < maxheight) {
             maxheight = lastline;
         }
-    } else {                    /* If multipage, make sure we have enough width for page footer */
-
-        if (width < 20) {
-            width = 20;
-        }
     }
 
-    height = maxheight;
-    menu->width = width;
-    menu->height = height;
+    /* avoid a tiny popup window; when it's shown over the endings of
+       old messages rather than over the map, it is fairly easy for
+       the player to overlook it, particularly when walking around and
+       stepping on a pile of 2 items; also, multi-page menus need enough
+       room for "(Page M of N) => " even if all entries are narrower
+       than that; we specify same minimum width even when single page */
+    menu->width = max(maxwidth, 25);
+    menu->height = max(maxheight, 5);
 }
 
 
@@ -912,11 +947,12 @@ menu_display_page(nhmenu *menu, WINDOW * win, int page_num)
 {
     nhmenu_item *menu_item_ptr;
     int count, curletter, entry_cols, start_col, num_lines, footer_x;
+    char *tmpstr;
     boolean first_accel = TRUE;
 
-#ifdef MENU_COLOR
     int color = NO_COLOR;
-    int attr = A_NORMAL;
+#ifdef MENU_COLOR
+    attr_t attr = A_NORMAL;
     boolean menu_color = FALSE;
 #endif /* MENU_COLOR */
 
@@ -932,17 +968,19 @@ menu_display_page(nhmenu *menu, WINDOW * win, int page_num)
     }
 
     if (menu_item_ptr == NULL) {        /* Page not found */
-        panic("menu_display_page: attempt to display nonexistant page");
+        impossible("menu_display_page: attempt to display nonexistent page");
+        return;
     }
 
     werase(win);
 
-    if (strlen(menu->prompt) > 0) {
+    if (menu->prompt && *menu->prompt) {
         num_lines = curses_num_lines(menu->prompt, menu->width);
 
         for (count = 0; count < num_lines; count++) {
-            mvwprintw(win, count + 1, 1, "%s",
-                      curses_break_str(menu->prompt, menu->width, count + 1));
+            tmpstr = curses_break_str(menu->prompt, menu->width, count + 1);
+            mvwprintw(win, count + 1, 1, "%s", tmpstr);
+            free(tmpstr);
         }
     }
 
@@ -991,7 +1029,7 @@ menu_display_page(nhmenu *menu, WINDOW * win, int page_num)
         if (menu_item_ptr->glyph != NO_GLYPH && !iflags.vanilla_ui_behavior) {
             unsigned special;   /*notused */
 
-            mapglyph(menu_item_ptr->glyph, &curletter, &color, &special, 0, 0);
+            mapglyph(menu_item_ptr->glyph, &curletter, &color, &special, 0, 0, 0);
             curses_toggle_color_attr(win, color, NONE, ON);
             mvwaddch(win, menu_item_ptr->line_num + 1, start_col, curletter);
             curses_toggle_color_attr(win, color, NONE, OFF);
@@ -1000,36 +1038,40 @@ menu_display_page(nhmenu *menu, WINDOW * win, int page_num)
             start_col += 2;
         }
 #ifdef MENU_COLOR
-        if (iflags.use_menu_color && iflags.use_color
-            && (menu_color
-                = curses_get_menu_coloring ((char *) menu_item_ptr->str, &color,
-                                     &attr))) {
-            if (color != NO_COLOR) {
-                curses_toggle_color_attr(win, color, NONE, ON);
+        color = NONE;
+        menu_color = iflags.use_menu_color && iflags.use_color &&
+                     curses_get_menu_coloring(menu_item_ptr->str, &color, &attr);
+        if (menu_color) {
+            attr = curses_convert_attr(attr);
+            if (color != NONE || attr != A_NORMAL) {
+                curses_menu_color_attr(win, color, attr, ON);
             }
-            if (attr != A_NORMAL) {
-                menu_item_ptr->attr = menu_item_ptr->attr | attr;
+        } else {
+            attr = menu_item_ptr->attr;
+            if (color != NONE || attr != A_NORMAL) {
+                curses_toggle_color_attr(win, color, attr, ON);
             }
         }
 #endif /* MENU_COLOR */
-        curses_toggle_color_attr(win, NONE, menu_item_ptr->attr, ON);
 
         num_lines = curses_num_lines(menu_item_ptr->str, entry_cols);
-
         for (count = 0; count < num_lines; count++) {
-            if (strlen(menu_item_ptr->str) > 0) {
-                mvwprintw(win, menu_item_ptr->line_num + count + 1,
-                          start_col, "%s", curses_break_str(menu_item_ptr->str,
-                                                            entry_cols,
-                                                            count + 1));
+            if (menu_item_ptr->str && *menu_item_ptr->str) {
+                tmpstr = curses_break_str(menu_item_ptr->str, entry_cols, count + 1);
+                mvwprintw(win, menu_item_ptr->line_num + count + 1, start_col, "%s", tmpstr);
+                free(tmpstr);
             }
         }
 #ifdef MENU_COLOR
-        if (menu_color && (color != NO_COLOR)) {
-            curses_toggle_color_attr(win, color, NONE, OFF);
+        if (color != NONE || attr != A_NORMAL) {
+            if (menu_color) {
+                curses_menu_color_attr(win, color, attr, OFF);
+            } else {
+                curses_toggle_color_attr(win, color, attr, OFF);
+            }
         }
 #endif /* MENU_COLOR */
-        curses_toggle_color_attr(win, NONE, menu_item_ptr->attr, OFF);
+
         menu_item_ptr = menu_item_ptr->next_item;
     }
 
@@ -1074,6 +1116,7 @@ menu_get_selections(WINDOW * win, nhmenu *menu, int how)
 
     while (!dismiss) {
         curletter = getch();
+
         if (curletter == ERR) {
             num_selected = -1;
             dismiss = TRUE;
@@ -1082,7 +1125,7 @@ menu_get_selections(WINDOW * win, nhmenu *menu, int how)
         if (curletter == '\033') {
             curletter = curses_convert_keys(curletter);
         }
-        
+
         switch (how) {
         case PICK_NONE:
             if (menu->num_pages == 1) {
@@ -1090,7 +1133,6 @@ menu_get_selections(WINDOW * win, nhmenu *menu, int how)
                     num_selected = -1;
                 } else {
                     num_selected = 0;
-
                 }
                 dismiss = TRUE;
                 break;
@@ -1117,7 +1159,7 @@ menu_get_selections(WINDOW * win, nhmenu *menu, int how)
                 curpage = menu_operation(win, menu, INVERT, 0);
                 break;
             }
-            /* FallThrough */
+            /* fall through */
         default:
             if (isdigit(curletter)) {
                 count = curses_get_count(curletter - '0');
@@ -1127,7 +1169,7 @@ menu_get_selections(WINDOW * win, nhmenu *menu, int how)
                 if (count > 0) {
                     count_letter = curletter;
                 }
-            }                
+            }
         }
 
         switch (curletter) {
@@ -1328,7 +1370,8 @@ menu_operation(WINDOW * win, nhmenu *menu, menu_op
     }
 
     if (menu_item_ptr == NULL) {        /* Page not found */
-        panic("menu_display_page: attempt to display nonexistant page");
+        impossible("menu_display_page: attempt to display nonexistent page");
+        return 0;
     }
 
     while (menu_item_ptr != NULL) {
@@ -1366,36 +1409,6 @@ menu_clear_selections(nhmenu *menu)
 }
 
 
-/* This is to get the color of a menu item if the menucolor patch is
- applied */
-
-#ifdef MENU_COLOR
-boolean
-curses_get_menu_coloring(char *str, int *color, int *attr)
-{
-    struct menucoloring *tmpmc;
-
-    if (iflags.use_menu_color && iflags.use_color)
-        for (tmpmc = menu_colorings; tmpmc; tmpmc = tmpmc->next)
-# ifdef MENU_COLOR_REGEX
-#  ifdef MENU_COLOR_REGEX_POSIX
-            if (regexec(&tmpmc->match, str, 0, NULL, 0) == 0) {
-#  else
-
-            if (re_search(&tmpmc->match, str, strlen(str), 0, 9999, 0) >= 0) {
-#  endif
-# else
-            if (pmatch(tmpmc->match, str)) {
-# endif
-                *color = tmpmc->color;
-                *attr = curses_convert_attr(tmpmc->attr);
-                return TRUE;
-            }
-    return FALSE;
-}
-#endif /* MENU_COLOR */
-
-
 /* Get the maximum height for a menu */
 
 static int
@@ -1403,3 +1416,27 @@ menu_max_height(void)
 {
     return term_rows - 2;
 }
+
+#ifdef MENU_COLOR
+boolean
+curses_get_menu_coloring(const char *line, int *color, attr_t*attr)
+{
+    struct menucoloring *tmpmc;
+    boolean foundcolor = FALSE, foundattr = FALSE;
+    char str[BUFSZ];
+
+    strcpy(str, line);
+    strip_brackets(str);
+
+    if (iflags.use_menu_color && iflags.use_color) {
+        for (tmpmc = menu_colorings; tmpmc; tmpmc = tmpmc->next) {
+            if (regex_match(str, tmpmc->match)) {
+                *color = tmpmc->color;
+                *attr = tmpmc->attr;
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
+}
+#endif

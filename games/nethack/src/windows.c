@@ -1,4 +1,4 @@
-/*	SCCS Id: @(#)windows.c	3.4	1996/05/19	*/
+/*  SCCS Id: @(#)windows.c  3.4 1996/05/19  */
 /* Copyright (c) D. Cohrs, 1993. */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -58,7 +58,7 @@ NEARDATA struct window_procs windowprocs;
 static
 struct win_choices {
     struct window_procs *procs;
-    void NDECL((*ini_routine));		/* optional (can be 0) */
+    void NDECL((*ini_routine));     /* optional (can be 0) */
 } winchoices[] = {
 #ifdef TTY_GRAPHICS
     { &tty_procs, win_tty_init },
@@ -82,8 +82,8 @@ struct win_choices {
     { &beos_procs, be_win_init },
 #endif
 #ifdef AMIGA_INTUITION
-    { &amii_procs, ami_wininit_data },		/* Old font version of the game */
-    { &amiv_procs, ami_wininit_data },		/* Tile version of the game */
+    { &amii_procs, ami_wininit_data },      /* Old font version of the game */
+    { &amiv_procs, ami_wininit_data },      /* Tile version of the game */
 #endif
 #ifdef WIN32_GRAPHICS
     { &win32_procs, 0 },
@@ -100,7 +100,7 @@ struct win_choices {
 #ifdef LISP_GRAPHICS
     { &lisp_procs, win_lisp_init },
 #endif
-    { 0, 0 }		/* must be last */
+    { 0, 0 }        /* must be last */
 };
 
 STATIC_OVL
@@ -118,21 +118,21 @@ const char *s;
     register int i;
 
     for(i=0; winchoices[i].procs; i++)
-	if (!strcmpi(s, winchoices[i].procs->name)) {
-	    windowprocs = *winchoices[i].procs;
-	    if (winchoices[i].ini_routine) (*winchoices[i].ini_routine)();
-	    return;
-	}
+        if (!strcmpi(s, winchoices[i].procs->name)) {
+            windowprocs = *winchoices[i].procs;
+            if (winchoices[i].ini_routine) (*winchoices[i].ini_routine)();
+            return;
+        }
 
     if (!windowprocs.win_raw_print)
-	windowprocs.win_raw_print = def_raw_print;
+        windowprocs.win_raw_print = def_raw_print;
 
     raw_printf("Window type %s not recognized.  Choices are:", s);
     for(i=0; winchoices[i].procs; i++)
-	raw_printf("        %s", winchoices[i].procs->name);
+        raw_printf("        %s", winchoices[i].procs->name);
 
     if (windowprocs.win_raw_print == def_raw_print)
-	terminate(EXIT_SUCCESS);
+        nh_terminate(EXIT_SUCCESS);
     wait_synch();
 }
 
@@ -143,8 +143,8 @@ const char *s;
 /*ARGSUSED*/
 char
 genl_message_menu(let, how, mesg)
-char let;
-int how;
+char let UNUSED;
+int how UNUSED;
 const char *mesg;
 {
     pline("%s", mesg);
@@ -154,12 +154,12 @@ const char *mesg;
 /*ARGSUSED*/
 void
 genl_preference_update(pref)
-const char *pref;
+const char *pref UNUSED;
 {
-	/* window ports are expected to provide
-	   their own preference update routine
-	   for the preference capabilities that
-	   they support.
-	   Just return in this genl one. */
+    /* window ports are expected to provide
+       their own preference update routine
+       for the preference capabilities that
+       they support.
+       Just return in this genl one. */
 }
 /*windows.c*/

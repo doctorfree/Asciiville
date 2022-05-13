@@ -4,6 +4,7 @@
 #include "hack.h"
 #include "wincurs.h"
 #include "cursinvt.h"
+#include "cursdial.h"
 
 /* Permanent inventory for curses interface */
 
@@ -17,7 +18,7 @@ curses_update_inv(void)
     if (!win) {
         /* It's not. Re-initialize the main windows if the
            option was enabled. */
-        if (flags.perm_invent) {
+        if (iflags.perm_invent) {
             curses_create_main_windows();
             curses_last_messages();
             doredraw();
@@ -38,12 +39,6 @@ curses_update_inv(void)
     /* Clear the window as it is at the moment. */
     werase(win);
 
-    wmove(win, y, x);
-    attr_t attr = A_UNDERLINE;
-    wattron(win, attr);
-    wprintw(win, "Inventory:");
-    wattroff(win, attr);
-
     /* The actual inventory will override this if we do carry stuff */
     wmove(win, y + 1, x);
     wprintw(win, "Not carrying anything");
@@ -58,55 +53,63 @@ curses_update_inv(void)
 
 /* Adds an inventory item. */
 void
-curses_add_inv(int y, int glyph, CHAR_P accelerator, attr_t attr,
-               const char *str)
+curses_add_inv(
+    int y,              /* line index; 1..n rather than 0..n-1 */
+    int glyph,          /* glyph to display with item */
+    CHAR_P accelerator, /* selector letter for items, 0 for class headers */
+    attr_t attr,        /* curses attribute for headers, 0 for items */
+    const char *str)    /* formatted inventory item, without invlet prefix,
+                         * or class header text */
 {
     WINDOW *win = curses_get_nhwin(INV_WIN);
+    int x, width, height, available_width;
+    int border = curses_window_has_border(INV_WIN) ? 1 : 0;
 
-    /* Figure out where to draw the line */
-    int x = 0;
-    if (curses_window_has_border(INV_WIN)) {
-        x++;
-        y++;
+    x = border; /* same for every line; 1 if border, 0 otherwise */
+
+    curses_get_window_size(INV_WIN, &height, &width);
+
+    /* exit early if we're outside the visible area */
+    if (y > height + border) {
+        return;
     }
 
-    wmove(win, y, x);
+    wmove(win, y - 1 + border, x);
+
     if (accelerator) {
-        attr_t bold = A_BOLD;
-        wattron(win, bold);
-        waddch(win, accelerator);
-        wattroff(win, bold);
-        wprintw(win, ") ");
+        curses_toggle_color_attr(win, HIGHLIGHT_COLOR, NONE, ON);
+        wprintw(win, " %c", accelerator);
+        curses_toggle_color_attr(win, HIGHLIGHT_COLOR, NONE, OFF);
+        wprintw(win,  ") ");
     }
 
     if (accelerator && glyph != NO_GLYPH && !iflags.vanilla_ui_behavior) {
         unsigned dummy = 0; /* Not used */
         int color = 0;
         int symbol = 0;
-        mapglyph(glyph, &symbol, &color, &dummy,
-                 0, 0);
+        mapglyph(glyph, &symbol, &color, &dummy, 0, 0, 0);
         attr_t glyphclr = curses_color_attr(color, 0);
         wattron(win, glyphclr);
         wprintw(win, "%c ", symbol);
         wattroff(win, glyphclr);
     }
 
+    int color = NO_COLOR;
 #ifdef MENU_COLOR
-    if (accelerator && /* Don't colorize categories */
-        iflags.use_menu_color) {
-        int color = NO_COLOR;
-        boolean menu_color = FALSE;
-        char str_mutable[BUFSZ];
-        Strcpy(str_mutable, str);
-        attr = 0;
-        curses_get_menu_coloring(str_mutable, &color, &attr);
-        if (color != NO_COLOR)
-            attr |= curses_color_attr(color, 0);
+    /* colorize categorizes */
+    if (iflags.use_menu_color) {
+        if (curses_get_menu_coloring(str, &color, &attr)) {
+            attr = curses_convert_attr(attr);
+        }
     }
 #endif
-    
-    wattron(win, attr);
+    if (color == NO_COLOR) {
+        color = NONE;
+    }
+
+    curses_menu_color_attr(win, color, attr, ON);
     wprintw(win, "%s", str);
-    wattroff(win, attr);
+    curses_menu_color_attr(win, color, attr, OFF);
+
     wclrtoeol(win);
 }

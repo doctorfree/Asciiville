@@ -1,5 +1,5 @@
-/*	SCCS Id: @(#)ioctl.c	3.4	1990/22/02 */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
+/*-Copyright (c) Kenneth Lorber, Kensington, Maryland, 2015. */
 /* NetHack may be freely redistributed.  See license for details. */
 
 /* This cannot be part of hack.tty.c (as it was earlier) since on some
@@ -40,7 +40,7 @@ struct ltchars ltchars0 = { -1, -1, -1, -1, -1, -1 }; /* turn all off */
 # ifdef POSIX_TYPES
 #include <termios.h>
 struct termios termio;
-#  if defined(BSD) || defined(_AIX32)
+#  if defined(BSD) || defined(_AIX32) || defined(__linux__)
 #   if defined(_AIX32) && !defined(_ALL_SOURCE)
 #    define _ALL_SOURCE
 #   endif
@@ -54,7 +54,7 @@ struct termios termio;
 struct termio termio;
 #  endif
 # endif
-# ifdef AMIX
+# if defined(AMIX) || defined(__APPLE__)
 #include <sys/ioctl.h>
 # endif /* AMIX */
 #endif
@@ -63,7 +63,12 @@ struct termio termio;
 #include	<signal.h>
 #endif
 
-#if defined(TIOCGWINSZ) && (defined(BSD) || defined(ULTRIX) || defined(AIX_31) || defined(_BULL_SOURCE) || defined(SVR4))
+/* AVOID_WIN_IOCTL can be uncommented in unixconf.h
+ * to force USE_WIN_IOTCL to remain undefined,
+ * instead of the restricted explicit opt-in
+ * logic that used to be here.
+ */
+#if defined(TIOCGWINSZ) && !defined(AVOID_WIN_IOCTL)
 #define USE_WIN_IOCTL
 #include "tcap.h"	/* for LI and CO */
 #endif
@@ -154,6 +159,10 @@ setioctls()
 int
 dosuspend()
 {
+    if (iflags.debug_fuzzer) {
+        return 0;
+    }
+
 # ifdef SIGTSTP
 	if(signal(SIGTSTP, SIG_IGN) == SIG_DFL) {
 		suspend_nhwindows((char *)0);

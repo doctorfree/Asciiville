@@ -1,11 +1,7 @@
 dnl	NETHACK autoconf template
-AC_INIT(NETHACK, 5.1.0, bhaak@gmx.net)
-dnl Avoid AC_REVISION() because we check configure into CVS
-dnl and it will cause confusing revision numbers to be included
-dnl in configure if developers forget to check in configure.ac
-dnl before running bootstrap.sh and checking in configure.
+AC_INIT([NETHACK],[6.0.3],[bhaak@gmx.net])
 
-AC_CONFIG_SRCDIR(Files)
+AC_CONFIG_SRCDIR(README.configure)
 AC_SUBST(SRCDIR,[../$srcdir/src])
 AC_CONFIG_AUX_DIR(sys/autoconf)
 
@@ -104,7 +100,7 @@ case $host_os in
 esac
 
 dnl  ----- Check for programs
-AC_PROG_LEX
+AC_PROG_LEX(noyywrap)
 if test "$LEX" = ":"; then
 	AC_MSG_ERROR([cannot find flex or lex])
 fi
@@ -135,44 +131,33 @@ OPTIONS_FILES=
 WINTTYLIB=
 if test "$enable_tty_graphics" != "no"; then
     if test $host_os = mingw32; then
-	AC_SUBST(EXTRA_UNSHARE,["nhdefkey.dll nh340key.dll nhraykey.dll"])
-	CFLAGS="$CFLAGS -DWIN32CON"
-	WINTTYLIB=""
-	WINSRC="${WINSRC} \$(WINTTYSRC)"
-	WINOBJ="${WINOBJ} \$(WINTTYOBJ)"
-	WINLIB="${WINLIB} \$(WINTTYLIB)"
-	AC_DEFINE(TTY_GRAPHICS, [], [Console output])
+        AC_SUBST(EXTRA_UNSHARE,["nhdefkey.dll nh340key.dll nhraykey.dll"])
+        CFLAGS="$CFLAGS -DWIN32CON"
+        WINTTYLIB=""
+        WINSRC="${WINSRC} \$(WINTTYSRC)"
+        WINOBJ="${WINOBJ} \$(WINTTYOBJ)"
+        WINLIB="${WINLIB} \$(WINTTYLIB)"
+        AC_DEFINE(TTY_GRAPHICS, [], [Console output])
     else
-	# For TTY, determine the termlib
-	# Check for termlib before termcap because Solaris termcap needs libucb.
-	TERMLIB_VARIANTS="ncurses curses termlib termcap terminfo"
-	for termlib in ${TERMLIB_VARIANTS}; do
-	    AC_CHECK_LIB(${termlib}, tgetent,
-	      [WINTTYLIB="-l${termlib}"
-	      WINSRC="${WINSRC} \$(WINTTYSRC)"
-	      WINOBJ="${WINOBJ} \$(WINTTYOBJ)"
-	      WINLIB="${WINLIB} \$(WINTTYLIB)"
-	      AC_DEFINE(TTY_GRAPHICS, [], [Console output])
-	      break])
-	done
-	if test -z "$termlib"; then
-	    if test "$enable_tty_graphics" = yes; then
-		AC_MSG_ERROR([Can't find tgetent (needed for tty graphics)])
-	    else
-		AC_MSG_WARN([Can't enable tty graphics (no tgetent)])
-		NETHACK_AUTO_WIN_DISABLE(tty)
-	    fi
-	fi
-	dnl  ----- Check for tparm in curses
-	AC_CHECK_HEADERS(ncurses.h curses.h termcap.h)
-	AC_CHECK_LIB(curses, tparm, AC_DEFINE(HAVE_TPARM, 1, [Define this if you have the tparm function in an included lib.]),
-	  [AC_CHECK_LIB(ncurses, tparm, AC_DEFINE(HAVE_TPARM, 1, [Define this if you have the tparm function in an included lib.])]))
+        dnl  ----- Check for tparm in curses
+        LIBS=
+        AC_CHECK_HEADERS(ncurses.h curses.h termcap.h)
+        AC_SEARCH_LIBS([tparm], [ncursesw ncurses curses tinfow tinfo], AC_DEFINE(HAVE_TPARM, 1, [Define this if you have the tparm function in an included lib.]))
+        TERMLIB_VARIANTS="ncursesw ncurses curses tinfow tinfo termlib termcap terminfo"
 
+        AC_SEARCH_LIBS([has_colors], ${TERMLIB_VARIANTS},
+                     [WINTTYLIB="${LIBS}"
+                      WINSRC="${WINSRC} \$(WINTTYSRC)"
+                      WINOBJ="${WINOBJ} \$(WINTTYOBJ)"
+                      WINLIB="${WINLIB} \$(WINTTYLIB)"
+                      AC_DEFINE(TTY_GRAPHICS, [], [Console output])],
+                      AC_MSG_ERROR([Can't find working curses library (needed for tty graphics)]))
     fi
 
     OPTIONS_FILE="options"
     OPTIONS_FILES="options"
 fi
+
 if test "$enable_tty_graphics" = "no" -a $host_os = mingw32; then
     LFLAGS="$LFLAGS -mwindows"
 fi
@@ -181,28 +166,21 @@ AC_SUBST(WINTTYLIB)
 
 WINCURSESLIB=
 if test "$enable_curses_graphics" != "no"; then
-	# For curses, determine the curses lib
-	CURSES_VARIANTS="ncurses curses"
-	for curseslib in ${CURSES_VARIANTS}; do
-	    AC_CHECK_LIB(${curseslib}, tgetent,
-	      [WINCURSESLIB="-l${curseslib}"
-	      WINSRC="${WINSRC} \$(WINCURSESSRC)"
-	      WINOBJ="${WINOBJ} \$(WINCURSESOBJ)"
-	      WINLIB="${WINLIB} \$(WINCURSESLIB)"
-	      AC_DEFINE(CURSES_GRAPHICS, [], [Curses interface])
-	      break])
-	done
-	if test -z "$curseslib"; then
-	    if test "$enable_curses_graphics" = yes; then
-		AC_MSG_ERROR([Can't find tgetent (needed for curses graphics)])
-	    else
-		AC_MSG_WARN([Can't enable curses graphics (no tgetent)])
-		NETHACK_AUTO_WIN_DISABLE(curses)
-	    fi
-	fi
+    # For curses, determine the curses lib
+    LIBS=
+    AC_CHECK_HEADERS(ncurses.h curses.h termcap.h locale.h)
+    AC_SEARCH_LIBS([tparm], [ncursesw ncurses curses tinfow tinfo], AC_DEFINE(HAVE_TPARM, 1, [Define this if you have the tparm function in an included lib.]))
+    CURSES_VARIANTS="ncursesw ncurses curses tinfow tinfo"
+    AC_SEARCH_LIBS([has_colors], ${CURSES_VARIANTS},
+                 [WINCURSESLIB="${LIBS}"
+                  WINSRC="${WINSRC} \$(WINCURSESSRC)"
+                  WINOBJ="${WINOBJ} \$(WINCURSESOBJ)"
+                  WINLIB="${WINLIB} \$(WINCURSESLIB)"
+                  AC_DEFINE(CURSES_GRAPHICS, [], [Console output])],
+                  AC_MSG_ERROR([Can't find working curses library (needed for curses graphics)]))
 
-	OPTIONS_FILE="options"
-	OPTIONS_FILES="options"
+    OPTIONS_FILE="options"
+    OPTIONS_FILES="options"
 fi
 AC_SUBST(WINCURSESLIB)
 
@@ -259,10 +237,8 @@ if test "$enable_dummy_graphics" != "no"; then
 fi
 
 if test "$enable_mswin_graphics" != "no"; then
-    AC_MINGW32
-
     if test "$WINDRES" = "no"; then
-	AC_MSG_ERROR([Need windres for Microsoft Window's native graphics])
+        AC_MSG_ERROR([Need windres for Microsoft Window's native graphics])
     fi
     WINSRC="${WINSRC} \$(WINMSSRC)"
     WINOBJ="${WINOBJ} \$(WINMSOBJ)"
@@ -306,9 +282,6 @@ else
     AC_MSG_ERROR([need to enable at least one window system])
 fi
 
-
-dnl  ----- Check for header files
-AC_HEADER_STDC
 # Due to what may be a bug in autoconf, we have to call AC_CHECK_HEADERS()
 # to get the various HAVE_xxx_H preprocessor variables detected by
 # AC_HEADER_STDC active. These are needed for AC_CHECK_DECLS(), below.
@@ -318,23 +291,15 @@ AC_CHECK_HEADER(regex.h, [have_regex_h=yes],[have_regex_h=no],/* TEST_REGEX */)
 dnl ------ Check for data types
 dnl -- Regex-Check for MENU_COLOR
 if test "$have_regex_h" = "yes"; then
-  AC_CHECK_TYPE(regex_t,
+    AC_CHECK_DECL(regcomp,
     [AC_DEFINE(MENU_COLOR_REGEX, [], [Use regular expressions])
-     AC_DEFINE(MENU_COLOR_REGEX_POSIX, [], [Posix regex is available])
-    ],
-    [AC_CHECK_TYPE(struct re_pattern_buffer,
-      [AC_DEFINE(MENU_COLOR_REGEX, [], [Use regular expressions])
-	AC_DEFINE(MENU_COLOR_REGEX_GNU, [], [GNU regex is available])
-      ],,
-      [AC_INCLUDES_DEFAULT([])
-	#include <regex.h>
-      ])
-    ],[AC_INCLUDES_DEFAULT([])
-	#include <regex.h>
-      ])
+     AC_SUBST(REGEXOBJ,[posixregex.o])],
+    [AC_SUBST(REGEXOBJ,[pmatchregex.o])],
+     #include <regex.h>
+    )
+else
+    AC_SUBST(REGEXOBJ,[pmatchregex.o])
 fi
-AC_CHECK_TYPE(void,,AC_DEFINE(NOVOID, [], [No void type available]))
-
 
 dnl  ----- Check for library functions
 AC_CHECK_DECLS([strncmpi, strnicmp], AC_DEFINE(STRNCMPI, [], [Use strncmpi]))
@@ -450,10 +415,8 @@ NETHACK_ARG(sortloot,[Sort item lists alphabetically by description.],SORTLOOT,y
 NETHACK_ARG(dungeon-growth,[Dungeon growth],DUNGEON_GROWTH,yes)
 #NETHACK_ARG(shout,[Shouting and pet commands (not implemented)],SHOUT,no)
 # NETHACK_ARG(display-layers,[Support transparent tilesets],DISPLAY_LAYERS,yes)
-NETHACK_ARG(goldobj,[Gold is kept on object chains (experimental)],GOLDOBJ,no)
 NETHACK_ARG(autopickup-exceptions,[Exceptions to autopickup],
   AUTOPICKUP_EXCEPTIONS,yes)
-NETHACK_ARG(quiver-fired,[Firing without anything quivered will ask you what to quiver],QUIVER_FIRED,yes)
 NETHACK_ARG(qwertz,[QWERTZ keyboard layout support],QWERTZ,yes)
 NETHACK_ARG(simple-mail,[simple mail dgamelaunch support],SIMPLE_MAIL,no)
 
@@ -475,6 +438,16 @@ if test "$enable_dump" != "no" ; then
 		NETHACK_ARG_WITH_PARAM(dump-html-css-file,[Path to the css dump file],DUMP_HTML_CSS_FILE,yes,FILE,"nethack_dump.css")
 		NETHACK_ARG(dump-html-css-embedded,[CSS file should be included in the HTML dump],DUMP_HTML_CSS_EMBEDDED,no)
 	fi
+fi
+
+NETHACK_ARG_WITH_PARAM(sysconf,[Enable public server global configuration file],SYSCF_FILE,no,FILE,[sysconf])
+if test "$enable_sysconf" != "no" ; then
+	AC_DEFINE([SYSCF], [], [Use configuration file for public server])
+	AC_SUBST(SYSCF_CP,[])
+	AC_SUBST(SYSCF_COMMENT,[])
+else
+	AC_SUBST(SYSCF_CP,[@#])
+	AC_SUBST(SYSCF_COMMENT,[#])
 fi
 
 if test "$enable_tty_graphics" != "no" -a "$host_os" != mingw32; then
@@ -528,6 +501,7 @@ fi
 
 
 NETHACK_ARG(file-areas,[Place files in different directories],FILE_AREAS,yes)
+NETHACK_ARG(debug-fuzzer,[Automatic fuzzing for debugging],DEBUG_FUZZER,no)
 
 AC_DEFUN([NETHACK_DIR_SET],
   [

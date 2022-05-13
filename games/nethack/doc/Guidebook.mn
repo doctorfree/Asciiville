@@ -2106,9 +2106,6 @@ Prompt for confirmation before praying (default on).
 .lp pushweapon
 Using the `w' (wield) command when already wielding
 something pushes the old item into your alternate weapon slot (default off).
-.lp quiver_fired
-Using the 'f' (fire) command when nothing is quivered, prompts for ammunition 
-to quiver, then fires it (default on).
 .lp qwertz_layout
 If QWERTZ was set in config.h at compile-time this option can be used to swap
 the y and z keys. This is useful for some keyboard layouts.

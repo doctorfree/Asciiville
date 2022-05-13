@@ -3,16 +3,11 @@
 
 /* Global declarations for curses interface */
 
-int term_rows, term_cols; /* size of underlying terminal */
-
-WINDOW *base_term;    /* underlying terminal window */
-
-WINDOW *mapwin, *statuswin, *messagewin;    /* Main windows */
-
-int orig_cursor;	/* Preserve initial cursor state */
-
-boolean counting;   /* Count window is active */
-
+extern int term_rows, term_cols;                /* size of underlying terminal */
+extern WINDOW *base_term;                       /* underlying terminal window */
+extern WINDOW *mapwin, *statuswin, *messagewin; /* Main windows */
+extern int orig_cursor;                         /* Preserve initial cursor state */
+extern boolean counting;                        /* Count window is active */
 
 #define TEXTCOLOR   /* Allow color */
 #define NHW_END 19
@@ -36,7 +31,7 @@ boolean counting;   /* Count window is active */
 #define MESG_HISTORY_MAX   200
 #if !defined(__APPLE__) || !defined(NCURSES_VERSION)
 # define USE_DARKGRAY /* Allow "bright" black; delete if not visible */
-#endif	/* !__APPLE__ && !PDCURSES */
+#endif  /* !__APPLE__ && !PDCURSES */
 #define CURSES_DARK_GRAY    17
 #define MAP_SCROLLBARS
 #ifdef PDCURSES
@@ -89,16 +84,16 @@ extern void curses_curs(winid wid, int x, int y);
 extern void curses_putstr(winid wid, int attr, const char *text);
 
 #ifdef FILE_AREAS
-extern void curses_display_file(const char *filearea,const char *filename,BOOLEAN_P must_exist);
+extern void curses_display_file(const char *filearea, const char *filename, BOOLEAN_P must_exist);
 #else
-extern void curses_display_file(const char *filename,BOOLEAN_P must_exist);
+extern void curses_display_file(const char *filename, BOOLEAN_P must_exist);
 #endif
 
 extern void curses_start_menu(winid wid);
 
 extern void curses_add_menu(winid wid, int glyph, int cnt, const ANY_P * identifier,
-		CHAR_P accelerator, CHAR_P group_accel, int attr, 
-		const char *str, BOOLEAN_P presel);
+                            CHAR_P accelerator, CHAR_P group_accel, int attr,
+                            const char *str, unsigned int presel);
 
 extern void curses_end_menu(winid wid, const char *prompt);
 
@@ -112,7 +107,7 @@ extern void curses_wait_synch(void);
 
 extern void curses_cliparound(int x, int y);
 
-extern void curses_print_glyph(winid wid,XCHAR_P x,XCHAR_P y,int glyph);
+extern void curses_print_glyph(winid wid, XCHAR_P x, XCHAR_P y, int glyph, int bg_glyph);
 
 extern void curses_raw_print(const char *str);
 
@@ -156,7 +151,7 @@ extern void curses_destroy_win(WINDOW *win);
 extern WINDOW *curses_get_nhwin(winid wid);
 
 extern void curses_add_nhwin(winid wid, int height, int width, int y,
- int x, orient orientation, boolean border);
+                             int x, orient orientation, boolean border);
 
 extern void curses_add_wid(winid wid);
 
@@ -191,37 +186,25 @@ extern void curses_alert_main_borders(boolean onoff);
 extern void curses_draw_map(int sx, int sy, int ex, int ey);
 
 extern boolean curses_map_borders(int *sx, int *sy, int *ex, int *ey,
- int ux, int uy);
+                                  int ux, int uy);
 
 
 /* cursmisc.c */
 
 extern int curses_read_char(void);
-
 extern void curses_toggle_color_attr(WINDOW *win, int color, int attr, int onoff);
-
+extern void curses_menu_color_attr(WINDOW *, int, int, int);
 extern void curses_bail(const char *mesg);
-
 extern winid curses_get_wid(int type);
-
 extern char *curses_copy_of(const char *s);
-
 extern int curses_num_lines(const char *str, int width);
-
 extern char *curses_break_str(const char *str, int width, int line_num);
-
 extern char *curses_str_remainder(const char *str, int width, int line_num);
-
 extern boolean curses_is_menu(winid wid);
-
 extern boolean curses_is_text(winid wid);
-
 extern int curses_convert_glyph(int ch, int glyph);
-
 extern void curses_move_cursor(winid wid, int x, int y);
-
 extern void curses_prehousekeeping(void);
-
 extern void curses_posthousekeeping(void);
 
 #ifdef FILE_AREAS
@@ -255,8 +238,8 @@ extern void curses_create_nhmenu(winid wid);
 extern boolean get_menu_coloring(char *, int *, int *);
 #endif
 extern void curses_add_nhmenu_item(winid wid, int glyph, const ANY_P *identifier,
- CHAR_P accelerator, CHAR_P group_accel, int attr, const char *str,
- BOOLEAN_P presel);
+                                   CHAR_P accelerator, CHAR_P group_accel, int attr, const char *str,
+                                   BOOLEAN_P presel);
 
 extern void curses_finalize_nhmenu(winid wid, const char *prompt);
 
@@ -294,6 +277,7 @@ extern void curses_display_splash_window(void);
 
 extern void curses_cleanup(void);
 
+extern int curses_debug_show_colors(void);
 
 /* cursmesg.c */
 
@@ -316,4 +300,3 @@ extern void curses_prev_mesg(void);
 extern void curses_count_window(const char *count_text);
 
 #endif  /* WINCURS_H */
-

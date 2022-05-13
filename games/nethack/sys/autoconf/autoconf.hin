@@ -33,11 +33,14 @@
 /* Convict class */
 #undef CONVICT
 
-/* Curses interface */
+/* Console output */
 #undef CURSES_GRAPHICS
 
 /* Unix on win32 */
 #undef CYGWIN32
+
+/* Automatic fuzzing for debugging */
+#undef DEBUG_FUZZER
 
 /* The default windowing system */
 #undef DEFAULT_WINDOW_SYS
@@ -105,9 +108,6 @@
 /* Location of other files which may be modified */
 #undef FILE_AREA_VAR
 
-/* Gold is kept on object chains (experimental) */
-#undef GOLDOBJ
-
 /* Define to 1 if you have the <curses.h> header file. */
 #undef HAVE_CURSES_H
 
@@ -125,14 +125,17 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Define to 1 if you have the <memory.h> header file. */
-#undef HAVE_MEMORY_H
+/* Define to 1 if you have the <locale.h> header file. */
+#undef HAVE_LOCALE_H
 
 /* Define to 1 if you have the <ncurses.h> header file. */
 #undef HAVE_NCURSES_H
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdio.h> header file. */
+#undef HAVE_STDIO_H
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
@@ -188,17 +191,8 @@
 /* Use regular expressions */
 #undef MENU_COLOR_REGEX
 
-/* GNU regex is available */
-#undef MENU_COLOR_REGEX_GNU
-
-/* Posix regex is available */
-#undef MENU_COLOR_REGEX_POSIX
-
 /* Microsoft Window's native graphics */
 #undef MSWIN_GRAPHICS
-
-/* No void type available */
-#undef NOVOID
 
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT
@@ -223,9 +217,6 @@
 
 /* Compare High Score entries by user id instead of user name */
 #undef PERS_IS_UID
-
-/* Firing without anything quivered will ask you what to quiver */
-#undef QUIVER_FIRED
 
 /* QWERTZ keyboard layout support */
 #undef QWERTZ
@@ -278,7 +269,9 @@
 /* TTY graphics status color */
 #undef STATUS_COLORS
 
-/* Define to 1 if you have the ANSI C header files. */
+/* Define to 1 if all of the C90 standard headers exist (not just the ones
+   required in a freestanding environment). This macro is provided for
+   backward compatibility; new code need not use it. */
 #undef STDC_HEADERS
 
 /* Ability to ride monsters */
@@ -286,6 +279,12 @@
 
 /* Use strncmpi */
 #undef STRNCMPI
+
+/* Use configuration file for public server */
+#undef SYSCF
+
+/* Enable public server global configuration file */
+#undef SYSCF_FILE
 
 /* A System V like system */
 #undef SYSV

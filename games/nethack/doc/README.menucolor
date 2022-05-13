@@ -16,9 +16,6 @@
    all cursed worn items show up in orange and underlined
    when viewing inventory.
 
-   If you have regex.h but it is not GNU (e.g. DJGPP, *BSD), uncomment
-   #define MENU_COLOR_REGEX_POSIX in include/config.h
-
    If you do not have regex.h, comment
    #define MENU_COLOR_REGEX out from include/config.h
    and replace the MENUCOLOR lines in your config file with these:

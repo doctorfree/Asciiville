@@ -410,17 +410,19 @@ const char *str;
 
 #ifndef WIN32CON
 void
-msmsg VA_DECL(const char *, fmt)
-	VA_START(fmt);
-	VA_INIT(fmt, const char *);
+msmsg
+VA_DECL(const char *, fmt)
+{
+    VA_START(fmt);
+    VA_INIT(fmt, const char *);
 # if defined(MSDOS) && defined(NO_TERMS)
-	if (iflags.grmode)
-		gr_finish();
+    if (iflags.grmode)
+        gr_finish();
 # endif
-	Vprintf(fmt, VA_ARGS);
-	flushout();
-	VA_END();
-	return;
+    Vprintf(fmt, VA_ARGS);
+    flushout();
+    VA_END();
+    return;
 }
 #endif
 
@@ -477,7 +479,7 @@ const char *name, *mode;
 	if ((strlen(name) + 1 + strlen(buf)) < BUFSZ - 1) {
 		append_slash(buf);
 		Strcat(buf,name);
-	} else 
+	} else
 		impossible("fopenp() buffer too small for complete filename!");
 	if(fp = fopen(buf,mode))
 		return fp;

@@ -286,91 +286,91 @@ main(argc, argv)
 int argc;
 char **argv;
 {
-	FILE *fin;
-	int i;
-	boolean errors_encountered = FALSE;
+    FILE *fin;
+    int i;
+    boolean errors_encountered = FALSE;
 #if defined(MAC) && (defined(THINK_C) || defined(__MWERKS__))
-	static char *mac_argv[] = {	"lev_comp",	/* dummy argv[0] */
-				":dat:Arch.des",
-				":dat:Barb.des",
-				":dat:Caveman.des",
-				":dat:Healer.des",
-				":dat:Knight.des",
-				":dat:Monk.des",
-				":dat:Priest.des",
-				":dat:Ranger.des",
-				":dat:Rogue.des",
-				":dat:Samurai.des",
-				":dat:Tourist.des",
-				":dat:Valkyrie.des",
-				":dat:Wizard.des",
-				":dat:bigroom.des",
-				":dat:castle.des",
-				":dat:endgame.des",
-				":dat:gehennom.des",
-				":dat:knox.des",
-				":dat:medusa.des",
-				":dat:mines.des",
-				":dat:oracle.des",
-				":dat:sheol.des",
-				":dat:sokoban.des",
-				":dat:tower.des",
-				":dat:yendor.des"
-				};
+    static char *mac_argv[] = {	"lev_comp",	/* dummy argv[0] */
+        ":dat:Arch.des",
+        ":dat:Barb.des",
+        ":dat:Caveman.des",
+        ":dat:Healer.des",
+        ":dat:Knight.des",
+        ":dat:Monk.des",
+        ":dat:Priest.des",
+        ":dat:Ranger.des",
+        ":dat:Rogue.des",
+        ":dat:Samurai.des",
+        ":dat:Tourist.des",
+        ":dat:Valkyrie.des",
+        ":dat:Wizard.des",
+        ":dat:bigroom.des",
+        ":dat:castle.des",
+        ":dat:endgame.des",
+        ":dat:gehennom.des",
+        ":dat:knox.des",
+        ":dat:medusa.des",
+        ":dat:mines.des",
+        ":dat:oracle.des",
+        ":dat:sheol.des",
+        ":dat:sokoban.des",
+        ":dat:tower.des",
+        ":dat:yendor.des"
+    };
 
-	argc = SIZE(mac_argv);
-	argv = mac_argv;
+    argc = SIZE(mac_argv);
+    argv = mac_argv;
 #endif
-	/* Note:  these initializers don't do anything except guarantee that
-		we're linked properly.
-	*/
-	monst_init();
-	objects_init();
-	decl_init();
-	/* this one does something... */
-	init_obj_classes();
+    /* Note:  these initializers don't do anything except guarantee that
+       we're linked properly.
+       */
+    monst_init();
+    objects_init();
+    decl_init();
+    /* this one does something... */
+    init_obj_classes();
 
-	init_yyout(stdout);
-	if (argc == 1) {		/* Read standard input */
-	    init_yyin(stdin);
-	    (void) yyparse();
-	    if (fatal_error > 0 || got_errors > 0) {
-		    errors_encountered = TRUE;
-	    }
-	} else {			/* Otherwise every argument is a filename */
-	    for(i=1; i<argc; i++) {
-		    fname = argv[i];
-		    if(!strcmp(fname, "-v")) {
-			be_verbose++;
-			continue;
-		    }
-		    if(!strcmp(fname, "-d")) {
-			decompile = 1;
-			continue;
-		    }
-		    fin = freopen(fname, "r", stdin);
-		    if (!fin) {
-			(void) fprintf(stderr,"Can't open \"%s\" for input.\n",
-						fname);
-			perror(fname);
-			errors_encountered = TRUE;
-		    } else {
-			fname_counter = 1;
-			init_yyin(fin);
-			(void) yyparse();
-			line_number = 1;
-			if (fatal_error > 0 || got_errors > 0) {
-				errors_encountered = TRUE;
-				fatal_error = 0;
-			}
-		    }
-		    (void) fclose(fin);
-		    funcdef_free_all(function_definitions);
-	    }
-	}
-	exit(errors_encountered ? EXIT_FAILURE : EXIT_SUCCESS);
-	/*NOTREACHED*/
-	return 0;
+    init_yyout(stdout);
+    if (argc == 1) {		/* Read standard input */
+        init_yyin(stdin);
+        (void) yyparse();
+        if (fatal_error > 0 || got_errors > 0) {
+            errors_encountered = TRUE;
+        }
+    } else {			/* Otherwise every argument is a filename */
+        for(i=1; i<argc; i++) {
+            fname = argv[i];
+            if(!strcmp(fname, "-v")) {
+                be_verbose++;
+                continue;
+            }
+            if(!strcmp(fname, "-d")) {
+                decompile = 1;
+                continue;
+            }
+            fin = freopen(fname, "r", stdin);
+            if (!fin) {
+                (void) fprintf(stderr,"Can't open \"%s\" for input.\n",
+                        fname);
+                perror(fname);
+                errors_encountered = TRUE;
+            } else {
+                fname_counter = 1;
+                init_yyin(fin);
+                (void) yyparse();
+                line_number = 1;
+                if (fatal_error > 0 || got_errors > 0) {
+                    errors_encountered = TRUE;
+                    fatal_error = 0;
+                }
+            }
+            (void) fclose(fin);
+            funcdef_free_all(function_definitions);
+        }
+    }
+    exit(errors_encountered ? EXIT_FAILURE : EXIT_SUCCESS);
+    /*NOTREACHED*/
+    return 0;
 }
 
 /*
@@ -383,7 +383,7 @@ yyerror(s)
 const char *s;
 {
 	char *e = ((char *)s + strlen(s) - 1);
-	(void) fprintf(stderr, "%s: line %d, pos %d : %s",
+	(void) fprintf(stderr, "%s: line %d, pos %zu : %s",
 		       fname, line_number,
 		       token_start_pos-strlen(curr_token), s);
 	if (*e != '.' && *e != '!')
@@ -801,16 +801,20 @@ funcdef_free_all(fchain)
     struct lc_funcdefs *nxt;
     struct lc_funcdefs_parm *tmpparam;
     while (tmp) {
-	nxt = tmp->next;
-	Free(tmp->name);
-	while (tmp->params) {
-	    tmpparam = tmp->params->next;
-	    Free(tmp->params->name);
-	    tmp->params = tmpparam;
-	}
-	/* FIXME: free tmp->code */
-	Free(tmp);
-	tmp = nxt;
+        nxt = tmp->next;
+        Free(tmp->name);
+        for (int i = 0; i < tmp->code.n_opcodes; i++) {
+            Free(tmp->code.opcodes[i].opdat);
+        }
+        Free(tmp->code.opcodes);
+        while (tmp->params) {
+            tmpparam = tmp->params->next;
+            Free(tmp->params->name);
+            tmp->params = tmpparam;
+        }
+        /* FIXME: free tmp->code */
+        Free(tmp);
+        tmp = nxt;
     }
 }
 
@@ -905,7 +909,7 @@ spovar2str(spovar)
 {
     static int togl = 0;
     static char buf[2][128];
-    char *n = NULL;
+    const char *n = NULL;
     int is_array = (spovar & SPOVAR_ARRAY);
     spovar &= ~SPOVAR_ARRAY;
 
@@ -1033,8 +1037,8 @@ splev_add_from(splev, from_splev)
 {
     int i;
     if (splev && from_splev)
-	for (i = 0; i < from_splev->n_opcodes; i++)
-	    add_opcode(splev, from_splev->opcodes[i].opcode, opvar_clone(from_splev->opcodes[i].opdat));
+        for (i = 0; i < from_splev->n_opcodes; i++)
+            add_opcode(splev, from_splev->opcodes[i].opcode, opvar_clone(from_splev->opcodes[i].opdat));
 }
 
 
@@ -1348,7 +1352,7 @@ sp_lev *sp;
 static boolean
 write_common_data(fd, lvl)
 int fd;
-sp_lev *lvl;
+sp_lev *lvl UNUSED;
 {
 	static struct version_info version_data = {
 			VERSION_NUMBER, VERSION_FEATURES,

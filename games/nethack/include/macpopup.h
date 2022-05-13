@@ -1,5 +1,5 @@
-/*	SCCS Id: @(#)macpopup.h	3.4	1999/10/25	*/
-/* Copyright (c) Nethack Develpment Team, 1999.		*/
+/*  SCCS Id: @(#)macpopup.h 3.4 1999/10/25  */
+/* Copyright (c) Nethack Develpment Team, 1999.     */
 /* NetHack may be freely redistributed.  See license for details. */
 
 #ifndef MACPOPUP_H

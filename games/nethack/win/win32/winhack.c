@@ -85,7 +85,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	TCHAR wbuf[BUFSZ];
 	char buf[BUFSZ];
     DWORD major, minor;
-
+    boolean resuming = FALSE; /* assume new game */
 
 	/* ensure that we don't access violate on a panic() */
 	windowprocs.win_raw_print = mswin_raw_print;
@@ -176,7 +176,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     }
 	pcmain(argc,argv);
 
-	moveloop();
+	moveloop(resuming);
 
 	return 0;
 }

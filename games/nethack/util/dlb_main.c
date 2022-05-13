@@ -330,6 +330,7 @@ main(argc, argv)
 
 	close_library(&lib);
 	xexit(EXIT_SUCCESS);
+    break;
 
     case 'x': {			/* extract archive contents */
 	int f, n;
@@ -395,6 +396,7 @@ main(argc, argv)
 	close_library(&lib);
 	xexit(EXIT_SUCCESS);
 	}
+    break;
 
     case 'c':			/* create archive */
 	{

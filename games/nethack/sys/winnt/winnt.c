@@ -91,12 +91,12 @@ char *path;
 		 ffhandle = (HANDLE)0;
 	}
 	ffhandle = FindFirstFile(path,&ffd);
-	return 
+	return
 	  (ffhandle == INVALID_HANDLE_VALUE) ? 0 : 1;
 }
 
 int
-findnext() 
+findnext()
 {
 	return FindNextFile(ffhandle,&ffd) ? 1 : 0;
 }
@@ -126,7 +126,7 @@ char *str;
 {
 	char *ptr;
 	char drive;
-	if ((ptr = index(str, ':')) != (char *)0) 
+	if ((ptr = index(str, ':')) != (char *)0)
 	{
 		drive = toupper(*(ptr - 1));
 		_chdrive((drive - 'A') + 1);
@@ -138,7 +138,7 @@ max_filename()
 {
 	DWORD maxflen;
 	int status=0;
-	
+
 	status = GetVolumeInformation((LPTSTR)0,(LPTSTR)0, 0
 			,(LPDWORD)0,&maxflen,(LPDWORD)0,(LPTSTR)0,0);
 	if (status) return maxflen;
@@ -151,7 +151,7 @@ def_kbhit()
 	return 0;
 }
 
-/* 
+/*
  * Strip out troublesome file system characters.
  */
 
@@ -179,7 +179,7 @@ int *lan_username_size;
 	DWORD i = BUFSZ - 1;
 
 	/* i gets updated with actual size */
-	status = GetUserName(username_buffer, &i);		
+	status = GetUserName(username_buffer, &i);
 	if (status) username_buffer[i] = '\0';
 	else Strcpy(username_buffer, "NetHack");
 	if (lan_username_size) *lan_username_size = strlen(username_buffer);
@@ -201,24 +201,26 @@ return &szFullPath[0];
 /* fatal error */
 /*VARARGS1*/
 void
-error VA_DECL(const char *,s)
-	char buf[BUFSZ];
-	VA_START(s);
-	VA_INIT(s, const char *);
-	/* error() may get called before tty is initialized */
-	if (iflags.window_inited) end_screen();
-	if (!strncmpi(windowprocs.name, "tty", 3)) {
-		buf[0] = '\n';
-		(void) vsprintf(&buf[1], s, VA_ARGS);
-		Strcat(buf, "\n");
-		msmsg(buf);
-	} else {
-		(void) vsprintf(buf, s, VA_ARGS);
-		Strcat(buf, "\n");
-		raw_printf(buf);
-	}
-	VA_END();
-	exit(EXIT_FAILURE);
+error
+VA_DECL(const char *,s)
+{
+    char buf[BUFSZ];
+    VA_START(s);
+    VA_INIT(s, const char *);
+    /* error() may get called before tty is initialized */
+    if (iflags.window_inited) end_screen();
+    if (!strncmpi(windowprocs.name, "tty", 3)) {
+        buf[0] = '\n';
+        (void) vsprintf(&buf[1], s, VA_ARGS);
+        Strcat(buf, "\n");
+        msmsg(buf);
+    } else {
+        (void) vsprintf(buf, s, VA_ARGS);
+        Strcat(buf, "\n");
+        raw_printf(buf);
+    }
+    exit(EXIT_FAILURE);
+    VA_END();
 }
 #endif
 

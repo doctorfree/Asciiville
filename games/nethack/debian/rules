@@ -8,7 +8,12 @@
 	dh $@
 
 override_dh_auto_configure:
-	dh_auto_configure -- --with-gamesdir=/var/games/nethack --bindir=/usr/games --with-unsharedir=/usr/lib/nethack
+	dh_auto_configure -- \
+	 --bindir=/usr/games \
+	 --with-gamesdir=/var/games/nethack \
+	 --with-unsharedir=/usr/lib/nethack \
+	 --enable-curses-graphics \
+	 --enable-tty-graphics
 
 override_dh_fixperms:
 	dh_fixperms
@@ -18,4 +23,3 @@ override_dh_fixperms:
 	chmod g+w debian/nethack/var/games/nethack
 	chgrp -R games debian/nethack/var/games/nethack debian/nethack/usr/lib/nethack
 	chmod 02755 debian/nethack/usr/lib/nethack/nethack
-

@@ -30,8 +30,8 @@ HWND mswin_init_status_window () {
 		register_status_window_class( );
 		run_once = 1;
 	}
-	
-	ret = CreateWindow(                                
+
+	ret = CreateWindow(
 			szStatusWindowClass,
 			NULL,
 			WS_CHILD | WS_DISABLED | WS_CLIPSIBLINGS,
@@ -44,7 +44,7 @@ HWND mswin_init_status_window () {
 			GetNHApp()->hApp,
 			NULL );
 	if( !ret ) panic("Cannot create status window");
-	
+
 	EnableWindow(ret, FALSE);
 
 	data = (PNHStatusWindow)malloc(sizeof(NHStatusWindow));
@@ -59,7 +59,7 @@ HWND mswin_init_status_window () {
 void register_status_window_class()
 {
 	WNDCLASS wcex;
-	
+
 	ZeroMemory( &wcex, sizeof(wcex));
 	wcex.style			= CS_NOCLOSE;
 	wcex.lpfnWndProc	= (WNDPROC)StatusWndProc;
@@ -74,21 +74,21 @@ void register_status_window_class()
 
 	RegisterClass(&wcex);
 }
-    
-    
+
+
 LRESULT CALLBACK StatusWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	RECT rt;
 	PAINTSTRUCT ps;
 	HDC hdc;
 	PNHStatusWindow data;
-	
+
 	data = (PNHStatusWindow)GetWindowLong(hWnd, GWL_USERDATA);
-	switch (message) 
+	switch (message)
 	{
 	case WM_MSNH_COMMAND: {
 		switch( wParam ) {
-		
+
 		case MSNH_MSG_PUTSTR:
 		case MSNH_MSG_CLEAR_WINDOW:
 			ZeroMemory(data->window_text, sizeof(data->window_text));
@@ -111,15 +111,15 @@ LRESULT CALLBACK StatusWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 
 			hdc = BeginPaint(hWnd, &ps);
 			GetClientRect(hWnd, &rt);
-			
+
 			oldFont = SelectObject(hdc, mswin_get_font(NHW_STATUS, ATR_NONE, hdc, FALSE));
 			OldBg = SetBkColor(hdc, mswin_get_color(NHW_STATUS, MSWIN_COLOR_BG));
-			OldFg = SetTextColor(hdc, mswin_get_color(NHW_STATUS, MSWIN_COLOR_FG)); 
+			OldFg = SetTextColor(hdc, mswin_get_color(NHW_STATUS, MSWIN_COLOR_FG));
 
-			DrawText(hdc, 
+			DrawText(hdc,
 					 NH_A2W(data->window_text, wbuf, MAXWINDOWTEXT),
-					 strlen(data->window_text), 
-					 &rt, 
+					 strlen(data->window_text),
+					 &rt,
 					 DT_LEFT | DT_NOPREFIX);
 
 			SetTextColor (hdc, OldFg);
@@ -230,11 +230,7 @@ void FormatStatusString(char* text, int format)
 	(void) describe_level(nb=eos(nb));
 	Sprintf(nb = eos(nb),
 		"%c:%-2ld HP:%d(%d) Pw:%d(%d) AC:%-2d", oc_syms[COIN_CLASS],
-#ifndef GOLDOBJ
-		u.ugold,
-#else
 		money_cnt(invent),
-#endif
 		hp, hpmax, u.uen, u.uenmax, u.uac);
 
 	if (Upolyd)

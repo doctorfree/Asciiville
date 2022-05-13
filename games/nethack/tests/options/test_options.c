@@ -12,8 +12,8 @@ static void check_parse_color_definition(
     fail_unless((iflags.color_definitions[expected_color] == expected_rgb),
             "\nFailed test for parse_color_definition(\"%s\"): \"%06x\" expected, \"%06x\" received",
             definition,
-            expected_rgb,
-            iflags.color_definitions[expected_color]);
+            (int)expected_rgb,
+            (int)iflags.color_definitions[expected_color]);
 }
 
 START_TEST (test_parse_color_definition)

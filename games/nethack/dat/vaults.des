@@ -107,7 +107,7 @@ LEVEL:"vlt-%04i"
 FLAGS:rndvault
 ROOM:"rndvault", random, random, random, (5,5) {
   SUBROOM:"rndvault", random, (2,2), (1,1), filled {
-    IF [ level.depth < 3 ] { BREAK }
+    IF [ level.depth < 7 ] { BREAK }
     $mons = MONSTER: { 'M', 'D', 'O', 'Z', 'T', 'H' }
     SHUFFLE: $mons
     MONSTER: $mons[0],(0,0),hostile
@@ -121,6 +121,7 @@ ROOM:"rndvault", random, random, random, (5,5) {
 LEVEL:"vlt-%04i"
 FLAGS:rndvault
 ROOM:"rndvault", random, random, random, random {
+  IF [ level.depth < 7 ] { BREAK }
   $mons = MONSTER: { 'M', 'D', 'O', 'Z', 'T', 'H' }
   SHUFFLE: $mons
   MONSTER:$mons[0],random, hostile
@@ -152,6 +153,12 @@ FLAGS:rndvault
 ROOM:"rndvault", unlit, random, random, random {
   LOOP [3d3] {
     TRAP:"web", random
+  }
+  IF [ level.depth < 3 ] { BREAK }
+  # add some inhabitants on lower levels
+  IF [ level.depth < 7 ] {
+    [25%]:MONSTER:"cave spider",random
+    [25%]:MONSTER:"cave spider",random
   }
 }
 
@@ -1166,6 +1173,7 @@ MAP
 |....|........|....|
 --------------------
 ENDMAP
+REGION:(1,1,1,1),lit,"rndvault",irregular,joined { }
 OBJECT:"apple",random
 OBJECT:"pear",random
 OBJECT:"banana",random

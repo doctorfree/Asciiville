@@ -45,276 +45,283 @@ static void NDECL(wd_message);
 static boolean wiz_error_flag = FALSE;
 #endif
 
+#ifdef UTF8_GLYPHS
+extern void check_utf8_console();
+#endif
+
 int
 main(argc,argv)
 int argc;
 char *argv[];
 {
-	register int fd;
+    register int fd;
 #ifdef CHDIR
-	register char *dir;
+    register char *dir;
 #endif
-	boolean exact_username;
+    boolean exact_username;
+    boolean resuming = FALSE; /* assume new game */
 #ifdef SIMPLE_MAIL
-	char* e_simple = NULL;
+    char* e_simple = NULL;
 #endif
+
+    early_init();
+
 #if defined(__APPLE__)
-	/* special hack to change working directory to a resource fork when
-	   running from finder --sam */
+    /* special hack to change working directory to a resource fork when
+       running from finder --sam */
 #define MAC_PATH_VALUE ".app/Contents/MacOS/"
-	char mac_cwd[1024], *mac_exe = argv[0], *mac_tmp;
-	int arg0_len = strlen(mac_exe), mac_tmp_len, mac_lhs_len=0;
-	getcwd(mac_cwd, 1024);
-	if(mac_exe[0] == '/' && !strcmp(mac_cwd, "/")) {
-	    if((mac_exe = strrchr(mac_exe, '/')))
-		mac_exe++;
-	    else
-		mac_exe = argv[0];
-	    mac_tmp_len = (strlen(mac_exe) * 2) + strlen(MAC_PATH_VALUE);
-	    if(mac_tmp_len <= arg0_len) {
-		mac_tmp = malloc(mac_tmp_len + 1);
-		sprintf(mac_tmp, "%s%s%s", mac_exe, MAC_PATH_VALUE, mac_exe);
-		if(!strcmp(argv[0] + (arg0_len - mac_tmp_len), mac_tmp)) {
-		    mac_lhs_len = (arg0_len - mac_tmp_len) + strlen(mac_exe) + 5;
-		    if(mac_lhs_len > mac_tmp_len - 1)
-			mac_tmp = realloc(mac_tmp, mac_lhs_len);
-		    strncpy(mac_tmp, argv[0], mac_lhs_len);
-		    mac_tmp[mac_lhs_len] = '\0';
-		    chdir(mac_tmp);
-		}
-		free(mac_tmp);
-	    }
-	}
+    char mac_cwd[1024], *mac_exe = argv[0], *mac_tmp;
+    int arg0_len = strlen(mac_exe), mac_tmp_len, mac_lhs_len=0;
+    getcwd(mac_cwd, 1024);
+    if (mac_exe[0] == '/' && !strcmp(mac_cwd, "/")) {
+        if ((mac_exe = strrchr(mac_exe, '/')))
+            mac_exe++;
+        else
+            mac_exe = argv[0];
+        mac_tmp_len = (strlen(mac_exe) * 2) + strlen(MAC_PATH_VALUE);
+        if (mac_tmp_len <= arg0_len) {
+            mac_tmp = malloc(mac_tmp_len + 1);
+            sprintf(mac_tmp, "%s%s%s", mac_exe, MAC_PATH_VALUE, mac_exe);
+            if (!strcmp(argv[0] + (arg0_len - mac_tmp_len), mac_tmp)) {
+                mac_lhs_len = (arg0_len - mac_tmp_len) + strlen(mac_exe) + 5;
+                if (mac_lhs_len > mac_tmp_len - 1)
+                    mac_tmp = realloc(mac_tmp, mac_lhs_len);
+                strncpy(mac_tmp, argv[0], mac_lhs_len);
+                mac_tmp[mac_lhs_len] = '\0';
+                chdir(mac_tmp);
+            }
+            free(mac_tmp);
+        }
+    }
 #endif
 
 #ifdef SIMPLE_MAIL
-	/* figure this out early */
-	e_simple = nh_getenv("SIMPLEMAIL");
-	iflags.simplemail = (e_simple ? 1 : 0);
+    /* figure this out early */
+    e_simple = nh_getenv("SIMPLEMAIL");
+    iflags.simplemail = (e_simple ? 1 : 0);
 #endif
 
-	hname = argv[0];
-	hackpid = getpid();
-	(void) umask(0777 & ~FCMASK);
+    hname = argv[0];
+    hackpid = getpid();
+    (void) umask(0777 & ~FCMASK);
 
-	choose_windows(DEFAULT_WINDOW_SYS);
+    choose_windows(DEFAULT_WINDOW_SYS);
 
 #ifdef CHDIR			/* otherwise no chdir() */
-	/*
-	 * See if we must change directory to the playground.
-	 * (Perhaps hack runs suid and playground is inaccessible
-	 *  for the player.)
-	 * The environment variable HACKDIR is overridden by a
-	 *  -d command line option (must be the first option given)
-	 */
-	dir = nh_getenv("NETHACKDIR");
-	if (!dir) dir = nh_getenv("HACKDIR");
+    /*
+     * See if we must change directory to the playground.
+     * (Perhaps hack runs suid and playground is inaccessible
+     *  for the player.)
+     * The environment variable HACKDIR is overridden by a
+     *  -d command line option (must be the first option given)
+     */
+    dir = nh_getenv("NETHACKDIR");
+    if (!dir) dir = nh_getenv("HACKDIR");
 #endif
-	if(argc > 1) {
+    if (argc > 1) {
 #ifdef CHDIR
-	    if (!strncmp(argv[1], "-d", 2) && argv[1][2] != 'e') {
-		/* avoid matching "-dec" for DECgraphics; since the man page
-		 * says -d directory, hope nobody's using -desomething_else
-		 */
-		argc--;
-		argv++;
-		dir = argv[0]+2;
-		if(*dir == '=' || *dir == ':') dir++;
-		if(!*dir && argc > 1) {
-			argc--;
-			argv++;
-			dir = argv[0];
-		}
-		if(!*dir)
-		    error("Flag -d must be followed by a directory name.");
-	    }
-	    if (argc > 1)
+        if (!strncmp(argv[1], "-d", 2) && argv[1][2] != 'e') {
+            /* avoid matching "-dec" for DECgraphics; since the man page
+             * says -d directory, hope nobody's using -desomething_else
+             */
+            argc--;
+            argv++;
+            dir = argv[0]+2;
+            if(*dir == '=' || *dir == ':') dir++;
+            if(!*dir && argc > 1) {
+                argc--;
+                argv++;
+                dir = argv[0];
+            }
+            if(!*dir)
+                error("Flag -d must be followed by a directory name.");
+        }
+        if (argc > 1)
 #endif /* CHDIR */
 
-	    /*
-	     * Now we know the directory containing 'record' and
-	     * may do a prscore().  Exclude `-style' - it's a Qt option.
-	     */
-	    if (!strncmp(argv[1], "-s", 2) && strncmp(argv[1], "-style", 6)) {
+            /*
+             * Now we know the directory containing 'record' and
+             * may do a prscore().  Exclude `-style' - it's a Qt option.
+             */
+            if (!strncmp(argv[1], "-s", 2) && strncmp(argv[1], "-style", 6)) {
 #ifdef CHDIR
-		chdirx(dir,0);
+                chdirx(dir,0);
 #endif
-		prscore(argc, argv);
-		exit(EXIT_SUCCESS);
-	    }
-	    if (!strncmp(argv[1], "--version", 9)) {
-		printf("%s\n", VERSION_ID);
-		exit(EXIT_SUCCESS);
-	    }
-	}
+                prscore(argc, argv);
+                exit(EXIT_SUCCESS);
+            }
+        if (!strncmp(argv[1], "--version", 9)) {
+            printf("%s\n", VERSION_ID);
+            exit(EXIT_SUCCESS);
+        }
+    }
 
-	/*
-	 * Change directories before we initialize the window system so
-	 * we can find the tile file.
-	 */
+    /*
+     * Change directories before we initialize the window system so
+     * we can find the tile file.
+     */
 #ifdef CHDIR
-	chdirx(dir,1);
+    chdirx(dir,1);
 #endif
 
 #ifdef _M_UNIX
-	check_sco_console();
+    check_sco_console();
 #endif
 #ifdef __linux__
-	check_linux_console();
+    check_linux_console();
 #endif
 #ifdef UTF8_GLYPHS
-	check_utf8_console();
+    check_utf8_console();
 #endif
 
-	initoptions();
-	init_nhwindows(&argc,argv);
-	exact_username = whoami();
+    initoptions();
+    init_nhwindows(&argc,argv);
+    exact_username = whoami();
 #ifdef _M_UNIX
-	init_sco_cons();
+    init_sco_cons();
 #endif
 #ifdef __linux__
-	init_linux_cons();
+    init_linux_cons();
 #endif
-	/*
-	 * It seems you really want to play.
-	 */
-	u.uhp = 1;	/* prevent RIP on early quits */
-	(void) signal(SIGHUP, (SIG_RET_TYPE) hangup);
-	(void) signal(SIGTERM, (SIG_RET_TYPE) hangup);
+    /*
+     * It seems you really want to play.
+     */
+    u.uhp = 1;	/* prevent RIP on early quits */
+    (void) signal(SIGHUP, (SIG_RET_TYPE) hangup);
+    (void) signal(SIGTERM, (SIG_RET_TYPE) hangup);
 #ifdef SIGXCPU
-	(void) signal(SIGXCPU, (SIG_RET_TYPE) hangup);
+    (void) signal(SIGXCPU, (SIG_RET_TYPE) hangup);
 #endif
 #ifdef WHEREIS_FILE
-	(void) signal(SIGUSR1, (SIG_RET_TYPE) signal_whereis);
+    (void) signal(SIGUSR1, (SIG_RET_TYPE) signal_whereis);
 #endif
 
-	process_options(argc, argv);	/* command line options */
+    process_options(argc, argv);	/* command line options */
 
 #ifdef DEF_PAGER
-	if(!(catmore = nh_getenv("HACKPAGER")) && !(catmore = nh_getenv("PAGER")))
-		catmore = DEF_PAGER;
+    if(!(catmore = nh_getenv("HACKPAGER")) && !(catmore = nh_getenv("PAGER")))
+        catmore = DEF_PAGER;
 #endif
 #ifdef MAIL
-	getmailstatus();
+    getmailstatus();
 #endif
 #ifdef WIZARD
-	if (wizard)
-		Strcpy(plname, "wizard");
-	else
+    if (wizard)
+        Strcpy(plname, "wizard");
+    else
 #endif
-	if(!*plname) {
-		askname();
-	} else if (exact_username) {
-		/* guard against user names with hyphens in them */
-		int len = strlen(plname);
-		/* append the current role, if any, so that last dash is ours */
-		if (++len < sizeof plname)
-			(void)strncat(strcat(plname, "-"),
-				      pl_character, sizeof plname - len - 1);
-	}
-	plnamesuffix();		/* strip suffix from name; calls askname() */
-				/* again if suffix was whole name */
-				/* accepts any suffix */
+        if (!*plname) {
+            askname();
+        } else if (exact_username) {
+            /* guard against user names with hyphens in them */
+            int len = strlen(plname);
+            /* append the current role, if any, so that last dash is ours */
+            if (++len < sizeof plname)
+                (void)strncat(strcat(plname, "-"),
+                        pl_character, sizeof plname - len - 1);
+        }
+    plnamesuffix();		/* strip suffix from name; calls askname() */
+    /* again if suffix was whole name */
+    /* accepts any suffix */
 #ifdef WIZARD
-	if(!wizard) {
+    if (!wizard) {
 #endif
-		/*
-		 * check for multiple games under the same name
-		 * (if !locknum) or check max nr of players (otherwise)
-		 */
-		(void) signal(SIGQUIT,SIG_IGN);
-		(void) signal(SIGINT,SIG_IGN);
-		if(!locknum)
-			Sprintf(lock, "%d%s", (int)getuid(), plname);
-		getlock();
+        /*
+         * check for multiple games under the same name
+         * (if !locknum) or check max nr of players (otherwise)
+         */
+        (void) signal(SIGQUIT,SIG_IGN);
+        (void) signal(SIGINT,SIG_IGN);
+        if(!locknum)
+            Sprintf(lock, "%d%s", (int)getuid(), plname);
+        getlock();
 #ifdef WIZARD
-	} else {
-		Sprintf(lock, "%d%s", (int)getuid(), plname);
-		getlock();
-	}
+    } else {
+        Sprintf(lock, "%d%s", (int)getuid(), plname);
+        getlock();
+    }
 #endif /* WIZARD */
 
-	dlb_init();	/* must be before newgame() */
+    dlb_init();	/* must be before newgame() */
 
-	/*
-	 * Initialization of the boundaries of the mazes
-	 * Both boundaries have to be even.
-	 */
-	x_maze_max = COLNO-1;
-	if (x_maze_max % 2)
-		x_maze_max--;
-	y_maze_max = ROWNO-1;
-	if (y_maze_max % 2)
-		y_maze_max--;
+    /*
+     * Initialization of the boundaries of the mazes
+     * Both boundaries have to be even.
+     */
+    x_maze_max = COLNO-1;
+    if (x_maze_max % 2)
+        x_maze_max--;
+    y_maze_max = ROWNO-1;
+    if (y_maze_max % 2)
+        y_maze_max--;
 
-	/*
-	 *  Initialize the vision system.  This must be before mklev() on a
-	 *  new game or before a level restore on a saved game.
-	 */
-	vision_init();
+    /*
+     *  Initialize the vision system.  This must be before mklev() on a
+     *  new game or before a level restore on a saved game.
+     */
+    vision_init();
 
-	display_gamewindows();
+    display_gamewindows();
 
-	if ((fd = restore_saved_game()) >= 0) {
+    if ((fd = restore_saved_game()) >= 0) {
 #ifdef WIZARD
-		/* Since wizard is actually flags.debug, restoring might
-		 * overwrite it.
-		 */
-		boolean remember_wiz_mode = wizard;
+        /* Since wizard is actually flags.debug, restoring might
+         * overwrite it.
+         */
+        boolean remember_wiz_mode = wizard;
 #endif
 #ifndef FILE_AREAS
-		const char *fq_save = fqname(SAVEF, SAVEPREFIX, 1);
+        const char *fq_save = fqname(SAVEF, SAVEPREFIX, 1);
 
-		(void) chmod(fq_save,0);	/* disallow parallel restores */
+        (void) chmod(fq_save,0);	/* disallow parallel restores */
 #else
-		(void) chmod_area(FILE_AREA_SAVE, SAVEF, 0);
+        (void) chmod_area(FILE_AREA_SAVE, SAVEF, 0);
 #endif
-		(void) signal(SIGINT, (SIG_RET_TYPE) done1);
+        (void) signal(SIGINT, (SIG_RET_TYPE) done1);
 #ifdef NEWS
-		if(iflags.news) {
-		    display_file_area(NEWS_AREA, NEWS, FALSE);
-		    iflags.news = FALSE; /* in case dorecover() fails */
-		}
+        if(iflags.news) {
+            display_file_area(NEWS_AREA, NEWS, FALSE);
+            iflags.news = FALSE; /* in case dorecover() fails */
+        }
 #endif
-		pline("Restoring save file...");
-		mark_synch();	/* flush output */
-		if(!dorecover(fd))
-			goto not_recovered;
+        pline("Restoring save file...");
+        mark_synch();	/* flush output */
+        if(!dorecover(fd))
+            goto not_recovered;
 #ifdef WIZARD
-		if(!wizard && remember_wiz_mode) wizard = TRUE;
+        if(!wizard && remember_wiz_mode) wizard = TRUE;
 #endif
-		check_special_room(FALSE);
-		wd_message();
+        check_special_room(FALSE);
+        wd_message();
 
-		if (discover || wizard) {
-			if(yn("Do you want to keep the save file?") == 'n')
-			    (void) delete_savefile();
-			else {
+        if (discover || wizard) {
+            if(yn("Do you want to keep the save file?") == 'n')
+                (void) delete_savefile();
+            else {
 #ifndef FILE_AREAS
-			    (void) chmod(fq_save,FCMASK); /* back to readable */
-			    compress_area(NULL, fq_save);
+                (void) chmod(fq_save,FCMASK); /* back to readable */
+                compress_area(NULL, fq_save);
 #else
-			    (void) chmod_area(FILE_AREA_SAVE, SAVEF, FCMASK);
-			    compress_area(FILE_AREA_SAVE, SAVEF);
+                (void) chmod_area(FILE_AREA_SAVE, SAVEF, FCMASK);
+                compress_area(FILE_AREA_SAVE, SAVEF);
 #endif
-			}
-		}
-		flags.move = 0;
-	} else {
+            }
+        }
+        flags.move = 0;
+        resuming = TRUE;
+    } else {
 not_recovered:
-		player_selection();
-		newgame();
-		wd_message();
+        player_selection();
+        newgame();
+        wd_message();
+        flags.move = 0;
+    }
 
-		flags.move = 0;
-		set_wear();
-		(void) pickup(1);
-	}
-
-	moveloop();
-	exit(EXIT_SUCCESS);
-	/*NOTREACHED*/
-	return(0);
+    /* moveloop() never returns but isn't flagged NORETURN */
+    moveloop(resuming);
+    exit(EXIT_SUCCESS);
+    /*NOTREACHED*/
+    return(0);
 }
 
 static void
@@ -363,6 +370,7 @@ char *argv[];
 			/* otherwise fall thru to discover */
 			wiz_error_flag = TRUE;
 #endif
+            /* fall through */
 		case 'X':
 			discover = TRUE;
 			break;

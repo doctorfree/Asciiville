@@ -532,6 +532,8 @@ mesg_exposed(w, client_data, widget_data)
 {
     XExposeEvent *event = (XExposeEvent *) widget_data;
 
+    nhUse(client_data);
+
     if (XtIsRealized(w) && event->count == 0) {
 	struct xwindow *wp;
 	Display *dpy;
@@ -600,6 +602,9 @@ mesg_resized(w, client_data, call_data)
 
     old_lines = wp->mesg_information->num_lines;;
 #endif
+
+    nhUse(call_data);
+    nhUse(client_data);
 
     num_args = 0;
     XtSetArg(args[num_args], XtNwidth,  &pixel_width);   num_args++;

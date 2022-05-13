@@ -197,8 +197,8 @@ LOOP [8] {
 #
 #	The "goal" level for the quest.
 #
-#	Here you meet the Dark One, your nemesis monster.  You have to
-#	defeat the Dark One in combat to gain the artifact you have
+#	Here you meet Anaraxis the Black, your nemesis monster.  You
+#	have to defeat him in combat to gain the artifact you have
 #	been assigned to retrieve.
 #
 
@@ -294,7 +294,7 @@ TRAP:random,random
 TRAP:random,random
 TRAP:random,random
 # Random monsters.
-MONSTER:('@',"Dark One"),(16,11) {
+MONSTER:('@',"Anaraxis the Black"),(16,11) {
   OBJECT:('(', "Bell of Opening"),uncursed
   OBJECT:'/'
   OBJECT:'?'

@@ -46,7 +46,7 @@ static void clear_map(void);
 WINDOW *
 curses_create_window(int width, int height, orient orientation)
 {
-    int mapx, mapy, maph, mapw = 0;
+    int mapx = 0, mapy = 0, maph, mapw = 0;
     int startx = 0;
     int starty = 0;
     WINDOW *win;
@@ -75,9 +75,15 @@ curses_create_window(int width, int height, orient orientation)
     width += 2;                 /* leave room for bounding box */
     height += 2;
 
-    if ((width > term_cols) || (height > term_rows))
-        panic("curses_create_window: Terminal too small for dialog window");
+    if ((width > term_cols) || (height > term_rows)) {
+        impossible("curses_create_window: Terminal too small for dialog window");
+        width = term_cols;
+        height = term_rows;
+    }
     switch (orientation) {
+    default:
+        impossible("curses_create_window: Bad orientation");
+        /* fall through */ /* to centre */
     case CENTER:
         startx = (term_cols / 2) - (width / 2);
         starty = (term_rows / 2) - (height / 2);
@@ -115,9 +121,6 @@ curses_create_window(int width, int height, orient orientation)
         }
 
         starty = 0;
-        break;
-    default:
-        panic("curses_create_window: Bad orientation");
         break;
     }
 
@@ -187,7 +190,8 @@ WINDOW *
 curses_get_nhwin(winid wid)
 {
     if (!is_main_window(wid)) {
-        panic("curses_get_nhwin: wid out of range. Not a main window.");
+        impossible("curses_get_nhwin: wid %d out of range. Not a main window.", wid);
+        return NULL;
     }
 
     return nhwins[wid].curwin;
@@ -205,7 +209,8 @@ curses_add_nhwin(winid wid, int height, int width, int y, int x,
     int real_height = height;
 
     if (!is_main_window(wid)) {
-        panic("curses_add_nhwin: wid out of range. Not a main window.");
+        impossible("curses_add_nhwin: wid %d out of range. Not a main window.", wid);
+        return;
     }
 
     nhwins[wid].nhwin = wid;
@@ -297,7 +302,8 @@ curses_del_nhwin(winid wid)
     }
 
     if (!is_main_window(wid)) {
-        panic("curses_del_nhwin: wid out of range. Not a main window.");
+        impossible("curses_del_nhwin: wid %d out of range. Not a main window.", wid);
+        return;
     }
 
     nhwins[wid].curwin = NULL;
@@ -387,7 +393,10 @@ void
 curses_get_window_xy(winid wid, int *x, int *y)
 {
     if (!is_main_window(wid)) {
-        panic("curses_get_window_xy: wid out of range. Not a main window.");
+        impossible("curses_get_window_xy: wid %d out of range. Not a main window.", wid);
+        *x = 0;
+        *y = 0;
+        return;
     }
 
     *x = nhwins[wid].x;
@@ -439,8 +448,9 @@ int
 curses_get_window_orientation(winid wid)
 {
     if (!is_main_window(wid)) {
-        panic
-            ("curses_get_window_orientation: wid out of range. Not a main window.");
+        impossible
+            ("curses_get_window_orientation: wid %d out of range. Not a main window.", wid);
+        return CENTER;
     }
 
     return nhwins[wid].orientation;
@@ -453,7 +463,7 @@ and text attributes */
 void
 curses_puts(winid wid, int attr, const char *text)
 {
-    anything *identifier;
+    anything identifier;
     WINDOW *win = NULL;
 
     if (is_main_window(wid)) {
@@ -475,12 +485,11 @@ curses_puts(winid wid, int attr, const char *text)
 
     if (curses_is_menu(wid) || curses_is_text(wid)) {
         if (!curses_menu_exists(wid)) {
-            panic("curses_puts: Attempted write to nonexistant window!");
+            impossible("curses_puts: Attempted write to nonexistant window %d!", wid);
+            return;
         }
-        identifier = malloc(sizeof (anything));
-        identifier->a_void = NULL;
-        curses_add_nhmenu_item(wid, NO_GLYPH, identifier, 0, 0, attr, text,
-                               FALSE);
+        identifier = zeroany;
+        curses_add_nhmenu_item(wid, NO_GLYPH, &identifier, 0, 0, attr, text, FALSE);
     } else {
         waddstr(win, text);
         wnoutrefresh(win);
@@ -546,6 +555,30 @@ is_main_window(winid wid)
     }
 }
 
+static int
+wpututf8char(WINDOW *win, int y, int x, glyph_t c)
+{
+    if (c < 0x80) {
+        return mvwprintw(win, y, x, "%c", c);
+    } else if(c < 0x800) {
+        return mvwprintw(win, y, x, "%c%c",
+                         0xC0 | (c >> 6),
+                         0x80 | (c & 0x3F));
+    } else if (c < 0x10000) {
+        return mvwprintw(win, y, x, "%c%c%c",
+                         0xE0 | (c >> 12),
+                         0x80 | (c >>  6 & 0x3F),
+                         0x80 | (c & 0x3F));
+    } else if (c < 0x200000) {
+        return mvwprintw(win, y, x, "%c%c%c%c",
+                         0xF0 | (c >> 18),
+                         0x80 | (c >> 12 & 0x3F),
+                         0x80 | (c >>  6 & 0x3F),
+                         0x80 | (c & 0x3F));
+    }
+
+    return 0;
+}
 
 /* Unconditionally write a single character to a window at the given
 coordinates without a refresh.  Currently only used for the map. */
@@ -554,10 +587,18 @@ static void
 write_char(WINDOW * win, int x, int y, nethack_char nch)
 {
     curses_toggle_color_attr(win, nch.color, nch.attr, ON);
+#ifdef UTF8_GLYPHS
+    if (iflags.UTF8graphics) {
+        wpututf8char(win, y, x, nch.ch);
+    } else {
+#endif
 #ifdef PDCURSES
-    mvwaddrawch(win, y, x, nch.ch);
+        mvwaddrawch(win, y, x, nch.ch);
 #else
-    mvwaddch(win, y, x, nch.ch);
+        mvwaddch(win, y, x, nch.ch);
+#endif
+#ifdef UTF8_GLYPHS
+    }
 #endif
     curses_toggle_color_attr(win, nch.color, nch.attr, OFF);
 }

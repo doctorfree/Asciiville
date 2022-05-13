@@ -31,7 +31,7 @@
 /* minimum/maximum font size (in points - 1/72 inch) */
 #define NHFONT_DEFAULT_SIZE 9
 #define NHFONT_SIZE_MIN 3
-#define NHFONT_SIZE_MAX 20
+#define NHFONT_SIZE_MAX 96
 
 #define MAX_LOADSTRING 100
 
@@ -104,7 +104,7 @@ void mswin_putstr_ex(winid wid, int attr, const char *text, int);
 void mswin_display_file(const char *filename,BOOLEAN_P must_exist);
 void mswin_start_menu(winid wid);
 void mswin_add_menu(winid wid, int glyph, int cnt, const ANY_P * identifier,
-		CHAR_P accelerator, CHAR_P group_accel, int attr, 
+		CHAR_P accelerator, CHAR_P group_accel, int attr,
 		const char *str, BOOLEAN_P presel);
 void mswin_end_menu(winid wid, const char *prompt);
 int  mswin_select_menu(winid wid, int how, MENU_ITEM_P **selected);
@@ -138,7 +138,7 @@ winid mswin_winid_from_type(int type);
 winid mswin_winid_from_handle(HWND hWnd);
 void mswin_window_mark_dead(winid wid);
 void bail(const char *mesg);
-void nhapply_image_transparent( 
+void nhapply_image_transparent(
 	HDC hDC, int x, int y, int width, int height,
 	HDC sourceDC, int s_x, int s_y, int s_width, int s_height,
 	COLORREF cTransparent

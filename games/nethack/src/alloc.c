@@ -1,91 +1,83 @@
-/*	SCCS Id: @(#)alloc.c	3.4	1995/10/04	*/
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
 /* to get the malloc() prototype from system.h */
-#define ALLOC_C		/* comment line for pre-compiled headers */
+#define ALLOC_C     /* comment line for pre-compiled headers */
 /* since this file is also used in auxiliary programs, don't include all the
  * function declarations for all of nethack
  */
-#define EXTERN_H	/* comment line for pre-compiled headers */
+#define EXTERN_H    /* comment line for pre-compiled headers */
 #include "config.h"
 
 #if defined(MONITOR_HEAP) || defined(WIZARD)
-char *FDECL(fmt_ptr, (const genericptr,char *));
+char *FDECL(fmt_ptr, (const genericptr));
 #endif
 
 #ifdef MONITOR_HEAP
 #undef alloc
 #undef free
-extern void FDECL(free,(genericptr_t));
+extern void FDECL(free, (genericptr_t));
 static void NDECL(heapmon_init);
 
 static FILE *heaplog = 0;
 static boolean tried_heaplog = FALSE;
 #endif
 
-long *FDECL(alloc,(unsigned int));
-extern void VDECL(panic, (const char *,...)) PRINTF_F(1,2);
+long *FDECL(alloc, (unsigned int));
+extern void VDECL(panic, (const char *, ...)) PRINTF_F(1, 2);
 
 
 long *
 alloc(lth)
 register unsigned int lth;
 {
-#ifdef LINT
-/*
- * a ridiculous definition, suppressing
- *	"possible pointer alignment problem" for (long *) malloc()
- * from lint
- */
-	long dummy = ftell(stderr);
+    void *ptr;
 
-	if(lth) dummy = 0;	/* make sure arg is used */
-	return(&dummy);
-#else
-	register genericptr_t ptr;
-
-	ptr = malloc(lth);
+    ptr = calloc(lth, 1);
 #ifndef MONITOR_HEAP
-	if (!ptr) panic("Memory allocation failure; cannot get %u bytes", lth);
+    if (!ptr) panic("Memory allocation failure; cannot get %u bytes", lth);
 #endif
-	return((long *) ptr);
-#endif
+    return ptr;
 }
 
 
-#if defined(MONITOR_HEAP) || defined(WIZARD)
+#ifdef HAS_PTR_FMT
+#define PTR_FMT "%p"
+#define PTR_TYP genericptr_t
+#else
+#define PTR_FMT "%06lx"
+#define PTR_TYP unsigned long
+#endif
 
-# if defined(MICRO) || defined(WIN32)
-/* we actually want to know which systems have an ANSI run-time library
- * to know which support the new %p format for printing pointers.
- * due to the presence of things like gcc, NHSTDC is not a good test.
- * so we assume microcomputers have all converted to ANSI and bigger
- * computers which may have older libraries give reasonable results with
- * the cast.
+/* A small pool of static formatting buffers.
+ * PTRBUFSIZ:  We assume that pointers will be formatted as integers in
+ * hexadecimal, requiring at least 16+1 characters for each buffer to handle
+ * 64-bit systems, but the standard doesn't mandate that encoding and an
+ * implementation could do something different for %p, so we make some
+ * extra room.
+ * PTRBUFCNT:  Number of formatted values which can be in use at the same
+ * time.  To have more, callers need to make copies of them as they go.
  */
-#  define MONITOR_PTR_FMT
-# endif
+#define PTRBUFCNT 4
+#define PTRBUFSIZ 32
+static char ptrbuf[PTRBUFCNT][PTRBUFSIZ];
+static int ptrbufidx = 0;
 
-# ifdef MONITOR_PTR_FMT
-#  define PTR_FMT "%p"
-#  define PTR_TYP genericptr_t
-# else
-#  define PTR_FMT "%06lx"
-#  define PTR_TYP unsigned long
-# endif
-
-/* format a pointer for display purposes; caller supplies the result buffer */
+/* format a pointer for display purposes; returns a static buffer */
 char *
-fmt_ptr(ptr, buf)
+fmt_ptr(ptr)
 const genericptr ptr;
-char *buf;
 {
-	Sprintf(buf, PTR_FMT, (PTR_TYP)ptr);
-	return buf;
-}
+    char *buf;
 
-#endif
+    buf = ptrbuf[ptrbufidx];
+    if (++ptrbufidx >= PTRBUFCNT) {
+        ptrbufidx = 0;
+    }
+
+    Sprintf(buf, PTR_FMT, (PTR_TYP) ptr);
+    return buf;
+}
 
 #ifdef MONITOR_HEAP
 
@@ -94,11 +86,11 @@ char *buf;
 static void
 heapmon_init()
 {
-	char *logname = getenv("NH_HEAPLOG");
+    char *logname = getenv("NH_HEAPLOG");
 
-	if (logname && *logname)
-		heaplog = fopen(logname, "w");
-	tried_heaplog = TRUE;
+    if (logname && *logname)
+        heaplog = fopen(logname, "w");
+    tried_heaplog = TRUE;
 }
 
 long *
@@ -107,19 +99,19 @@ unsigned int lth;
 const char *file;
 int line;
 {
-	long *ptr = alloc(lth);
-	char ptr_address[20];
+    long *ptr = alloc(lth);
+    char ptr_address[20];
 
-	if (!tried_heaplog) heapmon_init();
-	if (heaplog)
-		(void) fprintf(heaplog, "+%5u %s %4d %s\n", lth,
-				fmt_ptr((genericptr_t)ptr, ptr_address),
-				line, file);
-	/* potential panic in alloc() was deferred til here */
-	if (!ptr) panic("Cannot get %u bytes, line %d of %s",
-			lth, line, file);
+    if (!tried_heaplog) heapmon_init();
+    if (heaplog)
+        (void) fprintf(heaplog, "+%5u %s %4d %s\n", lth,
+                       fmt_ptr((genericptr_t)ptr, ptr_address),
+                       line, file);
+    /* potential panic in alloc() was deferred til here */
+    if (!ptr) panic("Cannot get %u bytes, line %d of %s",
+                    lth, line, file);
 
-	return ptr;
+    return ptr;
 }
 
 void
@@ -128,17 +120,27 @@ genericptr_t ptr;
 const char *file;
 int line;
 {
-	char ptr_address[20];
+    char ptr_address[20];
 
-	if (!tried_heaplog) heapmon_init();
-	if (heaplog)
-		(void) fprintf(heaplog, "-      %s %4d %s\n",
-				fmt_ptr((genericptr_t)ptr, ptr_address),
-				line, file);
+    if (!tried_heaplog) heapmon_init();
+    if (heaplog)
+        (void) fprintf(heaplog, "-      %s %4d %s\n",
+                       fmt_ptr((genericptr_t)ptr, ptr_address),
+                       line, file);
 
-	free(ptr);
+    free(ptr);
 }
 
 #endif /* MONITOR_HEAP */
+
+/* strdup() which uses our alloc() rather than libc's malloc();
+   not used when MONITOR_HEAP is enabled, but included unconditionally
+   in case utility programs get built using a different setting for that */
+char *
+dupstr(string)
+const char *string;
+{
+    return strcpy((char *) alloc(strlen(string) + 1), string);
+}
 
 /*alloc.c*/

@@ -1,6 +1,6 @@
-/*	SCCS Id: @(#)mactty.h	3.4	1993/03/01	*/
-/* Copyright (c) Jon W{tte 1993.					*/
-/* NetHack may be freely redistributed.  See license for details.	*/
+/*  SCCS Id: @(#)mactty.h   3.4 1993/03/01  */
+/* Copyright (c) Jon W{tte 1993.                    */
+/* NetHack may be freely redistributed.  See license for details.   */
 
 /*
  * This header is the supported external interface for the "tty" window
@@ -41,7 +41,7 @@
 
 #ifndef _H_tty_public
 # define _H_tty_public
-#undef red			/* undef internal color const strings from decl */
+#undef red          /* undef internal color const strings from decl */
 #undef green
 #undef blue
 #if !TARGET_API_MAC_CARBON
@@ -72,7 +72,7 @@
 #define CHAR_BLANK ((char)32)
 #define CHAR_DELETE ((char)127)
 
-extern char game_active;	/* flag to window rendering routines not to use ppat */
+extern char game_active;    /* flag to window rendering routines not to use ppat */
 /*
  * If you want some fancy operations that not a normal TTY device normally
  * supports, use EXTENDED_SUPPORT. For frames, area erases and area scrolls,
@@ -94,7 +94,7 @@ typedef enum tty_attrib {
  * These flags are passed at create_tty time, and changing them
  * later will clear the screen.
  */
-	TTY_ATTRIB_FLAGS ,
+    TTY_ATTRIB_FLAGS,
 /*
  * When using proportional fonts, this will place each character
  * separately, ensuring aligned columns (but looking ugly and taking
@@ -128,15 +128,15 @@ typedef enum tty_attrib {
  * affect clears)
  * On b/w screens these do nothing.
  */
-	TTY_ATTRIB_FOREGROUND ,
-	TTY_ATTRIB_BACKGROUND ,
-# define TA_RGB_TO_TTY(r) ((((long)((r).red>>8)&0xff)<<16)+\
-	(((long)((r).green>>8)&0xff)<<8)+((long)((r).blue>>8)&0xff))
+    TTY_ATTRIB_FOREGROUND,
+    TTY_ATTRIB_BACKGROUND,
+# define TA_RGB_TO_TTY(r) ((((long)((r).red>>8)&0xff)<<16)+ \
+                           (((long)((r).green>>8)&0xff)<<8)+((long)((r).blue>>8)&0xff))
 
 /*
  * Attributes relating to the cursor, and character set mappings
  */
-	TTY_ATTRIB_CURSOR ,
+    TTY_ATTRIB_CURSOR,
 /*
  * Blinking cursor is more noticeable when it's idle
  */
@@ -178,9 +178,9 @@ typedef enum tty_attrib {
 /*
  * This symbolic constant is used to check the number of attributes
  */
-	TTY_NUMBER_ATTRIBUTES
+    TTY_NUMBER_ATTRIBUTES
 
-} tty_attrib ;
+} tty_attrib;
 
 /*
  * Character returned by end-of-file condition
@@ -199,21 +199,21 @@ typedef enum tty_attrib {
  * crash. Not passing in_color means everything's rendered in
  * black & white.
  */
-extern short create_tty ( WindowPtr * window , short resource_id ,
-	Boolean in_color ) ;
+extern short create_tty ( WindowPtr * window, short resource_id,
+                          Boolean in_color );
 
 /*
  * Use init_tty_name or init_tty_number to initialize a window
  * once allocated by create_tty. Size parameters are in characters.
  */
 
-extern short init_tty_number ( WindowPtr window , short font_number ,
-	short font_size , short x_size , short y_size ) ;
+extern short init_tty_number ( WindowPtr window, short font_number,
+                               short font_size, short x_size, short y_size );
 
 /*
  * Close and deallocate a window and its data
  */
-extern short destroy_tty ( WindowPtr window ) ;
+extern short destroy_tty ( WindowPtr window );
 
 /*
  * Change the font and font size used in the window for drawing after
@@ -221,48 +221,48 @@ extern short destroy_tty ( WindowPtr window ) ;
  * force_tty_coordinate_system_recalc() - else it may look strange if
  * the new font doesn't match the old one.
  */
-extern short set_tty_font_name (winid window_type , char * name ) ;
-extern short force_tty_coordinate_system_recalc ( WindowPtr window ) ;
+extern short set_tty_font_name (winid window_type, char * name );
+extern short force_tty_coordinate_system_recalc ( WindowPtr window );
 
 /*
  * Getting some metrics about the tty and its drawing.
  */
-extern short get_tty_metrics ( WindowPtr window , short * x_size ,
-	short * y_size , short * x_size_pixels , short * y_size_pixels ,
-	short * font_number , short * font_size ,
-	short * char_width , short * row_height ) ;
+extern short get_tty_metrics ( WindowPtr window, short * x_size,
+                               short * y_size, short * x_size_pixels, short * y_size_pixels,
+                               short * font_number, short * font_size,
+                               short * char_width, short * row_height );
 
 /*
  * The basic move cursor function. 0,0 is topleft.
  */
-extern short move_tty_cursor ( WindowPtr window , short x_pos ,
-	short y_pos ) ;
+extern short move_tty_cursor ( WindowPtr window, short x_pos,
+                               short y_pos );
 
 /*
  * Flush all changes done to a tty to the screen (see TA_ALWAYS_UPDATE above)
  */
-extern short update_tty ( WindowPtr window ) ;
+extern short update_tty ( WindowPtr window );
 
 /*
  * Add a character to the tty and update the cursor position
  */
-extern short add_tty_char ( WindowPtr window , short character ) ;
+extern short add_tty_char ( WindowPtr window, short character );
 
 /*
  * Add a string of characters to the tty and update the cursor
  * position. The string is 0-terminated!
  */
-extern short add_tty_string ( WindowPtr window , const char * string ) ;
+extern short add_tty_string ( WindowPtr window, const char * string );
 
 /*
  * Change or read an attribute of the tty. Note that some attribute changes
  * may clear the screen. See the above enum and defines for values.
  * Attributes can be both function pointers and special flag values.
  */
-extern short get_tty_attrib ( WindowPtr window , tty_attrib attrib ,
-	long * value ) ;
-extern short set_tty_attrib ( WindowPtr window , tty_attrib attrib ,
-	long value ) ;
+extern short get_tty_attrib ( WindowPtr window, tty_attrib attrib,
+                              long * value );
+extern short set_tty_attrib ( WindowPtr window, tty_attrib attrib,
+                              long value );
 
 /*
  * Scroll the actual TTY image, in characters, positive means up/left
@@ -270,41 +270,41 @@ extern short set_tty_attrib ( WindowPtr window , tty_attrib attrib ,
  * directly, regardless of the wait-update setting. Does updates before
  * scrolling.
  */
-extern short scroll_tty ( WindowPtr window , short delta_x ,
-	short delta_y ) ;
+extern short scroll_tty ( WindowPtr window, short delta_x,
+                          short delta_y );
 
 /*
  * Erase the offscreen bitmap and move the cursor to 0,0. Re-init some window
  * values (font etc) Is always carried out directly on-screen, regardless of
  * the wait-for-update setting. Clears update area.
  */
-extern short clear_tty ( WindowPtr window ) ;
+extern short clear_tty ( WindowPtr window );
 
 /*
  * Call this routine with a window (always _mt_window) and a time (usually
  * from most recent event) to determine if cursor in window should be blinked
  */
-extern short blink_cursor ( WindowPtr window , long when ) ;
+extern short blink_cursor ( WindowPtr window, long when );
 
 /*
  * For screen dumps, open the printer port and call this function. Can be used
  * for clipboard as well (only for a PICT, though; this library doesn't concern
  * itself with characters, just bitmaps)
  */
-extern short image_tty ( EventRecord *theEvent, WindowPtr window ) ;
+extern short image_tty ( EventRecord *theEvent, WindowPtr window );
 
 /*
  * For erasing just an area of characters
  */
-extern short clear_tty_window ( WindowPtr window , short from_row ,
-	short from_col , short to_row , short to_col ) ;
+extern short clear_tty_window ( WindowPtr window, short from_row,
+                                short from_col, short to_row, short to_col );
 
 /*
  * get and set the invalid region of the main window
  */
- extern short get_invalid_region (WindowPtr window, Rect *inval_rect);
- extern short set_invalid_region (WindowPtr window, Rect *inval_rect);
- 
+extern short get_invalid_region (WindowPtr window, Rect *inval_rect);
+extern short set_invalid_region (WindowPtr window, Rect *inval_rect);
+
 /*
  * Now in macsnd.c, which seemed like a good place
  */
@@ -318,8 +318,8 @@ extern void tty_nhbell ();
  * insert, and you can never be sure which of row and col operations come first
  * if you specify both...
  */
-extern short mangle_tty_rows_columns ( WindowPtr window ,
-	short from_row , short num_rows , short from_col , short num_cols ) ;
+extern short mangle_tty_rows_columns ( WindowPtr window,
+                                       short from_row, short num_rows, short from_col, short num_cols );
 
 /*
  * For framing an area without using grahpics characters.
@@ -327,20 +327,20 @@ extern short mangle_tty_rows_columns ( WindowPtr window ,
  * draw in them. frame_fatness should typically be 1-5, and may be clipped
  * if it is too large.
  */
-extern short frame_tty_window ( WindowPtr window , short from_row ,
-	short from_col , short to_row , short to_col , short frame_fatness ) ;
+extern short frame_tty_window ( WindowPtr window, short from_row,
+                                short from_col, short to_row, short to_col, short frame_fatness );
 
 /*
  * For inverting specific characters after the fact. May look funny in color.
  */
-extern short invert_tty_window ( WindowPtr window , short from_row ,
-	short from_col , short to_row , short to_col ) ;
+extern short invert_tty_window ( WindowPtr window, short from_row,
+                                 short from_col, short to_row, short to_col );
 
 /*
  * For drawing lines on the tty - VERY DEVICE DEPENDENT. Use get_tty_metrics.
  */
-extern short draw_tty_line ( WindowPtr window , short from_x ,
-	short from_y , short to_x , short to_y ) ;
+extern short draw_tty_line ( WindowPtr window, short from_x,
+                             short from_y, short to_x, short to_y );
 
 #endif /* EXTENDED_SUPPORT */
 

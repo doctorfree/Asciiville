@@ -23,6 +23,7 @@ void VDECL(panic, (char *,...));
 
 void
 panic VA_DECL(char *,str)
+{
 	VA_START(str);
 	VA_INIT(str, char *);
 	if(panicking++)

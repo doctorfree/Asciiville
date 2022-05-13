@@ -9,7 +9,7 @@
 # enable_feature, with any '-' characters changed into '_'.
 AC_DEFUN([NETHACK_ARG],
   [AC_MSG_CHECKING(whether to enable $1)
-   AC_ARG_ENABLE([$1], AC_HELP_STRING([--enable-$1],[$2 (default=$4)]),
+   AC_ARG_ENABLE([$1], AS_HELP_STRING([--enable-$1],[$2 (default=$4)]),
      [],m4_if([$4], [auto], [$5], [enable_]m4_bpatsubst([$1], -, _)="[$4]"))
    AC_MSG_RESULT([$enable_]m4_bpatsubst([$1], -, _))
    if test "[$enable_]m4_bpatsubst([$1], -, _)" != "no" ; then
@@ -22,7 +22,7 @@ AC_DEFUN([NETHACK_ARG],
 # ------------------------------------------------------------------------
 AC_DEFUN([NETHACK_ARG_WITH_PARAM],
   [AC_MSG_CHECKING([whether to enable m4_bpatsubst([$1], -, [ ])])
-   AC_ARG_ENABLE([$1], AC_HELP_STRING([--enable-$1=$5],
+   AC_ARG_ENABLE([$1], AS_HELP_STRING([--enable-$1=$5],
         [$2 (default=$4, default m4_tolower($5)=[$6])]),
         if test "[$enableval]" != no; then [enable_]m4_bpatsubst([$1], -, _)=yes;
          if test "[$enableval]" != yes; then m4_bpatsubst([$1], -, _)=[$enableval];
@@ -44,7 +44,7 @@ AC_DEFUN([NETHACK_ARG_WITH_PARAM],
 # NETHACK_WIN_ENABLE(win, default, help-text)
 # -------------------------------------------
 AC_DEFUN([NETHACK_WIN_ENABLE],[AC_ARG_ENABLE($1-graphics,
-  [AC_HELP_STRING([--enable-$1-graphics],
+  [AS_HELP_STRING([--enable-$1-graphics],
     m4_ifval([$3],[$3],[use $1-graphics]) [(default=$2)])],
   [enable_$1_graphics="$enableval"], [enable_$1_graphics="$2"])
   AC_MSG_CHECKING([$1-graphics])
@@ -71,7 +71,7 @@ AC_DEFUN([NETHACK__LINK_ADD],
 	   NETHACK_LINKS="${NETHACK_LINKS} $1:$2"
 	fi],[NETHACK__LINK_ADD([$1],[$1])])])
 AC_DEFUN([NETHACK_LINKS_ADD],
-	[AC_FOREACH([NETHACK_File],[$1],
+	[m4_foreach([NETHACK_File],[$1],
 	    [NETHACK__LINK_ADD(m4_bpatsubst(NETHACK_File,[:],[,]))])])
 
 # Autoconf's standard AC_CONFIG_HEADERS() avoids undefining switches because
@@ -131,7 +131,7 @@ AC_DEFUN([NETHACK__TRY_LINK],[
     CFLAGS="$CFLAGS $3"
     LIBS="$LIBS $4"
     AC_MSG_CHECKING([if $2 is useable with $CFLAGS and $LIBS])
-    AC_TRY_LINK([$5], [$6],
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[$5]], [[$6]])],
       [$1_CFLAGS="$3"; $1_LIBS="$4"; AC_MSG_RESULT([yes]); $7],
       [AC_MSG_RESULT([no]); $8])
     CFLAGS=$nethack__save_cflags

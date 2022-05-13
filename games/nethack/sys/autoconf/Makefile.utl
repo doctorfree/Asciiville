@@ -27,7 +27,7 @@ CC = @CC@ -DAUTOCONF
 #	For Bull DPX/2 systems at B.O.S. 2.0 or higher use the following:
 #
 # CC = gcc -ansi -D_BULL_SOURCE -D_XOPEN_SOURCE -D_POSIX_SOURCE
-# 
+#
 #	If you are using GCC 2.2.2 or higher on a DPX/2, just use:
 #
 # CC = gcc -ansi
@@ -101,7 +101,7 @@ CFLAGS = -O2 -I../include -I$(srcdir)/../include @CFLAGS@
 LFLAGS = @LFLAGS@
 
 LIBS =
- 
+
 # If you are cross-compiling, you must use this:
 #OBJDIR = .
 # otherwise, you can save a little bit of disk space with this:
@@ -116,7 +116,7 @@ OBJDIR = ../src
 # LEX      = flex
 LEX      = @LEX@
 YACC     = @YACC@
- 
+
 # these are the suffixes of the output files from YACC/LEX. Under MS-DOS
 # and similar systems, they may differ
 YTABC = .tab.c
@@ -184,8 +184,8 @@ YACCDIST =
 
 #	dependencies for makedefs
 #
-makedefs:	$(MAKEOBJS)
-	$(CC) $(LFLAGS) -o makedefs $(MAKEOBJS)
+makedefs$(EXEEXT):	$(MAKEOBJS)
+	$(CC) $(LFLAGS) -o makedefs$(EXEEXT) $(MAKEOBJS)
 
 makedefs.o: makedefs.c $(CONFIG_H) $(srcdir)/../include/permonst.h \
 		$(srcdir)/../include/objclass.h $(srcdir)/../include/monsym.h \
@@ -193,14 +193,14 @@ makedefs.o: makedefs.c $(CONFIG_H) $(srcdir)/../include/permonst.h \
 		$(srcdir)/../include/monst.h $(srcdir)/../include/you.h $(srcdir)/../include/flag.h \
 		$(srcdir)/../include/dlb.h $(srcdir)/../include/patchlevel.h $(srcdir)/../include/qtext.h
 
-../include/onames.h: makedefs
-	./makedefs -o
-../include/pm.h: makedefs
-	./makedefs -p
-../src/monstr.c: makedefs
-	./makedefs -m
-../include/vis_tab.h: makedefs
-	./makedefs -z
+../include/onames.h: makedefs$(EXEEXT)
+	./makedefs$(EXEEXT) -o
+../include/pm.h: makedefs$(EXEEXT)
+	./makedefs$(EXEEXT) -p
+../src/monstr.c: makedefs$(EXEEXT)
+	./makedefs$(EXEEXT) -m
+../include/vis_tab.h: makedefs$(EXEEXT)
+	./makedefs$(EXEEXT) -z
 # makedefs -z makes both vis_tab.h and vis_tab.c, but writes the .h first
 ../src/vis_tab.c: ../include/vis_tab.h
 
@@ -219,8 +219,8 @@ panic.o:     panic.c $(CONFIG_H)
 
 #	dependencies for lev_comp
 #
-lev_comp:  $(SPLEVOBJS)
-	$(CC) $(LFLAGS) -o lev_comp $(SPLEVOBJS) $(LIBS)
+lev_comp$(EXEEXT):  $(SPLEVOBJS)
+	$(CC) $(LFLAGS) -o $@ $(SPLEVOBJS) $(LIBS)
 
 lev_yacc.o:  lev_yacc.c $(HACK_H) ../include/sp_lev.h
 lev_main.o:  lev_main.c $(HACK_H) ../include/sp_lev.h ../include/tcap.h \
@@ -236,9 +236,10 @@ lev_lex.o:   lev_lex.c $(HACK_H) ../include/lev_comp.h ../include/sp_lev.h
 ../include/lev_comp.h: lev_yacc.c
 
 lev_yacc.c: $(srcdir)/lev_comp.y
+	rm -f lev$(YTABH)
 	$(YACC) $(YACCDIST) -b lev -d $(srcdir)/lev_comp.y
 	mv lev$(YTABC) lev_yacc.c
-	mv lev$(YTABH) ../include/lev_comp.h
+	cp lev$(YTABH) ../include/lev_comp.h
 
 lev_lex.c: $(srcdir)/lev_comp.l
 	rm -f lev_$(LEXYYC)
@@ -253,8 +254,8 @@ lintlev:
 
 #	dependencies for dgn_comp
 #
-dgn_comp:  $(DGNCOMPOBJS)
-	$(CC) $(LFLAGS) -o dgn_comp $(DGNCOMPOBJS) $(LIBS)
+dgn_comp$(EXEEXT):  $(DGNCOMPOBJS)
+	$(CC) $(LFLAGS) -o $@ $(DGNCOMPOBJS) $(LIBS)
 
 dgn_yacc.o:  dgn_yacc.c $(CONFIG_H) ../include/dgn_file.h ../include/date.h
 dgn_main.o:  dgn_main.c $(CONFIG_H) ../include/dlb.h
@@ -267,9 +268,10 @@ dgn_lex.o:   dgn_lex.c $(CONFIG.H) ../include/dgn_comp.h ../include/dgn_file.h
 ../include/dgn_comp.h: dgn_yacc.c
 
 dgn_yacc.c: $(srcdir)/dgn_comp.y
+	rm -f dgn$(YTABH)
 	$(YACC) $(YACCDIST) -b dgn -d $(srcdir)/dgn_comp.y
 	mv dgn$(YTABC) dgn_yacc.c
-	mv dgn$(YTABH) ../include/dgn_comp.h
+	cp dgn$(YTABH) ../include/dgn_comp.h
 
 dgn_lex.c: $(srcdir)/dgn_comp.l
 	rm -f dgn_$(LEXYYC)
@@ -285,15 +287,15 @@ lintdgn:
 #	dependencies for recover
 #
 recover$(EXEEXT): $(RECOVOBJS)
-	$(CC) $(LFLAGS) -o recover$(EXEEXT) $(RECOVOBJS) $(LIBS)
+	$(CC) $(LFLAGS) -o $@ $(RECOVOBJS) $(LIBS)
 
 recover.o: recover.c $(CONFIG_H) ../include/date.h
 
 
 #	dependencies for dlb
 #
-dlb:	$(DLBOBJS)
-	$(CC) $(LFLAGS) -o dlb $(DLBOBJS) $(LIBS)
+dlb$(EXEEXT): $(DLBOBJS)
+	$(CC) $(LFLAGS) -o $@ $(DLBOBJS) $(LIBS)
 
 dlb_main.o: dlb_main.c $(CONFIG_H) ../include/dlb.h ../include/date.h
 	$(CC) $(CFLAGS) -c $(srcdir)/dlb_main.c
@@ -314,7 +316,7 @@ TEXT_IO = tiletext.o tiletxt.o $(ONAMING)
 GIFREADERS = gifread.o $(OALLOC)
 PPMWRITERS = ppmwrite.o $(OALLOC)
 
-tileutils: tilemap gif2txt txt2ppm tile2x11
+tileutils: tilemap$(EXEEXT) gif2txt txt2ppm tile2x11
 
 gif2txt: $(GIFREADERS) $(TEXT_IO)
 	$(CC) $(LFLAGS) -o gif2txt $(GIFREADERS) $(TEXT_IO) $(LIBS)
@@ -336,15 +338,15 @@ xpm2img.ttp: xpm2img.o bitmfile.o
 tile2beos: tile2beos.o $(TEXT_IO)
 	$(CC) $(LFLAGS) -o tile2beos tile2beos.o $(TEXT_IO) -lbe
 
-tilemap: $(srcdir)/../win/share/tilemap.c $(HACK_H)
-	$(CC) $(CFLAGS) $(LFLAGS) -o tilemap $(srcdir)/../win/share/tilemap.c $(LIBS)
-$(srcdir)/../src/tile.c: tilemap
-	./tilemap
-#../include/tile.h: ../win/share/tile.h tilemap
-#	./tilemap
+tilemap$(EXEEXT): $(srcdir)/../win/share/tilemap.c $(HACK_H)
+	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $(srcdir)/../win/share/tilemap.c $(LIBS)
+$(srcdir)/../src/tile.c: tilemap$(EXEEXT)
+	./tilemap$(EXEEXT)
+#../include/tile.h: ../win/share/tile.h tilemap$(EXEEXT)
+#	./tilemap$(EXEEXT)
 
-../include/tile.h: ../win/share/tile.h tilemap
-	./tilemap
+../include/tile.h: ../win/share/tile.h tilemap$(EXEEXT)
+	./tilemap$(EXEEXT)
 	cp ../win/share/tile.h ../include/tile.h
 
 tiletext.o: $(srcdir)/../win/share/tiletext.c $(CONFIG_H) ../include/tile.h
@@ -356,7 +358,7 @@ tiletxt.o: $(srcdir)/../win/share/tilemap.c $(HACK_H)
 tilelist.o: $(srcdir)/../win/share/tilemap.c $(HACK_H)
 	$(CC) $(CFLAGS) -DTILETEXT -DTILELIST -o tilelist.o -c $(srcdir)/../win/share/tilemap.c
 tilelist: tilelist.o
-	$(CC) $(CFLAGS) $(LFLAGS) ../src/monst_util.o ../src/objects_util.o ../src/decl_util.o ../src/drawing_util.o tilelist.o -o tilelist
+	$(CC) $(LFLAGS) ../src/decl_util.o tilelist.o -o tilelist
 
 gifread.o: $(srcdir)/../win/share/gifread.c $(CONFIG_H) ../include/tile.h
 	$(CC) $(CFLAGS) -c $(srcdir)/../win/share/gifread.c

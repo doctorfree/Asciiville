@@ -5748,8 +5748,7 @@ holes; that way, you can complete a path leading to the next level.
 It's possible to complete all the puzzles here according to the
 traditional Sokoban rules; however, by taking NetHack physics, and the
 possibility to use magic, into account, you may find certain rather
-more ingenious ways to solve the puzzle. However, players who cheat
-too badly at the puzzles may find themselves having a run of bad luck.
+more ingenious ways to solve the puzzle.
 
 In order to help you solve the puzzles in an informed manner, you'll
 be magically informed of the map on each level of Sokoban, so the aim
@@ -5783,8 +5782,8 @@ to figure out how those ones work for yourself.
 It is written in the Book of %d:
 
     After the Creation, the cruel god Moloch rebelled
-    against the authority of Marduk the Creator.
-    Moloch stole from Marduk the most powerful of all
+    against the authority of %m the Creator.
+    Moloch stole from %m the most powerful of all
     the artifacts of the gods, the Amulet of Yendor,
     and he hid it in the dark cavities of Gehennom, the
     Under World, where he now lurks, and bides his time.

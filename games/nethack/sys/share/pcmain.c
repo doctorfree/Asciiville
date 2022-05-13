@@ -68,7 +68,7 @@ STATIC_DCL char *FDECL(exepath,(char *));
 int FDECL(main, (int,char **));
 #endif
 
-extern void FDECL(pcmain, (int,char **));
+extern int FDECL(pcmain, (int,char **));
 
 
 #if defined(__BORLANDC__) && !defined(_WIN32)
@@ -91,11 +91,11 @@ main(argc,argv)
 int argc;
 char *argv[];
 {
-     pcmain(argc,argv);
+     boolean resuming = pcmain(argc,argv);
 #ifdef LAN_FEATURES
      init_lan_features();
 #endif
-     moveloop();
+     moveloop(resuming);
      nethack_exit(EXIT_SUCCESS);
      /*NOTREACHED*/
      return 0;
@@ -104,7 +104,7 @@ char *argv[];
 #endif /*OVL0*/
 #ifdef OVL1
 
-void
+int
 pcmain(argc,argv)
 int argc;
 char *argv[];
@@ -118,6 +118,7 @@ char *argv[];
 #ifdef NOCWD_ASSUMPTIONS
 	char failbuf[BUFSZ];
 #endif
+    boolean resuming = FALSE; /* assume new game */
 
 #if defined(__BORLANDC__) && !defined(_WIN32)
 	startup();
@@ -427,6 +428,7 @@ char *argv[];
 		}
 
 		flags.move = 0;
+        resuming = TRUE;
 	} else {
 not_recovered:
 		player_selection();
@@ -446,7 +448,7 @@ not_recovered:
 #ifdef OS2
 	gettty(); /* somehow ctrl-P gets turned back on during startup ... */
 #endif
-	return;
+	return resuming;
 }
 
 STATIC_OVL void

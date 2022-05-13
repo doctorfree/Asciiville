@@ -1,4 +1,4 @@
-/*	SCCS Id: @(#)global.h	3.4	2003/08/31	*/
+/*  SCCS Id: @(#)global.h   3.4 2003/08/31  */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -8,60 +8,60 @@
 #include <stdio.h>
 
 
-/* #define BETA	*/	/* if a beta-test copy	[MRS] */
+/* #define BETA */  /* if a beta-test copy  [MRS] */
 
 /*
  * Files expected to exist in the playground directory if file areas are not
  * enabled and in the named areas otherwise.
  */
 
-#define NH_RECORD		"record"  /* a file containing list of topscorers */
-#define NH_RECORD_AREA	FILE_AREA_VAR
-#define NH_HELP		"help"	  /* a file containing command descriptions */
-#define NH_HELP_AREA	FILE_AREA_SHARE
-#define NH_SHELP		"hh"		/* abbreviated form of the same */
-#define NH_SHELP_AREA	FILE_AREA_SHARE
-#define NH_DEBUGHELP	"wizhelp"	/* a file containing debug mode cmds */
-#define NH_DEBUGHELP_AREA	FILE_AREA_SHARE
-#define NH_RUMORFILE	"rumors"	/* a file with fortune cookies */
-#define NH_RUMORAREA	FILE_AREA_SHARE
-#define NH_ORACLEFILE	"oracles"	/* a file with oracular information */
-#define NH_ORACLEAREA	FILE_AREA_SHARE
-#define NH_DATAFILE	"data"	/* a file giving the meaning of symbols used */
-#define NH_DATAAREA	FILE_AREA_SHARE
-#define NH_CMDHELPFILE	"cmdhelp"	/* file telling what commands do */
-#define NH_CMDHELPAREA	FILE_AREA_SHARE
-#define NH_HISTORY		"history"	/* a file giving nethack's history */
-#define NH_HISTORY_AREA	FILE_AREA_SHARE
-#define NH_LICENSE		"license"	/* file with license information */
-#define NH_LICENSE_AREA	FILE_AREA_DOC
-#define NH_OPTIONFILE	"opthelp"	/* a file explaining runtime options */
-#define NH_OPTIONAREA	FILE_AREA_SHARE
-#define NH_OPTIONS_USED	"options"	/* compile-time options, for #version */
+#define NH_RECORD       "record"  /* a file containing list of topscorers */
+#define NH_RECORD_AREA  FILE_AREA_VAR
+#define NH_HELP     "help"    /* a file containing command descriptions */
+#define NH_HELP_AREA    FILE_AREA_SHARE
+#define NH_SHELP        "hh"        /* abbreviated form of the same */
+#define NH_SHELP_AREA   FILE_AREA_SHARE
+#define NH_DEBUGHELP    "wizhelp"   /* a file containing debug mode cmds */
+#define NH_DEBUGHELP_AREA   FILE_AREA_SHARE
+#define NH_RUMORFILE    "rumors"    /* a file with fortune cookies */
+#define NH_RUMORAREA    FILE_AREA_SHARE
+#define NH_ORACLEFILE   "oracles"   /* a file with oracular information */
+#define NH_ORACLEAREA   FILE_AREA_SHARE
+#define NH_DATAFILE "data"  /* a file giving the meaning of symbols used */
+#define NH_DATAAREA FILE_AREA_SHARE
+#define NH_CMDHELPFILE  "cmdhelp"   /* file telling what commands do */
+#define NH_CMDHELPAREA  FILE_AREA_SHARE
+#define NH_HISTORY      "history"   /* a file giving nethack's history */
+#define NH_HISTORY_AREA FILE_AREA_SHARE
+#define NH_LICENSE      "license"   /* file with license information */
+#define NH_LICENSE_AREA FILE_AREA_DOC
+#define NH_OPTIONFILE   "opthelp"   /* a file explaining runtime options */
+#define NH_OPTIONAREA   FILE_AREA_SHARE
+#define NH_OPTIONS_USED "options"   /* compile-time options, for #version */
 #define NH_OPTIONS_USED_AREA FILE_AREA_SHARE
 #ifdef SHORT_FILENAMES
 # define NH_GUIDEBOOK       "guideboo.txt"        /* Nethack Guidebook*/
 #else
 #define NH_GUIDEBOOK       "Guidebook.txt"       /* Nethack Guidebook*/
 #endif
-#define NH_GUIDEBOOK_AREA	FILE_AREA_DOC
+#define NH_GUIDEBOOK_AREA   FILE_AREA_DOC
 
 
-#define LEV_EXT	".lev"		/* extension for special level files */
-#define RECORD	      "record"	/* file containing list of topscorers */
-#define HELP	      "help"	/* file containing command descriptions */
-#define SHELP	      "hh"	/* abbreviated form of the same */
+#define LEV_EXT ".lev"      /* extension for special level files */
+#define RECORD        "record"  /* file containing list of topscorers */
+#define HELP          "help"    /* file containing command descriptions */
+#define SHELP         "hh"  /* abbreviated form of the same */
 #define DEBUGHELP     "wizhelp" /* file containing debug mode cmds */
-#define RUMORFILE     "rumors"	/* file with fortune cookies */
+#define RUMORFILE     "rumors"  /* file with fortune cookies */
 #define ORACLEFILE    "oracles" /* file with oracular information */
-#define DATAFILE      "data"	/* file giving the meaning of symbols used */
+#define DATAFILE      "data"    /* file giving the meaning of symbols used */
 #define CMDHELPFILE   "cmdhelp" /* file telling what commands do */
 #define HISTORY       "history" /* file giving nethack's history */
 #define LICENSE       "license" /* file with license information */
 #define OPTIONFILE    "opthelp" /* file explaining runtime options */
 #define OPTIONS_USED  "options" /* compile-time options, for #version */
 
-#define LEV_EXT ".lev"		/* extension for special level files */
+#define LEV_EXT ".lev"      /* extension for special level files */
 
 
 /* Assorted definitions that may depend on selections in config.h. */
@@ -78,26 +78,33 @@
 #ifndef STUPID
 #define STUPID
 #endif
-#endif	/* DUMB */
+#endif  /* DUMB */
 
 /*
  * type xchar: small integers in the range 0 - 127, usually coordinates
  * although they are nonnegative they must not be declared unsigned
  * since otherwise comparisons with signed quantities are done incorrectly
  */
-typedef schar	xchar;
+typedef schar xchar;
 #ifndef SKIP_BOOLEAN
-typedef xchar	boolean;		/* 0 or 1 */
+typedef xchar boolean;          /* 0 or 1 */
 #endif
 
-#ifndef TRUE		/* defined in some systems' native include files */
-#define TRUE	((boolean)1)
-#define FALSE	((boolean)0)
+#ifndef TRUE        /* defined in some systems' native include files */
+#define TRUE    ((boolean)1)
+#define FALSE   ((boolean)0)
 #endif
+
+enum optchoice { opt_in, opt_out};
+
+/*
+ * type nhsym: loadable symbols go into this type
+ */
+typedef glyph_t nhsym;
 
 #ifndef STRNCMPI
-# ifndef __SASC_60		/* SAS/C already shifts to stricmp */
-#  define strcmpi(a,b) strncmpi((a),(b),-1)
+# ifndef __SASC_60      /* SAS/C already shifts to stricmp */
+#  define strcmpi(a, b) strncmpi((a), (b), -1)
 # endif
 #endif
 
@@ -105,17 +112,17 @@ typedef xchar	boolean;		/* 0 or 1 */
  * disappear eventually
  */
 #ifdef INTERNAL_COMP
-# define RLECOMP	/* run-length compression of levl array - JLee */
-# define ZEROCOMP	/* zero-run compression of everything - Olaf Seibert */
+# define RLECOMP    /* run-length compression of levl array - JLee */
+# define ZEROCOMP   /* zero-run compression of everything - Olaf Seibert */
 #endif
 
-/* #define SPECIALIZATION */	/* do "specialized" version of new topology */
+/* #define SPECIALIZATION */    /* do "specialized" version of new topology */
 
 
 #ifdef BITFIELDS
-#define Bitfield(x,n)	unsigned x:n
+#define Bitfield(x, n)   unsigned x : n
 #else
-#define Bitfield(x,n)	uchar x
+#define Bitfield(x, n)   uchar x
 #endif
 
 #ifdef UNWIDENED_PROTOTYPES
@@ -139,20 +146,6 @@ typedef xchar	boolean;		/* 0 or 1 */
 #  define ALIGNTYP_P int
 # endif
 #endif
-#if defined(ULTRIX_PROTO) && !defined(__STDC__)
-/* The ultrix 2.0 and 2.1 compilers (on Ultrix 4.0 and 4.2 respectively) can't
- * handle "struct obj *" constructs in prototypes.  Their bugs are different,
- * but both seem to work if we put "void*" in the prototype instead.  This
- * gives us minimal prototype checking but avoids the compiler bugs.
- *
- * OBJ_P and MONST_P should _only_ be used for declaring function pointers.
- */
-#define OBJ_P void*
-#define MONST_P void*
-#else
-#define OBJ_P struct obj*
-#define MONST_P struct monst*
-#endif
 
 #define SIZE(x) (int)(sizeof(x) / sizeof(x[0]))
 
@@ -162,7 +155,7 @@ typedef xchar	boolean;		/* 0 or 1 */
  * particular machine, although it is set to the minimum required maximum
  * signed integer for C (2^15 -1).
  */
-#define LARGEST_INT	32767
+#define LARGEST_INT 32767
 
 
 #ifdef REDO
@@ -219,9 +212,9 @@ typedef xchar	boolean;		/* 0 or 1 */
 #ifndef FILE_AREAS
 
 #define fopen_datafile_area(area, filename, mode, use_spfx) \
- 		fopen_datafile(filename, mode, use_spfx)
+    fopen_datafile(filename, mode, use_spfx)
 #define lock_file_area(area, filename, prefix, retryct) \
- 		lock_file(filename, prefix, retryct)
+    lock_file(filename, prefix, retryct)
 #define unlock_file_area(area, filename) unlock_file(filename)
 #define dlb_fopen_area(area, name, mode) dlb_fopen(name, mode)
 
@@ -234,58 +227,58 @@ typedef xchar	boolean;		/* 0 or 1 */
  * this is often a good trade-off.
  */
 
-#define FILE_AREA_VAR		NULL
-#define FILE_AREA_SAVE		NULL
-#define FILE_AREA_LEVL		NULL
-#define FILE_AREA_BONES		NULL
-#define FILE_AREA_SHARE		NULL
-#define FILE_AREA_UNSHARE	NULL
+#define FILE_AREA_VAR       NULL
+#define FILE_AREA_SAVE      NULL
+#define FILE_AREA_LEVL      NULL
+#define FILE_AREA_BONES     NULL
+#define FILE_AREA_SHARE     NULL
+#define FILE_AREA_UNSHARE   NULL
 
 #endif
 
 /* Displayable name of this port; don't redefine if defined in *conf.h */
 #ifndef PORT_ID
 # ifdef AMIGA
-#  define PORT_ID	"Amiga"
+#  define PORT_ID   "Amiga"
 # endif
 # ifdef MAC
-#  define PORT_ID	"Mac"
+#  define PORT_ID   "Mac"
 # endif
 # ifdef MSDOS
 #  ifdef PC9800
-#  define PORT_ID	"PC-9800"
+#  define PORT_ID   "PC-9800"
 #  else
-#  define PORT_ID	"PC"
+#  define PORT_ID   "PC"
 #  endif
 #  ifdef DJGPP
-#  define PORT_SUB_ID	"djgpp"
+#  define PORT_SUB_ID   "djgpp"
 #  else
 #   ifdef OVERLAY
-#  define PORT_SUB_ID	"overlaid"
+#  define PORT_SUB_ID   "overlaid"
 #   else
-#  define PORT_SUB_ID	"non-overlaid"
+#  define PORT_SUB_ID   "non-overlaid"
 #   endif
 #  endif
 # endif
 # ifdef OS2
-#  define PORT_ID	"OS/2"
+#  define PORT_ID   "OS/2"
 # endif
 # ifdef TOS
-#  define PORT_ID	"ST"
+#  define PORT_ID   "ST"
 # endif
 # ifdef UNIX
-#  define PORT_ID	"Unix"
+#  define PORT_ID   "Unix"
 # endif
 # ifdef VMS
-#  define PORT_ID	"VMS"
+#  define PORT_ID   "VMS"
 # endif
 # ifdef WIN32
-#  define PORT_ID	"Windows"
+#  define PORT_ID   "Windows"
 #  ifndef PORT_SUB_ID
 #   ifdef MSWIN_GRAPHICS
-#    define PORT_SUB_ID	"graphical"
+#    define PORT_SUB_ID "graphical"
 #   else
-#    define PORT_SUB_ID	"tty"
+#    define PORT_SUB_ID "tty"
 #   endif
 #  endif
 # endif
@@ -293,7 +286,7 @@ typedef xchar	boolean;		/* 0 or 1 */
 
 #if defined(MICRO)
 #if !defined(AMIGA) && !defined(TOS) && !defined(OS2_HPFS)
-#define SHORT_FILENAMES		/* filenames are 8.3 */
+#define SHORT_FILENAMES     /* filenames are 8.3 */
 #endif
 #endif
 
@@ -320,13 +313,13 @@ typedef xchar	boolean;		/* 0 or 1 */
 
 #if defined(TTY_GRAPHICS)
 # ifndef USE_TILES
-#  define USE_TILES		/* glyph2tile[] will be available */
+#  define USE_TILES     /* glyph2tile[] will be available */
 # endif
 #endif
 
 #if defined(X11_GRAPHICS) || defined(QT_GRAPHICS) || defined(GNOME_GRAPHICS) || defined(MSWIN_GRAPHICS)
 # ifndef USE_TILES
-#  define USE_TILES		/* glyph2tile[] will be available */
+#  define USE_TILES     /* glyph2tile[] will be available */
 # endif
 #endif
 #if defined(AMII_GRAPHICS) || defined(GEM_GRAPHICS)
@@ -348,27 +341,30 @@ typedef xchar	boolean;		/* 0 or 1 */
 
 /* primitive memory leak debugging; see alloc.c */
 #ifdef MONITOR_HEAP
-extern long *FDECL(nhalloc, (unsigned int,const char *,int));
-extern void FDECL(nhfree, (genericptr_t,const char *,int));
+extern long *FDECL(nhalloc, (unsigned int, const char *, int));
+extern void FDECL(nhfree, (genericptr_t, const char *, int));
+extern char *FDECL(nhdupstr, (const char *, const char *, int));
 # ifndef __FILE__
 #  define __FILE__ ""
 # endif
 # ifndef __LINE__
 #  define __LINE__ 0
 # endif
-# define alloc(a) nhalloc(a,__FILE__,(int)__LINE__)
-# define free(a) nhfree(a,__FILE__,(int)__LINE__)
-#else	/* !MONITOR_HEAP */
-extern long *FDECL(alloc, (unsigned int));		/* alloc.c */
+# define alloc(a) nhalloc(a, __FILE__, (int)__LINE__)
+# define free(a) nhfree(a, __FILE__, (int)__LINE__)
+# define dupstr(s) nhdupstr(s, __FILE__, (int) __LINE__)
+#else   /* !MONITOR_HEAP */
+extern long *FDECL(alloc, (unsigned int));      /* alloc.c */
+extern char *FDECL(dupstr, (const char *)); /* ditto */
 #endif
 
 /* Used for consistency checks of various data files; declare it here so
    that utility programs which include config.h but not hack.h can see it. */
 struct version_info {
-	unsigned long	incarnation;	/* actual version number */
-	unsigned long	feature_set;	/* bitmask of config settings */
-	unsigned long	entity_count;	/* # of monsters and objects */
-	unsigned long	struct_sizes;	/* size of key structs */
+    unsigned long incarnation;      /* actual version number */
+    unsigned long feature_set;      /* bitmask of config settings */
+    unsigned long entity_count;     /* # of monsters and objects */
+    unsigned long struct_sizes;     /* size of key structs */
 };
 
 
@@ -381,47 +377,48 @@ struct version_info {
  */
 
 /* size of terminal screen is (at least) (ROWNO+3) by COLNO */
-#define COLNO	80
-#define ROWNO	21
+#define COLNO   80
+#define ROWNO   21
 
-/* MAXCO must hold longest uncompressed status line, and must be larger
- * than COLNO
- *
- * longest practical second status line at the moment is
- *	Astral Plane $:12345 HP:700(700) Pw:111(111) AC:-127 Xp:30/123456789
- *	T:123456 Satiated Conf FoodPois Ill Blind Stun Hallu Overloaded
- * -- or somewhat over 130 characters
- */
-#if COLNO <= 140
-#define MAXCO 160
-#else
-#define MAXCO (COLNO+20)
-#endif
+#define MAXNROFROOMS    40  /* max number of rooms per level */
+#define MAX_SUBROOMS    24  /* max # of subrooms in a given room */
+#define DOORMAX     120 /* max number of doors per level */
 
+#define BUFSZ       256 /* for getlin buffers */
+#define QBUFSZ      128 /* for building question text */
+#define TBUFSZ      300 /* toplines[] buffer max msg: 3 81char names */
+/* plus longest prefix plus a few extra words */
 
-#define MAXNROFROOMS	40	/* max number of rooms per level */
-#define MAX_SUBROOMS	24	/* max # of subrooms in a given room */
-#define DOORMAX		120	/* max number of doors per level */
+#define PL_NSIZ     32  /* name of player, ghost, shopkeeper */
+#define PL_CSIZ     32  /* sizeof pl_character */
+#define PL_FSIZ     32  /* fruit name */
+#define PL_PSIZ     63  /* player-given names for pets, other
+                         * monsters, objects */
 
-#define BUFSZ		256	/* for getlin buffers */
-#define QBUFSZ		128	/* for building question text */
-#define TBUFSZ		300	/* toplines[] buffer max msg: 3 81char names */
-				/* plus longest prefix plus a few extra words */
+#define MAXDUNGEON  16  /* current maximum number of dungeons */
+#define MAXLEVEL    32  /* max number of levels in one dungeon */
+#define MAXSTAIRS   1   /* max # of special stairways in a dungeon */
+#define ALIGNWEIGHT 4   /* generation weight of alignment */
 
-#define PL_NSIZ		32	/* name of player, ghost, shopkeeper */
-#define PL_CSIZ		32	/* sizeof pl_character */
-#define PL_FSIZ		32	/* fruit name */
-#define PL_PSIZ		63	/* player-given names for pets, other
-				 * monsters, objects */
+#define MAXULEV     30  /* max character experience level */
 
-#define MAXDUNGEON	16	/* current maximum number of dungeons */
-#define MAXLEVEL	32	/* max number of levels in one dungeon */
-#define MAXSTAIRS	1	/* max # of special stairways in a dungeon */
-#define ALIGNWEIGHT	4	/* generation weight of alignment */
+#define MAXMONNO    120 /* extinct monst after this number created */
+#define MHPMAX      500 /* maximum monster hp */
 
-#define MAXULEV		30	/* max character experience level */
-
-#define MAXMONNO	120	/* extinct monst after this number created */
-#define MHPMAX		500	/* maximum monster hp */
+/* LIVELOG message type flags */
+#define LL_WISH       0x0001 /* Report stuff people type at the wish prompt. */
+#define LL_ACHIEVE    0x0002 /* Achievements bitfield + invocation, planes */
+#define LL_UMONST     0x0004 /* Kill, Bribe or otherwise dispatch unique monsters */
+#define LL_DIVINEGIFT 0x0008 /* Sacrifice gifts, crowning */
+#define LL_LIFESAVE   0x0010 /* Use up amulet of lifesaving */
+#define LL_CONDUCT    0x0020 /* Break conduct - not reported early-game */
+#define LL_ARTIFACT   0x0040 /* Excalibur, Sting, Orcrist, plus sac gifts and artwishes */
+#define LL_GENOCIDE   0x0080 /* Logging of genocides */
+#define LL_KILLEDPET  0x0100 /* Killed a tame monster */
+#define LL_ALIGNMENT  0x0200 /* changed alignment temporarily or permanently */
+#define LL_DUMP_ASC   0x0400 /* Log URL for dumplog if ascended */
+#define LL_DUMP_ALL   0x0800 /* Log dumplog url for all games */
+#define LL_MINORAC    0x1000 /* Log 'minor' achievements - can be spammy */
+#define LL_DEBUG      0x8000 /* For debugging messages and other spam */
 
 #endif /* GLOBAL_H */

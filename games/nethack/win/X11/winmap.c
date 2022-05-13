@@ -49,6 +49,9 @@
 extern short glyph2tile[];
 extern int total_tiles_used;
 
+/* from dlb.c */
+extern FILE *FDECL(fopen_datafile, (const char *,const char *,int));
+
 /* Define these if you really want a lot of junk on your screen. */
 /* #define VERBOSE */		/* print various info & events as they happen */
 /* #define VERBOSE_UPDATE */	/* print screen update bounds */
@@ -72,10 +75,11 @@ static void FDECL(display_cursor, (struct xwindow *));
 /* Global functions ======================================================== */
 
 void
-X11_print_glyph(window, x, y, glyph)
+X11_print_glyph(window, x, y, glyph, bg_glyph)
     winid window;
     xchar x, y;
     int glyph;
+    int bg_glyph UNUSED;
 {
     struct map_info_t *map_info;
     boolean update_bbox;
@@ -107,9 +111,9 @@ X11_print_glyph(window, x, y, glyph)
 	register unsigned char *co_ptr;
 #endif
 	/* map glyph to character and color */
-        mapglyph(glyph, &och, &color, &special, x, y);
+        (void) mapglyph(glyph, &och, &color, &special, x, y, 0);
 	ch = (uchar)och;
-	
+
 	/* Only update if we need to. */
 	ch_ptr = &map_info->mtype.text_map->text[y][x];
 
@@ -141,7 +145,13 @@ X11_print_glyph(window, x, y, glyph)
  * on this being defined.
  */
 /*ARGSUSED*/
-void X11_cliparound(x, y) int x, y; { }
+void
+X11_cliparound(x, y)
+int x UNUSED;
+int y UNUSED;
+{
+    return;
+}
 #endif /* CLIPPING */
 
 /* End global functions ==================================================== */
@@ -1098,6 +1108,8 @@ map_exposed(w, client_data, widget_data)
     int start_row, stop_row, start_col, stop_col;
     XExposeEvent *event = (XExposeEvent *) widget_data;
     int t_height, t_width;	/* tile/text height & width */
+
+    nhUse(client_data);
 
     if (!XtIsRealized(w) || event->count > 0) return;
 

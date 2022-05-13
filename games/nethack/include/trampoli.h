@@ -1,5 +1,5 @@
-/*	SCCS Id: @(#)trampoli.h 3.4	1995/06/01	*/
-/* Copyright (c) 1989, by Norm Meluch and Stephen Spackman	  */
+/*  SCCS Id: @(#)trampoli.h 3.4 1995/06/01  */
+/* Copyright (c) 1989, by Norm Meluch and Stephen Spackman    */
 /* NetHack may be freely redistributed.  See license for details. */
 
 #ifndef TRAMPOLI_H
@@ -8,7 +8,7 @@
 #ifdef USE_TRAMPOLI
 
 /* ### apply.c ### */
-#define dig()	  dig_()
+#define dig()     dig_()
 #define doapply() doapply_()
 #define dojump()  dojump_()
 #define dorub()   dorub_()
@@ -19,21 +19,21 @@
 
 
 /* ### cmd.c ### */
-#define doextcmd()	   doextcmd_()
-#define doextlist()	   doextlist_()
-#define domonability()	   domonability_()
+#define doextcmd()     doextcmd_()
+#define doextlist()    doextlist_()
+#define domonability()     domonability_()
 #define enter_explore_mode() enter_explore_mode_()
 #define doprev_message() doprev_message_()
 #define timed_occupation() timed_occupation_()
 #define wiz_attributes()   wiz_attributes_()
 #ifdef WIZARD
-#define wiz_detect()	   wiz_detect_()
-#define wiz_genesis()	   wiz_genesis_()
-#define wiz_identify()	   wiz_identify_()
+#define wiz_detect()       wiz_detect_()
+#define wiz_genesis()      wiz_genesis_()
+#define wiz_identify()     wiz_identify_()
 #define wiz_level_tele()   wiz_level_tele_()
-#define wiz_map()	   wiz_map_()
-#define wiz_where()	   wiz_where_()
-#define wiz_wish()	   wiz_wish_()
+#define wiz_map()      wiz_map_()
+#define wiz_where()    wiz_where_()
+#define wiz_wish()     wiz_wish_()
 #endif
 
 /* ### display.c ### */
@@ -44,7 +44,7 @@
 #define dodown()   dodown_()
 #define dodrop()   dodrop_()
 #define donull()   donull_()
-#define doup()	   doup_()
+#define doup()     doup_()
 #define dowipe()   dowipe_()
 #define drop(x)    drop_(x)
 #define wipeoff()  wipeoff_()
@@ -169,7 +169,7 @@
 
 
 /* ### options.c ### */
-#define doset()		 doset_()
+#define doset()      doset_()
 #define dotogglepickup() dotogglepickup_()
 
 
@@ -186,13 +186,13 @@
 
 /* ### pcsys.c ### */
 #ifdef SHELL
-#define dosh()	     dosh_()
+#define dosh()       dosh_()
 #endif /* SHELL */
 
 
 /* ### pickup.c ### */
-#define ck_bag(x)	 ck_bag_(x)
-#define doloot()	 doloot_()
+#define ck_bag(x)    ck_bag_(x)
+#define doloot()     doloot_()
 #define in_container(x)  in_container_(x)
 #define out_container(x) out_container_(x)
 
@@ -210,7 +210,7 @@
 
 
 /* ### read.c ### */
-#define doread()	   doread_()
+#define doread()       doread_()
 #define set_lit(x, y, val) set_lit_(x, y, val)
 
 
@@ -226,8 +226,8 @@
 
 
 /* ### search.c ### */
-#define doidtrap()	     doidtrap_()
-#define dosearch()	     dosearch_()
+#define doidtrap()       doidtrap_()
+#define dosearch()       dosearch_()
 #define findone(zx, zy, num) findone_(zx, zy, num)
 #define openone(zx, zy, num) openone_(zx, zy, num)
 
@@ -276,56 +276,56 @@
 
 
 /* ### getline.c ### */
-#define tty_getlin(x,y)			tty_getlin_(x,y)
-#define tty_get_ext_cmd()		tty_get_ext_cmd_()
+#define tty_getlin(x, y)         tty_getlin_(x, y)
+#define tty_get_ext_cmd()       tty_get_ext_cmd_()
 
 
 /* ### termcap.c ### */
-#define tty_nhbell()			tty_nhbell_()
-#define tty_number_pad(x)		tty_number_pad_(x)
-#define tty_delay_output()		tty_delay_output_()
-#define tty_start_screen()		tty_start_screen_()
-#define tty_end_screen()		tty_end_screen_()
+#define tty_nhbell()            tty_nhbell_()
+#define tty_number_pad(x)       tty_number_pad_(x)
+#define tty_delay_output()      tty_delay_output_()
+#define tty_start_screen()      tty_start_screen_()
+#define tty_end_screen()        tty_end_screen_()
 
 
 /* ### topl.c ### */
-#define tty_doprev_message()		tty_doprev_message_()
-#define tty_yn_function(x,y,z)		tty_yn_function_(x,y,z)
+#define tty_doprev_message()        tty_doprev_message_()
+#define tty_yn_function(x, y, z)      tty_yn_function_(x, y, z)
 
 
 /* ### wintty.c ### */
-#define tty_init_nhwindows(x,y)		tty_init_nhwindows_(x,y)
-#define tty_player_selection()		tty_player_selection_()
-#define tty_askname()			tty_askname_()
-#define tty_get_nh_event()		tty_get_nh_event_()
-#define tty_exit_nhwindows(x)		tty_exit_nhwindows_(x)
-#define tty_suspend_nhwindows(x)	tty_suspend_nhwindows_(x)
-#define tty_resume_nhwindows()		tty_resume_nhwindows_()
-#define tty_create_nhwindow(x)		tty_create_nhwindow_(x)
-#define tty_clear_nhwindow(x)		tty_clear_nhwindow_(x)
-#define tty_display_nhwindow(x,y)	tty_display_nhwindow_(x,y)
-#define tty_destroy_nhwindow(x)		tty_destroy_nhwindow_(x)
-#define tty_curs(x,y,z)			tty_curs_(x,y,z)
-#define tty_putstr(x,y,z)		tty_putstr_(x,y,z)
-#define tty_display_file(x,y)		tty_display_file_(x,y)
-#define tty_start_menu(x)		tty_start_menu_(x)
-#define tty_add_menu(a,b,c,d,e,f,g,h,i)	tty_add_menu_(a,b,c,d,e,f,g,h,i)
-#define tty_end_menu(a,b)		tty_end_menu_(a,b)
-#define tty_select_menu(a,b,c)		tty_select_menu_(a,b,c)
-#define tty_update_inventory()		tty_update_inventory_()
-#define tty_mark_synch()		tty_mark_synch_()
-#define tty_wait_synch()		tty_wait_synch_()
+#define tty_init_nhwindows(x, y)     tty_init_nhwindows_(x, y)
+#define tty_player_selection()      tty_player_selection_()
+#define tty_askname()           tty_askname_()
+#define tty_get_nh_event()      tty_get_nh_event_()
+#define tty_exit_nhwindows(x)       tty_exit_nhwindows_(x)
+#define tty_suspend_nhwindows(x)    tty_suspend_nhwindows_(x)
+#define tty_resume_nhwindows()      tty_resume_nhwindows_()
+#define tty_create_nhwindow(x)      tty_create_nhwindow_(x)
+#define tty_clear_nhwindow(x)       tty_clear_nhwindow_(x)
+#define tty_display_nhwindow(x, y)   tty_display_nhwindow_(x, y)
+#define tty_destroy_nhwindow(x)     tty_destroy_nhwindow_(x)
+#define tty_curs(x, y, z)         tty_curs_(x, y, z)
+#define tty_putstr(x, y, z)       tty_putstr_(x, y, z)
+#define tty_display_file(x, y)       tty_display_file_(x, y)
+#define tty_start_menu(x)       tty_start_menu_(x)
+#define tty_add_menu(a, b, c, d, e, f, g, h, i) tty_add_menu_(a, b, c, d, e, f, g, h, i)
+#define tty_end_menu(a, b)       tty_end_menu_(a, b)
+#define tty_select_menu(a, b, c)      tty_select_menu_(a, b, c)
+#define tty_update_inventory()      tty_update_inventory_()
+#define tty_mark_synch()        tty_mark_synch_()
+#define tty_wait_synch()        tty_wait_synch_()
 #ifdef CLIPPING
-#define tty_cliparound(x,y)		tty_cliparound_(x,y)
+#define tty_cliparound(x, y)     tty_cliparound_(x, y)
 #endif
 #ifdef POSITIONBAR
-#define tty_update_positionbar(x)	tty_update_positionbar_(x)
+#define tty_update_positionbar(x)   tty_update_positionbar_(x)
 #endif
-#define tty_print_glyph(a,b,c,d)	tty_print_glyph_(a,b,c,d)
-#define tty_raw_print(x)		tty_raw_print_(x)
-#define tty_raw_print_bold(x)		tty_raw_print_bold_(x)
-#define tty_nhgetch()			tty_nhgetch_()
-#define tty_nh_poskey(x,y,z)		tty_nh_poskey_(x,y,z)
+#define tty_print_glyph(a, b, c, d)    tty_print_glyph_(a, b, c, d)
+#define tty_raw_print(x)        tty_raw_print_(x)
+#define tty_raw_print_bold(x)       tty_raw_print_bold_(x)
+#define tty_nhgetch()           tty_nhgetch_()
+#define tty_nh_poskey(x, y, z)        tty_nh_poskey_(x, y, z)
 
 #endif /* USE_TRAMPOLI */
 

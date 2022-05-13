@@ -1,4 +1,4 @@
-/*	SCCS Id: @(#)vmsconf.h	3.4	2003/05/19	*/
+/*  SCCS Id: @(#)vmsconf.h  3.4 2003/05/19  */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -15,8 +15,8 @@
  * Trailing NULs are present in the default values in order to make some
  *   extra room for patching longer values into an existing executable.
  */
-#define Local_WIZARD	"NHWIZARD\0\0\0\0"
-#define Local_HACKDIR	"DISK$USERS:[GAMES.NETHACK.3_4_X.PLAY]\0\0\0\0\0\0\0\0"
+#define Local_WIZARD    "NHWIZARD\0\0\0\0"
+#define Local_HACKDIR   "DISK$USERS:[GAMES.NETHACK.3_4_X.PLAY]\0\0\0\0\0\0\0\0"
 
 /*
  * This section cleans up the stuff done in config.h so that it
@@ -46,11 +46,11 @@
 
 /* filenames require punctuation to avoid redirection via logical names */
 #undef RECORD
-#define RECORD	"record;1"	/* scoreboard file (retains high scores) */
+#define RECORD  "record;1"  /* scoreboard file (retains high scores) */
 #undef LOGFILE
-#define LOGFILE "logfile;0"	/* optional file (records all games) */
+#define LOGFILE "logfile;0" /* optional file (records all games) */
 
-#define HLOCK	"perm;1"	/* an empty file used for locking purposes */
+#define HLOCK   "perm;1"    /* an empty file used for locking purposes */
 
 /* want compression--for level & save files--performed within NetHack itself */
 #ifdef COMPRESS
@@ -72,7 +72,7 @@
  * Put the readonly data files into a single container rather than into
  * separate files in the playground directory.
  */
-#define DLB	/* use data librarian code */
+#define DLB /* use data librarian code */
 
 /*
  * You may define TEXTCOLOR if your system has any terminals that recognize
@@ -97,13 +97,13 @@
  * the same, although the differences are fairly negligible.  You must
  * then use a VTxxx function key or two <escape>s to give an ESC response.
  */
-#define USE_QIO_INPUT	/* use SYS$QIOW instead of SMG$READ_KEYSTROKE */
+#define USE_QIO_INPUT   /* use SYS$QIOW instead of SMG$READ_KEYSTROKE */
 
 /*
  * Allow the user to decide whether to pause via timer or excess screen
  * output for various display effects like explosions and moving objects.
  */
-#define TIMED_DELAY	/* enable the `timed_delay' run-time option */
+#define TIMED_DELAY /* enable the `timed_delay' run-time option */
 
 /*
  * If you define MAIL, then NetHack will capture incoming broadcast
@@ -115,7 +115,7 @@
  * If you undefine MAIL, broadcasts will go straight to the terminal,
  * resulting in disruption of the screen display; use <ctrl/R> to redraw.
  */
-#define MAIL		/* enable broadcast trapping */
+#define MAIL        /* enable broadcast trapping */
 
 /*
  * SHELL enables the player to 'escape' into a spawned subprocess via
@@ -127,12 +127,12 @@
  * to the parent process with the <ctrl/Z> command; this is not very
  * close to Unix job control, but it's better than nothing.
  */
-#define SHELL		/* do not delete the '!' command */
-#define SUSPEND		/* don't delete the ^Z command, such as it is */
+#define SHELL       /* do not delete the '!' command */
+#define SUSPEND     /* don't delete the ^Z command, such as it is */
 
-#define RANDOM		/* use sys/share/random.c instead of vaxcrtl rand */
+#define RANDOM      /* use sys/share/random.c instead of vaxcrtl rand */
 
-#define FCMASK	0660	/* file creation mask */
+#define FCMASK  0660    /* file creation mask */
 
 
 /*
@@ -141,13 +141,13 @@
 
 /* data librarian defs */
 #ifdef DLB
-# define DLBFILE	"nh-data.dlb"
-	/*
-	 * Since we can do without case insensitive filename comparison,
-	 * avoid enabling it because that requires compiling and linking
-	 * src/hacklib into util/dlb_main.
-	 */
-/* # define FILENAME_CMP strcmpi */	/* case insensitive */
+# define DLBFILE    "nh-data.dlb"
+/*
+ * Since we can do without case insensitive filename comparison,
+ * avoid enabling it because that requires compiling and linking
+ * src/hacklib into util/dlb_main.
+ */
+/* # define FILENAME_CMP strcmpi */ /* case insensitive */
 #endif
 
 #if defined(VAXC) && !defined(ANCIENT_VAXC)
@@ -167,11 +167,11 @@
 #endif
 
 #ifndef alloca
-	/* bison generated foo_yacc.c might try to use alloca() */
+/* bison generated foo_yacc.c might try to use alloca() */
 # ifdef __GNUC__
 #  define alloca __builtin_alloca
 # else
-#  define ALLOCA_HACK	/* used in util/panic.c */
+#  define ALLOCA_HACK   /* used in util/panic.c */
 # endif
 #endif
 
@@ -194,12 +194,12 @@ typedef __gid_t gid_t;
 # define __MODE_T
 typedef __mode_t mode_t;
 # endif
-#endif	/* _DECC_V4_SOURCE */
+#endif  /* _DECC_V4_SOURCE */
 
 #include <time.h>
-#if 0	/* <file.h> is missing for old gcc versions; skip it to save time */
+#if 0   /* <file.h> is missing for old gcc versions; skip it to save time */
 #include <file.h>
-#else	/* values needed from missing include file */
+#else   /* values needed from missing include file */
 # define O_RDONLY 0
 # define O_WRONLY 1
 # define O_RDWR   2
@@ -214,40 +214,27 @@ typedef __mode_t mode_t;
 
 #include "system.h"
 
-#define index	strchr
-#define rindex	strrchr
-
-/* Use the high quality random number routines. */
-#if defined(RANDOM)
-#define Rand()	random()
-/* VMS V7 adds these entry points to DECC$SHR; stick with the nethack-supplied
-   code to avoid having to deal with version-specific conditionalized builds */
-#define random		nh_random
-#define srandom		nh_srandom
-#define initstate	nh_initstate
-#define setstate	nh_setstate
-#else
-#define Rand()	rand()
-#endif
+#define index   strchr
+#define rindex  strrchr
 
 #ifndef __GNUC__
 # ifndef bcopy
-#define bcopy(s,d,n)	memcpy((d),(s),(n))	/* vaxcrtl */
+#define bcopy(s, d, n)    memcpy((d), (s), (n)) /* vaxcrtl */
 # endif
 #endif
-#define abort()		vms_abort()		/* vmsmisc.c */
-#define creat(f,m)	vms_creat(f,m)		/* vmsfiles.c */
-#define exit(sts)	vms_exit(sts)		/* vmsmisc.c */
-#define getuid()	vms_getuid()		/* vmsunix.c */
-#define link(f1,f2)	vms_link(f1,f2)		/* vmsfiles.c */
-#define open(f,k,m)	vms_open(f,k,m)		/* vmsfiles.c */
-/* #define unlink(f0)	vms_unlink(f0)		/* vmsfiles.c */
+#define abort()     vms_abort()     /* vmsmisc.c */
+#define creat(f, m)  vms_creat(f, m)      /* vmsfiles.c */
+#define exit(sts)   vms_exit(sts)       /* vmsmisc.c */
+#define getuid()    vms_getuid()        /* vmsunix.c */
+#define link(f1, f2) vms_link(f1, f2)     /* vmsfiles.c */
+#define open(f, k, m) vms_open(f, k, m)     /* vmsfiles.c */
+/* #define unlink(f0)   vms_unlink(f0)      /* vmsfiles.c */
 #ifdef VERYOLD_VMS
-#define unlink(f0)	delete(f0)		/* vaxcrtl */
+#define unlink(f0)  delete(f0)      /* vaxcrtl */
 #else
-#define unlink(f0)	remove(f0)		/* vaxcrtl, decc$shr */
+#define unlink(f0)  remove(f0)      /* vaxcrtl, decc$shr */
 #endif
-#define C$$TRANSLATE(n) c__translate(n)		/* vmsfiles.c */
+#define C$$TRANSLATE(n) c__translate(n)     /* vmsfiles.c */
 
 /* VMS global names are case insensitive... */
 #define An vms_an
@@ -259,7 +246,7 @@ typedef __mode_t mode_t;
 
 /* used in several files which don't #include "extern.h" */
 extern void FDECL(vms_exit, (int));
-extern int FDECL(vms_open, (const char *,int,unsigned));
+extern int FDECL(vms_open, (const char *, int, unsigned));
 
-#endif	/* VMSCONF_H */
-#endif	/* VMS */
+#endif  /* VMSCONF_H */
+#endif  /* VMS */

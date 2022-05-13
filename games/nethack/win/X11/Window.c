@@ -87,10 +87,10 @@ static XtResource resources[] = {
 
 /* ARGSUSED */
 static void no_op(w, event, params, num_params)
-    Widget   w;			/* unused */
-    XEvent   *event;		/* unused */
-    String   *params;		/* unused */
-    Cardinal *num_params;	/* unused */
+    Widget   w UNUSED;
+    XEvent   *event UNUSED;
+    String   *params UNUSED;
+    Cardinal *num_params UNUSED;
 {
 }
 
@@ -107,7 +107,7 @@ static char translations[] =
 static void Redisplay(w, event, region)
     Widget w;
     XEvent *event;
-    Region region;	/* unused */
+    Region region UNUSED;
 {
     /* This isn't correct - we need to call the callback with region. */
     XtCallCallbacks(w, XtNexposeCallback, (caddr_t) event);

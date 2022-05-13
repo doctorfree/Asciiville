@@ -217,12 +217,13 @@ curses_color_attr(int nh_color, int bg_color)
     attr_t cattr = A_NORMAL;
 
     if (!nh_color) {
-#ifdef USE_DARKGRAY
-        if (!can_change_color() || COLORS <= 16)
-            cattr |= A_BOLD;
-#else
-        color = COLOR_BLUE;
-#endif
+        if (iflags.wc2_newcolors) {
+            if (COLORS <= 16) {
+                cattr |= A_BOLD;
+            }
+        } else {
+            color = COLOR_BLUE;
+        }
     }
 
     if (COLORS < 16 && color > 8) {
@@ -447,6 +448,8 @@ curses_update_stats(void)
         if (border)
             ay -= 2;
 
+        nhUse(ax); /* getmaxyx macro isn't sufficient */
+
         if (cy != ay) {
             curses_create_main_windows();
             curses_last_messages();
@@ -504,7 +507,7 @@ draw_horizontal(int x, int y, int hp, int hpmax)
         draw_horizontal_new(x, y, hp, hpmax);
         return;
     }
-    char buf[BUFSZ];
+    char buf[BUFSZ*2];
     char rank[BUFSZ];
     WINDOW *win = curses_get_nhwin(STATUS_WIN);
 
@@ -542,11 +545,7 @@ draw_horizontal(int x, int y, int hp, int hpmax)
 
     wprintw(win, "%s", buf);
 
-#ifndef GOLDOBJ
-    print_statdiff("$", &prevau, u.ugold, STAT_GOLD);
-#else
     print_statdiff("$", &prevau, money_cnt(invent), STAT_GOLD);
-#endif
 
     /* HP/Pw use special coloring rules */
     attr_t hpattr, pwattr;
@@ -587,6 +586,10 @@ draw_horizontal(int x, int y, int hp, int hpmax)
 
     if (flags.time)
         print_statdiff(" T:", &prevtime, moves, STAT_TIME);
+
+    if (iflags.showrealtime) {
+        wprintw(win, " %s", botl_realtime());
+    }
 
     curses_add_statuses(win, FALSE, FALSE, NULL, NULL);
 }
@@ -661,11 +664,7 @@ draw_horizontal_new(int x, int y, int hp, int hpmax)
     wprintw(win, "Pw:");
     draw_bar(FALSE, u.uen, u.uenmax, NULL);
 
-#ifndef GOLDOBJ
-    print_statdiff(" $", &prevau, u.ugold, STAT_GOLD);
-#else
     print_statdiff(" $", &prevau, money_cnt(invent), STAT_GOLD);
-#endif
 
 #ifdef SCORE_ON_BOTL
     if (flags.showscore)
@@ -674,6 +673,10 @@ draw_horizontal_new(int x, int y, int hp, int hpmax)
 
     if (flags.time)
         print_statdiff(" T:", &prevtime, moves, STAT_TIME);
+
+    if (iflags.showrealtime) {
+        wprintw(win, " %s", botl_realtime());
+    }
 
     curses_add_statuses(win, TRUE, FALSE, &x, &y);
 
@@ -781,11 +784,7 @@ draw_vertical(int x, int y, int hp, int hpmax)
         wprintw(win, "%d", depth(&u.uz));
     wmove(win, y++, x);
 
-#ifndef GOLDOBJ
-    print_statdiff("Gold:          ", &prevau, u.ugold, STAT_GOLD);
-#else
     print_statdiff("Gold:          ", &prevau, money_cnt(invent), STAT_GOLD);
-#endif
     wmove(win, y++, x);
 
     /* HP/Pw use special coloring rules */
@@ -858,6 +857,8 @@ curses_add_statuses(WINDOW *win, boolean align_right,
         getmaxyx(win, my, mx);
         if (!curses_window_has_border(STATUS_WIN))
             mx++;
+
+        nhUse(my);
 
         *x = mx;
     }

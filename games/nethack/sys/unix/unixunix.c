@@ -309,6 +309,11 @@ int
 dosh()
 {
 	register char *str;
+
+    if (iflags.debug_fuzzer) {
+        return 0;
+    }
+
 	if(child(0)) {
 		if((str = getenv("SHELL")) != (char*)0)
 			(void) execl(str, str, (char *)0);
@@ -400,7 +405,7 @@ const char *filearea, *filename;
 FILE *
 fopen_datafile_area(filearea, filename, mode, use_scoreprefix)
 const char *filearea, *filename, *mode;
-boolean use_scoreprefix;
+boolean use_scoreprefix UNUSED;
 {
 	FILE *fp;
 	char *buf;

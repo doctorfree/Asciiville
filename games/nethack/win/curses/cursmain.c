@@ -6,6 +6,10 @@
 #include "color.h"
 #include "wincurs.h"
 
+#ifdef HAVE_LOCALE_H
+# include <locale.h>
+#endif
+
 /* Public functions for curses NetHack interface */
 
 /* Interface definition, for windows.c */
@@ -65,12 +69,21 @@ struct window_procs curses_procs = {
     curses_preference_update,
 };
 
+/*
+ * Global variables for curses interface
+ */
+int term_rows, term_cols;                /* size of underlying terminal */
+int orig_cursor;                         /* Preserve initial cursor state */
+WINDOW *base_term;                       /* underlying terminal window */
+boolean counting;                        /* Count window is active */
+WINDOW *mapwin, *statuswin, *messagewin; /* Main windows */
+
 /* Track if we're performing an update to the permanent window.
    Needed since we aren't using the normal menu functions to handle
    the inventory window. */
 static int inv_update = 0;
 
-/*  
+/*
 init_nhwindows(int* argcp, char** argv)
                 -- Initialize the windows used by NetHack.  This can also
                    create the standard windows listed at the top, but does
@@ -85,10 +98,14 @@ init_nhwindows(int* argcp, char** argv)
                 ** windows?  Or at least all but WIN_INFO?      -dean
 */
 void
-curses_init_nhwindows(int *argcp, char **argv)
+curses_init_nhwindows(int *argcp UNUSED, char **argv UNUSED)
 {
 #ifdef PDCURSES
     char window_title[BUFSZ];
+#endif
+
+#ifdef HAVE_LOCALE_H
+    setlocale(LC_CTYPE, "");
 #endif
 
 #ifdef XCURSES
@@ -224,7 +241,7 @@ curses_exit_nhwindows(const char *str)
 
 /* Prepare the window to be suspended. */
 void
-curses_suspend_nhwindows(const char *str)
+curses_suspend_nhwindows(const char *str UNUSED)
 {
     endwin();
 }
@@ -237,7 +254,7 @@ curses_resume_nhwindows()
     curses_refresh_nethack_windows();
 }
 
-/*  Create a window of type "type" which can be 
+/*  Create a window of type "type" which can be
         NHW_MESSAGE     (top line)
         NHW_STATUS      (bottom lines)
         NHW_MAP         (main dungeon)
@@ -304,7 +321,7 @@ curses_display_nhwindow(winid wid, BOOLEAN_P block)
 }
 
 
-/* Destroy will dismiss the window if the window has not 
+/* Destroy will dismiss the window if the window has not
  * already been dismissed.
 */
 void
@@ -350,10 +367,19 @@ Attributes
 void
 curses_putstr(winid wid, int attr, const char *text)
 {
-    int curses_attr = curses_convert_attr(attr);
+    int mesgflags, curses_attr;
 
-    /* We need to convert NetHack attributes to curses attributes */
-    curses_puts(wid, curses_attr, text);
+    mesgflags = attr & (ATR_URGENT | ATR_NOHISTORY);
+    attr &= ~mesgflags;
+
+    if (wid == WIN_MESSAGE && (mesgflags & ATR_NOHISTORY) != 0) {
+        /* display message without saving it in recall history */
+        curses_count_window(text);
+    } else {
+        /* We need to convert NetHack attributes to curses attributes */
+        curses_attr = curses_convert_attr(attr);
+        curses_puts(wid, curses_attr, text);
+    }
 }
 
 /* Display the file named str.  Complain about missing files
@@ -419,13 +445,15 @@ add_menu(winid wid, int glyph, const anything identifier,
                    menu is displayed, set preselected to TRUE.
 */
 void
-curses_add_menu(winid wid, int glyph, int cnt, const ANY_P * identifier,
+curses_add_menu(winid wid, int glyph, int cnt UNUSED, const ANY_P * identifier,
                 CHAR_P accelerator, CHAR_P group_accel, int attr,
-                const char *str, BOOLEAN_P presel)
+                const char *str, unsigned int presel)
 {
+    attr &= ~(ATR_URGENT | ATR_NOHISTORY);
     int curses_attr = curses_convert_attr(attr);
 
     if (inv_update) {
+        /* persistent inventory window; nothing is selectable */
         curses_add_inv(inv_update, glyph, accelerator, curses_attr, str);
         inv_update++;
         return;
@@ -492,7 +520,7 @@ curses_update_inventory(void)
 {
     /* Don't do anything if perm_invent is off unless we
        changed the option. */
-    if (!flags.perm_invent) {
+    if (!iflags.perm_invent) {
         if (curses_get_nhwin(INV_WIN)) {
             curses_create_main_windows();
             curses_last_messages();
@@ -555,14 +583,18 @@ print_glyph(window, x, y, glyph)
                    a 1-1 map between glyphs and distinct things on the map).
 */
 void
-curses_print_glyph(winid wid, XCHAR_P x, XCHAR_P y, int glyph)
+curses_print_glyph(winid wid, XCHAR_P x, XCHAR_P y, int glyph,
+                   int bg_glyph UNUSED)
 {
     int ch, color;
     unsigned int special;
     int attr = -1;
 
     /* map glyph to character and color */
-    mapglyph(glyph, (glyph_t*)&ch, &color, &special, x, y);
+    mapglyph(glyph, (glyph_t*)&ch, &color, &special, x, y, 0);
+    if (special & MG_STATUE) {
+        attr = A_UNDERLINE;
+    }
     if ((special & MG_PET) && iflags.hilite_pet) {
         attr = iflags.wc2_petattr;
     }
@@ -636,8 +668,8 @@ int nh_poskey(int *x, int *y, int *mod)
                    a position in the MAP window is returned in x, y and mod.
                    mod may be one of
 
-                        CLICK_1         -- mouse click type 1 
-                        CLICK_2         -- mouse click type 2 
+                        CLICK_1         -- mouse click type 1
+                        CLICK_2         -- mouse click type 2
 
                    The different click types can map to whatever the
                    hardware supports.  If no mouse is supported, this
@@ -739,7 +771,7 @@ number_pad(state)
             -- Initialize the number pad to the given state.
 */
 void
-curses_number_pad(int state)
+curses_number_pad(int state UNUSED)
 {
 }
 
@@ -784,7 +816,7 @@ outrip(winid, int)
                genl_outrip for the value and check the #if in rip.c.
 */
 void
-curses_outrip(winid wid, int how)
+curses_outrip(winid wid UNUSED, int how UNUSED)
 {
 }
 
@@ -795,7 +827,7 @@ preference_update(preference)
                    port of that change.  If your window-port is capable of
                    dynamically adjusting to the change then it should do so.
                    Your window-port will only be notified of a particular
-                   change if it indicated that it wants to be by setting the 
+                   change if it indicated that it wants to be by setting the
                    corresponding bit in the wincap mask.
 */
 void

@@ -53,10 +53,16 @@ KDEINCDIR=/usr/include/kde
 CXXFLAGS = $(CFLAGS) -I. -I$(QTINCDIR)
 CXX=g++
 
+# file for regular expression matching
+#REGEXOBJ = posixregex.o
+#REGEXOBJ = pmatchregex.o
+#REGEXOBJ = cppregex.o
+REGEXOBJ = @REGEXOBJ@
+
 # files for a straight tty port using no native windowing system
 WINTTYSRC = $(srcdir)/../win/tty/getline.c $(srcdir)/../win/tty/termcap.c $(srcdir)/../win/tty/topl.c \
-	$(srcdir)/../win/tty/wintty.c 
-WINTTYOBJ = getline.o termcap.o topl.o wintty.o 
+	$(srcdir)/../win/tty/wintty.c
+WINTTYOBJ = getline.o termcap.o topl.o wintty.o
 #
 # Files for curses interface
 WINCURSESSRC = ../win/curses/cursmain.c ../win/curses/curswins.c \
@@ -163,7 +169,7 @@ RANDOBJ =
 # used by `make depend' to reconstruct this Makefile; you shouldn't need this
 AWK	= @AWK@
 
-MAKEDEFS = ../util/makedefs
+MAKEDEFS = ../util/makedefs$(EXEEXT)
 
 # timestamp files to reduce `make' overhead and shorten .o dependency lists
 CONFIG_H = ../src/config.h-t
@@ -198,7 +204,7 @@ HACKCSRC = $(srcdir)/allmain.c $(srcdir)/alloc.c $(srcdir)/apply.c \
 	$(srcdir)/rnd.c $(srcdir)/role.c $(srcdir)/rumors.c $(srcdir)/save.c \
 	$(srcdir)/shk.c $(srcdir)/shknam.c $(srcdir)/sit.c $(srcdir)/sounds.c \
 	$(srcdir)/sp_lev.c $(srcdir)/spell.c $(srcdir)/steal.c \
-	$(srcdir)/steed.c $(srcdir)/teleport.c $(srcdir)/timeout.c \
+	$(srcdir)/steed.c $(srcdir)/sys.c $(srcdir)/teleport.c $(srcdir)/timeout.c \
 	$(srcdir)/topten.c $(srcdir)/track.c $(srcdir)/trap.c \
 	$(srcdir)/u_init.c $(srcdir)/uhitm.c $(srcdir)/vault.c \
 	$(srcdir)/version.c $(srcdir)/vision.c $(srcdir)/weapon.c \
@@ -240,12 +246,12 @@ CSOURCES = $(HACKCSRC) $(SYSSRC) $(WINCSRC) $(GENCSRC)
 #
 HACKINCL = align.h amiconf.h artifact.h artilist.h attrib.h beconf.h color.h \
 	config.h config1.h coord.h decl.h def_os2.h display.h dlb.h dungeon.h \
-	edog.h emin.h engrave.h epri.h eshk.h extern.h flag.h func_tab.h \
-	global.h autoconf.h hack.h lev.h macconf.h mfndpos.h micro.h mkroom.h \
+	engrave.h extern.h flag.h func_tab.h \
+	global.h autoconf.h hack.h lev.h macconf.h mextra.h mfndpos.h micro.h mkroom.h \
 	monattk.h mondata.h monflag.h monst.h monsym.h obj.h objclass.h \
 	os2conf.h patchlevel.h pcconf.h permonst.h prop.h rect.h region.h rm.h \
 	sp_lev.h spell.h system.h tcap.h timeout.h tosconf.h tradstdc.h \
-	trampoli.h trap.h unixconf.h vault.h vision.h vmsconf.h wintty.h \
+	trampoli.h trap.h unixconf.h vision.h vmsconf.h wintty.h \
 	winX.h winprocs.h wintype.h you.h youprop.h
 
 HSOURCES = $(HACKINCL) date.h onames.h pm.h vis_tab.h\
@@ -255,6 +261,7 @@ HSOURCES = $(HACKINCL) date.h onames.h pm.h vis_tab.h\
 FIRSTOBJ = monst.o objects.o alloc.o
 
 HOBJ = $(FIRSTOBJ) allmain.o apply.o artifact.o attrib.o ball.o \
+	base32.o \
 	bones.o botl.o cmd.o dbridge.o decl.o detect.o dig.o display.o dlb.o \
 	do.o do_name.o do_wear.o dog.o dogmove.o dokick.o dothrow.o \
 	drawing.o dump.o dungeon.o eat.o end.o engrave.o exper.o explode.o \
@@ -266,10 +273,10 @@ HOBJ = $(FIRSTOBJ) allmain.o apply.o artifact.o attrib.o ball.o \
 	pager.o pickup.o pline.o polyself.o potion.o pray.o priest.o \
 	quest.o questpgr.o read.o rect.o region.o restore.o rip.o rnd.o rnd_isaac.o \
 	role.o rumors.o save.o shk.o shknam.o sit.o sounds.o sp_lev.o spell.o \
-	steal.o steed.o teleport.o tile.o timeout.o topten.o track.o trap.o tutorial.o \
-	u_init.o uhitm.o unicode.o vault.o vision.o vis_tab.o weapon.o were.o wield.o \
-	windows.o wizard.o worm.o worn.o write.o zap.o \
-	$(RANDOBJ) $(SYSOBJ) $(WINOBJ) version.o \
+	steal.o steed.o sys.o teleport.o tile.o timeout.o topten.o track.o trap.o \
+	tutorial.o u_init.o uhitm.o unicode.o vault.o vision.o vis_tab.o weapon.o were.o \
+	wield.o windows.o wizard.o worm.o worn.o write.o zap.o \
+	$(REGEXOBJ) $(RANDOBJ) $(SYSOBJ) $(WINOBJ) version.o \
 	livelog.o
 # the .o files from the HACKCSRC, SYSSRC, and WINSRC lists
 
@@ -396,7 +403,7 @@ $(MAKEDEFS): ../util/makedefs.c  $(CONFIG_H) ../include/permonst.h \
 		../include/artilist.h ../include/dungeon.h ../include/obj.h \
 		../include/monst.h ../include/you.h ../include/flag.h \
 		../include/dlb.h ../include/patchlevel.h ../include/qtext.h
-	@( cd ../util ; $(MAKE) makedefs)
+	@( cd ../util ; $(MAKE) makedefs$(EXEEXT))
 
 ../include/onames.h: $(MAKEDEFS)
 	@( cd ../util ; $(MAKE) ../include/onames.h )
@@ -423,7 +430,7 @@ $(srcdir)/../win/gnome/gn_rip.h: $(srcdir)/../win/X11/rip.xpm
 #	hack.h depends on makedefs' output, so we know makedefs will be
 #	up to date before being executed
 ../include/date.h:	$(VERSOURCES) $(HACK_H)
-	../util/makedefs -v
+	../util/makedefs$(EXEEXT) -v
 
 
 lint:
@@ -487,6 +494,7 @@ $(HACK_H): ../include/hack.h $(CONFIG_H) ../include/align.h \
 		../include/wintype.h ../include/decl.h ../include/quest.h \
 		../include/obj.h ../include/spell.h \
 		../include/you.h ../include/attrib.h ../include/monst.h \
+		../include/mextra.h \
 		../include/skills.h ../include/onames.h ../include/color.h \
 		../include/timeout.h ../include/trap.h ../include/flag.h \
 		../include/rm.h ../include/vision.h ../include/display.h \
@@ -505,6 +513,10 @@ pctty.o: $(srcdir)/../sys/share/pctty.c $(HACK_H)
 	$(CC) $(CFLAGS) -c $(srcdir)/../sys/share/pctty.c
 pcunix.o: $(srcdir)/../sys/share/pcunix.c $(HACK_H)
 	$(CC) $(CFLAGS) -c $(srcdir)/../sys/share/pcunix.c
+pmatchregex.o: ../sys/share/pmatchregex.c $(HACK_H)
+	$(CC) $(CFLAGS) -c -o $@ ../sys/share/pmatchregex.c
+posixregex.o: ../sys/share/posixregex.c $(HACK_H)
+	$(CC) $(CFLAGS) -c -o $@ ../sys/share/posixregex.c
 random.o: $(srcdir)/../sys/share/random.c $(HACK_H)
 	$(CC) $(CFLAGS) -c $(srcdir)/../sys/share/random.c
 ioctl.o: $(srcdir)/../sys/share/ioctl.c $(HACK_H) ../include/tcap.h
@@ -732,34 +744,33 @@ monstr.o: monstr.c $(CONFIG_H)
 vis_tab.o: vis_tab.c $(CONFIG_H) ../include/vis_tab.h
 allmain.o: $(srcdir)/allmain.c $(HACK_H) ../include/patchlevel.h
 alloc.o: $(srcdir)/alloc.c $(CONFIG_H)
-apply.o: $(srcdir)/apply.c $(HACK_H) ../include/edog.h 
+apply.o: $(srcdir)/apply.c $(HACK_H)
 artifact.o: $(srcdir)/artifact.c $(HACK_H) ../include/artifact.h \
 		../include/artilist.h
 attrib.o: $(srcdir)/attrib.c $(HACK_H)
 ball.o: $(srcdir)/ball.c $(HACK_H)
+base32.o: $(srcdir)/base32.c $(HACK_H)
 bones.o: $(srcdir)/bones.c $(HACK_H) ../include/lev.h
 botl.o: $(srcdir)/botl.c $(HACK_H)
 cmd.o: $(srcdir)/cmd.c $(HACK_H) ../include/func_tab.h
 dbridge.o: $(srcdir)/dbridge.c $(HACK_H)
 decl.o: $(srcdir)/decl.c $(HACK_H)
 detect.o: $(srcdir)/detect.c $(HACK_H) ../include/artifact.h
-dig.o: $(srcdir)/dig.c $(HACK_H) ../include/edog.h
+dig.o: $(srcdir)/dig.c $(HACK_H)
 display.o: $(srcdir)/display.c $(HACK_H)
 dlb.o: $(srcdir)/dlb.c $(CONFIG_H) ../include/dlb.h
 do.o: $(srcdir)/do.c $(HACK_H) ../include/lev.h
 do_name.o: $(srcdir)/do_name.c $(HACK_H)
 do_wear.o: $(srcdir)/do_wear.c $(HACK_H)
-dog.o: $(srcdir)/dog.c $(HACK_H) ../include/edog.h ../include/emin.h \
-		../include/epri.h
-dogmove.o: $(srcdir)/dogmove.c $(HACK_H) ../include/mfndpos.h \
-		../include/edog.h ../include/emin.h ../include/epri.h
-dokick.o: $(srcdir)/dokick.c $(HACK_H) ../include/eshk.h
-dothrow.o: $(srcdir)/dothrow.c $(HACK_H) ../include/edog.h
+dog.o: $(srcdir)/dog.c $(HACK_H)
+dogmove.o: $(srcdir)/dogmove.c $(HACK_H) ../include/mfndpos.h
+dokick.o: $(srcdir)/dokick.c $(HACK_H)
+dothrow.o: $(srcdir)/dothrow.c $(HACK_H)
 drawing.o: $(srcdir)/drawing.c $(HACK_H) ../include/tcap.h
 dump.o: $(srcdir)/dump.c $(HACK_H) ../include/date.h
 dungeon.o: $(srcdir)/dungeon.c $(HACK_H) ../include/dlb.h
 eat.o: $(srcdir)/eat.c $(HACK_H)
-end.o: $(srcdir)/end.c $(HACK_H) ../include/eshk.h ../include/dlb.h
+end.o: $(srcdir)/end.c $(HACK_H) ../include/dlb.h
 engrave.o: $(srcdir)/engrave.c $(HACK_H) ../include/lev.h
 exper.o: $(srcdir)/exper.c $(HACK_H)
 explode.o: $(srcdir)/explode.c $(HACK_H)
@@ -773,32 +784,30 @@ light.o: $(srcdir)/light.c $(HACK_H) ../include/lev.h
 livelog.o: $(srcdir)/livelog.c $(HACK_H)
 lock.o: $(srcdir)/lock.c $(HACK_H)
 mail.o: $(srcdir)/mail.c $(HACK_H) ../include/mail.h
-makemon.o: $(srcdir)/makemon.c $(HACK_H) ../include/epri.h ../include/emin.h \
-		../include/edog.h
+makemon.o: $(srcdir)/makemon.c $(HACK_H)
 mapglyph.o: $(srcdir)/mapglyph.c $(HACK_H)
 mcastu.o: $(srcdir)/mcastu.c $(HACK_H)
-mhitm.o: $(srcdir)/mhitm.c $(HACK_H) ../include/artifact.h ../include/edog.h
-mhitu.o: $(srcdir)/mhitu.c $(HACK_H) ../include/artifact.h ../include/edog.h
-minion.o: $(srcdir)/minion.c $(HACK_H) ../include/emin.h ../include/epri.h
+mhitm.o: $(srcdir)/mhitm.c $(HACK_H) ../include/artifact.h
+mhitu.o: $(srcdir)/mhitu.c $(HACK_H) ../include/artifact.h
+minion.o: $(srcdir)/minion.c $(HACK_H)
 mklev.o: $(srcdir)/mklev.c $(HACK_H)
 mkmap.o: $(srcdir)/mkmap.c $(HACK_H) ../include/sp_lev.h
 mkmaze.o: $(srcdir)/mkmaze.c $(HACK_H) ../include/sp_lev.h ../include/lev.h
 mkobj.o: $(srcdir)/mkobj.c $(HACK_H)
 mkroom.o: $(srcdir)/mkroom.c $(HACK_H)
 mksheol.o: $(srcdir)/mksheol.c $(HACK_H) ../include/sp_lev.h
-mon.o: $(srcdir)/mon.c $(HACK_H) ../include/mfndpos.h ../include/edog.h \
+mon.o: $(srcdir)/mon.c $(HACK_H) ../include/mfndpos.h \
 		../include/artifact.h
-mondata.o: $(srcdir)/mondata.c $(HACK_H) ../include/eshk.h ../include/epri.h
+mondata.o: $(srcdir)/mondata.c $(HACK_H)
 monmove.o: $(srcdir)/monmove.c $(HACK_H) ../include/mfndpos.h \
-		../include/artifact.h ../include/epri.h
+		../include/artifact.h
 monst.o: $(srcdir)/monst.c $(CONFIG_H) ../include/permonst.h \
 		../include/align.h ../include/monattk.h ../include/monflag.h \
-		../include/monsym.h ../include/dungeon.h ../include/eshk.h \
-		../include/vault.h ../include/epri.h \
+		../include/monsym.h ../include/dungeon.h \
 		../include/color.h
 mplayer.o: $(srcdir)/mplayer.c $(HACK_H)
 mthrowu.o: $(srcdir)/mthrowu.c $(HACK_H)
-muse.o: $(srcdir)/muse.c $(HACK_H) ../include/edog.h
+muse.o: $(srcdir)/muse.c $(HACK_H)
 music.o: $(srcdir)/music.c $(HACK_H) #interp.c
 o_init.o: $(srcdir)/o_init.c $(HACK_H) ../include/lev.h
 objects.o: $(srcdir)/objects.c $(CONFIG_H) ../include/obj.h \
@@ -809,12 +818,11 @@ options.o: $(srcdir)/options.c $(CONFIG_H) ../include/objclass.h \
 		../include/flag.h $(HACK_H) ../include/tcap.h
 pager.o: $(srcdir)/pager.c $(HACK_H) ../include/dlb.h
 pickup.o: $(srcdir)/pickup.c $(HACK_H)
-pline.o: $(srcdir)/pline.c $(HACK_H) ../include/epri.h ../include/edog.h
+pline.o: $(srcdir)/pline.c $(HACK_H)
 polyself.o: $(srcdir)/polyself.c $(HACK_H)
 potion.o: $(srcdir)/potion.c $(HACK_H)
-pray.o: $(srcdir)/pray.c $(HACK_H) ../include/epri.h
-priest.o: $(srcdir)/priest.c $(HACK_H) ../include/mfndpos.h ../include/eshk.h \
-		../include/epri.h ../include/emin.h
+pray.o: $(srcdir)/pray.c $(HACK_H)
+priest.o: $(srcdir)/priest.c $(HACK_H) ../include/mfndpos.h
 quest.o: $(srcdir)/quest.c $(HACK_H) ../include/qtext.h
 questpgr.o: $(srcdir)/questpgr.c $(HACK_H) ../include/dlb.h ../include/qtext.h
 read.o: $(srcdir)/read.c $(HACK_H)
@@ -827,14 +835,15 @@ rnd_isaac.o: $(srcdir)/rnd_isaac.c $(HACK_H) ../include/isaac.h
 role.o: $(srcdir)/role.c $(HACK_H)
 rumors.o: $(srcdir)/rumors.c $(HACK_H) ../include/lev.h ../include/dlb.h
 save.o: $(srcdir)/save.c $(HACK_H) ../include/lev.h
-shk.o: $(srcdir)/shk.c $(HACK_H) ../include/eshk.h
-shknam.o: $(srcdir)/shknam.c $(HACK_H) ../include/eshk.h
+shk.o: $(srcdir)/shk.c $(HACK_H)
+shknam.o: $(srcdir)/shknam.c $(HACK_H)
 sit.o: $(srcdir)/sit.c $(HACK_H) ../include/artifact.h
-sounds.o: $(srcdir)/sounds.c $(HACK_H) ../include/edog.h
+sounds.o: $(srcdir)/sounds.c $(HACK_H)
 sp_lev.o: $(srcdir)/sp_lev.c $(HACK_H) ../include/dlb.h ../include/sp_lev.h
-spell.o: $(srcdir)/spell.c $(HACK_H) ../include/edog.h
+spell.o: $(srcdir)/spell.c $(HACK_H)
 steal.o: $(srcdir)/steal.c $(HACK_H)
-steed.o: $(srcdir)/steed.c $(HACK_H)
+steed.o: $(srcdir)/steed.c $(HACK_H) ../include/sys.h
+sys.o: $(srcdir)/sys.c $(HACK_H)
 teleport.o: $(srcdir)/teleport.c $(HACK_H)
 timeout.o: $(srcdir)/timeout.c $(HACK_H) ../include/lev.h
 topten.o: $(srcdir)/topten.c $(HACK_H) ../include/dlb.h ../include/patchlevel.h
@@ -844,7 +853,7 @@ tutorial.o: $(srcdir)/tutorial.c $(HACK_H)
 u_init.o: $(srcdir)/u_init.c $(HACK_H)
 uhitm.o: $(srcdir)/uhitm.c $(HACK_H)
 unicode.o: $(srcdir)/unicode.c $(HACK_H)
-vault.o: $(srcdir)/vault.c $(HACK_H) ../include/vault.h
+vault.o: $(srcdir)/vault.c $(HACK_H)
 version.o: $(srcdir)/version.c $(HACK_H) ../include/date.h \
 		../include/patchlevel.h
 vision.o: $(srcdir)/vision.c $(HACK_H) ../include/vis_tab.h
@@ -853,7 +862,7 @@ were.o: $(srcdir)/were.c $(HACK_H)
 wield.o: $(srcdir)/wield.c $(HACK_H)
 windows.o: $(srcdir)/windows.c $(HACK_H) ../include/wingem.h \
 		../include/winGnome.h ../include/winlisp.h
-wizard.o: $(srcdir)/wizard.c $(HACK_H) ../include/qtext.h ../include/epri.h
+wizard.o: $(srcdir)/wizard.c $(HACK_H) ../include/qtext.h
 worm.o: $(srcdir)/worm.c $(HACK_H) ../include/lev.h
 worn.o: $(srcdir)/worn.c $(HACK_H)
 write.o: $(srcdir)/write.c $(HACK_H)

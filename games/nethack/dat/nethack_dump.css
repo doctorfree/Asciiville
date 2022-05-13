@@ -4,8 +4,8 @@ body {
 	background-color:#222222;
 	font-family: monospace;
 }
-pre.nh_screen { 
-	font-family: DejaVu Sans Mono,Menlo,Courier New,Courier,monospace;
+pre.nh_screen {
+	font-family: DejaVu Sans Mono,Consolas,Menlo,Andale Mono,Courier New,monospace;
 }
 .nh_skills,
 .nh_game_information,

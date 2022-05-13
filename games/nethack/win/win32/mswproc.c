@@ -3,7 +3,7 @@
 
 /*
  * This file implements the interface between the window port specific
- * code in the mswin port and the rest of the nethack game engine. 
+ * code in the mswin port and the rest of the nethack game engine.
 */
 
 #include "hack.h"
@@ -124,7 +124,7 @@ struct window_procs mswin_procs = {
 };
 
 
-/*  
+/*
 init_nhwindows(int* argcp, char** argv)
                 -- Initialize the windows used by NetHack.  This can also
                    create the standard windows listed at the top, but does
@@ -170,19 +170,19 @@ void mswin_init_nhwindows(int* argc, char** argv)
     mswin_menu_check_intf_mode();
 
     /* check default values */
-	if( iflags.wc_fontsiz_status<NHFONT_SIZE_MIN || 
+	if( iflags.wc_fontsiz_status<NHFONT_SIZE_MIN ||
 		iflags.wc_fontsiz_status>NHFONT_SIZE_MAX )
 		iflags.wc_fontsiz_status = NHFONT_DEFAULT_SIZE;
 
-	if( iflags.wc_fontsiz_message<NHFONT_SIZE_MIN || 
+	if( iflags.wc_fontsiz_message<NHFONT_SIZE_MIN ||
 		iflags.wc_fontsiz_message>NHFONT_SIZE_MAX )
 		iflags.wc_fontsiz_message = NHFONT_DEFAULT_SIZE;
 
-	if( iflags.wc_fontsiz_text<NHFONT_SIZE_MIN || 
+	if( iflags.wc_fontsiz_text<NHFONT_SIZE_MIN ||
 		iflags.wc_fontsiz_text>NHFONT_SIZE_MAX )
 		iflags.wc_fontsiz_text = NHFONT_DEFAULT_SIZE;
 
-	if( iflags.wc_fontsiz_menu<NHFONT_SIZE_MIN || 
+	if( iflags.wc_fontsiz_menu<NHFONT_SIZE_MIN ||
 		iflags.wc_fontsiz_menu>NHFONT_SIZE_MAX )
 		iflags.wc_fontsiz_menu = NHFONT_DEFAULT_SIZE;
 
@@ -217,7 +217,7 @@ void mswin_init_nhwindows(int* argc, char** argv)
 	/* set font-related options to change in the game */
 	set_wc_option_mod_status(
 		WC_HILITE_PET |
-		WC_ALIGN_MESSAGE | 
+		WC_ALIGN_MESSAGE |
 		WC_ALIGN_STATUS |
 		WC_SCROLL_AMOUNT |
 		WC_SCROLL_MARGIN |
@@ -226,12 +226,12 @@ void mswin_init_nhwindows(int* argc, char** argv)
 		WC_FONT_STATUS |
 		WC_FONT_MENU |
 		WC_FONT_TEXT |
-		WC_FONTSIZ_MESSAGE | 
-		WC_FONTSIZ_STATUS | 
-		WC_FONTSIZ_MENU | 
+		WC_FONTSIZ_MESSAGE |
+		WC_FONTSIZ_STATUS |
+		WC_FONTSIZ_MENU |
 		WC_FONTSIZ_TEXT |
 		WC_VARY_MSGCOUNT,
-		SET_IN_GAME 
+		SET_IN_GAME
 	);
 
 	mswin_color_from_string(iflags.wc_foregrnd_menu, &menu_fg_brush, &menu_fg_color);
@@ -334,7 +334,7 @@ void prompt_for_player_selection(void)
 
 	    /* tty_putstr(BASE_WINDOW, 0, ""); */
 	    /* echoline = wins[BASE_WINDOW]->cury; */
-            box_result = NHMessageBox(NULL, prompt, 
+            box_result = NHMessageBox(NULL, prompt,
 					MB_ICONQUESTION | MB_YESNOCANCEL | MB_DEFBUTTON1);
             pick4u = (box_result == IDYES) ? 'y' : (box_result == IDNO) ? 'n' : '\033';
 	    /* tty_putstr(BASE_WINDOW, 0, prompt); */
@@ -353,7 +353,7 @@ void prompt_for_player_selection(void)
 		 * bottom of the window.
 		 */
 		/* tty_clear_nhwindow(BASE_WINDOW) */ ;
-	    
+
 	    if (pick4u != 'y' && pick4u != 'n') {
 give_up:	/* Quit */
 		if (selected) free((genericptr_t) selected);
@@ -403,9 +403,9 @@ give_up:	/* Quit */
 					Strcpy(rolenamebuf, roles[i].name.m);
 					Strcat(rolenamebuf, "/");
 					Strcat(rolenamebuf, roles[i].name.f);
-				} else 
+				} else
 					Strcpy(rolenamebuf, roles[i].name.m);
-			}	
+			}
 			add_menu(win, NO_GLYPH, MENU_DEFCNT, &any, thisch,
 			    0, ATR_NONE, an(rolenamebuf), MENU_UNSELECTED);
 			lastch = thisch;
@@ -435,7 +435,7 @@ give_up:	/* Quit */
 	    (void)  root_plselection_prompt(plbuf, QBUFSZ - 1,
 			flags.initrole, flags.initrace, flags.initgend, flags.initalign);
 	}
-	
+
 	/* Select a race, if necessary */
 	/* force compatibility with role, try for compatibility with
 	 * pre-selected gender/alignment */
@@ -676,7 +676,7 @@ void mswin_get_nh_event(void)
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-	} 
+	}
 	return;
 }
 
@@ -688,7 +688,7 @@ void mswin_exit_nhwindows(const char *str)
 	logDebug("mswin_exit_nhwindows(%s)\n", str);
     /* Write Window settings to the registry */
     mswin_write_reg();
-    while (max_brush) 
+    while (max_brush)
 	DeleteObject(brush_table[--max_brush]);
 }
 
@@ -707,14 +707,14 @@ void mswin_resume_nhwindows()
 	return;
 }
 
-/*  Create a window of type "type" which can be 
+/*  Create a window of type "type" which can be
         NHW_MESSAGE     (top line)
         NHW_STATUS      (bottom lines)
         NHW_MAP         (main dungeon)
         NHW_MENU        (inventory or other "corner" windows)
         NHW_TEXT        (help/text, full screen paged window)
 */
-winid 
+winid
 mswin_create_nhwindow(int type)
 {
 	winid i = 0;
@@ -753,14 +753,14 @@ mswin_create_nhwindow(int type)
 		GetNHApp()->windowlist[i].type = type;
 		GetNHApp()->windowlist[i].dead = 0;
 		break;
-	}    
+	}
     case NHW_MENU:
 	{
 		GetNHApp()->windowlist[i].win = NULL; //will create later
 		GetNHApp()->windowlist[i].type = type;
 		GetNHApp()->windowlist[i].dead = 1;
 		break;
-	} 
+	}
     case NHW_TEXT:
 	{
 		GetNHApp()->windowlist[i].win = mswin_init_text_window();
@@ -772,7 +772,7 @@ mswin_create_nhwindow(int type)
 
 	ZeroMemory(&data, sizeof(data) );
 	data.wid = i;
-	SendMessage( GetNHApp()->hMainWnd, 
+	SendMessage( GetNHApp()->hMainWnd,
 		         WM_MSNH_COMMAND, (WPARAM)MSNH_MSG_ADDWND, (LPARAM)&data );
 	return i;
 }
@@ -782,21 +782,21 @@ void mswin_clear_nhwindow(winid wid)
 {
 	logDebug("mswin_clear_nhwindow(%d)\n", wid);
 
-    if ((wid >= 0) && 
+    if ((wid >= 0) &&
         (wid < MAXWINDOWS) &&
         (GetNHApp()->windowlist[wid].win != NULL))
     {
 #ifdef REINCARNATION
 		if( GetNHApp()->windowlist[wid].type == NHW_MAP ) {
-			if( Is_rogue_level(&u.uz) ) 
+			if( Is_rogue_level(&u.uz) )
 				mswin_map_mode(mswin_hwnd_from_winid(WIN_MAP), ROGUE_LEVEL_MAP_MODE);
-			else 
+			else
 				mswin_map_mode(mswin_hwnd_from_winid(WIN_MAP), iflags.wc_map_mode);
 		}
 #endif
 
-		SendMessage( 
-			 GetNHApp()->windowlist[wid].win, 
+		SendMessage(
+			 GetNHApp()->windowlist[wid].win,
 			 WM_MSNH_COMMAND, (WPARAM)MSNH_MSG_CLEAR_WINDOW, (LPARAM)NULL );
 	}
 }
@@ -873,15 +873,15 @@ void mswin_window_mark_dead(winid wid)
 	}
 }
 
-/* Destroy will dismiss the window if the window has not 
+/* Destroy will dismiss the window if the window has not
  * already been dismissed.
 */
 void mswin_destroy_nhwindow(winid wid)
 {
 	logDebug("mswin_destroy_nhwindow(%d)\n", wid);
 
-    if ((GetNHApp()->windowlist[wid].type == NHW_MAP) || 
-        (GetNHApp()->windowlist[wid].type == NHW_MESSAGE) || 
+    if ((GetNHApp()->windowlist[wid].type == NHW_MAP) ||
+        (GetNHApp()->windowlist[wid].type == NHW_MESSAGE) ||
         (GetNHApp()->windowlist[wid].type == NHW_STATUS)) {
 		/* main windows is going to take care of those */
 		return;
@@ -889,7 +889,7 @@ void mswin_destroy_nhwindow(winid wid)
 
     if (wid != -1) {
 		if( !GetNHApp()->windowlist[wid].dead &&
-			GetNHApp()->windowlist[wid].win != NULL ) 
+			GetNHApp()->windowlist[wid].win != NULL )
 			DestroyWindow(GetNHApp()->windowlist[wid].win);
 		GetNHApp()->windowlist[wid].win = NULL;
 		GetNHApp()->windowlist[wid].type = 0;
@@ -906,15 +906,15 @@ void mswin_curs(winid wid, int x, int y)
 {
 	logDebug("mswin_curs(%d, %d, %d)\n", wid, x, y);
 
-    if ((wid >= 0) && 
+    if ((wid >= 0) &&
         (wid < MAXWINDOWS) &&
         (GetNHApp()->windowlist[wid].win != NULL))
     {
 		 MSNHMsgCursor data;
 		 data.x = x;
 		 data.y = y;
-		 SendMessage( 
-			 GetNHApp()->windowlist[wid].win, 
+		 SendMessage(
+			 GetNHApp()->windowlist[wid].win,
 			 WM_MSNH_COMMAND, (WPARAM)MSNH_MSG_CURSOR, (LPARAM)&data );
     }
 }
@@ -945,13 +945,13 @@ Attributes
 void mswin_putstr(winid wid, int attr, const char *text)
 {
 	logDebug("mswin_putstr(%d, %d, %s)\n", wid, attr, text);
-	
+
 	mswin_putstr_ex(wid, attr, text, 0);
 }
 
 void mswin_putstr_ex(winid wid, int attr, const char *text, int app)
 {
-	if( (wid >= 0) && 
+	if( (wid >= 0) &&
         (wid < MAXWINDOWS) )
 	{
 		if( GetNHApp()->windowlist[wid].win==NULL &&
@@ -967,8 +967,8 @@ void mswin_putstr_ex(winid wid, int attr, const char *text, int app)
 			 data.attr = attr;
 			 data.text = text;
 			 data.append = app;
-			 SendMessage( 
-				 GetNHApp()->windowlist[wid].win, 
+			 SendMessage(
+				 GetNHApp()->windowlist[wid].win,
 				 WM_MSNH_COMMAND, (WPARAM)MSNH_MSG_PUTSTR, (LPARAM)&data );
 		}
         /* yield a bit so it gets done immediately */
@@ -999,7 +999,7 @@ void mswin_display_file(const char *filename,BOOLEAN_P must_exist)
 			TCHAR message[90];
 			_stprintf(message, TEXT("Warning! Could not find file: %s\n"), NH_A2W(filename, wbuf, sizeof(wbuf)));
 			NHMessageBox(GetNHApp()->hMainWnd, message, MB_OK | MB_ICONEXCLAMATION );
-		} 
+		}
 	} else {
 		winid text;
 		char line[LLEN];
@@ -1027,7 +1027,7 @@ void mswin_display_file(const char *filename,BOOLEAN_P must_exist)
 void mswin_start_menu(winid wid)
 {
 	logDebug("mswin_start_menu(%d)\n", wid);
-	if( (wid >= 0) && 
+	if( (wid >= 0) &&
         (wid < MAXWINDOWS) ) {
 		if( GetNHApp()->windowlist[wid].win==NULL &&
 			GetNHApp()->windowlist[wid].type==NHW_MENU ) {
@@ -1036,8 +1036,8 @@ void mswin_start_menu(winid wid)
 		}
 
 		if(GetNHApp()->windowlist[wid].win != NULL)	{
-			SendMessage( 
-				 GetNHApp()->windowlist[wid].win, 
+			SendMessage(
+				 GetNHApp()->windowlist[wid].win,
 				 WM_MSNH_COMMAND, (WPARAM)MSNH_MSG_STARTMENU, (LPARAM)NULL
 			);
 		}
@@ -1076,13 +1076,13 @@ add_menu(windid window, int glyph, const anything identifier,
                    menu is displayed, set preselected to TRUE.
 */
 void mswin_add_menu(winid wid, int glyph, int cnt, const ANY_P * identifier,
-		CHAR_P accelerator, CHAR_P group_accel, int attr, 
+		CHAR_P accelerator, CHAR_P group_accel, int attr,
 		const char *str, BOOLEAN_P presel)
 {
 	logDebug("mswin_add_menu(%d, %d, %p, %c, %c, %d, %s, %d)\n",
 		     wid, glyph, identifier, (char)accelerator, (char)group_accel,
 			 attr, str, presel);
-	if ((wid >= 0) && 
+	if ((wid >= 0) &&
 		(wid < MAXWINDOWS) &&
 		(GetNHApp()->windowlist[wid].win != NULL))
 	{
@@ -1096,8 +1096,8 @@ void mswin_add_menu(winid wid, int glyph, int cnt, const ANY_P * identifier,
 		data.str = str;
 		data.presel = presel;
 
-		SendMessage( 
-			 GetNHApp()->windowlist[wid].win, 
+		SendMessage(
+			 GetNHApp()->windowlist[wid].win,
 			 WM_MSNH_COMMAND, (WPARAM)MSNH_MSG_ADDMENU, (LPARAM)&data
 		);
 	}
@@ -1115,7 +1115,7 @@ end_menu(window, prompt)
 void mswin_end_menu(winid wid, const char *prompt)
 {
 	logDebug("mswin_end_menu(%d, %s)\n", wid, prompt);
-	if ((wid >= 0) && 
+	if ((wid >= 0) &&
 		(wid < MAXWINDOWS) &&
 		(GetNHApp()->windowlist[wid].win != NULL))
 	{
@@ -1123,8 +1123,8 @@ void mswin_end_menu(winid wid, const char *prompt)
 		ZeroMemory(&data, sizeof(data));
 		data.text = prompt;
 
-		SendMessage( 
-			 GetNHApp()->windowlist[wid].win, 
+		SendMessage(
+			 GetNHApp()->windowlist[wid].win,
 			 WM_MSNH_COMMAND, (WPARAM)MSNH_MSG_ENDMENU, (LPARAM)&data
 		);
 	}
@@ -1161,7 +1161,7 @@ int mswin_select_menu(winid wid, int how, MENU_ITEM_P **selected)
 
 	logDebug("mswin_select_menu(%d, %d)\n", wid, how);
 
-	if ((wid >= 0) && 
+	if ((wid >= 0) &&
 		(wid < MAXWINDOWS) &&
 		(GetNHApp()->windowlist[wid].win != NULL))
 	{
@@ -1172,7 +1172,7 @@ int mswin_select_menu(winid wid, int how, MENU_ITEM_P **selected)
 
 /*
     -- Indicate to the window port that the inventory has been changed.
-    -- Merely calls display_inventory() for window-ports that leave the 
+    -- Merely calls display_inventory() for window-ports that leave the
 	window up, otherwise empty.
 */
 void mswin_update_inventory()
@@ -1212,15 +1212,15 @@ void mswin_cliparound(int x, int y)
 
 	logDebug("mswin_cliparound(%d, %d)\n", x, y);
 
-    if ((wid >= 0) && 
+    if ((wid >= 0) &&
         (wid < MAXWINDOWS) &&
         (GetNHApp()->windowlist[wid].win != NULL))
     {
 		 MSNHMsgClipAround data;
 		 data.x = x;
 		 data.y = y;
-         SendMessage( 
-			 GetNHApp()->windowlist[wid].win, 
+         SendMessage(
+			 GetNHApp()->windowlist[wid].win,
 			 WM_MSNH_COMMAND, (WPARAM)MSNH_MSG_CLIPAROUND, (LPARAM)&data );
     }
 }
@@ -1236,7 +1236,7 @@ void mswin_print_glyph(winid wid,XCHAR_P x,XCHAR_P y,int glyph)
 {
     logDebug("mswin_print_glyph(%d, %d, %d, %d)\n", wid, x, y, glyph);
 
-    if ((wid >= 0) && 
+    if ((wid >= 0) &&
         (wid < MAXWINDOWS) &&
         (GetNHApp()->windowlist[wid].win != NULL))
     {
@@ -1246,7 +1246,7 @@ void mswin_print_glyph(winid wid,XCHAR_P x,XCHAR_P y,int glyph)
 		data.x = x;
 		data.y = y;
 		data.glyph = glyph;
-		SendMessage( GetNHApp()->windowlist[wid].win, 
+		SendMessage( GetNHApp()->windowlist[wid].win,
 		         WM_MSNH_COMMAND, (WPARAM)MSNH_MSG_PRINT_GLYPH, (LPARAM)&data );
 	}
 }
@@ -1265,7 +1265,7 @@ void mswin_raw_print(const char *str)
 	TCHAR wbuf[255];
     logDebug("mswin_raw_print(%s)\n", str);
 	if( str && *str )
-		NHMessageBox(GetNHApp()->hMainWnd, NH_A2W(str, wbuf, sizeof(wbuf)), 
+		NHMessageBox(GetNHApp()->hMainWnd, NH_A2W(str, wbuf, sizeof(wbuf)),
 		    MB_ICONINFORMATION | MB_OK );
 }
 
@@ -1279,7 +1279,7 @@ void mswin_raw_print_bold(const char *str)
 	TCHAR wbuf[255];
     logDebug("mswin_raw_print_bold(%s)\n", str);
 	if( str && *str )
-		NHMessageBox(GetNHApp()->hMainWnd, NH_A2W(str, wbuf, sizeof(wbuf)), 
+		NHMessageBox(GetNHApp()->hMainWnd, NH_A2W(str, wbuf, sizeof(wbuf)),
 		    MB_ICONINFORMATION | MB_OK );
 }
 
@@ -1295,10 +1295,10 @@ int mswin_nhgetch()
     int key = 0;
 
 	logDebug("mswin_nhgetch()\n");
-	
+
 
 	while( (event = mswin_input_pop()) == NULL ||
-		   event->type != NHEVENT_CHAR ) 
+		   event->type != NHEVENT_CHAR )
 		mswin_main_loop();
 
 	key = event->kbd.ch;
@@ -1313,8 +1313,8 @@ int nh_poskey(int *x, int *y, int *mod)
                    a position in the MAP window is returned in x, y and mod.
                    mod may be one of
 
-                        CLICK_1         -- mouse click type 1 
-                        CLICK_2         -- mouse click type 2 
+                        CLICK_1         -- mouse click type 1
+                        CLICK_2         -- mouse click type 2
 
                    The different click types can map to whatever the
                    hardware supports.  If no mouse is supported, this
@@ -1357,7 +1357,7 @@ doprev_message()
 int mswin_doprev_message()
 {
     logDebug("mswin_doprev_message()\n");
-	SendMessage(mswin_hwnd_from_winid(WIN_MESSAGE), WM_VSCROLL, MAKEWPARAM(SB_LINEUP, 0), (LPARAM)NULL); 
+	SendMessage(mswin_hwnd_from_winid(WIN_MESSAGE), WM_VSCROLL, MAKEWPARAM(SB_LINEUP, 0), (LPARAM)NULL);
     return 0;
 }
 
@@ -1399,7 +1399,7 @@ char mswin_yn_function(const char *question, const char *choices,
         strcat(text, question);
         box_result = NHMessageBox(NULL,
              NH_W2A(text, message, sizeof(message)),
-             MB_YESNOCANCEL | MB_ICONQUESTION | 
+             MB_YESNOCANCEL | MB_ICONQUESTION |
              ((def == 'y') ? MB_DEFBUTTON1 :
               (def == 'n') ? MB_DEFBUTTON2 : MB_DEFBUTTON3));
         free(text);
@@ -1428,7 +1428,7 @@ char mswin_yn_function(const char *question, const char *choices,
     }
 
     createcaret = 1;
-    SendMessage(mswin_hwnd_from_winid(WIN_MESSAGE), 
+    SendMessage(mswin_hwnd_from_winid(WIN_MESSAGE),
         WM_MSNH_COMMAND, (WPARAM)MSNH_MSG_CARET, (LPARAM)&createcaret );
 
     mswin_clear_nhwindow(WIN_MESSAGE);
@@ -1501,7 +1501,7 @@ char mswin_yn_function(const char *question, const char *choices,
 	} while( !ch );
 
     createcaret = 0;
-    SendMessage(mswin_hwnd_from_winid(WIN_MESSAGE), 
+    SendMessage(mswin_hwnd_from_winid(WIN_MESSAGE),
         WM_MSNH_COMMAND, (WPARAM)MSNH_MSG_CARET, (LPARAM)&createcaret );
 
 	/* display selection in the message window */
@@ -1537,7 +1537,7 @@ void mswin_getlin(const char *question, char *input)
         int createcaret;
 
         createcaret = 1;
-        SendMessage(mswin_hwnd_from_winid(WIN_MESSAGE), 
+        SendMessage(mswin_hwnd_from_winid(WIN_MESSAGE),
             WM_MSNH_COMMAND, (WPARAM)MSNH_MSG_CARET, (LPARAM)&createcaret );
 
  mswin_clear_nhwindow(WIN_MESSAGE);
@@ -1578,7 +1578,7 @@ void mswin_getlin(const char *question, char *input)
         }
         HideCaret(mswin_hwnd_from_winid(WIN_MESSAGE));
         createcaret = 0;
-        SendMessage(mswin_hwnd_from_winid(WIN_MESSAGE), 
+        SendMessage(mswin_hwnd_from_winid(WIN_MESSAGE),
             WM_MSNH_COMMAND, (WPARAM)MSNH_MSG_CARET, (LPARAM)&createcaret );
     }
     else
@@ -1591,14 +1591,14 @@ void mswin_getlin(const char *question, char *input)
 
 /*
 int get_ext_cmd(void)
-	    -- Get an extended command in a window-port specific way.
-	       An index into extcmdlist[] is returned on a successful
-	       selection, -1 otherwise.
+ -- Get an extended command in a window-port specific way.
+    An index into extcmdlist[] is returned on a successful
+    selection, -1 otherwise.
 */
 int mswin_get_ext_cmd()
 {
-	int ret;
-	logDebug("mswin_get_ext_cmd()\n");
+    int ret;
+    logDebug("mswin_get_ext_cmd()\n");
 
     if (!iflags.wc_popup_dialog)
     {
@@ -1608,12 +1608,12 @@ int mswin_get_ext_cmd()
         int createcaret;
 
         createcaret = 1;
-        SendMessage(mswin_hwnd_from_winid(WIN_MESSAGE), 
-            WM_MSNH_COMMAND, (WPARAM)MSNH_MSG_CARET, (LPARAM)&createcaret );
+        SendMessage(mswin_hwnd_from_winid(WIN_MESSAGE),
+                WM_MSNH_COMMAND, (WPARAM)MSNH_MSG_CARET, (LPARAM)&createcaret );
 
         cmd[0] = '\0';
         i = -2;
- mswin_clear_nhwindow(WIN_MESSAGE);
+        mswin_clear_nhwindow(WIN_MESSAGE);
         mswin_putstr_ex(WIN_MESSAGE, ATR_BOLD, "#", 0);
         len = 0;
         ShowCaret(mswin_hwnd_from_winid(WIN_MESSAGE));
@@ -1647,22 +1647,23 @@ int mswin_get_ext_cmd()
                     }
                     else
                     {
-
                         cmd[len++] = c;
                         cmd[len] = '\0';
                         /* Find a command with this prefix in extcmdlist */
-	                    com_index = -1;
-	                    for (oindex = 0; extcmdlist[oindex].ef_txt != (char *)0; oindex++) {
-		                    if (!strncmpi(cmd, extcmdlist[oindex].ef_txt, len)) {
-			                    if (com_index == -1)	/* no matches yet */
-			                        com_index = oindex;
+                        com_index = -1;
+                        for (oindex = 0; extcmdlist[oindex].ef_txt != (char *)0; oindex++) {
+                            if ((extcmdlist[oindex].flags & AUTOCOMPLETE) &&
+                                 !(!wizard && (extcmdlist[oindex].flags & WIZMODECMD)) &&
+                                 !strncmpi(cmd, extcmdlist[oindex].ef_txt, len)) {
+                                if (com_index == -1) /* no matches yet */
+                                    com_index = oindex;
                                 else
-                                    com_index = -2;     /* two matches, don't complete */
-		                    }
-	                    }
-	                    if (com_index >= 0) {
-		                    Strcpy(cmd, extcmdlist[com_index].ef_txt);
-	                    }
+                                    com_index = -2;  /* two matches, don't complete */
+                            }
+                        }
+                        if (com_index >= 0) {
+                            Strcpy(cmd, extcmdlist[com_index].ef_txt);
+                        }
                     }
                     mswin_putstr_ex(WIN_MESSAGE, ATR_BOLD, cmd, 1);
                     break;
@@ -1670,16 +1671,16 @@ int mswin_get_ext_cmd()
         }
         HideCaret(mswin_hwnd_from_winid(WIN_MESSAGE));
         createcaret = 0;
-        SendMessage(mswin_hwnd_from_winid(WIN_MESSAGE), 
-            WM_MSNH_COMMAND, (WPARAM)MSNH_MSG_CARET, (LPARAM)&createcaret );
-	    return i;
+        SendMessage(mswin_hwnd_from_winid(WIN_MESSAGE),
+                WM_MSNH_COMMAND, (WPARAM)MSNH_MSG_CARET, (LPARAM)&createcaret );
+        return i;
     }
     else
     {
-    	if(mswin_ext_cmd_window (&ret) == IDCANCEL)
-	    	return -1;
-	    else 
-		    return ret;
+        if(mswin_ext_cmd_window (&ret) == IDCANCEL)
+            return -1;
+        else
+            return ret;
     }
 }
 
@@ -1705,15 +1706,15 @@ void mswin_delay_output()
 	Sleep(50);
 }
 
-void mswin_change_color() 
-{ 
-	logDebug("mswin_change_color()\n"); 
+void mswin_change_color()
+{
+	logDebug("mswin_change_color()\n");
 }
 
-char *mswin_get_color_string() 
-{ 
+char *mswin_get_color_string()
+{
 	logDebug("mswin_get_color_string()\n");
-	return( "" ); 
+	return( "" );
 }
 
 /*
@@ -1747,53 +1748,50 @@ outrip(winid, int)
 #define STONE_LINE_LEN	16
 void mswin_outrip(winid wid, int how)
 {
-	char buf[BUFSZ];
+    char buf[BUFSZ];
 
-   	logDebug("mswin_outrip(%d)\n", wid, how);
+    logDebug("mswin_outrip(%d)\n", wid, how);
     if ((wid >= 0) && (wid < MAXWINDOWS) ) {
-		DestroyWindow(GetNHApp()->windowlist[wid].win);
-		GetNHApp()->windowlist[wid].win = mswin_init_RIP_window();
-		GetNHApp()->windowlist[wid].type = NHW_RIP;
-		GetNHApp()->windowlist[wid].dead = 0;
-	}
+        DestroyWindow(GetNHApp()->windowlist[wid].win);
+        GetNHApp()->windowlist[wid].win = mswin_init_RIP_window();
+        GetNHApp()->windowlist[wid].type = NHW_RIP;
+        GetNHApp()->windowlist[wid].dead = 0;
+    }
 
-	/* Put name on stone */
-	Sprintf(buf, "%s", plname);
-	buf[STONE_LINE_LEN] = 0;
-	putstr(wid, 0, buf);
+    /* Put name on stone */
+    Sprintf(buf, "%s", plname);
+    buf[STONE_LINE_LEN] = 0;
+    putstr(wid, 0, buf);
 
-	/* Put $ on stone */
-#ifndef GOLDOBJ
-	Sprintf(buf, "%ld Au", u.ugold);
-#else
-	Sprintf(buf, "%ld Au", done_money);
-#endif
-	buf[STONE_LINE_LEN] = 0; /* It could be a *lot* of gold :-) */
-	putstr(wid, 0, buf);
+    /* Put $ on stone */
+    Sprintf(buf, "%ld Au", done_money);
 
-	/* Put together death description */
-	switch (killer_format) {
-		default: impossible("bad killer format?");
-		case KILLED_BY_AN:
-			Strcpy(buf, killed_by_prefix[how]);
-			Strcat(buf, an(killer));
-			break;
-		case KILLED_BY:
-			Strcpy(buf, killed_by_prefix[how]);
-			Strcat(buf, killer);
-			break;
-		case NO_KILLER_PREFIX:
-			Strcpy(buf, killer);
-			break;
-	}
+    buf[STONE_LINE_LEN] = 0; /* It could be a *lot* of gold :-) */
+    putstr(wid, 0, buf);
 
-	/* Put death type on stone */
-	putstr(wid, 0, buf);
+    /* Put together death description */
+    switch (killer.format) {
+        default: impossible("bad killer format?");
+        case KILLED_BY_AN:
+                 Strcpy(buf, killed_by_prefix[how]);
+                 Strcat(buf, an(killer.name));
+                 break;
+        case KILLED_BY:
+                 Strcpy(buf, killed_by_prefix[how]);
+                 Strcat(buf, killer.name);
+                 break;
+        case NO_KILLER_PREFIX:
+                 Strcpy(buf, killer.name);
+                 break;
+    }
 
-	/* Put year on stone */
-	Sprintf(buf, "%4d", getyear());
-	putstr(wid, 0, buf);
-	mswin_finish_rip_text(wid);
+    /* Put death type on stone */
+    putstr(wid, 0, buf);
+
+    /* Put year on stone */
+    Sprintf(buf, "%4d", getyear());
+    putstr(wid, 0, buf);
+    mswin_finish_rip_text(wid);
 }
 
 /* handle options updates here */
@@ -1803,7 +1801,7 @@ void mswin_preference_update(const char *pref)
 
 	if( stricmp( pref, "font_menu")==0 ||
 		stricmp( pref, "font_size_menu")==0 ) {
-		if( iflags.wc_fontsiz_menu<NHFONT_SIZE_MIN || 
+		if( iflags.wc_fontsiz_menu<NHFONT_SIZE_MIN ||
 			iflags.wc_fontsiz_menu>NHFONT_SIZE_MAX )
 			iflags.wc_fontsiz_menu = NHFONT_DEFAULT_SIZE;
 
@@ -1823,7 +1821,7 @@ void mswin_preference_update(const char *pref)
 	if( stricmp( pref, "font_status")==0 ||
 		stricmp( pref, "font_size_status")==0 ) {
 
-		if( iflags.wc_fontsiz_status<NHFONT_SIZE_MIN || 
+		if( iflags.wc_fontsiz_status<NHFONT_SIZE_MIN ||
 			iflags.wc_fontsiz_status>NHFONT_SIZE_MAX )
 			iflags.wc_fontsiz_status = NHFONT_DEFAULT_SIZE;
 
@@ -1844,7 +1842,7 @@ void mswin_preference_update(const char *pref)
 	if( stricmp( pref, "font_message")==0 ||
 		stricmp( pref, "font_size_message")==0 ) {
 
-		if( iflags.wc_fontsiz_message<NHFONT_SIZE_MIN || 
+		if( iflags.wc_fontsiz_message<NHFONT_SIZE_MIN ||
 			iflags.wc_fontsiz_message>NHFONT_SIZE_MAX )
 			iflags.wc_fontsiz_message = NHFONT_DEFAULT_SIZE;
 
@@ -1865,7 +1863,7 @@ void mswin_preference_update(const char *pref)
 	if( stricmp( pref, "font_text")==0 ||
 		stricmp( pref, "font_size_text")==0 ) {
 
-		if( iflags.wc_fontsiz_text<NHFONT_SIZE_MIN || 
+		if( iflags.wc_fontsiz_text<NHFONT_SIZE_MIN ||
 			iflags.wc_fontsiz_text>NHFONT_SIZE_MAX )
 			iflags.wc_fontsiz_text = NHFONT_DEFAULT_SIZE;
 
@@ -1929,7 +1927,7 @@ void mswin_main_loop()
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-	} 
+	}
 }
 
 /* clean up and quit */
@@ -1937,7 +1935,7 @@ void bail(const char *mesg)
 {
     clearlocks();
     mswin_exit_nhwindows(mesg);
-    terminate(EXIT_SUCCESS);
+    nh_terminate(EXIT_SUCCESS);
     /*NOTREACHED*/
 }
 
@@ -1951,17 +1949,17 @@ BOOL initMapTiles(void)
 	extern int total_tiles_used;
 
 	/* no file - no tile */
-	if( !(iflags.wc_tile_file && *iflags.wc_tile_file) ) 
+	if( !(iflags.wc_tile_file && *iflags.wc_tile_file) )
 		return TRUE;
 
 	/* load bitmap */
 	hBmp = LoadImage(
-				GetNHApp()->hApp, 
+				GetNHApp()->hApp,
 				NH_A2W(iflags.wc_tile_file, wbuf, MAX_PATH),
 				IMAGE_BITMAP,
 				0,
 				0,
-				LR_LOADFROMFILE | LR_DEFAULTSIZE 
+				LR_LOADFROMFILE | LR_DEFAULTSIZE
 			);
 	if( hBmp==NULL ) {
 		raw_print("Cannot load tiles from the file. Reverting back to default.");
@@ -2000,7 +1998,7 @@ BOOL initMapTiles(void)
 	mswin_map_stretch(
 		mswin_hwnd_from_winid(WIN_MAP),
 		&map_size,
-		TRUE 
+		TRUE
 	);
 	return TRUE;
 }
@@ -2037,7 +2035,7 @@ void mswin_popup_display(HWND hWnd, int* done_indicator)
 	SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 
 	/* go into message loop */
-	while( IsWindow(hWnd) && 
+	while( IsWindow(hWnd) &&
 		   (done_indicator==NULL || !*done_indicator) &&
 		   GetMessage(&msg, NULL, 0, 0)!=0 ) {
 		if( !IsDialogMessage(hWnd, &msg) ) {
@@ -2129,15 +2127,15 @@ mswin_read_reg()
     DWORD size;
     char keystring[MAX_PATH];
 
-    sprintf(keystring, "%s\\%s\\%s\\%s", 
+    sprintf(keystring, "%s\\%s\\%s\\%s",
         CATEGORYKEY, COMPANYKEY, PRODUCTKEY, SETTINGSKEY);
 
-    /* Set the defaults here. The very first time the app is started, nothing is 
+    /* Set the defaults here. The very first time the app is started, nothing is
        read from the registry, so these defaults apply. */
     GetNHApp()->saveRegistrySettings = 1;   /* Normally, we always save */
     GetNHApp()->regNetHackMode = 0;
 
-    if (RegOpenKeyEx(HKEY_CURRENT_USER, keystring, 0, KEY_READ, &key) 
+    if (RegOpenKeyEx(HKEY_CURRENT_USER, keystring, 0, KEY_READ, &key)
             != ERROR_SUCCESS)
         return;
 
@@ -2154,7 +2152,7 @@ mswin_read_reg()
     RegQueryValueEx(key, MAINRIGHTKEY, 0, NULL, (unsigned char *)(&(GetNHApp()->regMainRight)), &size);
     RegQueryValueEx(key, MAINTOPKEY, 0, NULL, (unsigned char *)(&(GetNHApp()->regMainTop)), &size);
     RegQueryValueEx(key, MAINBOTTOMKEY, 0, NULL, (unsigned char *)(&(GetNHApp()->regMainBottom)), &size);
-    
+
     RegCloseKey(key);
 }
 
@@ -2168,7 +2166,7 @@ mswin_write_reg()
     {
         char keystring[MAX_PATH];
 
-        sprintf(keystring, "%s\\%s\\%s\\%s", 
+        sprintf(keystring, "%s\\%s\\%s\\%s",
             CATEGORYKEY, COMPANYKEY, PRODUCTKEY, SETTINGSKEY);
 
         if (RegOpenKeyEx(HKEY_CURRENT_USER, keystring, 0, KEY_WRITE, &key) != ERROR_SUCCESS)
@@ -2202,10 +2200,10 @@ mswin_destroy_reg()
     DWORD nrsubkeys;
 
     /* Delete keys one by one, as NT does not delete trees */
-    sprintf(keystring, "%s\\%s\\%s\\%s", 
+    sprintf(keystring, "%s\\%s\\%s\\%s",
         CATEGORYKEY, COMPANYKEY, PRODUCTKEY, SETTINGSKEY);
     RegDeleteKey(HKEY_CURRENT_USER, keystring);
-    sprintf(keystring, "%s\\%s\\%s", 
+    sprintf(keystring, "%s\\%s\\%s",
         CATEGORYKEY, COMPANYKEY, PRODUCTKEY);
     RegDeleteKey(HKEY_CURRENT_USER, keystring);
     /* The company key will also contain information about newer versions
@@ -2214,9 +2212,9 @@ mswin_destroy_reg()
     sprintf(keystring, "%s\\%s", CATEGORYKEY, COMPANYKEY);
     /* If we cannot open it, we probably cannot delete it either... Just
        go on and see what happens. */
-    RegOpenKeyEx(HKEY_CURRENT_USER, keystring, 0, KEY_READ, &key); 
+    RegOpenKeyEx(HKEY_CURRENT_USER, keystring, 0, KEY_READ, &key);
     nrsubkeys = 0;
-    RegQueryInfoKey(key, NULL, NULL, NULL, &nrsubkeys, NULL, NULL, NULL, 
+    RegQueryInfoKey(key, NULL, NULL, NULL, &nrsubkeys, NULL, NULL, NULL,
         NULL, NULL, NULL, NULL);
     RegCloseKey(key);
     if (nrsubkeys == 0)
@@ -2346,7 +2344,7 @@ static void mswin_color_from_string(char *colorstring, HBRUSH* brushptr, COLORRE
 int NHMessageBox(HWND hWnd, LPCTSTR text, UINT type)
 {
     TCHAR title[MAX_LOADSTRING];
-    
+
     LoadString(GetNHApp()->hApp, IDS_APP_TITLE_SHORT, title, MAX_LOADSTRING);
 
     return MessageBox(hWnd, text, title, type);

@@ -1,4 +1,4 @@
-/*	SCCS Id: @(#)config1.h	3.4	1999/12/05	*/
+/*  SCCS Id: @(#)config1.h  3.4 1999/12/05  */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -13,16 +13,16 @@
  * DJGPP       auto-defines MSDOS.
  */
 
-/* #define MSDOS */	/* use if not defined by compiler or cases below */
+/* #define MSDOS */ /* use if not defined by compiler or cases below */
 
-#ifdef __MSDOS__	/* for Borland C */
+#ifdef __MSDOS__    /* for Borland C */
 # ifndef MSDOS
 # define MSDOS
 # endif
 #endif
 
 #ifdef __TURBOC__
-# define __MSC		/* increase Borland C compatibility in libraries */
+# define __MSC      /* increase Borland C compatibility in libraries */
 #endif
 
 #ifdef MSDOS
@@ -32,17 +32,17 @@
 /*
  * Mac Stuff.
  */
-#ifdef macintosh	/*	Auto-defined symbol for MPW compilers (sc and mrc) */
+#ifdef macintosh    /*  Auto-defined symbol for MPW compilers (sc and mrc) */
 # define MAC
 #endif
 
-#ifdef THINK_C		/* Think C auto-defined symbol */
+#ifdef THINK_C      /* Think C auto-defined symbol */
 # define MAC
 # define NEED_VARARGS
 #endif
 
-#ifdef __MWERKS__	/* defined by Metrowerks' Codewarrior compiler */
-# ifndef __BEOS__	/* BeOS */
+#ifdef __MWERKS__   /* defined by Metrowerks' Codewarrior compiler */
+# ifndef __BEOS__   /* BeOS */
 #  define MAC
 # endif
 # define NEED_VARARGS
@@ -62,12 +62,12 @@
 /*
  * Amiga setup.
  */
-#ifdef AZTEC_C	/* Manx auto-defines this */
-# ifdef MCH_AMIGA	/* Manx auto-defines this for AMIGA */
+#ifdef AZTEC_C  /* Manx auto-defines this */
+# ifdef MCH_AMIGA   /* Manx auto-defines this for AMIGA */
 #  ifndef AMIGA
-#define AMIGA		/* define for Commodore-Amiga */
-#  endif		/* (SAS/C auto-defines AMIGA) */
-#define AZTEC_50	/* define for version 5.0 of manx */
+#define AMIGA       /* define for Commodore-Amiga */
+#  endif        /* (SAS/C auto-defines AMIGA) */
+#define AZTEC_50    /* define for version 5.0 of manx */
 # endif
 #endif
 #ifdef __SASC_60
@@ -135,28 +135,28 @@
 # define _GNU_SOURCE
 #endif
 
-#ifdef VMS	/* really old compilers need special handling, detected here */
+#ifdef VMS  /* really old compilers need special handling, detected here */
 # undef UNIX
 # ifdef __DECC
-#  ifndef __DECC_VER	/* buggy early versions want widened prototypes */
-#   define NOTSTDC	/* except when typedefs are involved		*/
+#  ifndef __DECC_VER    /* buggy early versions want widened prototypes */
+#   define NOTSTDC  /* except when typedefs are involved        */
 #   define USE_VARARGS
 #  else
 #   define NHSTDC
 #   define USE_STDARG
 #   define POSIX_TYPES
-#   define _DECC_V4_SOURCE	/* avoid some incompatible V5.x changes */
+#   define _DECC_V4_SOURCE  /* avoid some incompatible V5.x changes */
 #  endif
 #  undef __HIDE_FORBIDDEN_NAMES /* need non-ANSI library support functions */
 # else
-#  ifdef VAXC	/* must use CC/DEFINE=ANCIENT_VAXC for vaxc v2.2 or older */
-#   ifdef ANCIENT_VAXC	/* vaxc v2.2 and earlier [lots of warnings to come] */
-#    define KR1ED	/* simulate defined() */
+#  ifdef VAXC   /* must use CC/DEFINE=ANCIENT_VAXC for vaxc v2.2 or older */
+#   ifdef ANCIENT_VAXC  /* vaxc v2.2 and earlier [lots of warnings to come] */
+#    define KR1ED   /* simulate defined() */
 #    define USE_VARARGS
-#   else		/* vaxc v2.3,2.4,or 3.x, or decc in vaxc mode */
+#   else        /* vaxc v2.3,2.4,or 3.x, or decc in vaxc mode */
 #     if defined(USE_PROTOTYPES) /* this breaks 2.2 (*forces* use of ANCIENT)*/
 #      define __STDC__ 0 /* vaxc is not yet ANSI compliant, but close enough */
-#      define signed	/* well, almost close enough */
+#      define signed    /* well, almost close enough */
 #include <stddef.h>
 #      define UNWIDENED_PROTOTYPES
 #     endif
@@ -164,8 +164,8 @@
 #   endif
 #  endif /*VAXC*/
 # endif /*__DECC*/
-# ifdef VERYOLD_VMS	/* v4.5 or earlier; no longer available for testing */
-#  define USE_OLDARGS	/* <varargs.h> is there, vprintf & vsprintf aren't */
+# ifdef VERYOLD_VMS /* v4.5 or earlier; no longer available for testing */
+#  define USE_OLDARGS   /* <varargs.h> is there, vprintf & vsprintf aren't */
 #  ifdef USE_VARARGS
 #   undef USE_VARARGS
 #  endif
@@ -185,15 +185,15 @@
 # endif
 #endif
 
-#ifdef KR1ED		/* For compilers which cannot handle defined() */
+#ifdef KR1ED        /* For compilers which cannot handle defined() */
 #define defined(x) (-x-1 != -1)
 /* Because:
  * #define FOO => FOO={} => defined( ) => (-1 != - - 1) => 1
  * #define FOO 1 or on command-line -DFOO
- *	=> defined(1) => (-1 != - 1 - 1) => 1
+ *  => defined(1) => (-1 != - 1 - 1) => 1
  * if FOO isn't defined, FOO=0. But some compilers default to 0 instead of 1
  * for -DFOO, oh well.
- *	=> defined(0) => (-1 != - 0 - 1) => 0
+ *  => defined(0) => (-1 != - 0 - 1) => 0
  *
  * But:
  * defined("") => (-1 != - "" - 1)
@@ -201,4 +201,4 @@
  */
 #endif
 
-#endif	/* CONFIG1_H */
+#endif  /* CONFIG1_H */

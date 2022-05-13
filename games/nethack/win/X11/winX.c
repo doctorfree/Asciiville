@@ -559,7 +559,7 @@ X11_putstr(window, attr, str)
 	    X11_destroy_nhwindow(window);
 	    *wp = window_list[new_win];
 	    window_list[new_win].type = NHW_NONE;	/* allow re-use */
-	    /* fall though to add text */
+        /* fall through */ /* to add text */
 	case NHW_TEXT:
 	    add_to_text_window(wp, attr, str);
 	    break;
@@ -841,11 +841,23 @@ void X11_wait_synch() { if (x_inited) XFlush(XtDisplay(toplevel)); }
 void X11_resume_nhwindows() { return; }
 
 /* ARGSUSED */
-void X11_suspend_nhwindows(str) const char *str; { return; }
+void X11_suspend_nhwindows(str)
+const char *str;
+{
+    nhUse(str);
+
+    return;
+}
 
 /* Under X, we don't need to initialize the number pad. */
 /* ARGSUSED */
-void X11_number_pad(state) int state; { return; } /* called from options.c */
+void X11_number_pad(state) /* called from options.c */
+int state;
+{
+    nhUse(state);
+
+    return;
+}
 
 
 void X11_start_screen() { return; } /* called from setftty() in unixtty.c */
@@ -1045,6 +1057,8 @@ void X11_exit_nhwindows(dummy)
 {
     extern Pixmap tile_pixmap;	/* from winmap.c */
 
+    nhUse(dummy);
+
     /* explicitly free the icon and tile pixmaps */
     if (icon_pixmap != None) {
 	XFreePixmap(XtDisplay(toplevel), icon_pixmap);
@@ -1079,6 +1093,9 @@ d_timeout(client_data, id)
 {
     XEvent event;
     XClientMessageEvent *mesg;
+
+    nhUse(client_data);
+    nhUse(id);
 
     /* Set up a fake message to the event handler. */
     mesg = (XClientMessageEvent *) &event;
@@ -1118,6 +1135,11 @@ X11_hangup(w, event, params, num_params)
     String *params;
     Cardinal *num_params;
 {
+    nhUse(w);
+    nhUse(event);
+    nhUse(params);
+    nhUse(num_params);
+
     hangup(1);		/* 1 is commonly SIGHUP, but ignored anyway */
 }
 
@@ -1130,6 +1152,10 @@ askname_delete(w, event, params, num_params)
     String *params;
     Cardinal *num_params;
 {
+    nhUse(event);
+    nhUse(params);
+    nhUse(num_params);
+
     nh_XtPopdown(w);
     (void) strcpy(plname, "Mumbles");	/* give them a name... ;-) */
     exit_x_event = TRUE;
@@ -1146,6 +1172,9 @@ askname_done(w, client_data, call_data)
     int len;
     char *s;
     Widget dialog = (Widget) client_data;
+
+    nhUse(w);
+    nhUse(call_data);
 
     s = (char *) GetDialogResponse(dialog);
 
@@ -1217,6 +1246,9 @@ done_button(w, client_data, call_data)
     char *s;
     Widget dialog = (Widget) client_data;
 
+    nhUse(w);
+    nhUse(call_data);
+
     s = (char *) GetDialogResponse(dialog);
     len = strlen(s);
 
@@ -1239,6 +1271,10 @@ getline_delete(w, event, params, num_params)
     String *params;
     Cardinal *num_params;
 {
+    nhUse(event);
+    nhUse(params);
+    nhUse(num_params);
+
     Strcpy(getline_input, CANCEL_STR);
     nh_XtPopdown(w);
     exit_x_event = TRUE;
@@ -1253,6 +1289,9 @@ abort_button(w, client_data, call_data)
     XtPointer call_data;
 {
     Widget dialog = (Widget) client_data;
+
+    nhUse(w);
+    nhUse(call_data);
 
     Strcpy(getline_input, CANCEL_STR);
     nh_XtPopdown(XtParent(dialog));
@@ -1317,6 +1356,10 @@ delete_file(w, event, params, num_params)
     String *params;
     Cardinal *num_params;
 {
+    nhUse(event);
+    nhUse(params);
+    nhUse(num_params);
+
     nh_XtPopdown(w);
     XtDestroyWidget(w);
 }
@@ -1330,6 +1373,10 @@ dismiss_file(w, event, params, num_params)
     String *params;
     Cardinal *num_params;
 {
+    nhUse(event);
+    nhUse(params);
+    nhUse(num_params);
+
     Widget popup = XtParent(w);
     nh_XtPopdown(popup);
     XtDestroyWidget(popup);
@@ -1514,6 +1561,11 @@ yn_delete(w, event, params, num_params)
     String *params;
     Cardinal *num_params;
 {
+    nhUse(w);
+    nhUse(event);
+    nhUse(params);
+    nhUse(num_params);
+
     yn_getting_num = FALSE;
     /* Only use yn_esc_map if we have choices.  Otherwise, return ESC. */
     yn_return = yn_choices ? yn_esc_map : '\033';
@@ -1723,6 +1775,9 @@ msgkey(w, data, event)
     XtPointer data;
     XEvent *event;
 {
+    nhUse(w);
+    nhUse(data);
+
     Cardinal num = 0;
     map_input(window_list[WIN_MAP].w, event, (String*) 0, &num);
 }
@@ -1736,6 +1791,9 @@ win_visible(w, data, event, flag)	/* only called for autofocus */
     Boolean *flag;	/* continue_to_dispatch flag not used */
 {
     XVisibilityEvent *vis_event = (XVisibilityEvent *)event;
+
+    nhUse(data);
+    nhUse(flag);
 
     if (vis_event->state != VisibilityFullyObscured) {
 	/* one-time operation; cancel ourself */
@@ -1880,7 +1938,7 @@ init_standard_windows()
 	XtSetArg(args[0], XtNwidth, &form_width);
 	XtSetArg(args[1], XtNheight, &form_height);
 	XtGetValues(toplevel, args, TWO);
-	
+
 	if (form_width > screen_width || form_height > screen_height) {
 	    XtSetArg(args[0], XtNwidth, min(form_width,screen_width));
 	    XtSetArg(args[1], XtNheight, min(form_height,screen_height));
@@ -2018,6 +2076,8 @@ nh_keyscroll(viewport, event, params, num_params)
     Boolean do_call;
     int direction;
     Cardinal in_nparams = (num_params ? *num_params : 0);
+
+    nhUse(event);
 
     if (in_nparams != 1) return; /* bad translation */
 

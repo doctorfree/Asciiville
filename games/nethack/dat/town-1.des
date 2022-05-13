@@ -151,3 +151,8 @@ LOOP [4] {
 LOOP [5] {
   MONSTER:random,random
 }
+
+# random boulders
+LOOP [2d3] {
+  OBJECT:('`',"boulder"),random
+}

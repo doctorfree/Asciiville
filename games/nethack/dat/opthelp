@@ -93,11 +93,6 @@ timed_delay    on unix and VMS, use a timer instead of sending
                display effect.  on MSDOS without the termcap
                lib, whether or not to pause for visual effect.    [TRUE]
 
-Boolean option if QUIVER_FIRED was set at compile time:
-quiver_fired   when using the f (fire) command and no ammunition
-               is quivered, prompt for ammunition to quiver, then 
-               fire it.                                           [TRUE]
-
 Boolean option if QWERTZ was set at compile time:
 qwertz_layout  swap the y and z keys                              [FALSE]
 

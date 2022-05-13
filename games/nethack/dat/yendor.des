@@ -256,7 +256,7 @@ TRAP:"board",(05,04)
 
 
 LEVEL:"fakewiz2"
-FLAGS:mazelevel
+FLAGS:mazelevel,noflip
 INIT_MAP:mazegrid,'-'
 GEOMETRY:center,center
 MAP

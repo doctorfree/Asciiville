@@ -1447,6 +1447,7 @@ mon_gen_part	: '(' integer_or_var ',' monster ')'
 		      token = get_monster_id($4, (char)0);
 		      if (token == ERR) lc_error("Monster generation: Invalid monster name");
 		      add_opvars(splev, "ii", token, 0);
+              Free($4);
 		  }
 		;
 
@@ -1576,6 +1577,7 @@ seen_trap_mask	: STRING
 		      int token = get_trap_type($1);
 		      if (token == ERR || token == 0)
 			  lc_error("Unknown trap type '%s'!", $1);
+              Free($1);
 		      $$ = (1L << (token - 1));
 		  }
 		| ALL_ID
@@ -1590,7 +1592,7 @@ seen_trap_mask	: STRING
 
 		      if ((1L << (token - 1)) & $3)
 			  lc_error("Monster seen_traps, trap '%s' listed twice.", $1);
-
+              Free($1);
 		      $$ = ((1L << (token - 1)) | $3);
 		  }
 		;
@@ -2276,6 +2278,7 @@ encodemonster	: STRING
 			  $$ = -1;
 		      } else
 			  $$ = SP_MONST_PACK(m, def_monsyms[(int)mons[m].mlet]);
+              Free($1);
 		  }
 		| CHAR
 		  {
@@ -2294,6 +2297,7 @@ encodemonster	: STRING
 			  $$ = -1;
 		      } else
 			  $$ = SP_MONST_PACK(m, $2);
+              Free($4);
 		  }
 		| RANDOM_TYPE
 		  {
@@ -2350,6 +2354,7 @@ encodexobj	: '(' CHAR ',' STRING ')'
 			  $$ = -1;
 		      } else
 			  $$ = SP_OBJ_PACK(m, $2);
+              Free($4);
 		  }
 		| objectid ':' STRING
 		  {
@@ -2359,6 +2364,7 @@ encodexobj	: '(' CHAR ',' STRING ')'
 			  $$ = -1;
 		      } else
 			  $$ = SP_OBJ_PACK(m, 1); /* obj class != 0 to force generation of a specific item */
+              Free($3);
 		  }
 		;
 
@@ -2370,7 +2376,7 @@ encodeobj	: STRING
 			  $$ = -1;
 		      } else
 			  $$ = SP_OBJ_PACK(m, 1); /* obj class != 0 to force generation of a specific item */
-
+              Free($1);
 		  }
 		| CHAR
 		  {
@@ -2389,6 +2395,7 @@ encodeobj	: STRING
 			  $$ = -1;
 		      } else
 			  $$ = SP_OBJ_PACK(m, $2);
+              Free($4);
 		  }
 		| RANDOM_TYPE
 		  {
@@ -2467,7 +2474,7 @@ func_param_part		: any_var_or_arr ':' func_param_type
 				  curr_function->params = tmp;
 				  curr_function->n_params++;
 				  {
-				      long vt;
+				      long vt = SPOVAR_NULL;
 				      switch (tmp->parmtype) {
 				      case 'i': vt = SPOVAR_INT; break;
 				      case 's': vt = SPOVAR_STRING; break;

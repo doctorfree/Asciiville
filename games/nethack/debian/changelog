@@ -1,8 +1,14 @@
+nethack (5.2.0) unstable; urgency=low
+
+  * New major release.
+
+ -- Patric Mueller <bhaak@gmx.net>  Tue, 01 Jan 2019 20:12:11 +0100
+
 nethack (5.0.2) unstable; urgency=low
 
   * New major release.
 
- -- Patric Mueller <bhaak@gmx.net>  Fri, 15 Jul 2013 22:51:48 +0200
+ -- Patric Mueller <bhaak@gmx.net>  Mon, 15 Jul 2013 22:51:48 +0200
 
 nethack (4.0.0) lucid; urgency=low
 

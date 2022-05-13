@@ -4,6 +4,7 @@
 #include "hack.h"
 #include "wincurs.h"
 #include "cursmisc.h"
+#include "cursstat.h"
 #include "func_tab.h"
 #include "dlb.h"
 
@@ -38,6 +39,7 @@ int
 curses_read_char()
 {
     int ch, tmpch;
+    nhUse(tmpch);
 
     ch = getch();
     tmpch = ch;
@@ -94,15 +96,16 @@ curses_toggle_color_attr(WINDOW * win, int color, int attr, int onoff)
     }
 
     if (color == 0) {           /* make black fg visible */
-# ifdef USE_DARKGRAY
-        if (can_change_color() && (COLORS > 16)) {
-            /* colorpair for black is already darkgray */
-        } else {            /* Use bold for a bright black */
+        if (iflags.wc2_newcolors) {
+            if (COLORS > 16) {
+                /* colorpair for black is already darkgray */
+            } else {
+                /* Use bold for a bright black */
                 wattron(win, A_BOLD);
+            }
+        } else {
+            color = CLR_BLUE;
         }
-# else
-        color = CLR_BLUE;
-# endif/* USE_DARKGRAY */
     }
     curses_color = color + 1;
     if (COLORS < 16) {
@@ -129,15 +132,15 @@ curses_toggle_color_attr(WINDOW * win, int color, int attr, int onoff)
             if ((color > 7) && (COLORS < 16)) {
                 wattroff(win, A_BOLD);
             }
-# ifdef USE_DARKGRAY
-            if ((color == 0) && (!can_change_color() || (COLORS <= 16))) {
-                wattroff(win, A_BOLD);
+            if (iflags.wc2_newcolors) {
+                if ((color == 0) && (COLORS <= 16)) {
+                    wattroff(win, A_BOLD);
+                }
+            } else {
+                if (iflags.use_inverse) {
+                    wattroff(win, A_REVERSE);
+                }
             }
-# else
-            if (iflags.use_inverse) {
-                wattroff(win, A_REVERSE);
-            }
-# endif/* DARKGRAY */
             wattroff(win, COLOR_PAIR(curses_color));
         }
 
@@ -148,6 +151,19 @@ curses_toggle_color_attr(WINDOW * win, int color, int attr, int onoff)
 #endif /* TEXTCOLOR */
 }
 
+void
+curses_menu_color_attr(WINDOW *win, int color, int attr, int onoff)
+{
+    boolean save_guicolor = iflags.wc2_guicolor;
+
+    /* curses_toggle_color_attr() uses 'guicolor' to decide whether to
+       honor specified color, but menu windows have their own
+       more-specific control, 'menucolors', so override with that here */
+    iflags.wc2_guicolor = iflags.use_menu_color;
+    curses_toggle_color_attr(win, color, attr, onoff);
+    iflags.wc2_guicolor = save_guicolor;
+}
+
 
 /* clean up and quit - taken from tty port */
 
@@ -156,7 +172,7 @@ curses_bail(const char *mesg)
 {
     clearlocks();
     curses_exit_nhwindows(mesg);
-    terminate(EXIT_SUCCESS);
+    nh_terminate(EXIT_SUCCESS);
 }
 
 
@@ -183,8 +199,8 @@ curses_get_wid(int type)
         ret = text_wid;
         break;
     default:
-        panic("curses_get_wid: unsupported window type");
-        ret = -1;               /* Not reached */
+        impossible("curses_get_wid: unsupported window type");
+        ret = -1;
     }
 
     while (curses_window_exists(ret)) {
@@ -216,7 +232,7 @@ curses_copy_of(const char *s)
 {
     if (!s)
         s = "";
-    return strcpy((char *) alloc((unsigned) (strlen(s) + 1)), s);
+    return dupstr(s);
 }
 
 
@@ -266,7 +282,7 @@ curses_break_str(const char *str, int width, int line_num)
     int last_space, count;
     char *retstr;
     int curline = 0;
-    int strsize = strlen(str);
+    int strsize = (int) strlen(str) + 1;
     char substr[strsize];
     char curstr[strsize];
     char tmpstr[strsize];
@@ -322,9 +338,8 @@ curses_str_remainder(const char *str, int width, int line_num)
     int last_space, count;
     char *retstr;
     int curline = 0;
-    int strsize = strlen(str);
+    int strsize = strlen(str) + 1;
     char substr[strsize];
-    char curstr[strsize];
     char tmpstr[strsize];
 
     strcpy(substr, str);
@@ -346,11 +361,7 @@ curses_str_remainder(const char *str, int width, int line_num)
         if (last_space == 0) {  /* No spaces found */
             last_space = count - 1;
         }
-        for (count = 0; count < last_space; count++) {
-            curstr[count] = substr[count];
-        }
-        curstr[count] = '\0';
-        if (substr[count] == '\0') {
+        if (substr[last_space] == '\0') {
             break;
         }
         for (count = (last_space + 1); count < strlen(substr); count++) {
@@ -544,7 +555,7 @@ curses_view_file(const char *filename, boolean must_exist)
 #endif
 {
     winid wid;
-    anything *identifier;
+    anything identifier;
     char buf[BUFSZ];
     menu_item *selected = NULL;
 #ifdef FILE_AREAS
@@ -552,7 +563,7 @@ curses_view_file(const char *filename, boolean must_exist)
 #else
     dlb *fp = dlb_fopen(filename, "r");
 #endif
-    
+
     if ((fp == NULL) && (must_exist)) {
         pline("Cannot open %s for reading!", filename);
     }
@@ -563,11 +574,10 @@ curses_view_file(const char *filename, boolean must_exist)
 
     wid = curses_get_wid(NHW_MENU);
     curses_create_nhmenu(wid);
-    identifier = malloc(sizeof (anything));
-    identifier->a_void = NULL;
+    identifier = zeroany;
 
     while (dlb_fgets(buf, BUFSZ, fp) != NULL) {
-        curses_add_menu(wid, NO_GLYPH, MENU_DEFCNT, identifier, 0, 0, A_NORMAL, buf, FALSE);
+        curses_add_menu(wid, NO_GLYPH, MENU_DEFCNT, &identifier, 0, 0, A_NORMAL, buf, FALSE);
     }
 
     dlb_fclose(fp);
@@ -582,7 +592,9 @@ curses_rtrim(char *str)
     char *s;
 
     for (s = str; *s != '\0'; ++s);
-    for (--s; isspace(*s) && s > str; --s);
+    if (s > str) {
+        for (--s; isspace(*s) && s > str; --s);
+    }
     if (s == str)
         *s = '\0';
     else
@@ -628,6 +640,10 @@ int
 curses_convert_attr(int attr)
 {
     int curses_attr;
+
+    /* first, strip off control flags masked onto the display attributes
+       (caller should have already done this...) */
+    attr &= ~(ATR_URGENT | ATR_NOHISTORY);
 
     switch (attr) {
     case ATR_NONE:

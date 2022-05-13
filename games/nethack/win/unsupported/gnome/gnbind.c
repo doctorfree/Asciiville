@@ -4,7 +4,7 @@
 
 /*
  * This file implements the interface between the window port specific
- * code in the Gnome port and the rest of the nethack game engine. 
+ * code in the Gnome port and the rest of the nethack game engine.
 */
 
 #include "gnbind.h"
@@ -76,7 +76,7 @@ struct window_procs Gnome_procs = {
     genl_preference_update,
 };
 
-/*  
+/*
 init_nhwindows(int* argcp, char** argv)
                 -- Initialize the windows used by NetHack.  This can also
                    create the standard windows listed at the top, but does
@@ -103,7 +103,7 @@ void gnome_init_nhwindows(int* argc, char** argv)
 #else
 #   error HACKDIR is not defined!
 #endif
-  
+
     // gnome/gtk is not reentrant
     set_option_mod_status("ignintr", DISP_IN_GAME);
     flags.ignintr = TRUE;
@@ -166,7 +166,7 @@ gnome_player_selection()
 	free(pickmap);
     } else if (flags.initrole < 0) sel = ROLE_RANDOM;
     else sel = flags.initrole;
-  
+
     if (sel == ROLE_RANDOM) {	/* Random role */
 	sel = pick_role(flags.initrace, flags.initgend,
 			  flags.initalign, PICK_RANDOM);
@@ -346,7 +346,7 @@ void gnome_askname()
     g_message("Asking name....");
 
     /* Ask for a name and stuff the response into plname, a nethack global */
-    ret = ghack_ask_string_dialog("What is your name?", "gandalf", 
+    ret = ghack_ask_string_dialog("What is your name?", "gandalf",
 	    "GnomeHack", plname);
 
     /* Quit if they want to quit... */
@@ -390,14 +390,14 @@ void gnome_resume_nhwindows()
 	return;
 }
 
-/*  Create a window of type "type" which can be 
+/*  Create a window of type "type" which can be
         NHW_MESSAGE     (top line)
         NHW_STATUS      (bottom lines)
         NHW_MAP         (main dungeon)
         NHW_MENU        (inventory or other "corner" windows)
         NHW_TEXT        (help/text, full screen paged window)
 */
-winid 
+winid
 gnome_create_nhwindow(int type)
 {
 
@@ -432,7 +432,7 @@ gnome_create_nhwindow_by_id( int type, winid i)
 	  gnome_windowlist[i].win = ghack_init_message_window( );
 	  gnome_windowlist[i].type = NHW_MESSAGE;
 	  ghack_main_window_add_message_window( gnome_windowlist[i].win);
-	  break; 
+	  break;
 	}
       case NHW_STATUS:
 	{
@@ -440,7 +440,7 @@ gnome_create_nhwindow_by_id( int type, winid i)
 	  gnome_windowlist[i].type = NHW_STATUS;
 	  ghack_main_window_add_status_window( gnome_windowlist[i].win);
 	  break;
-	}    
+	}
       case NHW_WORN:
 	{
 	  gnome_windowlist[i].win = ghack_init_worn_window( );
@@ -453,7 +453,7 @@ gnome_create_nhwindow_by_id( int type, winid i)
 	  gnome_windowlist[i].type = NHW_MENU;
 	  gnome_windowlist[i].win = ghack_init_menu_window( );
 	  break;
-	} 
+	}
       case NHW_TEXT:
 	{
 	  gnome_windowlist[i].win = ghack_init_text_window( );
@@ -511,13 +511,13 @@ void gnome_display_nhwindow(winid wid, BOOLEAN_P block)
 }
 
 
-/* Destroy will dismiss the window if the window has not 
+/* Destroy will dismiss the window if the window has not
  * already been dismissed.
 */
 void gnome_destroy_nhwindow(winid wid)
 {
-    if ((wid == WIN_MAP) || 
-        (wid == WIN_MESSAGE) || 
+    if ((wid == WIN_MAP) ||
+        (wid == WIN_MESSAGE) ||
         (wid == WIN_STATUS)) {
 	/* no thanks, I'll do these myself */
 	return;
@@ -539,7 +539,7 @@ void gnome_curs(winid wid, int x, int y)
 {
   if (wid != -1 && gnome_windowlist[wid].win != NULL)
     {
-      gtk_signal_emit( GTK_OBJECT (gnome_windowlist[wid].win), 
+      gtk_signal_emit( GTK_OBJECT (gnome_windowlist[wid].win),
 		       ghack_signals[GHSIG_CURS], x, y);
     }
 }
@@ -569,7 +569,7 @@ Attributes
 */
 void gnome_putstr(winid wid, int attr, const char *text)
 {
-    if ((wid >= 0) && 
+    if ((wid >= 0) &&
         (wid < MAXWINDOWS) &&
         (gnome_windowlist[wid].win != NULL))
     {
@@ -589,9 +589,9 @@ void gnome_display_file(const char *filename,BOOLEAN_P must_exist)
 	 * instead of reusing any existing ones -- perhaps we can work out
 	 * some way to reuse stuff -- but for now just make and destroy new
 	 * ones each time */
-        
+
 	dlb *f;
-       
+
         f = dlb_fopen(filename, "r");
         if (!f) {
 	  if (must_exist) {
@@ -604,7 +604,7 @@ void gnome_display_file(const char *filename,BOOLEAN_P must_exist)
 		    GNOME_STOCK_BUTTON_OK,
 		    NULL);
 	    gnome_dialog_set_default( GNOME_DIALOG(box), 0);
-	    gnome_dialog_set_parent (GNOME_DIALOG (box), 
+	    gnome_dialog_set_parent (GNOME_DIALOG (box),
 		    GTK_WINDOW (ghack_get_main_window ()) );
 	    gtk_window_set_modal( GTK_WINDOW(box), TRUE);
 	    gtk_widget_show (box);
@@ -636,12 +636,12 @@ void gnome_display_file(const char *filename,BOOLEAN_P must_exist)
 	    charcount += strlen(line);
 	  }
 	  (void) dlb_fclose(f);
-	  
+
 	  /* Ignore empty files */
 	  if (num_lines == 0) return;
 
 	  /*
-	   * Re-open the file and read the data into a buffer.  
+	   * Re-open the file and read the data into a buffer.
 	   */
 	  textlines = (char *) alloc((unsigned int) charcount);
 	  textlines[0] = '\0';
@@ -659,7 +659,7 @@ void gnome_display_file(const char *filename,BOOLEAN_P must_exist)
                              TRUE, TRUE, 0);
 	  gtk_widget_show_all( txtwin);
 	  gtk_window_set_modal( GTK_WINDOW(txtwin), TRUE);
-	  gnome_dialog_set_parent (GNOME_DIALOG (txtwin), 
+	  gnome_dialog_set_parent (GNOME_DIALOG (txtwin),
 		  GTK_WINDOW (ghack_get_main_window ()) );
 	  gnome_dialog_run_and_close (GNOME_DIALOG (txtwin));
 	  free(textlines);
@@ -716,7 +716,7 @@ add_menu(windid window, int glyph, const anything identifier,
                    menu is displayed, set preselected to TRUE.
 */
 void gnome_add_menu(winid wid, int glyph, const ANY_P * identifier,
-		CHAR_P accelerator, CHAR_P group_accel, int attr, 
+		CHAR_P accelerator, CHAR_P group_accel, int attr,
 		const char *str, BOOLEAN_P presel)
 {
   GHackMenuItem item;
@@ -796,7 +796,7 @@ int gnome_select_menu(winid wid, int how, MENU_ITEM_P **selected)
 
 /*
     -- Indicate to the window port that the inventory has been changed.
-    -- Merely calls display_inventory() for window-ports that leave the 
+    -- Merely calls display_inventory() for window-ports that leave the
 	window up, otherwise empty.
 */
 void gnome_update_inventory()
@@ -844,7 +844,7 @@ void gnome_cliparound_proper(winid wid, int x, int y)
       {
 	gtk_signal_emit( GTK_OBJECT (gnome_windowlist[wid].win),
 			 ghack_signals[GHSIG_CLIPAROUND],
-			 (guint) x, 
+			 (guint) x,
 			 (guint) y);
       }
 }
@@ -912,9 +912,9 @@ int gnome_nhgetch()
 
     g_askingQuestion = 1;
     /* Process events until a key press event arrives. */
-    while ( g_numKeys == 0 ) 
+    while ( g_numKeys == 0 )
 	gtk_main_iteration();
-    
+
     theFirst = g_list_first( g_keyBuffer);
     g_keyBuffer = g_list_remove_link(g_keyBuffer, theFirst);
     key = GPOINTER_TO_INT( theFirst->data);
@@ -932,8 +932,8 @@ int nh_poskey(int *x, int *y, int *mod)
                    a position in the MAP window is returned in x, y and mod.
                    mod may be one of
 
-                        CLICK_1         -- mouse click type 1 
-                        CLICK_2         -- mouse click type 2 
+                        CLICK_1         -- mouse click type 1
+                        CLICK_2         -- mouse click type 2
 
                    The different click types can map to whatever the
                    hardware supports.  If no mouse is supported, this
@@ -943,16 +943,16 @@ int gnome_nh_poskey(int *x, int *y, int *mod)
 {
     gtk_signal_emit (GTK_OBJECT (gnome_windowlist[WIN_STATUS].win),
 		       ghack_signals[GHSIG_FADE_HIGHLIGHT]);
-    
+
     g_askingQuestion = 0;
     /* Process events until a key or map-click arrives. */
     while ( g_numKeys == 0 && g_numClicks == 0 )
 	gtk_main_iteration();
-    
+
     if (g_numKeys > 0) {
 	int key;
 	GList *theFirst;
-	
+
 	theFirst = g_list_first( g_keyBuffer);
 	g_keyBuffer = g_list_remove_link(g_keyBuffer, theFirst);
 	key = GPOINTER_TO_INT( theFirst->data);
@@ -963,7 +963,7 @@ int gnome_nh_poskey(int *x, int *y, int *mod)
     else {
 	GHClick *click;
 	GList *theFirst;
-	
+
 	theFirst = g_list_first( g_clickBuffer);
 	g_clickBuffer = g_list_remove_link(g_clickBuffer, theFirst);
 	click = (GHClick*) theFirst->data;
@@ -1025,8 +1025,8 @@ char gnome_yn_function(const char *question, const char *choices,
     char message[BUFSZ];
     char yn_esc_map='\033';
     GtkWidget *mainWnd = ghack_get_main_window();
-    
-    
+
+
     if (choices) {
 	char *cb, choicebuf[QBUFSZ];
 	Strcpy(choicebuf, choices);
@@ -1042,8 +1042,8 @@ char gnome_yn_function(const char *question, const char *choices,
     } else {
 	Strcpy(message, question);
     }
-    
-    
+
+
     gnome_putstr(WIN_MESSAGE, ATR_BOLD, message);
     if (mainWnd != NULL && choices && !index(choices,ch)) {
 	return(ghack_yes_no_dialog( question, choices, def));
@@ -1156,18 +1156,15 @@ void gnome_outrip(winid wid, int how)
     char buf[BUFSZ];
     char ripString[BUFSZ]="\0";
     extern const char *killed_by_prefix[];
-    
+
     /* Put name on stone */
     Sprintf(buf, "%s\n", plname);
     Strcat(ripString, buf);
-    
+
     /* Put $ on stone */
     Sprintf(buf, "%ld Au\n",
-#ifndef GOLDOBJ
-		u.ugold);
-#else
-		done_money);
-#endif
+            done_money);
+
     Strcat(ripString, buf);
 
     /* Put together death description */

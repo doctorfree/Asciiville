@@ -122,7 +122,7 @@ DATHELP = help hh cmdhelp history opthelp wizhelp
 SPEC_LEVS = asmod-?.lev baalz-?.lev bigrm-*.lev blkmar-?.lev castle-?.lev fakewiz?.lev \
 	vlt-*.lev \
 	juiblex.lev knox-?.lev town*.lev \
-	medusa-?.lev minend-?.lev minefill.lev minetn-?.lev \
+	medusa-?.lev medufill.lev minend-?.lev minefill.lev minetn-?.lev \
 	oracle.lev orcus-?.lev sanctum.lev soko?-*.lev \
 	hellfill.lev nymph.lev drgn?.lev \
 	tower?.lev valley-?.lev wizard?.lev heck-?-?.lev \
@@ -173,12 +173,12 @@ quest.dat: $(GAME)
 	( cd dat ; $(MAKE) quest.dat )
 
 spec_levs: $(GAME)
-	( cd util ; $(MAKE) lev_comp )
+	( cd util ; $(MAKE) lev_comp$(EXEEXT) )
 	( cd dat ; $(MAKE) spec_levs )
 	( cd dat ; $(MAKE) quest_levs )
 
 dungeon: $(GAME)
-	( cd util ; $(MAKE) dgn_comp )
+	( cd util ; $(MAKE) dgn_comp$(EXEEXT) )
 	( cd dat ; $(MAKE) dungeon )
 
 Guidebook.txt:
@@ -224,11 +224,11 @@ title.img:
 	( cd dat ; $(MAKE) title.img )
 
 check-dlb: @OPTIONS_FILE@
-	@if egrep -s librarian dat/@OPTIONS_FILE@ ; then $(MAKE) dlb ; else true ; fi
+	@if egrep -s librarian dat/@OPTIONS_FILE@ ; then $(MAKE) dlb$(EXEEXT) ; else true ; fi
 
-dlb: spec_levs
-	( cd util ; $(MAKE) dlb )
-	( cd dat ; LC_ALL=C ; ../util/dlb cf nhdat $(SHARE_DATDLB) $(UNSHARE_DATDLB) )
+dlb$(EXEEXT): spec_levs
+	( cd util ; $(MAKE) dlb$(EXEEXT) )
+	( cd dat ; LC_ALL=C ; ../util/dlb$(EXEEXT) cf nhdat $(SHARE_DATDLB) $(UNSHARE_DATDLB) )
 
 
 # recover can be used when INSURANCE is defined in include/config.h
@@ -329,6 +329,12 @@ install: $(GAME) recover$(EXEEXT) $(CNF_SHARE_DAT) dungeon spec_levs @GUIDEBOOK_
 	-( cd $(DESTDIR)$(FILE_AREA_VAR) ; $(CHOWN) $(GAMEUID) perm record logfile @XLOGFILE@ @LIVELOGFILE@ ; \
 			$(CHGRP) $(GAMEGRP) perm record logfile @XLOGFILE@ @LIVELOGFILE@ ; \
 			chmod $(VARFILEPERM) perm record logfile @XLOGFILE@ @LIVELOGFILE@ )
+	@SYSCF_CP@cp $(srcdir)/dat/sysconf $(DESTDIR)$(FILE_AREA_SHARE) ; \
+		( cd $(DESTDIR)$(FILE_AREA_SHARE) ; \
+		  @SYSCF_COMMENT@$(CHOWN) $(GAMEUID) @SYSCF_FILE@ ; \
+		  @SYSCF_COMMENT@$(CHGRP) $(GAMEGRP) @SYSCF_FILE@ ; \
+		  @SYSCF_COMMENT@$(CHMOD) $(FILEPERM) @SYSCF_FILE@ \
+		)
 # and a reminder
 	@echo You may also want to reinstall the man pages via the doc Makefile.
 
@@ -347,6 +353,10 @@ spotless:
 	( cd dat ; $(MAKE) spotless )
 	( cd doc ; $(MAKE) spotless )
 	-rm -f Makefile include/autoconf.h include/autoconf_paths.h include/win32api.h
+
+distclean: spotless
+check:
+	(cd tests && make)
 
 include/autoconf_paths.h: Makefile
 	echo '#ifndef AUTOCONF_PATH_H'  >$@
@@ -368,12 +378,17 @@ release_archive: $(GAME)
 	rm -f $(NETHACK_RELEASE_ARCHIVE)
 	git ls-files | tar cfz $(NETHACK_RELEASE_ARCHIVE) --mtime=now --transform 's,^,$(NETHACK_RELEASE_ARCHIVE_PREFIX)/,' -T -
 
+dist: release_archive
+
+win32_prerelease_tag:
+	git tag $(RELEASEVERSION)-`git log -1 --date=format:%Y%m%d --format="%cd-%h"`
+
 win32_release: $(GAME)
 	cp $(srcdir)/ChangeLog  $(DESTDIR)$(GAMEDIR)/ChangeLog.txt
 	cp $(srcdir)/README $(DESTDIR)$(GAMEDIR)/README.txt
 	touch $(GAMEDIR)/News
 	cp $(srcdir)/dat/*.ttf $(DESTDIR)$(GAMEDIR)/
-	convert -verbose $(srcdir)/tilesets/unchozo32b.png $(DESTDIR)$(GAMEDIR)/unchozo32b.bmp
+	convert -verbose $(srcdir)/tilesets/unchozo32b.png BMP3:$(DESTDIR)$(GAMEDIR)/unchozo32b.bmp
 	vim -c "set fileformat=dos" -c w -c q $(DESTDIR)$(GAMEDIR)/News
 	vim -c "set fileformat=dos" -c w -c q $(DESTDIR)$(GAMEDIR)/defaults.nh
 	vim -c "set fileformat=dos" -c w -c q $(DESTDIR)$(GAMEDIR)/license

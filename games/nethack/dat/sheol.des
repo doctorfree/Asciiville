@@ -48,7 +48,7 @@ TRAP: random, random
 
 # Middle level
 LEVEL: "sheolmid"
-FLAGS: sheol,hardfloor,noteleport
+FLAGS: sheol,hardfloor,noteleport,noflip
 INIT_MAP: sheollev
 
 GEOMETRY:(0,2)

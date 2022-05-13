@@ -1077,11 +1077,8 @@ int how;
 	Sprintf(rip_line[NAME_LINE], "%s", plname);
 	/* Put $ on stone */
 	Sprintf(rip_line[GOLD_LINE], "%ld Au",
-#ifndef GOLDOBJ
-		u.ugold);
-#else
 		done_money);
-#endif
+
 	/* Put together death description */
 	switch (killer_format) {
 	default: impossible("bad killer format?");

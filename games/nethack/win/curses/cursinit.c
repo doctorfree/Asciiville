@@ -23,25 +23,6 @@ static void set_window_position(int *, int *, int *, int *, int,
                                 int *, int *, int *, int *, int,
                                 int, int);
 
-/* array to save initial terminal colors for later restoration */
-
-typedef struct nhrgb_type {
-    short r;
-    short g;
-    short b;
-} nhrgb;
-
-nhrgb orig_yellow;
-nhrgb orig_white;
-nhrgb orig_darkgray;
-nhrgb orig_hired;
-nhrgb orig_higreen;
-nhrgb orig_hiyellow;
-nhrgb orig_hiblue;
-nhrgb orig_himagenta;
-nhrgb orig_hicyan;
-nhrgb orig_hiwhite;
-
 /* Banners used for an optional ASCII splash screen */
 
 #define NETHACK_SPLASH_A \
@@ -302,7 +283,7 @@ curses_create_main_windows()
                             status_orientation, &map_x, &map_y, &map_width, &map_height,
                             border_space, statusheight, 26);
 
-    if (flags.perm_invent) {
+    if (iflags.perm_invent) {
         /* Take up all width unless msgbar is also vertical. */
         int width = -25;
         if (msg_vertical)
@@ -350,9 +331,10 @@ curses_create_main_windows()
     curses_add_nhwin(MESSAGE_WIN, message_height, message_width, message_y,
                      message_x, message_orientation, borders);
 
-    if (flags.perm_invent)
+    if (iflags.perm_invent) {
         curses_add_nhwin(INV_WIN, inv_height, inv_width, inv_y, inv_x,
                          ALIGN_RIGHT, borders);
+    }
 
     curses_add_nhwin(MAP_WIN, map_height, map_width, map_y, map_x, 0, borders);
 
@@ -362,8 +344,9 @@ curses_create_main_windows()
 
     if (iflags.window_inited) {
         curses_update_stats();
-        if (flags.perm_invent)
+        if (iflags.perm_invent) {
             curses_update_inventory();
+        }
     } else {
         iflags.window_inited = TRUE;
     }
@@ -385,7 +368,7 @@ curses_init_nhcolors()
         init_pair(5, COLOR_BLUE, -1);
         init_pair(6, COLOR_MAGENTA, -1);
         init_pair(7, COLOR_CYAN, -1);
-        init_pair(8, -1, -1);
+        init_pair(8, COLOR_WHITE, -1);
 
         {
             int i;
@@ -420,7 +403,10 @@ curses_init_nhcolors()
 
 
         if (COLORS >= 16) {
-            init_pair(9, COLOR_WHITE, -1);
+# ifdef USE_DARKGRAY
+            //init_pair(1, COLOR_BLACK + 8, -1);
+# endif
+            init_pair(9, COLOR_BLACK + 8, -1);
             init_pair(10, COLOR_RED + 8, -1);
             init_pair(11, COLOR_GREEN + 8, -1);
             init_pair(12, COLOR_YELLOW + 8, -1);
@@ -428,55 +414,6 @@ curses_init_nhcolors()
             init_pair(14, COLOR_MAGENTA + 8, -1);
             init_pair(15, COLOR_CYAN + 8, -1);
             init_pair(16, COLOR_WHITE + 8, -1);
-        }
-
-        if (can_change_color()) {
-            /* Preserve initial terminal colors */
-            color_content(COLOR_YELLOW, &orig_yellow.r, &orig_yellow.g,
-                          &orig_yellow.b);
-            color_content(COLOR_WHITE, &orig_white.r, &orig_white.g,
-                          &orig_white.b);
-
-            /* Set colors to appear as NetHack expects */
-            init_color(COLOR_YELLOW, 500, 300, 0);
-            init_color(COLOR_WHITE, 600, 600, 600);
-            if (COLORS >= 16) {
-                /* Preserve initial terminal colors */
-                color_content(COLOR_RED + 8, &orig_hired.r,
-                              &orig_hired.g, &orig_hired.b);
-                color_content(COLOR_GREEN + 8, &orig_higreen.r,
-                              &orig_higreen.g, &orig_higreen.b);
-                color_content(COLOR_YELLOW + 8, &orig_hiyellow.r,
-                              &orig_hiyellow.g, &orig_hiyellow.b);
-                color_content(COLOR_BLUE + 8, &orig_hiblue.r,
-                              &orig_hiblue.g, &orig_hiblue.b);
-                color_content(COLOR_MAGENTA + 8, &orig_himagenta.r,
-                              &orig_himagenta.g, &orig_himagenta.b);
-                color_content(COLOR_CYAN + 8, &orig_hicyan.r,
-                              &orig_hicyan.g, &orig_hicyan.b);
-                color_content(COLOR_WHITE + 8, &orig_hiwhite.r,
-                              &orig_hiwhite.g, &orig_hiwhite.b);
-
-                /* Set colors to appear as NetHack expects */
-                init_color(COLOR_RED + 8, 1000, 500, 0);
-                init_color(COLOR_GREEN + 8, 0, 1000, 0);
-                init_color(COLOR_YELLOW + 8, 1000, 1000, 0);
-                init_color(COLOR_BLUE + 8, 0, 0, 1000);
-                init_color(COLOR_MAGENTA + 8, 1000, 0, 1000);
-                init_color(COLOR_CYAN + 8, 0, 1000, 1000);
-                init_color(COLOR_WHITE + 8, 1000, 1000, 1000);
-# ifdef USE_DARKGRAY
-                if (COLORS > 16) {
-                    color_content(CURSES_DARK_GRAY, &orig_darkgray.r,
-                                  &orig_darkgray.g, &orig_darkgray.b);
-                    init_color(CURSES_DARK_GRAY, 300, 300, 300);
-                    /* just override black colorpair entry here */
-                    init_pair(1, CURSES_DARK_GRAY, -1);
-                }
-# endif
-            } else {
-                /* Set flag to use bold for bright colors */
-            }
         }
     }
 #endif
@@ -534,7 +471,7 @@ curses_choose_character()
     }
 
     prompt[count_off] = '\0';
-    sprintf(choice, "%s%c", tmpchoice, '\033');
+    Snprintf(choice, sizeof(choice), "%s%c", tmpchoice, '\033');
     if (strchr(tmpchoice, 't')) {       /* Tutorial mode */
         mvaddstr(0, 1, "New? Press t to enter a tutorial.");
     }
@@ -545,7 +482,7 @@ curses_choose_character()
         tmpchoice[count] = toupper(tmpchoice[count]);
     }
 
-    sprintf(choice, "%s%s", choice, tmpchoice);
+    strcat(choice, tmpchoice);
 
     /* prevent an unnecessary prompt */
     rigid_role_checks();
@@ -936,6 +873,10 @@ curses_init_options()
        options.c in case the game is compiled with both tty and curses. */
     if (iflags.IBMgraphics) {
         switch_graphics(IBM_GRAPHICS);
+#ifdef HAVE_LOCALE_H
+    } else if (iflags.supports_utf8 && !iflags.cursesgraphics) {
+        switch_graphics(UTF8_GRAPHICS);
+#endif
     } else if (iflags.DECgraphics || iflags.UTF8graphics || iflags.cursesgraphics) {
         switch_graphics(CURS_GRAPHICS);
     } else {
@@ -1110,32 +1051,49 @@ curses_display_splash_window()
 void
 curses_cleanup()
 {
-#ifdef TEXTCOLOR
-    if (has_colors() && can_change_color()) {
-        init_color(COLOR_YELLOW, orig_yellow.r, orig_yellow.g, orig_yellow.b);
-        init_color(COLOR_WHITE, orig_white.r, orig_white.g, orig_white.b);
+}
 
-        if (COLORS >= 16) {
-            init_color(COLOR_RED + 8, orig_hired.r, orig_hired.g, orig_hired.b);
-            init_color(COLOR_GREEN + 8, orig_higreen.r, orig_higreen.g,
-                       orig_higreen.b);
-            init_color(COLOR_YELLOW + 8, orig_hiyellow.r,
-                       orig_hiyellow.g, orig_hiyellow.b);
-            init_color(COLOR_BLUE + 8, orig_hiblue.r, orig_hiblue.g,
-                       orig_hiblue.b);
-            init_color(COLOR_MAGENTA + 8, orig_himagenta.r,
-                       orig_himagenta.g, orig_himagenta.b);
-            init_color(COLOR_CYAN + 8, orig_hicyan.r, orig_hicyan.g,
-                       orig_hicyan.b);
-            init_color(COLOR_WHITE + 8, orig_hiwhite.r, orig_hiwhite.g,
-                       orig_hiwhite.b);
-# ifdef USE_DARKGRAY
-            if (COLORS > 16) {
-                init_color(CURSES_DARK_GRAY, orig_darkgray.r,
-                           orig_darkgray.g, orig_darkgray.b);
-            }
-# endif
+
+/** Show all available colors with names. */
+int
+curses_debug_show_colors()
+{
+    int i,c;
+    winid tmpwin;
+    char buf[BUFSZ];
+
+    tmpwin = create_nhwindow(NHW_TEXT);
+    WINDOW *win = curses_get_nhwin(MESSAGE_WIN);
+    putstr(tmpwin, ATR_INVERSE, "Colors");
+    char *colorterm = getenv("COLORTERM");
+    int colors = tgetnum("Co");
+    snprintf(buf, BUFSZ, "%s %d %s", getenv("TERM"), colors, colorterm ? colorterm : "");
+    putstr(tmpwin, 0, buf);
+    putstr(tmpwin, 0, "");
+
+    for (c = 0; c < CLR_MAX; c++) {
+        sprintf(buf, " %2d %s ", c, clr2colorname(c));
+        while (strlen(buf) < 18) { strcat(buf, " "); }
+#if 0
+        // disabled until the curses port supports setting colors
+        if (iflags.color_definitions[c]) {
+            sprintf(eos(buf), "  %06" PRIx64 " ", iflags.color_definitions[c]);
+        } else {
+            sprintf(eos(buf), "  ------");
         }
-    }
 #endif
+
+        int attr = A_NORMAL;
+        if (c != NO_COLOR) {
+            attr = curses_color_attr(c, 0);
+        }
+        curses_puts(tmpwin, attr, buf);
+        sprintf(eos(buf), "-");
+        curses_puts(tmpwin, attr | A_REVERSE, buf);
+    }
+
+    display_nhwindow(tmpwin, TRUE);
+    destroy_nhwindow(tmpwin);
+
+    return 0;
 }

@@ -1,4 +1,4 @@
-/*	SCCS Id: @(#)tcap.h	3.4	1992/10/21	*/
+/*  SCCS Id: @(#)tcap.h 3.4 1992/10/21  */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1989. */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -8,7 +8,7 @@
 #define TCAP_H
 
 #ifndef MICRO
-# define TERMLIB	/* include termcap code */
+# define TERMLIB    /* include termcap code */
 #endif
 
 /* might display need graphics code? */
@@ -20,8 +20,8 @@
 
 #ifndef DECL_H
 extern struct tc_gbl_data {   /* also declared in decl.h; defined in decl.c */
-    char *tc_AS, *tc_AE;	/* graphics start and end (tty font swapping) */
-    int   tc_LI,  tc_CO;	/* lines and columns */
+    char *tc_AS, *tc_AE;    /* graphics start and end (tty font swapping) */
+    int tc_LI,  tc_CO;      /* lines and columns */
 } tc_gbl_data;
 #define AS tc_gbl_data.tc_AS
 #define AE tc_gbl_data.tc_AE
@@ -44,7 +44,7 @@ extern struct tc_lcl_data {   /* defined and set up in termcap.c */
 #define nh_UE tc_lcl_data.tc_UE
 #define ul_hack tc_lcl_data.tc_ul_hack
 
-extern short ospeed;		/* set up in termcap.c */
+extern short ospeed;        /* set up in termcap.c */
 
 #ifdef TEXTCOLOR
 # ifdef TOS

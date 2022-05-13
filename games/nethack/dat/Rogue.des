@@ -238,7 +238,7 @@ LOOP [4 + 1d3] {
 #	arrival point and his location.
 #
 LEVEL: "Rog-goal"
-FLAGS: noteleport,mazelevel
+FLAGS: noteleport,mazelevel,noflip
 INIT_MAP:solidfill,' '
 MON_GENERATION:86%, (64,"leprechaun"), (16,'n'), (16,"guardian naga"), (4,'N')
 GEOMETRY:center,center

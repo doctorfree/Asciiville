@@ -4,8 +4,8 @@
 
 /* tty.c - (Windows NT) version */
 
-/*                                                  
- * Initial Creation 				M. Allison	1993/01/31 
+/*
+ * Initial Creation 				M. Allison	1993/01/31
  * Switch to low level console output routines	M. Allison	2003/10/01
  * Restrict cursor movement until input pending	M. Lehotay	2003/10/02
  *
@@ -53,7 +53,7 @@ INPUT_RECORD ir;
  * a final RETURN at the end of the game when launched from the GUI
  * to prevent the scoreboard (or panic message :-|) from vanishing
  * immediately after it is displayed, yet not bother when started
- * from the command line. 
+ * from the command line.
  */
 int GUILaunched;
 static BOOL FDECL(CtrlHandler, (DWORD));
@@ -202,7 +202,7 @@ tty_end_screen()
 	{
 	    DWORD ccnt;
 	    COORD newcoord;
-	    
+
 	    newcoord.X = 0;
 	    newcoord.Y = 0;
 	    FillConsoleOutputAttribute(hConOut,
@@ -232,7 +232,7 @@ DWORD ctrltype;
 #endif
 #if 0
 			clearlocks();
-			terminate(EXIT_FAILURE);
+			nh_terminate(EXIT_FAILURE);
 #endif
 		default:
 			return FALSE;
@@ -253,7 +253,7 @@ nttty_open()
          */
 	nt_kbhit = nttty_kbhit;
 
-        /* The following 6 lines of code were suggested by 
+        /* The following 6 lines of code were suggested by
          * Bob Landau of Microsoft WIN32 Developer support,
          * as the only current means of determining whether
          * we were launched from the command prompt, or from
@@ -273,20 +273,20 @@ nttty_open()
 	hConIn = CreateFile("CONIN$",
 			GENERIC_READ |GENERIC_WRITE,
 			FILE_SHARE_READ |FILE_SHARE_WRITE,
-			0, OPEN_EXISTING, 0, 0);					
+			0, OPEN_EXISTING, 0, 0);
 	hConOut = CreateFile("CONOUT$",
 			GENERIC_READ |GENERIC_WRITE,
 			FILE_SHARE_READ |FILE_SHARE_WRITE,
 			0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,0);
-#endif       
+#endif
 
 	GetConsoleMode(hConIn,&cmode);
 #ifdef NO_MOUSE_ALLOWED
 	mask = ENABLE_PROCESSED_INPUT | ENABLE_LINE_INPUT |
-	       ENABLE_MOUSE_INPUT | ENABLE_ECHO_INPUT | ENABLE_WINDOW_INPUT;   
+	       ENABLE_MOUSE_INPUT | ENABLE_ECHO_INPUT | ENABLE_WINDOW_INPUT;
 #else
 	mask = ENABLE_PROCESSED_INPUT | ENABLE_LINE_INPUT |
-	       ENABLE_ECHO_INPUT | ENABLE_WINDOW_INPUT;   
+	       ENABLE_ECHO_INPUT | ENABLE_WINDOW_INPUT;
 #endif
 	/* Turn OFF the settings specified in the mask */
 	cmode &= ~mask;
@@ -327,13 +327,13 @@ void
 get_scr_size()
 {
 	GetConsoleScreenBufferInfo(hConOut, &csbi);
-  
+
 	LI = csbi.srWindow.Bottom - (csbi.srWindow.Top + 1);
 	CO = csbi.srWindow.Right - (csbi.srWindow.Left + 1);
 
 	if ( (LI < 25) || (CO < 80) ) {
 		COORD newcoord;
-    
+
 		LI = 25;
 		CO = 80;
 
@@ -436,13 +436,13 @@ char ch;
 	}
 }
 
-void
-xputc(ch)
-char ch;
+int
+xputc(int ch)
 {
-	cursor.X = ttyDisplay->curx;
-	cursor.Y = ttyDisplay->cury;
-	xputc_core(ch);
+    cursor.X = ttyDisplay->curx;
+    cursor.Y = ttyDisplay->cury;
+    xputc_core((char) ch);
+    return 0;
 }
 
 void
@@ -500,7 +500,7 @@ clear_screen()
 	if (GetConsoleScreenBufferInfo(hConOut,&csbi)) {
 	    DWORD ccnt;
 	    COORD newcoord;
-	    
+
 	    newcoord.X = 0;
 	    newcoord.Y = 0;
 	    FillConsoleOutputAttribute(hConOut,
@@ -538,7 +538,7 @@ cl_eos()
 	if (GetConsoleScreenBufferInfo(hConOut,&csbi)) {
 	    DWORD ccnt;
 	    COORD newcoord;
-	    
+
 	    newcoord.X = ttyDisplay->curx;
 	    newcoord.Y = ttyDisplay->cury;
 	    FillConsoleOutputAttribute(hConOut,
@@ -678,7 +678,7 @@ convert_uchars(bufp,list,size)
 		if ((count==size) || !*bufp) return count;
 		bufp++;
 		break;
-	    case '#': 
+	    case '#':
 		if (num) {
 		    list[count++] = num;
 		    list[count] = 0;
@@ -711,7 +711,7 @@ has_color(int color)
 	return 1;
     else
 	return 0;
-# endif 
+# endif
 }
 
 void
@@ -755,7 +755,7 @@ term_end_attr(int attrib)
         case ATR_BOLD:
 		foreground &= ~FOREGROUND_INTENSITY;
 		break;
-    }                
+    }
     attr = (foreground | background);
 }
 
@@ -838,18 +838,20 @@ const char *pref;
 void
 win32con_debug_keystrokes()
 {
-	DWORD count;
-	boolean valid = 0;
-	int ch;
-	xputs("\n");
-	while (!valid || ch != 27) {
-	   nocmov(ttyDisplay->curx, ttyDisplay->cury);
-	   ReadConsoleInput(hConIn,&ir,1,&count);
-	   if ((ir.EventType == KEY_EVENT) && ir.Event.KeyEvent.bKeyDown)
-		ch = process_keystroke(&ir, &valid, iflags.num_pad, 1);
-	}
-	(void)doredraw();
+    DWORD count;
+    boolean valid = 0;
+    int ch = 0;
+    xputs("\n");
+    while (!valid || ch != 27) {
+        nocmov(ttyDisplay->curx, ttyDisplay->cury);
+        ReadConsoleInput(hConIn,&ir,1,&count);
+        if ((ir.EventType == KEY_EVENT) && ir.Event.KeyEvent.bKeyDown) {
+            ch = process_keystroke(&ir, &valid, iflags.num_pad, 1);
+        }
+    }
+    (void) doredraw();
 }
+
 void
 win32con_handler_info()
 {
@@ -927,10 +929,10 @@ load_keyboard_handler()
 			FreeLibrary(hLibrary);
 			hLibrary = (HANDLE)0;
 		   pNHkbhit = (NHKBHIT)0;
-		   pCheckInput = (CHECKINPUT)0; 
-		   pSourceWhere = (SOURCEWHERE)0; 
-		   pSourceAuthor = (SOURCEAUTHOR)0; 
-		   pKeyHandlerName = (KEYHANDLERNAME)0; 
+		   pCheckInput = (CHECKINPUT)0;
+		   pSourceWhere = (SOURCEWHERE)0;
+		   pSourceAuthor = (SOURCEAUTHOR)0;
+		   pKeyHandlerName = (KEYHANDLERNAME)0;
 		   pProcessKeystroke = (PROCESS_KEYSTROKE)0;
 		}
 		if ((truncspot = strstri(iflags.altkeyhandler, suffx)) != 0)
@@ -960,11 +962,11 @@ load_keyboard_handler()
 		if (hLibrary) {
 			FreeLibrary(hLibrary);
 			hLibrary = (HANDLE)0;
-			pNHkbhit = (NHKBHIT)0; 
-			pCheckInput = (CHECKINPUT)0; 
-			pSourceWhere = (SOURCEWHERE)0; 
-			pSourceAuthor = (SOURCEAUTHOR)0; 
-			pKeyHandlerName = (KEYHANDLERNAME)0; 
+			pNHkbhit = (NHKBHIT)0;
+			pCheckInput = (CHECKINPUT)0;
+			pSourceWhere = (SOURCEWHERE)0;
+			pSourceAuthor = (SOURCEAUTHOR)0;
+			pKeyHandlerName = (KEYHANDLERNAME)0;
 			pProcessKeystroke = (PROCESS_KEYSTROKE)0;
 		}
 		(void)strncpy(kh, "nhdefkey.dll", (MAX_ALTKEYHANDLER - sizeof suffx) - 1);
@@ -1002,32 +1004,36 @@ load_keyboard_handler()
  * system isn't initialized yet
  */
 void
-msmsg VA_DECL(const char *, fmt)
-	char buf[ROWNO * COLNO];	/* worst case scenario */
-	VA_START(fmt);
-	VA_INIT(fmt, const char *);
-	Vsprintf(buf, fmt, VA_ARGS);
-	VA_END();
-	xputs(buf);
-	if (ttyDisplay) curs(BASE_WINDOW, cursor.X+1, cursor.Y);
-	return;
+msmsg
+VA_DECL(const char *, fmt)
+{
+    char buf[ROWNO * COLNO];	/* worst case scenario */
+    VA_START(fmt);
+    VA_INIT(fmt, const char *);
+    Vsprintf(buf, fmt, VA_ARGS);
+    xputs(buf);
+    if (ttyDisplay) curs(BASE_WINDOW, cursor.X+1, cursor.Y);
+    VA_END();
+    return;
 }
 
 /* fatal error */
 /*VARARGS1*/
 void
-error VA_DECL(const char *,s)
-	char buf[BUFSZ];
-	VA_START(s);
-	VA_INIT(s, const char *);
-	/* error() may get called before tty is initialized */
-	if (iflags.window_inited) end_screen();
-	buf[0] = '\n';
-	(void) vsprintf(&buf[1], s, VA_ARGS);
-	VA_END();
-	msmsg(buf);
-	really_move_cursor();
-	exit(EXIT_FAILURE);
+error
+VA_DECL(const char *,s)
+{
+    char buf[BUFSZ];
+    VA_START(s);
+    VA_INIT(s, const char *);
+    /* error() may get called before tty is initialized */
+    if (iflags.window_inited) end_screen();
+    buf[0] = '\n';
+    (void) vsprintf(&buf[1], s, VA_ARGS);
+    msmsg(buf);
+    really_move_cursor();
+    VA_END();
+    exit(EXIT_FAILURE);
 }
 
 void

@@ -1,12 +1,6 @@
 General information about NetHack
 ===================================
 
-This is release 5.2.0 of NetHack. This release updates the previous version
-with bugfixes and new features of the development version 5.3.1 (distribution
-packagers therefore don't need to package 5.2.0 if they already ship 5.3.1).
-
-This release is not bones and saves compatible with 5.1.0.
-
 NetHack is a fork of NetHack, originally based on NetHack version 3.4.3.
 
 It features more randomness, more levels, more challenges and more fun than
@@ -21,8 +15,8 @@ The project page with detailed information about changes from NetHack, the
 development blog, public servers, source code repository and ways to reach the
 developer can be found at: https://nethack.wordpress.com/
 
-For discussion, join the IRC channel #nethack on irc.freenode.net, post to
-rec.games.roguelike.nethack.
+For discussions, join the IRC channel #nethack on Libera.Chat, post to the
+Reddit group r/nethack or the Usenet group rec.games.roguelike.nethack.
 
 
  -- Good luck, and happy Hacking

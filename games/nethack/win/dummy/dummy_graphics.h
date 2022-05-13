@@ -21,14 +21,18 @@ void dummy_display_nhwindow(winid wid, BOOLEAN_P block);
 void dummy_destroy_nhwindow(winid wid);
 void dummy_curs(winid wid, int x, int y);
 void dummy_putstr(winid wid, int attr, const char *text);
-void dummy_display_file(const char *filename,BOOLEAN_P must_exist);
+#ifdef FILE_AREAS
+void dummy_display_file(const char *farea, const char *filename, BOOLEAN_P must_exist);
+#else
+void dummy_display_file(const char *filename, BOOLEAN_P must_exist);
+#endif
 void dummy_start_menu(winid wid);
 void dummy_add_menu(winid wid, int glyph, int cnt, const ANY_P * identifier,
-		CHAR_P accelerator, CHAR_P group_accel, int attr, 
-		const char *str, BOOLEAN_P presel);
+        CHAR_P accelerator, CHAR_P group_accel, int attr,
+        const char *str, unsigned int presel);
 void dummy_end_menu(winid wid, const char *prompt);
 int  dummy_select_menu(winid wid, int how, MENU_ITEM_P **selected);
-/* No need for message_menu -- we'll use genl_message_menu instead */	
+/* No need for message_menu -- we'll use genl_message_menu instead */
 void dummy_update_inventory(void);
 void dummy_mark_synch(void);
 void dummy_wait_synch(void);
@@ -37,7 +41,7 @@ void dummy_cliparound(int x, int y);
  * dummy_cliparound (which lacks the winid) simply calls this funtion.
 */
 void dummy_cliparound_proper(winid wid, int x, int y);
-void dummy_print_glyph(winid wid,XCHAR_P x,XCHAR_P y,int glyph);
+void dummy_print_glyph(winid wid,XCHAR_P x,XCHAR_P y,int glyph, int bg_glyph);
 void dummy_raw_print(const char *str);
 void dummy_raw_print_bold(const char *str);
 int  dummy_nhgetch(void);

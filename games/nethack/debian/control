@@ -1,8 +1,13 @@
 Source: nethack
 Section: games
-Priority: extra
+Priority: optional
 Maintainer: Patric Mueller <bhaak@gmx.net>
-Build-Depends: debhelper (>= 8.0.0), autotools-dev, flex, bison, libncurses5-dev
+Build-Depends:
+ autotools-dev,
+ bison,
+ debhelper (>= 8.0.0),
+ flex,
+ libncurses5-dev | libncurses-dev
 Standards-Version: 3.8.4
 Homepage: https://nethack.wordpress.com/
 Vcs-Git: https://github.com/NetHack/NetHack.git
@@ -11,6 +16,6 @@ Vcs-Browser: https://github.com/nethack/nethack
 Package: nethack
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: NetHack is a variant of NetHack.
- NetHack is a variant of NetHack. 
- It features more randomness, more levels, more challenges and more fun than vanilla NetHack.
+Description: A variant of the roguelike game NetHack.
+ It features more randomness, more levels, more challenges and more fun than
+ vanilla NetHack.

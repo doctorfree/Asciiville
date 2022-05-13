@@ -1,6 +1,8 @@
 #	NetHack Makefile.
 #	SCCS Id: @(#)Makefile.top	3.4	1995/01/05
 
+EXEEXT = @EXEEXT@
+
 # newer makes predefine $(MAKE) to 'make' and do smarter processing of
 # recursive make calls if $(MAKE) is used
 # these makes allow $(MAKE) to be overridden by the environment if someone
@@ -40,7 +42,7 @@ VARDIR  = $(GAMEDIR)
 SHELLDIR = $(PREFIX)/games
 
 # per discussion in Install.X11 and Install.Qt
-VARDATND = 
+VARDATND =
 # VARDATND = x11tiles NetHack.ad pet_mark.xbm
 # VARDATND = x11tiles NetHack.ad pet_mark.xbm rip.xpm
 # for Atari/Gem
@@ -166,16 +168,16 @@ title.img:
 	( cd dat ; $(MAKE) title.img )
 
 check-dlb: options
-	@if egrep -s librarian dat/options ; then $(MAKE) dlb ; else true ; fi
+	@if egrep -s librarian dat/options ; then $(MAKE) dlb$(EXEEXT) ; else true ; fi
 
-dlb:
-	( cd util ; $(MAKE) dlb )
-	( cd dat ; LC_ALL=C ; ../util/dlb cf nhdat $(DATDLB) )
+dlb$(EXEEXT):
+	( cd util ; $(MAKE) dlb$(EXEEXT) )
+	( cd dat ; LC_ALL=C ; ../util/dlb$(EXEEXT) cf nhdat $(DATDLB) )
 
 # recover can be used when INSURANCE is defined in include/config.h
 # and the checkpoint option is true
-recover: $(GAME)
-	( cd util ; $(MAKE) recover )
+recover$(EXEEXT): $(GAME)
+	( cd util ; $(MAKE) recover$(EXEEXT) )
 
 dofiles:
 	target=`sed -n					\

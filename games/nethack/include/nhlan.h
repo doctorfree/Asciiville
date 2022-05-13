@@ -1,23 +1,23 @@
-/*	SCCS Id: @(#)nhlan.h	3.4	1997/04/12	*/
-/* Copyright (c) Michael Allison, 1997			*/
+/*  SCCS Id: @(#)nhlan.h    3.4 1997/04/12  */
+/* Copyright (c) Michael Allison, 1997          */
 /* NetHack may be freely redistributed.  See license for details. */
 
 #ifndef NHLAN_H
 #define NHLAN_H
 /*
  * Here are the LAN features currently implemented:
- * LAN_MAIL		Mail facility allowing receipt and
- *			reading of mail.
- * LAN_SHARED_BONES	Allows bones files to be stored on a
- *			network share. (Does NOT imply compatibiliy
- *			between unlike platforms)
+ * LAN_MAIL     Mail facility allowing receipt and
+ *          reading of mail.
+ * LAN_SHARED_BONES Allows bones files to be stored on a
+ *          network share. (Does NOT imply compatibiliy
+ *          between unlike platforms)
  */
 
 # ifdef LAN_FEATURES
 #  ifdef LAN_MAIL
 #define MAIL
 #ifndef WIN32
-#define MAILCKFREQ	  50
+#define MAILCKFREQ    50
 #else
 /*
  * WIN32 port does the real mail lookups in a separate thread
@@ -27,8 +27,8 @@
  * system is controlled by MAILTHREADFREQ and is expressed
  * in milliseconds.
  */
-#define MAILCKFREQ	  5
-#define MAILTHREADFREQ	  50000
+#define MAILCKFREQ    5
+#define MAILTHREADFREQ    50000
 #endif
 
 #ifndef MAX_BODY_SIZE
@@ -36,11 +36,11 @@
 #endif
 
 struct lan_mail_struct {
-	char sender[120];
-	char subject[120];
-	boolean body_in_ram;	/* TRUE means body in memory not file */
-	char filename[_MAX_PATH];
-	char body[MAX_BODY_SIZE];
+    char sender[120];
+    char subject[120];
+    boolean body_in_ram;    /* TRUE means body in memory not file */
+    char filename[_MAX_PATH];
+    char body[MAX_BODY_SIZE];
 };
 #  endif
 

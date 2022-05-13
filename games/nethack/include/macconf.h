@@ -1,4 +1,4 @@
-/*	SCCS Id: @(#)macconf.h	3.4	1999/10/25	*/
+/*  SCCS Id: @(#)macconf.h  3.4 1999/10/25  */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
@@ -9,10 +9,10 @@
 /*
  * Compiler selection is based on the following symbols:
  *
- *  __SC__			sc, a MPW 68k compiler
- *  __MRC__			mrc, a MPW PowerPC compiler
- *	THINK_C			Think C compiler
- *	__MWERKS__		Metrowerks' Codewarrior compiler
+ *  __SC__          sc, a MPW 68k compiler
+ *  __MRC__         mrc, a MPW PowerPC compiler
+ *  THINK_C         Think C compiler
+ *  __MWERKS__      Metrowerks' Codewarrior compiler
  *
  * We use these early in config.h to define some needed symbols,
  * including MAC.
@@ -23,7 +23,7 @@
  */
 
 #ifndef __powerc
-# define MAC68K		/* 68K mac (non-powerpc) */
+# define MAC68K     /* 68K mac (non-powerpc) */
 #endif
 #ifndef TARGET_API_MAC_CARBON
 # define TARGET_API_MAC_CARBON 0
@@ -33,11 +33,11 @@
 #ifndef __MACH__
 #define RANDOM
 #endif
-#define NO_SIGNAL		/* You wouldn't believe our signals ... */
+#define NO_SIGNAL       /* You wouldn't believe our signals ... */
 #define FILENAME 256
-#define NO_TERMS		/* For tty port (see wintty.h) */
+#define NO_TERMS        /* For tty port (see wintty.h) */
 
-#define TEXTCOLOR		/* For Mac TTY interface */
+#define TEXTCOLOR       /* For Mac TTY interface */
 #define CHANGE_COLOR
 
 /* Use these two includes instead of system.h. */
@@ -46,14 +46,14 @@
 
 /* Uncomment this line if your headers don't already define off_t */
 /*typedef long off_t;*/
-#include <time.h>	/* for time_t */
+#include <time.h>   /* for time_t */
 
 /*
  * Try and keep the number of files here to an ABSOLUTE minimum !
  * include the relevant files in the relevant .c files instead !
  */
 #if TARGET_API_MAC_CARBON
-  /* Avoid including <CarbonCore/fp.h> -- it has a conflicting expl() */
+/* Avoid including <CarbonCore/fp.h> -- it has a conflicting expl() */
 # define __FP__
 # include <Carbon/Carbon.h>
 #else
@@ -69,8 +69,7 @@
 #define index strchr
 #define rindex strrchr
 
-#define Rand random
-extern void error(const char *,...);
+extern void error(const char *, ...);
 
 #if !defined(O_WRONLY)
 # ifdef __MWERKS__

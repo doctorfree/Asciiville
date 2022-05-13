@@ -1,20 +1,19 @@
-/*	SCCS Id: @(#)patchlevel.h	3.4	2003/12/06	*/
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
-/* NetHack 5.0.0 */
-#define GAME_SHORT_NAME	"UNH"
-#define VERSION_MAJOR	5
-#define VERSION_MINOR	2
+/* NetHack 6.0.3 */
+#define GAME_SHORT_NAME "UNH"
+#define VERSION_MAJOR   6
+#define VERSION_MINOR   0
 /*
  * PATCHLEVEL is updated for each release.
  */
-#define PATCHLEVEL	0
+#define PATCHLEVEL  4
 /*
  * Incrementing EDITLEVEL can be used to force invalidation of old bones
  * and save files.
  */
-#define EDITLEVEL	0
+#define EDITLEVEL   0
 
 /*
  * NetHack follows a more modern approach regarding version numbers:
@@ -29,27 +28,27 @@
  * and are considered only bugfix releases. Therefore the revision number isn't
  * included into VERSION_COMPATIBILITY.
  */
-/*#define VERSION_REVISION	1*/
+/*#define VERSION_REVISION  1*/
 
 #define COPYRIGHT_BANNER_A \
-"NetHack 5, Copyright 2009-2019"
+    "NetHack 6, Copyright 2009-2022"
 
 #define COPYRIGHT_BANNER_B \
-"    Based on NetHack, Copyright 1985-2003 by Stichting Mathematisch"
+    "    Based on NetHack, Copyright 1985-2003 by Stichting Mathematisch"
 
 #define COPYRIGHT_BANNER_C \
-"         Centrum and M. Stephenson.  See license for details."
+    "         Centrum and M. Stephenson.  See license for details."
 
 /*
  * If two or more successive releases have compatible data files, define
  * this with the version number of the oldest such release so that the
  * new release will accept old save and bones files.  The format is
- *	0xMMmmPPeeL
+ *  0xMMmmPPeeL
  * 0x = literal prefix "0x", MM = major version, mm = minor version,
  * PP = patch level, ee = edit level, L = literal suffix "L",
  * with all four numbers specified as two hexadecimal digits.
  */
-#define VERSION_COMPATIBILITY 0x05020000L	/* 5.2.0-e0 */
+#define VERSION_COMPATIBILITY 0x06000400L   /* 6.0.4-e0 */
 
 
 /*****************************************************************************/
@@ -98,11 +97,11 @@
  *  NetHack 3.4.0, March 20, 2002
  *
  *  Hundreds of general bug fixes including some for sliming, zapping, conduct,
- *	and several more for riding
+ *  and several more for riding
  *  Eliminated a few potentially fatal bugs including one for stone-to-flesh,
- *	trouble-fixing during prayer, riding down stairs while punished,
- *	polyd player demon summoning, throwing digging tools into shops, and
- *	a couple from having the vision system enabled at inappropriate times 
+ *  trouble-fixing during prayer, riding down stairs while punished,
+ *  polyd player demon summoning, throwing digging tools into shops, and
+ *  a couple from having the vision system enabled at inappropriate times
  *  Corrected some incorrect calculations in final scoring
  *  Enhanced config file processing and alert to duplication of entries
  *  Player selection prompt enhancements for TTY and X11
@@ -126,20 +125,20 @@
 
 /*  Patch 1, August 9, 2000
  *  Many, many general fixes, including a number for riding, twoweapon,
- *	and invisible monsters
+ *  and invisible monsters
  *  A security fix for a couple of potentially exploitable buffer overflows
- *	in previous versions
+ *  in previous versions
  *  Redo Ranger quest
  *  Introduction of differentiation between different causes of blindness
  *  Overhaul of warning
  *  Functionality restored to Amiga (courtesy Janne Salmijarvi) and Atari
- *	(courtesy Christian "Marvin" Bressler) ports
+ *  (courtesy Christian "Marvin" Bressler) ports
  *  Mac: multiple interface fixes
  *  win32: fixed bug that caused messages to stop displaying after escape
  *  tty: use ANSI color (AF) over standard color (Sf) when given the choice
  *  several ports: offer for player selection only choices consistent with
- *	those already made by config file/command line (e.g., only offer roles
- *	that are compatible with specified race)
+ *  those already made by config file/command line (e.g., only offer roles
+ *  that are compatible with specified race)
  */
 
 /*
@@ -183,7 +182,7 @@
  *  fix the `recover' utility
  *  fix priest/minion name overflow which could cause Astral Plane crashes
  *  avoid crash when hit by own thrown boomerang
- *    "     "	 "   worn blindfold pushed off by applying cursed towel
+ *    "     "    "   worn blindfold pushed off by applying cursed towel
  *  handle returning live Wizard correctly in deep dungeon levels
  *  don't occasionally display unseen areas of new levels during level change
  *  other minor display fixes
@@ -196,13 +195,13 @@
  *  tty: support object class characters for 'I' command in menu mode
  *  Unix: work around several <curses.h> compilation problems
  *  X11: as tty above, plus implement tty-style count handling in menus;
- *	better window placement support for old window managers
+ *  better window placement support for old window managers
  */
 
 /*  Patch 1, May 28, 1996
  *  eliminate `#qualifications'; fix weapon proficiency handling for missiles
  *  keep Medusa from continuing to move after she's been killed by reflection
- *	of her own gaze (fixes relmon panic)
+ *  of her own gaze (fixes relmon panic)
  *  make monsters a little smarter; assorted eating and chatting changes
  *  fix object amnesia for spellbooks; fix Nazgul's sleep gas attack
  *  fix bullwhip usage for case of having recently been in a trap
@@ -217,11 +216,11 @@
  *  DLB: avoid excessive fseek calls (major performance hit for MSDOS)
  *  HPUX: workaround for gcc-2.6.3 bug adversely affecting monster generation
  *  Mac: avoid MW 68K struct copy optimization bug which caused crashes;
- *	fix dragging of scrollbar; boost partitions to 2MB minimum
+ *  fix dragging of scrollbar; boost partitions to 2MB minimum
  *  MSDOS: wasn't safe to enter endgame for MFLOPPY configuration;
- *	fix re-entry into game after "!" (shell escape) + chdir + EXIT;
- *	F3/F4/F5 display interface swapping improvements;
- *	add support for preloading all tiles in protected mode environment
+ *  fix re-entry into game after "!" (shell escape) + chdir + EXIT;
+ *  F3/F4/F5 display interface swapping improvements;
+ *  add support for preloading all tiles in protected mode environment
  *  TERMINFO: colors were wrong for some systems, such as Linux
  *  X11: display help files properly
  */
@@ -229,12 +228,12 @@
 /*
  *  NetHack 3.2.0, April 11, 1996
  *  enhancements to the windowing systems including "tiles" or icons to
- *	visually represent monsters and objects (courtesy Warwick Allison)
+ *  visually represent monsters and objects (courtesy Warwick Allison)
  *  window based menu system introduced for inventory and selection
  *  moving light sources besides the player
  *  improved #untrap (courtesy Helge Hafting)
  *  spellcasting logic changes to balance spellcasting towards magic-using
- *	classes (courtesy Stephen White)
+ *  classes (courtesy Stephen White)
  *  many, many bug fixes and abuse eliminations
  */
 
@@ -246,24 +245,24 @@
 /*
  *  Patch 3, July 12, 1993
  *  further revise Mac windowing and extend to Think C (courtesy
- *	Barton House)
+ *  Barton House)
  *  fix confusing black/gray/white display on some MSDOS hardware
  *  remove fatal bugs dealing with horns of plenty and VMS bones levels,
- *	as well as more minor ones
+ *  as well as more minor ones
  */
 
 /*
  *  Patch 2, June 1, 1993
  *  add tty windowing to Mac and Amiga ports and revise native windowing
  *  allow direct screen I/O for MS-DOS versions instead of going through
- *	termcap routines (courtesy Michael Allison and Kevin Smolkowski)
+ *  termcap routines (courtesy Michael Allison and Kevin Smolkowski)
  *  changes for NEC PC-9800 and various termcap.zip fixes by Yamamoto Keizo
  *  SYSV 386 music driver ported to 386BSD (courtesy Andrew Chernov) and
- *	SCO UNIX (courtesy Andreas Arens)
+ *  SCO UNIX (courtesy Andreas Arens)
  *  enhanced pickup and disclosure options
  *  removed fatal bugs dealing with cursed bags of holding, renaming
- *	shopkeepers, objects falling through trapdoors on deep levels,
- *	and kicking embedded objects loose, and many more minor ones
+ *  shopkeepers, objects falling through trapdoors on deep levels,
+ *  and kicking embedded objects loose, and many more minor ones
  */
 
 /*
@@ -278,11 +277,11 @@
  *  many, many changes and bugfixes -- some of the highlights include:
  *  display rewrite using line-of-sight vision
  *  general window interface, with the ability to use multiple interfaces
- *	in the same executable
+ *  in the same executable
  *  intelligent monsters
  *  enhanced dungeon mythology
  *  branching dungeons with more special levels, quest dungeons, and
- *	multi-level endgame
+ *  multi-level endgame
  *  more artifacts and more uses for artifacts
  *  generalization to multiple shops with damage repair
  *  X11 interface
@@ -315,8 +314,8 @@
  *  Patch 8, June 3, 1990
  *  further debug and refine Macintosh port
  *  refine the overlay manager, rearrange the OVLx breakdown for better
- *	efficiency, rename the overlay macros, and split off the overlay
- *	instructions to Install.ovl
+ *  efficiency, rename the overlay macros, and split off the overlay
+ *  instructions to Install.ovl
  *  introduce NEARDATA for better Amiga efficiency
  *  support for more VMS versions (courtesy Joshua Delahunty and Pat Rankin)
  *  more const fixes
@@ -327,17 +326,17 @@
 /*
  *  Patch 7, February 19, 1990
  *  refine overlay support to handle portions of .c files through OVLx
- *	(courtesy above plus Kevin Smolkowski)
+ *  (courtesy above plus Kevin Smolkowski)
  *  update and extend Amiga port and documentation (courtesy Richard Addison,
- *	Jochen Erwied, Mark Gooderum, Ken Lorber, Greg Olson, Mike Passaretti,
- *	and Gregg Wonderly)
+ *  Jochen Erwied, Mark Gooderum, Ken Lorber, Greg Olson, Mike Passaretti,
+ *  and Gregg Wonderly)
  *  refine and extend Macintosh port and documentation (courtesy Johnny Lee,
- *	Kevin Sitze, Michael Sokolov, Andy Swanson, Jon Watte, and Tom West)
+ *  Kevin Sitze, Michael Sokolov, Andy Swanson, Jon Watte, and Tom West)
  *  refine VMS documentation
  *  continuing ANSIfication, this time of const usage
  *  teach '/' about differences within monster classes
  *  smarter eating code (yet again), death messages, and treatment of
- *	non-animal monsters, monster unconsciousness, and naming
+ *  non-animal monsters, monster unconsciousness, and naming
  *  extended version command to give compilation options
  *  and the usual bug fixes and hole plugs
  */
@@ -345,14 +344,14 @@
 /*
  *  Patch 6, November 19, 1989
  *  add overlay support for MS-DOS (courtesy Pierre Martineau, Stephen
- *	Spackman, and Norm Meluch)
+ *  Spackman, and Norm Meluch)
  *  refine Macintosh port
  *  different door states show as different symbols (courtesy Ari Huttunen)
  *  smarter drawbridges (courtesy Kevin Darcy)
  *  add CLIPPING and split INFERNO off HARD
  *  further refine eating code wrt picking up and resumption
  *  make first few levels easier, by adding :x monsters and increasing initial
- *	attribute points and hitting probability
+ *  attribute points and hitting probability
  *  teach '/' about configurable symbols
  */
 
@@ -369,9 +368,9 @@
  *  Patch 4, September 27, 1989
  *  add support for VMS (courtesy David Gentzel)
  *  move monster-on-floor references into functions and implement the new
- *	lookup structure for both objects and monsters
+ *  lookup structure for both objects and monsters
  *  extend the definitions of objects and monsters to provide "living color"
- *	in the dungeon, instead of a single monster color
+ *  in the dungeon, instead of a single monster color
  *  ifdef varargs usage to satisfy ANSI compilers
  *  standardize on the color 'gray'
  *  assorted bug fixes
@@ -382,9 +381,9 @@
  *  add war hammers and revise object prices
  *  extend prototypes to ANSI compilers in addition to the previous MSDOS ones
  *  move object-on-floor references into functions in preparation for planned
- *	data structures to allow faster access and better colors
+ *  data structures to allow faster access and better colors
  *  fix some more bugs, and extend the portability of things added in earlier
- *	patches
+ *  patches
  */
 
 /*
@@ -402,9 +401,9 @@
 /*
  *  Patch 1, July 31, 1989
  *  add support for Atari TOS (courtesy Eric Smith) and Andrew File System
- *	(courtesy Ralf Brown)
+ *  (courtesy Ralf Brown)
  *  include the uuencoded version of termcap.arc for the MSDOS versions that
- *	was included with 2.2 and 2.3
+ *  was included with 2.2 and 2.3
  *  make a number of simple changes to accommodate various compilers
  *  fix a handful of bugs, and do some code cleaning elsewhere
  *  add more instructions for new environments and things commonly done wrong

@@ -1,5 +1,5 @@
-/*	SCCS Id: @(#)xwindowp.h 3.4	1992/03/07	*/
-/* Copyright (c) Dean Luick, 1992				  */
+/*  SCCS Id: @(#)xwindowp.h 3.4 1992/03/07  */
+/* Copyright (c) Dean Luick, 1992                 */
 /* NetHack may be freely redistributed.  See license for details. */
 
 #ifndef _xwindowp_h
@@ -8,7 +8,7 @@
 #include "xwindow.h"
 
 #ifndef SYSV
-#define PRESERVE_NO_SYSV	/* X11 include files may define SYSV */
+#define PRESERVE_NO_SYSV    /* X11 include files may define SYSV */
 #endif
 
 /* include superclass private header file */
@@ -30,32 +30,32 @@ typedef struct {
 } WindowClassPart;
 
 typedef struct _WindowClassRec {
-    CoreClassPart	core_class;
-    WindowClassPart	window_class;
+    CoreClassPart core_class;
+    WindowClassPart window_class;
 } WindowClassRec;
 
 extern WindowClassRec windowClassRec;
 
 typedef struct {
     /* resources */
-    Dimension	   rows;
-    Dimension	   columns;
-    Pixel	   foreground;
-    Pixel	   black;
-    Pixel	   red;
-    Pixel	   green;
-    Pixel	   brown;
-    Pixel	   blue;
-    Pixel	   magenta;
-    Pixel	   cyan;
-    Pixel	   gray;
-    Pixel	   orange;
-    Pixel	   bright_green;
-    Pixel	   yellow;
-    Pixel	   bright_blue;
-    Pixel	   bright_magenta;
-    Pixel	   bright_cyan;
-    Pixel	   white;
+    Dimension rows;
+    Dimension columns;
+    Pixel foreground;
+    Pixel black;
+    Pixel red;
+    Pixel green;
+    Pixel brown;
+    Pixel blue;
+    Pixel magenta;
+    Pixel cyan;
+    Pixel gray;
+    Pixel orange;
+    Pixel bright_green;
+    Pixel yellow;
+    Pixel bright_blue;
+    Pixel bright_magenta;
+    Pixel bright_cyan;
+    Pixel white;
     XFontStruct    *font;
     XtCallbackList expose_callback;
     XtCallbackList input_callback;
@@ -65,8 +65,8 @@ typedef struct {
 } WindowPart;
 
 typedef struct _WindowRec {
-    CorePart	core;
-    WindowPart	window;
+    CorePart core;
+    WindowPart window;
 } WindowRec;
 
 #endif /* _xwindowp_h */

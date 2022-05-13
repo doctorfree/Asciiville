@@ -21,7 +21,7 @@ void curses_add_nhmenu_item(winid wid, int glyph, const ANY_P * identifier,
                             CHAR_P accelerator, CHAR_P group_accel, int attr,
                             const char *str, BOOLEAN_P presel);
 # ifdef MENU_COLOR
-boolean curses_get_menu_coloring(char *, int *, int *);
+boolean curses_get_menu_coloring(const char *, int *, attr_t *);
 # endif
 void curses_finalize_nhmenu(winid wid, const char *prompt);
 int curses_display_nhmenu(winid wid, int how, MENU_ITEM_P ** _selected);
