@@ -1,0 +1,32 @@
+INSTALLATION INSTRUCTIONS
+
+Linux, *BSD, Mac OS X, etc.
+---------------------------
+
+  Normally, it should be enough to just run:
+
+	./configure && make
+
+  A single executable "tetris" should then have been created, which may be
+  moved anywhere.  You can also run "make install" to install the program
+  along with documentation and desktop integration files in /usr/local.
+
+  If you only get error messages from the shell when you run configure, try
+  to execute with "bash configure" instead.  If you don't have bash, you will
+  have to edit config.mk and then run make.
+
+  Use "./configure help" for a list of build and installation options.
+
+  If you build with Xlib the game will pause automatically when your terminal
+  window loses focus.
+
+  By default, vitetris.xpm is installed in pixmapdir and vitetris.desktop
+  in desktopdir.  If you don't want them, set those dirs to empty strings
+  with configure or uncomment them in config.mk.  That is:
+
+	./configure pixmapdir= desktopdir=
+
+  There is a game server included which can be built with "make gameserver".
+  If SAME_LEVEL_HEIGHT is defined, players will be forced to have the same
+  start level and height (uncomment in src/netw/gameserver.c).
+  See the README under "Network Play" for more information.
