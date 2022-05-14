@@ -592,7 +592,10 @@ CONF="${HOME}/.config/asciiville/init"
   echo "use_lol=YES" >> ${CONF}
   echo "journal=\"default\"" >> ${CONF}
   echo "style=\"pretty\"" >> ${CONF}
+  echo "art_font_size=4" >> ${CONF}
+  echo "txt_font_size=20" >> ${CONF}
 }
+touch ${HOME}/.tetris
 
 [ "${quiet}" ] || {
   printf "\n${BOLD}Asciiville Initialization Complete${NORMAL}\n"

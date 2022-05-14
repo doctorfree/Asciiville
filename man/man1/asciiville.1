@@ -71,6 +71,38 @@ of \f[V]asciiville\f[R].
 For example, if a command and terminal were selected in interactive menu
 mode then those selections will automatically be applied the next time
 \f[V]asciiville\f[R] is run.
+.SH CONFIGURATION
+.PP
+The \f[V]asciiville\f[R] command initializes some configuration settings
+by reading the file \f[V]$HOME/.config/asciiville/init\f[R].
+Example user configurable settings in
+\f[V]$HOME/.config/asciiville/init\f[R]:
+.IP
+.nf
+\f[C]
+ARTDIR=/usr/share/asciiville/art
+MUSEDIR=/usr/share/asciiville/music
+SONG=/home/ronnie/Music/Buckingham_Green.mp3
+ALTSONG=/Epic_Dramatic-Yuriy_Bespalov.wav
+AUDIO=1
+BROWSER=w3m
+COMMAND=newsboat
+FULLSCREEN=
+LOLCAT=\[dq]lolcat\[dq]
+MTITLE=\[dq]RSS Feeds\[dq]
+CURRENT=
+GNOME=1
+RETRO=
+TILIX=
+XFCE4=
+use_lolcat=1
+use_lol=YES
+journal=\[dq]asciiville\[dq]
+style=\[dq]fancy\[dq]
+art_font_size=6
+txt_font_size=24
+\f[R]
+.fi
 .SH COMMAND LINE OPTIONS
 .PP
 \f[I]Terminal/Command options:\f[R]

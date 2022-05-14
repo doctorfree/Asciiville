@@ -41,6 +41,8 @@ ARTDIR=/usr/share/asciiville/art
 MUSEDIR=/usr/share/asciiville/music
 SONG="${MUSEDIR}/Chronos.mp3"
 ALTSONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
+art_font_size=4
+txt_font_size=20
 
 # Some configuration can be maintained here
 CONFIG="${HOME}/.config/asciiville/init"
@@ -240,6 +242,8 @@ set_user_conf() {
     echo "use_lol=${use_lol}" >> ${CONFIG}
     echo "journal=\"${journal}\"" >> ${CONFIG}
     echo "style=\"${style}\"" >> ${CONFIG}
+    echo "art_font_size=${art_font_size}" >> ${CONFIG}
+    echo "txt_font_size=${txt_font_size}" >> ${CONFIG}
   }
   exit ${exitcode}
 }
@@ -308,7 +312,7 @@ make_it_so() {
       then
         if [ "${TILIX}" ]
         then
-          termprofset -t -s 20
+          termprofset -t -s ${txt_font_size}
           tilix --title="${MTITLE}" \
                 --full-screen \
                 --window-style=borderless \
@@ -317,7 +321,7 @@ make_it_so() {
         else
           if [ "${XFCE4}" ]
           then
-            termprofset -x -s 20
+            termprofset -x -s ${txt_font_size}
             xfce4-terminal --title "${MTITLE}" \
                 --icon=audio-player \
                 --hide-menubar \
@@ -326,7 +330,7 @@ make_it_so() {
                 --fullscreen \
                 --command="${AVCOMM}" &
           else
-            termprofset -g -s 20
+            termprofset -g -s ${txt_font_size}
             gnome-terminal -t "${MTITLE}" \
                 --hide-menubar \
                 --full-screen \
@@ -337,7 +341,7 @@ make_it_so() {
       else
         if [ "${TILIX}" ]
         then
-          termprofset -t -s 20
+          termprofset -t -s ${txt_font_size}
           tilix --title="${MTITLE}" \
                 --window-style=borderless \
                 --geometry=90x28+150+25 \
@@ -346,7 +350,7 @@ make_it_so() {
         else
           if [ "${XFCE4}" ]
           then
-            termprofset -x -s 20
+            termprofset -x -s ${txt_font_size}
             xfce4-terminal --title "${MTITLE}" \
               --icon=audio-player \
               --hide-menubar \
@@ -355,7 +359,7 @@ make_it_so() {
               --geometry 90x28+150+25 \
               --command="${AVCOMM}" &
           else
-            termprofset -g -s 20
+            termprofset -g -s ${txt_font_size}
             gnome-terminal -t "${MTITLE}" \
                 --hide-menubar \
                 --geometry 90x28+150+25 \
@@ -516,20 +520,20 @@ play_slide_show() {
   else
     if [ "${XFCE4}" ]
     then
-      termprofset -x -s 20
+      termprofset -x -s ${txt_font_size}
       xfce4-terminal --fullscreen \
              --color-bg=Black \
              --command="show_ascii_art -e xfce4 ${showargs} -s ${showname}"
     else
       if [ "${TILIX}" ]
       then
-        termprofset -t -s 20
+        termprofset -t -s ${txt_font_size}
         tilix --full-screen \
               --window-style=borderless \
               --profile=Asciiville \
               --command="show_ascii_art -e tilix ${showargs} -s ${showname}"
       else
-        termprofset -g -s 20
+        termprofset -g -s ${txt_font_size}
         gnome-terminal --window --full-screen \
                        --profile=Asciiville \
                        -- show_ascii_art -e gnome ${showargs} -s ${showname}
@@ -2599,7 +2603,7 @@ init_vars() {
 have_gnome=`type -p gnome-terminal`
 have_tilix=`type -p tilix`
 # Check if initialization has been run
-[ -f ${HOME}/.config/asciiville/init ] || {
+[ -f ${CONFIG} ] || {
   echo ""
   echo "Asciiville initialization needs to be run once."
   echo "Answer 'y' to initialize, 'n' to skip it for now,"
@@ -2619,7 +2623,7 @@ have_tilix=`type -p tilix`
         read -p "Press Enter to continue" contans
         [ -d ${HOME}/.config ] || mkdir ${HOME}/.config
         [ -d ${HOME}/.config/asciiville ] || mkdir ${HOME}/.config/asciiville
-        touch ${HOME}/.config/asciiville/init
+        touch ${CONFIG}
         break
         ;;
       [Yy]* )

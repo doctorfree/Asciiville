@@ -72,6 +72,16 @@ original profile or font settings.
 .PP
 Current profile or font settings can be listed with the \f[V]-l\f[R]
 option.
+.PP
+The \f[V]termprofset\f[R] command is used by \f[V]asciiville\f[R] and
+\f[V]show_ascii_art\f[R] when displaying Ascii Art.
+During Ascii Art displays the font size is manipulated to produce higher
+resolution character graphics during art display while setting the font
+size higher for Figlet text display.
+The font sizes used in these commands can be controlled via the
+\f[V]art_font_size\f[R] and \f[V]txt_font_size\f[R] values in
+\f[V]$HOME/.config/asciiville/init\f[R].
+Default font sizes are 4 and 20.
 .SH COMMAND LINE OPTIONS
 .TP
 \f[B]-f \[aq]fontname\[aq]\f[R]

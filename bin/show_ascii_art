@@ -14,6 +14,12 @@ LOLCAT_ANIM="lolcat --animate --speed=60.0"
 LOLCAT="${LOLCAT_ANIM}"
 art="yinyang"
 custom_song=
+art_font_size=4
+txt_font_size=20
+
+# Some configuration can be maintained here
+CONFIG="${HOME}/.config/asciiville/init"
+[ -f ${CONFIG} ] && . ${CONFIG}
 
 # Default palette used by jp2a
 defchars="   ...',;:clodxkO0KXNWM"
@@ -373,7 +379,7 @@ done
   if [ "${have_gnome}" ]
   then
     echo "Invoking gnome-terminal to convert ${make_inp} to ${make_out}"
-    termprofset -g -s 4
+    termprofset -g -s ${art_font_size}
     gnome-terminal --window --geometry=320x100 --profile=Asciiville \
                    -- make_ascii_art -i "${make_inp}" -o "${make_out}"
     termprofset -g -r
@@ -381,7 +387,7 @@ done
     if [ "${have_tilix}" ]
     then
       echo "Invoking Tilix to convert ${make_inp} to ${make_out}"
-      termprofset -t -s 4
+      termprofset -t -s ${art_font_size}
       tilix --geometry=320x100 \
             --profile=Asciiville \
             --window-style=borderless \
@@ -411,7 +417,7 @@ have_lolcat=
   have_lolcat=`type -p lolcat`
 }
 
-termprofset ${termarg} -s 4
+termprofset ${termarg} -s ${art_font_size}
 sleep 1
 termhigh=`stty size | awk '{print $1}'`
 termwide=`stty size | awk '{print $2}'`
@@ -434,7 +440,7 @@ fade_audio() {
 goodbye() {
   clear
   [ "${quiet}" ] || {
-    termprofset ${termarg} -s 20
+    termprofset ${termarg} -s ${txt_font_size}
     printf "\n\n\n"
     if [ "${have_lolcat}" ]
     then
@@ -473,7 +479,7 @@ play_slide_show() {
     }
     [ "${first}" ] && {
       [ "${quiet}" ] || {
-        termprofset ${termarg} -s 20
+        termprofset ${termarg} -s ${txt_font_size}
         printf "\n\n\n"
         if [ "${have_lolcat}" ]
         then
@@ -493,7 +499,7 @@ play_slide_show() {
       first=
     }
     clear
-    termprofset ${termarg} -s 4
+    termprofset ${termarg} -s ${art_font_size}
     show_ascii "${art}"
     [ $? -eq 3 ] || sleep ${delay}
     termprofset ${termarg} -r
@@ -661,14 +667,14 @@ fi
 
 clear
 [ "${quiet}" ] || {
-  termprofset ${termarg} -s 20
+  termprofset ${termarg} -s ${txt_font_size}
   figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME}
   figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII}
   sleep ${delay}
   termprofset ${termarg} -r
 }
 
-termprofset ${termarg} -s 4
+termprofset ${termarg} -s ${art_font_size}
 if [ "${input_image}" ]
 then
   image_name=`basename "${input_image}"`
@@ -729,7 +735,7 @@ else
             }
           done
           [ "${foundit}" ] || {
-            termprofset ${termarg} -s 20
+            termprofset ${termarg} -s ${txt_font_size}
             echo "Cannot locate ${art}"
           }
         fi
@@ -742,7 +748,7 @@ fi
   sleep ${delay}
   if [ "${have_lolcat}" ]
   then
-    termprofset ${termarg} -s 20
+    termprofset ${termarg} -s ${txt_font_size}
     figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME} | ${LOLCAT}
     figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII} | ${LOLCAT}
   fi
@@ -752,7 +758,7 @@ if [ "${have_lolcat}" ]
 then
   sleep ${delay}
   termprofset ${termarg} -r
-  termprofset ${termarg} -s 4
+  termprofset ${termarg} -s ${art_font_size}
   if [ "${input_image}" ]
   then
     show_ascii "/tmp/${image_name}$$.asc" "${tabs}" ${LOLCAT}

@@ -27,6 +27,36 @@ Previously started tmux sessions and asciimatics scripts can be quickly and easi
 
 Asciiville preferences are maintained in `$HOME/.config/asciiville/init`. Preferences set in interactive menu mode are preserved over invocations of `asciiville`. For example, if a command and terminal were selected in interactive menu mode then those selections will automatically be applied the next time `asciiville` is run.
 
+# CONFIGURATION
+
+The `asciiville` command initializes some configuration settings by reading
+the file `$HOME/.config/asciiville/init`. Example user configurable settings
+in `$HOME/.config/asciiville/init`:
+
+```
+ARTDIR=/usr/share/asciiville/art
+MUSEDIR=/usr/share/asciiville/music
+SONG=/home/ronnie/Music/Buckingham_Green.mp3
+ALTSONG=/Epic_Dramatic-Yuriy_Bespalov.wav
+AUDIO=1
+BROWSER=w3m
+COMMAND=newsboat
+FULLSCREEN=
+LOLCAT="lolcat"
+MTITLE="RSS Feeds"
+CURRENT=
+GNOME=1
+RETRO=
+TILIX=
+XFCE4=
+use_lolcat=1
+use_lol=YES
+journal="asciiville"
+style="fancy"
+art_font_size=6
+txt_font_size=24
+```
+
 # COMMAND LINE OPTIONS
 
 *Terminal/Command options:*

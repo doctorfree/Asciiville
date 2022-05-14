@@ -9,6 +9,7 @@ utilities to perform common operations in a text-only environment.
 ## Table of contents
 
 1. [Overview](#overview)
+1. [Asciiville Ascii Art Galleries](#asciiville-ascii-art-galleries)
 1. [Asciiville Commands](#asciiville-commands)
 1. [Quickstart](#quickstart)
 1. [Requirements](#requirements)
@@ -113,6 +114,38 @@ Integration is provided for:
     * cool-retro-term
 * [MusicPlayerPlus](https://github.com/doctorfree/MusicPlayerPlus#readme), character based suite of commands to manage music server and player
 * [RoonCommandLine](https://github.com/doctorfree/RoonCommandLine#readme), command line control of the Roon audio system over a local network
+
+## Asciiville Ascii Art Galleries
+
+The Asciiville project includes many curated Ascii Art galleries.
+These include hundreds of high resolution Ascii Art files created
+by Asciiville author and artist, Dr. Ronald Joe Record. The Asciiville
+package, when installed, provides the following Ascii Art galleries
+located in the default Ascii Art Gallery folder `/usr/share/asciiville/art/`:
+
+```
+Art - A collection of fine art transformed into Ascii Art
+Doctorwhen - Some of Doctor When's fantastic art
+Dragonflies - Photos of dragonflies converted to Ascii using Asciiville tools
+Family - Photos of my family converted to Ascii using Asciiville tools
+Fractals - Images of fractals converted to Ascii using Asciiville tools
+Frax - Images made with Frax converted to Ascii using Asciiville tools
+Friends - Photos of my friends converted to Ascii using Asciiville tools
+Iterated - Images made with iteration converted to Ascii using Asciiville tools
+Lyapunov - Lyapunov fractals converted to Ascii using Asciiville tools
+Mixed - A mix of photos and fractals converted to Ascii using Asciiville tools
+Nature - Photos of nature converted to Ascii using Asciiville tools
+Owls - Photos of owls converted to Ascii using Asciiville tools
+Space - Photos of space converted to Ascii using Asciiville tools
+Wallpapers - Pretty wallpapers converted to Ascii using Asciiville tools
+Waterfalls - Photos of waterfalls converted to Ascii using Asciiville tools
+```
+
+All of these galleries may be viewed using the menus in the `asciiville`
+command. Asciiville users can add their own custom galleries using the
+conversion and generation tools provided by Asciiville. Custom menus added
+to the Ascii Art Gallery folder will automatically appear in the
+`asciiville` menu selections.
 
 ## Asciiville Commands
 
@@ -818,6 +851,18 @@ After using either of these methods to generate ASCII Art, follow the guide
 above to add the newly generated ASCII Art folder to the Asciiville ASCII
 Art galleries.
 
+### Adding and Viewing Art Galleries
+
+The Asciiville Wiki article
+"[Adding and Viewing Art Galleries](Adding-Art-Galleries)" details a brief
+tutorial introduction to generating a new ASCII Art gallery and viewing it.
+
+### ASCII Art Tools
+
+The Asciiville Wiki article "[ASCII Art Tools](Tools-Ascii-Art)"
+describes several tools not included in Asciiville that may be of
+use in drawing and painting ASCII Art
+
 ## Figlet fonts
 
 Asciiville installs many new Figlet Fonts in addition to those installed
@@ -950,125 +995,14 @@ all such character renderings, ASCII and extended ASCII. Whether it's
 
 ### ASCII Art History
 
-ASCII Art is a graphic design technique that uses computers for presentation
-and consists of pictures pieced together from the 95 printable (from a total
-of 128) characters defined by the ASCII Standard from 1963 and ASCII compliant
-character sets with proprietary extended characters (beyond the 128 characters
-of standard 7-bit ASCII). The term is also loosely used to refer to text based
-visual art in general. ASCII Art can be created with any text editor, and is
-often used with free-form languages. Most examples of ASCII Art require a
-fixed-width font (non-proportional fonts, as on a traditional typewriter) such
-as Courier for presentation.
-
-Among the oldest known examples of ASCII Art are the creations by computer-art
-pioneer Kenneth Knowlton from around 1966, who was working for Bell Labs at the
-time. "Studies in Perception I" by Ken Knowlton and Leon Harmon from 1966 shows
-some examples of their early ASCII Art.
-
-ASCII Art was invented, in large part, because early printers often lacked
-graphics ability and thus characters were used in place of graphic marks.
-Also, to mark divisions between different print jobs from different users,
-bulk printers often used ASCII Art to print large banner pages, making the
-division easier to spot so that the results could be more easily separated
-by a computer operator or clerk. ASCII Art was also used in early e-mail
-when images could not be embedded.
-
-### Pre-Computer Text Art
-
-#### Concrete Poetry
-
-Text art predates computers. Perhaps the earliest use of characters
-in art was in ancient Greece during the 3rd and 2nd centuries BCE with shaped
-or patterned poems referred to as "concrete poetry". In this art form, the
-words of a poem are arranged in such a way as to depict their subject.
-
-Early religious examples of shaped poems in English include "Easter Wings"
-and "The Altar" in George Herbert's The Temple (1633):
-
-<p float="left">
-Easter Wings<br/>
-  <img src="art/pics/george-herbert-easter-wings.jpg" style="width:600px;height:800px;">
-</p>
-
-#### Typewriter Art
-
-Text artists in the 19th century invented a novel technique for creating art:
-feeding paper into the rollers of typewriters numerous times, each at a
-different angle to allow the overprinting and fine-tuning of an image.
+The Asciiville Wiki article "[ASCII Art History](Ascii-Art-History)"
+provides us with a brief history of the development of text based art over
+the millenia, concrete poetry to typewriter art to ASCII and ANSI art.
 
 <p float="left">
 Typewriter art by Flora F.F. Stacey from 1898<br/>
   <img src="art/pics/typewriter-art.jpg" style="width:600px;height:800px;">
 </p>
-
-#### Teletype Art
-
-Typewriter art was succeeded by Teletype art using character sets such as the
-Baudot code which predated ASCII. Text images produced on a TTY or RTTY have
-been discovered as early as 1923.
-
-### Computer Generated Text Art
-
-#### Line Printer Art
-
-In the 1960s Andries van Dam and Kenneth Knowlton were producing realistic
-images using line printers by overprinting several characters on top of one
-another. This technique used EBCDIC rather than ASCII. Line printer art
-flourished throughout the 1970s as anyone who had a job in a computer lab
-back then will tell you. Everybody learned how to print a Snoopy banner.
-
-#### ASCII Art
-
-In the late 1970s and early 1980s computer bulletin board systems,
-email users, game designers, Usenet news groups, and others began
-using ASCII Art to represent images. ASCII artists invented Emoticons,
-short small combinations of characters which represented the user's
-emotional state - happy, sad, angry, and more. Email messages and
-Usenet newsgroups were littered with :) and {:> and the Golden Age
-of ASCII Art flourished throughout the 1990s.
-
-This technique of representing images as text found its way into the source
-code of computer programs as a way to represent company or product logos.
-In some cases, the entire source code of a program is a piece of ASCII Art.
-For instance, an entry to one of the earlier "International Obfuscated C Code
-Contest" is a program that adds numbers, but visually looks like a binary
-adder drawn in logic ports.
-
-#### ANSI Art
-
-ANSI Art is similar to ASCII Art, but constructed from a larger set of 256
-letters, numbers, and symbols — often referred to as extended ASCII. ANSI Art
-also contains special ANSI escape sequences that can be used to color text.
-
-### The Decline of ASCII and ANSI Art
-
-The rise of the Internet and graphical desktop environments saw the decline
-of BBSes and character based user environments which made ASCII and ANSI Art
-harder to create and to view due to the lack of software compatible with the
-new dominant operating system, Microsoft Windows.
-
-By the end of 2002 all traditional ANSI Art groups like ACiD, ICE, CIA, Fire,
-Dark and many others were no longer making periodic releases of artworks,
-called "artpacks" and the community of artists almost vanished.
-
-### The Resurrection of ASCII and ANSI Art
-
-ASCII and ANSI Art resurrected in 2022 with the publication of
-["Asciiville"](https://github.com/doctorfree/Asciiville#readme), a
-compendium of art, animation, utilities, and integrated components all
-utilizing character based graphics. Haha! Just kidding :smiley:. Asciiville
-leverages the resurgence of interest in character based graphics accompanied
-by many recent advances like [Figlet Fonts](http://www.figlet.org/),
-[Lolcat](https://github.com/busyloop/lolcat),
-[lsd](https://github.com/Peltoche/lsd),
-[asciimatics](https://github.com/peterbrittain/asciimatics),
-[asciinema](https://asciinema.org/),
-[btop](https://github.com/aristocratos/btop),
-[jp2a](https://github.com/cslarsen/jp2a),
-[Moebius](https://github.com/blocktronics/moebius),
-and more. These modern utilities and character based
-components have breathed new life into the ASCII Art community and produced
-many interesting works of art and animation.
 
 ## Videos
 
