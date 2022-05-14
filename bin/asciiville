@@ -1199,7 +1199,7 @@ show_art_menu() {
       [ "${ascii_dir_name}" == "Dragonflies" ] && ascii_dir_name="Dragonfly"
       options+=("${ascii_dir_name} Art Slideshow")
     done
-    # options+=("Mixed Art Slideshow")
+    options+=("Generate ASCII Art")
     options+=("Cycle Slideshow       [${cyclestat}]")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring   [${use_lol}]")
     options+=("Use Audio             [${audiostat}]")
@@ -1211,7 +1211,6 @@ show_art_menu() {
     options+=("Current Terminal      [${use_current}]")
     options+=("Use Tmux              [${usetmux}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session   [${recordstat}]")
-    options+=("Generate ASCII Art")
     [ "${have_splash}" ] && options+=("Animations Menu")
     options+=("Main Menu" "Quit")
     select opt in "${options[@]}"
@@ -1331,8 +1330,8 @@ show_art_menu() {
                 fi
                 audarg="-P -S ${SONG}"
               else
-                ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s/ -a//" -e "s/ -s ${SONG}//"`
-                ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s/ -a//" -e "s/ -s ${SONG}//"`
+                ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s# -a##" -e "s# -s ${SONG}##"`
+                ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s# -a##" -e "s# -s ${SONG}##"`
                 audarg=
               fi
               break
@@ -1676,8 +1675,8 @@ show_animation_menu() {
                 fi
                 audarg="-P -S ${SONG}"
               else
-                ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s/ -a//" -e "s/ -s ${SONG}//"`
-                ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s/ -a//" -e "s/ -s ${SONG}//"`
+                ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s# -a##" -e "s# -s ${SONG}##"`
+                ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s# -a##" -e "s# -s ${SONG}##"`
                 audarg=
               fi
               skip_it_so=1
@@ -2381,8 +2380,8 @@ show_main_menu() {
                 fi
                 audarg="-P -S ${SONG}"
               else
-                ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s/ -a//" -e "s/ -s ${SONG}//"`
-                ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s/ -a//" -e "s/ -s ${SONG}//"`
+                ASCSPLASH=`echo ${ASCSPLASH} | sed -e "s# -a##" -e "s# -s ${SONG}##"`
+                ASCSPLASH_TMUX=`echo ${ASCSPLASH_TMUX} | sed -e "s# -a##" -e "s# -s ${SONG}##"`
                 audarg=
               fi
               skip_it_so=1
