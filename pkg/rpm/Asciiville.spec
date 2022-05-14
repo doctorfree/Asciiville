@@ -128,14 +128,6 @@ fi
 
 %files
 /usr
-%exclude %dir /usr/share/man/man1
-%exclude %dir /usr/share/man
-%exclude %dir /usr/share/doc
-%exclude %dir /usr/share/menu
-%exclude %dir /usr/share
-%exclude %dir /usr/bin
-%exclude %dir /usr/games
-%files
 %defattr(-,root,root)
 %attr(4755, games, games) /usr/games/bin/*
 %attr(0755, games, games) /usr/games/lib/ninvaders
@@ -149,5 +141,13 @@ fi
 %attr(0644, games, games) /usr/games/var/nethack/perm
 %attr(0644, games, games) /usr/games/var/nethack/record
 %attr(0644, games, games) /usr/games/var/nethack/xlogfile
+%exclude %dir /usr/share/man/man1
+%exclude %dir /usr/share/man/man6
+%exclude %dir /usr/share/man
+%exclude %dir /usr/share/doc
+%exclude %dir /usr/share/menu
+%exclude %dir /usr/share
+%exclude %dir /usr/bin
+%exclude %dir /usr/games
 
 %changelog
