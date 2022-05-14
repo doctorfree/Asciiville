@@ -134,5 +134,20 @@ fi
 %exclude %dir /usr/share/menu
 %exclude %dir /usr/share
 %exclude %dir /usr/bin
+%exclude %dir /usr/games
+%files
+%defattr(-,root,root)
+%attr(4755, games, games) /usr/games/bin/*
+%attr(0755, games, games) /usr/games/lib/ninvaders
+%attr(0644, games, games) /usr/games/lib/ninvaders/*
+%attr(0644, games, games) /usr/games/var/tetris-hiscores
+%attr(0755, games, games) /usr/games/var/nethack
+%attr(0755, games, games) /usr/games/var/nethack/bones
+%attr(0755, games, games) /usr/games/var/nethack/level
+%attr(0755, games, games) /usr/games/var/nethack/saves
+%attr(0644, games, games) /usr/games/var/nethack/logfile
+%attr(0644, games, games) /usr/games/var/nethack/perm
+%attr(0644, games, games) /usr/games/var/nethack/record
+%attr(0644, games, games) /usr/games/var/nethack/xlogfile
 
 %changelog

@@ -102,6 +102,7 @@ Integration is provided for:
 * [cmatrix](https://github.com/abishekvashok/cmatrix), screen from "The Matrix"
 * [nethack](https://en.wikipedia.org/wiki/NetHack), ASCII text dungeon game
 * [ninvaders](https://en.wikipedia.org/wiki/Space_Invaders), ASCII text version of Space Invaders
+* [tetris](https://en.wikipedia.org/wiki/Tetris), ASCII text version of Tetris
 * [tmux](https://github.com/tmux/tmux/wiki), a terminal multiplexer
 * [wttr.in](https://github.com/chubin/wttr.in), console-oriented weather report
 * Enhanced key bindings for extended control of terminal windows
