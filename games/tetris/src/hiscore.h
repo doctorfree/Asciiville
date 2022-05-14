@@ -11,7 +11,7 @@ struct hiscore {
 
 extern unsigned lastscore;
 
-#define ishiscore() (((game->mode & MODE_BTYPE) ? player1.lines == 0 : player1.score >= 12000) && \
+#define ishiscore() (((game->mode & MODE_BTYPE) ? player1.lines == 0 : player1.score >= 500) && \
 		     player1.score > hiscores[9].score)
 
 int readhiscores(const char *filename);
