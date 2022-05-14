@@ -75,7 +75,48 @@ mode then those selections will automatically be applied the next time
 .PP
 The \f[V]asciiville\f[R] command initializes some configuration settings
 by reading the file \f[V]$HOME/.config/asciiville/init\f[R].
-Example user configurable settings in
+These are user configurable and saved each time the \f[V]asciiville\f[R]
+command exits.
+A sample Asciiville configuration file is provided below.
+In this sample configuration the \f[I]ARTDIR\f[R] is set to
+\f[V]/usr/share/asciiville/art\f[R], the default Asciiville Ascii Art
+galleries folder.
+To change the Ascii Art galleries folder, modify this setting.
+For example, to change where \f[V]asciiville\f[R] looks for Ascii Art
+galleries, this setting could be modified to:
+.IP
+.nf
+\f[C]
+ARTDIR=${HOME}/Pictures/AsciiArt
+\f[R]
+.fi
+.PP
+Asciiville commands would then look in \f[V]$HOME/Pictures/AsciiArt\f[R]
+for Ascii Art galleries rather than \f[V]/usr/share/asciiville/art\f[R].
+.PP
+Of particular interest are the \f[V]art_font_size\f[R] and
+\f[V]txt_font_size\f[R] configuration settings.
+These control the size of the font used to display Ascii Art slideshows
+and the Figlet text in slideshows.
+Individual display devices differ in resolution.
+Terminal emulator windows used for display of Ascii Art vary in number
+of rows and columns available.
+The Ascii Art included with Asciiville was generated in fairly high
+resolution.
+Reducing the \f[V]art_font_size\f[R] will decrease the amount of screen
+the art display requires while increasing that font size will increase
+the size of the art displayed.
+Similarly, decreasing or increasing the \f[V]txt_font_size\f[R] will
+shrink or enlargen the Figlet text displayed.
+The default settings for these two configuration parameters are
+\[aq]4\[aq] and \[aq]20\[aq].
+If the art displayed during a slideshow is too small or you wish to make
+it larger, change \f[V]art_font_size=4\f[R] to \f[V]art_font_size=6\f[R]
+and \f[V]txt_font_size=20\f[R] to \f[V]txt_font_size=24\f[R].
+Some experimentation may be required to fit the art to your display and
+terminal emulator window.
+.PP
+A sample Asciiville configuration file
 \f[V]$HOME/.config/asciiville/init\f[R]:
 .IP
 .nf

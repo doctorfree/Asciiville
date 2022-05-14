@@ -18,6 +18,8 @@ utilities to perform common operations in a text-only environment.
     1. [RPM package installation](#rpm-package-installation)
     1. [BB AAlib Demo](#bb-aalib-demo)
 1. [Configuration](#configuration)
+    1. [Asciiville configuration](#asciiville-configuration)
+        1. [Asciiville utilities configuration](#asciiville-utilities-configuration)
     1. [NeoMutt email configuration](#neomutt-email-configuration)
         1. [NeoMutt encrypted passwords](#neomutt-encrypted-passwords)
         1. [Replacing an existing NeoMutt configuration](#replacing-an-existing-neomutt-configuration)
@@ -127,13 +129,11 @@ located in the default Ascii Art Gallery folder `/usr/share/asciiville/art/`:
 Art - A collection of fine art transformed into Ascii Art
 Doctorwhen - Some of Doctor When's fantastic art
 Dragonflies - Photos of dragonflies converted to Ascii using Asciiville tools
-Family - Photos of my family converted to Ascii using Asciiville tools
 Fractals - Images of fractals converted to Ascii using Asciiville tools
 Frax - Images made with Frax converted to Ascii using Asciiville tools
-Friends - Photos of my friends converted to Ascii using Asciiville tools
+Friends - Photos of friends and family converted to Ascii using Asciiville tools
 Iterated - Images made with iteration converted to Ascii using Asciiville tools
 Lyapunov - Lyapunov fractals converted to Ascii using Asciiville tools
-Mixed - A mix of photos and fractals converted to Ascii using Asciiville tools
 Nature - Photos of nature converted to Ascii using Asciiville tools
 Owls - Photos of owls converted to Ascii using Asciiville tools
 Space - Photos of space converted to Ascii using Asciiville tools
@@ -330,6 +330,8 @@ The BB AAlib Demo is not required. It's just a fun demo.
 
 ## Configuration
 
+### Asciiville configuration
+
 Asciiville preferences are maintained in `$HOME/.config/asciiville/init`.
 Preferences set in interactive menu mode are preserved over invocations
 of `asciiville`. For example, if a command and terminal were selected
@@ -350,6 +352,63 @@ ascinit
 # Or, on a console system without the X11 windowing system:
 ascinit -c
 ```
+
+A sample Asciiville configuration file is provided below. In this sample
+configuration the *ARTDIR* is set to `/usr/share/asciiville/art`, the default
+Asciiville Ascii Art galleries folder. To change the Ascii Art galleries folder,
+modify this setting. For example, to change where `asciiville` looks for
+Ascii Art galleries, this setting could be modified to:
+
+```
+ARTDIR=${HOME}/Pictures/AsciiArt
+```
+
+Asciiville commands would then look in `$HOME/Pictures/AsciiArt`
+for Ascii Art galleries rather than `/usr/share/asciiville/art`.
+
+Of particular interest are the `art_font_size` and `txt_font_size`
+configuration settings. These control the size of the font used to
+display Ascii Art slideshows and the Figlet text in slideshows.
+Individual display devices differ in resolution. Terminal emulator
+windows used for display of Ascii Art vary in number of rows and columns
+available. The Ascii Art included with Asciiville was generated in fairly
+high resolution. Reducing the `art_font_size` will decrease the amount
+of screen the art display requires while increasing that font size will
+increase the size of the art displayed. Similarly, decreasing or increasing
+the `txt_font_size` will shrink or enlargen the Figlet text displayed.
+The default settings for these two configuration parameters are '4' and
+'20'. If the art displayed during a slideshow is too small or you wish
+to make it larger, change `art_font_size=4` to `art_font_size=6` and
+`txt_font_size=20` to `txt_font_size=24`. Some experimentation may be
+required to fit the art to your display and terminal emulator window.
+
+A sample Asciiville configuration file `$HOME/.config/asciiville/init`:
+
+```
+ARTDIR=/usr/share/asciiville/art
+MUSEDIR=/usr/share/asciiville/music
+SONG=/home/ronnie/Music/Buckingham_Green.mp3
+ALTSONG=/Epic_Dramatic-Yuriy_Bespalov.wav
+AUDIO=1
+BROWSER=w3m
+COMMAND=newsboat
+FULLSCREEN=
+LOLCAT="lolcat"
+MTITLE="RSS Feeds"
+CURRENT=
+GNOME=1
+RETRO=
+TILIX=
+XFCE4=
+use_lolcat=1
+use_lol=YES
+journal="asciiville"
+style="fancy"
+art_font_size=6
+txt_font_size=24
+```
+
+#### Asciiville utilities configuration
 
 Asciiville creates several default configuration files for utilities
 included in the distribution. Examine these files to further customize

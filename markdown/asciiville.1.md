@@ -30,8 +30,38 @@ Asciiville preferences are maintained in `$HOME/.config/asciiville/init`. Prefer
 # CONFIGURATION
 
 The `asciiville` command initializes some configuration settings by reading
-the file `$HOME/.config/asciiville/init`. Example user configurable settings
-in `$HOME/.config/asciiville/init`:
+the file `$HOME/.config/asciiville/init`. These are user configurable and
+saved each time the `asciiville` command exits. A sample Asciiville
+configuration file is provided below. In this sample configuration the
+*ARTDIR* is set to `/usr/share/asciiville/art`, the default Asciiville
+Ascii Art galleries folder. To change the Ascii Art galleries folder,
+modify this setting. For example, to change where `asciiville` looks for
+Ascii Art galleries, this setting could be modified to:
+
+```
+ARTDIR=${HOME}/Pictures/AsciiArt
+```
+
+Asciiville commands would then look in `$HOME/Pictures/AsciiArt`
+for Ascii Art galleries rather than `/usr/share/asciiville/art`.
+
+Of particular interest are the `art_font_size` and `txt_font_size`
+configuration settings. These control the size of the font used to
+display Ascii Art slideshows and the Figlet text in slideshows.
+Individual display devices differ in resolution. Terminal emulator
+windows used for display of Ascii Art vary in number of rows and columns
+available. The Ascii Art included with Asciiville was generated in fairly
+high resolution. Reducing the `art_font_size` will decrease the amount
+of screen the art display requires while increasing that font size will
+increase the size of the art displayed. Similarly, decreasing or increasing
+the `txt_font_size` will shrink or enlargen the Figlet text displayed.
+The default settings for these two configuration parameters are '4' and
+'20'. If the art displayed during a slideshow is too small or you wish
+to make it larger, change `art_font_size=4` to `art_font_size=6` and
+`txt_font_size=20` to `txt_font_size=24`. Some experimentation may be
+required to fit the art to your display and terminal emulator window.
+
+A sample Asciiville configuration file `$HOME/.config/asciiville/init`:
 
 ```
 ARTDIR=/usr/share/asciiville/art

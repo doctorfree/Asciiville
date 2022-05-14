@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-ART_DIR="/usr/share/asciiville/art"
+ARTDIR="/usr/share/asciiville/art"
 FIG_WELCOME="Welcome To"
 FIG_ASCII="Asciiville"
 FIG_FONTS="/usr/share/figlet-fonts"
@@ -42,7 +42,7 @@ usage() {
   printf "\nWhere:"
   printf "\n\t-a 'art' specifies which ascii art to display"
   printf "\n\t\t'art' can be the relative path to a file in:"
-  printf "\n\t\t\t${ART_DIR}"
+  printf "\n\t\t\t${ARTDIR}"
   printf "\n\t\tor the path to a file, with or without file extension"
   printf "\n\t-A 'art_dir' specifies the path to the ascii art folder"
   printf "\n\t-b when generating ascii art use a border"
@@ -207,7 +207,7 @@ while getopts "a:A:bBcCD:d:e:gh:i:I:l:LF:f:n:N:oO:Pp:qrs:S:t:T:w:zu" flag; do
           art="${OPTARG}"
           ;;
       A)
-          ART_DIR="${OPTARG}"
+          ARTDIR="${OPTARG}"
           ;;
       b)
           border="--border"
@@ -352,14 +352,14 @@ done
 
 [ "${list}" ] && {
   first=1
-  for art in ${ART_DIR}/*/*.asc
+  for art in ${ARTDIR}/*/*.asc
   do
-      [ "${art}" == "${ART_DIR}/*/*.asc" ] && {
-          echo "No ascii art found in ${ART_DIR}"
+      [ "${art}" == "${ARTDIR}/*/*.asc" ] && {
+          echo "No ascii art found in ${ARTDIR}"
           echo "Ascii art files must have a '.asc' suffix"
           exit 0
       }
-      [ "${first}" ] && echo "Ascii Art in ${ART_DIR} :"
+      [ "${first}" ] && echo "Ascii Art in ${ARTDIR} :"
       bart=`basename "${art}"`
       bdir=`dirname "${art}"`
       bdir=`basename "${bdir}"`
@@ -513,7 +513,7 @@ play_slide_show() {
   case "${slideshow}" in
     Art*)
       FIG_ASCII="Fine Art"
-      SLIDE_DIR="${ART_DIR}/Art"
+      SLIDE_DIR="${ARTDIR}/Art"
       SLIDE_FONT="Shadow"
       [ "${custom_song}" ] || {
         [ -f "${MUSEDIR}/Jean_Baptiste_Singelee-3er_Solo_de_Concert.ogg" ] && {
@@ -523,7 +523,7 @@ play_slide_show() {
       ;;
     Dragonf*)
       FIG_ASCII="Dragonfly"
-      SLIDE_DIR="${ART_DIR}/Dragonflies"
+      SLIDE_DIR="${ARTDIR}/Dragonflies"
       SLIDE_FONT="Speed"
       [ "${custom_song}" ] || {
         [ -f "${MUSEDIR}/Moving-Ahead-RA.mp3" ] && {
@@ -533,7 +533,7 @@ play_slide_show() {
       ;;
     Fractal*)
       FIG_ASCII="Fractal"
-      SLIDE_DIR="${ART_DIR}/Fractals"
+      SLIDE_DIR="${ARTDIR}/Fractals"
       SLIDE_FONT="sblood"
       [ "${custom_song}" ] || {
         [ -f "${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav" ] && {
@@ -543,12 +543,12 @@ play_slide_show() {
       ;;
     Doctor*)
       FIG_ASCII="Doctorwhen"
-      SLIDE_DIR="${ART_DIR}/Doctorwhen"
+      SLIDE_DIR="${ARTDIR}/Doctorwhen"
       SLIDE_FONT="Varsity"
       ;;
     Lyap*)
       FIG_ASCII="Lyapunov"
-      SLIDE_DIR="${ART_DIR}/Lyapunov"
+      SLIDE_DIR="${ARTDIR}/Lyapunov"
       SLIDE_FONT="sblood"
       [ "${custom_song}" ] || {
         [ -f "${MUSEDIR}/Overdrive-Matrika.mp3" ] && {
@@ -558,7 +558,7 @@ play_slide_show() {
       ;;
     Mixed|Misc)
       FIG_ASCII="Mixed"
-      SLIDE_DIR="${ART_DIR}/Mixed"
+      SLIDE_DIR="${ARTDIR}/Mixed"
       SLIDE_FONT="Varsity"
       [ "${custom_song}" ] || {
         [ -f "${MUSEDIR}/Loyalty_Freak_Music-Im_On_Fire.ogg" ] && {
@@ -568,7 +568,7 @@ play_slide_show() {
       ;;
     Owls*)
       FIG_ASCII="Owls"
-      SLIDE_DIR="${ART_DIR}/Owls"
+      SLIDE_DIR="${ARTDIR}/Owls"
       SLIDE_FONT="Shadow"
       [ "${custom_song}" ] || {
         [ -f "${MUSEDIR}/Moving-Ahead-RA.mp3" ] && {
@@ -578,7 +578,7 @@ play_slide_show() {
       ;;
     Space*)
       FIG_ASCII="Space"
-      SLIDE_DIR="${ART_DIR}/Space"
+      SLIDE_DIR="${ARTDIR}/Space"
       SLIDE_FONT="Bolger"
       [ "${custom_song}" ] || {
         [ -f "${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav" ] && {
@@ -588,7 +588,7 @@ play_slide_show() {
       ;;
     Waterfall*)
       FIG_ASCII="Waterfalls"
-      SLIDE_DIR="${ART_DIR}/Waterfalls"
+      SLIDE_DIR="${ARTDIR}/Waterfalls"
       SLIDE_FONT="Bolger"
       [ "${custom_song}" ] || {
         [ -f "${MUSEDIR}/Moving-Ahead-RA.mp3" ] && {
@@ -598,7 +598,7 @@ play_slide_show() {
       ;;
     *)
       FIG_ASCII="${slideshow}"
-      SLIDE_DIR="${ART_DIR}/${slideshow}"
+      SLIDE_DIR="${ARTDIR}/${slideshow}"
       SLIDE_FONT="Varsity"
       ;;
   esac
@@ -707,13 +707,13 @@ then
   fi
   show_ascii "/tmp/${image_name}$$.asc" "${tabs}"
 else
-  if [ -f "${ART_DIR}/${art}.asc" ]
+  if [ -f "${ARTDIR}/${art}.asc" ]
   then
-    show_ascii "${ART_DIR}/${art}.asc" "${tabs}"
+    show_ascii "${ARTDIR}/${art}.asc" "${tabs}"
   else
-    if [ -f "${ART_DIR}/${art}" ]
+    if [ -f "${ARTDIR}/${art}" ]
     then
-      show_ascii "${ART_DIR}/${art}" "${tabs}"
+      show_ascii "${ARTDIR}/${art}" "${tabs}"
     else
       if [ -f "${art}.asc" ]
       then
@@ -724,10 +724,10 @@ else
           show_ascii "${art}" "${tabs}"
         else
           foundit=
-          for asc in ${ART_DIR}/*/${art}*.asc ${ART_DIR}/*/${art}*
+          for asc in ${ARTDIR}/*/${art}*.asc ${ARTDIR}/*/${art}*
           do
-            [ "${asc}" == "${ART_DIR}/*/${art}*.asc" ] && continue 
-            [ "${asc}" == "${ART_DIR}/*/${art}*" ] && continue 
+            [ "${asc}" == "${ARTDIR}/*/${art}*.asc" ] && continue 
+            [ "${asc}" == "${ARTDIR}/*/${art}*" ] && continue 
             [ -f "${asc}" ] && {
               foundit=1
               show_ascii "${asc}" "${tabs}"
@@ -763,13 +763,13 @@ then
   then
     show_ascii "/tmp/${image_name}$$.asc" "${tabs}" ${LOLCAT}
   else
-    if [ -f "${ART_DIR}/${art}.asc" ]
+    if [ -f "${ARTDIR}/${art}.asc" ]
     then
-      show_ascii "${ART_DIR}/${art}.asc" "${tabs}" ${LOLCAT}
+      show_ascii "${ARTDIR}/${art}.asc" "${tabs}" ${LOLCAT}
     else
-      if [ -f "${ART_DIR}/${art}" ]
+      if [ -f "${ARTDIR}/${art}" ]
       then
-        show_ascii "${ART_DIR}/${art}" "${tabs}" ${LOLCAT}
+        show_ascii "${ARTDIR}/${art}" "${tabs}" ${LOLCAT}
       else
         if [ -f "${art}.asc" ]
         then
@@ -789,17 +789,17 @@ termprofset ${termarg} -r
 [ -f "/tmp/${image_name}$$.asc" ] && {
   if [ "${save_art}" ]
   then
-    if [ -f "${ART_DIR}/${image_name}.asc" ]
+    if [ -f "${ARTDIR}/${image_name}.asc" ]
     then
       if [ "${overwrite}" ]
       then
-        sudo cp "/tmp/${image_name}$$.asc" "${ART_DIR}/${image_name}.asc"
+        sudo cp "/tmp/${image_name}$$.asc" "${ARTDIR}/${image_name}.asc"
       else
-        echo "${ART_DIR}/${image_name}.asc already exists"
+        echo "${ARTDIR}/${image_name}.asc already exists"
         echo "Not saving ${image_name}.asc"
       fi
     else
-      sudo cp "/tmp/${image_name}$$.asc" "${ART_DIR}/${image_name}.asc"
+      sudo cp "/tmp/${image_name}$$.asc" "${ARTDIR}/${image_name}.asc"
     fi
   fi
   rm -f "/tmp/${image_name}$$.asc"
