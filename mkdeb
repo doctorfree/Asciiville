@@ -244,7 +244,7 @@ ${SUDO} cp tetris/tetris.desktop ${OUT_DIR}/${DESTDIR}/games/share/applications
 ${SUDO} touch ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
 ${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
 ${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
-${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
+${SUDO} chmod 0664 ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
 cd ..
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"

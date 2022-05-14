@@ -23,6 +23,6 @@ DINET = -DINET=1
 inet_obj = inet.o
 DTTY_SOCKET = -DTTY_SOCKET=1
 tty_socket_obj = tty_socket.o
-#DHISCORE_FILENAME = -D'HISCORE_FILENAME=""'
+DHISCORE_FILENAME = -D'HISCORE_FILENAME="/usr/games/var/tetris-hiscores"'
 #DPCTIMER = -DPCTIMER=1
 #pctimer_obj = pctimer.o
