@@ -117,7 +117,7 @@ set_tabs() {
 #   third is a command to use in a pipe (optional)
 show_ascii() {
   [ -f "$1" ] || {
-    termprofset ${termarg} -r
+    termprofset ${termarg} -R
     echo "File: $1 does not exist"
     echo "Exiting"
     exit 1
@@ -379,31 +379,35 @@ done
   if [ "${have_gnome}" ]
   then
     echo "Invoking gnome-terminal to convert ${make_inp} to ${make_out}"
+    termprofset -g -S
     termprofset -g -s ${art_font_size}
     gnome-terminal --window --geometry=320x100 --profile=Asciiville \
                    -- make_ascii_art -i "${make_inp}" -o "${make_out}"
-    termprofset -g -r
+    termprofset -g -R
   else
     if [ "${have_tilix}" ]
     then
       echo "Invoking Tilix to convert ${make_inp} to ${make_out}"
+      termprofset -t -S
       termprofset -t -s ${art_font_size}
       tilix --geometry=320x100 \
             --profile=Asciiville \
             --window-style=borderless \
             --command="make_ascii_art -i \"${make_inp}\" -o \"${make_out}\"" \
               2> /dev/null
-      termprofset -t -r
+      termprofset -t -R
     else
       if [ "${have_xfce4}" ]
       then
+        termprofset -x -S
+        termprofset -x -s ${art_font_size}
         xfce4-terminal \
             --hide-menubar \
             --hide-toolbar \
             --hide-scrollbar \
-            --font="Monospace Regular 4" \
             --geometry=320x100 \
             --command="make_ascii_art -i \"${make_inp}\" -o \"${make_out}\""
+        termprofset -x -R
       else
         make_ascii_art -i "${make_inp}" -o "${make_out}" &
       fi
@@ -417,11 +421,12 @@ have_lolcat=
   have_lolcat=`type -p lolcat`
 }
 
+termprofset ${termarg} -S
 termprofset ${termarg} -s ${art_font_size}
 sleep 1
 termhigh=`stty size | awk '{print $1}'`
 termwide=`stty size | awk '{print $2}'`
-termprofset ${termarg} -r
+termprofset ${termarg} -s ${txt_font_size}
 
 fade_audio() {
   vol=75
@@ -457,7 +462,7 @@ goodbye() {
       figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Ascii Art !"
     fi
     sleep $((delay / 2))
-    termprofset ${termarg} -r
+    termprofset ${termarg} -R
   }
 }
 
@@ -465,6 +470,7 @@ cleanup() {
   goodbye
   tput cnorm
   [ "${playing}" ] && fade_audio
+  termprofset ${termarg} -R
   exit 0
 }
 
@@ -473,8 +479,10 @@ play_slide_show() {
   for art in ${SLIDE_DIR}/*.asc
   do
     [ "${art}" == "${SLIDE_DIR}/*.asc" ] && {
+      termprofset ${termarg} -s ${txt_font_size}
       echo "No ascii art found in ${SLIDE_DIR}"
       echo "Ascii art files must have a '.asc' suffix"
+      termprofset ${termarg} -R
       exit 0
     }
     [ "${first}" ] && {
@@ -494,15 +502,16 @@ play_slide_show() {
         fi
         figlet -c -d "${FIG_FONTS}" -f "Digital" -k -t "Ctrl-c  Exits"
         sleep ${delay}
-        termprofset ${termarg} -r
       }
-      first=
+      first="setfont"
     }
     clear
-    termprofset ${termarg} -s ${art_font_size}
+    [ "${first}" == "setfont" ] && {
+      termprofset ${termarg} -s ${art_font_size}
+      first=
+    }
     show_ascii "${art}"
     [ $? -eq 3 ] || sleep ${delay}
-    termprofset ${termarg} -r
   done
 }
 
@@ -604,6 +613,7 @@ play_slide_show() {
   esac
   [ -d "${SLIDE_DIR}" ] || {
     echo "${SLIDE_DIR} does not exist or is not a directory. Exiting."
+    termprofset ${termarg} -R
     exit 1
   }
 
@@ -635,6 +645,7 @@ play_slide_show() {
   goodbye
   tput cnorm
   [ "${playing}" ] && fade_audio
+  termprofset ${termarg} -R
   exit 0
 }
 
@@ -671,7 +682,6 @@ clear
   figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME}
   figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII}
   sleep ${delay}
-  termprofset ${termarg} -r
 }
 
 termprofset ${termarg} -s ${art_font_size}
@@ -692,7 +702,7 @@ then
       then
         convert "${input_image}" /tmp/${image_name}$$.jpg
       else
-        termprofset ${termarg} -r
+        termprofset ${termarg} -s ${txt_font_size}
         echo "The 'convert' command is not installed or not in PATH"
         echo "Cannot convert ${input_image} to ascii art"
         exit 1
@@ -734,10 +744,7 @@ else
               sleep 5
             }
           done
-          [ "${foundit}" ] || {
-            termprofset ${termarg} -s ${txt_font_size}
-            echo "Cannot locate ${art}"
-          }
+          [ "${foundit}" ] || echo "Cannot locate ${art}"
         fi
       fi
     fi
@@ -757,7 +764,6 @@ fi
 if [ "${have_lolcat}" ]
 then
   sleep ${delay}
-  termprofset ${termarg} -r
   termprofset ${termarg} -s ${art_font_size}
   if [ "${input_image}" ]
   then
@@ -784,7 +790,6 @@ then
     fi
   fi
 fi
-termprofset ${termarg} -r
 
 [ -f "/tmp/${image_name}$$.asc" ] && {
   if [ "${save_art}" ]
@@ -795,6 +800,7 @@ termprofset ${termarg} -r
       then
         sudo cp "/tmp/${image_name}$$.asc" "${ARTDIR}/${image_name}.asc"
       else
+        termprofset ${termarg} -s ${txt_font_size}
         echo "${ARTDIR}/${image_name}.asc already exists"
         echo "Not saving ${image_name}.asc"
       fi
@@ -805,3 +811,4 @@ termprofset ${termarg} -r
   rm -f "/tmp/${image_name}$$.asc"
 }
 
+termprofset ${termarg} -R

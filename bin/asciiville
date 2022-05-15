@@ -312,7 +312,6 @@ make_it_so() {
       then
         if [ "${TILIX}" ]
         then
-          termprofset -t -s ${txt_font_size}
           tilix --title="${MTITLE}" \
                 --full-screen \
                 --window-style=borderless \
@@ -321,7 +320,6 @@ make_it_so() {
         else
           if [ "${XFCE4}" ]
           then
-            termprofset -x -s ${txt_font_size}
             xfce4-terminal --title "${MTITLE}" \
                 --icon=audio-player \
                 --hide-menubar \
@@ -330,7 +328,6 @@ make_it_so() {
                 --fullscreen \
                 --command="${AVCOMM}" &
           else
-            termprofset -g -s ${txt_font_size}
             gnome-terminal -t "${MTITLE}" \
                 --hide-menubar \
                 --full-screen \
@@ -341,7 +338,6 @@ make_it_so() {
       else
         if [ "${TILIX}" ]
         then
-          termprofset -t -s ${txt_font_size}
           tilix --title="${MTITLE}" \
                 --window-style=borderless \
                 --geometry=90x28+150+25 \
@@ -350,7 +346,6 @@ make_it_so() {
         else
           if [ "${XFCE4}" ]
           then
-            termprofset -x -s ${txt_font_size}
             xfce4-terminal --title "${MTITLE}" \
               --icon=audio-player \
               --hide-menubar \
@@ -359,7 +354,6 @@ make_it_so() {
               --geometry 90x28+150+25 \
               --command="${AVCOMM}" &
           else
-            termprofset -g -s ${txt_font_size}
             gnome-terminal -t "${MTITLE}" \
                 --hide-menubar \
                 --geometry 90x28+150+25 \
@@ -520,23 +514,26 @@ play_slide_show() {
   else
     if [ "${XFCE4}" ]
     then
-      termprofset -x -s ${txt_font_size}
+      termprofset -x -S
       xfce4-terminal --fullscreen \
              --color-bg=Black \
              --command="show_ascii_art -e xfce4 ${showargs} -s ${showname}"
+      termprofset -x -R
     else
       if [ "${TILIX}" ]
       then
-        termprofset -t -s ${txt_font_size}
+        termprofset -t -S
         tilix --full-screen \
               --window-style=borderless \
               --profile=Asciiville \
               --command="show_ascii_art -e tilix ${showargs} -s ${showname}"
+        termprofset -t -R
       else
-        termprofset -g -s ${txt_font_size}
+        termprofset -g -S
         gnome-terminal --window --full-screen \
                        --profile=Asciiville \
                        -- show_ascii_art -e gnome ${showargs} -s ${showname}
+        termprofset -g -R
       fi
     fi
   fi

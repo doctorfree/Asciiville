@@ -31,12 +31,13 @@ TILIX_PATH="/com/gexperts/Tilix/profiles/"
 TILIX_LIST="com.gexperts.Tilix.ProfilesList"
 
 usage() {
-  printf "\nUsage: termprofset [-f fontname] [-s fontsize] [-p profile] [-glrtxu]"
+  printf "\nUsage: termprofset [-f fontname] [-s fontsize] [-p profile] [-glRStxu]"
   printf "\nWhere:"
   printf "\n\t-f 'fontname' specifies the font name to set terminal's font to"
   printf "\n\t-s 'fontsize' specifies the font size to set terminal's font to"
   printf "\n\t-p 'profile' specifies the terminal profile to manipulate"
-  printf "\n\t-r indicates restore saved settings"
+  printf "\n\t-R indicates restore original saved settings and exit"
+  printf "\n\t-S indicates save original settings and exit"
   printf "\n\t-g indicates use Gnome terminal emulator"
   printf "\n\t-l indicates list current profile settings and exit"
   printf "\n\t-t indicates use Tilix terminal emulator"
@@ -52,7 +53,12 @@ usage() {
 rest_settings() {
   if [ "${USE_XFCE4}" ]
   then
-    [ "${have_set_xfce4}" ] && set_xfce_font -r
+    if [ "${REST_ORIG}" ]
+    then
+      [ -f "${T_SAVE}" ] && cp "${T_SAVE}" "${RC}"
+    else
+      [ "${have_set_xfce4}" ] && set_xfce_font -r
+    fi
   else
     [ -f "${T_SAVE}" ] && {
       . "${T_SAVE}"
@@ -75,9 +81,10 @@ save_settings() {
   [ -d "${SAVE_DIR}" ] || mkdir "${SAVE_DIR}"
   if [ "${USE_XFCE4}" ]
   then
-    cp "${RC}" "${T_SAVE}"
+    [ -f "${RC}" ] && cp "${RC}" "${T_SAVE}"
   else
-    echo "current_font=\"${CURR_FONT}\"" > ${T_SAVE}
+    echo "TERM_PROF=\"${TERM_PROF}\"" > ${T_SAVE}
+    echo "current_font=\"${CURR_FONT}\"" >> ${T_SAVE}
     echo "use_system_font=${USE_SYSTEM_FONT}" >> ${T_SAVE}
     echo "use_theme=${USE_THEME}" >> ${T_SAVE}
     echo "background=\"${USE_BACK}\"" >> ${T_SAVE}
@@ -89,12 +96,14 @@ FONT_NAME="Monospace"
 FONT_SIZE=4
 PROF_NAME="Asciiville"
 RESTORE=
+SAVE_ORIG=
+REST_ORIG=
 USE_GNOME=1
 TERM_NAME=Gnome
 USE_TILIX=
 USE_XFCE4=
 SHOW_LIST=
-while getopts "gf:lp:rs:txu" flag; do
+while getopts "gf:lp:Rs:Stxu" flag; do
   case $flag in
     g)
       USE_TILIX=
@@ -110,8 +119,11 @@ while getopts "gf:lp:rs:txu" flag; do
     p)
       PROF_NAME="${OPTARG}"
       ;;
-    r)
-      RESTORE=1
+    R)
+      REST_ORIG=1
+      ;;
+    S)
+      SAVE_ORIG=1
       ;;
     s)
       FONT_SIZE="${OPTARG}"
@@ -163,85 +175,82 @@ else
   fi
 fi
 
-[ "${SHOW_LIST}" ] && RESTORE=
-
-# Save/Restore the current terminal settings
-if [ "${RESTORE}" ]
-then
+# Restore the saved original terminal settings and exit
+[ "${REST_ORIG}" ] && {
   rest_settings
   exit 0
+}
+
+if [ "${USE_XFCE4}" ]
+then
+  [ "${SHOW_LIST}" ] && {
+    echo "Current font settings for ${TERM_NAME}:"
+    [ "${have_set_xfce4}" ] && set_xfce_font
+    exit 0
+  }
 else
-  if [ "${USE_XFCE4}" ]
+  # Get the current font, settings, and profile id
+  TERM_PROF=
+  if [ "${PROF_NAME}" == "default" ]
   then
-    if [ "${SHOW_LIST}" ]
-    then
-      echo "Current font settings for ${TERM_NAME}:"
-      [ "${have_set_xfce4}" ] && set_xfce_font
-      exit 0
-    else
-      save_settings
-    fi
+    TERM_PROF=`gsettings get ${T_LIST} default | awk -F \' '{print $2}'`
   else
-    # Get the terminal profile id
-    TERM_PROF=
-    if [ "${PROF_NAME}" == "default" ]
+    profiles=($(gsettings get ${T_LIST} list | tr -d "[]\',"))
+    if [ "$profiles" = "" ]
     then
-      TERM_PROF=`gsettings get ${T_LIST} default | awk -F \' '{print $2}'`
+      echo "No profiles detected. Exiting."
+      usage
     else
-      profiles=($(gsettings get ${T_LIST} list | tr -d "[]\',"))
-      if [ "$profiles" = "" ]
+      if [ "${USE_GNOME}" ]
       then
-        echo "No profiles detected. Exiting."
-        usage
+        P_PATH="${T_PATH}:"
       else
-        if [ "${USE_GNOME}" ]
-        then
-          P_PATH="${T_PATH}:"
-        else
-          P_PATH="${T_PATH}"
-        fi
-        for i in ${!profiles[*]}
-        do
-          visname="$(dconf read ${P_PATH}${profiles[i]}/visible-name)"
-          [ "${visname}" == "'${PROF_NAME}'" ] && {
-            TERM_PROF="${profiles[i]}"
-            break
-          }
-        done
+        P_PATH="${T_PATH}"
       fi
-      [ "${TERM_PROF}" ] || {
-        echo "Could not locate ${PROF_NAME} profile. Exiting."
-        usage
-      }
+      for i in ${!profiles[*]}
+      do
+        visname="$(dconf read ${P_PATH}${profiles[i]}/visible-name)"
+        [ "${visname}" == "'${PROF_NAME}'" ] && {
+          TERM_PROF="${profiles[i]}"
+          break
+        }
+      done
     fi
-    #
-    # Save the current font and use-system-font
-    USE_SYSTEM_FONT=`gsettings get \
-        ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-system-font`
-    CURR_FONT=`gsettings get \
-        ${T_PROF}:${T_PATH}:${TERM_PROF}/ font`
-    USE_THEME=`gsettings get \
-        ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-theme-colors`
-    USE_BACK=`gsettings get \
-        ${T_PROF}:${T_PATH}:${TERM_PROF}/ background-color`
-    USE_FORE=`gsettings get \
-        ${T_PROF}:${T_PATH}:${TERM_PROF}/ foreground-color`
-    if [ "${SHOW_LIST}" ]
-    then
-      echo "Current settings for ${PROF_NAME} profile in ${TERM_NAME}:"
-      echo "font=${CURR_FONT}"
-      echo "use-system-font=${USE_SYSTEM_FONT}"
-      echo "use-theme-colors=${USE_THEME}"
-      echo "background-color=${USE_BACK}"
-      echo "foreground-color=${USE_FORE}"
-      exit 0
-    else
-      save_settings
-    fi
+    [ "${TERM_PROF}" ] || {
+      echo "Could not locate ${PROF_NAME} profile. Exiting."
+      usage
+    }
   fi
+  #
+  USE_SYSTEM_FONT=`gsettings get \
+      ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-system-font`
+  CURR_FONT=`gsettings get \
+      ${T_PROF}:${T_PATH}:${TERM_PROF}/ font`
+  USE_THEME=`gsettings get \
+      ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-theme-colors`
+  USE_BACK=`gsettings get \
+      ${T_PROF}:${T_PATH}:${TERM_PROF}/ background-color`
+  USE_FORE=`gsettings get \
+      ${T_PROF}:${T_PATH}:${TERM_PROF}/ foreground-color`
+  [ "${SHOW_LIST}" ] && {
+    echo "Current settings for ${PROF_NAME} profile in ${TERM_NAME}:"
+    echo "font=${CURR_FONT}"
+    echo "use-system-font=${USE_SYSTEM_FONT}"
+    echo "use-theme-colors=${USE_THEME}"
+    echo "background-color=${USE_BACK}"
+    echo "foreground-color=${USE_FORE}"
+    exit 0
+  }
 fi
+
+# Save the current terminal settings and exit
+[ "${SAVE_ORIG}" ] && {
+  save_settings
+  exit 0
+}
+
 #
-# Next, we can use gsettings to change the properties we care about.
+# Finally, we can use gsettings to change the properties we care about.
 #
 if [ "${USE_GNOME}" ]
 then
