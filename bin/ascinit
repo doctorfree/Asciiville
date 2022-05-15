@@ -536,7 +536,7 @@ have_go=`type -p go`
   }
 }
 
-CONF="${HOME}/.config/asciiville/init"
+CONF="${HOME}/.config/asciiville/config"
 [ -d ${HOME}/.config ] || mkdir ${HOME}/.config
 [ -d ${HOME}/.config/asciiville ] || mkdir ${HOME}/.config/asciiville
 [ -f ${CONF} ] || {

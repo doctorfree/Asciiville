@@ -25,12 +25,12 @@ The interactive menu interface provides three types of menu options. Some menu s
 
 Previously started tmux sessions and asciimatics scripts can be quickly and easily terminated by executing the `asciiville -k` command.
 
-Asciiville preferences are maintained in `$HOME/.config/asciiville/init`. Preferences set in interactive menu mode are preserved over invocations of `asciiville`. For example, if a command and terminal were selected in interactive menu mode then those selections will automatically be applied the next time `asciiville` is run.
+Asciiville preferences are maintained in `$HOME/.config/asciiville/config`. Preferences set in interactive menu mode are preserved over invocations of `asciiville`. For example, if a command and terminal were selected in interactive menu mode then those selections will automatically be applied the next time `asciiville` is run.
 
 # CONFIGURATION
 
 The `asciiville` command initializes some configuration settings by reading
-the file `$HOME/.config/asciiville/init`. These are user configurable and
+the file `$HOME/.config/asciiville/config`. These are user configurable and
 saved each time the `asciiville` command exits. A sample Asciiville
 configuration file is provided below. In this sample configuration the
 *ARTDIR* is set to `/usr/share/asciiville/art`, the default Asciiville
@@ -61,7 +61,7 @@ to make it larger, change `art_font_size=4` to `art_font_size=6` and
 `txt_font_size=20` to `txt_font_size=24`. Some experimentation may be
 required to fit the art to your display and terminal emulator window.
 
-A sample Asciiville configuration file `$HOME/.config/asciiville/init`:
+A sample Asciiville configuration file `$HOME/.config/asciiville/config`:
 
 ```
 ARTDIR=/usr/share/asciiville/art

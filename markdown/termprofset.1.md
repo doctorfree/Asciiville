@@ -41,7 +41,7 @@ displaying Ascii Art. During Ascii Art displays the font size is manipulated
 to produce higher resolution character graphics during art display while
 setting the font size higher for Figlet text display. The font sizes used
 in these commands can be controlled via the `art_font_size` and `txt_font_size`
-values in `$HOME/.config/asciiville/init`. Default font sizes are 4 and 20.
+values in `$HOME/.config/asciiville/config`. Default font sizes are 4 and 20.
 
 # COMMAND LINE OPTIONS
 **-f 'fontname'**

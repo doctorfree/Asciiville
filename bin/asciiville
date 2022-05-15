@@ -45,7 +45,7 @@ art_font_size=4
 txt_font_size=20
 
 # Some configuration can be maintained here
-CONFIG="${HOME}/.config/asciiville/init"
+CONFIG="${HOME}/.config/asciiville/config"
 [ -f ${CONFIG} ] && . ${CONFIG}
 
 if [ `echo $PATH | grep -c /usr/local/bin` -ne "1" ]
@@ -512,9 +512,11 @@ play_slide_show() {
     num_exp='^[0-9]+$'
     termname=unknown
     myppid=`ps -e | grep ${PPID} | awk ' { print $1 } '`
+    myppid=`echo ${myppid} | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`
     if [[ ${myppid} =~ ${num_exp} ]]
     then
       parent=`ps -o ppid= -p ${myppid}`
+      parent=`echo ${parent} | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`
       if [[ ${parent} =~ ${num_exp} ]]
       then
         termname=`ps -e | grep ${parent} | awk ' { print $4 } '`
@@ -554,6 +556,11 @@ play_slide_show() {
       termprofset -x -S
       xfce4-terminal --fullscreen \
              --color-bg=Black \
+             --hide-menubar \
+             --hide-borders \
+             --hide-toolbar \
+             --hide-scrollbar \
+             --font="Monospace ${txt_font_size}" \
              --command="show_ascii_art -e xfce4 ${showargs} -s ${showname}"
       termprofset -x -R
     else

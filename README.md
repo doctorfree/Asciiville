@@ -332,7 +332,7 @@ The BB AAlib Demo is not required. It's just a fun demo.
 
 ### Asciiville configuration
 
-Asciiville preferences are maintained in `$HOME/.config/asciiville/init`.
+Asciiville preferences are maintained in `$HOME/.config/asciiville/config`.
 Preferences set in interactive menu mode are preserved over invocations
 of `asciiville`. For example, if a command and terminal were selected
 in interactive menu mode then those selections will automatically be
@@ -382,7 +382,7 @@ to make it larger, change `art_font_size=4` to `art_font_size=6` and
 `txt_font_size=20` to `txt_font_size=24`. Some experimentation may be
 required to fit the art to your display and terminal emulator window.
 
-A sample Asciiville configuration file `$HOME/.config/asciiville/init`:
+A sample Asciiville configuration file `$HOME/.config/asciiville/config`:
 
 ```
 ARTDIR=/usr/share/asciiville/art

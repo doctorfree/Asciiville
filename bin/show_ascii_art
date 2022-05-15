@@ -18,7 +18,7 @@ art_font_size=4
 txt_font_size=20
 
 # Some configuration can be maintained here
-CONFIG="${HOME}/.config/asciiville/init"
+CONFIG="${HOME}/.config/asciiville/config"
 [ -f ${CONFIG} ] && . ${CONFIG}
 
 # Default palette used by jp2a
