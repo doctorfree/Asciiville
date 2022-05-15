@@ -1,0 +1,15 @@
+#!/bin/bash
+
+for i in *.asc
+do
+    cat "$i"
+    while true
+    do
+        read -p "" answer
+        case "${answer}" in
+            *)
+                break
+                ;;
+        esac
+    done
+done

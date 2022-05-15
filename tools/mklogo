@@ -1,0 +1,7 @@
+#!/bin/bash
+
+FIG_FONTS="/usr/share/figlet-fonts"
+FONT="Lean"
+
+figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -t "Asciiville" | tr ' _/' ' ()' | lolcat
+figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -t "Asciiville" | tr ' _/' ' ()' | cat

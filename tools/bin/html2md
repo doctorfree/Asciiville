@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "converting $1"
+[ -d markdown ] || mkdir markdown
+
+# cat $1 | sed '1,/<div class="asset-header">/d' | sed '/<div class="asset-footer">/,/<\/html>/d' | pandoc --wrap=none --from html --to markdown_strict > markdown/$1.md
+
+cat $1 | pandoc --from html --to markdown_strict -o markdown/$1.md
+

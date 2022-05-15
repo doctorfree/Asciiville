@@ -175,7 +175,6 @@ games/tetris/src/config.h
 pics/*
 releases/*
 tmp/*
-tools/*
 
 # vim files
 .*.sw[a-z]

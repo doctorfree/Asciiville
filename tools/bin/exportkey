@@ -1,0 +1,23 @@
+#!/bin/bash
+
+gpg --list-secret-keys ronaldrecord@gmail.com
+
+# Example output:
+# 
+# pub   4096R/ABC12345 2020-01-01 [expires: 2025-12-31]
+# uid                  Your Name <user@example.com>
+# sub   4096R/DEF67890 2020-01-01 [expires: 2025-12-31]
+# 
+# Remember the ID of your key (second column, after the slash, e.g. "ABC12345"). If you have a "sub" entry, you can ignore it.
+# 
+# Run this command to export your key:
+# 
+# gpg --export-secret-keys YOUR_ID_HERE > private.key
+# 
+# Copy the key file to the other machine using a secure transport (scp is your friend).
+# 
+# To import, run
+# 
+# Copy
+# gpg --import private.key
+

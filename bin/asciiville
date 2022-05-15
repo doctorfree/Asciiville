@@ -178,6 +178,7 @@ generate_art() {
     ascii_dir=
     select_output_dir
     [ "${ascii_dir}" ] && {
+      save_config
       echo "Selected image input directory = ${image_dir}"
       echo "Selected ascii art output directory = ${ascii_dir}"
       while true
@@ -218,8 +219,7 @@ generate_art() {
   }
 }
 
-set_user_conf() {
-  exitcode=$?
+save_config() {
   [ -f ${CONFIG} ] && {
     echo "ARTDIR=${ARTDIR}" > ${CONFIG}
     echo "MUSEDIR=${MUSEDIR}" >> ${CONFIG}
@@ -245,6 +245,11 @@ set_user_conf() {
     echo "art_font_size=${art_font_size}" >> ${CONFIG}
     echo "txt_font_size=${txt_font_size}" >> ${CONFIG}
   }
+}
+
+set_user_conf() {
+  exitcode=$?
+  save_config
   exit ${exitcode}
 }
 
@@ -501,9 +506,41 @@ play_slide_show() {
     art_dir=
   fi
   showargs="${art_dir} -C ${cycarg} ${lolarg} ${audarg}"
+  save_config
   [ "${CURRENT}" ] && {
     add_fullscreen
-    show_ascii_art ${showargs} -s ${showname}
+    num_exp='^[0-9]+$'
+    termname=unknown
+    myppid=`ps -e | grep ${PPID} | awk ' { print $1 } '`
+    if [[ ${myppid} =~ ${num_exp} ]]
+    then
+      parent=`ps -o ppid= -p ${myppid}`
+      if [[ ${parent} =~ ${num_exp} ]]
+      then
+        termname=`ps -e | grep ${parent} | awk ' { print $4 } '`
+      fi
+    fi
+
+    case ${termname} in
+      gnome-terminal*)
+        termprofset -g -S
+        show_ascii_art -e gnome ${showargs} -s ${showname}
+        termprofset -g -R
+        ;;
+      tilix*)
+        termprofset -t -S
+        show_ascii_art -e tilix ${showargs} -s ${showname}
+        termprofset -t -R
+        ;;
+      xfce4-terminal*)
+        termprofset -x -S
+        show_ascii_art -e xfce4 ${showargs} -s ${showname}
+        termprofset -x -R
+        ;;
+      *)
+        show_ascii_art ${showargs} -s ${showname}
+        ;;
+    esac
     remove_fullscreen
     return
   }

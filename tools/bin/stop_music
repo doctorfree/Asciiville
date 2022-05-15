@@ -1,0 +1,10 @@
+#!/bin/bash
+
+for i in /tmp/mplayer?* /tmp/bbdemo?*
+do
+    [ "$i" == "/tmp/mplayer?*" ] && continue
+    [ "$i" == "/tmp/bbdemo?*" ] && continue
+    echo "stop" > $i &
+done
+sleep 1
+rm -f /tmp/mplayer?* /tmp/bbdemo?*

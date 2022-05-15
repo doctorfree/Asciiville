@@ -1,0 +1,9 @@
+#!/bin/bash
+
+FIG_FONTS="/usr/share/figlet-fonts"
+FONT="Lean"
+
+figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -t "Asciiville" | tr ' _/' ' ()'
+figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -t "Asciiville" | tr ' _/' ' ()' | lolcat --animate --speed=40.0
+figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -t "Asciiville" | tr ' _/' ' //'
+figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -t "Asciiville" | tr ' _/' ' //' | lolcat --animate --speed=40.0

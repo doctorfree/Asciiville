@@ -1,0 +1,3 @@
+#!/bin/bash
+
+xfce4-terminal --font="Monospace Regular 12" --geometry=160x50 &

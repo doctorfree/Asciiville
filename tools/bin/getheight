@@ -1,0 +1,3 @@
+#!/bin/bash
+
+xrandr | grep current | awk -F ',' ' { print $2 } ' | awk ' { print $4 } '

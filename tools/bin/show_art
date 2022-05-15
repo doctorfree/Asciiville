@@ -1,0 +1,5 @@
+#!/bin/bash
+#
+# showascii3 - view ascii art from a folder
+
+gnome-terminal --window --full-screen --profile=Asciiville -- showascii

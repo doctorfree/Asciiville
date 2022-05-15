@@ -1,0 +1,7 @@
+#!/bin/bash
+
+DIR="/usr/share/doc/asciiville/music"
+TMP="$(mktemp)"
+ranger --choosefile="${TMP}" ${DIR} 1>&2
+cat ${TMP}
+rm  -f ${TMP}

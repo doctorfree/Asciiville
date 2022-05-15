@@ -1,0 +1,6 @@
+#!/bin/bash
+
+gnome-terminal --window --full-screen \
+               --profile=Asciiville \
+               -- show_ascii_art -P -C -l 2 -s $1
+#              -- show_ascii_art -A ~/src/Asciiville/art -C -l -s $1

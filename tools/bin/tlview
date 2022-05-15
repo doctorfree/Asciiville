@@ -1,0 +1,3 @@
+#!/bin/bash
+
+tilix --geometry=160x50 &

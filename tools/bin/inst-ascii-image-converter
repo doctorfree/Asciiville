@@ -1,0 +1,6 @@
+#!/bin/bash
+
+go install github.com/TheZoraiz/ascii-image-converter@latest
+
+# Snap
+# sudo snap install ascii-image-converter

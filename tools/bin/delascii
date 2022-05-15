@@ -1,0 +1,24 @@
+#!/bin/bash
+
+for i in *.asc
+do
+    termprofset -s 4
+    cat "$i"
+    sleep 2
+    termprofset -r
+    termprofset -s 20
+    while true
+    do
+        read -p "Delete (y/n) " answer
+        case "${answer}" in
+            y|Y)
+                rm -f "$i"
+                break
+                ;;
+            *)
+                break
+                ;;
+        esac
+    done
+    termprofset -r
+done

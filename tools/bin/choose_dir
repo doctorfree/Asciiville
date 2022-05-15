@@ -1,0 +1,6 @@
+#!/bin/bash
+
+TMP="$(mktemp)"
+ranger --show-only-dir --choosedir="$TMP" 1>&2
+cat $TMP
+rm  -f $TMP

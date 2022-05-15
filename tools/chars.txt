@@ -1,0 +1,6 @@
+# Default palette used by jp2a
+   ...',;:clodxkO0KXNWM
+# Dark to light
+$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`'.
+# Light to Dark
+.'`^",:;Il!i><~+_-?][}{1)(|\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$

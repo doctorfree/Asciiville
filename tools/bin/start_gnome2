@@ -1,0 +1,3 @@
+#!/bin/bash
+
+gnome-terminal --window --profile=Dark &

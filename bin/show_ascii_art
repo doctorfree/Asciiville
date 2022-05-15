@@ -421,12 +421,10 @@ have_lolcat=
   have_lolcat=`type -p lolcat`
 }
 
-termprofset ${termarg} -S
 termprofset ${termarg} -s ${art_font_size}
 sleep 1
 termhigh=`stty size | awk '{print $1}'`
 termwide=`stty size | awk '{print $2}'`
-termprofset ${termarg} -s ${txt_font_size}
 
 fade_audio() {
   vol=75
@@ -470,7 +468,6 @@ cleanup() {
   goodbye
   tput cnorm
   [ "${playing}" ] && fade_audio
-  termprofset ${termarg} -R
   exit 0
 }
 
@@ -645,7 +642,6 @@ play_slide_show() {
   goodbye
   tput cnorm
   [ "${playing}" ] && fade_audio
-  termprofset ${termarg} -R
   exit 0
 }
 

@@ -1,0 +1,25 @@
+To check if running in a console virtual terminal, use the 'tty' command:
+
+case $(tty) in /dev/tty[0-9]*)
+    do_something ;;
+esac
+
+To manipulate the Linux console font, use the 'setfont' command.
+Console fonts are stored in /usr/share/consolefonts/
+
+For example:
+
+$ setfont Uni2-Fixed18
+
+To also save the previous font to a file, use the '-o file' option to setfont
+
+For example:
+
+$ setfont -o /tmp/prev_font$$ Uni2-Fixed18
+
+To override the font height, use the '-h height' option to setfont
+
+For example:
+
+$ setfont -h 4 -o /tmp/prev_font$$ Uni2-Fixed18
+

@@ -1,0 +1,24 @@
+#!/bin/bash
+
+[ -d ascii ] || mkdir ascii
+for i in *
+do
+    cat "$i"
+    echo $i
+    while true
+    do
+        read -p "Save (y/n)" answer
+        case "${answer}" in
+            y|Y)
+                cp "$i" ascii/"$i"
+                break
+                ;;
+            n|N)
+                break
+                ;;
+            *)
+                echo y or n
+                ;;
+        esac
+    done
+done

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+ART_DIR=$HOME/src/Asciiville/art
+[ -d ascii ] || mkdir ascii
+for i in *.jpg *.jpeg *.JPG *.png *.PNG
+do
+    [ -d "$i" ] && continue
+    [ "$i" == "*.jpg" ] && continue
+    [ "$i" == "*.jpeg" ] && continue
+    [ "$i" == "*.JPG" ] && continue
+    [ "$i" == "*.png" ] && continue
+    [ "$i" == "*.PNG" ] && continue
+    j=`echo $i | sed -e "s/.jpg/.txt/" -e "s/.JPG/.txt/" -e "s/.jpeg/.txt/" \
+                     -e "s/.PNG/.txt/" -e "s/.png/.txt/"`
+    for pic in ${ART_DIR}/*/$j ${ART_DIR}/$j
+    do
+      [ "$pic" == "${ART_DIR}/*/$j" ] && continue
+      [ -f "$pic" ] || continue
+      jp2a --border --colors --height=22 --output=ascii/"$j" "$i"
+      break
+    done
+done

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+fullscreen=
+[ "$1" == "-f" ] && fullscreen="--full-screen"
+
+tilix ${fullscreen} --profile=Asciiville &

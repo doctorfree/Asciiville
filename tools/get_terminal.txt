@@ -1,0 +1,45 @@
+
+The parent process ID is the environment variable PPID:
+
+echo $PPID
+
+Then use ps to list that process:
+
+ps -e | grep $PPID
+
+To get the parent process ID of a running process, use its process id:
+
+parent=`ps -o ppid= -p 9801`
+
+Then, again, use ps to list the parent:
+
+ps -e | grep $parent
+
+So, in 'asciiville', when invoking 'show_ascii_art' from the current terminal:
+
+1. Get the parent process ID of the 'asciiville' command:
+
+   myppid=`ps -e | grep $PPID | awk ' { print $1 } '`
+
+2. Get the parent process ID of the shell that invoked asciiville
+
+   parent=`ps -o ppid= -p ${myppid}`
+
+3. Get the terminal name by parsing the grandparent process:
+
+   termname=`ps -e | grep ${parent} | awk ' { print $4 } '`
+   echo "termname = ${termname}"
+
+4. Test to see if we know how to manipulate the font:
+
+   case ${termname} in
+     gnome-terminal)
+       show_ascii_art -e gnome ...
+     ;;
+     tilix)
+       show_ascii_art -e tilix ...
+     ;;
+     xfce4-terminal)
+       show_ascii_art -e xfce4 ...
+     ;;
+   esac

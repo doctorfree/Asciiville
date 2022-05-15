@@ -1,0 +1,8 @@
+case $TERM in
+  iterm            |\
+  linux-truecolor  |\
+  screen-truecolor |\
+  tmux-truecolor   |\
+  xterm-truecolor  )    export COLORTERM=truecolor ;;
+  vte*)
+esac

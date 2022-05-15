@@ -50,52 +50,9 @@ usage() {
   exit 1
 }
 
-rest_settings() {
-  if [ "${USE_XFCE4}" ]
-  then
-    if [ "${REST_ORIG}" ]
-    then
-      [ -f "${T_SAVE}" ] && cp "${T_SAVE}" "${RC}"
-    else
-      [ "${have_set_xfce4}" ] && set_xfce_font -r
-    fi
-  else
-    [ -f "${T_SAVE}" ] && {
-      . "${T_SAVE}"
-      gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
-                font "${current_font}"
-      gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
-                use-system-font ${use_system_font}
-      gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
-                use-theme-colors ${use_theme}
-      gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
-                background-color "${background}"
-      gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
-                foreground-color "${foreground}"
-    }
-  fi
-}
-
-save_settings() {
-  [ -d "${CONF_DIR}" ] || mkdir "${CONF_DIR}"
-  [ -d "${SAVE_DIR}" ] || mkdir "${SAVE_DIR}"
-  if [ "${USE_XFCE4}" ]
-  then
-    [ -f "${RC}" ] && cp "${RC}" "${T_SAVE}"
-  else
-    echo "TERM_PROF=\"${TERM_PROF}\"" > ${T_SAVE}
-    echo "current_font=\"${CURR_FONT}\"" >> ${T_SAVE}
-    echo "use_system_font=${USE_SYSTEM_FONT}" >> ${T_SAVE}
-    echo "use_theme=${USE_THEME}" >> ${T_SAVE}
-    echo "background=\"${USE_BACK}\"" >> ${T_SAVE}
-    echo "foreground=\"${USE_FORE}\"" >> ${T_SAVE}
-  fi
-}
-
 FONT_NAME="Monospace"
 FONT_SIZE=4
 PROF_NAME="Asciiville"
-RESTORE=
 SAVE_ORIG=
 REST_ORIG=
 USE_GNOME=1
@@ -177,7 +134,24 @@ fi
 
 # Restore the saved original terminal settings and exit
 [ "${REST_ORIG}" ] && {
-  rest_settings
+  if [ "${USE_XFCE4}" ]
+  then
+    [ -f "${T_SAVE}" ] && cp "${T_SAVE}" "${RC}"
+  else
+    [ -f "${T_SAVE}" ] && {
+      . "${T_SAVE}"
+      gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
+                font "${current_font}"
+      gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
+                use-system-font ${use_system_font}
+      gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
+                use-theme-colors ${use_theme}
+      gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
+                background-color "${background}"
+      gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
+                foreground-color "${foreground}"
+    }
+  fi
   exit 0
 }
 
@@ -245,7 +219,19 @@ fi
 
 # Save the current terminal settings and exit
 [ "${SAVE_ORIG}" ] && {
-  save_settings
+  [ -d "${CONF_DIR}" ] || mkdir "${CONF_DIR}"
+  [ -d "${SAVE_DIR}" ] || mkdir "${SAVE_DIR}"
+  if [ "${USE_XFCE4}" ]
+  then
+    [ -f "${RC}" ] && cp "${RC}" "${T_SAVE}"
+  else
+    echo "TERM_PROF=\"${TERM_PROF}\"" > ${T_SAVE}
+    echo "current_font=\"${CURR_FONT}\"" >> ${T_SAVE}
+    echo "use_system_font=${USE_SYSTEM_FONT}" >> ${T_SAVE}
+    echo "use_theme=${USE_THEME}" >> ${T_SAVE}
+    echo "background=\"${USE_BACK}\"" >> ${T_SAVE}
+    echo "foreground=\"${USE_FORE}\"" >> ${T_SAVE}
+  fi
   exit 0
 }
 
@@ -287,5 +273,6 @@ else
     fi
   fi
 fi
+sleep 1
 
 exit 0

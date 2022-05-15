@@ -1,0 +1,5 @@
+#!/bin/bash
+#
+# del_ascii_art - selectively delete ascii art from a folder
+
+gnome-terminal --window --full-screen --profile=Asciiville -- delascii

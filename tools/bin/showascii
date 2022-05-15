@@ -1,0 +1,23 @@
+#!/bin/bash
+
+termprofset -s 4
+for i in *.asc
+do
+    cat "$i"
+    sleep 5
+#   termprofset -r
+#   termprofset -s 20
+#   while true
+#   do
+#       read -p "Continue (y/n) " answer
+#       case "${answer}" in
+#           y|Y)
+#               break
+#               ;;
+#           *)
+#               break
+#               ;;
+#       esac
+#   done
+done
+termprofset -r

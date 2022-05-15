@@ -11,11 +11,12 @@ RC="${CONF_DIR}/xfce4/terminal/terminalrc"
 FN="FontName"
 
 usage() {
-  printf "\nUsage: set_xfce_font [-f fontname] [-s fontsize] [-ru]"
+  printf "\nUsage: set_xfce_font [-f fontname] [-s fontsize] [-RSu]"
   printf "\nWhere:"
   printf "\n\t-f 'fontname' specifies the font name to set terminal's font to"
   printf "\n\t-s 'fontsize' specifies the font size to set terminal's font to"
-  printf "\n\t-r indicates restore saved settings"
+  printf "\n\t-R indicates restore saved settings"
+  printf "\n\t-S indicates save current settings"
   printf "\n\t-u displays this usage message and exits"
   printf "\nNo arguments indicates list current font setting and exit"
   printf "\nDefault font is Monospace Regular"
@@ -49,7 +50,8 @@ set_font() {
     }
 }
 
-RESTORE=
+REST_ORIG=
+SAVE_ORIG=
 FONT_NAME="Monospace Regular"
 FONT_SIZE=20
 [ $# -eq 0 ] && {
@@ -57,13 +59,16 @@ FONT_SIZE=20
     exit 0
 }
 
-while getopts "f:rs:u" flag; do
+while getopts "f:s:RSu" flag; do
   case $flag in
     f)
       FONT_NAME="${OPTARG}"
       ;;
-    r)
-      RESTORE=1
+    R)
+      REST_ORIG=1
+      ;;
+    S)
+      SAVE_ORIG=1
       ;;
     s)
       FONT_SIZE="${OPTARG}"
@@ -75,7 +80,7 @@ while getopts "f:rs:u" flag; do
 done
 NF="${FONT_NAME} ${FONT_SIZE}"
 
-[ "${RESTORE}" ] && {
+[ "${REST_ORIG}" ] && {
     [ -f "${SAVE_XFCE}" ] && cp "${SAVE_XFCE}" "${RC}"
     exit 0
 }
@@ -89,14 +94,14 @@ NF="${FONT_NAME} ${FONT_SIZE}"
 if grep ${FN} ${RC} > /dev/null
 then
     is_number ${FONT_SIZE}
-    save_settings
+    [ "${SAVE_ORIG}" ] && save_settings
     set_font
 else
     if [ $# -eq 0 ]
     then
         echo "No ${FN} setting"
     else
-        save_settings
+        [ "${SAVE_ORIG}" ] && save_settings
         echo "${FN}=${NF}" >> ${RC}
     fi
 fi
