@@ -421,8 +421,9 @@ have_lolcat=
   have_lolcat=`type -p lolcat`
 }
 
+termprofset ${termarg} -S
 termprofset ${termarg} -s ${art_font_size}
-sleep 1
+sleep 2
 termhigh=`stty size | awk '{print $1}'`
 termwide=`stty size | awk '{print $2}'`
 
@@ -452,6 +453,7 @@ goodbye() {
       figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Viewing" | ${LOLCAT}
       printf "\n\n"
       figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Ascii Art !" | ${LOLCAT}
+      tput civis -- invisible
     else
       figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Thanks For"
       printf "\n\n"
