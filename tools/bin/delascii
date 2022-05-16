@@ -5,7 +5,7 @@ do
     termprofset -s 4
     cat "$i"
     sleep 2
-    termprofset -r
+    termprofset -R
     termprofset -s 20
     while true
     do
@@ -20,5 +20,5 @@ do
                 ;;
         esac
     done
-    termprofset -r
+    termprofset -R
 done

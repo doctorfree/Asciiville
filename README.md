@@ -130,7 +130,6 @@ Art - A collection of fine art transformed into Ascii Art
 Doctorwhen - Some of Doctor When's fantastic art
 Dragonflies - Photos of dragonflies converted to Ascii using Asciiville tools
 Fractals - Images of fractals converted to Ascii using Asciiville tools
-Frax - Images made with Frax converted to Ascii using Asciiville tools
 Friends - Photos of friends and family converted to Ascii using Asciiville tools
 Iterated - Images made with iteration converted to Ascii using Asciiville tools
 Lyapunov - Lyapunov fractals converted to Ascii using Asciiville tools
