@@ -22,7 +22,8 @@ termprofset - manipulate the profiles of a Gnome or Tilix terminal, or
 the font setting of an XFCE4 terminal
 .SH SYNOPSIS
 .PP
-\f[B]termprofset\f[R] [-f fontname] [-s fontsize] [-p profile] [-glrtxu]
+\f[B]termprofset\f[R] [-f fontname] [-s fontsize] [-p profile]
+[-glBRStxu]
 .SH DESCRIPTION
 .PP
 The \f[I]termprofset\f[R] command can be used to set or restore profile
@@ -59,11 +60,15 @@ foreground-color \[aq]#AFAFAF\[aq]
 .PP
 The font name and font size can be specified on the command line using
 the \f[V]-f fontname\f[R] and \f[V]-s fontsize\f[R] options.
+Background color and transparency in \f[V]xfce4-terminal\f[R] can be set
+with the \f[V]-B color\f[R] option.
 .PP
 In addition to setting profile settings or font setting,
-\f[I]termprofset\f[R] can be used to restore profile settings or font
-setting saved from a previous invocation.
-Use the \f[V]-r\f[R] command line option to indicate restore saved
+\f[I]termprofset\f[R] can be used to save or restore profile settings or
+font setting saved from a previous invocation.
+Use the \f[V]-S\f[R] command line option to save the current profile or
+configuration settings of a terminal emulator.
+Use the \f[V]-R\f[R] command line option to indicate restore saved
 profile settings or font setting.
 In this way, \f[I]termprofset\f[R] can be used to manipulate a profile
 or font temporarily.
@@ -73,16 +78,19 @@ original profile or font settings.
 Current profile or font settings can be listed with the \f[V]-l\f[R]
 option.
 .PP
-The \f[V]termprofset\f[R] command is used by \f[V]asciiville\f[R] and
-\f[V]show_ascii_art\f[R] when displaying Ascii Art.
+The \f[V]termprofset\f[R] command is used by the
+\f[V]show_ascii_art\f[R] command when displaying Ascii Art.
 During Ascii Art displays the font size is manipulated to produce higher
 resolution character graphics during art display while setting the font
 size higher for Figlet text display.
-The font sizes used in these commands can be controlled via the
+The font sizes used in this command can be controlled via the
 \f[V]art_font_size\f[R] and \f[V]txt_font_size\f[R] values in
 \f[V]$HOME/.config/asciiville/config\f[R].
 Default font sizes are 4 and 20.
 .SH COMMAND LINE OPTIONS
+.TP
+\f[B]-B\f[R]
+indicates set background to black, no transparency
 .TP
 \f[B]-f \[aq]fontname\[aq]\f[R]
 specifies the font name to set terminal\[aq]s font to
@@ -93,8 +101,11 @@ specifies the font size to set terminal\[aq]s font to
 \f[B]-p \[aq]profile\[aq]\f[R]
 specifies the terminal profile to manipulate
 .TP
-\f[B]-r\f[R]
+\f[B]-R\f[R]
 indicates restore saved settings
+.TP
+\f[B]-S\f[R]
+indicates save original settings
 .TP
 \f[B]-g\f[R]
 indicates use Gnome terminal emulator
@@ -130,7 +141,7 @@ Sets the Asciiville Tilix profile with a Monospace font and font size 8
 \f[B]termprofset -x -s 18\f[R]
 Sets the XFCE4 terminal with a Monospace font and font size 18
 .TP
-\f[B]termprofset -r -t\f[R]
+\f[B]termprofset -R -t\f[R]
 Restores the Asciiville Tilix profile with settings saved from a
 previous run
 .TP

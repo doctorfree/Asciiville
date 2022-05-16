@@ -526,27 +526,13 @@ play_slide_show() {
 
     case ${termname} in
       gnome-terminal*)
-#       termprofset -g -S
         show_ascii_art -e gnome ${showargs} -s ${showname}
-#       termprofset -g -R
         ;;
       tilix*)
-#       termprofset -t -S
         show_ascii_art -e tilix ${showargs} -s ${showname}
-#       termprofset -t -R
         ;;
       xfce4-terminal*)
-#       termprofset -x -S
         show_ascii_art -e xfce4 ${showargs} -s ${showname}
-#       xfce4-terminal --fullscreen \
-#            --color-bg=Black \
-#            --hide-menubar \
-#            --hide-borders \
-#            --hide-toolbar \
-#            --hide-scrollbar \
-#            --font="Monospace ${txt_font_size}" \
-#            --command="show_ascii_art -e xfce4 ${showargs} -s ${showname}"
-#       termprofset -x -R
         ;;
       *)
         show_ascii_art ${showargs} -s ${showname}
@@ -562,7 +548,6 @@ play_slide_show() {
   else
     if [ "${XFCE4}" ]
     then
-#     termprofset -x -S
       xfce4-terminal --fullscreen \
              --color-bg=Black \
              --hide-menubar \
@@ -570,23 +555,17 @@ play_slide_show() {
              --hide-toolbar \
              --hide-scrollbar \
              --command="show_ascii_art -e xfce4 ${showargs} -s ${showname}"
-#            --font="Monospace ${txt_font_size}" \
-#     termprofset -x -R
     else
       if [ "${TILIX}" ]
       then
-#       termprofset -t -S
         tilix --full-screen \
               --window-style=borderless \
               --profile=Asciiville \
               --command="show_ascii_art -e tilix ${showargs} -s ${showname}"
-#       termprofset -t -R
       else
-#       termprofset -g -S
         gnome-terminal --window --full-screen \
                        --profile=Asciiville \
                        -- show_ascii_art -e gnome ${showargs} -s ${showname}
-#       termprofset -g -R
       fi
     fi
   fi

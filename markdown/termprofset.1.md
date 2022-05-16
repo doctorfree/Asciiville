@@ -9,7 +9,7 @@ date: May 10, 2022
 termprofset - manipulate the profiles of a Gnome or Tilix terminal, or the font setting of an XFCE4 terminal
 
 # SYNOPSIS
-**termprofset** [-f fontname] [-s fontsize] [-p profile] [-glrtxu]
+**termprofset** [-f fontname] [-s fontsize] [-p profile] [-glBRStxu]
 
 # DESCRIPTION
 The *termprofset* command can be used to set or restore profile settings of a Gnome or Tilix terminal emulator (`gnome-terminal` and `tilix` commands), or the font setting of an XFCE4 terminal emulator (`xfce4-terminal` command). Profile settings that can be configured by *termprofset* are:
@@ -30,20 +30,23 @@ When setting the profile of a terminal, the following settings are used:
 - background-color '#000000'
 - foreground-color '#AFAFAF'
 
-The font name and font size can be specified on the command line using the `-f fontname` and `-s fontsize` options.
+The font name and font size can be specified on the command line using the `-f fontname` and `-s fontsize` options. Background color and transparency in `xfce4-terminal` can be set with the `-B color` option.
 
-In addition to setting profile settings or font setting, *termprofset* can be used to restore profile settings or font setting saved from a previous invocation. Use the `-r` command line option to indicate restore saved profile settings or font setting. In this way, *termprofset* can be used to manipulate a profile or font temporarily. Display ascii art with a customized profile or font then restore the original profile or font settings.
+In addition to setting profile settings or font setting, *termprofset* can be used to save or restore profile settings or font setting saved from a previous invocation. Use the `-S` command line option to save the current profile or configuration settings of a terminal emulator. Use the `-R` command line option to indicate restore saved profile settings or font setting. In this way, *termprofset* can be used to manipulate a profile or font temporarily. Display ascii art with a customized profile or font then restore the original profile or font settings.
 
 Current profile or font settings can be listed with the `-l` option.
 
-The `termprofset` command is used by `asciiville` and `show_ascii_art` when
+The `termprofset` command is used by the `show_ascii_art` command when
 displaying Ascii Art. During Ascii Art displays the font size is manipulated
 to produce higher resolution character graphics during art display while
 setting the font size higher for Figlet text display. The font sizes used
-in these commands can be controlled via the `art_font_size` and `txt_font_size`
+in this command can be controlled via the `art_font_size` and `txt_font_size`
 values in `$HOME/.config/asciiville/config`. Default font sizes are 4 and 20.
 
 # COMMAND LINE OPTIONS
+**-B**
+: indicates set background to black, no transparency
+
 **-f 'fontname'**
 : specifies the font name to set terminal's font to
 
@@ -53,8 +56,11 @@ values in `$HOME/.config/asciiville/config`. Default font sizes are 4 and 20.
 **-p 'profile'**
 : specifies the terminal profile to manipulate
 
-**-r**
+**-R**
 : indicates restore saved settings
+
+**-S**
+: indicates save original settings
 
 **-g**
 : indicates use Gnome terminal emulator
@@ -90,7 +96,7 @@ Default font size is 4
 **termprofset -x -s 18**
 : Sets the XFCE4 terminal with a Monospace font and font size 18 
 
-**termprofset -r -t**
+**termprofset -R -t**
 : Restores the Asciiville Tilix profile with settings saved from a previous run
 
 **termprofset -p default -t -s 18**

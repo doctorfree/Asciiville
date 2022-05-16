@@ -5,10 +5,13 @@
 # Run with no arguments to get the current transparency setting
 # Run with a numeric argument between 0.0 and 1.0 to set the transparency
 # Run with an argument of "more" or "less" to increase or decrease transparency
+# Optional second argument can be used to specify the background color
+#    (black, white, or hex color without the leading '#')
 
 RC="${HOME}/.config/xfce4/terminal/terminalrc"
 BD="BackgroundDarkness"
 BM="BackgroundMode"
+CB="ColorBackground"
 TB="TERMINAL_BACKGROUND_TRANSPARENT"
 
 is_number() {
@@ -41,6 +44,16 @@ check_val() {
     fi
 }
 
+set_background() {
+    background=`grep ${CB} ${RC} | awk -F '=' ' { print $2 } '`
+    [ "${background}" == "$1" ] || {
+        newback=$1
+        cat ${RC} | sed -e "s/${CB}=.*/${CB}=${newback}/" > /tmp/backness$$
+        cp /tmp/backness$$ ${RC}
+        rm -f /tmp/backness$$
+    }
+}
+
 set_darkness() {
     darkness=`grep ${BD} ${RC} | awk -F '=' ' { print $2 } '`
     [ "${darkness}" == "$1" ] || {
@@ -71,6 +84,7 @@ then
     if [ $# -eq 0 ]
     then
         grep ${BM} ${RC}
+        grep ${CB} ${RC}
     else
         set_mode
     fi
@@ -88,6 +102,7 @@ then
     if [ $# -eq 0 ]
     then
         grep ${BD} ${RC}
+        grep ${CB} ${RC}
     else
         oldval=`grep ${BD} ${RC} | awk -F '=' ' { print $2 } '`
         if [ "$1" == "more" ]
@@ -128,3 +143,22 @@ else
         echo "${BD}=${newval}" >> ${RC}
     fi
 fi
+
+[ "$2" ] && {
+    if [ "$2" == "black" ]
+    then
+        newback='#000000'
+    elif [ "$2" == "white" ]
+    then
+        newback='#ffffff'
+    else
+        newback="#$2"
+    fi
+    if grep ${CB} ${RC} > /dev/null
+    then
+        oldback=`grep ${CB} ${RC} | awk -F '=' ' { print $2 } '`
+        [ "${oldback}" == "${newback}" ] || set_background ${newback}
+    else
+        echo "${CB}=${newback}" >> ${RC}
+    fi
+}

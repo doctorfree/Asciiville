@@ -379,8 +379,7 @@ done
   if [ "${have_gnome}" ]
   then
     echo "Invoking gnome-terminal to convert ${make_inp} to ${make_out}"
-    termprofset -g -S
-    termprofset -g -s ${art_font_size}
+    termprofset -S -g -s ${art_font_size}
     gnome-terminal --window --geometry=320x100 --profile=Asciiville \
                    -- make_ascii_art -i "${make_inp}" -o "${make_out}"
     termprofset -g -R
@@ -388,8 +387,7 @@ done
     if [ "${have_tilix}" ]
     then
       echo "Invoking Tilix to convert ${make_inp} to ${make_out}"
-      termprofset -t -S
-      termprofset -t -s ${art_font_size}
+      termprofset -S -t -s ${art_font_size}
       tilix --geometry=320x100 \
             --profile=Asciiville \
             --window-style=borderless \
@@ -399,8 +397,7 @@ done
     else
       if [ "${have_xfce4}" ]
       then
-        termprofset -x -S
-        termprofset -x -s ${art_font_size}
+        termprofset -S -x -s ${art_font_size}
         xfce4-terminal \
             --hide-menubar \
             --hide-toolbar \
@@ -421,8 +418,10 @@ have_lolcat=
   have_lolcat=`type -p lolcat`
 }
 
-termprofset ${termarg} -S
-termprofset ${termarg} -s ${art_font_size}
+# Save the current terminal profile or config
+# Set the xfce4-terminal background to black and no transparency
+# Set the terminal profile or config font size for ascii art
+termprofset ${termarg} -S -B -s ${art_font_size}
 sleep 2
 termhigh=`stty size | awk '{print $1}'`
 termwide=`stty size | awk '{print $2}'`

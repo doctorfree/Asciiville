@@ -31,13 +31,14 @@ TILIX_PATH="/com/gexperts/Tilix/profiles/"
 TILIX_LIST="com.gexperts.Tilix.ProfilesList"
 
 usage() {
-  printf "\nUsage: termprofset [-f fontname] [-s fontsize] [-p profile] [-glRStxu]"
+  printf "\nUsage: termprofset [-f fontname] [-s fontsize] [-p profile] [-glBRStxu]"
   printf "\nWhere:"
+  printf "\n\t-B indicates set background to black, no transparency"
   printf "\n\t-f 'fontname' specifies the font name to set terminal's font to"
   printf "\n\t-s 'fontsize' specifies the font size to set terminal's font to"
   printf "\n\t-p 'profile' specifies the terminal profile to manipulate"
   printf "\n\t-R indicates restore original saved settings and exit"
-  printf "\n\t-S indicates save original settings and exit"
+  printf "\n\t-S indicates save original settings"
   printf "\n\t-g indicates use Gnome terminal emulator"
   printf "\n\t-l indicates list current profile settings and exit"
   printf "\n\t-t indicates use Tilix terminal emulator"
@@ -53,6 +54,7 @@ usage() {
 FONT_NAME="Monospace"
 FONT_SIZE=4
 PROF_NAME="Asciiville"
+SET_BLACK=
 SAVE_ORIG=
 REST_ORIG=
 USE_GNOME=1
@@ -60,8 +62,11 @@ TERM_NAME=Gnome
 USE_TILIX=
 USE_XFCE4=
 SHOW_LIST=
-while getopts "gf:lp:Rs:Stxu" flag; do
+while getopts "Bgf:lp:Rs:Stxu" flag; do
   case $flag in
+    B)
+      SET_BLACK=1
+      ;;
     g)
       USE_TILIX=
       USE_XFCE4=
@@ -125,6 +130,7 @@ else
       T_LIST=
       T_SAVE="${SAVE_XFCE4}"
       have_set_xfce4=`type -p set_xfce_font`
+      have_set_trans=`type -p set_xfce_trans`
     else
       echo "Unknown/Unsupported terminal emulator. Exiting."
       usage
@@ -217,7 +223,7 @@ else
   }
 fi
 
-# Save the current terminal settings and exit
+# Save the current terminal settings
 [ "${SAVE_ORIG}" ] && {
   [ -d "${CONF_DIR}" ] || mkdir "${CONF_DIR}"
   [ -d "${SAVE_DIR}" ] || mkdir "${SAVE_DIR}"
@@ -232,7 +238,6 @@ fi
     echo "background=\"${USE_BACK}\"" >> ${T_SAVE}
     echo "foreground=\"${USE_FORE}\"" >> ${T_SAVE}
   fi
-  exit 0
 }
 
 #
@@ -267,6 +272,10 @@ else
     if [ "${USE_XFCE4}" ]
     then
       [ "${have_set_xfce4}" ] && set_xfce_font -f "${FONT_NAME}" -s ${FONT_SIZE}
+      # Set background to black, no transparency, and exit
+      [ "${SET_BLACK}" ] && {
+        [ "${have_set_trans}" ] && set_xfce_trans 1 black
+      }
     else
       echo "Unknown/Unsupported terminal emulator. Exiting."
       usage
