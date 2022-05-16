@@ -9,7 +9,7 @@ date: April 24, 2022
 show_ascii_art - display ascii art
 
 # SYNOPSIS
-**show_ascii_art** [-a art] [-A art_dir] [-b] [-B] [-c] [-C] [-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g] [-i image] [-I input_dir] [-O output_dir] [-l level] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S song] [-t first_text] [-T second_text] [-h height] [-w width] [-z] [-u]
+**show_ascii_art** [-a art] [-A art_dir] [-b] [-B] [-c] [-C] [-d font_dir] [-D seconds] [-e term] [-F large_font] [-f small_font] [-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S song] [-t first_text] [-T second_text] [-h height] [-w width] [-z] [-u]
 
 # DESCRIPTION
 The *show_ascii_art* command displays one of the ascii art images included in
@@ -56,6 +56,12 @@ the fonts used to display accompanying text, and the text to display.
 **-I 'input_dir'**
 : generates ascii art from all images in 'input_dir' and saves them in the directory specified with '-O output_dir' (defaults to current directory if '-O output_dir' is specified)
 
+**-K 'fifo_name'**
+: use a FIFO to communicate back to caller when done
+
+    Calling process can wait for `show_ascii_art` to exit
+    by waiting for 'done' to be written to the FIFO
+
 **-l 'level'**
 : use lolcat coloring, 'level' can be '1' or '2' (animate)
 
@@ -101,7 +107,8 @@ the fonts used to display accompanying text, and the text to display.
 **-s 'show'**
 : slide show of ascii art
 
-    'show' can be Art, Fractals, Lyap, Owls, Waterfalls, Mixed
+    'show' can be Art, Doctorwhen, Dragonflies, Fractals, Friends, Iterated,
+                  Lyapunov, Nature, Owls, Space, Wallpapers, Waterfalls
 
 **-t 'first_text'**
 : specifies the first text to display

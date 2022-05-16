@@ -35,7 +35,7 @@ set -m
 usage() {
   printf "\nUsage: show_ascii_art [-a art] [-A art_dir] [-b] [-B] [-c] [-C]"
   printf "\n\t[-d font_dir] [-D seconds] [-e term] [-F large_font] [-f small_font]"
-  printf "\n\t[-g] [-i image] [-I input_dir] [-O output_dir] [-l level]"
+  printf "\n\t[-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level]"
   printf "\n\t[-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r]"
   printf "\n\t[-s show] [-S song] [-t first_text] [-T second_text]"
   printf "\n\t[-h height] [-w width] [-z] [-u]"
@@ -58,6 +58,7 @@ usage() {
   printf "\n\t-I 'input_dir' generates ascii art from all images in 'input_dir'"
   printf "\n\t\tand saves them in the directory specified with '-O output_dir'"
   printf "\n\t\t(defaults to current directory if '-O output_dir' is specified)"
+  printf "\n\t-K 'fifo_name' use a FIFO to communicate back to caller when done"
   printf "\n\t-l 'level' use lolcat coloring, 'level' can be '1' or '2' (animate)"
   printf "\n\t-L lists the ascii art in the 'art_dir' and exits"
   printf "\n\t-f 'small_font' specifies the figlet font to use for small text"
@@ -78,9 +79,10 @@ usage() {
   printf "\n\t-q don't display text, just the ascii art"
   printf "\n\t-r indicates select random fonts"
   printf "\n\t-s 'show' slide show of ascii art"
-  printf "\n\t\t'show' can be Art, Doctorwhen, Dragonflies, Fractals,"
-  printf "\n\t\t\tLyap, Mixed, Owls, Space, Waterfalls,"
-  printf "\n\t\t\tor a custom folder name (with '-A art_dir')"
+  printf "\n\t\t'show' can be:"
+  printf "\n\t\t\t'Art', 'Doctorwhen', 'Dragonflies', 'Fractals', 'Friends', 'Iterated'"
+  printf "\n\t\t\t'Lyapunov', 'Nature', 'Owls', 'Space', 'Wallpapers', 'Waterfalls'"
+  printf "\n\t\tor a custom folder name (with '-A art_dir')"
   printf "\n\t-S 'song' use 'song' as audio track"
   printf "\n\t-t 'first_text' specifies the first text to display"
   printf "\n\t-T 'second_text' specifies the second text to display"
@@ -91,6 +93,17 @@ usage() {
   printf "\n\t\tcalculate the other from image aspect ratio"
   printf "\n\t-z indicates save converted image ascii art in art_dir\n\n"
   exit 1
+}
+
+send_done() {
+  if [ -p "${fifo_name}" ]
+  then
+    printf "done\n" > "${fifo_name}"
+  else
+    printf "\n Error fifo '%s' not found.\n\n" "${fifo_name}"
+  fi
+  clear
+  rm -f ${fifo_name}
 }
 
 set_spaces() {
@@ -182,6 +195,7 @@ colordepth=
 colors=
 cycle=
 execute=
+fifo_name=
 termarg=
 grayscale=
 list=
@@ -201,7 +215,7 @@ tabs=
 width=
 have_convert=`type -p convert`
 have_jp2a=`type -p jp2a`
-while getopts "a:A:bBcCD:d:e:gh:i:I:l:LF:f:n:N:oO:Pp:qrs:S:t:T:w:zu" flag; do
+while getopts "a:A:bBcCD:d:e:gh:i:I:K:l:LF:f:n:N:oO:Pp:qrs:S:t:T:w:zu" flag; do
   case $flag in
       a)
           art="${OPTARG}"
@@ -266,6 +280,9 @@ while getopts "a:A:bBcCD:d:e:gh:i:I:l:LF:f:n:N:oO:Pp:qrs:S:t:T:w:zu" flag; do
           ;;
       I)
           make_inp=${OPTARG}
+          ;;
+      K)
+          fifo_name="${OPTARG}"
           ;;
       L)
           list=1
@@ -357,6 +374,7 @@ done
       [ "${art}" == "${ARTDIR}/*/*.asc" ] && {
           echo "No ascii art found in ${ARTDIR}"
           echo "Ascii art files must have a '.asc' suffix"
+          [ "${fifo_name}" ] && send_done
           exit 0
       }
       [ "${first}" ] && echo "Ascii Art in ${ARTDIR} :"
@@ -367,6 +385,7 @@ done
       first=
   done
   printf "\n\n"
+  [ "${fifo_name}" ] && send_done
   exit 0
 }
 
@@ -410,6 +429,7 @@ done
       fi
     fi
   fi
+  [ "${fifo_name}" ] && send_done
   exit 0
 }
 
@@ -468,6 +488,7 @@ goodbye() {
 cleanup() {
   goodbye
   tput cnorm
+  [ "${fifo_name}" ] && send_done
   [ "${playing}" ] && fade_audio
   exit 0
 }
@@ -481,6 +502,7 @@ play_slide_show() {
       echo "No ascii art found in ${SLIDE_DIR}"
       echo "Ascii art files must have a '.asc' suffix"
       termprofset ${termarg} -R
+      [ "${fifo_name}" ] && send_done
       exit 0
     }
     [ "${first}" ] && {
@@ -612,6 +634,7 @@ play_slide_show() {
   [ -d "${SLIDE_DIR}" ] || {
     echo "${SLIDE_DIR} does not exist or is not a directory. Exiting."
     termprofset ${termarg} -R
+    [ "${fifo_name}" ] && send_done
     exit 1
   }
 
@@ -642,6 +665,7 @@ play_slide_show() {
   fi
   goodbye
   tput cnorm
+  [ "${fifo_name}" ] && send_done
   [ "${playing}" ] && fade_audio
   exit 0
 }
@@ -702,6 +726,7 @@ then
         termprofset ${termarg} -s ${txt_font_size}
         echo "The 'convert' command is not installed or not in PATH"
         echo "Cannot convert ${input_image} to ascii art"
+        [ "${fifo_name}" ] && send_done
         exit 1
       fi
     }
@@ -809,3 +834,4 @@ fi
 }
 
 termprofset ${termarg} -R
+[ "${fifo_name}" ] && send_done

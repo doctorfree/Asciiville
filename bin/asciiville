@@ -43,6 +43,8 @@ SONG="${MUSEDIR}/Chronos.mp3"
 ALTSONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 art_font_size=4
 txt_font_size=20
+# fifo name
+fifo_name="/tmp/asciiville_fifo_$$"
 
 # Some configuration can be maintained here
 CONFIG="${HOME}/.config/asciiville/config"
@@ -250,6 +252,8 @@ save_config() {
 set_user_conf() {
   exitcode=$?
   save_config
+  rm -f ${fifo_name}
+
   exit ${exitcode}
 }
 
@@ -483,7 +487,11 @@ add_fullscreen() {
       win_id=`wmctrl -lp | grep $(xprop -root | grep _NET_ACTIVE_WINDOW | head -1 | awk '{print $5}' | sed 's/,//' | sed 's/^0x/0x0/') | awk ' { print $1 } '`
       [ "${win_id}" ] && xprop -id ${win_id} | grep _NET_WM_STATE | grep FULLSCREEN > /dev/null && isfull=1
     }
-    [ "${isfull}" ] || wmctrl -r ':ACTIVE:' -b add,fullscreen
+    [ "${isfull}" ] || {
+      wmctrl -r ':ACTIVE:' -b add,fullscreen
+      # [ "${isfull}" ] || wmctrl -r ':ACTIVE:' -b add,maximized_vert,maximized_horz,fullscreen
+      sleep 0.2
+    }
   }
 }
 
@@ -491,10 +499,37 @@ remove_fullscreen() {
   [ "${have_wmctrl}" ] && {
     [ "${isfull}" ] || {
       wmctrl -r ':ACTIVE:' -b remove,fullscreen
+      # wmctrl -r ':ACTIVE:' -b remove,maximized_vert,maximized_horz,fullscreen
       clear
       sleep 0.2
     }
   }
+}
+
+wait_for_done() {
+  # if fifo not found, create
+  [ -p "${fifo_name}" ] || mkfifo "${fifo_name}"
+
+  # redirect fifo_name to fd 3
+  # exec 3< ${fifo_name}
+
+  while true
+  do
+    # read line from fifo_name
+    [ -p "${fifo_name}" ] || break
+    # read -r -u 3 status<${fifo_name}
+    read -r status<${fifo_name}
+    # if status is done, break from loop
+    if [ "${status}" = 'done' ]
+    then
+      break
+    fi
+  done
+
+  # reset fd 3 redirection
+  # exec 3<&-
+
+  rm -f ${fifo_name}
 }
 
 play_slide_show() {
@@ -508,7 +543,8 @@ play_slide_show() {
   showargs="${art_dir} -C ${cycarg} ${lolarg} ${audarg}"
   save_config
   clear
-  [ "${CURRENT}" ] && {
+  if [ "${CURRENT}" ]
+  then
     add_fullscreen
     num_exp='^[0-9]+$'
     termname=unknown
@@ -532,40 +568,53 @@ play_slide_show() {
         show_ascii_art -e tilix ${showargs} -s ${showname}
         ;;
       xfce4-terminal*)
-        show_ascii_art -e xfce4 ${showargs} -s ${showname}
+        xfce4-terminal --tab \
+             --title "${showname} Slideshow" \
+             --color-bg=Black \
+             --hide-menubar \
+             --hide-borders \
+             --hide-toolbar \
+             --hide-scrollbar \
+             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs} -s ${showname}" &
+        wait_for_done
         ;;
       *)
         show_ascii_art ${showargs} -s ${showname}
         ;;
     esac
     remove_fullscreen
-    return
-  }
-  if [ "${RETRO}" ]
-  then
-    cool-retro-term --fullscreen \
-                    -e show_ascii_art ${showargs} -s ${showname} > /dev/null 2>&1
   else
-    if [ "${XFCE4}" ]
+    if [ "${RETRO}" ]
     then
-      xfce4-terminal --fullscreen \
+      cool-retro-term --fullscreen \
+                      -e show_ascii_art ${showargs} -s ${showname} > /dev/null 2>&1
+    else
+      if [ "${XFCE4}" ]
+      then
+        add_fullscreen
+        xfce4-terminal --fullscreen \
              --color-bg=Black \
              --hide-menubar \
              --hide-borders \
              --hide-toolbar \
              --hide-scrollbar \
-             --command="show_ascii_art -e xfce4 ${showargs} -s ${showname}"
-    else
-      if [ "${TILIX}" ]
-      then
-        tilix --full-screen \
-              --window-style=borderless \
-              --profile=Asciiville \
-              --command="show_ascii_art -e tilix ${showargs} -s ${showname}"
+             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs} -s ${showname}" &
+        wait_for_done
+        clear
+        sleep 2
+        remove_fullscreen
       else
-        gnome-terminal --window --full-screen \
-                       --profile=Asciiville \
-                       -- show_ascii_art -e gnome ${showargs} -s ${showname}
+        if [ "${TILIX}" ]
+        then
+          tilix --full-screen \
+                --window-style=borderless \
+                --profile=Asciiville \
+                --command="show_ascii_art -e tilix ${showargs} -s ${showname}"
+        else
+          gnome-terminal --window --full-screen \
+                         --profile=Asciiville \
+                         -- show_ascii_art -e gnome ${showargs} -s ${showname}
+        fi
       fi
     fi
   fi
