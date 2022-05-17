@@ -35,9 +35,9 @@ pkgname=`echo ${ARCHIVE} | awk -F '_' '{ print $1 }'`
   usage
 }
 
-pkgvra=`echo ${ARCHIVE} | awk -F '_' '{ print $2 }'`
-pkgver=`echo ${pkgvra} | awk -F '-' '{ print $1 }'`
-pkgrag=`echo ${pkgvra} | awk -F '-' '{ print $2 }'`
+pkgvra=`echo ${ARCHIVE} | awk -F '-' '{ print $1 }'`
+pkgver=`echo ${pkgvra} | awk -F '_' '{ print $2 }'`
+pkgrag=`echo ${ARCHIVE} | awk -F '-' '{ print $2 }'`
 pkgrel=`echo ${pkgrag} | awk -F '.' '{ print $1 }'`
 pkgarc=`echo ${pkgrag} | awk -F '.' '{ print $2 }'`
 pkgsuf=`echo ${pkgrag} | awk -F '.' '{ print $3 }'`

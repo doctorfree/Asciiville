@@ -94,18 +94,20 @@ On systems for which neither the Debian or RPM packages will suffice,
 install manually by downloading the `Install-bin.sh` script and either
 the gzip'd distribution archive or the zip'd distribution archive.
 After downloading the installation script and distribution archive,
-execute the commands:
+as a user with sudo privilege execute the commands:
 
 ```bash
 chmod 755 Install-bin.sh
-./Install-bin.sh /path/to/Asciiville_1.4.0-1.<arch>.tgz
+sudo ./Install-bin.sh /path/to/Asciiville_1.4.0-1.<arch>.tgz
 or
-./Install-bin.sh /path/to/Asciiville_1.4.0-1.<arch>.zip
+sudo ./Install-bin.sh /path/to/Asciiville_1.4.0-1.<arch>.zip
 ```
 
 ## Configuration
 
 * REQUIRED: execute the `ascinit` command to initialize *mutt/neomutt*, *tmux*, *ranger*, *rainbowstream*, and install terminal emulators
+    * The `ascinit` command should be executed as a normal user with sudo privilege
+        * ascinit # (not 'sudo ascinit')
     * Execute `ascinit -c` rather than `ascinit` if no terminal emulators or graphical utilities are desired
 * OPTIONAL: authorize the command line Twitter client by executing `rainbowstream`
 
@@ -137,3 +139,20 @@ Removal of the package on RPM based systems can be accomplished by issuing the c
 ```bash
 sudo dnf remove Asciiville
 ```
+
+On systems for which the manual installation was performed using
+the `Install-bin.sh` script, remove Asciiville manually by downloading
+the `Uninstall-bin.sh` script and, as a user with sudo privilege,
+execute the commands:
+
+```bash
+chmod 755 Uninstall-bin.sh
+sudo ./Uninstall-bin.sh
+```
+
+Note that manual removal of Asciiville using the `Uninstall-bin.sh` script
+will not remove any of the dependencies manually installed above. Manual
+installation and removal of Asciiville is not as robust as packaged
+installation and removal. Hopefully additional platform packaging will be
+available in the future. If you would like to assist with this effort, see the
+['Contributing' section of the Asciiville README](https://github.com/doctorfree/Asciiville#contributing).
