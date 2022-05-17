@@ -922,6 +922,20 @@ The Asciiville Wiki article
 "[Adding and Viewing Art Galleries](Adding-Art-Galleries)" details a brief
 tutorial introduction to generating a new ASCII Art gallery and viewing it.
 
+Asciiville default galleries can be viewed using the interactive menus
+in the `asciiville` command. Select the *Ascii Art Slideshows* entry from
+the main menu, select the options you prefer (e.g. preferred terminal
+emulator and audio), and select the Ascii Art gallery you wish to view.
+
+Note that the `cool-retro-term` terminal emulator will not, by default,
+display the full height of the Ascii Art included in Asciiville as the
+font size is too large. To view Asciiville Ascii Art slideshows using
+`cool-retro-term`, first reduce the font scaling in the settings menu
+to about 0.5. All the other terminal emulators supported by default in
+Asciiville (`gnome-terminal`, `tilix`, and `xfce4-terminal`) are
+dynamically configured during slideshow presentations to scale font sizes
+so Ascii Art is displayed correctly.
+
 ### ASCII Art Tools
 
 The Asciiville Wiki article "[ASCII Art Tools](Tools-Ascii-Art)"
