@@ -32,13 +32,20 @@ utilities to perform common operations in a text-only environment.
     1. [Usage](#usage)
     1. [Example invocations](#example-invocations)
 1. [Adding an ASCII Art Gallery](#adding-an-ascii-art-gallery)
+    1. [Generating ASCII Art](#generating-ascii-art)
+    1. [Adding and Viewing Art Galleries](#adding-and-viewing-art-galleries)
+    1. [ASCII Art Tools](#ascii-art-tools)
 1. [Figlet fonts](#figlet-fonts)
 1. [Build](#build)
 1. [Removal](#removal)
 1. [What is ASCII](#what-is-ascii)
     1. [ASCII Art History](#ascii-art-history)
-1. [Screenshots](#screenshots)
 1. [Videos](#videos)
+1. [Screenshots](#screenshots)
+1. [Contributing](#contributing)
+    1. [Testing and Issue Reporting](#testing-and-Issue-Reporting)
+    1. [Sponsor Asciiville](#sponsor-asciiville)
+    1. [Contribute to Development](#contribute-to-development)
 
 ## Overview
 
@@ -1096,3 +1103,97 @@ Ascii System Monitor, Maps, and Weather<br/>
   <img src="screenshots/Weather.png" style="width:800px;height:600px;">
 </p>
 
+## Contributing
+
+There are a variety of ways to contribute to the Asciiville project. All forms of
+contribution are appreciated and valuable. Also, it's fun to collaborate. Here are
+a few ways to contribute to the further improvement and evolution of Ascii Art,
+Animation, and Utilities:
+
+### Testing and Issue Reporting
+
+Asciiville is fairly complex with many components, features, options,
+configurations, and use cases. Although currently only supported on
+Linux platforms, there are a plethora of Linux platforms on which
+Asciiville can be deployed. Testing all of the above is time consuming
+and tedious. If you have a Linux platform on which you can install Asciiville
+and you have the time and will to put it through its paces, then issue
+reports on problems you encounter would greatly help improve the robustness
+and quality of Asciiville. Open issue reports at
+[https://github.com/doctorfree/Asciiville/issues](https://github.com/doctorfree/Asciiville/issues)
+
+### Sponsor Asciiville
+
+Asciiville is completely free and open source software. All of the
+Asciiville components are freely licensed and may be copied, modified,
+and redistributed freely. Nobody gets paid, nobody is making any money,
+it's a project fully motivated by curiousity and love of art. However,
+it does take some money to procure development and testing resources.
+Right now Asciiville needs a multi-boot test platform to extend support
+to a wider variety of Linux platforms and potentially Mac OS X.
+
+If you have the means and you would like to sponsor Asciiville development,
+testing, platform support, and continued improvement then your monetary
+support could play a very critical role. A little bit goes a long way
+in Asciiville. For example, a bootable USB SSD device could serve as a 
+means of porting and testing support for additional platforms. Or, a
+decent cup of coffee could be the difference between a bug filled
+release and a glorious artistic adventure.
+
+Sponsor the Asciiville project at
+[https://github.com/sponsors/doctorfree](https://github.com/sponsors/doctorfree)
+
+### Contribute to Development
+
+If you have programming skills and find Ascii text based art, animation,
+and utilities to be an interesting area, you can contribute to Asciiville
+development through the standard Github "fork, clone, pull request" process.
+There are many guides to contributing to Github hosted open source projects
+on the Internet. A good one is available at
+[https://www.dataschool.io/how-to-contribute-on-github/](https://www.dataschool.io/how-to-contribute-on-github/). Another short succinct guide is at
+[https://gist.github.com/MarcDiethelm/7303312](https://gist.github.com/MarcDiethelm/7303312).
+
+Once you have forked and cloned the Asciiville repository, it's time to setup
+a development environment. Although many of Asciiville's commands are Bash
+shell scripts, there are also text based applicatons and games written in C
+and C++ along with documentation in Markdown format, configuration files
+in a variety of formats, examples, screenshots, video demos, build scripts,
+packaging, and more.
+
+The development environment consists of several packages needed to build, package,
+and test Asciiville components. These include:
+
+coreutils, sed, git, build-essential, gcc, g++, make,
+uuid-dev, libboost-graph-dev, cmake, python3, jdk, flex,
+bison, libncurses5-dev, autotools-dev, libjpeg-dev, libpng-dev,
+libcurl4-gnutls-dev, libncurses5-dev, autoconf-archive, pkg-config
+
+Not all are required to build a specific utility or game. Utilities and games
+built from source in Asciiville include btop++, cbftp, ddgr, diagon, jp2a,
+nethack, ninvaders, and tetris.
+
+The build script `build` in the top-level directory of the Asciiville repository
+can be used to compile btop, cbftp, jp2a, diagon, nethack, ninvaders, and tetris.
+Invoke the `build` script with the game or utility you wish to compile as
+an argument. For example, to compile the btop++ system monitor from source,
+run the command `./build btop`.
+
+On Debian and RPM based systems the Asciiville installation package can be
+created with the `mkdeb` and `mkrpm` scripts. These scripts invoke the `build`
+script for each of the projects included with Asciiville, populate a distribution
+tree, and call the respective packaging utilities. Packages are saved in the
+`./releases/<version>/` folder. Once a package has been created it can be
+installed with the `Install` script.
+
+It's not necessary to have C/C++ expertise to contribute to Asciiville
+development. Many of the Asciiville commands are Bash scripts and require
+no compilaton. Script commands reside in the `bin` directory. To modify a
+shell script, install Asciiville and edit the `bin/<script>` you wish to
+improve. Simply copy the revised script to `/usr/bin` and test your changes.
+Modifying the configuration files is a little more tricky. Configuration
+files generally live in the `conf` directory but each has its own installation
+location and some are modified by the `ascinit` command during installation.
+If you are just modifying the shell scripts or configuration files then
+you don't need to worry about the extensive list of dependencies listed above.
+
+Feel free to email me at github@ronrecord.com with questions or comments.

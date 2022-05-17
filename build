@@ -16,8 +16,6 @@ build_btop() {
   #                            --slave /usr/bin/g++ g++ /usr/bin/g++-10 \
   #                            --slave /usr/bin/gcov gcov /usr/bin/gcov-10
   #
-  # Usage: ./build-btop.sh [-i]
-  # Where -i indicates install btop after compiling
 
   [ -f bin/btop ] || make STATIC=true STRIP=true
   chmod +x bin/btop
