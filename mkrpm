@@ -311,6 +311,8 @@ have_rpm=`type -p rpmbuild`
   fi
 }
 
+ARCH=`rpm --eval '%{_arch}'`
+
 rpmbuild -ba --build-in-place \
          --define "_topdir ${OUT_DIR}" \
          --define "_sourcedir ${OUT_DIR}" \
