@@ -41,6 +41,7 @@ shift $(( OPTIND - 1 ))
 [ "$PACKAGE" ] && ./mkdeb
 
 cp pkg/Install-bin.sh releases/${VERSION}/Install-bin.sh
+cp pkg/Uninstall-bin.sh releases/${VERSION}/Uninstall-bin.sh
 
 ANNO="Asciiville Version ${VERSION} Release ${RELEASE}"
 gittag v${VERSION}r${RELEASE} ${ANNO}
