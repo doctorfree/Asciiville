@@ -27,7 +27,6 @@ AVILLE_FILES="/usr/bin/asciiart \
 /usr/bin/datafilecat \
 /usr/bin/datafilewrite \
 /usr/bin/ddgr \
-/usr/bin/diagon \
 /usr/bin/jp2a \
 /usr/bin/make_ascii_art \
 /usr/bin/set_xfce_font \
@@ -60,7 +59,6 @@ AVILLE_FILES="/usr/bin/asciiart \
 /usr/share/man/man1/btop.1 \
 /usr/share/man/man1/cbftp.1 \
 /usr/share/man/man1/ddgr.1 \
-/usr/share/man/man1/diagon.1 \
 /usr/share/man/man1/jp2a.1 \
 /usr/share/man/man1/show_ascii_art.1 \
 /usr/share/man/man1/show_moon.1 \

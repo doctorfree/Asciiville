@@ -19,8 +19,6 @@ Version 1.4.0 adds support for:
 * User generated ASCII Art galleries can be added to menu
 * Add generate ascii art menu entry to art menu
 * Use architecture in distribution filenames
-* Add diagon tool for ascii diagram generation
-    * Don't include diagon in RPM builds, not ported yet
 * Add menu for generating and viewing ascii art
 
 Version 1.3.1 included:

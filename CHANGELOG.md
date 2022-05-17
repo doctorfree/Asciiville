@@ -23,8 +23,6 @@ All notable changes to this project will be documented in this file.
 * User generated ASCII Art galleries can be added to menu
 * Add generate ascii art menu entry to art menu
 * Use architecture in distribution filenames
-* Add diagon tool for ascii diagram generation
-    * Don't include diagon in RPM builds, not ported yet
 * Add menu for generating and viewing ascii art
 
 # Asciiville-1.3.1r2 (2022-05-06)

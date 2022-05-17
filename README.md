@@ -68,7 +68,6 @@ The `asciiville` command can be used to invoke:
 * The lightweight character based file manager, `ranger`
 * The lightweight character based disk usage analyzer, `gdu`
 * The lightweight character based journal app, `jrnl`
-* The ascii diagram generator, `diagon`
 * One or more terminal emulators running a command
 * A tmux session
 * A command line web search
@@ -92,7 +91,6 @@ Integration is provided for:
 * [btop](btop/README.md), character based system monitor
 * [cbftp](cbftp/README), character based FTP client
 * [ddgr](ddgr/README.md), command line web search
-* [diagon](diagon/README.md), command line ascii diagram generator
 * [jrnl](https://jrnl.sh/en/stable/), a simple command line journal application
 * [w3m](http://w3m.sourceforge.net/), another character based web browser
 * [lynx](https://lynx.invisible-island.net/), character based web browser
@@ -601,7 +599,6 @@ bring up the interactive menu interface.
 - [**btop-tmux**](markdown/btop-tmux.1.md) : Asciiville in a tmux session
 - [**btop**](markdown/btop.1.md) : Asciiville system monitor
 - [**cbftp**](markdown/cbftp.1.md) : Asciiville FTP client
-- [**diagon**](markdown/diagon.1.md) : Ascii diagram generator
 - [**show_ascii_art**](markdown/show_ascii_art.1.md) : Display ascii art, convert images to ascii art
 - [**show_moon**](markdown/show_moon.1.md) : Display the phase of the Moon
 - [**show_weather**](markdown/show_weather.1.md) : Display a weather report
@@ -1183,11 +1180,11 @@ bison, libncurses5-dev, autotools-dev, libjpeg-dev, libpng-dev,
 libcurl4-gnutls-dev, libncurses5-dev, autoconf-archive, pkg-config
 
 Not all are required to build a specific utility or game. Utilities and games
-built from source in Asciiville include btop++, cbftp, ddgr, diagon, jp2a,
+built from source in Asciiville include btop++, cbftp, ddgr, jp2a,
 nethack, ninvaders, and tetris.
 
 The build script `build` in the top-level directory of the Asciiville repository
-can be used to compile btop, cbftp, jp2a, diagon, nethack, ninvaders, and tetris.
+can be used to compile btop, cbftp, jp2a, nethack, ninvaders, and tetris.
 Invoke the `build` script with the game or utility you wish to compile as
 an argument. For example, to compile the btop++ system monitor from source,
 run the command `./build btop`.
