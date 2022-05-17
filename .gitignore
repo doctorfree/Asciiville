@@ -172,6 +172,7 @@ games/tetris/gameserver
 games/tetris/tetris
 games/tetris/src/config.h
 
+conf/cool-retro-term/*
 pics/*
 releases/*
 tmp/*
