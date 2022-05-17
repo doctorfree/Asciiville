@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-# Asciiville-1.4.0r1 (2022-05-09)
+# Asciiville-1.4.0r1 (2022-05-17)
 
 * Add manual installation script for non Debian/RPM systems
 * Support for xfce4-terminal slideshows with FIFO
