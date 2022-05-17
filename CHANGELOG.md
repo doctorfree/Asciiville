@@ -4,8 +4,15 @@ All notable changes to this project will be documented in this file.
 
 # Asciiville-1.4.0r1 (2022-05-09)
 
+* Add manual installation script for non Debian/RPM systems
+* Support for xfce4-terminal slideshows with FIFO
+* Updated NetHack to latest development snapshot
+* Add Tetris video game to build and packaging
+* Add several new Ascii Art galleries
+* Add Ninvaders game
+* Add termprofset command to manage terminal profile settings
 * Add `newsboat` RSS Feed reader
-* Maintain Asciiville preferences in `$HOME/.config/asciiville/init`
+* Maintain Asciiville preferences in `$HOME/.config/asciiville/config`
 * Beginning with version 1.4.0 a console-only setup is supported
     * No graphical utilities are installed if `ascinit -c` used
     * Console screen used exclusively for display
@@ -14,6 +21,7 @@ All notable changes to this project will be documented in this file.
 * Add `tdraw` ascii drawing tool
 * Dynamically generate Art folder menu entries
 * User generated ASCII Art galleries can be added to menu
+* Add generate ascii art menu entry to art menu
 * Use architecture in distribution filenames
 * Add diagon tool for ascii diagram generation
     * Don't include diagon in RPM builds, not ported yet
