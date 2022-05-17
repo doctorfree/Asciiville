@@ -63,27 +63,6 @@ then
   fi
 fi
 
-# Link our Figlet Fonts into default Figlet Font directory
-# FIGLET_DIR="/usr/share/figlet"
-# FIGLET_NEW="/usr/share/figlet-fonts"
-# if [ -d ${FIGLET_NEW} ]
-# then
-#   if [ ! -d ${FIGLET_DIR} ]
-#   then
-#     mkdir -p ${FIGLET_DIR}
-#   fi
-#   cd ${FIGLET_NEW}
-#   for font in *
-#   do
-#     if [ -f ${FIGLET_DIR}/"${font}" ]
-#     then
-#       continue
-#     else
-#       ln -s ${FIGLET_NEW}/"${font}" ${FIGLET_DIR}/"${font}" 
-#     fi
-#   done
-# fi
-
 FIGLET_DIR="/usr/share/figlet-fonts"
 FIGLET_ZIP="figlet-fonts.zip"
 zip_inst=`type -p zip`
@@ -103,28 +82,6 @@ then
 fi
 
 %preun
-
-# FIGLET_DIR="/usr/share/figlet"
-# FIGLET_NEW="/usr/share/figlet-fonts"
-# if [ -d ${FIGLET_DIR} ]
-# then
-#   cd ${FIGLET_DIR}
-#   for font in ${FIGLET_NEW}/*
-#   do
-#     if [ "${font}" == "${FIGLET_NEW}/*" ]
-#     then
-#       continue
-#     else
-#       b=`basename "${font}"`
-#       if [ -L "$b" ]
-#       then
-#         readlink "$b" | grep ${FIGLET_NEW} > /dev/null && rm -f "$b"
-#       else
-#         continue
-#       fi
-#     fi
-#   done
-# fi
 
 %files
 /usr

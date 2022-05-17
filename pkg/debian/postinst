@@ -76,26 +76,6 @@ case "$1" in
         fi
       fi
     fi
-    # Link our Figlet Fonts into default Figlet Font directory
-    # FIGLET_DIR="/usr/share/figlet"
-    # FIGLET_NEW="/usr/share/figlet-fonts"
-    # if [ -d ${FIGLET_NEW} ]
-    # then
-    #   if [ ! -d ${FIGLET_DIR} ]
-    #   then
-    #     mkdir -p ${FIGLET_DIR}
-    #   fi
-    #   cd ${FIGLET_NEW}
-    #   for font in *
-    #   do
-    #     if [ -f ${FIGLET_DIR}/"${font}" ]
-    #     then
-    #       continue
-    #     else
-    #       ln -s ${FIGLET_NEW}/"${font}" ${FIGLET_DIR}/"${font}" 
-    #     fi
-    #   done
-    # fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
