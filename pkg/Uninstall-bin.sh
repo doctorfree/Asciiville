@@ -71,5 +71,14 @@ AVILLE_FILES="/usr/bin/asciiart \
 /usr/share/man/man6/recover.6 \
 /usr/share/menu/asciiville"
 
+user=`id -u -n`
+
+[ "${user}" == "root" ] || {
+  echo "Uninstall-bin.sh must be run as the root user."
+  echo "Use 'sudo ./Uninstall-bin.sh ...'"
+  echo "Exiting"
+  exit 1
+}
+
 rm -f ${AVILLE_FILES}
 rm -rf ${AVILLE_DIRS}

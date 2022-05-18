@@ -172,6 +172,27 @@ games/tetris/gameserver
 games/tetris/tetris
 games/tetris/src/config.h
 
+# gztool
+gztool/Makefile
+gztool/Makefile.in
+gztool/aclocal.m4
+gztool/autom4te.cache
+gztool/compile
+gztool/config.h*
+gztool/config.log
+gztool/config.status
+gztool/configure
+gztool/depcomp
+gztool/install-sh
+gztool/missing
+gztool/gztool
+gztool/gztool.o
+gztool/stamp-h1
+gztool/test-driver
+gztool/test-suite.log
+gztool/test.sh.*
+gztool/.deps
+
 conf/cool-retro-term/*
 pics/*
 releases/*

@@ -1,12 +1,21 @@
 #!/bin/bash
 
 usage() {
-  echo "Usage: ./Install-bin.sh /path/to/Asciiville_<version>-<release>.<arch>.<suffix>"
+  echo "Usage: sudo ./Install-bin.sh /path/to/Asciiville_<version>-<release>.<arch>.<suffix>"
   echo "Where:"
   printf "\n\t<suffix> can be a gzip'd tar archive with filename suffix 'tgz'"
   printf "\n\t\tor a zip archive with filename suffix 'zip'\n"
   echo "Download the latest gzip'd or zip'd binary distribution archive at"
   echo "https://github.com/doctorfree/Asciiville/releases"
+  exit 1
+}
+
+user=`id -u -n`
+
+[ "${user}" == "root" ] || {
+  echo "Install-bin.sh must be run as the root user."
+  echo "Use 'sudo ./Install-bin.sh ...'"
+  echo "Exiting"
   exit 1
 }
 

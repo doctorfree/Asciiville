@@ -1,0 +1,3 @@
+https://github.com/chubin/awesome-console-services
+    A curated list of console services
+    Reachable via HTTP, HTTPS and other network protocols

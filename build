@@ -1,5 +1,8 @@
 #!/bin/bash
 #
+# build - compile and optionally install Asciiville components
+#
+
 build_btop() {
   # Repo: https://github.com/doctorfree/Asciiville
   #
@@ -35,9 +38,6 @@ build_cbftp() {
   #   sudo apt upgrade -y
   #   sudo apt install make g++ libssl-dev libncursesw5-dev
   #
-  # Usage: ./build-cbftp.sh [-i]
-  # Where -i indicates install cbftp after compiling
-
   [ -f bin/cbftp ] || make
   chmod +x bin/*
 
@@ -60,9 +60,6 @@ build_diagon() {
   #   sudo apt upgrade -y
   #   sudo apt install make uuid-dev libboost-graph-dev cmake default-jdk
   #
-  # Usage: ./build-diagon.sh [-i]
-  # Where -i indicates install diagon after compiling
-
   buildit=1
   [ -L build/diagon ] && {
     diagonpath=`realpath build/diagon`
@@ -88,14 +85,34 @@ build_diagon() {
   [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
 }
 
+build_gztool() {
+  #
+  # Repo: https://github.com/doctorfree/Asciiville
+  #
+  # Fork of Repo: https://github.com/circulosmeos/gztool
+  #
+  # Can be compiles simply with:
+  #   gcc -O3 -o gztool gztool.c -lz -lm
+  #
+  [ -f gztool ] || {
+    prefix="--prefix=/usr"
+    [ "${PREFIX}" ] && prefix="--prefix=${PREFIX}"
+    autoreconf --install
+    ./configure ${prefix}
+    make check
+  }
+
+  chmod +x gztool
+
+  [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
+}
+
 build_jp2a() {
   #
   # Repo: https://github.com/doctorfree/Asciiville
   #
   # Fork of Repo: https://github.com/cslarsen/jp2a
   #
-  # Usage: ./build-jp2a.sh [-i]
-  # Where -i indicates install jp2a after compiling
   [ -f src/jp2a ] || {
     prefix="--prefix=/usr"
     [ "${PREFIX}" ] && prefix="--prefix=${PREFIX}"
@@ -221,6 +238,14 @@ do
       [ -d ${PROJ} ] && {
         cd ${PROJ}
         build_diagon
+        cd ..
+      }
+      ;;
+    gztool)
+      PROJ=gztool
+      [ -d ${PROJ} ] && {
+        cd ${PROJ}
+        build_gztool
         cd ..
       }
       ;;

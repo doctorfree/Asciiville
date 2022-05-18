@@ -1,0 +1,5 @@
+# Magic local data for file(1) command.
+# Insert here your local magic data. Format is described in magic(5).
+
+0       string  \0\0\0\0\0\0\0\0gzipindx        GZIP index file (v0), usable with gztool
+0       string  \0\0\0\0\0\0\0\0gzipindX        GZIP index file (v1) with line info, usable with gztool
