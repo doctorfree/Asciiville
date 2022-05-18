@@ -86,10 +86,8 @@ fi
 %files
 %defattr(-,root,root)
 %attr(4755, games, games) /usr/games/bin/*
-%attr(0755, games, games) /usr/games/lib/ninvaders
 %attr(0644, games, games) /usr/games/lib/ninvaders/*
 %attr(0664, games, games) /usr/games/var/tetris-hiscores
-%attr(0755, games, games) /usr/games/var/nethack
 %attr(0755, games, games) /usr/games/var/nethack/bones
 %attr(0755, games, games) /usr/games/var/nethack/level
 %attr(0755, games, games) /usr/games/var/nethack/saves
@@ -105,5 +103,16 @@ fi
 %exclude %dir /usr/share
 %exclude %dir /usr/bin
 %exclude %dir /usr/games
+%exclude %dir /usr/games/bin
+%exclude %dir /usr/games/lib
+%exclude %dir /usr/games/share
+%exclude %dir /usr/games/var
+/usr/bin/*
+/usr/share/*
+/usr/games/gameserver
+/usr/games/nethack
+/usr/games/ninvaders
+/usr/games/tetris
+/usr/games/share/*
 
 %changelog
