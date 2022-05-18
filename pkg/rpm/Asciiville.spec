@@ -84,7 +84,6 @@ fi
 %preun
 
 %files
-/usr
 %defattr(-,root,root)
 %attr(4755, games, games) /usr/games/bin/*
 %attr(0755, games, games) /usr/games/lib/ninvaders
