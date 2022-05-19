@@ -192,6 +192,8 @@ gztool/test-driver
 gztool/test-suite.log
 gztool/test.sh.*
 gztool/.deps
+gztool/tests/test.sh.log
+gztool/tests/test.sh.trs
 
 conf/cool-retro-term/*
 pics/*

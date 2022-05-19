@@ -135,7 +135,21 @@ show_ascii() {
     echo "Exiting"
     exit 1
   }
-  asciiart="$1"
+  case "$1" in
+    *.asc)
+        compressed=
+        asciiart="$1"
+        ;;
+    *.gz)
+        compressed=1
+        gzip -cd $1 > /tmp/asciiart$$
+        asciiart="/tmp/asciiart$$"
+        ;;
+    *)
+        echo "Unsupported filename. Skipping ${asciiart}"
+        return 2
+        ;;
+  esac
 
   prep="\n${2}"
   numlines=0
@@ -185,6 +199,7 @@ show_ascii() {
     done < <(/bin/cat "${asciiart}")
   fi
   printf "\n"
+  [ "${compressed}" ] && rm -f "${asciiart}"
 }
 
 audio=
@@ -369,20 +384,28 @@ done
 
 [ "${list}" ] && {
   first=1
-  for art in ${ARTDIR}/*/*.asc
+  have_asc=1
+  have_agz=1
+  for art in ${ARTDIR}/*/*.asc ${ARTDIR}/*/*.asc.gz
   do
-      [ "${art}" == "${ARTDIR}/*/*.asc" ] && {
-          echo "No ascii art found in ${ARTDIR}"
-          echo "Ascii art files must have a '.asc' suffix"
-          [ "${fifo_name}" ] && send_done
-          exit 0
-      }
-      [ "${first}" ] && echo "Ascii Art in ${ARTDIR} :"
-      bart=`basename "${art}"`
-      bdir=`dirname "${art}"`
-      bdir=`basename "${bdir}"`
-      printf "\n\t${bdir}/${bart}"
-      first=
+    [ "${art}" == "${ARTDIR}/*/*.asc" ] && {
+      have_asc=
+      continue
+    }
+    [ "${art}" == "${ARTDIR}/*/*.asc.gz" ] && have_agz=
+    [ "${have_asc}" ] || [ "${have_agz}" ] || {
+      echo "No ascii art found in ${ARTDIR}"
+      echo "Ascii art files must have a '.asc' suffix"
+      [ "${fifo_name}" ] && send_done
+      exit 0
+    }
+    [ "${art}" == "${ARTDIR}/*/*.asc.gz" ] && continue
+    [ "${first}" ] && echo "Ascii Art in ${ARTDIR} :"
+    bart=`basename "${art}"`
+    bdir=`dirname "${art}"`
+    bdir=`basename "${bdir}"`
+    printf "\n\t${bdir}/${bart}"
+    first=
   done
   printf "\n\n"
   [ "${fifo_name}" ] && send_done
@@ -495,16 +518,24 @@ cleanup() {
 
 play_slide_show() {
   tput civis -- invisible
-  for art in ${SLIDE_DIR}/*.asc
+  have_asc=1
+  have_agz=1
+  for art in ${SLIDE_DIR}/*.asc ${SLIDE_DIR}/*.asc.gz
   do
     [ "${art}" == "${SLIDE_DIR}/*.asc" ] && {
+      have_asc=
+      continue
+    }
+    [ "${art}" == "${SLIDE_DIR}/*.asc.gz" ] && have_agz=
+    [ "${have_asc}" ] || [ "${have_agz}" ] || {
       termprofset ${termarg} -s ${txt_font_size}
       echo "No ascii art found in ${SLIDE_DIR}"
-      echo "Ascii art files must have a '.asc' suffix"
+      echo "Ascii art files must have a '.asc' or '.asc.gz' suffix"
       termprofset ${termarg} -R
       [ "${fifo_name}" ] && send_done
       exit 0
     }
+    [ "${art}" == "${SLIDE_DIR}/*.asc.gz" ] && continue
     [ "${first}" ] && {
       [ "${quiet}" ] || {
         termprofset ${termarg} -s ${txt_font_size}
@@ -531,7 +562,7 @@ play_slide_show() {
       first=
     }
     show_ascii "${art}"
-    [ $? -eq 3 ] || sleep ${delay}
+    [ $? -gt 1 ] || sleep ${delay}
   done
 }
 
@@ -743,30 +774,39 @@ else
   then
     show_ascii "${ARTDIR}/${art}.asc" "${tabs}"
   else
-    if [ -f "${ARTDIR}/${art}" ]
+    if [ -f "${ARTDIR}/${art}.asc.gz" ]
     then
-      show_ascii "${ARTDIR}/${art}" "${tabs}"
+      show_ascii "${ARTDIR}/${art}.asc.gz" "${tabs}"
     else
-      if [ -f "${art}.asc" ]
+      if [ -f "${ARTDIR}/${art}" ]
       then
-        show_ascii "${art}.asc" "${tabs}"
+        show_ascii "${ARTDIR}/${art}" "${tabs}"
       else
-        if [ -f "${art}" ]
+        if [ -f "${art}.asc" ]
         then
-          show_ascii "${art}" "${tabs}"
+          show_ascii "${art}.asc" "${tabs}"
         else
-          foundit=
-          for asc in ${ARTDIR}/*/${art}*.asc ${ARTDIR}/*/${art}*
-          do
-            [ "${asc}" == "${ARTDIR}/*/${art}*.asc" ] && continue 
-            [ "${asc}" == "${ARTDIR}/*/${art}*" ] && continue 
-            [ -f "${asc}" ] && {
-              foundit=1
-              show_ascii "${asc}" "${tabs}"
-              sleep 5
-            }
-          done
-          [ "${foundit}" ] || echo "Cannot locate ${art}"
+          if [ -f "${art}.asc.gz" ]
+          then
+            show_ascii "${art}.asc.gz" "${tabs}"
+          else
+            if [ -f "${art}" ]
+            then
+              show_ascii "${art}" "${tabs}"
+            else
+              foundit=
+              for asc in ${ARTDIR}/*/${art}*
+              do
+                [ "${asc}" == "${ARTDIR}/*/${art}*" ] && continue 
+                [ -f "${asc}" ] && {
+                  foundit=1
+                  show_ascii "${asc}" "${tabs}"
+                  sleep 5
+                }
+              done
+              [ "${foundit}" ] || echo "Cannot locate ${art}"
+            fi
+          fi
         fi
       fi
     fi
@@ -795,17 +835,27 @@ then
     then
       show_ascii "${ARTDIR}/${art}.asc" "${tabs}" ${LOLCAT}
     else
-      if [ -f "${ARTDIR}/${art}" ]
+      if [ -f "${ARTDIR}/${art}.asc.gz" ]
       then
-        show_ascii "${ARTDIR}/${art}" "${tabs}" ${LOLCAT}
+        show_ascii "${ARTDIR}/${art}.asc.gz" "${tabs}" ${LOLCAT}
       else
-        if [ -f "${art}.asc" ]
+        if [ -f "${ARTDIR}/${art}" ]
         then
-          show_ascii "${art}.asc" "${tabs}" ${LOLCAT}
+          show_ascii "${ARTDIR}/${art}" "${tabs}" ${LOLCAT}
         else
-          if [ -f "${art}" ]
+          if [ -f "${art}.asc" ]
           then
-            show_ascii "${art}" "${tabs}" ${LOLCAT}
+            show_ascii "${art}.asc" "${tabs}" ${LOLCAT}
+          else
+            if [ -f "${art}.asc.gz" ]
+            then
+              show_ascii "${art}.asc.gz" "${tabs}" ${LOLCAT}
+            else
+              if [ -f "${art}" ]
+              then
+                show_ascii "${art}" "${tabs}" ${LOLCAT}
+              fi
+            fi
           fi
         fi
       fi

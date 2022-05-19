@@ -79,17 +79,17 @@ fi
 #fi
 
 # Build gztool
-if [ -x build ]
-then
-  ./build gztool
-else
-  cd gztool
-  autoreconf --install
-  ./configure --prefix=/usr
-  make check
-  chmod +x gztool
-  cd ..
-fi
+#if [ -x build ]
+#then
+#  ./build gztool
+#else
+#  cd gztool
+#  autoreconf --install
+#  ./configure --prefix=/usr
+#  make check
+#  chmod +x gztool
+#  cd ..
+#fi
 
 # Build jp2a
 if [ -x build ]
@@ -174,7 +174,7 @@ ${SUDO} cp btop/bin/btop ${OUT_DIR}/${DESTDIR}/bin/btop
 ${SUDO} cp jp2a/src/jp2a ${OUT_DIR}/${DESTDIR}/bin/jp2a
 ${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
 ${SUDO} cp ddgr/ddgr ${OUT_DIR}/${DESTDIR}/bin/ddgr
-${SUDO} cp gztool/gztool ${OUT_DIR}/${DESTDIR}/bin/gztool
+#${SUDO} cp gztool/gztool ${OUT_DIR}/${DESTDIR}/bin/gztool
 
 # Revised NetHack install using UnNetHack mods
 cd games/nethack
@@ -246,7 +246,7 @@ ${SUDO} cp README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} pandoc -f gfm README.md | ${SUDO} tee ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README.html > /dev/null
 ${SUDO} cp VERSION ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp ddgr/README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-ddgr.md
-${SUDO} cp gztool/README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-gztool.md
+#${SUDO} cp gztool/README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-gztool.md
 ${SUDO} cp btop/README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-btop.md
 ${SUDO} cp btop/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-btop
 ${SUDO} cp btop/README.md ${OUT_DIR}/${DESTDIR}/share/btop/README.md
@@ -265,9 +265,11 @@ ${SUDO} cp -a art "${OUT_DIR}/${DESTDIR}/share/${PKG}/art"
 ${SUDO} cp -a music "${OUT_DIR}/${DESTDIR}/share/${PKG}/music"
 ${SUDO} cp -a tools "${OUT_DIR}/${DESTDIR}/share/${PKG}/tools"
 
+${SUDO} gzip ${OUT_DIR}/${DESTDIR}/share/${PKG}/art/*/*.asc
+
 ${SUDO} cp -a man/man1 ${OUT_DIR}/${DESTDIR}/share/man/man1
 ${SUDO} cp ddgr/ddgr.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
-${SUDO} cp gztool/gztool.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
+#${SUDO} cp gztool/gztool.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
 ${SUDO} cp jp2a/man/jp2a.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
 [ -d ${OUT_DIR}/${DESTDIR}/share/man/man6 ] || {
   ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/man/man6

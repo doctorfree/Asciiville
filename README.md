@@ -151,6 +151,23 @@ conversion and generation tools provided by Asciiville. Custom menus added
 to the Ascii Art Gallery folder will automatically appear in the
 `asciiville` menu selections.
 
+Beginning with Asciiville version 1.4.0 release 2, Asciiville will ship with
+gzip compressed ascii art gallery files. If you wish to compress your current
+pre-1.4.0r2 Asciiville ascii art gallery files then download and install
+[show_ascii_art](https://github.com/doctorfree/Asciiville/blob/main/bin/show_ascii_art).
+Install the updated `show_ascii_art` by copying it to `/usr/bin/` with the
+command `sudo cp show_ascii_art /usr/bin`.
+
+When creating custom ascii art galleries for use with Asciiville, compression
+is optional but can be used to reduce the disk size of ascii art files.  When
+choosing to compress ascii art files, a gallery's files must be compressed
+with `gzip`:
+
+```console
+cd /path/to/gallery
+sudo gzip *.asc
+```
+
 ## Asciiville Commands
 
 Asciiville adds the following commands to your system:
@@ -922,16 +939,16 @@ tutorial introduction to generating a new ASCII Art gallery and viewing it.
 Asciiville default galleries can be viewed using the interactive menus
 in the `asciiville` command. Select the *Ascii Art Slideshows* entry from
 the main menu, select the options you prefer (e.g. preferred terminal
-emulator and audio), and select the Ascii Art gallery you wish to view.
+emulator and audio), and select the ascii art gallery you wish to view.
 
 Note that the `cool-retro-term` terminal emulator will not, by default,
-display the full height of the Ascii Art included in Asciiville as the
+display the full height of the ascii art included in Asciiville as the
 font size is too large. To view Asciiville Ascii Art slideshows using
 `cool-retro-term`, first reduce the font scaling in the settings menu
 to about 0.5. All the other terminal emulators supported by default in
 Asciiville (`gnome-terminal`, `tilix`, and `xfce4-terminal`) are
 dynamically configured during slideshow presentations to scale font sizes
-so Ascii Art is displayed correctly.
+so ascii art is displayed correctly.
 
 ### ASCII Art Tools
 
