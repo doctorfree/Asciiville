@@ -54,6 +54,14 @@ macro index,pager A \
     "<pipe-message>khard add-email<return>" \
     "add the sender email address to khard"
 
+# Press Ctrl-b to scan for urls with urlscan
+macro index,pager \Cb \
+    "<pipe-message> urlscan<enter>" \
+    "call urlscan to extract URLs out of a message"
+macro attach,compose \Cb \
+    "<pipe-entry> urlscan<enter>" \
+    "call urlscan to extract URLs out of a message"
+
 ## Shortcuts
 macro index,pager <f2> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/gmail<enter><change-folder>!<enter>'
 macro index,pager <f3> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/main<enter><change-folder>!<enter>'

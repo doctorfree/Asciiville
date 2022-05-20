@@ -69,6 +69,7 @@ usage() {
   printf "\n\t\tIf 'command' is keyword 'maps' then display a map using mapscii"
   printf "\n\t\tIf 'command' is keyword 'moon' then display the phase of the Moon"
   printf "\n\t\tIf 'command' is keyword 'news' then display RSS news feeds"
+  printf "\n\t\tIf 'command' is keyword 'reddit' then display Reddit terminal UI"
   printf "\n\t\tIf 'command' is keyword 'search' then a web search is performed"
   printf "\n\t\tIf 'command' is keyword 'speed' then a speed test is performed"
   printf "\n\t\tIf 'command' is keyword 'translate' then the translation tool is run"
@@ -769,6 +770,7 @@ show_help_menu() {
     options+=("Show ASCII Art Man Page")
     options+=("Show Phase of Moon Man Page")
     options+=("Show Weather Report Man Page")
+    [ "${have_tuir}" ] && options+=("Terminal UI for Reddit Man Page")
     options+=("Tmux Multiplexer Man Page")
     [ "${have_w3m}" ] && options+=("W3m Web Browser Man Page")
     [ "${have_retro}" ] && options+=("Retro Terminal Man Page")
@@ -915,6 +917,10 @@ show_help_menu() {
           man show_weather
           break
           ;;
+        "Terminal"*,*|*,"Terminal"*)
+          man tuir
+          break
+          ;;
         "Tmux"*,*|*,"Tmux"*)
           man tmux
           break
@@ -962,9 +968,6 @@ show_help_menu() {
 
 
 show_select_menu() {
-  animation_menu=
-  art_menu=
-  journal_menu=
   main_menu=
   while true
   do
@@ -979,6 +982,7 @@ show_select_menu() {
     use_nethack="NO"
     use_ninvaders="NO"
     use_newsboat="NO"
+    use_tuir="NO"
     use_ranger="NO"
     use_tetris="NO"
     use_w3m="NO"
@@ -1018,6 +1022,9 @@ show_select_menu() {
         ;;
       tetris)
         use_tetris="YES"
+        ;;
+      tuir)
+        use_tuir="YES"
         ;;
       w3m*)
         use_w3m="YES"
@@ -1084,6 +1091,7 @@ show_select_menu() {
     [ "${have_tetris}" ] && options+=("Tetris Video Game      [${use_tetris}]")
     [ "${have_newsboat}" ] && options+=("Newsboat RSS Feeds     [${use_newsboat}]")
     [ "${have_ranger}" ] && options+=("Ranger File Manager    [${use_ranger}]")
+    [ "${have_tuir}" ] && options+=("Terminal UI for Reddit [${use_tuir}]")
     [ "${have_xfce4}" ] && options+=("XFCE4 Terminal         [${use_xfce4}]")
     [ "${have_gnome}" ] && options+=("Gnome Terminal         [${use_gnome}]")
     [ "${have_retro}" ] && options+=("Retro Terminal         [${use_retro}]")
@@ -1189,6 +1197,11 @@ show_select_menu() {
           "Ranger"*,*|*,"Ranger"*)
               COMMAND=ranger
               MTITLE="Ranger File Manager"
+              break
+              ;;
+          "Terminal"*,*|*,"Terminal"*)
+              COMMAND=tuir
+              MTITLE="Terminal UI for Reddit"
               break
               ;;
           "Tetris"*,*|*,"Tetris"*)
@@ -2855,6 +2868,7 @@ have_ninvaders=`type -p ninvaders`
 have_ranger=`type -p ranger`
 have_retro=`type -p cool-retro-term`
 have_tetris=`type -p tetris`
+have_tuir=`type -p tuir`
 have_asciiart=`type -p asciiart`
 have_asciijulia=`type -p asciijulia`
 have_asciiplasma=`type -p asciiplasma`
@@ -3001,6 +3015,10 @@ while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
               fi
             fi
           }
+          break
+          ;;
+      reddit|Reddit)
+          [ "${have_tuir}" ] && tuir
           break
           ;;
       search|Search)

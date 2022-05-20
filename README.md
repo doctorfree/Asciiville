@@ -68,6 +68,7 @@ The `asciiville` command can be used to invoke:
 * The lightweight character based file manager, `ranger`
 * The lightweight character based disk usage analyzer, `gdu`
 * The lightweight character based journal app, `jrnl`
+* The lightweight character based terminal UI for Reddit, `tuir`
 * One or more terminal emulators running a command
 * A tmux session
 * A command line web search
@@ -98,6 +99,7 @@ Integration is provided for:
 * [neomutt](http://neomutt.org/), character based email client
 * [newsboat](https://github.com/newsboat/newsboat), character based RSS feed reader
 * [ranger](https://ranger.github.io/), character based file manager
+* [tuir](https://gitlab.com/ajak/tuir/), terminal UI for Reddit
 * [gdu](https://github.com/dundee/gdu#readme), character based disk usage analyzer
 * [got](https://github.com/fedeztk/got), text based translation tool
 * [mpcplus](https://github.com/doctorfree/MusicPlayerPlus/blob/master/mpcplus/README.md), featureful ncurses based Music Player client
@@ -444,6 +446,7 @@ Generated configuration files include:
 * `$HOME/.config/neofetch/config.conf` : NeoFetch system info script
 * `$HOME/.config/jrnl/` : Journal command `jrnl` configuration file
 * `$HOME/.config/ranger/rifle.conf` : Rifle, Ranger's file opener
+* `$HOME/.config/tuir/` : TUIR terminal UI for Reddit configuration files
 * `$HOME/.mutt/muttrc` : Mutt email client
 * `$HOME/.newsboat/` : Newsboat RSS feed reader configuration files
 * `$HOME/.rainbow_config.json` : Rainbowstream Twitter client

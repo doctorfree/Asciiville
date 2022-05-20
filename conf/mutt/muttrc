@@ -44,3 +44,11 @@ set send_charset = "utf-8:iso-8859-1:us-ascii"
 set charset = "utf-8"
 # View html automatically
 auto_view text/html text/calendar application/ics
+
+###############################################################
+# When in either the index or the pager (reading a message),  #
+# you can hit ^B and the urlscan program will be invoked.     #
+###############################################################
+
+macro index \cb |urlscan\n 'call urlscan to extract URLs out of a message'
+macro pager \cb |urlscan\n 'call urlscan to extract URLs out of a message'

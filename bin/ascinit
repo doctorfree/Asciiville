@@ -296,6 +296,13 @@ shift $(( OPTIND - 1 ))
   }
 }
 
+# Setup default tuir configuration for this user unless one exists
+[ -d ${CONFDIR}/tuir ] && {
+  [ -d ${HOME}/.config/tuir ] || {
+    cp -a ${CONFDIR}/tuir ${HOME}/.config/tuir
+  }
+}
+
 # Setup default tmux configuration for this user unless
 # terminal-overrides has already been set
 [ -f ${CONFDIR}/tmux.conf ] && {
@@ -332,6 +339,7 @@ have_pip=`type -p pip`
 
 pip list | grep asciimatics > /dev/null || python3 -m pip install asciimatics
 pip list | grep rainbowstream > /dev/null || python3 -m pip install rainbowstream
+pip list | grep tuir > /dev/null || python3 -m pip install tuir
 
 # Install the 'jrnl' command if not already installed
 have_jrnl=`type -p jrnl`

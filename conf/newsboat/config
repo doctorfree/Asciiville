@@ -338,13 +338,14 @@ download-timeout 10
 #
 # If set, then `show-urls` will pipe the current article to a specific external
 # tool instead of using the internal URL viewer. This can be used to integrate
-# tools such as urlview.
+# tools such as urlview and urlscan.
 #
 # Syntax: <command>
 #
 # Default value: ""
 #
 # external-url-viewer "urlview"
+external-url-viewer "urlscan"
 
 ####  feed-sort-order
 #

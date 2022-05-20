@@ -178,12 +178,12 @@ selection process.
 \f[B]-c \[aq]command\[aq]\f[R]
 Indicates run \[aq]command\[aq] in selected terminal window.
 If \f[I]command\f[R] is one of the special keywords (\f[I]maps\f[R],
-\f[I]moon\f[R], \f[I]news\f[R], \f[I]search\f[R], \f[I]speed\f[R],
-\f[I]translate\f[R], \f[I]twitter\f[R], \f[I]weather\f[R]) then display
-a map, the phase of the Moon, run the \f[V]newsboat\f[R] RSS feed
-reader, perform a web search, perform a speed test, run the
-\f[V]got\f[R] text based translation tool, run the command line twitter
-client, or display a weather report.
+\f[I]moon\f[R], \f[I]news\f[R], \f[I]reddit\f[R], \f[I]search\f[R],
+\f[I]speed\f[R], \f[I]translate\f[R], \f[I]twitter\f[R],
+\f[I]weather\f[R]) then display a map, the phase of the Moon, run the
+\f[V]newsboat\f[R] RSS feed reader, perform a web search, perform a
+speed test, run the \f[V]got\f[R] text based translation tool, run the
+command line twitter client, or display a weather report.
 .TP
 \f[B]-d\f[R]
 Indicates use disk usage analyzer as command
@@ -349,6 +349,9 @@ Displays the Phase of the Moon using \f[V]wttr.in\f[R]
 \f[B]asciiville -c news\f[R]
 Launches the \f[V]newsboat\f[R] text based RSS feed reader in the
 current terminal
+.TP
+\f[B]asciiville -c reddit\f[R]
+Launches the \f[V]tuir\f[R] text based Reddit UI in the current terminal
 .TP
 \f[B]asciiville -c search\f[R]
 Launches the \f[V]ddgr\f[R] command line web search in the current
