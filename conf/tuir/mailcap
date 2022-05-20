@@ -540,15 +540,13 @@ video/*; mpv '%s' --autofit=640x480 --loop=inf; test=test -n "$DISPLAY"
 # Don't have a solution for albums yet
 image/x-imgur-album; echo
 
-image/*; feh -g 640x480 -. '%s'; test=test -n "$DISPLAY"
-
 # 256 color images using half-width unicode characters
 # Much higher quality than img2txt, but must be built from source
 # https://github.com/rossy/img2xterm
-image/*; curl -s '%s' | convert -resize 80x80 - jpg:/tmp/tuir.jpg && img2xterm /tmp/tuir.jpg; needsterminal; copiousoutput
+# image/*; curl -s '%s' | convert -resize 80x80 - jpg:/tmp/tuir.jpg && img2xterm /tmp/tuir.jpg; needsterminal; copiousoutput
 
-# Display images in classic ascii using img2txt and lib-caca
-image/*; curl -s '%s' | convert - jpg:/tmp/tuir.jpg && img2txt -f utf8 /tmp/tuir.jpg; needsterminal; copiousoutput
+# Display images in 256 colors using jp2a in Asciiville
+image/*; curl -s '%s' | convert -resize 80x80 - jpg:/tmp/tuir.jpg && jp2a --border --colors --term-fit /tmp/tuir.jpg; copiousoutput
 
 # Full motion videos - requires a framebuffer to view
 video/x-youtube; mpv -vo drm -quiet '%s'; needsterminal

@@ -1353,6 +1353,10 @@ image/x-rgb; /usr/bin/cacaview '%s'; description=RGB Image; nametemplate=%s.rgb;
 image/x-rgb; unset DISPLAY\; /usr/bin/cacaview '%s'; description=RGB Image; nametemplate=%s.rgb; needsterminal
 image/x-xpixmap; /usr/bin/cacaview '%s'; description=XPM Image; nametemplate=%s.xpm; test=test -n "$DISPLAY"
 image/x-xpixmap; unset DISPLAY\; /usr/bin/cacaview '%s'; description=XPM Image; nametemplate=%s.xpm; needsterminal
+
+# Display images in 256 colors using jp2a in Asciiville
+image/*; convert -resize 80x80 '%s' /tmp/w3m.jpg && jp2a --border --colors --term-fit /tmp/w3m.jpg; copiousoutput
+
 application/x-info; /usr/bin/info --subnodes -o /dev/stdout -f '%s' 2>/dev/null; copiousoutput; description=GNU Info document
 application/x-tar; /bin/tar tvf '%s'; print=/bin/tar tvf - | print text/plain:-; copiousoutput
 application/x-gtar; /bin/tar tvf '%s'; print=/bin/tar tvf - | print text/plain:-; copiousoutput
