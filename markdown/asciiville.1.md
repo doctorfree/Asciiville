@@ -65,6 +65,14 @@ art_font_size=6
 txt_font_size=24
 ```
 
+# SELECTING FILES AND FOLDERS
+
+In interactive menu mode, **asciiville** may prompt for the selection of ascii art file(s) and folders. The **asciiville** command utilizes the **ranger** file manager command for file and folder selection.
+
+Choosing a directory in Ranger is done by visiting a directory. Use the arrow keys to browse folders. Press 'Enter' to enter a directory. Create a new directory with `:mkdir <dirname>`. While in the directory you wish to select, quit Ranger with 'q'.
+
+Choosing a file in Ranger is done by visiting a directory and selecting a file. Use the arrow keys to browse folders. Press 'Enter' or 'Right Arrow' to enter a directory and 'Left Arrow' to go back up a directory. While in a directory, use the arrow keys to navigate to the file you wish to select. To select a single file, press 'Enter' when the file is highlighted. To select multiple files, press 'Space' and navigate to another file. All files selected with 'Space' will be added to your selections when you press 'Enter' on a selected file to complete the selection process.
+
 # COMMAND LINE OPTIONS
 
 *Terminal/Command options:*

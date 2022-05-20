@@ -2625,8 +2625,19 @@ choose_folder() {
 
 choose_ascii() {
   TMP="$(mktemp)"
-  ranger --choosefile="${TMP}" "${ARTDIR}" 1>&2
-  cat ${TMP}
+  ranger --choosefiles="${TMP}" "${ARTDIR}" 1>&2
+  artfiles=
+  while read line
+  do
+    if [ "${artfiles}" ]
+    then
+      artfiles="${artfiles},${line}"
+    else
+      artfiles="${line}"
+    fi
+  done < <(cat ${TMP})
+
+  echo "${artfiles}" 
   rm  -f ${TMP}
 }
 
@@ -2716,6 +2727,7 @@ select_output_dir() {
 }
 
 select_ascii() {
+  selectedAscii=
   if [ "${have_ranger}" ]
   then
     selectedAscii="$(choose_ascii)"
@@ -2724,7 +2736,7 @@ select_ascii() {
                           --title "Please select an ascii art file" \
                           --fselect ${ARTDIR}/ 14 48)
   fi
-  show_art_file "${selectedAscii}"
+  [ "${selectedAscii}" ] && show_art_file "${selectedAscii}"
 }
 
 select_song() {
