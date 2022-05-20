@@ -60,10 +60,10 @@ then
 fi
 
 usage() {
-  printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]"
-  printf "\n\t[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N]"
-  printf "\n\t[-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T]"
-  printf "\n\t[-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]\n"
+  printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F] [-g]"
+  printf "\n\t[-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p]"
+  printf "\n\t[-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show]"
+  printf "\n\t[-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1 [file2 ...]]\n"
   printf "\nTerminal/Command options:"
   printf "\n\t-c 'command' indicates use 'command'"
   printf "\n\t\tIf 'command' is keyword 'maps' then display a map using mapscii"
@@ -121,6 +121,7 @@ usage() {
   printf "\n\t-T indicates use a tmux session for either ASCIImatics or command"
   printf "\n\t-v displays the Asciiville version and exits"
   printf "\n\t-u displays this usage message and exits\n"
+  printf "\nRemaining arguments are filenames of ascii art to display\n"
   printf "\nInvoked without any arguments, 'asciiville' will display a menu\n"
   printf "\nType 'man asciiville' for detailed usage info on Asciiville"
   printf "\nType 'man asciisplash' for detailed usage info on Asciisplash"
@@ -510,9 +511,6 @@ wait_for_done() {
   # if fifo not found, create
   [ -p "${fifo_name}" ] || mkfifo "${fifo_name}"
 
-  # redirect fifo_name to fd 3
-  # exec 3< ${fifo_name}
-
   while true
   do
     # read line from fifo_name
@@ -526,10 +524,95 @@ wait_for_done() {
     fi
   done
 
-  # reset fd 3 redirection
-  # exec 3<&-
-
   rm -f ${fifo_name}
+}
+
+show_art_file() {
+  art="$1"
+  if [ "$2" ]
+  then
+    art_dir="-A $2"
+  else
+    art_dir=
+  fi
+  showargs="${art_dir} -v -C ${cycarg} ${lolarg} ${audarg}"
+  save_config
+  clear
+  if [ "${CURRENT}" ]
+  then
+    add_fullscreen
+    num_exp='^[0-9]+$'
+    termname=unknown
+    myppid=`ps -e | grep ${PPID} | awk ' { print $1 } '`
+    myppid=`echo ${myppid} | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`
+    if [[ ${myppid} =~ ${num_exp} ]]
+    then
+      parent=`ps -o ppid= -p ${myppid}`
+      parent=`echo ${parent} | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`
+      if [[ ${parent} =~ ${num_exp} ]]
+      then
+        termname=`ps -e | grep ${parent} | awk ' { print $4 } '`
+      fi
+    fi
+
+    case ${termname} in
+      gnome-terminal*)
+        show_ascii_art -e gnome ${showargs} -a ${art}
+        ;;
+      tilix*)
+        show_ascii_art -e tilix ${showargs} -a ${art}
+        ;;
+      xfce4-terminal*)
+        xfce4-terminal --tab \
+             --title "${art} Slideshow" \
+             --color-bg=Black \
+             --hide-menubar \
+             --hide-borders \
+             --hide-toolbar \
+             --hide-scrollbar \
+             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs} -a ${art}" &
+        wait_for_done
+        ;;
+      *)
+        show_ascii_art ${showargs} -a ${art}
+        ;;
+    esac
+    remove_fullscreen
+  else
+    if [ "${RETRO}" ]
+    then
+      cool-retro-term --fullscreen \
+                      -e show_ascii_art ${showargs} -a ${art} > /dev/null 2>&1
+    else
+      if [ "${XFCE4}" ]
+      then
+        add_fullscreen
+        xfce4-terminal --fullscreen \
+             --color-bg=Black \
+             --hide-menubar \
+             --hide-borders \
+             --hide-toolbar \
+             --hide-scrollbar \
+             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs} -a ${art}" &
+        wait_for_done
+        clear
+        sleep 2
+        remove_fullscreen
+      else
+        if [ "${TILIX}" ]
+        then
+          tilix --full-screen \
+                --window-style=borderless \
+                --profile=Asciiville \
+                --command="show_ascii_art -e tilix ${showargs} -a ${art}"
+        else
+          gnome-terminal --window --full-screen \
+                         --profile=Asciiville \
+                         -- show_ascii_art -e gnome ${showargs} -a ${art}
+        fi
+      fi
+    fi
+  fi
 }
 
 play_slide_show() {
@@ -2822,6 +2905,7 @@ export BROWSER
 
 cycle=
 noaudio=
+showart=
 show_neofetch=
 SLIDESHOW=
 while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
@@ -3285,6 +3369,7 @@ while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
       ;;
     esac
 done
+shift $((OPTIND-1))
 
 # The -T option says use tmux, -S says do asciimatics
 # If we have both then do asciimatics in tmux
@@ -3326,6 +3411,14 @@ else
     fi
   fi
 fi
+
+artshow=
+[ "$1" ] && artshow=1
+for art in "$@"
+do
+  show_art_file ${art}
+done
+[ "${artshow}" ] && exit 0
 
 [ "${show_neofetch}" ] && {
   if [ "${use_lolcat}" ]

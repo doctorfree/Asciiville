@@ -2,6 +2,7 @@
 #
 ARTDIR="/usr/share/asciiville/art"
 FIG_WELCOME="Welcome To"
+FIG_CONTINUE="Press Enter to continue"
 FIG_ASCII="Asciiville"
 FIG_FONTS="/usr/share/figlet-fonts"
 LARGE_FONT="Bolger"
@@ -38,7 +39,7 @@ usage() {
   printf "\n\t[-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level]"
   printf "\n\t[-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r]"
   printf "\n\t[-s show] [-S song] [-t first_text] [-T second_text]"
-  printf "\n\t[-h height] [-w width] [-z] [-u]"
+  printf "\n\t[-h height] [-w width] [-v] [-z] [-u]"
   printf "\nWhere:"
   printf "\n\t-a 'art' specifies which ascii art to display"
   printf "\n\t\t'art' can be the relative path to a file in:"
@@ -91,6 +92,7 @@ usage() {
   printf "\n\t-w 'width' specifies the width of the converted ascii art"
   printf "\n\t\tIf only one of 'width' and 'height' is provided,"
   printf "\n\t\tcalculate the other from image aspect ratio"
+  printf "\n\t-v indicates view ascii art and prompt to continue"
   printf "\n\t-z indicates save converted image ascii art in art_dir\n\n"
   exit 1
 }
@@ -199,7 +201,14 @@ show_ascii() {
     done < <(/bin/cat "${asciiart}")
   fi
   printf "\n"
+
+  [ "${viewshow}" ] && {
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_CONTINUE}
+    tput civis -- invisible
+    read -p "" answer
+  }
   [ "${compressed}" ] && rm -f "${asciiart}"
+  [ "${viewshow}" ] && return 4
 }
 
 audio=
@@ -226,11 +235,12 @@ save_art=
 height=
 numtabs=0
 slideshow=
+viewshow=
 tabs=
 width=
 have_convert=`type -p convert`
 have_jp2a=`type -p jp2a`
-while getopts "a:A:bBcCD:d:e:gh:i:I:K:l:LF:f:n:N:oO:Pp:qrs:S:t:T:w:zu" flag; do
+while getopts "a:A:bBcCD:d:e:gh:i:I:K:l:LF:f:n:N:oO:Pp:qrs:S:t:T:vw:zu" flag; do
   case $flag in
       a)
           art="${OPTARG}"
@@ -369,6 +379,9 @@ while getopts "a:A:bBcCD:d:e:gh:i:I:K:l:LF:f:n:N:oO:Pp:qrs:S:t:T:w:zu" flag; do
           ;;
       h)
           height="${OPTARG}"
+          ;;
+      v)
+          viewshow=1
           ;;
       w)
           width="${OPTARG}"
@@ -733,9 +746,11 @@ clear
   termprofset ${termarg} -s ${txt_font_size}
   figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME}
   figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII}
+  tput civis -- invisible
   sleep ${delay}
 }
 
+clear
 termprofset ${termarg} -s ${art_font_size}
 if [ "${input_image}" ]
 then
@@ -770,6 +785,7 @@ then
   fi
   show_ascii "/tmp/${image_name}$$.asc" "${tabs}"
 else
+  tput civis -- invisible
   if [ -f "${ARTDIR}/${art}.asc" ]
   then
     show_ascii "${ARTDIR}/${art}.asc" "${tabs}"
