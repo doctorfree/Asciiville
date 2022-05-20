@@ -24,6 +24,7 @@ utilities to perform common operations in a text-only environment.
         1. [NeoMutt encrypted passwords](#neomutt-encrypted-passwords)
         1. [Replacing an existing NeoMutt configuration](#replacing-an-existing-neomutt-configuration)
     1. [Mutt email configuration](#mutt-email-configuration)
+    1. [Tuir Reddit client configuration](#tuir-reddit-client-configuration)
 1. [Documentation](#documentation)
     1. [Btop++ README](#btop++-readme)
     1. [Cbftp README](#cbftp-readme)
@@ -578,6 +579,35 @@ files rather than your previously configured setup, move the existing
 There are many Mutt configuration guides on the Internet.
 ArchLinux has a good guide at
 [https://wiki.archlinux.org/title/Mutt](https://wiki.archlinux.org/title/Mutt).
+
+### Tuir Reddit client configuration
+
+The `tuir` command is a text based user interface for Reddit. A `tuir`
+configuration is setup as part of the `ascinit` Asciiville initialization
+and this configuration should work well for most users. However, if you wish to
+login to your Reddit account using `tuir` then you will first need to generate
+an OAuth client id and secret with Reddit. This process is described at:
+
+[https://github.com/reddit-archive/reddit/wiki/oauth2](https://github.com/reddit-archive/reddit/wiki/oauth2)
+
+First visit
+[https://www.reddit.com/prefs/apps/](https://www.reddit.com/prefs/apps/)
+and click "Create another app ..." at the bottom of the page. You can use
+whatever you like for the Name of the app, I used 'tuir'. Make sure that the
+'redirect uri' is `http://127.0.0.1:65000/` or whatever you have set it to in
+`$HOME/.config/tuir/tuir.cfg` (most configurations will be unchanged and
+can use `http://127.0.0.1:65000/`). I left the 'about url' blank.
+
+After you have completed the process of creating a new app in Reddit,
+update your `$HOME/.config/tuir/tuir.cfg` with your new `oauth_client_id`
+and `oauth_client_secret`. These can be found back up towards the top of
+the newly created app page.
+
+After updating `tuir.cfg` with the new id and secret, open `tuir` and attempt
+to login the Reddit by pressing the 'u' key while in tuir. This should open
+your default browser and take you to Reddit where you can give your new app
+authorization, leave the browser, and go back to `tuir` where you should now
+be logged in.
 
 ## Documentation
 
