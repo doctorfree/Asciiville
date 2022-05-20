@@ -26,7 +26,7 @@ Email/FTP/File/Web clients, and character based utilities
 \f[B]asciiville\f[R] [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]
 [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p]
 [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show] [-w]
-[-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]
+[-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1 [file2 ...]]
 .PP
 Invoked without any arguments or with the \f[V]-i\f[R] argument,
 \f[V]asciiville\f[R] displays an interactive dialog menu.
@@ -257,7 +257,11 @@ Indicates display ASCIImatics splash animation
 \f[B]-V \[aq]show\[aq]\f[R]
 Displays an ascii art slide show
 .RS
-\[aq]show\[aq] can be Art, Fractals, Lyap, Mixed, Owls, Waterfalls
+\[aq]show\[aq] can be one of \[aq]Art\[aq], \[aq]Doctorwhen\[aq],
+\[aq]Dragonflies\[aq], \[aq]Fractals\[aq], \[aq]Friends\[aq],
+\[aq]Iterated\[aq], \[aq]Lyapunov\[aq], \[aq]Nature\[aq],
+\[aq]Owls\[aq], \[aq]Space\[aq], \[aq]Wallpapers\[aq], or
+\[aq]Waterfalls\[aq]
 .RE
 .TP
 \f[B]-Z\f[R]
@@ -279,6 +283,17 @@ Displays the Asciiville version and exits
 .TP
 \f[B]-u\f[R]
 Displays this usage message and exits
+.PP
+Remaining arguments are filenames of ascii art to display
+.PP
+Ascii art filenames can be relative to the Ascii Art Gallery folder and
+need not specify the filename suffix.
+For example:
+.PP
+\f[B]asciiville -L 2 Friends/tux Doctorwhen/Capitola_Village_Vivid\f[R]
+.PP
+Invoked without any arguments, \f[B]asciiville\f[R] will display an
+interactive menu
 .SH EXAMPLES
 .TP
 \f[B]asciiville\f[R]

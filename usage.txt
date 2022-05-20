@@ -1,7 +1,7 @@
-Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]
-	[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N]
-	[-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T]
-	[-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]
+Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F] [-g]
+	[-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p]
+	[-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show]
+	[-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1 [file2 ...]]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
@@ -51,8 +51,9 @@ Slideshow/ASCIImatics animation options:
 		or ~/Music/
 	-S indicates display ASCIImatics splash animation
 	-V 'show' displays an ascii art slide show
-		'show' can be Art, Doctorwhen, Dragonflies, Fractals,
-			Lyap, Mixed, Owls, Space, or Waterfalls
+		'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies',
+			'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature',
+			'Owls', 'Space', 'Wallpapers', or 'Waterfalls'
 	-Z indicates do not play audio during slideshow/animation
 
 General options:
@@ -62,4 +63,9 @@ General options:
 	-v displays the Asciiville version and exits
 	-u displays this usage message and exits
 
-Invoked without any arguments, 'asciiville' will display a menu
+Remaining arguments are filenames of ascii art to display
+	Ascii art filenames can be relative to the Ascii Art Gallery folder
+	and need not specify the filename suffix. For example:
+		asciiville -L 2 Friends/tux Doctorwhen/Capitola_Village_Vivid
+
+Invoked without any arguments, 'asciiville' will display an interactive menu

@@ -644,10 +644,10 @@ The usage message for `asciiville` provides a brief summary of the command
 line options:
 
 ```
-Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]
-	[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N]
-	[-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T]
-	[-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]
+Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F] [-g]
+	[-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p]
+	[-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show]
+	[-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1 [file2 ...]]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
@@ -697,8 +697,9 @@ Slideshow/ASCIImatics animation options:
 		or ~/Music/
 	-S indicates display ASCIImatics splash animation
 	-V 'show' displays an ascii art slide show
-		'show' can be Art, Doctorwhen, Dragonflies, Fractals,
-			Lyap, Mixed, Owls, Space, or Waterfalls
+		'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies',
+			'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature',
+			'Owls', 'Space', 'Wallpapers', or 'Waterfalls'
 	-Z indicates do not play audio during slideshow/animation
 
 General options:
@@ -708,27 +709,46 @@ General options:
 	-v displays the Asciiville version and exits
 	-u displays this usage message and exits
 
-Invoked without any arguments, 'asciiville' will display a menu
+Remaining arguments are filenames of ascii art to display
+	Ascii art filenames can be relative to the Ascii Art Gallery folder
+	and need not specify the filename suffix. For example:
+		asciiville -L 2 Friends/tux Doctorwhen/Capitola_Village_Vivid
+
+Invoked without any arguments, 'asciiville' will display an interactive menu
 ```
 
 #### Usage message for the `show_ascii_art` command
 
 ```
-Usage: show_ascii_art [-a art] [-A art_dir] [-b] [-c] [-C]
-	[-d font_dir] [-D seconds] [-F large_font] [-f small_font] [-g]
-	[-i image] [-l] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-q] [-r] [-s show]
-	[-S] [-u] [-t first_text] [-T second_text] [-h height] [-w width]
+Usage: show_ascii_art [-a art[,art2,...]] [-A art_dir] [-b] [-B] [-c] [-C]
+	[-d font_dir] [-D seconds] [-e term] [-F large_font] [-f small_font]
+	[-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level]
+	[-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r]
+	[-s show] [-S song] [-t first_text] [-T second_text]
+	[-h height] [-w width] [-v] [-z] [-u]
 Where:
-	-a 'art' specifies which ascii art to display
+	-a 'art' specifies ascii art file(s) to display
+		multiple files are separated by a comma with no spaces
+		(e.g. '-a Friends/tux,Doctorwhen/Capitola_Village_Vivid')
+		'art' can be the relative path to a file in:
+			/usr/share/asciiville/art
+		or the path to a file, with or without file extension
 	-A 'art_dir' specifies the path to the ascii art folder
 	-b when generating ascii art use a border
-	-c when generating ascii art use ANSI colors
+	-B use backup song when playing audio in slideshows
+	-c cycle slideshow endlessly (Ctrl-c to exit show)
 	-C center ascii art on screen if border detected
 	-d 'font_dir' specifies the path to the figlet fonts
 	-D 'seconds' specifies the delay, in seconds, between screens
+	-e 'term' specifies the terminal in which execution occurs
+		'term' can be one of 'gnome', 'xfce4', or 'tilix'
 	-g convert image to grayscale
 	-i 'image' specifies an image file to convert to ascii art
-	-l use lolcat coloring
+	-I 'input_dir' generates ascii art from all images in 'input_dir'
+		and saves them in the directory specified with '-O output_dir'
+		(defaults to current directory if '-O output_dir' is specified)
+	-K 'fifo_name' use a FIFO to communicate back to caller when done
+	-l 'level' use lolcat coloring, 'level' can be '1' or '2' (animate)
 	-L lists the ascii art in the 'art_dir' and exits
 	-f 'small_font' specifies the figlet font to use for small text
 	-F 'large_font' specifies the figlet font to use for large text
@@ -737,6 +757,9 @@ Where:
 		'depth' can be '4' (for ANSI), '8' (for 256 color palette)
 		or '24' (for truecolor or 24-bit color)
 	-o indicates overwrite any existing ascii art when saving
+	-O 'output_dir' generates ascii art from all images in the
+		directory specified with '-I' and saves them in 'output_dir'
+	-P indicates play audio during slideshow
 	-p 'palette' specifies which character set to use for ascii art
 		'palette' can be one of 'def', 'long', 'rev', 'longrev'
 		'def' is the default set, 'long' a long set,
@@ -745,8 +768,11 @@ Where:
 	-q don't display text, just the ascii art
 	-r indicates select random fonts
 	-s 'show' slide show of ascii art
-		'show' can be Art, Fractals, Lyap, Owls, Waterfalls, Mixed
-	-S indicates save converted image ascii art in art_dir
+		'show' can be:
+			'Art', 'Doctorwhen', 'Dragonflies', 'Fractals', 'Friends', 'Iterated'
+			'Lyapunov', 'Nature', 'Owls', 'Space', 'Wallpapers', 'Waterfalls'
+		or a custom folder name (with '-A art_dir')
+	-S 'song' use 'song' as audio track
 	-t 'first_text' specifies the first text to display
 	-T 'second_text' specifies the second text to display
 	-u displays this usage message and exits
@@ -754,6 +780,8 @@ Where:
 	-w 'width' specifies the width of the converted ascii art
 		If only one of 'width' and 'height' is provided,
 		calculate the other from image aspect ratio
+	-v indicates view ascii art and prompt to continue
+	-z indicates save converted image ascii art in art_dir
 ```
 
 #### Usage message for the `asciisplash` command

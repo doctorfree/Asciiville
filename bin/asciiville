@@ -112,8 +112,9 @@ usage() {
   printf "\n\t\tor ~/Music/"
   printf "\n\t-S indicates display ASCIImatics splash animation"
   printf "\n\t-V 'show' displays an ascii art slide show"
-  printf "\n\t\t'show' can be Art, Doctorwhen, Dragonflies, Fractals,"
-  printf "\n\t\t\tLyap, Mixed, Owls, Space, or Waterfalls"
+  printf "\n\t\t'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies',"
+  printf "\n\t\t\t'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature',"
+  printf "\n\t\t\t'Owls', 'Space', 'Wallpapers', or 'Waterfalls'"
   printf "\n\t-Z indicates do not play audio during slideshow/animation\n"
   printf "\nGeneral options:"
   printf "\n\t-k indicates kill Asciiville tmux sessions and ASCIImatics scripts"
@@ -121,8 +122,11 @@ usage() {
   printf "\n\t-T indicates use a tmux session for either ASCIImatics or command"
   printf "\n\t-v displays the Asciiville version and exits"
   printf "\n\t-u displays this usage message and exits\n"
-  printf "\nRemaining arguments are filenames of ascii art to display\n"
-  printf "\nInvoked without any arguments, 'asciiville' will display a menu\n"
+  printf "\nRemaining arguments are filenames of ascii art to display"
+  printf "\n\tAscii art filenames can be relative to the Ascii Art Gallery folder"
+  printf "\n\tand need not specify the filename suffix. For example:"
+  printf "\n\t\tasciiville -L 2 Friends/tux Doctorwhen/Capitola_Village_Vivid\n"
+  printf "\nInvoked without any arguments, 'asciiville' will display an interactive menu\n"
   printf "\nType 'man asciiville' for detailed usage info on Asciiville"
   printf "\nType 'man asciisplash' for detailed usage info on Asciisplash"
   printf "\nType 'man btop' for detailed usage info on the Btop system monitor"
@@ -3170,6 +3174,7 @@ while getopts "Aabc:CdfFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
           use_lol="YES"
           LOLCAT="${LOLCAT_NORM}"
         fi
+        lolarg="-l ${use_lolcat}"
       }
       ;;
     m)
@@ -3436,13 +3441,17 @@ else
   fi
 fi
 
-artshow=
-[ "$1" ] && artshow=1
+artfiles=
+[ "$1" ] && artfiles="$1"
 for art in "$@"
 do
-  show_art_file ${art}
+  [ "${art}" == "${artfiles}" ] && continue
+  artfiles="${artfiles},${art}"
 done
-[ "${artshow}" ] && exit 0
+[ "${artfiles}" ] && {
+  show_art_file "${artfiles}"
+  exit 0
+}
 
 [ "${show_neofetch}" ] && {
   if [ "${use_lolcat}" ]

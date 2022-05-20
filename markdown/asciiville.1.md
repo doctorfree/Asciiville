@@ -10,7 +10,7 @@ asciiville - Launch a terminal emulator and specified character based command, a
 and character based utilities
 
 # SYNOPSIS
-**asciiville** [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u]
+**asciiville** [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1 [file2 ...]]
 
 Invoked without any arguments or with the `-i` argument, `asciiville` displays an interactive dialog menu.
 
@@ -29,37 +29,15 @@ Asciiville preferences are maintained in `$HOME/.config/asciiville/config`. Pref
 
 # CONFIGURATION
 
-The `asciiville` command initializes some configuration settings by reading
-the file `$HOME/.config/asciiville/config`. These are user configurable and
-saved each time the `asciiville` command exits. A sample Asciiville
-configuration file is provided below. In this sample configuration the
-*ARTDIR* is set to `/usr/share/asciiville/art`, the default Asciiville
-Ascii Art galleries folder. To change the Ascii Art galleries folder,
-modify this setting. For example, to change where `asciiville` looks for
-Ascii Art galleries, this setting could be modified to:
+The `asciiville` command initializes some configuration settings by reading the file `$HOME/.config/asciiville/config`. These are user configurable and saved each time the `asciiville` command exits. A sample Asciiville configuration file is provided below. In this sample configuration the *ARTDIR* is set to `/usr/share/asciiville/art`, the default Asciiville Ascii Art galleries folder. To change the Ascii Art galleries folder, modify this setting. For example, to change where `asciiville` looks for Ascii Art galleries, this setting could be modified to:
 
 ```
 ARTDIR=${HOME}/Pictures/AsciiArt
 ```
 
-Asciiville commands would then look in `$HOME/Pictures/AsciiArt`
-for Ascii Art galleries rather than `/usr/share/asciiville/art`.
+Asciiville commands would then look in `$HOME/Pictures/AsciiArt` for Ascii Art galleries rather than `/usr/share/asciiville/art`.
 
-Of particular interest are the `art_font_size` and `txt_font_size`
-configuration settings. These control the size of the font used to
-display Ascii Art slideshows and the Figlet text in slideshows.
-Individual display devices differ in resolution. Terminal emulator
-windows used for display of Ascii Art vary in number of rows and columns
-available. The Ascii Art included with Asciiville was generated in fairly
-high resolution. Reducing the `art_font_size` will decrease the amount
-of screen the art display requires while increasing that font size will
-increase the size of the art displayed. Similarly, decreasing or increasing
-the `txt_font_size` will shrink or enlargen the Figlet text displayed.
-The default settings for these two configuration parameters are '4' and
-'20'. If the art displayed during a slideshow is too small or you wish
-to make it larger, change `art_font_size=4` to `art_font_size=6` and
-`txt_font_size=20` to `txt_font_size=24`. Some experimentation may be
-required to fit the art to your display and terminal emulator window.
+Of particular interest are the `art_font_size` and `txt_font_size` configuration settings. These control the size of the font used to display Ascii Art slideshows and the Figlet text in slideshows.  Individual display devices differ in resolution. Terminal emulator windows used for display of Ascii Art vary in number of rows and columns available. The Ascii Art included with Asciiville was generated in fairly high resolution. Reducing the `art_font_size` will decrease the amount of screen the art display requires while increasing that font size will increase the size of the art displayed. Similarly, decreasing or increasing the `txt_font_size` will shrink or enlargen the Figlet text displayed.  The default settings for these two configuration parameters are '4' and '20'. If the art displayed during a slideshow is too small or you wish to make it larger, change `art_font_size=4` to `art_font_size=6` and `txt_font_size=20` to `txt_font_size=24`. Some experimentation may be required to fit the art to your display and terminal emulator window.
 
 A sample Asciiville configuration file `$HOME/.config/asciiville/config`:
 
@@ -192,7 +170,7 @@ txt_font_size=24
 **-V 'show'**
 : Displays an ascii art slide show
 
-    'show' can be Art, Fractals, Lyap, Mixed, Owls, Waterfalls
+    'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies', 'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature', 'Owls', 'Space', 'Wallpapers', or 'Waterfalls'
 
 **-Z**
 : Indicates do not play audio during slideshow/animation
@@ -213,6 +191,15 @@ txt_font_size=24
 
 **-u**
 : Displays this usage message and exits
+
+Remaining arguments are filenames of ascii art to display
+
+Ascii art filenames can be relative to the Ascii Art Gallery folder
+and need not specify the filename suffix. For example:
+
+**asciiville -L 2 Friends/tux Doctorwhen/Capitola_Village_Vivid**
+
+Invoked without any arguments, **asciiville** will display an interactive menu
 
 # EXAMPLES
 **asciiville**

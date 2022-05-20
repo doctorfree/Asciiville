@@ -9,19 +9,34 @@ date: April 24, 2022
 show_ascii_art - display ascii art
 
 # SYNOPSIS
-**show_ascii_art** [-a art] [-A art_dir] [-b] [-B] [-c] [-C] [-d font_dir] [-D seconds] [-e term] [-F large_font] [-f small_font] [-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S song] [-t first_text] [-T second_text] [-h height] [-w width] [-v] [-z] [-u]
+**show_ascii_art** [-a art[,art2,...]] [-A art_dir] [-b] [-B] [-c] [-C] [-d font_dir] [-D seconds] [-e term] [-F large_font] [-f small_font] [-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S song] [-t first_text] [-T second_text] [-h height] [-w width] [-v] [-z] [-u]
 
 # DESCRIPTION
-The *show_ascii_art* command displays one of the ascii art images included in
+The *show_ascii_art* command displays one or more of the ascii art images included in
 Asciiville. Command line options can be used to tell *show_ascii_art* to create
 a new ascii art image from an image file in any format. Other command line
 options can be used to specify the width and heigh of the converted image,
 the fonts used to display accompanying text, and the text to display.
 
+The *show_ascii_art* command is not intended as the primary user interface for
+ascii art display. Rather, use the *asciiville* command which provides options
+for the generation and display of ascii art using *show_ascii_art* as a backend.
+See the **asciiville**(1) man page (`man asciiville`).
+
 # COMMAND LINE OPTIONS
 
 **-a 'art'**
-: specifies which ascii art to display
+: specifies ascii art file(s) to display
+
+    multiple files are separated by a comma with no spaces
+
+        (e.g. `-a Friends/tux,Doctorwhen/Capitola_Village_Vivid`)
+
+    'art' can be the relative path to a file in:
+
+        `/usr/share/asciiville/art/`
+
+    or the path to a file, with or without file extension
 
 **-A 'art_dir'**
 : specifies the path to the ascii art folder
@@ -40,6 +55,11 @@ the fonts used to display accompanying text, and the text to display.
 
 **-D 'seconds'**
 : specifies the delay, in seconds, between screens
+
+**-e 'term'**
+: specifies the terminal in which execution occurs
+
+    'term' can be one of 'gnome', 'xfce4', or 'tilix'
 
 **-f 'small_font'**
 : specifies the figlet font to use for small text
