@@ -557,10 +557,10 @@ show_art_file() {
 
     case ${termname} in
       gnome-terminal*)
-        show_ascii_art -e gnome ${showargs} -a ${art}
+        show_ascii_art -e gnome ${showargs} -a "${art}"
         ;;
       tilix*)
-        show_ascii_art -e tilix ${showargs} -a ${art}
+        show_ascii_art -e tilix ${showargs} -a "${art}"
         ;;
       xfce4-terminal*)
         xfce4-terminal --tab \
@@ -570,11 +570,11 @@ show_art_file() {
              --hide-borders \
              --hide-toolbar \
              --hide-scrollbar \
-             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs} -a ${art}" &
+             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs} -a '${art}'" &
         wait_for_done
         ;;
       *)
-        show_ascii_art ${showargs} -a ${art}
+        show_ascii_art ${showargs} -a "${art}"
         ;;
     esac
     remove_fullscreen
@@ -582,7 +582,7 @@ show_art_file() {
     if [ "${RETRO}" ]
     then
       cool-retro-term --fullscreen \
-                      -e show_ascii_art ${showargs} -a ${art} > /dev/null 2>&1
+                      -e show_ascii_art ${showargs} -a "${art}" > /dev/null 2>&1
     else
       if [ "${XFCE4}" ]
       then
@@ -593,7 +593,7 @@ show_art_file() {
              --hide-borders \
              --hide-toolbar \
              --hide-scrollbar \
-             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs} -a ${art}" &
+             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs} -a '${art}'" &
         wait_for_done
         clear
         sleep 2
@@ -604,11 +604,11 @@ show_art_file() {
           tilix --full-screen \
                 --window-style=borderless \
                 --profile=Asciiville \
-                --command="show_ascii_art -e tilix ${showargs} -a ${art}"
+                --command="show_ascii_art -e tilix ${showargs} -a '${art}'"
         else
           gnome-terminal --window --full-screen \
                          --profile=Asciiville \
-                         -- show_ascii_art -e gnome ${showargs} -a ${art}
+                         -- show_ascii_art -e gnome ${showargs} -a "${art}"
         fi
       fi
     fi
@@ -645,10 +645,10 @@ play_slide_show() {
 
     case ${termname} in
       gnome-terminal*)
-        show_ascii_art -e gnome ${showargs} -s ${showname}
+        show_ascii_art -e gnome ${showargs} -s "${showname}"
         ;;
       tilix*)
-        show_ascii_art -e tilix ${showargs} -s ${showname}
+        show_ascii_art -e tilix ${showargs} -s "${showname}"
         ;;
       xfce4-terminal*)
         xfce4-terminal --tab \
@@ -658,11 +658,11 @@ play_slide_show() {
              --hide-borders \
              --hide-toolbar \
              --hide-scrollbar \
-             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs} -s ${showname}" &
+             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs} -s '${showname}'" &
         wait_for_done
         ;;
       *)
-        show_ascii_art ${showargs} -s ${showname}
+        show_ascii_art ${showargs} -s "${showname}"
         ;;
     esac
     remove_fullscreen
@@ -670,7 +670,7 @@ play_slide_show() {
     if [ "${RETRO}" ]
     then
       cool-retro-term --fullscreen \
-                      -e show_ascii_art ${showargs} -s ${showname} > /dev/null 2>&1
+                      -e show_ascii_art ${showargs} -s "${showname}" > /dev/null 2>&1
     else
       if [ "${XFCE4}" ]
       then
@@ -681,7 +681,7 @@ play_slide_show() {
              --hide-borders \
              --hide-toolbar \
              --hide-scrollbar \
-             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs} -s ${showname}" &
+             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs} -s '${showname}'" &
         wait_for_done
         clear
         sleep 2
@@ -692,11 +692,11 @@ play_slide_show() {
           tilix --full-screen \
                 --window-style=borderless \
                 --profile=Asciiville \
-                --command="show_ascii_art -e tilix ${showargs} -s ${showname}"
+                --command="show_ascii_art -e tilix ${showargs} -s '${showname}'"
         else
           gnome-terminal --window --full-screen \
                          --profile=Asciiville \
-                         -- show_ascii_art -e gnome ${showargs} -s ${showname}
+                         -- show_ascii_art -e gnome ${showargs} -s "${showname}"
         fi
       fi
     fi
@@ -1360,6 +1360,7 @@ show_art_menu() {
       [ "${ascii_dir_name}" == "Dragonflies" ] && ascii_dir_name="Dragonfly"
       options+=("${ascii_dir_name} Art Slideshow")
     done
+    options+=("Select ASCII Art")
     options+=("Generate ASCII Art")
     options+=("Cycle Slideshow       [${cyclestat}]")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring   [${use_lol}]")
@@ -1554,11 +1555,15 @@ show_art_menu() {
               fi
               break
               ;;
+          "Select ASCII"*,*|*,"Select ASCII"*)
+              select_ascii
+              break
+              ;;
           "Generate"*,*|*,"Generate"*)
               generate_art
               break
               ;;
-          "Select"*,*|*,"Select"*)
+          "Select Song"*,*|*,"Select Song"*)
               select_song
               break
               ;;
@@ -1997,7 +2002,7 @@ show_journal_menu() {
       options+=("Encrypt Journal")
     fi
     [ "${have_splash}" ] && options+=("Animations Menu")
-    [ "${have_showascii}" ] && options+=("Ascii Art Slideshows")
+    [ "${have_showascii}" ] && options+=("Ascii Art")
     options+=("Main Menu" "Quit")
     select opt in "${options[@]}"
     do
@@ -2229,7 +2234,7 @@ show_main_menu() {
     }
     PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORMAL}"
     options=()
-    [ "${have_showascii}" ] && options+=("Ascii Art Slideshows")
+    [ "${have_showascii}" ] && options+=("Ascii Art")
     [ "${have_splash}" ] && options+=("ASCIImatics Animations")
     options+=("Run ${show_comm} in ${show_term}")
     options+=("Select App and Terminal")
@@ -2609,14 +2614,21 @@ show_main_menu() {
 
 choose_folder() {
   TMP="$(mktemp)"
-  ranger --choosedir="${TMP}" ${HOME} 1>&2
+  ranger --choosedir="${TMP}" "${HOME}" 1>&2
+  cat ${TMP}
+  rm  -f ${TMP}
+}
+
+choose_ascii() {
+  TMP="$(mktemp)"
+  ranger --choosefile="${TMP}" "${ARTDIR}" 1>&2
   cat ${TMP}
   rm  -f ${TMP}
 }
 
 choose_song() {
   TMP="$(mktemp)"
-  ranger --choosefile="${TMP}" ${HOME}/Music 1>&2
+  ranger --choosefile="${TMP}" "${HOME}/Music" 1>&2
   cat ${TMP}
   rm  -f ${TMP}
 }
@@ -2699,6 +2711,18 @@ select_output_dir() {
   fi
 }
 
+select_ascii() {
+  if [ "${have_ranger}" ]
+  then
+    selectedAscii="$(choose_ascii)"
+  else
+    selectedAscii=$(dialog --stdout \
+                          --title "Please select an ascii art file" \
+                          --fselect ${ARTDIR}/ 14 48)
+  fi
+  show_art_file "${selectedAscii}"
+}
+
 select_song() {
   if [ "${have_ranger}" ]
   then
@@ -2709,8 +2733,8 @@ select_song() {
                           --fselect ${HOME}/Music/ 14 48)
   fi
   songfile=
-  file ${selectedSong} | grep -i audio > /dev/null || \
-  file ${selectedSong} | grep Ogg > /dev/null && songfile=1
+  file "${selectedSong}" | grep -i audio > /dev/null || \
+  file "${selectedSong}" | grep Ogg > /dev/null && songfile=1
   [ "${songfile}" ] && {
     SONG="${selectedSong}"
     songname=`basename "${SONG}"`
