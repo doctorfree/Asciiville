@@ -48,65 +48,6 @@ build_cbftp() {
   }
 }
 
-build_diagon() {
-  #
-  # Repo: https://github.com/doctorfree/diagon
-  #
-  # Fork of Repo: https://github.com/ArthurSonzogni/Diagon
-  #
-  # Build Dependencies:
-  # On Ubuntu 20.04
-  #   sudo apt update -y
-  #   sudo apt upgrade -y
-  #   sudo apt install make uuid-dev libboost-graph-dev cmake default-jdk
-  #
-  buildit=1
-  [ -L build/diagon ] && {
-    diagonpath=`realpath build/diagon`
-    [ -f ${diagonpath} ] && buildit=
-  }
-
-  [ "${buildit}" ] && {
-    advice=`git config --get advice.detachedHead`
-    git config --global advice.detachedHead false
-    [ -d build ] || mkdir build
-    cd build
-    cmake .. -DCMAKE_BUILD_TYPE=Release
-    make -j
-    if [ "${advice}" ]
-    then
-      git config --global advice.detachedHead ${advice}
-    else
-      git config --global --unset advice.detachedHead
-    fi
-    cd ..
-  }
-
-  [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
-}
-
-build_gztool() {
-  #
-  # Repo: https://github.com/doctorfree/Asciiville
-  #
-  # Fork of Repo: https://github.com/circulosmeos/gztool
-  #
-  # Can be compiles simply with:
-  #   gcc -O3 -o gztool gztool.c -lz -lm
-  #
-  [ -f gztool ] || {
-    prefix="--prefix=/usr"
-    [ "${PREFIX}" ] && prefix="--prefix=${PREFIX}"
-    autoreconf --install
-    ./configure ${prefix}
-    make check
-  }
-
-  chmod +x gztool
-
-  [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
-}
-
 build_jp2a() {
   #
   # Repo: https://github.com/doctorfree/Asciiville
@@ -184,7 +125,7 @@ usage() {
     printf "\n\t-u displays this usage message and exits\n"
     printf "\nNo arguments: build btop, configure with prefix=/usr, build\n"
     printf "\n'project' can be one or more of 'btop', 'cbftp', 'jp2a',"
-    printf "\n'diagon', 'nethack', 'ninvaders', and 'tetris'\n"
+    printf "\n'nethack', 'ninvaders', and 'tetris'\n"
     exit 1
 }
 
@@ -230,22 +171,6 @@ do
       [ -d ${PROJ} ] && {
         cd ${PROJ}
         build_jp2a
-        cd ..
-      }
-      ;;
-    diagon)
-      PROJ=diagon
-      [ -d ${PROJ} ] && {
-        cd ${PROJ}
-        build_diagon
-        cd ..
-      }
-      ;;
-    gztool)
-      PROJ=gztool
-      [ -d ${PROJ} ] && {
-        cd ${PROJ}
-        build_gztool
         cd ..
       }
       ;;

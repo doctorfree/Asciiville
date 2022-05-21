@@ -1,9 +1,0 @@
-if ("a") {
-  if ("b")
-    "c";
-  else
-    return "d";
-}
-else
-  return "e";
-"f";

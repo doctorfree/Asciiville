@@ -1,6 +1,5 @@
 Todo:
 - Figure out how to programmatically set the font size or scaling in cool-retro-term
-- Add diagon to menus, README, and command line args in asciiville
 - Add tdraw ascii draw tool to menus, README, and command line args in asciiville
     - https://github.com/aca/tdraw
 - Try out Sampler dashboard

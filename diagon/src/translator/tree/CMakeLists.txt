@@ -1,3 +1,0 @@
-add_library(translator_tree STATIC Tree.cpp)
-target_set_common(translator_tree)
-target_link_libraries(translator_tree PRIVATE diagon_base)

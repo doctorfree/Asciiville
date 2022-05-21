@@ -1,8 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Exec=diagon
-Icon=${SNAP}/meta/gui/diagon.png
-Name=Diagon
-Type=Application
-Terminal=true
-Category=Utility

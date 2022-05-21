@@ -10,9 +10,6 @@ rm -f aclocal.m4 compile config.h.in configure \
 rm -rf autom4te.cache src/.deps 
 cd ../cbftp
 make clean
-cd ../diagon
-rm -rf build
-rm -f tools/*.jar
 cd ../games/nethack
 [ -f Makefile ] && make spotless
 rm -f config.log config.status configure doc/Guidebook.txt sys/share/Makefile.lib

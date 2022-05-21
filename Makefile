@@ -7,8 +7,7 @@ DOCDIR ?= $(PREFIX)/share/doc/asciiville
 BINS = bin/asciiart bin/asciijulia bin/asciimpplus bin/asciiplasma \
 	   bin/asciisplash bin/asciisplash-tmux bin/asciiville bin/ascinit \
 	   bin/bb-tmux bin/btop-tmux bin/chktermcolor bin/make_ascii_art \
-	   bin/set_xfce_trans bin/show_ascii_art bin/show_figlet_fonts \
-	   bin/diagon
+	   bin/set_xfce_trans bin/show_ascii_art bin/show_figlet_fonts
 MANS = man/man1/asciiart.1 man/man1/asciijulia.1 man/man1/asciimpplus.1 \
 	   man/man1/asciiplasma.1 man/man1/asciisplash-tmux.1 \
 	   man/man1/asciisplash.1 man/man1/asciiville.1 man/man1/cbftp.1 \
@@ -68,9 +67,9 @@ else
 endif
 endif
 
-.PHONY: all info deb rpm btop cbftp diagon jp2a nethack ninvaders clean
+.PHONY: all info deb rpm btop cbftp jp2a nethack ninvaders clean
 
-all: btop cbftp diagon jp2a nethack ninvaders deb rpm
+all: btop cbftp jp2a nethack ninvaders deb rpm
 
 info:
 	@$(FIG_CMD)
@@ -83,9 +82,6 @@ btop: info
 
 cbftp: info
 	@./build cbftp
-
-diagon: info
-	@./build diagon
 
 jp2a: info
 	@./build jp2a

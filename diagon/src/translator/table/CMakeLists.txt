@@ -1,3 +1,0 @@
-add_library(translator_table STATIC Table.cpp)
-target_set_common(translator_table)
-target_link_libraries(translator_table PRIVATE diagon_base)
