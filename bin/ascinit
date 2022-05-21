@@ -300,6 +300,7 @@ shift $(( OPTIND - 1 ))
 [ -d ${CONFDIR}/tuir ] && {
   [ -d ${HOME}/.config/tuir ] || {
     cp -a ${CONFDIR}/tuir ${HOME}/.config/tuir
+    chmod 600 ${HOME}/.config/tuir/tuir.cfg
   }
 }
 
