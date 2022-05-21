@@ -42,7 +42,7 @@ command will not install the terminal emulators or create the terminal profiles.
 : indicates do not ask to play an animation when done
 
 **-c**
-: indicates console-only mode, no terminal emulators are installed or configured
+: indicates console-only mode, no terminal emulators are installed or configured and several mailcap configurations specifically tailored for console use are installed
 
 **-d**
 : indicates debug mode

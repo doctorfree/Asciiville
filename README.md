@@ -365,10 +365,16 @@ applied the next time `asciiville` is run.
 After installing Asciiville, initialize Asciiville configuration and
 install additional features by executing the `ascinit` command as a normal
 user with `sudo` privilege. The `ascinit` command will customize the
-configuration of several Asciiville packages and install additional
-packages. If you wish to perform a "console" initialization on a headless
-system or a system on which there is no available X Server, then execute
-the command `ascinit -c` rather than `ascinit`.
+configuration of several Asciiville packages and install additional packages.
+
+If you wish to perform a "console" initialization on a headless system or a
+system on which there is no available X Server, then execute the command
+`ascinit -c` rather than `ascinit`. A "console" initialization skips the
+installation of several graphical utilities including the terminal emulators
+that Asciiville uses when in desktop mode. In addition, a "console"
+initialization copies several `mailcap` files tailored for use on a console.
+These `mailcap` files generally try to display images and video using
+text-based character graphics on a console.
 
 ```console
 # Execute the ascinit command:
