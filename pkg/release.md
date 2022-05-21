@@ -1,4 +1,16 @@
-Version 1.4.0 adds support for:
+Version 1.4.0 release 2 adds support for:
+
+* Better support for console-only deployments
+* Console-based mailcap configs used with `ascinit -c`
+* Mailcap improvements for mutt, neomutt, and tuir
+* Use jp2a in mailcaps for images
+* Add support for TUIR - Terminal UI for Reddit
+* Add support for selecting multiple ascii art files with ranger
+* Add ascii art selection to menus
+* View individual ascii art via command line
+* Compress ascii art files
+
+Version 1.4.0 release 1 added support for:
 
 * Add manual installation script for non Debian/RPM systems
 * Beginning with version 1.4.0 a console-only setup is supported
@@ -69,20 +81,20 @@ Install the package on Debian based systems by executing the commands:
 
 ```bash
 sudo apt update -y
-sudo apt install ./Asciiville_1.4.0-1.amd64.deb
+sudo apt install ./Asciiville_1.4.0-2.amd64.deb
 ```
 
 or, on a Raspberry Pi:
 
 ```bash
 sudo apt update -y
-sudo apt install ./Asciiville_1.4.0-1.armhf.deb
+sudo apt install ./Asciiville_1.4.0-2.armhf.deb
 ```
 
 Install the package on RPM based systems by executing the command
 ```bash
 sudo dnf update -y
-sudo dnf localinstall ./Asciiville-1.4.0-1.x86_64.rpm
+sudo dnf localinstall ./Asciiville-1.4.0-2.x86_64.rpm
 ```
 
 On systems for which neither the Debian or RPM packages will suffice,
@@ -93,9 +105,9 @@ as a user with sudo privilege execute the commands:
 
 ```bash
 chmod 755 Install-bin.sh
-sudo ./Install-bin.sh /path/to/Asciiville_1.4.0-1.<arch>.tgz
+sudo ./Install-bin.sh /path/to/Asciiville_1.4.0-2.<arch>.tgz
 or
-sudo ./Install-bin.sh /path/to/Asciiville_1.4.0-1.<arch>.zip
+sudo ./Install-bin.sh /path/to/Asciiville_1.4.0-2.<arch>.zip
 ```
 
 ## Configuration
