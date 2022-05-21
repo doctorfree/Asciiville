@@ -203,7 +203,17 @@ shift $(( OPTIND - 1 ))
       chmod 640 ${HOME}/.mutt/colors
     }
     [ -f ${HOME}/.mutt/mailcap ] || {
-      cp ${CONFDIR}/mutt/mailcap ${HOME}/.mutt/mailcap
+      if [ "${console}" ]
+      then
+        if [ -f ${CONFDIR}/console/mutt/mailcap ]
+        then
+          cp ${CONFDIR}/console/mutt/mailcap ${HOME}/.mutt/mailcap
+        else
+          cp ${CONFDIR}/mutt/mailcap ${HOME}/.mutt/mailcap
+        fi
+      else
+        cp ${CONFDIR}/mutt/mailcap ${HOME}/.mutt/mailcap
+      fi
       chmod 640 ${HOME}/.mutt/mailcap
     }
     [ -f ${HOME}/.mutt/muttrc ] || {
@@ -230,6 +240,11 @@ shift $(( OPTIND - 1 ))
 [ -d ${CONFDIR}/neomutt ] && {
   [ -d ${HOME}/.config/neomutt ] || {
     cp -a ${CONFDIR}/neomutt ${HOME}/.config/neomutt
+    [ "${console}" ] && {
+      [ -f ${CONFDIR}/console/neomutt/mailcap ] && {
+        cp ${CONFDIR}/console/neomutt/mailcap ${HOME}/.config/neomutt/mailcap
+      }
+    }
     chmod 600 ${HOME}/.config/neomutt/accounts/*
     chmod 750 ${HOME}/.config/neomutt/accounts
     [ -d ${HOME}/.config/neomutt/tmp ] || mkdir ${HOME}/.config/neomutt/tmp
@@ -257,10 +272,22 @@ shift $(( OPTIND - 1 ))
       bconf=`basename "${w3mconf}"`
       [ -f "${HOME}/.w3m/${bconf}" ] || {
         cp "${w3mconf}" "${HOME}/.w3m/${bconf}"
+        [ "${bconf}" == "mailcap" ] && {
+          [ "${console}" ] && {
+            [ -f ${CONFDIR}/console/w3m/mailcap ] && {
+              cp ${CONFDIR}/console/w3m/mailcap ${HOME}/.w3m/mailcap
+            }
+          }
+        }
       }
     done
   else
     cp -a ${CONFDIR}/w3m ${HOME}/.w3m
+    [ "${console}" ] && {
+      [ -f ${CONFDIR}/console/w3m/mailcap ] && {
+        cp ${CONFDIR}/console/w3m/mailcap ${HOME}/.w3m/mailcap
+      }
+    }
   fi
   # Verify text/markdown is a recognized MIME type
   [ -f /etc/mime.types ] && {
@@ -300,6 +327,11 @@ shift $(( OPTIND - 1 ))
 [ -d ${CONFDIR}/tuir ] && {
   [ -d ${HOME}/.config/tuir ] || {
     cp -a ${CONFDIR}/tuir ${HOME}/.config/tuir
+    [ "${console}" ] && {
+      [ -f ${CONFDIR}/console/tuir/mailcap ] && {
+        cp ${CONFDIR}/console/tuir/mailcap ${HOME}/.config/tuir/mailcap
+      }
+    }
     chmod 600 ${HOME}/.config/tuir/tuir.cfg
   }
 }
