@@ -1,5 +1,6 @@
 Version 1.4.0 release 2 adds support for:
 
+* Add sample NNTP account in NeoMutt (use NeoMutt to read Usenet newsgroups)
 * Better support for console-only deployments
 * Console-based mailcap configs used with `ascinit -c`
 * Mailcap improvements for mutt, neomutt, and tuir
