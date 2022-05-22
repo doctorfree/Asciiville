@@ -417,7 +417,7 @@ select_font() {
 
   case "$1" in
     AsciiAppTerm)
-      FIG_TEXT="App & Terminal"
+      FIG_TEXT="Apps & Games"
       ;;
     AsciiArt)
       if [ "${goBig}" ]
@@ -1092,9 +1092,9 @@ show_select_menu() {
     [ "${have_retro}" ] && options+=("Retro Terminal         [${use_retro}]")
     [ "${have_tilix}" ] && options+=("Tilix Terminal         [${use_tilix}]")
     options+=("Current Terminal       [${use_current}]")
-    options+=("Run ${show_comm} in ${show_term}")
+    options+=("${BOLD}Run ${show_comm} in ${show_term}${NORMAL}")
     [ "${have_jrnl}" ] && options+=("Journal Menu")
-    [ "${have_showascii}" ] && options+=("Slideshow Menu")
+    [ "${have_showascii}" ] && options+=("Ascii Art Menu")
     [ "${have_splash}" ] && options+=("Animations Menu")
     options+=("Done / Main Menu" "Quit")
     select opt in "${options[@]}"
@@ -1118,7 +1118,7 @@ show_select_menu() {
               journal_menu=1
               break 2
               ;;
-          "Slideshow"*,*|*,"Slideshow"*)
+          "Ascii Art"*,*|*,"Ascii Art"*)
               art_menu=1
               break 2
               ;;
@@ -1244,7 +1244,7 @@ show_select_menu() {
               XFCE4=
               break
               ;;
-          "Run ${show_comm} in ${show_term}",*|*,"Run ${show_comm} in ${show_term}")
+          *"Run ${show_comm} in ${show_term}"*,*|*,*"Run ${show_comm} in ${show_term}"*)
               make_it_so
               break
               ;;
@@ -1704,7 +1704,7 @@ show_animation_menu() {
     [ "${have_jrnl}" ] && options+=("Journal Menu")
     [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
     [ "${have_roon}" ] && options+=("RoonCommandLine Menu")
-    [ "${have_showascii}" ] && options+=("Slideshow Menu")
+    [ "${have_showascii}" ] && options+=("Ascii Art Menu")
     options+=("Main Menu" "Quit")
     select opt in "${options[@]}"
     do
@@ -1762,7 +1762,7 @@ show_animation_menu() {
               journal_menu=1
               break 2
               ;;
-          "Slideshow"*,*|*,"Slideshow"*)
+          "Ascii Art"*,*|*,"Ascii Art"*)
               art_menu=1
               break 2
               ;;
@@ -2248,14 +2248,14 @@ show_main_menu() {
     options=()
     [ "${have_showascii}" ] && options+=("Ascii Art")
     [ "${have_splash}" ] && options+=("ASCIImatics Animations")
-    options+=("Run ${show_comm} in ${show_term}")
-    options+=("Select App and Terminal")
+    options+=("Apps & Games")
     [ "${have_bb}" ] && {
       [ "$DISPLAY" = "" ] || options+=("AAlib Demo (X11 mode)")
     }
     [ "${have_bb}" ] && options+=("AAlib Demo (Curses mode)")
     [ "${have_mapscii}" ] && options+=("Mapscii World Map")
     [ "${have_curl}" ] && options+=("Phase of the Moon")
+    options+=("Run ${show_comm} in ${show_term}")
     [ "${have_ddgr}" ] && options+=("Search the Web")
     [ "${have_speed}" ] && options+=("Speed Test")
     [ "${have_rainbow}" ] && options+=("Twitter Client")
@@ -2492,7 +2492,7 @@ show_main_menu() {
               journal_menu=1
               break 2
               ;;
-          "Select App"*,*|*,"Select App"*)
+          "Apps"*,*|*,"Apps"*)
               select_menu=1
               break 2
               ;;

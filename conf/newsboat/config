@@ -632,6 +632,7 @@ goto-next-feed no
 # include "~/.newsboat/colorschemes/commander
 include "~/.newsboat/colorschemes/cyanism
 # include "~/.newsboat/colorschemes/greenscreen
+# include "~/.newsboat/colorschemes/gruvbox
 # include "~/.newsboat/colorschemes/inkpot
 # include "~/.newsboat/colorschemes/kinda-maia
 # include "~/.newsboat/colorschemes/light
@@ -642,6 +643,7 @@ include "~/.newsboat/colorschemes/cyanism
 # include "~/.newsboat/colorschemes/simple
 # include "~/.newsboat/colorschemes/solarized-dark
 # include "~/.newsboat/colorschemes/solarized-light
+# include "~/.newsboat/colorschemes/universal-color
 
 ####  itemview-title-format
 #

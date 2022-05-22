@@ -6,8 +6,9 @@
 #------------------------
 #-------NEWSFEEDS--------
 #------------------------
-http://rss.cnn.com/rss/cnn_topstories.rss
-http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml
+http://rss.cnn.com/rss/cnn_topstories.rss "~NEWS: CNN"
+http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml "~NEWS: BBC"
+http://www.vox.com/rss/index.xml "~NEWS: VOX"
 #-------------------------
 #-------YOUTUBE-----------
 #-------------------------
@@ -15,9 +16,11 @@ https://www.youtube.com/feeds/videos.xml?channel_id=UC1aQCduPHWSXX5UgfHCyVCA "~Y
 #-------------------------
 #-------REDDIT------------
 #-------------------------
+https://www.reddit.com/r/ascii.rss "~REDDIT: r/ascii"
 https://www.reddit.com/r/asciiart.rss "~REDDIT: r/asciiart"
 https://www.reddit.com/r/commandline.rss "~REDDIT: r/commandline"
 https://www.reddit.com/r/linux.rss "~REDDIT: r/linux"
+https://www.reddit.com/r/magicmirror.rss "~REDDIT: r/magicmirror"
 https://www.reddit.com/r/opensource.rss "~REDDIT: r/opensource"
 #-------------------------
 #-------TWITTER---------
@@ -27,3 +30,10 @@ https://nitter.net/search/rss?f=tweets&q=ronrecord "~TWITTER: ronrecord"
 #-------GIT_REPOS---------
 #-------------------------
 https://github.com/doctorfree.atom "~GITHUB: Doctorfree"
+#-------------------------
+#-------FUN---------------
+#-------------------------
+http://xkcd.com/atom.xml "~FUN: xkcd"
+http://www.dumbingofage.com/feed/ "~FUN: Dumbing of Age"
+http://feeds.feedburner.com/oatmealfeed "~FUN: Oatmeal"
+http://www.smbc-comics.com/rss.php "~FUN: Saturday Morning Breakfast Cereal"

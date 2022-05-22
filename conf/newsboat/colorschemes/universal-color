@@ -1,0 +1,17 @@
+# A simple color scheme designed to work well with pretty much any terminal:
+#   Uses the basic 16 ANSI colors
+#   Works with dark and light (inverted) terminal color schemes
+#   Avoids color-on-color text
+#   Avoids blue and yellow as those are often too bright or too dim
+#   Works with Linux framebuffer terminal despite it being weird with bold text
+
+color background         default default
+color listnormal         default default
+color listnormal_unread  color15 default bold
+color listfocus          green   default reverse
+color listfocus_unread   color10 default reverse bold
+color info               magenta default reverse
+color article            default default
+
+# Highlight URLs with regex
+highlight article "[a-z]+://[^ ]+" green default underline
