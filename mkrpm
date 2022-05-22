@@ -141,6 +141,8 @@ ${SUDO} cp jp2a/src/jp2a ${OUT_DIR}/${DESTDIR}/bin/jp2a
 ${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
 ${SUDO} cp ddgr/ddgr ${OUT_DIR}/${DESTDIR}/bin/ddgr
 
+${SUDO} cp -a share/doc ${OUT_DIR}/${DESTDIR}/share/doc
+
 # Revised NetHack install using UnNetHack mods
 cd games/nethack
 ${SUDO} make DESTDIR=${OUT_DIR} install

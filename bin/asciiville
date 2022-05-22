@@ -764,12 +764,14 @@ show_help_menu() {
     [ "${have_nethack}" ] && options+=("NetHack Game Man Page")
     [ "${have_nethack}" ] && options+=("NetHack Guide Book")
     [ "${have_newsboat}" ] && options+=("Newsboat RSS Feed Man Page")
+    [ "${have_newsboat}" ] && options+=("Newsboat Full Manual")
     [ "${have_ranger}" ] && options+=("Ranger File Manager Man Page")
     [ "${have_ranger}" ] && options+=("Rifle File Opener Man Page")
     options+=("Show ASCII Art Man Page")
     options+=("Show Phase of Moon Man Page")
     options+=("Show Weather Report Man Page")
     [ "${have_tuir}" ] && options+=("Terminal UI for Reddit Man Page")
+    [ "${have_tuir}" ] && options+=("Terminal UI for Reddit Controls")
     options+=("Tmux Multiplexer Man Page")
     [ "${have_w3m}" ] && options+=("W3m Web Browser Man Page")
     [ "${have_retro}" ] && options+=("Retro Terminal Man Page")
@@ -888,7 +890,18 @@ show_help_menu() {
           less /usr/games/share/doc/nethack/Guidebook.txt
           break
           ;;
-        "News"*,*|*,"News"*)
+        "Newsboat Full"*,*|*,"Newsboat Full"*)
+          if [ "${have_w3m}" ]
+          then
+            w3m /usr/share/doc/newsboat/newsboat.html
+          else
+            [ "${have_lynx}" ] && {
+              lynx /usr/share/doc/newsboat/newsboat.html
+            }
+          fi
+          break
+          ;;
+        "Newsboat"*,*|*,"Newsboat"*)
           man newsboat
           break
           ;;
@@ -912,8 +925,19 @@ show_help_menu() {
           man show_weather
           break
           ;;
-        "Terminal"*,*|*,"Terminal"*)
+        "Terminal"*"Man Page",*|*,"Terminal"*"Man Page")
           man tuir
+          break
+          ;;
+        "Terminal"*"Controls",*|*,"Terminal"*"Controls")
+          if [ "${have_w3m}" ]
+          then
+            w3m /usr/share/doc/tuir/CONTROLS.md
+          else
+            [ "${have_lynx}" ] && {
+              lynx /usr/share/doc/tuir/CONTROLS.md
+            }
+          fi
           break
           ;;
         "Tmux"*,*|*,"Tmux"*)
