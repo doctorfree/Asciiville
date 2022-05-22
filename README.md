@@ -411,6 +411,9 @@ The default settings for these two configuration parameters are '4' and
 to make it larger, change `art_font_size=4` to `art_font_size=6` and
 `txt_font_size=20` to `txt_font_size=24`. Some experimentation may be
 required to fit the art to your display and terminal emulator window.
+On a display with resolution 2560x1440 pixels, setting `art_font_size=8`
+and `txt_font_size=28` provides a larger display of Asciiville ascii art
+that fills most of the screen.
 
 A sample Asciiville configuration file `$HOME/.config/asciiville/config`:
 
@@ -434,8 +437,8 @@ use_lolcat=1
 use_lol=YES
 journal="asciiville"
 style="fancy"
-art_font_size=6
-txt_font_size=24
+art_font_size=8
+txt_font_size=28
 ```
 
 #### Asciiville utilities configuration
