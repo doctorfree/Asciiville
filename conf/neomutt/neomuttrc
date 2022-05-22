@@ -13,3 +13,6 @@ folder-hook  $folder 'source ~/.config/neomutt/accounts/gmail'
 
 #source ~/.config/neomutt/accounts/main
 #folder-hook  $folder 'source ~/.config/neomutt/accounts/main'
+
+#source ~/.config/neomutt/accounts/nntp
+#folder-hook  $folder 'source ~/.config/neomutt/accounts/nntp'
