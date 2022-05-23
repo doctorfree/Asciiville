@@ -486,7 +486,15 @@ The `ascinit` command creates an initial NeoMutt configuration in
 necessary to configure `$HOME/.config/neomutt/accounts/*` with your name,
 email address, and credentials. The default NeoMutt user configuration files
 configure NeoMutt for use with GMail. This can be modified by editing the
-accounts configured in `$HOME/.config/neomutt/neomuttrc`.
+accounts configured in `$HOME/.config/neomutt/neomuttrc`. Asciiville provides
+three preconfigured NeoMutt accounts - `$HOME/.config/neomutt/accounts/gmail`,
+`$HOME/.config/neomutt/accounts/main`, and `$HOME/.config/neomutt/accounts/nntp`.
+The `accounts/gmail` NeoMutt account is enabled by default while the other two
+are disabled by default. The `main` account is a vanilla account with a basic
+configuration while the `gmail` and `nntp` accounts are highly curated and take
+advantage of some advanced NeoMutt features. The `gmail` account is tailored for
+use with GMail and the `nntp` account is tailored for use with a Usenet Newsgroup
+server (`news.eternal-september.org` is the default NNTP server).
 
 Comments in `$HOME/.config/neomutt/accounts/gmail`
 provide pointers to configuring your credentials with GMail. If Google 2FA

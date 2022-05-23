@@ -8,9 +8,6 @@ source ~/.config/neomutt/mappings
 source ~/.config/neomutt/accounts/gmail
 folder-hook  $folder 'source ~/.config/neomutt/accounts/gmail'
 
-#source ~/.config/neomutt/accounts/school
-#folder-hook  $folder 'source ~/.config/neomutt/accounts/school'
-
 #source ~/.config/neomutt/accounts/main
 #folder-hook  $folder 'source ~/.config/neomutt/accounts/main'
 
