@@ -1,3 +1,11 @@
+# Asciiville NeoMutt Key Bindings
+
+Primary differences between the Asciiville NeoMutt key bindings and the default:
+
+- Vim keybinds. `k` and `j` to go up and down, and `l` and `h` to move forwards and back pages
+- Open the sidebar with `B`. `Ctrl+j` and `Ctrl+k` to navigate, `Ctrl+o` to open selection
+- `A` will attempt to create a new contact with khard
+- `F2`, `F3`, and `F4` are used to switch between three mailboxes
 
 ## Index
 

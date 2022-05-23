@@ -559,9 +559,19 @@ To transfer a previously generated GnuPG key pair from another system, see
 
 #### NeoMutt Key Bindings
 
-The Asciiville NeoMutt configuration includes some custom key bindings to ease
-NeoMutt navigation. These are documented in
-`/usr/share/asciiville/neomutt/cheatsheet.md` as follows:
+The Asciiville NeoMutt configuration includes some custom key bindings
+to ease NeoMutt navigation. These are documented in
+`/usr/share/asciiville/neomutt/cheatsheet.md`.
+
+The primary differences between the Asciiville NeoMutt key bindings
+and the default are as follows:
+
+- Vim keybinds. `k` and `j` to go up and down, and `l` and `h` to move forwards and back pages
+- Open the sidebar with `B`. `Ctrl+j` and `Ctrl+k` to navigate, `Ctrl+o` to open selection
+- `A` will attempt to create a new contact with khard
+- `F2`, `F3`, and `F4` are used to switch between three mailboxes
+
+The customized Asciiville NeoMutt key bindings are as follows:
 
 ##### Index
 
