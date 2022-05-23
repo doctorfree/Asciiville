@@ -1,0 +1,32 @@
+# To use an encrypted password with NeoMutt, follow the guide at:
+# https://www.xmodulo.com/mutt-email-client-encrypted-passwords.html
+# and see the Asciiville README Configuration section at:
+# https://github.com/doctorfree/Asciiville#configuration
+#
+# Set your name, email address, and credentials
+#
+unmailboxes *
+
+# in/out mail servers
+set realname = "Firstname Lastname"
+set imap_pass="`gpg --batch -q --decrypt ~/.config/neomutt/cruzio.gpg`"
+set smtp_url = "smtps://user@domain.com@mail.domain.com:465"
+set smtp_pass="`gpg --batch -q --decrypt ~/.config/neomutt/cruzio.gpg`"
+set folder = "imaps://user@domain.com@mail.domain.com:993"
+set spoolfile = "+INBOX"
+
+set from = "user@domain.com"
+set envelope_from
+set use_from = "yes"
+set record = "+Sent"
+set trash = "+Trash"
+set postponed = "+Drafts"
+set mail_check = 6
+
+# Allow Mutt to open a new IMAP connection automatically.
+unset imap_passive
+
+# Keep the IMAP connection alive by polling intermittently (time in seconds).
+set imap_keepalive = 300
+
+account-hook $folder "set imap_pass=\"`gpg --batch -q --decrypt ~/.config/neomutt/cruzio.gpg`\""

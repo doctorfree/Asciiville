@@ -62,3 +62,5 @@ bind index,pager \CI sidebar-open                 # Ctrl-o to open selected fold
 bind index,pager \CB sidebar-toggle-visible       # Ctrl-b to toggle visibility of the sidebar
 
 set smtp_authenticators="gssapi:login"
+
+account-hook $folder "set imap_pass=\"`gpg --batch -q --decrypt ~/.config/neomutt/gmail.gpg`\""

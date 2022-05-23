@@ -489,15 +489,28 @@ The `ascinit` command creates an initial NeoMutt configuration in
 necessary to configure `$HOME/.config/neomutt/accounts/*` with your name,
 email address, and credentials. The default NeoMutt user configuration files
 configure NeoMutt for use with GMail. This can be modified by editing the
-accounts configured in `$HOME/.config/neomutt/neomuttrc`. Asciiville provides
-three preconfigured NeoMutt accounts - `$HOME/.config/neomutt/accounts/gmail`,
-`$HOME/.config/neomutt/accounts/main`, and `$HOME/.config/neomutt/accounts/nntp`.
-The `accounts/gmail` NeoMutt account is enabled by default while the other two
-are disabled by default. The `main` account is a vanilla account with a basic
-configuration while the `gmail` and `nntp` accounts are highly curated and take
-advantage of some advanced NeoMutt features. The `gmail` account is tailored for
-use with GMail and the `nntp` account is tailored for use with a Usenet Newsgroup
-server (`news.eternal-september.org` is the default NNTP server).
+accounts configured in `$HOME/.config/neomutt/neomuttrc`.
+
+Asciiville provides three preconfigured NeoMutt email accounts -
+`$HOME/.config/neomutt/accounts/gmail`, `$HOME/.config/neomutt/accounts/main`,
+and `$HOME/.config/neomutt/accounts/cruzio`. The `accounts/gmail` NeoMutt
+account is enabled by default while the other two are disabled by default.
+The `main` account is a vanilla account with a basic configuration while the
+`gmail` and `cruzio` accounts are highly curated and take advantage of some
+advanced NeoMutt features. The `gmail` account is tailored for use with GMail
+and the `cruzio` account is tailored for use with Cruzio, an independent
+internet service provider in Santa Cruz, California. Cruzio was founded in
+1989 by Chris and Peggy and has remained 100% locally owned and staffed.
+The citizens of Asciiville encourage the patronage of independent locally
+owned internet service providers.
+
+In addition to the three preconfigured NeoMutt email accounts, Asciiville
+also provides a preconfigured NNTP account. One of NeoMutt's advanced
+features is the ability to act as an NNTP client, enabling it to read
+and post to Usenet newsgroups. The NeoMutt account
+`$HOME/.config/neomutt/accounts/nntp`, when enabled in `neomuttrc`,
+can be used to connect to a Usenet Newsgroup server. The `nntp` account
+uses `news.eternal-september.org` as the default NNTP server.
 
 Comments in `$HOME/.config/neomutt/accounts/gmail`
 provide pointers to configuring your credentials with GMail. If Google 2FA

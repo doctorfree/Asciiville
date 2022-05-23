@@ -64,5 +64,6 @@ macro attach,compose \Cb \
 
 ## Shortcuts
 macro index,pager <f2> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/gmail<enter><change-folder>!<enter>'
-macro index,pager <f3> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/main<enter><change-folder>!<enter>'
-macro index,pager <f4> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/nntp<enter><change-folder>!<enter>'
+macro index,pager <f3> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/cruzio<enter><change-folder>!<enter>'
+macro index,pager <f4> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/main<enter><change-folder>!<enter>'
+macro index,pager I <change-newsgroup>?
