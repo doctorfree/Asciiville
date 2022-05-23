@@ -95,6 +95,7 @@ Integration is provided for:
 * [cbftp](cbftp/README), character based FTP client
 * [ddgr](ddgr/README.md), command line web search
 * [jrnl](https://jrnl.sh/en/stable/), a simple command line journal application
+* [khard](https://github.com/lucc/khard), address book for the Unix console
 * [w3m](http://w3m.sourceforge.net/), another character based web browser
 * [lynx](https://lynx.invisible-island.net/), character based web browser
 * [mutt](http://www.mutt.org/), character based email client
@@ -456,6 +457,7 @@ Generated configuration files include:
 * `$HOME/.config/neomutt/` : NeoMutt email client startup files
 * `$HOME/.config/neofetch/config.conf` : NeoFetch system info script
 * `$HOME/.config/jrnl/` : Journal command `jrnl` configuration file
+* `$HOME/.config/khard/khard.conf` : Address book `khard` configuration file
 * `$HOME/.config/ranger/rifle.conf` : Rifle, Ranger's file opener
 * `$HOME/.config/tuir/` : TUIR terminal UI for Reddit configuration files
 * `$HOME/.mutt/muttrc` : Mutt email client

@@ -198,6 +198,7 @@ ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
 ${SUDO} cp -a conf/console ${OUT_DIR}/${DESTDIR}/share/${PKG}/console
 ${SUDO} cp -a conf/got ${OUT_DIR}/${DESTDIR}/share/${PKG}/got
 ${SUDO} cp -a conf/jrnl ${OUT_DIR}/${DESTDIR}/share/${PKG}/jrnl
+${SUDO} cp -a conf/khard ${OUT_DIR}/${DESTDIR}/share/${PKG}/khard
 ${SUDO} cp -a conf/mutt ${OUT_DIR}/${DESTDIR}/share/${PKG}/mutt
 ${SUDO} cp -a conf/mutt_multiple ${OUT_DIR}/${DESTDIR}/share/${PKG}/mutt_multiple
 ${SUDO} cp -a conf/neomutt ${OUT_DIR}/${DESTDIR}/share/${PKG}/neomutt

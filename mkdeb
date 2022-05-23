@@ -137,7 +137,7 @@ Version: ${PKG_VER}-${PKG_REL}
 Section: misc
 Priority: optional
 Architecture: ${ARCH}
-Depends: uuid-runtime, python3, python3-pip, python3-venv, tmux, mplayer, w3m, neomutt, newsboat, ranger, jq, asciinema, speedtest-cli, libaa-bin, libaa1, bb, neofetch, figlet, imagemagick, dconf-cli, libncurses-dev, libjpeg-dev, libpng-dev, cmatrix, gnupg, pandoc, urlscan
+Depends: uuid-runtime, python3, python3-pip, python3-venv, tmux, mplayer, w3m, neomutt, newsboat, ranger, jq, asciinema, speedtest-cli, libaa-bin, libaa1, bb, neofetch, figlet, imagemagick, dconf-cli, libncurses-dev, libjpeg-dev, libpng-dev, cmatrix, gnupg, pandoc, urlscan, khard
 Maintainer: ${DEBFULLNAME} <${DEBEMAIL}>
 Installed-Size: 189000
 Build-Depends: debhelper (>= 11)
@@ -229,6 +229,7 @@ ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
 ${SUDO} cp -a conf/console ${OUT_DIR}/${DESTDIR}/share/${PKG}/console
 ${SUDO} cp -a conf/got ${OUT_DIR}/${DESTDIR}/share/${PKG}/got
 ${SUDO} cp -a conf/jrnl ${OUT_DIR}/${DESTDIR}/share/${PKG}/jrnl
+${SUDO} cp -a conf/khard ${OUT_DIR}/${DESTDIR}/share/${PKG}/khard
 ${SUDO} cp -a conf/mutt ${OUT_DIR}/${DESTDIR}/share/${PKG}/mutt
 ${SUDO} cp -a conf/mutt_multiple ${OUT_DIR}/${DESTDIR}/share/${PKG}/mutt_multiple
 ${SUDO} cp -a conf/neomutt ${OUT_DIR}/${DESTDIR}/share/${PKG}/neomutt

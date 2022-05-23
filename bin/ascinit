@@ -307,6 +307,23 @@ shift $(( OPTIND - 1 ))
   }
 }
 
+# Setup default khard configuration for this user unless one exists
+[ -d ${CONFDIR}/khard ] && {
+  [ -d ${HOME}/.config/khard ] || {
+    cp -a ${CONFDIR}/khard ${HOME}/.config/khard
+    chmod 640 ${HOME}/.config/khard/khard.conf
+  }
+  [ -d ${HOME}/.contacts ] || {
+    mkdir -p ${HOME}/.contacts
+  }
+  [ -d ${HOME}/.contacts/family ] || {
+    mkdir -p ${HOME}/.contacts/family
+  }
+  [ -d ${HOME}/.contacts/friends ] || {
+    mkdir -p ${HOME}/.contacts/friends
+  }
+}
+
 # Setup default rifle configuration for this user unless one exists
 [ -f ${CONFDIR}/rifle.conf ] && {
   [ -f ${HOME}/.config/ranger/rifle.conf ] || {
