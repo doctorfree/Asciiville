@@ -1,5 +1,13 @@
-# Example NeoMutt config file for the nntp feature.
-
+# NeoMutt config file for NNTP account
+#
+# Read Usenet newsgroups with NeoMutt
+#
+# This NeoMutt account configuration uses encrypted credentials
+# to authenticate with the NNTP server. Follow the guide at:
+# https://www.xmodulo.com/mutt-email-client-encrypted-passwords.html
+# and see the Asciiville README Configuration section at:
+# https://github.com/doctorfree/Asciiville#configuration
+#
 # --------------------------------------------------------------------------
 # VARIABLES – shown with their default values
 # --------------------------------------------------------------------------
@@ -12,15 +20,15 @@ set inews=''
 set newsgroups_charset=utf-8
 set newsrc='~/.newsrc'
 set news_cache_dir='~/.cache/neomutt'
-set news_server='news://$USERNAME:$PASSWORD@news.eternal-september.org'
-# set folder = 'news://news.eternal-september.org'
+# NNTP server account username and password were encrypted with GPG
+set nntp_user="`gpg --batch -q --decrypt ~/.config/neomutt/nntp_user.gpg`"
+set nntp_pass="`gpg --batch -q --decrypt ~/.config/neomutt/nntp_pass.gpg`"
+set news_server="news://$nntp_user:$nntp_pass@news.eternal-september.org"
 set nntp_authenticators='user'
 set nntp_context=1000
 set nntp_listgroup=yes
 set nntp_load_description=yes
-set nntp_pass='$PASSWORD'
 set nntp_poll=60
-set nntp_user='$USERNAME'
 set post_moderated=ask-yes
 set save_unsubscribed=no
 set show_new_news=yes
@@ -44,7 +52,7 @@ bind attach,index,pager F followup-message
 # post message to newsgroup
 bind index,pager P post-message
 # load list of all newsgroups from NNTP server
-bind browser gg reload-active
+# bind browser g reload-active
 # subscribe to current mbox (IMAP/NNTP only)
 bind browser s subscribe
 # subscribe to newsgroups matching a pattern
