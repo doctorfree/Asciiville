@@ -4,12 +4,15 @@ All notable changes to this project will be documented in this file.
 
 # Asciiville-1.4.0r2 (2022-05-24)
 
-* Add sample NNTP account in NeoMutt (use NeoMutt to read Usenet newsgroups)
 * Better support for console-only deployments
 * Console-based mailcap configs used with `ascinit -c`
+* Add sample NNTP account in NeoMutt (use NeoMutt to read Usenet newsgroups)
+* Use encrypted credentials for NNTP server authenticaton
+* Add preconfigured Cruzio account for NeoMutt
 * Mailcap improvements for mutt, neomutt, and tuir
 * Use jp2a in mailcaps for images
 * Add support for TUIR - Terminal UI for Reddit
+* Add khard contact management integration and configuration
 * Add support for selecting multiple ascii art files with ranger
 * Add ascii art selection to menus
 * View individual ascii art via command line
