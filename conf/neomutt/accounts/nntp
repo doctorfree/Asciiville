@@ -35,6 +35,7 @@ set save_unsubscribed = no
 set show_new_news = yes
 set show_only_unread = no
 set x_comment_to = no
+
 # --------------------------------------------------------------------------
 # FUNCTIONS – shown with an example mapping
 # --------------------------------------------------------------------------

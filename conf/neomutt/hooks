@@ -1,0 +1,21 @@
+# -*- muttrc -*-
+#
+# Fcc hooks, everything else goes to ~/Mail/Sent
+#
+
+fcc-hook garble-.*@.*\.sourceforge\.net                          /dev/null
+fcc-hook lbc@.*linuxemporium\.co\.uk                             /dev/null
+fcc-hook librep-list@.*\.sourceforge\.net                        /dev/null
+fcc-hook mutt-users@(.*cs\.hmc\.edu|mutt\.org|gbnet\.net)        /dev/null
+fcc-hook (peterboro|lincs)@mailman\.lug\.org\.uk                 /dev/null
+fcc-hook stormcock@(steamradio\.com|mistlethrush\.co\.uk)        /dev/null
+fcc-hook (clocc|cclan)-list@lists\.sourceforge\.net              /dev/null
+fcc-hook debian-.*@lists\.debian\.org                            /dev/null
+fcc-hook spamprobe-users@lists\.sourceforge\.net                 /dev/null
+fcc-hook ecls-list@lists\.sourceforge\.net                       /dev/null
+fcc-hook uk-lispers@cathouse\.bofh\.se                           /dev/null
+fcc-hook dict-beta@dict\.org                                     /dev/null
+fcc-hook movitz-devel@common-lisp\.net                           /dev/null
+fcc-hook sbcl-help@lists\.sourceforge\.net                       /dev/null
+fcc-hook lispweb@red-bean\.com                                   /dev/null
+fcc-hook .*                                                      "~/Mail/Sent"

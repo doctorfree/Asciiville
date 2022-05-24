@@ -11,15 +11,11 @@
 # If Google 2FA is enabled, use the App password created from above URL
 #
 set realname="Firstname Lastname"
-set imap_user="youraccount@gmail.com"
-#set imap_pass=<yourpassword>
+set imap_user=youraccount@gmail.com
 set imap_pass="`gpg --batch -q --decrypt ~/.config/neomutt/gmail.gpg`"
-set from="youraccount@gmail.com"
-#set smtp_url="smtps://youraccount@gmail.com@smtp.gmail.com:587"
-set smtp_url="smtps://youraccount@gmail.com@smtp.gmail.com:465"
-#set smtp_pass=<yourpassword>
+set from=$imap_user
+set smtp_url=smtps://$imap_user@smtp.gmail.com:465
 set smtp_pass="`gpg --batch -q --decrypt ~/.config/neomutt/gmail.gpg`"
-#
 
 set folder=imaps://imap.gmail.com/
 set spoolfile=+INBOX
@@ -38,8 +34,7 @@ set sort_aux=last-date-received
 # Index page format. Default "%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s"
 set index_format="%4C %Z %{%b %d %R} %-15.15L (%?l?%4l&%4c?) %s"
 
-
-set sidebar_visible
+#set sidebar_visible
 set sidebar_format="%B%?F? [%F]?%* %?N?%N/?%S"
 set mail_check_stats
 
@@ -63,4 +58,9 @@ bind index,pager \CB sidebar-toggle-visible       # Ctrl-b to toggle visibility 
 
 set smtp_authenticators="gssapi:login"
 
-account-hook $folder "set imap_pass=\"`gpg --batch -q --decrypt ~/.config/neomutt/gmail.gpg`\""
+account-hook $folder " \
+    set imap_user=youraccount@gmail.com ; \
+    set from=$imap_user \
+    imap_pass='`gpg --batch -q --decrypt ~/.config/neomutt/gmail.gpg`' \
+    smtp_url=smtps://$imap_user@smtp.gmail.com:465 \
+    smtp_pass='`gpg --batch -q --decrypt ~/.config/neomutt/gmail.gpg`' "

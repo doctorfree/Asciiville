@@ -1,7 +1,9 @@
 
-source ~/.config/neomutt/settings
 source ~/.config/neomutt/colors
+source ~/.config/neomutt/headers
+source ~/.config/neomutt/hooks
 source ~/.config/neomutt/mappings
+source ~/.config/neomutt/settings
 
 # Accounts
 

@@ -3,20 +3,33 @@
 # set editor to vim
 set editor = "vim"
 
-set my_name = "FIRSTNAME LASTNAME"
+set my_name = "Firstname Lastname"
 set imap_check_subscribed
 
 # Set preffered view modes
 auto_view text/html text/calendar application/ics # view html automatically
 alternative_order text/html text/plain text/enriched text/*
 
+# Default signature
+set signature=~/.signature
+# Start off with index footer in pager.
+set pager_index_lines=1
+# Reset any headers that may have been set in other folder-hooks
+unmy_hdr From:
+unmy_hdr Reply-To:
+unmy_hdr Fcc:
+unmy_hdr Return-Receipt-To:
+unmy_hdr Organization:
+unmy_hdr X-URL:
 
-# main options
+# Main options
+#
 set envelope_from
 set edit_headers                     # show headers when composing
 set fast_reply                       # skip to compose when replying
 set askcc                            # ask for CC:
 set fcc_attach                       # save attachments with the body
+set fcc_clear                        # Keep fcc's clear of signatues and encryption
 set forward_format = "Fwd: %s"       # format of subject when forwarding
 set forward_decode                   # decode when forwarding
 set attribution = "On %d, %n wrote:" # format of quoting header
