@@ -510,7 +510,10 @@ features is the ability to act as an NNTP client, enabling it to read
 and post to Usenet newsgroups. The NeoMutt account
 `$HOME/.config/neomutt/accounts/nntp`, when enabled in `neomuttrc`,
 can be used to connect to a Usenet Newsgroup server. The `nntp` account
-uses `news.eternal-september.org` as the default NNTP server.
+uses `news.eternal-september.org` as the default NNTP server. In order
+to access this Usenet server a free registration at
+https://www.eternal-september.org/RegisterNewsAccount.php
+is required.
 
 Comments in `$HOME/.config/neomutt/accounts/gmail`
 provide pointers to configuring your credentials with GMail. If Google 2FA
