@@ -18,7 +18,7 @@ set smtp_url=smtps://$imap_user@smtp.gmail.com:465
 set smtp_pass="`gpg --batch -q --decrypt ~/.config/neomutt/gmail.gpg`"
 
 set folder=imaps://imap.gmail.com/
-set spoolfile=+INBOX
+set spoolfile=+Inbox
 set record="+[Gmail]/Sent Mail"
 set postponed="+[Gmail]/Drafts"
 
@@ -39,7 +39,7 @@ set sidebar_format="%B%?F? [%F]?%* %?N?%N/?%S"
 set mail_check_stats
 
 # You can use any gmail imap mailboxes
-mailboxes =INBOX =[Gmail]/Sent\ Mail =[Gmail]/Drafts =[Gmail]/Spam =[Gmail]/Trash
+mailboxes =Inbox =[Gmail]/Sent\ Mail =[Gmail]/Drafts =[Gmail]/Spam =[Gmail]/Trash
 
 # Vim like binds
 bind attach,index,pager \CD next-page

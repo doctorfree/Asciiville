@@ -78,4 +78,8 @@ set mailcap_path = ~/.config/neomutt/mailcap:/usr/local/etc/mailcap:/etc/mailcap
 set header_cache = "~/.cache/neomutt"
 set message_cachedir = "~/.cache/neomutt"
 
+# Trusted server certificates
+set certificate_file = ~/.config/neomutt/certificates
+set ssl_ca_certificates_file = /etc/ssl/certs/ca-certificates.crt
+
 set query_command = "khard email --parsable --search-in-source-files '%s'"

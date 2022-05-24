@@ -14,7 +14,8 @@ set imap_pass="`gpg --batch -q --decrypt ~/.config/neomutt/cruzio.gpg`"
 set smtp_url = smtps://$imap_user@mail.domain.com
 set smtp_pass="`gpg --batch -q --decrypt ~/.config/neomutt/cruzio.gpg`"
 set folder = imaps://$imap_user@mail.domain.com:993
-set spoolfile = "+INBOX"
+set spoolfile = "+Inbox"
+mailboxes = "+Inbox"
 
 set from = $imap_user
 set envelope_from
