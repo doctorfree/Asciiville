@@ -949,6 +949,7 @@ Terminal/Command options:
 		If 'command' is keyword 'maps' then display a map using mapscii
 		If 'command' is keyword 'moon' then display the phase of the Moon
 		If 'command' is keyword 'news' then display RSS news feeds
+		If 'command' is keyword 'reddit' then display Reddit terminal UI
 		If 'command' is keyword 'search' then a web search is performed
 		If 'command' is keyword 'speed' then a speed test is performed
 		If 'command' is keyword 'translate' then the translation tool is run
