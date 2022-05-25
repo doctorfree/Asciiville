@@ -35,7 +35,7 @@ set -m
 
 usage() {
   printf "\nUsage: show_ascii_art [-a art[,art2,...]] [-A art_dir] [-b] [-B] [-c] [-C]"
-  printf "\n\t[-d font_dir] [-D seconds] [-e term] [-F large_font] [-f small_font]"
+  printf "\n\t[-d font_dir] [-D seconds] [-e term] [-E] [-F large_font] [-f small_font]"
   printf "\n\t[-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level]"
   printf "\n\t[-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r]"
   printf "\n\t[-s show] [-S song] [-t first_text] [-T second_text]"
@@ -56,6 +56,7 @@ usage() {
   printf "\n\t-D 'seconds' specifies the delay, in seconds, between screens"
   printf "\n\t-e 'term' specifies the terminal in which execution occurs"
   printf "\n\t\t'term' can be one of 'gnome', 'xfce4', or 'tilix'"
+  printf "\n\t-E disables font size changing"
   printf "\n\t-g convert image to grayscale"
   printf "\n\t-i 'image' specifies an image file to convert to ascii art"
   printf "\n\t-I 'input_dir' generates ascii art from all images in 'input_dir'"
@@ -190,19 +191,31 @@ show_ascii() {
     printf "\n"
     ((line++))
   done
-  if [ "$3" ]
+  if [ "${set_font_size}" ]
   then
-    while read l
-    do 
-      printf "${prep}$l"
-    done < <(/bin/cat "${asciiart}") | $3
+    if [ "$3" ]
+    then
+      while read l
+      do 
+        printf "${prep}$l"
+      done < <(/bin/cat "${asciiart}") | $3
+    else
+      while read l
+      do 
+        printf "${prep}$l"
+      done < <(/bin/cat "${asciiart}")
+    fi
+    printf "\n"
   else
-    while read l
-    do 
-      printf "${prep}$l"
-    done < <(/bin/cat "${asciiart}")
+    printf "${prep}"
+    if [ "${have_lolcat}" ]
+    then
+      /bin/cat "${asciiart}" | ${LOLCAT}
+      tput civis -- invisible
+    else
+      /bin/cat "${asciiart}"
+    fi
   fi
-  printf "\n"
 
   [ "${viewshow}" ] && {
     printf "\n\n"
@@ -240,6 +253,7 @@ input_image=
 randfont=
 overwrite=
 save_art=
+set_font_size=1
 height=
 numtabs=0
 slideshow=
@@ -248,7 +262,7 @@ tabs=
 width=
 have_convert=`type -p convert`
 have_jp2a=`type -p jp2a`
-while getopts "a:A:bBcCD:d:e:gh:i:I:K:l:LF:f:n:N:oO:Pp:qrs:S:t:T:vw:zu" flag; do
+while getopts "a:A:bBcCD:d:e:Egh:i:I:K:l:LF:f:n:N:oO:Pp:qrs:S:t:T:vw:zu" flag; do
   case $flag in
       a)
           artfiles="${OPTARG}"
@@ -292,6 +306,9 @@ while getopts "a:A:bBcCD:d:e:gh:i:I:K:l:LF:f:n:N:oO:Pp:qrs:S:t:T:vw:zu" flag; do
               fi
             fi
           fi
+          ;;
+      E)
+          set_font_size=
           ;;
       F)
           LARGE_FONT="${OPTARG}"
@@ -579,7 +596,7 @@ play_slide_show() {
     }
     clear
     [ "${first}" == "setfont" ] && {
-      termprofset ${termarg} -s ${art_font_size}
+      [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
       first=
     }
     show_ascii "${art}"
@@ -592,7 +609,7 @@ play_slide_show() {
   trap 'cleanup' SIGINT SIGTERM
   FIG_WELCOME="Asciiville"
   case "${slideshow}" in
-    Art*)
+    Art)
       FIG_ASCII="Fine Art"
       SLIDE_DIR="${ARTDIR}/Art"
       SLIDE_FONT="Shadow"
@@ -602,7 +619,7 @@ play_slide_show() {
         }
       }
       ;;
-    Dragonf*)
+    Dragonfl*)
       FIG_ASCII="Dragonfly"
       SLIDE_DIR="${ARTDIR}/Dragonflies"
       SLIDE_FONT="Speed"
@@ -612,7 +629,7 @@ play_slide_show() {
         }
       }
       ;;
-    Fractal*)
+    Fractals)
       FIG_ASCII="Fractal"
       SLIDE_DIR="${ARTDIR}/Fractals"
       SLIDE_FONT="sblood"
@@ -622,7 +639,7 @@ play_slide_show() {
         }
       }
       ;;
-    Doctor*)
+    Doctorwhen)
       FIG_ASCII="Doctorwhen"
       SLIDE_DIR="${ARTDIR}/Doctorwhen"
       SLIDE_FONT="Varsity"
@@ -647,7 +664,7 @@ play_slide_show() {
         }
       }
       ;;
-    Owls*)
+    Owls)
       FIG_ASCII="Owls"
       SLIDE_DIR="${ARTDIR}/Owls"
       SLIDE_FONT="Shadow"
@@ -657,7 +674,7 @@ play_slide_show() {
         }
       }
       ;;
-    Space*)
+    Space)
       FIG_ASCII="Space"
       SLIDE_DIR="${ARTDIR}/Space"
       SLIDE_FONT="Bolger"
@@ -667,7 +684,7 @@ play_slide_show() {
         }
       }
       ;;
-    Waterfall*)
+    Waterfalls)
       FIG_ASCII="Waterfalls"
       SLIDE_DIR="${ARTDIR}/Waterfalls"
       SLIDE_FONT="Bolger"

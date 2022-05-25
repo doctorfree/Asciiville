@@ -9,7 +9,7 @@ date: April 24, 2022
 show_ascii_art - display ascii art
 
 # SYNOPSIS
-**show_ascii_art** [-a art[,art2,...]] [-A art_dir] [-b] [-B] [-c] [-C] [-d font_dir] [-D seconds] [-e term] [-F large_font] [-f small_font] [-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S song] [-t first_text] [-T second_text] [-h height] [-w width] [-v] [-z] [-u]
+**show_ascii_art** [-a art[,art2,...]] [-A art_dir] [-b] [-B] [-c] [-C] [-d font_dir] [-D seconds] [-e term] [-E] [-F large_font] [-f small_font] [-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S song] [-t first_text] [-T second_text] [-h height] [-w width] [-v] [-z] [-u]
 
 # DESCRIPTION
 The *show_ascii_art* command displays one or more of the ascii art images included in
@@ -60,6 +60,9 @@ See the **asciiville**(1) man page (`man asciiville`).
 : specifies the terminal in which execution occurs
 
     'term' can be one of 'gnome', 'xfce4', or 'tilix'
+
+**-E**
+: disables font size changing
 
 **-f 'small_font'**
 : specifies the figlet font to use for small text

@@ -178,7 +178,7 @@ Choosing a file in Ranger is done by visiting a directory and selecting a file. 
 **-V 'show'**
 : Displays an ascii art slide show
 
-    'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies', 'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature', 'Owls', 'Space', 'Wallpapers', or 'Waterfalls'
+    'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies', 'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature', 'Owls', 'Space', 'Vintage', 'Wallpapers', or 'Waterfalls'
 
 **-Z**
 : Indicates do not play audio during slideshow/animation

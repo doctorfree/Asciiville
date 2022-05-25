@@ -146,6 +146,7 @@ Lyapunov - Lyapunov fractals converted to Ascii using Asciiville tools
 Nature - Photos of nature converted to Ascii using Asciiville tools
 Owls - Photos of owls converted to Ascii using Asciiville tools
 Space - Photos of space converted to Ascii using Asciiville tools
+Vintage - Traditional Ascii Art
 Wallpapers - Pretty wallpapers converted to Ascii using Asciiville tools
 Waterfalls - Photos of waterfalls converted to Ascii using Asciiville tools
 ```
@@ -993,7 +994,7 @@ Slideshow/ASCIImatics animation options:
 	-V 'show' displays an ascii art slide show
 		'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies',
 			'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature',
-			'Owls', 'Space', 'Wallpapers', or 'Waterfalls'
+			'Owls', 'Space', 'Vintage', 'Wallpapers', or 'Waterfalls'
 	-Z indicates do not play audio during slideshow/animation
 
 General options:
@@ -1015,7 +1016,7 @@ Invoked without any arguments, 'asciiville' will display an interactive menu
 
 ```
 Usage: show_ascii_art [-a art[,art2,...]] [-A art_dir] [-b] [-B] [-c] [-C]
-	[-d font_dir] [-D seconds] [-e term] [-F large_font] [-f small_font]
+	[-d font_dir] [-D seconds] [-e term] [-E] [-F large_font] [-f small_font]
 	[-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level]
 	[-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r]
 	[-s show] [-S song] [-t first_text] [-T second_text]
@@ -1036,6 +1037,7 @@ Where:
 	-D 'seconds' specifies the delay, in seconds, between screens
 	-e 'term' specifies the terminal in which execution occurs
 		'term' can be one of 'gnome', 'xfce4', or 'tilix'
+	-E disables font size changing
 	-g convert image to grayscale
 	-i 'image' specifies an image file to convert to ascii art
 	-I 'input_dir' generates ascii art from all images in 'input_dir'
@@ -1064,7 +1066,7 @@ Where:
 	-s 'show' slide show of ascii art
 		'show' can be:
 			'Art', 'Doctorwhen', 'Dragonflies', 'Fractals', 'Friends', 'Iterated'
-			'Lyapunov', 'Nature', 'Owls', 'Space', 'Wallpapers', 'Waterfalls'
+			'Lyapunov', 'Nature', 'Owls', 'Space', 'Vintage', 'Wallpapers', 'Waterfalls'
 		or a custom folder name (with '-A art_dir')
 	-S 'song' use 'song' as audio track
 	-t 'first_text' specifies the first text to display
@@ -1255,8 +1257,9 @@ Art galleries.
 ### Adding and Viewing Art Galleries
 
 The Asciiville Wiki article
-"[Adding and Viewing Art Galleries](Adding-Art-Galleries)" details a brief
-tutorial introduction to generating a new ASCII Art gallery and viewing it.
+"[Adding and Viewing Art Galleries](https://github.com/doctorfree/Asciiville/wiki/Adding-Art-Galleries)"
+details a brief tutorial introduction to generating a new ASCII Art gallery
+and viewing it.
 
 Asciiville default galleries can be viewed using the interactive menus
 in the `asciiville` command. Select the *Ascii Art Slideshows* entry from
@@ -1272,9 +1275,25 @@ Asciiville (`gnome-terminal`, `tilix`, and `xfce4-terminal`) are
 dynamically configured during slideshow presentations to scale font sizes
 so ascii art is displayed correctly.
 
+Asciiville ascii art viewing utilities including slideshow display utilize
+intelligent and configurable font size changes to render ascii art in higher
+quality. If you do not wish a gallery to be displayed in adaptive font mode
+then create an empty file named `.disable_font_size` in the art gallery folder.
+For example, to disable font size changes when displaying ascii art in the
+`/usr/share/asciiville/art/Cats/` folder, execute the command:
+
+```console
+sudo touch /usr/share/asciiville/art/Cats/.disable_font_size
+```
+
+Disabling font size changes is typically desired for gallery folders that
+contain traditional Ascii Art without the UTF-8 escape sequences that can
+be used to color the extended Ascii character set.
+
 ### ASCII Art Tools
 
-The Asciiville Wiki article "[ASCII Art Tools](Tools-Ascii-Art)"
+The Asciiville Wiki article
+"[ASCII Art Tools](https://github.com/doctorfree/Asciiville/wiki/Tools-Ascii-Art)"
 describes several tools not included in Asciiville that may be of
 use in drawing and painting ASCII Art
 
@@ -1410,7 +1429,8 @@ all such character renderings, ASCII and extended ASCII. Whether it's
 
 ### ASCII Art History
 
-The Asciiville Wiki article "[ASCII Art History](Ascii-Art-History)"
+The Asciiville Wiki article
+"[ASCII Art History](https://github.com/doctorfree/Asciiville/wiki/Ascii-Art-History)"
 provides us with a brief history of the development of text based art over
 the millenia, concrete poetry to typewriter art to ASCII and ANSI art.
 

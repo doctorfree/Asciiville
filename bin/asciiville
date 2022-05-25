@@ -116,7 +116,7 @@ usage() {
   printf "\n\t-V 'show' displays an ascii art slide show"
   printf "\n\t\t'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies',"
   printf "\n\t\t\t'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature',"
-  printf "\n\t\t\t'Owls', 'Space', 'Wallpapers', or 'Waterfalls'"
+  printf "\n\t\t\t'Owls', 'Space', 'Vintage', 'Wallpapers', or 'Waterfalls'"
   printf "\n\t-Z indicates do not play audio during slideshow/animation\n"
   printf "\nGeneral options:"
   printf "\n\t-k indicates kill Asciiville tmux sessions and ASCIImatics scripts"
@@ -629,7 +629,9 @@ play_slide_show() {
   else
     art_dir=
   fi
-  showargs="${art_dir} -C ${cycarg} ${lolarg} ${audarg}"
+  fontarg=
+  [ -f ${ARTDIR}/${showname}/.disable_font_size ] && fontarg="-E"
+  showargs="${art_dir} -C ${cycarg} ${fontarg} ${lolarg} ${audarg}"
   save_config
   clear
   if [ "${CURRENT}" ]
