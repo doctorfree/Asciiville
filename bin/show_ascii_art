@@ -39,7 +39,7 @@ usage() {
   printf "\n\t[-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level]"
   printf "\n\t[-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r]"
   printf "\n\t[-s show] [-S song] [-t first_text] [-T second_text]"
-  printf "\n\t[-h height] [-w width] [-v] [-z] [-u]"
+  printf "\n\t[-h height] [-w width] [-v] [-z] [-Z] [-u]"
   printf "\nWhere:"
   printf "\n\t-a 'art' specifies ascii art file(s) to display"
   printf "\n\t\tmultiple files are separated by a comma with no spaces"
@@ -96,6 +96,7 @@ usage() {
   printf "\n\t\tIf only one of 'width' and 'height' is provided,"
   printf "\n\t\tcalculate the other from image aspect ratio"
   printf "\n\t-v indicates view ascii art and prompt to continue"
+  printf "\n\t-Z indicates no ANSI escape sequences used in ascii art"
   printf "\n\t-z indicates save converted image ascii art in art_dir\n\n"
   exit 1
 }

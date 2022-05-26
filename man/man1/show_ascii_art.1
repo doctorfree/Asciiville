@@ -26,7 +26,7 @@ show_ascii_art - display ascii art
 small_font] [-g] [-i image] [-I input_dir] [-O output_dir] [-K
 fifo_name] [-l level] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P]
 [-q] [-r] [-s show] [-S song] [-t first_text] [-T second_text] [-h
-height] [-w width] [-v] [-z] [-u]
+height] [-w width] [-v] [-z] [-Z] [-u]
 .SH DESCRIPTION
 .PP
 The \f[I]show_ascii_art\f[R] command displays one or more of the ascii
@@ -185,6 +185,9 @@ calculate the other from image aspect ratio
 .TP
 \f[B]-v\f[R]
 indicates view ascii art and prompt to continue
+.TP
+\f[B]-Z\f[R]
+indicates no ANSI escape sequences used in ascii art\[dq]
 .TP
 \f[B]-z\f[R]
 indicates save converted image ascii art in art_dir

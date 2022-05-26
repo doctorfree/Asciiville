@@ -1021,7 +1021,7 @@ Usage: show_ascii_art [-a art[,art2,...]] [-A art_dir] [-b] [-B] [-c] [-C]
 	[-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level]
 	[-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r]
 	[-s show] [-S song] [-t first_text] [-T second_text]
-	[-h height] [-w width] [-v] [-z] [-u]
+	[-h height] [-w width] [-v] [-z] [-Z] [-u]
 Where:
 	-a 'art' specifies ascii art file(s) to display
 		multiple files are separated by a comma with no spaces
@@ -1067,7 +1067,7 @@ Where:
 	-s 'show' slide show of ascii art
 		'show' can be:
 			'Art', 'Doctorwhen', 'Dragonflies', 'Fractals', 'Friends', 'Iterated'
-			'Lyapunov', 'Nature', 'Owls', 'Space', 'Vintage', 'Wallpapers', 'Waterfalls'
+			'Lyapunov', 'Nature', 'Owls', 'Space', 'Wallpapers', 'Waterfalls'
 		or a custom folder name (with '-A art_dir')
 	-S 'song' use 'song' as audio track
 	-t 'first_text' specifies the first text to display
@@ -1078,6 +1078,7 @@ Where:
 		If only one of 'width' and 'height' is provided,
 		calculate the other from image aspect ratio
 	-v indicates view ascii art and prompt to continue
+	-Z indicates no ANSI escape sequences used in ascii art
 	-z indicates save converted image ascii art in art_dir
 ```
 

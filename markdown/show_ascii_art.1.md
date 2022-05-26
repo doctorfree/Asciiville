@@ -9,7 +9,7 @@ date: April 24, 2022
 show_ascii_art - display ascii art
 
 # SYNOPSIS
-**show_ascii_art** [-a art[,art2,...]] [-A art_dir] [-b] [-B] [-c] [-C] [-d font_dir] [-D seconds] [-e term] [-E] [-F large_font] [-f small_font] [-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S song] [-t first_text] [-T second_text] [-h height] [-w width] [-v] [-z] [-u]
+**show_ascii_art** [-a art[,art2,...]] [-A art_dir] [-b] [-B] [-c] [-C] [-d font_dir] [-D seconds] [-e term] [-E] [-F large_font] [-f small_font] [-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S song] [-t first_text] [-T second_text] [-h height] [-w width] [-v] [-z] [-Z] [-u]
 
 # DESCRIPTION
 The *show_ascii_art* command displays one or more of the ascii art images included in
@@ -149,6 +149,9 @@ If only one of 'width' and 'height' is provided, calculate the other from image 
 
 **-v**
 : indicates view ascii art and prompt to continue
+
+**-Z**
+: indicates no ANSI escape sequences used in ascii art"
 
 **-z**
 : indicates save converted image ascii art in art_dir
