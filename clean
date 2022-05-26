@@ -3,6 +3,7 @@
 sudo rm -rf dist releases
 cd aewan
 make distclean
+rm -f configure
 cd ../btop
 make distclean
 cd ../jp2a
