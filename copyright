@@ -40,8 +40,13 @@ Copyright: 2007-2018 Victor Geraldsson
 License: Tetris License
 
 Files: art/Vintage/*
-Copyright: None
-License: public-domain
+Copyright: Various/Unknown
+License: non-commercial
+  The licensing for these archived ascii art files varies from public domain
+  to non-commercial personal use. Many include a requirement to leave the
+  attribution (initials or name) in the art intact and all prohibit commercial
+  use. For example, see:
+  https://web.archive.org/web/20091028023223/http://www.geocities.com/SoHo/7373/please.htm
 
 License: MIT
  Permission is hereby granted, free of charge, to any person obtaining a
