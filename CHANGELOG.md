@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+# Asciiville-1.4.0r3 (2022-05-30)
+
+* Add aewan ascii art creation tools
+* Add per-gallery config file support
+* Add Vintage ascii art gallery
+
 # Asciiville-1.4.0r2 (2022-05-24)
 
 * Better support for console-only deployments

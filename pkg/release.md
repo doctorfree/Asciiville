@@ -1,4 +1,10 @@
-Version 1.4.0 release 2 adds support for:
+Version 1.4.0 release 3 adds support for:
+
+* Add aewan ascii art creation tools
+* Add per-gallery config file support
+* Add Vintage ascii art gallery
+
+Version 1.4.0 release 2 added support for:
 
 * Better support for console-only deployments
 * Console-based mailcap configs used with `ascinit -c`
@@ -85,20 +91,20 @@ Install the package on Debian based systems by executing the commands:
 
 ```bash
 sudo apt update -y
-sudo apt install ./Asciiville_1.4.0-2.amd64.deb
+sudo apt install ./Asciiville_1.4.0-3.amd64.deb
 ```
 
 or, on a Raspberry Pi:
 
 ```bash
 sudo apt update -y
-sudo apt install ./Asciiville_1.4.0-2.armhf.deb
+sudo apt install ./Asciiville_1.4.0-3.armhf.deb
 ```
 
 Install the package on RPM based systems by executing the command
 ```bash
 sudo dnf update -y
-sudo dnf localinstall ./Asciiville-1.4.0-2.x86_64.rpm
+sudo dnf localinstall ./Asciiville-1.4.0-3.x86_64.rpm
 ```
 
 On systems for which neither the Debian or RPM packages will suffice,
@@ -109,9 +115,9 @@ as a user with sudo privilege execute the commands:
 
 ```bash
 chmod 755 Install-bin.sh
-sudo ./Install-bin.sh /path/to/Asciiville_1.4.0-2.<arch>.tgz
+sudo ./Install-bin.sh /path/to/Asciiville_1.4.0-3.<arch>.tgz
 or
-sudo ./Install-bin.sh /path/to/Asciiville_1.4.0-2.<arch>.zip
+sudo ./Install-bin.sh /path/to/Asciiville_1.4.0-3.<arch>.zip
 ```
 
 ## Configuration
