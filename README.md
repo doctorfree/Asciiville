@@ -1278,18 +1278,33 @@ so ascii art is displayed correctly.
 
 Asciiville ascii art viewing utilities including slideshow display utilize
 intelligent and configurable font size changes to render ascii art in higher
-quality. If you do not wish a gallery to be displayed in adaptive font mode
-then create an empty file named `.disable_font_size` in the art gallery folder.
-For example, to disable font size changes when displaying ascii art in the
-`/usr/share/asciiville/art/Cats/` folder, execute the command:
+quality. Each Asciiville ascii art gallery can be configured with options
+to control some of these font size and display features. To configure a
+gallery, add or edit the file `/usr/share/asciiville/art/<gallery>/.config`.
+An example Asciiville gallery configuration file can be found in
+`/usr/share/asciiville/art/Vintage/.config`:
 
-```console
-sudo touch /usr/share/asciiville/art/Cats/.disable_font_size
+```
+scale_art_font=2
+scale_txt_font=1
+disable_font_size=
+uses_ansi_escape=
 ```
 
-Disabling font size changes is typically desired for gallery folders that
-contain traditional Ascii Art without the UTF-8 escape sequences that can
-be used to color the extended Ascii character set.
+In this example, `scale_art_font=2` indicates double the font size used for
+ascii art display; `scale_txt_font=1` indicates no change to the text font
+size used for ascii art text display; `disable_font_size=` indicates do not
+disable font size changes; and `uses_ansi_escape=` indicates this gallery's
+ascii art does not utilize ANSI escape sequences to color its text.
+
+The default settings for Asciiville ascii art galleries is:
+
+```
+scale_art_font=1
+scale_txt_font=1
+disable_font_size=
+uses_ansi_escape=1
+```
 
 ### ASCII Art Tools
 

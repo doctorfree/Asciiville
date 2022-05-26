@@ -630,8 +630,25 @@ play_slide_show() {
     art_dir=
   fi
   fontarg=
-  [ -f ${ARTDIR}/${showname}/.disable_font_size ] && fontarg="-E"
-  showargs="${art_dir} -C ${cycarg} ${fontarg} ${lolarg} ${audarg}"
+  ansiarg=
+  disable_font_size=
+  uses_ansi_escape=1
+  scale_art_font=1
+  scale_txt_font=1
+  [ -f ${ARTDIR}/${showname}/.config ] && {
+    . ${ARTDIR}/${showname}/.config
+    [ "${disable_font_size}" ] && fontarg="-E"
+    [ "${uses_ansi_escape}" ] || ansiarg="-Z"
+    [ ${scale_art_font} -eq 1 ] || {
+      saved_art_size=${art_font_size}
+      art_font_size=$((art_font_size * scale_art_font))
+    }
+    [ ${scale_txt_font} -eq 1 ] || {
+      saved_txt_size=${txt_font_size}
+      txt_font_size=$((txt_font_size * scale_txt_font))
+    }
+  }
+  showargs="${art_dir} -C ${cycarg} ${ansiarg} ${fontarg} ${lolarg} ${audarg}"
   save_config
   clear
   if [ "${CURRENT}" ]
@@ -709,6 +726,9 @@ play_slide_show() {
       fi
     fi
   fi
+  [ ${scale_art_font} -eq 1 ] || art_font_size=${saved_art_size}
+  [ ${scale_txt_font} -eq 1 ] || txt_font_size=${saved_txt_size}
+  [ ${scale_art_font} -eq 1 ] && [ ${scale_txt_font} -eq 1 ] || save_config
 }
 
 show_figlet() {
@@ -2938,8 +2958,10 @@ isfull=
 image_dir=
 ascii_dir=
 custom_song=
-use_lolcat=
-use_lol="NO"
+[ "${use_lol}" ] || {
+  use_lolcat=
+  use_lol="NO"
+}
 if [ "${have_figlet}" ]
 then
   use_figlet=1
@@ -3561,11 +3583,6 @@ done
 }
 
 [ "${INTERACTIVE}" ] && {
-  [ "${have_lolcat}" ] && {
-    use_lolcat=1
-    use_lol="YES"
-    LOLCAT="${LOLCAT_NORM}"
-  }
   songname=`basename "${SONG}"`
   songleng=`echo ${songname} | wc -c`
   [ ${songleng} -gt 16 ] && {
