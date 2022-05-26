@@ -1,0 +1,85 @@
+# Copyright (c) 2003 Bruno T. C. de Oliveira
+# 
+# LICENSE INFORMATION:
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation; either
+# version 2 of the License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+# Copyright (c) 2002 Bruno T. C. de Oliveira
+# 
+# INFORMAÇÕES DE LICENÇA:
+# Este programa é um software de livre distribuição; você pode
+# redistribuí-lo e/ou modificá-lo sob os termos da GNU General
+# Public License, conforme publicado pela Free Software Foundation,
+# pela versão 2 da licença ou qualquer versão posterior.
+# 
+# Este programa é distribuído na esperança de que ele será útil
+# aos seus usuários, porém, SEM QUAISQUER GARANTIAS; sem sequer
+# a garantia implícita de COMERCIABILIDADE ou DE ADEQUAÇÃO A
+# QUALQUER FINALIDADE ESPECÍFICA. Consulte a GNU General Public
+# License para obter mais detalhes (uma cópia acompanha este
+# programa, armazenada no arquivo COPYING).
+ 
+sources=$(wildcard *.c) $(wildcard aewl/*.c) $(wildcard bores/*.c)
+headers=$(wildcard *.h) $(wildcard bores/*.h) $(wildcard aewl/*.h)
+execs=aewan@EXESUF@ aecat@EXESUF@ aemakeflic@EXESUF@
+mainobjs=$(patsubst %@EXESUF@,%.o,$(execs))
+objects=$(filter-out $(mainobjs), $(patsubst %.c,%.o,$(sources)))
+
+CC=@CC@
+CFLAGS=@CFLAGS@ -fno-strict-aliasing -Wall
+LIBS=@LIBS@
+LDFLAGS=@LDFLAGS@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+bindir=@bindir@
+mandir=@mandir@
+
+export CC
+export CFLAGS
+export LDFLAGS
+export LIBS
+
+all: $(execs)
+
+$(execs): %@EXESUF@: %.o $(objects)
+	$(CC) $(CFLAGS) -o $@ $(objects) \
+			   $(patsubst %@EXESUF@, %.o, $@) $(LDFLAGS) $(LIBS)
+
+clean:
+	rm -f *.o aewl/*.o bores/*.o depends aewan.log $(execs) *.stackdump
+
+distclean: clean
+	rm -rf autom4te.cache config.status config.log Makefile
+
+cvsclean: distclean
+	rm -f configure
+
+install: all
+	mkdir -p $(DESTDIR)$(bindir)
+	cp $(execs) $(DESTDIR)$(bindir)
+	mkdir -p $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(mandir)/man5
+	cp man/man1/*.1 $(DESTDIR)$(mandir)/man1
+	cp man/man5/*.5 $(DESTDIR)$(mandir)/man5
+
+-include depends
+
+.c.o:
+	$(CC) $(CFLAGS) -c $< -o $@
+
+depends: $(sources) $(headers)
+	$(CC) $(CFLAGS) -MM $(sources) >depends
+
+.PHONY: clean all depends
+

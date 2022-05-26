@@ -10,9 +10,9 @@ build_aewan() {
   # Fork of Repo: http://aewan.sourceforge.net/
   #
   [ -f aewan ] || {
-    ./configure --prefix=/usr
     prefix="--prefix=/usr"
     [ "${PREFIX}" ] && prefix="--prefix=${PREFIX}"
+    autoreconf -vi
     ./configure ${prefix}
     make
   }
