@@ -27,6 +27,7 @@ utilities to perform common operations in a text-only environment.
     1. [Mutt email configuration](#mutt-email-configuration)
     1. [Tuir Reddit client configuration](#tuir-reddit-client-configuration)
 1. [Documentation](#documentation)
+    1. [Aewan README](#aewan-readme)
     1. [Btop++ README](#btop++-readme)
     1. [Cbftp README](#cbftp-readme)
     1. [Ddgr README](#ddgr-readme)
@@ -82,6 +83,7 @@ The `asciiville` command can be used to invoke:
 * The ASCII text-based dungeon game `nethack` with Extended ASCII glyphs
 * The `cmatrix` command that displays the screen from "The Matrix"
 * Character based ASCII Art and image to ascii conversion utility `jp2a`
+* ASCII Art creation tool `aewan`
 * Display system info
 * Display the Phase of the Moon
 * Display a weather report
@@ -91,6 +93,7 @@ The `asciiville` command can be used to invoke:
 
 Integration is provided for:
 
+* [aewan](aewan/README), Ascii Art creation tool
 * [btop](btop/README.md), character based system monitor
 * [cbftp](cbftp/README), character based FTP client
 * [ddgr](ddgr/README.md), command line web search
@@ -179,6 +182,7 @@ sudo gzip *.asc
 Asciiville adds the following commands to your system:
 
 * **asciiville** : primary user interface, invokes terminal emulators, ascii animations, system monitor, mail client, file manager, web browser, and more
+* **aewan/aecat/aemakeflic** : Ascii Art creation tools
 * **btop** : character based system monitor
 * **cbftp** : character based FTP client
 * **ascinit** : one-time initializaton of a user's Asciiville configuration
@@ -888,6 +892,9 @@ to manuals and man pages describing usage of the Asciiville components.
 Run the `asciiville` command with no arguments or the `-i` argument to
 bring up the interactive menu interface.
 
+### Aewan README
+- [aewan](aewan/README), Introduction to the Aewan ascii art creation tool
+
 ### Btop++ README
 - [**btop/README.md**](btop/README.md) - Introduction to the btop system monitor
 
@@ -1556,11 +1563,11 @@ bison, libncurses5-dev, autotools-dev, libjpeg-dev, libpng-dev,
 libcurl4-gnutls-dev, libncurses5-dev, autoconf-archive, pkg-config
 
 Not all are required to build a specific utility or game. Utilities and games
-built from source in Asciiville include btop++, cbftp, ddgr, jp2a,
+built from source in Asciiville include aewan, btop++, cbftp, ddgr, jp2a,
 nethack, ninvaders, and tetris.
 
 The build script `build` in the top-level directory of the Asciiville repository
-can be used to compile btop, cbftp, jp2a, nethack, ninvaders, and tetris.
+can be used to compile aewan, btop, cbftp, jp2a, nethack, ninvaders, and tetris.
 Invoke the `build` script with the game or utility you wish to compile as
 an argument. For example, to compile the btop++ system monitor from source,
 run the command `./build btop`.

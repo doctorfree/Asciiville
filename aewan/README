@@ -1,0 +1,77 @@
+AEWAN Ascii Art Editor
+Copyright (c) 2004 Bruno Takahashi C. de Oliveira
+Licensed under the GNU General Public license
+Refer to the COPYING file for a full text of the license.
+
+[[ 0. PROJECT HOME PAGE ]]
+
+        http://aewan.sourceforge.net
+
+There you will find author information, FAQ, links to the latest
+version of the program, etc.
+
+[[ 1. HOW TO COMPILE AND INSTALL ]]
+
+Assuming you downloaded aewan-0.X.Y.tar.gz (where X, Y represent nonnegative
+integers), this is how you would compile it:
+
+$ tar -zxf aewan-0.X.Y.tar.gz
+$ cd aewan-0.X.Y
+$ ./configure
+$ make
+$ su -c 'make install'
+
+NOTE: as of version 0.8.7, aewan no longer requires the separate libbores 
+library, since it has been merged into the project.
+
+[[ 2. THANKS ]]
+
+Thanks to every who, directly or indirectly, contributed to this project.
+In particular, I would like to thank:
+
+  * Sourceforge.net for their excellent Open Source hosting infrastructure
+  * The authors of tetradraw, whose program served as an inspiration
+    to write this editor
+
+I would also like to thank Robert Lemmen <robertle@semistable.com> for all
+his cooperation in getting aewan into the Debian distribution.
+
+PEOPLE WHO HAVE WORKED OR ARE CURRENTLY WORKING ON THIS PROJECT:
+
+  * Bruno T. C. de Oliveira (brunotc@gmail.com)
+  * Peep Pullerits (http://solicit.estprog.ee; solicit@estprog.ee)
+  * Praveen Kurup <praveen_kurup@jasubhai.com>
+  * Gerfried Fuchs <alfie@ist.org>
+
+[[ 3. WHAT IS AEWAN ]]
+
+Summary: Aewan is a multi-layered ascii-art/animation editor that produces
+both stand-alone cat-able art files and an easy-to-parse format for integration
+in your terminal applications. It is primarily designed for Linux, although it
+currently also compiles under FreeBSD and possibly other *NIX systems.
+
+More details: Aewan is a curses-based program that allows for the creation and
+editing of ascii art. The user is able to move the cursor around the screen by
+means of the arrow keys and 'paint' characters by pressing the corresponding
+keys. There are dialog boxes that allow the user to choose foreground and
+background colors, as well as bold and blink attributes. The user may also
+select rectangular areas of the canvas in order to move, copy and paste them.
+Aewan also supports 'intelligent' horizontal and vertical flipping (e.g.
+converts '\' to '/', etc).
+
+What sets Aewan apart from similar projects is the fact that it can work with
+multiple layers, and has the ability to turn transparency and visibility on and
+off for each layer. A layer dialog is provided through which the user can
+change the order of the layers. Thus, each layer can be edited independently in
+order to generate a composite drawing. Instead of using the layers for
+compositing, it is also possible to use the layers as frames for an animation,
+thus enabling the user to create ascii animations with Aewan (note: to be fully
+implemented next release).
+
+The file format is easy to parse, so it is easy to write a terminal-based
+application that uses the Aewan files to display onscreen. Currently it has
+been tested on the Linux terminal, rxvt, xterm, the Cygwin terminal and the
+FreeBSD console. Although it is already quite stable (I am already using it on
+some projects of mine), it is a little rough on the edges, but that can be
+worked out in the near future.
+

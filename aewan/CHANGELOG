@@ -1,0 +1,37 @@
+1.0.01
+
+ * aecat now accepts "comment" format (which extracts metadata from the file)
+   and -L option (which outputs layer count) - contributed by 
+   Gerfried Fuchs (alfie@ist.org)
+ * corrected aeff (aewan file format) escape sequence interpretation bug
+   that was causing special characters in metainfo to get garbled
+ * added "resize layer" funcionality, also contributed by 
+   Gerfried Fuchs (alfie@ist.org)
+ * both 'Load file' and 'Save file' now use dialog boxes that let the
+   user browse directories 
+ * added a new export utility: aemakeflic, which converts aewan documents
+   into animations to be played in the 'less' command or as a shell script
+ * added a confirmation question when quitting the program or clearing
+   the document to prevent against accidental loss of current work
+ * in the version number, the revision will be conventionally written
+   with two digits from now on
+
+0.9.7 
+
+ * cleaned up Makefile.in to make the bores/ directory (remnants of a library
+   that used to be separate from aewan) compile together with the rest
+   of the project instead of separately as libbores.a
+
+0.9.6 - release date: 2005-02-19 (minor bugfix release)
+
+ * fixed segfault bug which resulted from trying to correct cursor coords
+   when a layer had just been added (reported in Debian bug tracking system)
+
+0.9.5 - release date: 2005-02-18
+
+ * menu introduced in order to make the interface more friendly
+ * "new file" (i.e. clear everything and start from scratch) funcionality added
+ * added patches from Gerfried Fuchs (alfie@ist.org):
+      - aecat now produces more XHTML-compliant html and supports
+        background color
+      - user can now manipulate upper-left corner of selection in select mode

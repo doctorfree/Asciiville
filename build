@@ -3,6 +3,34 @@
 # build - compile and optionally install Asciiville components
 #
 
+build_aewan() {
+  #
+  # Repo: https://github.com/doctorfree/Asciiville
+  #
+  # Fork of Repo: http://aewan.sourceforge.net/
+  #
+  [ -f aewan ] || {
+    ./configure --prefix=/usr
+    prefix="--prefix=/usr"
+    [ "${PREFIX}" ] && prefix="--prefix=${PREFIX}"
+    ./configure ${prefix}
+    make
+  }
+  chmod +x aewan aecat aemakeflic
+
+  [ "${INSTALL}" ] && {
+    [ -d ${PREFIX}/usr ] || sudo mkdir -p ${PREFIX}/usr
+    [ -d ${PREFIX}/usr/bin ] || sudo mkdir -p ${PREFIX}/usr/bin
+    sudo cp aewan aecat aemakeflic ${PREFIX}/usr/bin
+    [ -d ${PREFIX}/usr/share ] || sudo mkdir -p ${PREFIX}/usr/share
+    [ -d ${PREFIX}/usr/share/man ] || sudo mkdir -p ${PREFIX}/usr/share/man
+    [ -d ${PREFIX}/usr/share/man/man1 ] || sudo mkdir -p ${PREFIX}/usr/share/man/man1
+    [ -d ${PREFIX}/usr/share/man/man5 ] || sudo mkdir -p ${PREFIX}/usr/share/man/man5
+    sudo cp man/man1/*.1 ${PREFIX}/usr/share/man/man1
+    sudo cp man/man5/*.5 ${PREFIX}/usr/share/man/man5
+  }
+}
+
 build_btop() {
   # Repo: https://github.com/doctorfree/Asciiville
   #
@@ -124,8 +152,8 @@ usage() {
     printf "\n\t-p prefix specifies installation prefix (default /usr)"
     printf "\n\t-u displays this usage message and exits\n"
     printf "\nNo arguments: build btop, configure with prefix=/usr, build\n"
-    printf "\n'project' can be one or more of 'btop', 'cbftp', 'jp2a',"
-    printf "\n'nethack', 'ninvaders', and 'tetris'\n"
+    printf "\n'project' can be one or more of 'aewan', 'btop', 'cbftp',"
+    printf "\n'jp2a', 'nethack', 'ninvaders', and 'tetris'\n"
     exit 1
 }
 
@@ -150,6 +178,14 @@ shift $(( OPTIND - 1 ))
 for project in $*
 do
   case "${project}" in
+    aewan)
+      PROJ=aewan
+      [ -d ${PROJ} ] && {
+        cd ${PROJ}
+        build_aewan
+        cd ..
+      }
+      ;;
     btop)
       PROJ=btop
       [ -d ${PROJ} ] && {

@@ -1,0 +1,50 @@
+.TH aemakeflic "1" "September 2005" "aemakeflic (Aewan Ascii Art Editor)"
+.SH NAME
+aemakeflic \- produce an animation from an aewan document
+.SH SYNOPSIS
+.B aemakeflic
+[-f {less|sh}] [-N] [-b] [-d <delay>] input.ae [outputfile.ext]
+
+.SH DESCRIPTION
+This utility will make an ascii animation out of an aewan document. It
+can currently produce animations in two formats: a shellscript which,
+when executed, will display the animation and a "less movie" intended
+to be "played" on the very popular 'less' output pager -- that is, the
+user will see the animation as he pages down through the file in an
+appropriate window size.
+
+Each layer in the aewan document is interpreted as one frame of the animation.
+Layer transparency and compositing are not used: each layer becomes a frame.
+
+.SH OPTIONS
+.TP
+\fB\-f\fR
+specifies output format - can "sh" for a shellscript or "less" for a
+"less movie"
+.TP
+\fB\-N\fR
+omit the initial instructions that are normally included in the resulting
+file. The instructions will orient the user as to how to play the file.
+.TP
+\fB\-b\fR
+disables output of color (only characters will be printed).
+.TP
+\fB\-d delay\fR
+specifies the delay between frames (for shellscript only), given in
+milliseconds.
+
+.SH AUTHORS
+This program is part of the Aewan Ascii Art Editor package.
+See aewan(1) for author information.
+
+.SH LICENSE
+Copyright (c) 2004-2005 Bruno Takahashi C. de Oliveira. All rights reserved.
+
+This program is licensed under the GNU General Public License,
+version 2 or, at your option, any later version. For full license
+information, please refer to the COPYING file that accompanies
+the program.
+
+.SH SEE ALSO
+\fBaewan\fR(1), \fBaewan\fR(5), \fBaecat\fR(1)
+

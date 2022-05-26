@@ -1,0 +1,30 @@
+TODO
+Items in order of importance
+
+CURRENT WORK
+
+- see TODO in filedlg.c
+
+CORRECTIONS:
+
+- [aewl] make the label widget a little more robust: make it respect its width
+  when painting itself
+
+- [aewl] make text fields 'scrollable'
+
+- [aewl] BUG: cursor in textfield goes arbitrarily to the right as text 
+  is added beyond the visible part of it
+
+NEW FEATURES:
+
+- dialogs!!!! For saving files, opening files, confirming operations,
+  specifying layer dimensions, renaming layers and everything else
+- IMPORT/EXPORT from/to ansi, etc
+
+- flip strategies (let user decide what characters are to be flipped)
+- more intuitive transparent-layer handling (or add more documentation)
+- enable smaller layers to be placed anywhere instead of always having
+  to be anchored to the top-left corner
+
+- configurable key bindings
+

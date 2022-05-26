@@ -1,0 +1,63 @@
+.TH aecat "1" "March 2005" "aecat (Aewan Ascii Art Editor)"
+.SH NAME
+aecat \- display an aewan document
+.SH SYNOPSIS
+.B aecat
+[-b] [-c] [-{n|N}] [{-p | -l <layer_num>}] [-f <format>] [-o <output_file>] inputfile
+
+.SH DESCRIPTION
+This is an utility program that will convert an aewan document
+to ANSI escape sequences so that it can be rendered on a standard
+terminal. Alternatively, it can also generate HTML code for displaying
+the document in a web page. Any particular layer of the document
+may be converted, or you may request a composite of all layers.
+
+.SH OPTIONS
+.TP
+\fB\-f\fR
+specifies output format - can "text", "html" or "comment". Default is "text".
+The "comment" format extracts document metadata.
+.TP
+\fB\-c\fR
+prepend a 'clear screen' escape sequence (only valid when outputting
+text).
+.TP
+\fB\-o\fR\fI<file>\fR
+writes output to specified file rather than stdout
+.TP
+\fB\-b\fR
+disables output of color (only characters will be printed).
+.TP
+\fB\-l\fR\fI<layer_no>\fR
+specifies which layer of the document is to be used
+(must be an index, not a layer name). By default, layer 0 will be used.
+.TP
+\fB\-L\fR
+displays the number of layers in the file.
+.TP
+\fB\-p\fR
+exports a composite, that is, overlays all visible layers,
+paying attention to layer transparency, etc. The size of the
+composite will be the size of the first layer
+.TP
+\fB\-n\fR
+suppress output of newlines
+.TP
+\fB\-h\fR
+prints a short help text
+
+.SH AUTHORS
+This program is part of the Aewan Ascii Art Editor package.
+See aewan(1) for author information.
+
+.SH LICENSE
+Copyright (c) 2004-2005 Bruno Takahashi C. de Oliveira. All rights reserved.
+
+This program is licensed under the GNU General Public License,
+version 2 or, at your option, any later version. For full license
+information, please refer to the COPYING file that accompanies
+the program.
+
+.SH SEE ALSO
+\fBaewan\fR(1), \fBaewan\fR(5), \fBaemakeflic\fR(1)
+

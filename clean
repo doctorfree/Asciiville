@@ -1,7 +1,9 @@
 #!/bin/bash
 
 sudo rm -rf dist releases
-cd btop
+cd aewan
+make distclean
+cd ../btop
 make distclean
 cd ../jp2a
 [ -f Makefile ] && make distclean
