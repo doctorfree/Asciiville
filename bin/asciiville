@@ -773,6 +773,7 @@ show_help_menu() {
     options+=("MusicPlayer Animation Man Page")
     options+=("ASCII Splash Man Page")
     options+=("ASCII Splash Tmux Man Page")
+    [ "${have_aewan}" ] && options+=("Aewan Art Creation Man Page")
     [ "${have_btop}" ] && options+=("Btop System Monitor Man Page")
     [ "${have_cbftp}" ] && options+=("Cbftp FTP Client Man Page")
     [ "${have_ddgr}" ] && options+=("Ddgr Web Search Man Page")
@@ -845,6 +846,10 @@ show_help_menu() {
           ;;
         "ASCII Splash"*,*|*,"ASCII Splash"*)
           man asciisplash
+          break
+          ;;
+        "Aewan"*,*|*,"Aewan"*)
+          man aewan
           break
           ;;
         "Btop"*,*|*,"Btop"*)
@@ -1013,6 +1018,7 @@ show_select_menu() {
   while true
   do
     [ "${COMMAND}" ] || COMMAND=btop
+    use_aewan="NO"
     use_btop="NO"
     use_cmatrix="NO"
     use_ftp="NO"
@@ -1028,6 +1034,9 @@ show_select_menu() {
     use_tetris="NO"
     use_w3m="NO"
     case "${COMMAND}" in
+      aewan)
+        use_aewan="YES"
+        ;;
       btop)
         use_btop="YES"
         ;;
@@ -1109,6 +1118,7 @@ show_select_menu() {
     }
     PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORMAL}"
     options=()
+    [ "${have_aewan}" ] && options+=("Aewan Art Creation     [${use_btop}]")
     [ "${have_btop}" ] && options+=("Btop System Monitor    [${use_btop}]")
     [ "${have_gdu}" ] && options+=("Disk Usage Analyzer    [${use_gdu}]")
     [ "${have_lynx}" ] && options+=("Lynx Web Browser       [${use_lynx}]")
@@ -1167,6 +1177,11 @@ show_select_menu() {
           "Ascii Art"*,*|*,"Ascii Art"*)
               art_menu=1
               break 2
+              ;;
+          "Aewan"*,*|*,"Aewan"*)
+              COMMAND=aewan
+              MTITLE="Aewan Art Creation"
+              break
               ;;
           "Btop"*,*|*,"Btop"*)
               COMMAND=btop
@@ -2913,6 +2928,7 @@ FULLSCREEN=
 init_vars
 # Without any arguments, bring up interactive dialog menu
 [ $# -eq 0 ] && INTERACTIVE=1
+have_aewan=`type -p aewan`
 have_btop=`type -p btop`
 have_mutt=`type -p mutt`
 have_neomutt=`type -p neomutt`
