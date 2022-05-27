@@ -11,9 +11,9 @@ asciisplash - Launch a fun splashy screen of ASCIImatics animations
 # SYNOPSIS
 **asciisplash** [-a] [-b] [-C] [-c numcycles] [-d] [-j] [-J] [-m] [-p] [-s song] [-u]
 
-**NOTE:** `asciisplash` can be run by invoking `mpplus [-a] [-b] [-jJ] [-m] [-n num] [-N] [-p] [-R] [-S]`
+**NOTE:** `asciisplash` can be run by invoking `asciiville [-S] ...`
 
-See `man mpplus` for details on how to front-end `asciisplash` with `mpplus`
+See `man asciiville` for details on how to front-end `asciisplash` with `asciiville`
 
 # DESCRIPTION
 The *asciisplash* command plays one of the ASCIImatics animations included in Asciiville.

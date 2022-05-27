@@ -11,12 +11,14 @@ asciisplash-tmux - embeds `asciisplash` in a tmux session
 # SYNOPSIS
 **asciisplash-tmux** [-a] [-b] [-c num] [-d] [-l script] [-r script] [-R] [-s song] [-t] [-u]
 
-**NOTE:** `asciisplash-tmux` can be run by invoking `mpplus [-a] [-b] [-jJ] [-m] [-n num] [-N] [-p] [-R] -S -T`
+**NOTE:** `asciisplash-tmux` can be run by invoking `asciiville -S -T ...`
 
-See `man mpplus` for details on how to front-end `asciisplash-tmux` with `mpplus`
+See `man asciiville` for details on how to front-end `asciisplash-tmux` with `asciiville`
 
 # DESCRIPTION
 The *asciisplash-tmux* command runs the *asciisplash* command in a tmux session. This enables automatic recording with *asciinema*, if desired, and simplifies the process of creating and managing a tmux session.
+
+**NOTE:** The `asciisplash-tmux` command resides in `/usr/share/asciiville/tools/bin/asciisplash-tmux` and is intended as a backend for use by the `asciiville` command.
 
 # COMMAND LINE OPTIONS
 **-a**
