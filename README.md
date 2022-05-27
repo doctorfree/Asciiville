@@ -195,7 +195,6 @@ Asciiville adds the following commands to your system:
     * **asciijulia** : ASCIImatics animated zoom on a Julia Set
     * **asciiplasma** : ASCIImatics animated plasma graphic
     * **asciimpplus** : ASCIImatics animated Music Player Plus splash screen
-* **chktermcolor** : checks if a terminal has 24-bit true color support
 * **cmatrix** : display that screen from "The Matrix"
 * **ddgr** : command line web search
 * **got** : text based translation tool (only added if `go` is installed)

@@ -23,7 +23,6 @@ AVILLE_FILES="/usr/bin/asciiart \
 /usr/bin/btop-tmux \
 /usr/bin/cbftp \
 /usr/bin/cbftp-debug \
-/usr/bin/chktermcolor \
 /usr/bin/datafilecat \
 /usr/bin/datafilewrite \
 /usr/bin/ddgr \
