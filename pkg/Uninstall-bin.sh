@@ -19,7 +19,6 @@ AVILLE_FILES="/usr/bin/asciiart \
 /usr/bin/asciiville \
 /usr/bin/ascinit \
 /usr/bin/btop \
-/usr/bin/btop-tmux \
 /usr/bin/cbftp \
 /usr/bin/cbftp-debug \
 /usr/bin/datafilecat \

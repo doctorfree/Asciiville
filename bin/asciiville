@@ -2871,7 +2871,7 @@ set_show_term() {
 
 init_vars() {
   MTITLE="Asciiville"
-  COMMAND_TMUX="btop-tmux"
+  COMMAND_TMUX="/usr/share/asciiville/tools/bin/btop-tmux"
   ASCSPLASH="asciisplash"
   ASCSPLASH_TMUX="asciisplash-tmux"
 

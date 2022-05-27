@@ -6,8 +6,7 @@ MANDIR ?= $(PREFIX)/share/man/man1
 DOCDIR ?= $(PREFIX)/share/doc/asciiville
 BINS = bin/asciiart bin/asciijulia bin/asciimpplus bin/asciiplasma \
 	   bin/asciisplash bin/asciisplash-tmux bin/asciiville bin/ascinit \
-	   bin/btop-tmux bin/make_ascii_art \
-	   bin/set_xfce_trans bin/show_ascii_art
+	   bin/make_ascii_art bin/set_xfce_trans bin/show_ascii_art
 MANS = man/man1/asciiart.1 man/man1/asciijulia.1 man/man1/asciimpplus.1 \
 	   man/man1/asciiplasma.1 man/man1/asciisplash-tmux.1 \
 	   man/man1/asciisplash.1 man/man1/asciiville.1 man/man1/cbftp.1 \
