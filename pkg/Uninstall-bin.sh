@@ -31,7 +31,6 @@ AVILLE_FILES="/usr/bin/asciiart \
 /usr/bin/set_xfce_font \
 /usr/bin/set_xfce_trans \
 /usr/bin/show_ascii_art \
-/usr/bin/show_figlet_fonts \
 /usr/bin/show_moon \
 /usr/bin/show_weather \
 /usr/bin/termprofset \

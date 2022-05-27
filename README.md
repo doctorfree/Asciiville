@@ -1385,12 +1385,13 @@ by the `pyfiglet` Python package. These fonts are used by the `asciimatics`
 Python package. To view a complete list of the installed `pyfiglet` fonts,
 run the command `pyfiglet -l`. To see an example rendering of each of the
 installed `pyfiglet` fonts including those installed by `Asciiville`,
-run the command `show_figlet_fonts`. There are many fonts so you may wish
-to redirect the output of the `show_figlet_fonts` command for use with an
-editor or pager:
+run the command `/usr/share/asciiville/tools/bin/show_figlet_fonts`.
+There are many fonts so you may wish to redirect the output of the
+`/usr/share/asciiville/tools/bin/show_figlet_fonts` command for use
+with an editor or pager:
 
 ```
-show_figlet_fonts > figlet-fonts-examples.txt
+/usr/share/asciiville/tools/bin/show_figlet_fonts > figlet-fonts-examples.txt
 less figlet-fonts-examples.txt
 ```
 
