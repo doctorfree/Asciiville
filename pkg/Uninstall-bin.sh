@@ -18,7 +18,6 @@ AVILLE_FILES="/usr/bin/asciiart \
 /usr/bin/asciisplash-tmux \
 /usr/bin/asciiville \
 /usr/bin/ascinit \
-/usr/bin/bb-tmux \
 /usr/bin/btop \
 /usr/bin/btop-tmux \
 /usr/bin/cbftp \

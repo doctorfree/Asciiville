@@ -189,7 +189,6 @@ Asciiville adds the following commands to your system:
 * **cbftp** : character based FTP client
 * **ascinit** : one-time initializaton of a user's Asciiville configuration
 * **btop-tmux** : runs btop in a tmux session
-* **bb-tmux** : runs aalib bb demo in a tmux session
 * **asciisplash** : fun ascii art screens using ASCIImatics animations. Ascii art commands:
     * **asciiart** : ASCIImatics animated art images
     * **asciijulia** : ASCIImatics animated zoom on a Julia Set

@@ -1821,12 +1821,12 @@ show_animation_menu() {
               then
                 if [ "${custom_song}" ]
                 then
-                  bb-tmux -a -s "${SONG}"
+                  /usr/share/asciiville/tools/bin/bb-tmux -a -s "${SONG}"
                 else
-                  bb-tmux -a
+                  /usr/share/asciiville/tools/bin/bb-tmux -a
                 fi
               else
-                bb-tmux
+                /usr/share/asciiville/tools/bin/bb-tmux
               fi
               skip_it_so=1
               export DISPLAY="${SAVED_DISPLAY}"
@@ -2470,9 +2470,9 @@ show_main_menu() {
               export DISPLAY=""
               if [ "${AUDIO}" ]
               then
-                bb-tmux -a
+                /usr/share/asciiville/tools/bin/bb-tmux -a
               else
-                bb-tmux
+                /usr/share/asciiville/tools/bin/bb-tmux
               fi
               skip_it_so=1
               export DISPLAY="${SAVED_DISPLAY}"
@@ -2481,9 +2481,9 @@ show_main_menu() {
           "AAlib Demo (X11 mode)",*|*,"AAlib Demo (X11 mode)")
               if [ "${AUDIO}" ]
               then
-                bb-tmux -a
+                /usr/share/asciiville/tools/bin/bb-tmux -a
               else
-                bb-tmux
+                /usr/share/asciiville/tools/bin/bb-tmux
               fi
               skip_it_so=1
               break
@@ -2944,7 +2944,7 @@ have_asciijulia=`type -p asciijulia`
 have_asciiplasma=`type -p asciiplasma`
 have_asciimpplus=`type -p asciimpplus`
 have_asciinema=`type -p asciinema`
-have_bb=`type -p bb-tmux`
+have_bb=`type -p bb`
 have_cmatrix=`type -p cmatrix`
 have_curl=`type -p curl`
 have_ddgr=`type -p ddgr`
