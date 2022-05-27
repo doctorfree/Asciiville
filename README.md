@@ -19,13 +19,14 @@ utilities to perform common operations in a text-only environment.
     1. [BB AAlib Demo](#bb-aalib-demo)
 1. [Configuration](#configuration)
     1. [Asciiville configuration](#asciiville-configuration)
-        1. [Asciiville utilities configuration](#asciiville-utilities-configuration)
-    1. [NeoMutt email configuration](#neomutt-email-configuration)
+    1. [Asciiville utilities configuration](#asciiville-utilities-configuration)
+        1. [Newsboat RSS feed reader configuration](#newsboat-rss-feed-reader-configuration)
+        1. [NeoMutt email configuration](#neomutt-email-configuration)
         1. [NeoMutt encrypted passwords](#neomutt-encrypted-passwords)
         1. [NeoMutt Key Bindings](#neomutt-key-bindings)
         1. [Replacing an existing NeoMutt configuration](#replacing-an-existing-neomutt-configuration)
-    1. [Mutt email configuration](#mutt-email-configuration)
-    1. [Tuir Reddit client configuration](#tuir-reddit-client-configuration)
+        1. [Mutt email configuration](#mutt-email-configuration)
+        1. [Tuir Reddit client configuration](#tuir-reddit-client-configuration)
 1. [Documentation](#documentation)
     1. [Aewan README](#aewan-readme)
     1. [Btop++ README](#btop++-readme)
@@ -38,6 +39,7 @@ utilities to perform common operations in a text-only environment.
     1. [Generating ASCII Art](#generating-ascii-art)
     1. [Adding and Viewing Art Galleries](#adding-and-viewing-art-galleries)
     1. [ASCII Art Tools](#ascii-art-tools)
+    1. [ASCII Art Online](#ascii-art-online)
 1. [Figlet fonts](#figlet-fonts)
 1. [Build](#build)
 1. [Removal](#removal)
@@ -448,7 +450,7 @@ art_font_size=8
 txt_font_size=28
 ```
 
-#### Asciiville utilities configuration
+### Asciiville utilities configuration
 
 Asciiville creates several default configuration files for utilities
 included in the distribution. Examine these files to further customize
@@ -483,7 +485,24 @@ After installing Asciiville and running the `ascinit` command, initialize the
 the command line Twitter client by invoking the `rainbowstream` command and
 authorizing the app to access your Twitter account.
 
-### NeoMutt email configuration
+#### Newsboat RSS feed reader configuration
+
+The [Newsboat](https://github.com/newsboat/newsboat) character based RSS feed
+reader is a quick and easy way to view configured RSSS feeds. Newsboat is
+very lightweight and displays its list of configured feeds and articles almost
+immediately. It's an excellent way to get a quick glimpse of News, Articles,
+Blog posts, Twitter feeds, and more. Asciiville provides a default initial
+configuration for Newsboat that includes RSS feeds for News sources, YouTube
+channels, Reddit subreddits, Twitter feeds, Github repositories, Blogs, and
+online Comics. To reconfigure Newsboat with the RSS feeds you wish to follow,
+edit the file `$HOME/.newsboat/urls`.
+
+Asciiville also provides a default Newsboat reader configuration with key
+bindings, formatting, and other Newsboat view and usage parameters. To adjust
+the way Newsboat displays feeds, formats output, and responds to input,
+edit the file `$HOME/.newsboat/config`.
+
+#### NeoMutt email configuration
 
 The [NeoMutt](https://neomutt.org/) email client is an improved Mutt client.
 Asciiville installs NeoMutt as a dependency and provides support for configuring
@@ -814,7 +833,7 @@ want to use the Asciiville NeoMutt setup files rather than your previously
 configured setup, move the existing `$HOME/.config/neomutt/` folder aside
 and rerun `ascinit`.
 
-### Mutt email configuration
+#### Mutt email configuration
 
 Alternatively, you may prefer using the older but still maintained and robust
 [Mutt](https://www.mutt.org/) email client. Asciiville checks to see if Mutt
@@ -846,7 +865,7 @@ There are many Mutt configuration guides on the Internet.
 ArchLinux has a good guide at
 [https://wiki.archlinux.org/title/Mutt](https://wiki.archlinux.org/title/Mutt).
 
-### Tuir Reddit client configuration
+#### Tuir Reddit client configuration
 
 The `tuir` command is a text based user interface for Reddit. A `tuir`
 configuration is setup as part of the `ascinit` Asciiville initialization
@@ -1320,6 +1339,45 @@ The Asciiville Wiki article
 "[ASCII Art Tools](https://github.com/doctorfree/Asciiville/wiki/Tools-Ascii-Art)"
 describes several tools not included in Asciiville that may be of
 use in drawing and painting ASCII Art
+
+### ASCII Art Online
+
+There are many online galleries of ASCII Art. In addition to the newly minted
+extended ASCII Art galleries included in Asciiville, the Asciiville project
+also includes a rich set of vintage ASCII Art in the `Vintage` art gallery.
+The citizens of Asciiville have been diligent in their efforts to comply
+with the artists' licensing restrictions and only art that is freely
+redistributable is contained in Asciiville. Many of the online ASCII Art
+galleries available to the public are not as scrupulous with regards
+licensing requirements. In their defense, it can be extremely difficult
+to discover the origin and history of many of these works of art. Most
+were just culled from other archives who culled them from downloads of
+archives of defunct online bulletin boards and newsgroups and websites.
+
+The point being, we here in Asciiville cannot guarantee anything about
+the legal provinance of online ASCII Art galleries. We can only assure
+you that the art included in Asciiville has been vetted and complies
+with all licensing requirements. Note that much of the art included in
+Asciiville prohibits redistribution for commercial purposes (e.g. the
+art in the `Vintage` gallery). Others prohibit the use of hate speech
+in conjunction with the display of the artist's work. All of these
+requirements must be satisfied by Asciiville users, both those of us
+here in Asciiville and those who download and install our project.
+
+That being said, exploring the online ASCII Art galleries is fun and
+much of it can be legally downloaded, utilized however you want, and
+redistributed. To get started exploring the world of online ASCII Art,
+visit the following:
+
+- [Joan Stark's incredible archived website](https://web.archive.org/web/20091026203414/http://www.geocities.com/spunk1111/indexjava.htm)
+- [Christopher Johnson's ASCII Art Collection](https://asciiart.website/)
+- [Dernières images d'art ascii](http://www.ascii-fr.com/)
+- [Typo Gallery](http://www.mondocolorado.org/vault/typo.html)
+- [ASCII Art Archive](https://www.asciiart.eu/)
+- [Textart](https://textart.io/art)
+- [Windows 93 on the Web](http://www.windows93.net)
+    - [ASCII Art](http://www.windows93.net/#!ascii)
+    - [ANSI Art](http://www.windows93.net/#!ansi)
 
 ## Figlet fonts
 
