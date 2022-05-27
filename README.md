@@ -195,7 +195,6 @@ Asciiville adds the following commands to your system:
     * **asciijulia** : ASCIImatics animated zoom on a Julia Set
     * **asciiplasma** : ASCIImatics animated plasma graphic
     * **asciimpplus** : ASCIImatics animated Music Player Plus splash screen
-* **cmatrix** : display that screen from "The Matrix"
 * **datafilecat** : decrypts the content of a cbftp data file
 * **datafilewrite** : encrypts the content of a cbftp plain text data file
 * **ddgr** : command line web search
@@ -215,6 +214,36 @@ Asciiville adds the following commands to your system:
 * **tdraw** : ASCII drawing tool (only added if `go` is installed)
 * **termprofset** : set/restore default profile or font settings for the Gnome, Xfce4, and Tilix terminals
 * **tetris** : classic video game
+
+In addition to the above commands which reside in the Asciiville project,
+several commands may also be installed as dependencies. These include:
+
+* **asciinema** : ascii animation
+* **bb** : AAlib demo animation
+* **cmatrix** : display that screen from "The Matrix"
+* **figlet** : display Figlet Text
+* **gnupg** : pretty good privacy
+* **ImageMagick** : the ImageMagick suite of graphics command line tools
+* **jq** : json parsing and manipulation tool
+* **khard** : contact management for the console
+* **mplayer** : media player
+* **neofetch** : system info
+* **neomutt** : sophisticated text-based EMail and NNTP client
+* **newsboat** : text-based RSS feed reader
+* **pandoc** : convert and manipulate multiple document formats
+* **ranger** : text-based file management
+* **speedtest-cli** : text-based command line network speed test
+* **tmux** : embed commands and terminal sessions in a terminal multiplexer
+* **urlscan** : scan for urls in a message
+* **w3m** : text-based web browser
+
+Finally, several terminal emulators are installed during Asciiville
+initialization unless initialization is performed with `ascinit -c`:
+
+* **cool-retro-term**
+* **gnome-terminal**
+* **tilix** :
+* **xfce4-terminal**
 
 Additional detail and info can be found in the
 [Asciiville Wiki](https://github.com/doctorfree/Asciiville/wiki).
