@@ -3,12 +3,17 @@
 #
 # http://username:password@hostname.domain.tld/feed.rss
 #
-#------------------------
-#-------NEWSFEEDS--------
-#------------------------
+# All unread articles in all feeds
+#
+"query:Unread Articles:unread = \"yes\""
+#
+#-------------------------
+#-------NEWSFEEDS---------
+#-------------------------
 http://rss.cnn.com/rss/cnn_topstories.rss "~NEWS: CNN"
 http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml "~NEWS: BBC"
 http://www.vox.com/rss/index.xml "~NEWS: VOX"
+https://newsboat.org/news.atom "~NEWS: Newsboat"
 #-------------------------
 #-------YOUTUBE-----------
 #-------------------------
@@ -23,13 +28,19 @@ https://www.reddit.com/r/linux.rss "~REDDIT: r/linux"
 https://www.reddit.com/r/magicmirror.rss "~REDDIT: r/magicmirror"
 https://www.reddit.com/r/opensource.rss "~REDDIT: r/opensource"
 #-------------------------
-#-------TWITTER---------
+#-------TWITTER-----------
 #-------------------------
 https://nitter.net/search/rss?f=tweets&q=ronrecord "~TWITTER: ronrecord"
 #-------------------------
 #-------GIT_REPOS---------
 #-------------------------
 https://github.com/doctorfree.atom "~GITHUB: Doctorfree"
+#-------------------------
+#-------BLOGS-------------
+#-------------------------
+https://blog.ronrecord.com/index.php/feed/ "~BLOG: Doctorwhen
+https://github.blog/feed/ "~BLOG: Github"
+https://github.blog/category/open-source/feed/ "~BLOG: Github Open Source"
 #-------------------------
 #-------FUN---------------
 #-------------------------
