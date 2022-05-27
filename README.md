@@ -6,6 +6,8 @@ packages as well as providing convenience commands to invoke a variety
 of components used to display ASCII Art, animations, and text based
 utilities to perform common operations in a text-only environment.
 
+Asciiville includes nearly 1,000 works of ASCII and ANSI Art!
+
 ## Table of contents
 
 1. [Overview](#overview)
@@ -194,11 +196,16 @@ Asciiville adds the following commands to your system:
     * **asciiplasma** : ASCIImatics animated plasma graphic
     * **asciimpplus** : ASCIImatics animated Music Player Plus splash screen
 * **cmatrix** : display that screen from "The Matrix"
+* **datafilecat** : decrypts the content of a cbftp data file
+* **datafilewrite** : encrypts the content of a cbftp plain text data file
 * **ddgr** : command line web search
+* **gameserver** : multi-player game server
 * **got** : text based translation tool (only added if `go` is installed)
 * **jp2a** : image to ascii conversion utility
+* **make_ascii_art** : generate ascii art from images
 * **mapscii** : character based zoomable map of the world
 * **nethack** : character based dungeon game
+* **ninvaders** : classic video game
 * **rainbowstream** : command line Twitter client
 * **set_xfce_font** : sets an xfce4-terminal window's font and font size
 * **set_xfce_trans** : sets an xfce4-terminal window's transparency level
@@ -207,6 +214,7 @@ Asciiville adds the following commands to your system:
 * **show_weather** : display a weather report
 * **tdraw** : ASCII drawing tool (only added if `go` is installed)
 * **termprofset** : set/restore default profile or font settings for the Gnome, Xfce4, and Tilix terminals
+* **tetris** : classic video game
 
 Additional detail and info can be found in the
 [Asciiville Wiki](https://github.com/doctorfree/Asciiville/wiki).

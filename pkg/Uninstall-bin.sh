@@ -15,7 +15,6 @@ AVILLE_FILES="/usr/bin/asciiart \
 /usr/bin/asciimpplus \
 /usr/bin/asciiplasma \
 /usr/bin/asciisplash \
-/usr/bin/asciisplash-tmux \
 /usr/bin/asciiville \
 /usr/bin/ascinit \
 /usr/bin/btop \
