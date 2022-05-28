@@ -624,16 +624,7 @@ show_art_file() {
   fi
 }
 
-play_random_show() {
-  showlength="$1"
-  [ ${showlength} -lt 0 ] && showlength=0
-  if [ "$2" ]
-  then
-    art_dir="-A $2"
-  else
-    art_dir=
-  fi
-  showargs="${art_dir} -C -R ${showlength} ${cycarg} ${lolarg} ${audarg}"
+play_show() {
   clear
   if [ "${CURRENT}" ]
   then
@@ -712,6 +703,19 @@ play_random_show() {
   fi
 }
 
+play_random_show() {
+  showlength="$1"
+  [ ${showlength} -lt 0 ] && showlength=0
+  if [ "$2" ]
+  then
+    art_dir="-A $2"
+  else
+    art_dir=
+  fi
+  showargs="${art_dir} -C -R ${showlength} ${cycarg} ${lolarg} ${audarg}"
+  play_show
+}
+
 play_slide_show() {
   showname="$1"
   if [ "$2" ]
@@ -739,82 +743,7 @@ play_slide_show() {
   }
   showargs="${art_dir} -C ${cycarg} ${ansiarg} ${fontarg} ${lolarg} ${audarg}"
   save_config
-  clear
-  if [ "${CURRENT}" ]
-  then
-    add_fullscreen
-    num_exp='^[0-9]+$'
-    termname=unknown
-    myppid=`ps -e | grep ${PPID} | awk ' { print $1 } '`
-    myppid=`echo ${myppid} | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`
-    if [[ ${myppid} =~ ${num_exp} ]]
-    then
-      parent=`ps -o ppid= -p ${myppid}`
-      parent=`echo ${parent} | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`
-      if [[ ${parent} =~ ${num_exp} ]]
-      then
-        termname=`ps -e | grep ${parent} | awk ' { print $4 } '`
-      fi
-    fi
-
-    case ${termname} in
-      gnome-terminal*)
-        show_ascii_art -e gnome ${showargs} -s "${showname}"
-        ;;
-      tilix*)
-        show_ascii_art -e tilix ${showargs} -s "${showname}"
-        ;;
-      xfce4-terminal*)
-        xfce4-terminal --tab \
-             --title "${showname} Slideshow" \
-             --color-bg=Black \
-             --hide-menubar \
-             --hide-borders \
-             --hide-toolbar \
-             --hide-scrollbar \
-             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs} -s '${showname}'" &
-        wait_for_done
-        ;;
-      *)
-        show_ascii_art ${showargs} -s "${showname}"
-        ;;
-    esac
-    remove_fullscreen
-  else
-    if [ "${RETRO}" ]
-    then
-      cool-retro-term --fullscreen \
-                      -e show_ascii_art ${showargs} -s "${showname}" > /dev/null 2>&1
-    else
-      if [ "${XFCE4}" ]
-      then
-        add_fullscreen
-        xfce4-terminal --fullscreen \
-             --color-bg=Black \
-             --hide-menubar \
-             --hide-borders \
-             --hide-toolbar \
-             --hide-scrollbar \
-             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs} -s '${showname}'" &
-        wait_for_done
-        clear
-        sleep 2
-        remove_fullscreen
-      else
-        if [ "${TILIX}" ]
-        then
-          tilix --full-screen \
-                --window-style=borderless \
-                --profile=Asciiville \
-                --command="show_ascii_art -e tilix ${showargs} -s '${showname}'"
-        else
-          gnome-terminal --window --full-screen \
-                         --profile=Asciiville \
-                         -- show_ascii_art -e gnome ${showargs} -s "${showname}"
-        fi
-      fi
-    fi
-  fi
+  play_show
   [ ${scale_art_font} -eq 1 ] || art_font_size=${saved_art_size}
   [ ${scale_txt_font} -eq 1 ] || txt_font_size=${saved_txt_size}
   [ ${scale_art_font} -eq 1 ] && [ ${scale_txt_font} -eq 1 ] || save_config
@@ -1520,6 +1449,7 @@ show_art_menu() {
       [ "${ascii_dir_name}" == "Dragonflies" ] && ascii_dir_name="Dragonfly"
       options+=("${ascii_dir_name} Art Slideshow")
     done
+    options+=("Random Art Slideshow")
     options+=("Select ASCII Art")
     options+=("Generate ASCII Art")
     options+=("Cycle Slideshow       [${cyclestat}]")
@@ -1579,6 +1509,23 @@ show_art_menu() {
               ;;
           "Owls"*,*|*,"Owls"*)
               play_slide_show Owls
+              break
+              ;;
+          "Random"*,*|*,"Random"*)
+              num=50
+              while true
+              do
+                read -p "Enter slideshow length or 'Enter' to accept length = ${num} " len
+                [ "${len}" ] || break
+                if [[ ${len} =~ $re ]]
+                then
+                  num=${len}
+                  break
+                else
+                  echo "Requested slideshow length '${len}' is not a number"
+                fi
+              done
+              play_random_show ${num}
               break
               ;;
           "Waterfalls"*,*|*,"Waterfalls"*)
