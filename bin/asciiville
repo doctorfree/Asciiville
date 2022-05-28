@@ -41,6 +41,7 @@ ARTDIR=/usr/share/asciiville/art
 MUSEDIR=/usr/share/asciiville/music
 SONG="${MUSEDIR}/Chronos.mp3"
 ALTSONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
+show_interval=5
 art_font_size=4
 txt_font_size=20
 re='^[0-9]+$'
@@ -256,6 +257,7 @@ save_config() {
     echo "use_lol=${use_lol}" >> ${CONFIG}
     echo "journal=\"${journal}\"" >> ${CONFIG}
     echo "style=\"${style}\"" >> ${CONFIG}
+    echo "show_interval=${show_interval}" >> ${CONFIG}
     echo "art_font_size=${art_font_size}" >> ${CONFIG}
     echo "txt_font_size=${txt_font_size}" >> ${CONFIG}
   }
@@ -546,7 +548,7 @@ show_art_file() {
   else
     art_dir=
   fi
-  showargs="${art_dir} -v -C ${cycarg} ${delay} ${lolarg} ${audarg}"
+  showargs="${art_dir} -v -C ${cycarg} -D ${show_interval} ${lolarg} ${audarg}"
   save_config
   clear
   if [ "${CURRENT}" ]
@@ -714,7 +716,7 @@ play_random_show() {
   else
     art_dir=
   fi
-  showargs="${art_dir} -C -R ${showlength} ${cycarg} ${delay} ${lolarg} ${audarg}"
+  showargs="${art_dir} -C -R ${showlength} ${cycarg} -D ${show_interval} ${lolarg} ${audarg}"
   play_show
 }
 
@@ -742,8 +744,8 @@ play_slide_show() {
       txt_font_size=$((txt_font_size * scale_txt_font))
     }
   }
-  showargs="${art_dir} -C ${cycarg} ${delay} ${fontargs} ${lolarg} ${audarg}"
-  if [ "${RANDOMSHOW}" ]
+  showargs="${art_dir} -C ${cycarg} -D ${show_interval} ${fontargs} ${lolarg} ${audarg}"
+  if [ "${shuffle}" ]
   then
     showargs="${showargs} -R ${length} -s ${showname}"
   else
@@ -1392,6 +1394,12 @@ show_art_menu() {
     else
       cyclestat="NO"
     fi
+    if [ "${shuffle}" ]
+    then
+      randomize="YES"
+    else
+      randomize="NO"
+    fi
     if [ "${RECORD}" ]
     then
       recordstat="YES"
@@ -1460,6 +1468,7 @@ show_art_menu() {
     options+=("Select ASCII Art")
     options+=("Generate ASCII Art")
     options+=("Cycle Slideshow       [${cyclestat}]")
+    options+=("Shuffle Slideshow     [${randomize}]")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring   [${use_lol}]")
     options+=("Use Audio             [${audiostat}]")
     [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
@@ -1470,6 +1479,7 @@ show_art_menu() {
     options+=("Current Terminal      [${use_current}]")
     options+=("Use Tmux              [${usetmux}]")
     [ "${have_asciinema}" ] && options+=("Record Tmux Session   [${recordstat}]")
+    options+=("Slideshow Interval    [${show_interval}]")
     options+=("Art Font Size         [${art_font_size}]")
     options+=("Text Font Size        [${txt_font_size}]")
     options+=("Main Menu" "Quit")
@@ -1618,6 +1628,15 @@ show_art_menu() {
               fi
               break
               ;;
+          "Shuffle"*,*|*,"Shuffle"*)
+              if [ "${shuffle}" ]
+              then
+                shuffle=
+              else
+                shuffle=1
+              fi
+              break
+              ;;
           "Use Lolcat"*,*|*,"Use Lolcat"*)
               if [ "${use_lolcat}" == "2" ]
               then
@@ -1676,6 +1695,20 @@ show_art_menu() {
               ;;
           "Select Song"*,*|*,"Select Song"*)
               select_song
+              break
+              ;;
+          "Slideshow Interval"*,*|*,"Slideshow Interval"*)
+              while true
+              do
+                read -p "Enter slideshow interval in seconds (current value = ${show_interval}) " interval
+                if [[ ${interval} =~ $re ]]
+                then
+                  show_interval=${interval}
+                  break
+                else
+                  echo "Requested interval '${interval}' is not a number"
+                fi
+              done
               break
               ;;
           "Art Font"*,*|*,"Art Font"*)
@@ -3074,13 +3107,13 @@ fi
 export BROWSER
 
 cycle=
-delay=
 noaudio=
 length=0
 showart=
 show_neofetch=
-RANDOMSHOW=
-SLIDESHOW=
+shuffle=
+shuffle=
+slideshow=
 while getopts "Aabc:CdD:E:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
   case $flag in
     A)
@@ -3221,10 +3254,10 @@ while getopts "Aabc:CdD:E:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
       }
       ;;
     D)
-      delay="-D ${OPTARG}"
+      show_interval=${OPTARG}
       ;;
     E)
-      RANDOMSHOW=1
+      shuffle=1
       length=${OPTARG}
       ;;
     f)
@@ -3449,7 +3482,7 @@ while getopts "Aabc:CdD:E:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
       exit 0
       ;;
     V)
-      SLIDESHOW="${OPTARG}"
+      slideshow="${OPTARG}"
       ;;
     W)
       if [ "${have_cmatrix}" ]
@@ -3677,12 +3710,12 @@ else
   audarg=
 fi
 
-[ "${SLIDESHOW}" ] && {
-  play_slide_show ${SLIDESHOW}
+[ "${slideshow}" ] && {
+  play_slide_show ${slideshow}
   exit 0
 }
 
-[ "${RANDOMSHOW}" ] && {
+[ "${shuffle}" ] && {
   play_random_show ${length}
   exit 0
 }
