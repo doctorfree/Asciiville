@@ -25,8 +25,8 @@ show_ascii_art - display ascii art
 [-C] [-d font_dir] [-D seconds] [-e term] [-E] [-F large_font] [-f
 small_font] [-g] [-i image] [-I input_dir] [-O output_dir] [-K
 fifo_name] [-l level] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P]
-[-q] [-r] [-s show] [-S song] [-t first_text] [-T second_text] [-h
-height] [-w width] [-v] [-z] [-Z] [-u]
+[-q] [-r] [-R len] [-s show] [-S song] [-t first_text] [-T second_text]
+[-h height] [-w width] [-v] [-z] [-Z] [-u]
 .SH DESCRIPTION
 .PP
 The \f[I]show_ascii_art\f[R] command displays one or more of the ascii
@@ -156,6 +156,10 @@ don\[aq]t display text, just the ascii art
 .TP
 \f[B]-r\f[R]
 indicates select random fonts
+.TP
+\f[B]-R \[aq]len\[aq]\f[R]
+indicates random slideshow of length \[aq]len\[aq] (0 \[aq]len\[aq]
+infinite show)
 .TP
 \f[B]-S \[aq]song\[aq]\f[R]
 specifies the song to play as audio track (use default if \[aq]-s

@@ -23,10 +23,10 @@ command, ascii art, asciimatics animation, character based
 Email/FTP/File/Web clients, and character based utilities
 .SH SYNOPSIS
 .PP
-\f[B]asciiville\f[R] [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F]
-[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p]
-[-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show] [-w]
-[-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1 [file2 ...]]
+\f[B]asciiville\f[R] [-a] [-A] [-b] [-c command] [-C] [-d] [-E len] [-f]
+[-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num]
+[-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show]
+[-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1 [file2 ...]]
 .PP
 Invoked without any arguments or with the \f[V]-i\f[R] argument,
 \f[V]asciiville\f[R] displays an interactive dialog menu.
@@ -188,6 +188,9 @@ command line twitter client, or display a weather report.
 \f[B]-d\f[R]
 Indicates use disk usage analyzer as command
 .TP
+\f[B]-E \[aq]len\[aq]\f[R]
+Indicates random slideshow of length \[aq]len\[aq] (0 infinite)
+.TP
 \f[B]-f\f[R]
 Indicates fullscreen display
 .TP
@@ -327,6 +330,11 @@ interactive menu
 Launches \f[V]asciiville\f[R] in interactive mode with menu selections
 controlling actions rather than command line arguments, Btop System
 Monitor is the default command
+.TP
+\f[B]asciiville -E 25\f[R]
+Displays a random slideshow of 25 ascii art images in the current
+terminal window, console, or terminal emulator specified in
+\f[V]$HOME/.config/asciiville/config\f[R]
 .TP
 \f[B]asciiville -i -y\f[R]
 Launches \f[V]asciiville\f[R] in interactive mode with Ranger File

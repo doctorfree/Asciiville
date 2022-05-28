@@ -998,8 +998,8 @@ The usage message for `asciiville` provides a brief summary of the command
 line options:
 
 ```
-Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F] [-g]
-	[-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p]
+Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-E len] [-f] [-F]
+	[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p]
 	[-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show]
 	[-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1 [file2 ...]]
 
@@ -1016,6 +1016,7 @@ Terminal/Command options:
 		If 'command' is keyword 'weather' then display a weather report
 		Otherwise, 'command' will be executed in a terminal window
 	-d indicates use disk usage analyzer as default command
+	-E 'len' indicates random slideshow of length 'len' (0 infinite)
 	-f indicates use cbftp/ncftp as the default command
 	-F indicates fullscreen display
 	-g indicates use gnome terminal emulator
@@ -1078,7 +1079,7 @@ Invoked without any arguments, 'asciiville' will display an interactive menu
 Usage: show_ascii_art [-a art[,art2,...]] [-A art_dir] [-b] [-B] [-c] [-C]
 	[-d font_dir] [-D seconds] [-e term] [-E] [-F large_font] [-f small_font]
 	[-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level]
-	[-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r]
+	[-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-R len]
 	[-s show] [-S song] [-t first_text] [-T second_text]
 	[-h height] [-w width] [-v] [-z] [-Z] [-u]
 Where:
@@ -1123,6 +1124,7 @@ Where:
 		Any other argument to '-p' will be taken as the character set
 	-q don't display text, just the ascii art
 	-r indicates select random fonts
+	-R 'len' indicates random slideshow of length 'len' (0 'len' infinite show)
 	-s 'show' slide show of ascii art
 		'show' can be:
 			'Art', 'Doctorwhen', 'Dragonflies', 'Fractals', 'Friends', 'Iterated'
@@ -1174,19 +1176,23 @@ Run `asciiville` in interactive menu mode:
 
 `asciiville`
 
+Display a random slideshow of 25 ascii art images in the default terminal window
+
+`asciiville -E 25`
+
 Run `asciiville` in interactive mode with Ranger File Manager selected as command:
 
 `asciiville -i -y`
 
-Open the btop client in fullscreen mode:
+Open the default client in fullscreen mode:
 
 `asciiville -F`
 
-Open the btop client in fullscreen mode using the Tilix terminal emulator:
+Open the default client in fullscreen mode using the Tilix terminal emulator:
 
 `asciiville -F -t`
 
-Open the btop client in the cool-retro-term terminal:
+Open the default client in the cool-retro-term terminal:
 
 `asciiville -r`
 
@@ -1347,14 +1353,14 @@ An example Asciiville gallery configuration file can be found in
 ```
 scale_art_font=2
 scale_txt_font=1
-disable_font_size=
+set_font_size=
 uses_ansi_escape=
 ```
 
 In this example, `scale_art_font=2` indicates double the font size used for
 ascii art display; `scale_txt_font=1` indicates no change to the text font
-size used for ascii art text display; `disable_font_size=` indicates do not
-disable font size changes; and `uses_ansi_escape=` indicates this gallery's
+size used for ascii art text display; `set_font_size=` indicates do not
+make font size changes; and `uses_ansi_escape=` indicates this gallery's
 ascii art does not utilize ANSI escape sequences to color its text.
 
 The default settings for Asciiville ascii art galleries is:
@@ -1362,7 +1368,7 @@ The default settings for Asciiville ascii art galleries is:
 ```
 scale_art_font=1
 scale_txt_font=1
-disable_font_size=
+set_font_size=1
 uses_ansi_escape=1
 ```
 

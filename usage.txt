@@ -1,5 +1,5 @@
-Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F] [-g]
-	[-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p]
+Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-E len] [-f] [-F]
+	[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p]
 	[-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show]
 	[-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1 [file2 ...]]
 
@@ -16,6 +16,7 @@ Terminal/Command options:
 		If 'command' is keyword 'weather' then display a weather report
 		Otherwise, 'command' will be executed in a terminal window
 	-d indicates use disk usage analyzer as default command
+	-E 'len' indicates random slideshow of length 'len' (0 infinite)
 	-f indicates use cbftp/ncftp as the default command
 	-F indicates fullscreen display
 	-g indicates use gnome terminal emulator

@@ -10,7 +10,7 @@ asciiville - Launch a terminal emulator and specified character based command, a
 and character based utilities
 
 # SYNOPSIS
-**asciiville** [-a] [-A] [-b] [-c command] [-C] [-d] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1 [file2 ...]]
+**asciiville** [-a] [-A] [-b] [-c command] [-C] [-d] [-E len] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1 [file2 ...]]
 
 Invoked without any arguments or with the `-i` argument, `asciiville` displays an interactive dialog menu.
 
@@ -82,6 +82,9 @@ Choosing a file in Ranger is done by visiting a directory and selecting a file. 
 
 **-d**
 : Indicates use disk usage analyzer as command
+
+**-E 'len'**
+: Indicates random slideshow of length 'len' (0 infinite)
 
 **-f**
 : Indicates fullscreen display
@@ -212,6 +215,9 @@ Invoked without any arguments, **asciiville** will display an interactive menu
 # EXAMPLES
 **asciiville**
 : Launches `asciiville` in interactive mode with menu selections controlling actions rather than command line arguments, Btop System Monitor is the default command
+
+**asciiville -E 25**
+: Displays a random slideshow of 25 ascii art images in the current terminal window, console, or terminal emulator specified in `$HOME/.config/asciiville/config`
 
 **asciiville -i -y**
 : Launches `asciiville` in interactive mode with Ranger File Manager selected as command rather than Btop System Monitor

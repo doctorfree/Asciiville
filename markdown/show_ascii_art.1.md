@@ -9,7 +9,7 @@ date: April 24, 2022
 show_ascii_art - display ascii art
 
 # SYNOPSIS
-**show_ascii_art** [-a art[,art2,...]] [-A art_dir] [-b] [-B] [-c] [-C] [-d font_dir] [-D seconds] [-e term] [-E] [-F large_font] [-f small_font] [-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-s show] [-S song] [-t first_text] [-T second_text] [-h height] [-w width] [-v] [-z] [-Z] [-u]
+**show_ascii_art** [-a art[,art2,...]] [-A art_dir] [-b] [-B] [-c] [-C] [-d font_dir] [-D seconds] [-e term] [-E] [-F large_font] [-f small_font] [-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-R len] [-s show] [-S song] [-t first_text] [-T second_text] [-h height] [-w width] [-v] [-z] [-Z] [-u]
 
 # DESCRIPTION
 The *show_ascii_art* command displays one or more of the ascii art images included in
@@ -123,6 +123,9 @@ See the **asciiville**(1) man page (`man asciiville`).
 
 **-r**
 : indicates select random fonts
+
+**-R 'len'**
+: indicates random slideshow of length 'len' (0 'len' infinite show)
 
 **-S 'song'**
 : specifies the song to play as audio track (use default if '-s song' omitted)
