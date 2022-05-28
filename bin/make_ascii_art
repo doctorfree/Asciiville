@@ -21,13 +21,17 @@ usage() {
 }
 
 # Default palette used by jp2a
-defchars="   ...',;:clodxkO0KXNWM"
+# defchars="   ...',;:clodxkO0KXNWM"
+defchars="   ...,;:clodxkO0KXNWM"
 # Reversed default palette
-revchars="MWNXK0Okxdolc:;,'...   "
+# revchars="MWNXK0Okxdolc:;,'...   "
+revchars="MWNXK0Okxdolc:;,...   "
 # Dark to light character set
-revlong="8WMoahkbdpqwmZO0QLCJUYXzcvunxrjft1-_+ilI;:,^..."
+# revlong="8WMoahkbdpqwmZO0QLCJUYXzcvunxrjft1-_+ilI;:,^..."
+revlong="WMZO0QLCJUYXzcvun1il;:,^.. "
 # Light to Dark character set
-longchars="...^,:;Ili+_-1tfjrxnuvczXYUJCLQ0OZmwqpdbkhaoMW8"
+# longchars="...^,:;Ili+_-1tfjrxnuvczXYUJCLQ0OZmwqpdbkhaoMW8"
+longchars=" ..^,:;li1nuvczXYUJCLQ0OZMW"
 
 # Override the palettes defined above in the Asciiville config
 CONFIG="${HOME}/.config/asciiville/config"
@@ -36,8 +40,8 @@ CONFIG="${HOME}/.config/asciiville/config"
 debug=
 border=
 charopt=
-color=
-fit=
+coloropt=
+fitopt=
 palette=
 have_convert=`type -p convert`
 INP_DIR="."
@@ -48,13 +52,13 @@ while getopts "bcdfi:o:p:u" flag; do
         border="--border"
         ;;
       c)
-        color="--colors"
+        coloropt="--colors"
         ;;
       d)
         debug=1
         ;;
       f)
-        fit="--term-fit"
+        fitopt="--term-fit"
         ;;
       i)
         INP_DIR="$OPTARG"
@@ -170,8 +174,8 @@ do
   }
   [ "${debug}" ] && {
     echo "Converting with:"
-    echo "jp2a ${border} ${colors} ${fit} ${charopt} --output=${OUT_DIR}/${art_name}.asc ${input_image}"
+    echo "jp2a ${border} ${coloropt} ${fitopt} ${charopt} --output=${OUT_DIR}/${art_name}.asc ${input_image}"
   }
-  jp2a ${border} ${colors} ${fit} ${charopt} \
+  jp2a ${border} ${coloropt} ${fitopt} ${charopt} \
        --output=${OUT_DIR}/"${art_name}.asc" "${input_image}"
 done

@@ -654,10 +654,10 @@ CONF="${HOME}/.config/asciiville/config"
   echo "art_font_size=4" >> ${CONF}
   echo "txt_font_size=20" >> ${CONF}
   echo "" >> ${CONF}
-  echo 'defchars="   ...\',;:clodxkO0KXNWM"' >> ${CONF}
-  echo 'revchars="MWNXK0Okxdolc:;,\'...   "' >> ${CONF}
-  echo 'revlong="8WMoahkbdpqwmZO0QLCJUYXzcvunxrjft1-_+ilI;:,^..."' >> ${CONF}
-  echo 'longchars="...^,:;Ili+_-1tfjrxnuvczXYUJCLQ0OZmwqpdbkhaoMW8"' >> ${CONF}
+  echo "defchars='   ...,;:clodxkO0KXNWM'" >> ${CONF}
+  echo "revchars='MWNXK0Okxdolc:;,...   '" >> ${CONF}
+  echo "revlong='WMZO0QLCJUYXzcvun1il;:,^.. '" >> ${CONF}
+  echo "longchars=' ..^,:;li1nuvczXYUJCLQ0OZMW'" >> ${CONF}
 }
 touch ${HOME}/.tetris
 

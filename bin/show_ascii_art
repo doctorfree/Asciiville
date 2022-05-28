@@ -19,13 +19,17 @@ art_font_size=4
 txt_font_size=20
 
 # Default palette used by jp2a
-defchars="   ...',;:clodxkO0KXNWM"
+# defchars="   ...',;:clodxkO0KXNWM"
+defchars="   ...,;:clodxkO0KXNWM"
 # Reversed default palette
-revchars="MWNXK0Okxdolc:;,'...   "
+# revchars="MWNXK0Okxdolc:;,'...   "
+revchars="MWNXK0Okxdolc:;,...   "
 # Dark to light character set
-revlong="8WMoahkbdpqwmZO0QLCJUYXzcvunxrjft1-_+ilI;:,^..."
+# revlong="8WMoahkbdpqwmZO0QLCJUYXzcvunxrjft1-_+ilI;:,^..."
+revlong="WMZO0QLCJUYXzcvun1il;:,^.. "
 # Light to Dark character set
-longchars="...^,:;Ili+_-1tfjrxnuvczXYUJCLQ0OZmwqpdbkhaoMW8"
+# longchars="...^,:;Ili+_-1tfjrxnuvczXYUJCLQ0OZmwqpdbkhaoMW8"
+longchars=" ..^,:;li1nuvczXYUJCLQ0OZMW"
 
 # Some configuration can be maintained here
 CONFIG="${HOME}/.config/asciiville/config"
