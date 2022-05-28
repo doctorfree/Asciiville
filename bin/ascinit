@@ -653,6 +653,11 @@ CONF="${HOME}/.config/asciiville/config"
   echo "show_interval=5" >> ${CONF}
   echo "art_font_size=4" >> ${CONF}
   echo "txt_font_size=20" >> ${CONF}
+  echo "" >> ${CONF}
+  echo 'defchars="   ...\',;:clodxkO0KXNWM"' >> ${CONF}
+  echo 'revchars="MWNXK0Okxdolc:;,\'...   "' >> ${CONF}
+  echo 'revlong="8WMoahkbdpqwmZO0QLCJUYXzcvunxrjft1-_+ilI;:,^..."' >> ${CONF}
+  echo 'longchars="...^,:;Ili+_-1tfjrxnuvczXYUJCLQ0OZmwqpdbkhaoMW8"' >> ${CONF}
 }
 touch ${HOME}/.tetris
 

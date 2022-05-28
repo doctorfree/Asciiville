@@ -3,24 +3,84 @@
 # make_ascii_art - create ascii art from a folder of images
 
 usage() {
-  printf "\nUsage: make_ascii_art [-d] [-i input_dir] [-o output_dir] [-u]\n"
+  printf "\nUsage: make_ascii_art [-b] [-c] [-d] [-f] [-p palette]"
+  printf "\n\t[-i input_dir] [-o output_dir] [-u]\n"
+  printf "Where:"
+  printf "\n\t-b indicates create a border"
+  printf "\n\t-c indicates use color"
+  printf "\n\t-d indicates debug mode"
+  printf "\n\t-f indicates fit terminal window"
+  printf "\n\t-i 'input_dir' specifies the input folder of images"
+  printf "\n\t-o 'output_dir' specifies the output folder of ascii art"
+  printf "\n\t-p 'palette' specifies the character palette to use"
+  printf "\n\t\t'palette' can be 'def', 'long', 'rev', or 'revlong'"
+  printf "\n\t\tto specify the 'default', 'long', 'reverse default',"
+  printf "\n\t\tor 'reverse long' character palette used for conversion"
+  printf "\n\t-u displays this usage message and exits\n"
   exit 1
 }
 
+# Default palette used by jp2a
+defchars="   ...',;:clodxkO0KXNWM"
+# Reversed default palette
+revchars="MWNXK0Okxdolc:;,'...   "
+# Dark to light character set
+revlong="8WMoahkbdpqwmZO0QLCJUYXzcvunxrjft1-_+ilI;:,^..."
+# Light to Dark character set
+longchars="...^,:;Ili+_-1tfjrxnuvczXYUJCLQ0OZmwqpdbkhaoMW8"
+
+# Override the palettes defined above in the Asciiville config
+CONFIG="${HOME}/.config/asciiville/config"
+[ -f ${CONFIG} ] && . ${CONFIG}
+
 debug=
+border=
+charopt=
+color=
+fit=
+palette=
 have_convert=`type -p convert`
 INP_DIR="."
 OUT_DIR="./ascii"
-while getopts "di:o:u" flag; do
+while getopts "bcdfi:o:p:u" flag; do
   case $flag in
+      b)
+        border="--border"
+        ;;
+      c)
+        color="--colors"
+        ;;
       d)
         debug=1
+        ;;
+      f)
+        fit="--term-fit"
         ;;
       i)
         INP_DIR="$OPTARG"
         ;;
       o)
         OUT_DIR="$OPTARG"
+        ;;
+      p)
+        charset="${OPTARG}"
+        case "${charset}" in
+          def)
+            charopt=
+            ;;
+          long)
+            charopt="--chars=${longchars}"
+            ;;
+          rev)
+            charopt="--chars=${revchars}"
+            ;;
+          longrev)
+            charopt="--chars=${revlong}"
+            ;;
+          *)
+            charopt="--chars=${charset}"
+            ;;
+        esac
         ;;
       u)
         usage
@@ -110,8 +170,8 @@ do
   }
   [ "${debug}" ] && {
     echo "Converting with:"
-    echo "jp2a --border --colors --term-fit --output=${OUT_DIR}/${art_name}.asc ${input_image}"
+    echo "jp2a ${border} ${colors} ${fit} ${charopt} --output=${OUT_DIR}/${art_name}.asc ${input_image}"
   }
-  jp2a --border --colors --term-fit \
+  jp2a ${border} ${colors} ${fit} ${charopt} \
        --output=${OUT_DIR}/"${art_name}.asc" "${input_image}"
 done

@@ -260,6 +260,11 @@ save_config() {
     echo "show_interval=${show_interval}" >> ${CONFIG}
     echo "art_font_size=${art_font_size}" >> ${CONFIG}
     echo "txt_font_size=${txt_font_size}" >> ${CONFIG}
+    echo "" >> ${CONFIG}
+    echo "defchars='${defchars}'" >> ${CONFIG}
+    echo "revchars='${revchars}'" >> ${CONFIG}
+    echo "revlong='${revlong}'" >> ${CONFIG}
+    echo "longchars='${longchars}'" >> ${CONFIG}
   }
 }
 

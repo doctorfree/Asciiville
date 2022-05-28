@@ -18,12 +18,6 @@ custom_song=
 art_font_size=4
 txt_font_size=20
 
-# Some configuration can be maintained here
-CONFIG="${HOME}/.config/asciiville/config"
-[ -f ${CONFIG} ] && . ${CONFIG}
-saved_art_size=${art_font_size}
-saved_txt_size=${txt_font_size}
-
 # Default palette used by jp2a
 defchars="   ...',;:clodxkO0KXNWM"
 # Reversed default palette
@@ -32,6 +26,12 @@ revchars="MWNXK0Okxdolc:;,'...   "
 revlong="8WMoahkbdpqwmZO0QLCJUYXzcvunxrjft1-_+ilI;:,^..."
 # Light to Dark character set
 longchars="...^,:;Ili+_-1tfjrxnuvczXYUJCLQ0OZmwqpdbkhaoMW8"
+
+# Some configuration can be maintained here
+CONFIG="${HOME}/.config/asciiville/config"
+[ -f ${CONFIG} ] && . ${CONFIG}
+saved_art_size=${art_font_size}
+saved_txt_size=${txt_font_size}
 
 set -m
 
@@ -273,6 +273,7 @@ audio=
 border=
 center=
 charopt=
+charset=
 colordepth=
 colors=
 cycle=
@@ -503,12 +504,15 @@ done
   have_gnome=`type -p gnome-terminal`
   have_tilix=`type -p tilix`
   have_xfce4=`type -p xfce4-terminal`
+  convargs="-c -f"
+  [ "${border}" ] && convargs="-b ${convargs}"
+  [ "${charset}" ] && convargs="${convargs} -p ${charset}"
   if [ "${have_gnome}" ]
   then
     echo "Invoking gnome-terminal to convert ${make_inp} to ${make_out}"
     [ "${set_font_size}" ] && termprofset -S -g -s ${art_font_size}
     gnome-terminal --window --geometry=320x100 --profile=Asciiville \
-                   -- make_ascii_art -i "${make_inp}" -o "${make_out}"
+        -- make_ascii_art ${convargs} -i "${make_inp}" -o "${make_out}"
     [ "${set_font_size}" ] && termprofset -g -R
   else
     if [ "${have_tilix}" ]
@@ -518,7 +522,7 @@ done
       tilix --geometry=320x100 \
             --profile=Asciiville \
             --window-style=borderless \
-            --command="make_ascii_art -i '${make_inp}' -o '${make_out}'" \
+            --command="make_ascii_art ${convargs} -i '${make_inp}' -o '${make_out}'" \
               2> /dev/null
       [ "${set_font_size}" ] && termprofset -t -R
     else
@@ -530,10 +534,10 @@ done
             --hide-toolbar \
             --hide-scrollbar \
             --geometry=320x100 \
-            --command="make_ascii_art -i '${make_inp}' -o '${make_out}'"
+            --command="make_ascii_art ${convargs} -i '${make_inp}' -o '${make_out}'"
         [ "${set_font_size}" ] && termprofset -x -R
       else
-        make_ascii_art -i "${make_inp}" -o "${make_out}" &
+        make_ascii_art ${convargs} -i "${make_inp}" -o "${make_out}" &
       fi
     fi
   fi
