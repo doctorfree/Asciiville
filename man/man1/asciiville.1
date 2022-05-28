@@ -23,10 +23,11 @@ command, ascii art, asciimatics animation, character based
 Email/FTP/File/Web clients, and character based utilities
 .SH SYNOPSIS
 .PP
-\f[B]asciiville\f[R] [-a] [-A] [-b] [-c command] [-C] [-d] [-E len] [-f]
-[-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num]
-[-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show]
-[-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1 [file2 ...]]
+\f[B]asciiville\f[R] [-a] [-A] [-b] [-c command] [-C] [-d] [-D delay]
+[-E len] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M]
+[-N] [-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U]
+[-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1
+[file2 ...]]
 .PP
 Invoked without any arguments or with the \f[V]-i\f[R] argument,
 \f[V]asciiville\f[R] displays an interactive dialog menu.
@@ -188,9 +189,6 @@ command line twitter client, or display a weather report.
 \f[B]-d\f[R]
 Indicates use disk usage analyzer as command
 .TP
-\f[B]-E \[aq]len\[aq]\f[R]
-Indicates random slideshow of length \[aq]len\[aq] (0 infinite)
-.TP
 \f[B]-f\f[R]
 Indicates fullscreen display
 .TP
@@ -240,19 +238,25 @@ Indicates use NetHack dungeon game as the default command
 \f[B]-z\f[R]
 Indicates use neomutt email client as the default command
 .PP
-\f[I]ASCIImatics animation options:\f[R]
+\f[I]Slideshow / ASCIImatics animation options:\f[R]
 .TP
 \f[B]-a\f[R]
-Indicates play audio during ASCIImatics display
+Indicates play audio during display
 .TP
 \f[B]-A\f[R]
 Indicates use Asciiville scenes in ASCIImatics display
 .TP
 \f[B]-b\f[R]
-Indicates use backup audio during ASCIImatics display
+Indicates use backup audio during display
 .TP
 \f[B]-C\f[R]
 Indicates cycle slideshow endlessly (Ctrl-c to exit show)
+.TP
+\f[B]-D \[aq]delay\[aq]\f[R]
+Specifies delay, in seconds, between art display (default 5)
+.TP
+\f[B]-E \[aq]len\[aq]\f[R]
+Indicates random slideshow of length \[aq]len\[aq] (0 infinite)
 .TP
 \f[B]-j\f[R]
 Indicates use Julia Set scenes in ASCIImatics display
@@ -332,9 +336,14 @@ controlling actions rather than command line arguments, Btop System
 Monitor is the default command
 .TP
 \f[B]asciiville -E 25\f[R]
-Displays a random slideshow of 25 ascii art images in the current
-terminal window, console, or terminal emulator specified in
-\f[V]$HOME/.config/asciiville/config\f[R]
+Displays a random slideshow of 25 ascii art images selected from all the
+galleries and displayed in the current terminal window, console, or
+terminal emulator specified in \f[V]$HOME/.config/asciiville/config\f[R]
+.TP
+\f[B]asciiville -E 30 -V Vintage -D 10 -t\f[R]
+Displays a random slideshow of 30 ascii art images selected from the
+Vintage art gallery in a Tilix terminal window with a delay of 10
+seconds between images
 .TP
 \f[B]asciiville -i -y\f[R]
 Launches \f[V]asciiville\f[R] in interactive mode with Ranger File

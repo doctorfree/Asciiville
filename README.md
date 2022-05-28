@@ -998,10 +998,11 @@ The usage message for `asciiville` provides a brief summary of the command
 line options:
 
 ```
-Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-E len] [-f] [-F]
-	[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p]
-	[-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show]
-	[-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1 [file2 ...]]
+Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-D delay]
+	[-E len] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level]
+	[-m] [-M] [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song]
+	[-S] [-t] [-T] [-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y]
+	[-Y] [-z] [-Z] [-u] [file1 [file2 ...]]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
@@ -1016,7 +1017,6 @@ Terminal/Command options:
 		If 'command' is keyword 'weather' then display a weather report
 		Otherwise, 'command' will be executed in a terminal window
 	-d indicates use disk usage analyzer as default command
-	-E 'len' indicates random slideshow of length 'len' (0 infinite)
 	-f indicates use cbftp/ncftp as the default command
 	-F indicates fullscreen display
 	-g indicates use gnome terminal emulator
@@ -1036,9 +1036,11 @@ Terminal/Command options:
 	-z indicates use neomutt email client as the default command
 Slideshow/ASCIImatics animation options:
 	-A indicates use Asciiville scenes in ASCIImatics display
-	-a indicates play audio during ASCIImatics display
-	-b indicates use backup audio during ASCIImatics display
+	-a indicates play audio during display
+	-b indicates use backup audio during display
 	-C indicates cycle slideshow endlessly (Ctrl-c to exit show)
+	-D 'delay' specifies delay, in seconds, between art display (default 5)
+	-E 'len' indicates random slideshow of length 'len' (0 infinite)
 	-j indicates use Julia Set scenes in ASCIImatics display
 	-J indicates Julia Set with several runs using different parameters
 	-m indicates use MusicPlayerPlus scenes in ASCIImatics display
@@ -1176,9 +1178,15 @@ Run `asciiville` in interactive menu mode:
 
 `asciiville`
 
-Display a random slideshow of 25 ascii art images in the default terminal window
+Display a random slideshow of 25 ascii art images selected from all galleries
+in the default terminal window
 
 `asciiville -E 25`
+
+Display a random slideshow of 30 ascii art images selected from the Vintage art
+gallery with a delay of 10 seconds between images in a Tilix terminal window
+
+`asciiville -E 30 -V Vintage -D 10 -t`
 
 Run `asciiville` in interactive mode with Ranger File Manager selected as command:
 

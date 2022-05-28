@@ -63,10 +63,11 @@ then
 fi
 
 usage() {
-  printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-E len] [-f] [-F]"
-  printf "\n\t[-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p]"
-  printf "\n\t[-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show]"
-  printf "\n\t[-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1 [file2 ...]]\n"
+  printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-D delay]"
+  printf "\n\t[-E len] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level]"
+  printf "\n\t[-m] [-M] [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song]"
+  printf "\n\t[-S] [-t] [-T] [-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y]"
+  printf "\n\t[-Y] [-z] [-Z] [-u] [file1 [file2 ...]]\n"
   printf "\nTerminal/Command options:"
   printf "\n\t-c 'command' indicates use 'command'"
   printf "\n\t\tIf 'command' is keyword 'maps' then display a map using mapscii"
@@ -80,7 +81,6 @@ usage() {
   printf "\n\t\tIf 'command' is keyword 'weather' then display a weather report"
   printf "\n\t\tOtherwise, 'command' will be executed in a terminal window"
   printf "\n\t-d indicates use disk usage analyzer as default command"
-  printf "\n\t-E 'len' indicates random slideshow of length 'len' (0 infinite)"
   printf "\n\t-f indicates use cbftp/ncftp as the default command"
   printf "\n\t-F indicates fullscreen display"
   printf "\n\t-g indicates use gnome terminal emulator"
@@ -100,9 +100,11 @@ usage() {
   printf "\n\t-z indicates use neomutt email client as the default command"
   printf "\nSlideshow/ASCIImatics animation options:"
   printf "\n\t-A indicates use Asciiville scenes in ASCIImatics display"
-  printf "\n\t-a indicates play audio during ASCIImatics display"
-  printf "\n\t-b indicates use backup audio during ASCIImatics display"
+  printf "\n\t-a indicates play audio during display"
+  printf "\n\t-b indicates use backup audio during display"
   printf "\n\t-C indicates cycle slideshow endlessly (Ctrl-c to exit show)"
+  printf "\n\t-D 'delay' specifies delay, in seconds, between art display (default 5)"
+  printf "\n\t-E 'len' indicates random slideshow of length 'len' (0 infinite)"
   printf "\n\t-j indicates use Julia Set scenes in ASCIImatics display"
   printf "\n\t-J indicates Julia Set with several runs using different parameters"
   printf "\n\t-m indicates use MusicPlayerPlus scenes in ASCIImatics display"
@@ -544,7 +546,7 @@ show_art_file() {
   else
     art_dir=
   fi
-  showargs="${art_dir} -v -C ${cycarg} ${lolarg} ${audarg}"
+  showargs="${art_dir} -v -C ${cycarg} ${delay} ${lolarg} ${audarg}"
   save_config
   clear
   if [ "${CURRENT}" ]
@@ -645,10 +647,10 @@ play_show() {
 
     case ${termname} in
       gnome-terminal*)
-        show_ascii_art -e gnome ${showargs} -s "${showname}"
+        show_ascii_art -e gnome ${showargs}
         ;;
       tilix*)
-        show_ascii_art -e tilix ${showargs} -s "${showname}"
+        show_ascii_art -e tilix ${showargs}
         ;;
       xfce4-terminal*)
         xfce4-terminal --tab \
@@ -658,11 +660,11 @@ play_show() {
              --hide-borders \
              --hide-toolbar \
              --hide-scrollbar \
-             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs} -s '${showname}'" &
+             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs}" &
         wait_for_done
         ;;
       *)
-        show_ascii_art ${showargs} -s "${showname}"
+        show_ascii_art ${showargs}
         ;;
     esac
     remove_fullscreen
@@ -670,7 +672,7 @@ play_show() {
     if [ "${RETRO}" ]
     then
       cool-retro-term --fullscreen \
-                      -e show_ascii_art ${showargs} -s "${showname}" > /dev/null 2>&1
+                      -e show_ascii_art ${showargs} > /dev/null 2>&1
     else
       if [ "${XFCE4}" ]
       then
@@ -681,7 +683,7 @@ play_show() {
              --hide-borders \
              --hide-toolbar \
              --hide-scrollbar \
-             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs} -s '${showname}'" &
+             --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs}" &
         wait_for_done
         clear
         sleep 2
@@ -692,11 +694,11 @@ play_show() {
           tilix --full-screen \
                 --window-style=borderless \
                 --profile=Asciiville \
-                --command="show_ascii_art -e tilix ${showargs} -s '${showname}'"
+                --command="show_ascii_art -e tilix ${showargs}"
         else
           gnome-terminal --window --full-screen \
                          --profile=Asciiville \
-                         -- show_ascii_art -e gnome ${showargs} -s "${showname}"
+                         -- show_ascii_art -e gnome ${showargs}
         fi
       fi
     fi
@@ -712,7 +714,7 @@ play_random_show() {
   else
     art_dir=
   fi
-  showargs="${art_dir} -C -R ${showlength} ${cycarg} ${lolarg} ${audarg}"
+  showargs="${art_dir} -C -R ${showlength} ${cycarg} ${delay} ${lolarg} ${audarg}"
   play_show
 }
 
@@ -724,16 +726,15 @@ play_slide_show() {
   else
     art_dir=
   fi
-  fontarg=
-  ansiarg=
+  fontargs=
   set_font_size=1
   uses_ansi_escape=1
   scale_art_font=1
   scale_txt_font=1
   [ -f ${ARTDIR}/${showname}/.config ] && {
     . ${ARTDIR}/${showname}/.config
-    [ "${set_font_size}" ] || fontarg="-E"
-    [ "${uses_ansi_escape}" ] || ansiarg="-Z"
+    [ "${set_font_size}" ] || fontargs="-E"
+    [ "${uses_ansi_escape}" ] || fontargs="${fontargs} -Z"
     [ ${scale_art_font} -eq 1 ] || {
       art_font_size=$((art_font_size * scale_art_font))
     }
@@ -741,7 +742,13 @@ play_slide_show() {
       txt_font_size=$((txt_font_size * scale_txt_font))
     }
   }
-  showargs="${art_dir} -C ${cycarg} ${ansiarg} ${fontarg} ${lolarg} ${audarg}"
+  showargs="${art_dir} -C ${cycarg} ${delay} ${fontargs} ${lolarg} ${audarg}"
+  if [ "${RANDOMSHOW}" ]
+  then
+    showargs="${showargs} -R ${length} -s ${showname}"
+  else
+    showargs="${showargs} -s ${showname}"
+  fi
   save_config
   play_show
   [ ${scale_art_font} -eq 1 ] || art_font_size=${saved_art_size}
@@ -3067,13 +3074,14 @@ fi
 export BROWSER
 
 cycle=
+delay=
 noaudio=
 length=0
 showart=
 show_neofetch=
 RANDOMSHOW=
 SLIDESHOW=
-while getopts "Aabc:CdE:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
+while getopts "Aabc:CdD:E:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
   case $flag in
     A)
       ASCSPLASH="${ASCSPLASH} -i"
@@ -3212,6 +3220,9 @@ while getopts "Aabc:CdE:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
         fi
       }
       ;;
+    D)
+      delay="-D ${OPTARG}"
+      ;;
     E)
       RANDOMSHOW=1
       length=${OPTARG}
@@ -3250,12 +3261,18 @@ while getopts "Aabc:CdE:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
       FULLSCREEN=1
       ;;
     g)
-      GNOME=1
-      [ "${have_gnome}" ] || {
+      if [ "${have_gnome}" ]
+      then
+        CURRENT=
+        XFCE4=
+        TILIX=
+        RETRO=
+        GNOME=1
+      else
         GNOME=
         not_in_path gnome-terminal -g
         select_alt_term
-      }
+      fi
       ;;
     i)
       INTERACTIVE=1
@@ -3367,11 +3384,18 @@ while getopts "Aabc:CdE:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
       ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l ${OPTARG}"
       ;;
     r)
-      RETRO=1
-      [ "${have_retro}" ] || {
+      if [ "${have_retro}" ]
+      then
+        CURRENT=
+        XFCE4=
+        TILIX=
+        RETRO=1
+        GNOME=
+      else
+        RETRO=
         not_in_path cool-retro-term -r
         select_alt_term
-      }
+      fi
       ;;
     R)
       [ "${have_asciinema}" ] && {
@@ -3390,12 +3414,18 @@ while getopts "Aabc:CdE:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
       ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -s ${OPTARG}"
       ;;
     t)
-      TILIX=1
-      [ "${have_tilix}" ] || {
+      if [ "${have_tilix}" ]
+      then
+        CURRENT=
+        XFCE4=
+        TILIX=1
+        RETRO=
+        GNOME=
+      else
         TILIX=
         not_in_path tilix -t
         select_alt_term
-      }
+      fi
       ;;
     T)
       TMUX=1
@@ -3463,14 +3493,24 @@ while getopts "Aabc:CdE:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
       ;;
     X)
       CURRENT=1
+      XFCE4=
+      TILIX=
+      RETRO=
+      GNOME=
       ;;
     x)
-      XFCE4=1
-      [ "${have_xfce4}" ] || {
+      if [ "${have_xfce4}" ]
+      then
+        CURRENT=
+        XFCE4=1
+        TILIX=
+        RETRO=
+        GNOME=
+      else
         XFCE4=
         not_in_path xfce4-terminal -x
         select_alt_term
-      }
+      fi
       ;;
     Y)
       if [ "${have_nethack}" ]
@@ -3637,13 +3677,13 @@ else
   audarg=
 fi
 
-[ "${RANDOMSHOW}" ] && {
-  play_random_show ${length}
+[ "${SLIDESHOW}" ] && {
+  play_slide_show ${SLIDESHOW}
   exit 0
 }
 
-[ "${SLIDESHOW}" ] && {
-  play_slide_show ${SLIDESHOW}
+[ "${RANDOMSHOW}" ] && {
+  play_random_show ${length}
   exit 0
 }
 

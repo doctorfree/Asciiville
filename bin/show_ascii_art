@@ -606,6 +606,7 @@ cleanup() {
 play_random_show() {
   tput civis -- invisible
   numslide=0
+  [ ${showlength} -eq 0 ] || ((numslide++))
   a=( ${ARTDIR}/* )
   while [ ${numslide} -le ${showlength} ]
   do
@@ -668,7 +669,6 @@ play_random_show() {
         sleep ${delay}
       }
       first=
-      [ ${showlength} -eq 0 ] || ((numslide++))
     }
     clear
     [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
@@ -701,79 +701,53 @@ play_slide_show() {
       [ "${fifo_name}" ] && send_done
       exit 0
     }
-    [ "${art}" == "${SLIDE_DIR}/*.asc.gz" ] && continue
-    [ "${first}" ] && {
-      [ "${quiet}" ] || {
-        [ "${set_font_size}" ] && termprofset ${termarg} -s ${txt_font_size}
-        printf "\n\n\n"
-        if [ "${have_lolcat}" ]
-        then
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} | ${LOLCAT}
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} | ${LOLCAT}
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art" | ${LOLCAT}
-          tput civis -- invisible
-        else
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME}
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII}
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art"
-        fi
-        figlet -c -d "${FIG_FONTS}" -f "Digital" -k -t "Ctrl-c  Exits"
-        sleep ${delay}
-      }
-      first="setfont"
-    }
-    clear
-    [ "${first}" == "setfont" ] && {
-      [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
-      first=
-    }
-    show_ascii "${art}"
-    [ $? -gt 1 ] || sleep ${delay}
   done
-}
-
-[ "${randomshow}" ] && {
-  stty -echoctl # hide ^C
-  trap 'cleanup' SIGINT SIGTERM
-  FIG_WELCOME="Asciiville"
-  FIG_ASCII="Random"
-  SLIDE_FONT="Shadow"
-  [ "${custom_song}" ] || {
-    [ -f "${MUSEDIR}/Moving-Ahead-RA.mp3" ] && {
-      SONG="${MUSEDIR}/Moving-Ahead-RA.mp3"
-    }
+  [ "${quiet}" ] || {
+    [ "${set_font_size}" ] && termprofset ${termarg} -s ${txt_font_size}
+    printf "\n\n\n"
+    if [ "${have_lolcat}" ]
+    then
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art" | ${LOLCAT}
+      tput civis -- invisible
+    else
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME}
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII}
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art"
+    fi
+    figlet -c -d "${FIG_FONTS}" -f "Digital" -k -t "Ctrl-c  Exits"
+    sleep ${delay}
   }
-
-  playing=
-  [ "${audio}" ] && {
-    have_mplayer=`type -p mplayer`
-    [ "${have_mplayer}" ] && {
-      fifo="/tmp/mplayer$$"
-      rm -f ${fifo}
-      mkfifo ${fifo}
-      playing=1
-      mplayer -novideo -loop 0 -volume 80 -really-quiet \
-              -nolirc -slave -input file=${fifo} ${SONG} 2>&1 &
-    }
-  }
-  clear
-  first=1
-  if [ "${cycle}" ]
+  if [ "${randomshow}" ]
   then
-    while true
+    numslide=0
+    [ ${showlength} -eq 0 ] || ((numslide++))
+    slides=( ${SLIDE_DIR}/* )
+    while [ ${numslide} -le ${showlength} ]
     do
-      play_random_show
+      # Pick a random ascii art from the slideshow gallery
+      ((k=RANDOM%${#slides[@]}))
+      art="${slides[k]}"
       clear
-      first=1
+      [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
+      show_ascii "${art}"
+      [ $? -gt 1 ] || {
+        sleep ${delay}
+        [ ${showlength} -eq 0 ] || ((numslide++))
+      }
     done
   else
-    play_random_show
+    for art in ${SLIDE_DIR}/*.asc ${SLIDE_DIR}/*.asc.gz
+    do
+      [ "${art}" == "${SLIDE_DIR}/*.asc" ] && continue
+      [ "${art}" == "${SLIDE_DIR}/*.asc.gz" ] && continue
+      clear
+      [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
+      show_ascii "${art}"
+      [ $? -gt 1 ] || sleep ${delay}
+    done
   fi
-  goodbye
-  tput cnorm
-  [ "${fifo_name}" ] && send_done
-  [ "${playing}" ] && fade_audio
-  exit 0
 }
 
 [ "${slideshow}" ] && {
@@ -903,6 +877,50 @@ play_slide_show() {
     done
   else
     play_slide_show
+  fi
+  goodbye
+  tput cnorm
+  [ "${fifo_name}" ] && send_done
+  [ "${playing}" ] && fade_audio
+  exit 0
+}
+
+[ "${randomshow}" ] && {
+  stty -echoctl # hide ^C
+  trap 'cleanup' SIGINT SIGTERM
+  FIG_WELCOME="Asciiville"
+  FIG_ASCII="Random"
+  SLIDE_FONT="Shadow"
+  [ "${custom_song}" ] || {
+    [ -f "${MUSEDIR}/Moving-Ahead-RA.mp3" ] && {
+      SONG="${MUSEDIR}/Moving-Ahead-RA.mp3"
+    }
+  }
+
+  playing=
+  [ "${audio}" ] && {
+    have_mplayer=`type -p mplayer`
+    [ "${have_mplayer}" ] && {
+      fifo="/tmp/mplayer$$"
+      rm -f ${fifo}
+      mkfifo ${fifo}
+      playing=1
+      mplayer -novideo -loop 0 -volume 80 -really-quiet \
+              -nolirc -slave -input file=${fifo} ${SONG} 2>&1 &
+    }
+  }
+  clear
+  first=1
+  if [ "${cycle}" ]
+  then
+    while true
+    do
+      play_random_show
+      clear
+      first=1
+    done
+  else
+    play_random_show
   fi
   goodbye
   tput cnorm
