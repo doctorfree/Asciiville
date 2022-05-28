@@ -517,7 +517,6 @@ done
     [ "${set_font_size}" ] && termprofset -S -g -s ${art_font_size}
     gnome-terminal --window --geometry=320x100 --profile=Asciiville \
         -- make_ascii_art ${convargs} -i "${make_inp}" -o "${make_out}"
-    [ "${set_font_size}" ] && termprofset -g -R
   else
     if [ "${have_tilix}" ]
     then
@@ -528,7 +527,6 @@ done
             --window-style=borderless \
             --command="make_ascii_art ${convargs} -i '${make_inp}' -o '${make_out}'" \
               2> /dev/null
-      [ "${set_font_size}" ] && termprofset -t -R
     else
       if [ "${have_xfce4}" ]
       then
@@ -539,12 +537,13 @@ done
             --hide-scrollbar \
             --geometry=320x100 \
             --command="make_ascii_art ${convargs} -i '${make_inp}' -o '${make_out}'"
-        [ "${set_font_size}" ] && termprofset -x -R
       else
-        make_ascii_art ${convargs} -i "${make_inp}" -o "${make_out}" &
+        make_ascii_art ${convargs} -i "${make_inp}" -o "${make_out}"
       fi
     fi
   fi
+  sleep 4
+  [ "${set_font_size}" ] && termprofset -g -R
   [ "${fifo_name}" ] && send_done
   exit 0
 }
@@ -638,13 +637,12 @@ play_random_show() {
       done
     done
     # Apply any custom gallery customization
-    fontarg=
-    ansiarg=
     set_font_size=1
     uses_ansi_escape=1
     set_font_size=1
     scale_art_font=1
     scale_txt_font=1
+    show_filename=
     [ -f ${showdir}/.config ] && {
       . ${showdir}/.config
       [ ${scale_art_font} -eq 1 ] || {
@@ -682,6 +680,14 @@ play_random_show() {
     [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
     show_ascii "${art}"
     [ $? -gt 1 ] || {
+      [ "${show_filename}" ] && {
+        if [ "${have_lolcat}" ]
+        then
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${art} | ${LOLCAT}
+        else
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${art}
+        fi
+      }
       sleep ${delay}
       [ ${showlength} -eq 0 ] || ((numslide++))
     }
@@ -710,6 +716,22 @@ play_slide_show() {
       exit 0
     }
   done
+  # Apply any custom gallery customization
+  set_font_size=1
+  uses_ansi_escape=1
+  set_font_size=1
+  scale_art_font=1
+  scale_txt_font=1
+  show_filename=
+  [ -f ${SLIDE_DIR}/.config ] && {
+    . ${SLIDE_DIR}/.config
+    [ ${scale_art_font} -eq 1 ] || {
+      art_font_size=$((art_font_size * scale_art_font))
+    }
+    [ ${scale_txt_font} -eq 1 ] || {
+      txt_font_size=$((txt_font_size * scale_txt_font))
+    }
+  }
   [ "${quiet}" ] || {
     [ "${set_font_size}" ] && termprofset ${termarg} -s ${txt_font_size}
     printf "\n\n\n"
@@ -741,6 +763,14 @@ play_slide_show() {
       [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
       show_ascii "${art}"
       [ $? -gt 1 ] || {
+        [ "${show_filename}" ] && {
+          if [ "${have_lolcat}" ]
+          then
+            figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${art} | ${LOLCAT}
+          else
+            figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${art}
+          fi
+        }
         sleep ${delay}
         [ ${showlength} -eq 0 ] || ((numslide++))
       }

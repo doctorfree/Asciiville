@@ -201,7 +201,7 @@ generate_art() {
         read -p "Generate ASCII Art with these selections? (y/n) " answer
         case ${answer} in
           [Yy]* )
-            show_ascii_art -I "${image_dir}" -O "${ascii_dir}"
+            show_ascii_art -b -I "${image_dir}" -O "${ascii_dir}"
             while true
             do
               read -p "View slideshow of generated ascii art? (y/n) " viewslides
