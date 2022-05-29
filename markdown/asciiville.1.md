@@ -57,12 +57,18 @@ GNOME=1
 RETRO=
 TILIX=
 XFCE4=
+
 use_lolcat=1
 use_lol=YES
 journal="asciiville"
 style="fancy"
 art_font_size=6
 txt_font_size=24
+
+defchars='   ...,;:clodxkO0KXNWM'
+revchars='MWNXK0Okxdolc:;,...   '
+revlong='WMZO0QLCJUYXzcvun1il;:,^.. '
+longchars=' ..^,:;li1nuvczXYUJCLQ0OZMW'
 ```
 
 # SELECTING FILES AND FOLDERS

@@ -1359,14 +1359,14 @@ An example Asciiville gallery configuration file can be found in
 `/usr/share/asciiville/art/Vintage/.config`:
 
 ```
-scale_art_font=3
+scale_art_font=2
 scale_txt_font=1
 set_font_size=1
 uses_ansi_escape=
 show_filename=
 ```
 
-In this example, `scale_art_font=3` indicates triple the font size used for
+In this example, `scale_art_font=2` indicates double the font size used for
 ascii art display; `scale_txt_font=1` indicates no change to the text font
 size used for ascii art text display; `set_font_size=1` indicates make
 font size changes; `uses_ansi_escape=` indicates this gallery's
