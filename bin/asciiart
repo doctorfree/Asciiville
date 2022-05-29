@@ -24,7 +24,7 @@ import argparse
 
 def asciiville(screen):
     scenes = []
-    art = "/usr/share/asciiville/art/pics/"
+    art = "/usr/share/asciiville/pics/"
     center = (screen.width // 2, screen.height // 2)
     text = Figlet(font="banner", width=200).renderText("Asciiville")
     width = max([len(x) for x in text.split("\n")])

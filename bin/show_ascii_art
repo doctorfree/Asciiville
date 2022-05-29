@@ -542,7 +542,7 @@ done
       fi
     fi
   fi
-  sleep 4
+  sleep 2
   [ "${set_font_size}" ] && termprofset -g -R
   [ "${fifo_name}" ] && send_done
   exit 0
@@ -680,14 +680,7 @@ play_random_show() {
     [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
     show_ascii "${art}"
     [ $? -gt 1 ] || {
-      [ "${show_filename}" ] && {
-        if [ "${have_lolcat}" ]
-        then
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${art} | ${LOLCAT}
-        else
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${art}
-        fi
-      }
+      [ "${show_filename}" ] && figlet -c -k -t `basename ${art}`
       sleep ${delay}
       [ ${showlength} -eq 0 ] || ((numslide++))
     }
@@ -763,14 +756,7 @@ play_slide_show() {
       [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
       show_ascii "${art}"
       [ $? -gt 1 ] || {
-        [ "${show_filename}" ] && {
-          if [ "${have_lolcat}" ]
-          then
-            figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${art} | ${LOLCAT}
-          else
-            figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${art}
-          fi
-        }
+        [ "${show_filename}" ] && figlet -c -k -t `basename ${art}`
         sleep ${delay}
         [ ${showlength} -eq 0 ] || ((numslide++))
       }
@@ -783,7 +769,10 @@ play_slide_show() {
       clear
       [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
       show_ascii "${art}"
-      [ $? -gt 1 ] || sleep ${delay}
+      [ $? -gt 1 ] || {
+        [ "${show_filename}" ] && figlet -c -k -t `basename ${art}`
+        sleep ${delay}
+      }
     done
   fi
 }

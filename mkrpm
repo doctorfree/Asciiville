@@ -245,6 +245,8 @@ ${SUDO} cp games/tetris/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-tet
 ${SUDO} gzip -9 ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/CHANGELOG.md
 
 ${SUDO} cp -a art "${OUT_DIR}/${DESTDIR}/share/${PKG}/art"
+${SUDO} mv "${OUT_DIR}/${DESTDIR}/share/${PKG}/art/pics" \
+           "${OUT_DIR}/${DESTDIR}/share/${PKG}/pics"
 ${SUDO} cp -a music "${OUT_DIR}/${DESTDIR}/share/${PKG}/music"
 ${SUDO} cp -a tools "${OUT_DIR}/${DESTDIR}/share/${PKG}/tools"
 

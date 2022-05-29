@@ -1359,17 +1359,19 @@ An example Asciiville gallery configuration file can be found in
 `/usr/share/asciiville/art/Vintage/.config`:
 
 ```
-scale_art_font=2
+scale_art_font=3
 scale_txt_font=1
-set_font_size=
+set_font_size=1
 uses_ansi_escape=
+show_filename=
 ```
 
-In this example, `scale_art_font=2` indicates double the font size used for
+In this example, `scale_art_font=3` indicates triple the font size used for
 ascii art display; `scale_txt_font=1` indicates no change to the text font
-size used for ascii art text display; `set_font_size=` indicates do not
-make font size changes; and `uses_ansi_escape=` indicates this gallery's
-ascii art does not utilize ANSI escape sequences to color its text.
+size used for ascii art text display; `set_font_size=1` indicates make
+font size changes; `uses_ansi_escape=` indicates this gallery's
+ascii art does not utilize ANSI escape sequences to color its text; and
+`show_filename=` indicates do not display the ascii art filename.
 
 The default settings for Asciiville ascii art galleries is:
 
@@ -1378,7 +1380,13 @@ scale_art_font=1
 scale_txt_font=1
 set_font_size=1
 uses_ansi_escape=1
+show_filename=
 ```
+
+To display a gallery's ascii art filename below the ascii art displayed,
+set `show_filename=1` in the gallery's `.config`. Any, none, or all
+settings may be present in a gallery's `.config`. If a setting is not
+present, Asciiville uses the defaults described above.
 
 ### ASCII Art Tools
 
