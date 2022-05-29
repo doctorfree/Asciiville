@@ -1,9 +1,38 @@
 #!/bin/bash
 
 termprofset -s 4
-for i in *.asc
-do
+
+if [ "$1" ]
+then
+  for i in "$@"
+  do
+    case "$i" in
+      *.asc)
+        cat "$i"
+        sleep 5
+        ;;
+      *.asc.gz)
+        gzip -cd "$i"
+        sleep 5
+        ;;
+      *)
+        echo "Unknown filename suffix: $i"
+        echo "Skipping"
+        ;;
+    esac
+  done
+else
+  for i in *.asc
+  do
+    [ "$i" == "*.asc" ] && continue
     cat "$i"
     sleep 5
-done
+  done
+  for i in *.asc.gz
+  do
+    [ "$i" == "*.asc.gz" ] && continue
+    gzip -cd "$i"
+    sleep 5
+  done
+fi
 termprofset -R

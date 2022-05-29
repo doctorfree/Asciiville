@@ -1258,7 +1258,7 @@ Asciiville includes several ASCII Art galleries produced by the renowned
 Ascii Artist, Doctorwhen. These galleries can be viewed by opening
 `asciiville` in interactive menu mode (execute `asciiville` with no
 arguments or the `-i` argument). From the main Asciiville menu select
-*Ascii Art Slideshows* then select an Ascii Art slideshow to view from
+*Ascii Art* then select an Ascii Art slideshow to view from
 the list of slideshows available in the Asciiville Art menu.
 
 Additional ASCII Art galleries can be added to the Asciiville Art menu
@@ -1333,11 +1333,11 @@ Art galleries.
 
 The Asciiville Wiki article
 "[Adding and Viewing Art Galleries](https://github.com/doctorfree/Asciiville/wiki/Adding-Art-Galleries)"
-details a brief tutorial introduction to generating a new ASCII Art gallery
-and viewing it.
+provides a brief tutorial introduction to generating a new ASCII Art
+gallery, customizing, and viewing it.
 
 Asciiville default galleries can be viewed using the interactive menus
-in the `asciiville` command. Select the *Ascii Art Slideshows* entry from
+in the `asciiville` command. Select the *Ascii Art* entry from
 the main menu, select the options you prefer (e.g. preferred terminal
 emulator and audio), and select the ascii art gallery you wish to view.
 

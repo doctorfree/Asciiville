@@ -1,5 +1,23 @@
 #!/bin/bash
 #
-# showascii3 - view ascii art from a folder
+# show_art - view ascii art from a folder in a Gnome Terminal window
 
-gnome-terminal --window --full-screen --profile=Asciiville -- showascii
+TOOLSHOW="/usr/share/asciiville/tools/bin/showascii"
+
+have_show=`type -p showascii`
+
+if [ "${have_show}" ]
+then
+    SHOW="showascii"
+else
+    if [ -x ${TOOLSHOW} ]
+    then
+        SHOW="${TOOLSHOW}"
+    else
+        echo "Cannot locate the showascii script"
+        echo "Exiting"
+        exit 1
+    fi
+fi
+
+gnome-terminal --window --full-screen --profile=Asciiville -- ${SHOW} $*

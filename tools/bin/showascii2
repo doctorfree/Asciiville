@@ -1,15 +1,50 @@
 #!/bin/bash
 
-for i in *.asc
-do
+wait_input() {
+  while true
+  do
+    read -p "" answer
+    case "${answer}" in
+      *)
+          break
+          ;;
+    esac
+  done
+}
+
+termprofset -s 4
+
+if [ "$1" ]
+then
+  for i in "$@"
+  do
+    case "$i" in
+      *.asc)
+        cat "$i"
+        wait_input
+        ;;
+      *.asc.gz)
+        gzip -cd "$i"
+        wait_input
+        ;;
+      *)
+        echo "Unknown filename suffix: $i"
+        echo "Skipping"
+        ;;
+    esac
+  done
+else
+  for i in *.asc
+  do
+    [ "$i" == "*.asc" ] && continue
     cat "$i"
-    while true
-    do
-        read -p "" answer
-        case "${answer}" in
-            *)
-                break
-                ;;
-        esac
-    done
-done
+    wait_input
+  done
+  for i in *.asc.gz
+  do
+    [ "$i" == "*.asc.gz" ] && continue
+    gzip -cd "$i"
+    wait_input
+  done
+fi
+termprofset -R
