@@ -1,8 +1,14 @@
 Version 1.4.0 release 3 adds support for:
 
+* Manual installation and removal for non-Debian/RPM Linux systems
+* Improved Ascii Art display features
+* Additional Ascii Art
+* Shuffle and random display modes now supported
+* Several bug fixes
 * Add aewan ascii art creation tools
 * Add per-gallery config file support
 * Add Vintage ascii art gallery
+
 
 Version 1.4.0 release 2 added support for:
 

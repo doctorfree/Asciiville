@@ -2,8 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-# Asciiville-1.4.0r3 (2022-05-30)
+# Asciiville-1.4.0r3 (2022-05-31)
 
+* Manual installation and removal for non-Debian/RPM Linux systems
+* Improved Ascii Art display features
+* Additional Ascii Art
+* Shuffle and random display modes now supported
+* Several bug fixes
 * Add aewan ascii art creation tools
 * Add per-gallery config file support
 * Add Vintage ascii art gallery
