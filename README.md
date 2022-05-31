@@ -18,6 +18,7 @@ Asciiville includes nearly 1,000 works of ASCII and ANSI Art!
 1. [Installation](#installation)
     1. [Debian package installation](#debian-package-installation)
     1. [RPM package installation](#rpm-package-installation)
+    1. [Manual installation](#manual-installation)
     1. [BB AAlib Demo](#bb-aalib-demo)
 1. [Configuration](#configuration)
     1. [Asciiville configuration](#asciiville-configuration)
@@ -386,6 +387,21 @@ sudo dnf localinstall ./Asciiville_<version>-<release>.x86_64.rpm
 or
 ```console
 sudo yum localinstall ./Asciiville_<version>-<release>.x86_64.rpm
+```
+
+### Manual installation
+
+On systems for which neither the Debian or RPM packages will suffice,
+install manually by downloading the `Install-bin.sh` script and either
+the gzip'd distribution archive or the zip'd distribution archive.
+After downloading the installation script and distribution archive,
+as a user with sudo privilege execute the commands:
+
+```bash
+chmod 755 Install-bin.sh
+sudo ./Install-bin.sh /path/to/Asciiville_1.4.0-3.<arch>.tgz
+or
+sudo ./Install-bin.sh /path/to/Asciiville_1.4.0-3.<arch>.zip
 ```
 
 ### BB AAlib Demo
@@ -1545,6 +1561,23 @@ script in the Asciiville source directory:
     cd Asciiville
     ./Uninstall
 ```
+
+On systems for which the manual installation was performed using
+the `Install-bin.sh` script, remove Asciiville manually by downloading
+the `Uninstall-bin.sh` script and, as a user with sudo privilege,
+execute the commands:
+
+```bash
+chmod 755 Uninstall-bin.sh
+sudo ./Uninstall-bin.sh
+```
+
+Note that manual removal of Asciiville using the `Uninstall-bin.sh` script
+will not remove any of the manually installed dependencies. Manual
+installation and removal of Asciiville is not as robust as packaged
+installation and removal. Hopefully additional platform packaging will be
+available in the future. If you would like to assist with this effort, see the
+['Contributing' section](#contributing) below.
 
 ## What is ASCII
 
