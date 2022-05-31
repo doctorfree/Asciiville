@@ -64,7 +64,16 @@ utilities in a lightweight character based environment.
 At the core of Asciiville is the `asciiville` command which acts as
 a front-end for a variety of terminal commands and `tmux` sessions.
 
-The `asciiville` command can be used to invoke:
+The `asciiville` command can be used to display Ascii Art either
+as a slideshow or interactively. For example:
+
+```console
+asciiville -V Art
+asciiville -V Vintage
+asciiville file1 file2 ...
+```
+
+The `asciiville` command can also be used to invoke commands in a variety of ways:
 
 * The lightweight character based system monitor, `btop`
 * The lightweight character based web browser, `w3m`
@@ -94,6 +103,9 @@ The `asciiville` command can be used to invoke:
 * Display the MusicPlayerPlus or RoonCommandLine interactive menus
 * Any character based client the user wishes to run
 * One of several asciimatics animations optionally accompanied by audio
+
+Without arguments or with the `-i` argument, `asciiville` presents a set
+of interactive menus that can be used to control its behavior.
 
 Integration is provided for:
 
