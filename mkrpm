@@ -249,7 +249,6 @@ ${SUDO} mv "${OUT_DIR}/${DESTDIR}/share/${PKG}/art/pics" \
            "${OUT_DIR}/${DESTDIR}/share/${PKG}/pics"
 ${SUDO} cp -a music "${OUT_DIR}/${DESTDIR}/share/${PKG}/music"
 ${SUDO} cp -a tools "${OUT_DIR}/${DESTDIR}/share/${PKG}/tools"
-${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/tools/bin/*
 
 ${SUDO} gzip ${OUT_DIR}/${DESTDIR}/share/${PKG}/art/*/*.asc
 

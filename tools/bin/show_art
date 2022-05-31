@@ -10,9 +10,9 @@ if [ "${have_show}" ]
 then
     SHOW="showascii"
 else
-    if [ -x ${TOOLSHOW} ]
+    if [ -f ${TOOLSHOW} ]
     then
-        SHOW="${TOOLSHOW}"
+        SHOW="bash ${TOOLSHOW}"
     else
         echo "Cannot locate the showascii script"
         echo "Exiting"

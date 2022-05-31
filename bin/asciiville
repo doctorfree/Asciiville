@@ -1910,12 +1910,12 @@ show_animation_menu() {
               then
                 if [ "${custom_song}" ]
                 then
-                  /usr/share/asciiville/tools/bin/bb-tmux -a -s "${SONG}"
+                  bash /usr/share/asciiville/tools/bin/bb-tmux -a -s "${SONG}"
                 else
-                  /usr/share/asciiville/tools/bin/bb-tmux -a
+                  bash /usr/share/asciiville/tools/bin/bb-tmux -a
                 fi
               else
-                /usr/share/asciiville/tools/bin/bb-tmux
+                bash /usr/share/asciiville/tools/bin/bb-tmux
               fi
               skip_it_so=1
               export DISPLAY="${SAVED_DISPLAY}"
@@ -2559,9 +2559,9 @@ show_main_menu() {
               export DISPLAY=""
               if [ "${AUDIO}" ]
               then
-                /usr/share/asciiville/tools/bin/bb-tmux -a
+                bash /usr/share/asciiville/tools/bin/bb-tmux -a
               else
-                /usr/share/asciiville/tools/bin/bb-tmux
+                bash /usr/share/asciiville/tools/bin/bb-tmux
               fi
               skip_it_so=1
               export DISPLAY="${SAVED_DISPLAY}"
@@ -2570,9 +2570,9 @@ show_main_menu() {
           "AAlib Demo (X11 mode)",*|*,"AAlib Demo (X11 mode)")
               if [ "${AUDIO}" ]
               then
-                /usr/share/asciiville/tools/bin/bb-tmux -a
+                bash /usr/share/asciiville/tools/bin/bb-tmux -a
               else
-                /usr/share/asciiville/tools/bin/bb-tmux
+                bash /usr/share/asciiville/tools/bin/bb-tmux
               fi
               skip_it_so=1
               break
@@ -2960,9 +2960,9 @@ set_show_term() {
 
 init_vars() {
   MTITLE="Asciiville"
-  COMMAND_TMUX="/usr/share/asciiville/tools/bin/btop-tmux"
+  COMMAND_TMUX="bash /usr/share/asciiville/tools/bin/btop-tmux"
   ASCSPLASH="asciisplash"
-  ASCSPLASH_TMUX="/usr/share/asciiville/tools/bin/asciisplash-tmux"
+  ASCSPLASH_TMUX="bash /usr/share/asciiville/tools/bin/asciisplash-tmux"
 
   INTERACTIVE=
   RECORD=

@@ -15,16 +15,18 @@ in your execution path, e.g. :
 
 `cp /usr/share/asciiville/tools/bin/show_art $HOME/bin/show_art`
 
-or execute `/usr/share/asciiville/tools/bin/show_art` to view all of the
+`chmod 755 $HOME/bin/show_art`
+
+or execute `bash /usr/share/asciiville/tools/bin/show_art` to view all of the
 ascii art in the current directory. Providing `show_art` with filename
 arguments will display only those files:
 
 ```console
-/usr/share/asciiville/tools/bin/show_art
+bash /usr/share/asciiville/tools/bin/show_art
 ```
 
 or
 
 ```console
-/usr/share/asciiville/tools/bin/show_art /tmp/file1.asc file2.asc.gz
+bash /usr/share/asciiville/tools/bin/show_art /tmp/file1.asc file2.asc.gz
 ```
