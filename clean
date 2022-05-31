@@ -15,7 +15,9 @@ cd ../cbftp
 [ -f Makefile ] && make clean
 cd ../games/nethack
 [ -f Makefile ] && make spotless
-rm -f config.log config.status configure doc/Guidebook.txt sys/share/Makefile.lib
+rm -f config.log config.status configure doc/Guidebook.txt \
+      sys/share/Makefile.lib sys/autoconf/autoconf.hin \
+      util/dgn.tab.h util/lev.tab.h
 cd ../ninvaders
 rm -rf cmake_build
 cd ../tetris
