@@ -88,7 +88,7 @@ usage() {
   printf "\n\t-i indicates start asciiville in interactive mode"
   printf "\n\t-I indicates display system info"
   printf "\n\t-l indicates use lynx web browser as the default command"
-  printf "\n\t-L 'level' use lolcat coloring, 'level' can be '1' or '2' (animate)"
+  printf "\n\t-L 'level' lolcat coloring: 'level' can be '0' (off), '1' (on), or '2' (animate)"
   printf "\n\t-r indicates use retro terminal emulator"
   printf "\n\t-t indicates use tilix terminal emulator"
   printf "\n\t-U indicates set command to Ninvaders"
@@ -545,6 +545,27 @@ wait_for_done() {
   rm -f ${fifo_name}
 }
 
+custom_gallery() {
+  gallery_dir="$1"
+  fontargs=
+  set_font_size=1
+  uses_ansi_escape=1
+  scale_art_font=1
+  scale_txt_font=1
+  show_filename=
+  [ -f ${gallery_dir}/.config ] && {
+    . ${gallery_dir}/.config
+    [ "${set_font_size}" ] || fontargs="-E"
+    [ "${uses_ansi_escape}" ] || fontargs="${fontargs} -Z"
+    [ ${scale_art_font} -eq 1 ] || {
+      art_font_size=$((art_font_size * scale_art_font))
+    }
+    [ ${scale_txt_font} -eq 1 ] || {
+      txt_font_size=$((txt_font_size * scale_txt_font))
+    }
+  }
+}
+
 show_art_file() {
   art="$1"
   if [ "$2" ]
@@ -733,22 +754,7 @@ play_slide_show() {
   else
     art_dir=
   fi
-  fontargs=
-  set_font_size=1
-  uses_ansi_escape=1
-  scale_art_font=1
-  scale_txt_font=1
-  [ -f ${ARTDIR}/${showname}/.config ] && {
-    . ${ARTDIR}/${showname}/.config
-    [ "${set_font_size}" ] || fontargs="-E"
-    [ "${uses_ansi_escape}" ] || fontargs="${fontargs} -Z"
-    [ ${scale_art_font} -eq 1 ] || {
-      art_font_size=$((art_font_size * scale_art_font))
-    }
-    [ ${scale_txt_font} -eq 1 ] || {
-      txt_font_size=$((txt_font_size * scale_txt_font))
-    }
-  }
+  custom_gallery "${ARTDIR}/${showname}"
   showargs="${art_dir} -C ${cycarg} -D ${show_interval} ${fontargs} ${lolarg} ${audarg}"
   if [ "${shuffle}" ]
   then
@@ -3111,6 +3117,13 @@ else
 fi
 export BROWSER
 
+fontargs=
+set_font_size=1
+uses_ansi_escape=1
+scale_art_font=1
+scale_txt_font=1
+show_filename=
+
 cycle=
 noaudio=
 length=0
@@ -3364,18 +3377,33 @@ while getopts "Aabc:CdD:E:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
       }
       ;;
     L)
-      [ "${have_lolcat}" ] && {
+      if [ "${have_lolcat}" ]
+      then
         use_lolcat=${OPTARG}
         if [ "${use_lolcat}" == "2" ]
         then
           use_lol="YES+"
           LOLCAT="${LOLCAT_ANIM}"
         else
-          use_lol="YES"
-          LOLCAT="${LOLCAT_NORM}"
+          if [ "${use_lolcat}" == "1" ]
+          then
+            use_lol="YES"
+            LOLCAT="${LOLCAT_NORM}"
+          else
+            use_lolcat=
+            use_lol="NO"
+          fi
         fi
+      else
+        use_lolcat=
+        use_lol="NO"
+      fi
+      if [ "${use_lolcat}" ]
+      then
         lolarg="-l ${use_lolcat}"
-      }
+      else
+        lolarg=
+      fi
       ;;
     m)
       ASCSPLASH="${ASCSPLASH} -m"
@@ -3664,18 +3692,6 @@ else
   fi
 fi
 
-artfiles=
-[ "$1" ] && artfiles="$1"
-for art in "$@"
-do
-  [ "${art}" == "${artfiles}" ] && continue
-  artfiles="${artfiles},${art}"
-done
-[ "${artfiles}" ] && {
-  show_art_file "${artfiles}"
-  exit 0
-}
-
 [ "${show_neofetch}" ] && {
   if [ "${use_lolcat}" ]
   then
@@ -3714,6 +3730,18 @@ then
 else
   audarg=
 fi
+
+artfiles=
+[ "$1" ] && artfiles="$1"
+for art in "$@"
+do
+  [ "${art}" == "${artfiles}" ] && continue
+  artfiles="${artfiles},${art}"
+done
+[ "${artfiles}" ] && {
+  show_art_file "${artfiles}"
+  exit 0
+}
 
 [ "${slideshow}" ] && {
   play_slide_show ${slideshow}
