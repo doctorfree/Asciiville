@@ -391,6 +391,29 @@ pip list | grep asciimatics > /dev/null || python3 -m pip install asciimatics
 pip list | grep rainbowstream > /dev/null || python3 -m pip install rainbowstream
 pip list | grep tuir > /dev/null || python3 -m pip install tuir
 
+# Custom jrnl configuration for this user unless one exists
+[ -d ${CONFDIR}/jrnl ] && {
+  if [ -d ${HOME}/.config/jrnl ]
+  then
+    for jc in ${CONFDIR}/jrnl/*
+    do
+      [ "${jc}" == "${CONFDIR}/jrnl/*" ] && continue
+      bj=`basename ${jc}`
+      [ -f ${HOME}/.config/jrnl/${bj} ] || cp ${jc} ${HOME}/.config/jrnl/${bj}
+    done
+  else
+    cp -a ${CONFDIR}/jrnl ${HOME}/.config/jrnl
+  fi
+  [ -d ${HOME}/.local/share/jrnl ] || {
+    [ -d ${HOME}/.local ] || mkdir ${HOME}/.local
+    [ -d ${HOME}/.local/share ] || mkdir ${HOME}/.local/share
+    mkdir ${HOME}/.local/share/jrnl
+  }
+  touch ${HOME}/.local/share/jrnl/journal.txt
+  chmod 600 ${HOME}/.local/share/jrnl/journal.txt
+  touch ${HOME}/.local/share/jrnl/asciiville.txt
+  chmod 600 ${HOME}/.local/share/jrnl/asciiville.txt
+}
 # Install the 'jrnl' command if not already installed
 have_jrnl=`type -p jrnl`
 [ "${have_jrnl}" ] || {
@@ -398,21 +421,6 @@ have_jrnl=`type -p jrnl`
   [ "${have_pipx}" ] || {
     python3 -m pip install --user pipx 2> /dev/null
     python3 -m pipx ensurepath 2> /dev/null
-  }
-  # Custom jrnl configuration for this user unless one exists
-  [ -d ${CONFDIR}/jrnl ] && {
-    [ -d ${HOME}/.config/jrnl ] || {
-      cp -a ${CONFDIR}/jrnl ${HOME}/.config/jrnl
-      [ -d ${HOME}/.local/share/jrnl ] || {
-        [ -d ${HOME}/.local ] || mkdir ${HOME}/.local
-        [ -d ${HOME}/.local/share ] || mkdir ${HOME}/.local/share
-        mkdir ${HOME}/.local/share/jrnl
-        touch ${HOME}/.local/share/jrnl/journal.txt
-        chmod 600 ${HOME}/.local/share/jrnl/journal.txt
-        touch ${HOME}/.local/share/jrnl/asciiville.txt
-        chmod 600 ${HOME}/.local/share/jrnl/asciiville.txt
-      }
-    }
   }
   pipx install jrnl 2> /dev/null
   echo "Welcome to @jrnl" > /tmp/jrnl$$
