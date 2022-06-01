@@ -1,1 +1,54 @@
-https://www.raellic.com/linux/
+Command Line utilities and tools I am investigating for possible
+incorporation into Asciiville and other projects.
+
+==================================
+
+Several interesting command line tips and tricks can be found at:
+    https://www.raellic.com/linux/
+
+==================================
+
+The fuzzy finder, fzf, is a great tool and can be used in pipes,
+with vim, and a variety of ways. Install fzf with your OS package
+manager:
+
+    sudo apt install fzf
+    sudo dnf install fzf
+
+See https://github.com/junegunn/fzf
+
+==================================
+
+View JSON or pipe it to Python, JavaScript, or Ruby with FX:
+
+go install github.com/antonmedv/fx@latest
+
+See https://github.com/antonmedv/fx
+
+==================================
+
+The strip-json-comments-cli is a command line tool that
+can be used to strip JSON documents of C/C++ style comments.
+
+Install with NPM:
+
+    $ sudo npm install --global strip-json-comments-cli
+
+Usage:
+
+$ strip-json-comments --help
+
+  Usage
+    $ strip-json-comments <input-file> > <output-file>
+    $ strip-json-comments < <input-string>
+
+  Options
+    --no-whitespace  Remove comments instead of replacing them with whitespace
+
+  Example
+    $ strip-json-comments input.json > output.json
+
+See https://github.com/sindresorhus/strip-json-comments-cli
+
+==================================
+
