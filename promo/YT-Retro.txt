@@ -1,0 +1,8 @@
+A slideshow of vintage ascii art presented by Asciiville in a
+Cool Retro Terminal window. The Asciiville project includes nearly
+1,000 works of ascii art along with many utilities and applications
+for generating and viewing ascii art.
+
+Visit the Asciiville project at:
+
+https://github.com/doctorfree/Asciiville

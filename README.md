@@ -271,6 +271,17 @@ Additional detail and info can be found in the
 * Execute the `asciiville` command in interactive menu mode by running `asciiville -i`
 * See the [online asciiville man page](https://github.com/doctorfree/Asciiville/wiki/asciiville.1) or `man asciiville` for different ways to invoke the `asciiville` command
 
+The `asciiville` command can simply take ascii art filenames as arguments
+and it will display them. The full filename isn't even necessary, it will
+try to figure out what you mean. For example, to test whether your Asciiville
+installation is working, try the command:
+
+```console
+asciiville Waterfalls/wallhaven-r768vq
+```
+
+This should display a waterfall rendered with characters as ascii art.
+
 ## Requirements
 
 Asciiville can be installed on Debian or RPM based Linux systems.
@@ -1633,7 +1644,15 @@ Asciiville Art Slideshow Video:
 Asciiville Space Slideshow Video:
 [![Asciiville Space Slideshow](https://i.imgur.com/TJomRY2.png)](https://www.youtube.com/watch?v=DZV69SYLvc4 "Asciiville Space Slideshow")
 
+Asciiville Retro Vintage Slideshow Video:
+[![Asciiville Retro Vintage Slideshow](https://i.imgur.com/m0EaOXu.png)](https://www.youtube.com/watch?v=lDKJB8OOmaw "Asciiville Retro Vintage Slideshow")
+
 ## Screenshots
+
+<p float="left">
+Waterfall as Ascii Art generated and rendered with Asciiville<br/>
+  <img src="screenshots/Asciiville-Waterfall.png" style="width:1280px;height:720px;">
+</p>
 
 <p float="left">
 Asciiville Main Menu<br/>

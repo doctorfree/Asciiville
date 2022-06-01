@@ -861,6 +861,16 @@ play_slide_show() {
         }
       }
       ;;
+    Vintage)
+      FIG_ASCII="Vintage"
+      SLIDE_DIR="${ARTDIR}/Vintage"
+      SLIDE_FONT="Bolger"
+      [ "${custom_song}" ] || {
+        [ -f "${MUSEDIR}/Loyalty_Freak_Music-Im_On_Fire.ogg" ] && {
+          SONG="${MUSEDIR}/Loyalty_Freak_Music-Im_On_Fire.ogg"
+        }
+      }
+      ;;
     Waterfalls)
       FIG_ASCII="Waterfalls"
       SLIDE_DIR="${ARTDIR}/Waterfalls"
@@ -875,6 +885,11 @@ play_slide_show() {
       FIG_ASCII="${slideshow}"
       SLIDE_DIR="${ARTDIR}/${slideshow}"
       SLIDE_FONT="Varsity"
+      [ "${custom_song}" ] || {
+        [ -f "${MUSEDIR}/Moving-Ahead-RA.mp3" ] && {
+          SONG="${MUSEDIR}/Moving-Ahead-RA.mp3"
+        }
+      }
       ;;
   esac
   [ -d "${SLIDE_DIR}" ] || {
