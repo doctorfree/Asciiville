@@ -1,0 +1,329 @@
+# last update 23-Dec-2007 13:57 (pm)
+# use how you like... feel free to modify.
+#      ___           ___           ___           ___           ___       ___
+#     /\  \         /\  \         /\__\         /\  \         /\__\     /\__\
+#    /::\  \       /::\  \       /:/  /        /::\  \       /:/  /    /:/  /
+#   /:/\:\  \     /:/\:\  \     /:/  /        /:/\:\  \     /:/  /    /:/  /
+#  /::\~\:\  \   /::\~\:\  \   /:/__/  ___   /:/  \:\  \   /:/  /    /:/  /  ___
+# /:/\:\ \:\__\ /:/\:\ \:\__\  |:|  | /\__\ /:/__/ \:\__\ /:/__/    /:/__/  /\__\
+# \/_|::\/:/  / \:\~\:\ \/__/  |:|  |/:/  / \:\  \ /:/  / \:\  \    \:\  \ /:/  /
+#    |:|::/  /   \:\ \:\__\    |:|__/:/  /   \:\  /:/  /   \:\  \    \:\  /:/  /
+#    |:|\/__/     \:\ \/__/     \::::/__/     \:\/:/  /     \:\  \    \:\/:/  /
+#    |:|  |        \:\__\        ~~~~          \::/  /       \:\__\    \::/  /
+#     \|__|         \/__/                       \/__/         \/__/     \/__/
+#      ___                       ___           ___           ___           ___           ___
+#     /\  \          ___        /\  \         /\__\         /\  \         /\  \         |\__\
+#     \:\  \        /\  \      /::\  \       /::|  |       /::\  \       /::\  \        |:|  |
+#      \:\  \       \:\  \    /:/\:\  \     /:|:|  |      /:/\:\  \     /:/\:\  \       |:|  |
+#      /::\  \      /::\__\  /:/  \:\  \   /:/|:|  |__   /::\~\:\  \   /::\~\:\  \      |:|__|__
+#     /:/\:\__\  __/:/\/__/ /:/__/ \:\__\ /:/ |:| /\__\ /:/\:\ \:\__\ /:/\:\ \:\__\     /::::\__\
+#    /:/  \/__/ /\/:/  /    \:\  \ /:/  / \/__|:|/:/  / \/__\:\/:/  / \/_|::\/:/  /    /:/~~/~
+#   /:/  /      \::/__/      \:\  /:/  /      |:/:/  /       \::/  /     |:|::/  /    /:/  /
+#   \/__/        \:\__\       \:\/:/  /       |::/  /        /:/  /      |:|\/__/     \/__/
+#                 \/__/        \::/  /        /:/  /        /:/  /       |:|  |
+#                               \/__/         \/__/         \/__/         \|__|
+#
+# irssi -.theme by rolle (from Finland, so this is commented in finnish)
+# http://rolleweb.net/ (#rolleweb @ irc.quakenet.org)
+#
+# this theme can be found here: http://193.64.18.251//~rolle/revolutionary.theme
+# and if you use chanact.pl make sure that you have replaced its sb_background with sb_window_bg
+# it is already replaced in http://193.64.18.251/~rolle/chanact.pl
+# have fun with IRC!
+#
+#                           teksti          teksti           tausta
+#   ---------------------------------------------------------------------
+#   %k      %K      %0      musta           tummanharmaa     musta
+#   %r      %R      %1      punainen        kirkkaanpunainen punainen
+#   %g      %G      %2      vihreä          kirkkaanvihreä   vihreä
+#   %y      %Y      %3      keltainen       kirkas keltainen keltainen
+#   %b      %B      %4      sininen         kirkas sininen   sininen
+#   %m      %M      %5      pinkki          kirkas pinkki    pinkki
+#   %p      %P              purppura        kirkas purppura
+#   %c      %C      %6      vihreensininen  kirkasvihr.sin.  vihreensininen
+#   %w      %W      %7      harmaa          valkoinen        harmaa
+#   %n      %N              Muuttaa värin oletusväriksi poistaen kaiken muun
+#                           värityksen ja määrityksen. %N on aina terminaalin
+# 			    oletusväri. 
+#   %F                      Välkkyminen päälle/pois päältä.
+#   %U                      Alleviivaus päälle/pois päältä.
+#   %8                      Invert päälle/pois päältä.
+#   %9      %_              Bold päälle/pois päältä.
+#   %:                      Uusi rivi / rivinvaihto.
+#   %|                      Merkkaa identitation positionin.
+#   %#                      Monospace-fontti päälle/pois päältä. (hyödyllinen listojen ja käyttöliittymän kanssa)
+#   %%                      Pelkkä prosenttimerkki "%"
+#
+#
+
+# seuraavat merkit korvataan automaattisesti määritetyillä väreillä
+# (tummanharmaa oletuksena)
+replaces = { "[]=" = "$0-%n"; };
+
+abstracts = {
+
+  # teksti joka on ekana äksönilinjalla (join/part/quit/etc.), defaulttina kolme kaksoispistettä,
+  # jotta muokattu pisg tunnistaa sen (":::")
+  line_start = "%r:%y:%g:%n ";
+
+  # timestämpit
+  timestamp = "%K$0-%n";
+
+  # mikä tahansa teksti joka kaipaa hilightia, default on boldi (semmoinen valkoinen) eli vaikka *blaa* tai *nauraa*
+  hilight = "%_$0-%_";
+
+  # errorviesti, default kirkkaan punainen eli %R
+  error = "%R$0-%n";
+
+  # kanavan nimi
+  channel = "%n$0-%n";
+
+  # nick
+  nick = "%_$0-%_";
+
+  # nick hosti
+  nickhost = "%n[$0-]%n";
+
+  # serverin nimi
+  server = "%n%_$0-%_";
+
+  # kommentti
+  comment = "%n[$0-]%n";
+
+  # syyt jollekin (part, quit, kick, ..)
+  reason = "%R{comment $0-}";
+
+  # modenvaihto ([+o nick])
+  mode = "%n{comment $0-}";
+
+  #  _
+  # | |
+  # | | __  __ _  _ __    __ _ __   __  __ _
+  # | |/ / / _` || '_ \  / _` |\ \ / / / _` |
+  # |   < | (_| || | | || (_| | \ V / | (_| |
+  # |_|\_\ \__,_||_| |_| \__,_|  \_/   \__,_|
+  #
+
+  # alempana (lisäformaatit -kohta)
+
+  # nick (joinit)
+  channick_hilight = "%n$0-%n";
+
+  # host (joinit)
+  chanhost_hilight = "%n{nickhost $0-%n}";
+
+  # nick/host (partit, quitit, etc.)
+  channick = "%n$0-%n";
+  chanhost = "%n{nickhost $0-}%n";
+
+  # hilightattu kanava
+  channelhilight = "%g$0-%n";
+
+  # banni/poikkeus/invite -maski
+  ban = "%K$0-%K";
+
+  #         _             _    _  _
+  #        (_)           | |  (_)| |
+  # __   __ _   ___  ___ | |_  _ | |_
+  # \ \ / /| | / _ \/ __|| __|| || __|
+  #  \ V / | ||  __/\__ \| |_ | || |_
+  #   \_/  |_| \___||___/ \__||_| \__|
+  #
+
+  # mormityyli viestin tulostamiseen, $0 = nick mode, $1 = nick
+  msgnick = "%_$0%_$1- %|";
+
+  # viesti minulta itseltäni. "msgownnick" määrittää nickin tyylimuotoilun
+  # ($0 -kohta msgnickissä) ja "ownmsgnick" määrittää koko rivin tyylin.
+
+  # $0 = nick mode, $1 = nick
+  ownmsgnick = "%K{msgnick %_<%_%K$0%_ %G$1-%K>}%n";
+  ownnick = "$0-%n";
+
+  # julkinen viesti kanavalla, $0 = nick mode, $1 = nick
+  pubmsgnick = "%K{msgnick %_<%_%K$0%_ %C$1-%K>}%n";
+  pubnick = "$0-%n";
+
+  # julkinen viesti kanavalla juuri minulle (hilight), $0 = nick mode, $1 = nick
+  pubmsgmenick = "{msgnick %K<%K$0 %P$1-%K>}%P";
+  menick = "$0-%n";
+
+  # julkinen hailaitattu viesti kanavalla
+  # $0 = highlight color, $1 = nick mode, $2 = nick
+  pubmsghinick = "{msgnick %K<%K$1 %P$2-%K>}%P";
+
+  # kanavan nimi viestissä
+  msgchannel = "%n:%c$0-%n";
+
+  # privaviesti, $0 = nick, $1 = host
+  privmsg = "[%Y$0%K(%y$1-%K)%n] ";
+
+  # privaviesti minulta, $0 = "msg", $1 = target nick
+  ownprivmsg = "[%G$0%K(%Y$1-%K)%n] ";
+
+  # oma privaviesti queryssa
+  ownprivmsgnick = "{msgnick  %K<%G$0-%K>%n}";
+  ownprivnick = "%G$0-%n";
+
+  # privaviesti queryssa
+  privmsgnick = "{msgnick  %K<%W$0-%K>%n}";
+
+  #
+  #               _    _                _  _
+  #              | |  (_)              (_)| |
+  #   __ _   ___ | |_  _   ___   _ __   _ | |_
+  #  / _` | / __|| __|| | / _ \ | '_ \ | || __|
+  # | (_| || (__ | |_ | || (_) || | | || || |_
+  #  \__,_| \___| \__||_| \___/ |_| |_||_| \__|
+  #
+
+  # käytetty sisäisesti tässä teemassa
+  action_core = "%R >%Y>%G> %C$0-%n";
+
+  # yleinen (suurinosa toiminnoista)
+  action = "{action_core $0-} ";
+
+  # oma toiminta missä vaan
+  ownaction = "{action $0-}";
+
+  # oma toiminto kohteella missä vaan
+  ownaction_target = "{action_core $0}%K:%c$1%n ";
+
+  # jonkun toisen lähettämä priva-actioni
+  pvtaction = " (%R>%Y>%G>%n) %C$0-%n ";
+  pvtaction_query = "{action $0-}";
+
+  # julkinen jonkun toisen lähettämä actioni
+  pubaction = "{action $0-}";
+
+  #
+  #                           _
+  #                          | |
+  #  _ __ ___   _   _  _   _ | |_
+  # | '_ ` _ \ | | | || | | || __|
+  # | | | | | || |_| || |_| || |_
+  # |_| |_| |_| \__,_| \__,_| \__|
+  #
+
+  # noticet
+  ownnotice = "[%r$0%K(%R$1-%K)]%n ";
+  notice = "%K-%M$0-%K-%n ";
+  pubnotice_channel = "%K:%m$0-";
+  pvtnotice_host = "%K(%m$0-%K)";
+  servernotice = "%g!$0-%n ";
+
+  # CTCPt
+  ownctcp = "[%c$0%K(%C$1-%K)] ";
+  ctcp = "%g$0-%n";
+
+  # wallopsit
+  wallop = "%W$0-%n: ";
+  wallop_nick = "%n$0-";
+  wallop_action = "%W * $0-%n ";
+
+  # netsplitit
+  netsplit = "%R$0-%R";
+  netjoin = "%G$0-%G";
+
+  # /names -lista
+  names_nick = "[%_$0%_%y$1-%n] ";
+  names_users = "[%Y$0-%n]";
+  names_channel = "%Y$0-%n";
+
+  # DCCt
+  dcc = "<%g$0-%n>";
+  dccfile = "%_$0-%_";
+
+  # DCC xätit, omat DCC-toiminnat
+  dccownmsg = "[%r$0%K($1-%K)%n] ";
+  dccownnick = "<%R$0-%n>";
+  dccownaction = "{action $0-}";
+  dccownaction_target = "{action_core $0}%K:%c$1%n ";
+
+  # DCC xätit - muut
+  dccmsg = "[%G$1-%K(%g$0%K)%n] ";
+  dccquerynick = "<%C$0-%n>";
+  dccaction = " %R>%Y>%G>%n %C$0-%n %|";
+
+  #
+  #       _           _                              _  _     _     _
+  #      | |         | |                            | || |   | |   (_)
+  #  ___ | |_   __ _ | |_  _   _  ___  _ __    __ _ | || | __| | __ _
+  # / __|| __| / _` || __|| | | |/ __|| '_ \  / _` || || |/ /| |/ /| |
+  # \__ \| |_ | (_| || |_ | |_| |\__ \| |_) || (_| || ||   < |   < | |
+  # |___/ \__| \__,_| \__| \__,_||___/| .__/  \__,_||_||_|\_\|_|\_\|_|
+  #                                   | |
+  #                                   |_|
+  # 
+
+  # oletustaustaväri kaikille statuspalkeille. 
+  # statusbarin teksteille ja kohteille voit antaa myös omat värit.
+  sb_background = "%3%Y";
+
+  # aktiivisen ikkunan väri (alapalkki/splitscreen)
+  sb_window_bg = "%2%G";
+
+  # oletustausta oletusstatusbar-ryhmälle
+  #sb_default_bg = "%4";
+
+  # kirjoittamispalkin taustaväri
+  sb_prompt_bg = "%n";
+
+  # statusbarin infon taustaväri
+  sb_info_bg = "%6";
+
+  # topicbarin värit (yläpalkki)
+  sb_topic_bg = "%1%R";
+
+  # teksti statusbarin alussa. sb-item laittaa välin jo valmiiksi joten mitään ei ole oletuksena
+  sbstart = "";
+
+  # teksti statusbarin lopussa. siinä on taas väli oletuksena joten mitään ei tässäkään käytetä.
+  sbend = "";
+
+  prompt = "{channel $*}%n%9>%_ ";
+
+  # itemit.
+  sb = " %n$*";
+  sbmode = " (+%n$*%n)";
+  sbaway = " %rAway.%n";
+  sbservertag = ":%k$0";
+  #sbservertag = "";
+
+  # aktiivisuus
+  # ',' separator
+  sb_act_sep = "%G$*";
+
+  # normaali teksti
+  sb_act_text = "%G$*";
+
+  #sb_act_text = "";
+
+  # julkinen viesti (joku kirjoittaa kanavalla)
+  sb_act_msg = "%W$*";
+
+  # hilight!
+  sb_act_hilight = "%Y>>$*";
+
+  # hilight määritetyllä värillä, $0 = väri, $1 = teksti
+  sb_act_hilight_color = "$0$1-%n";
+
+};
+
+# lisäformaatit
+
+formats = {
+  "fe-common/core" = {
+    join = "%g{channick_hilight $0} {chanhost_hilight $1} has joined %G{channel $2}";
+    part = "%r{channick $0} {chanhost $1} has left %R{channel $2}%r {reason $3}";
+    kick = "%r{channick $0} was kicked from %R{channel $1}%r by {nick $2} {reason $3}";
+    quit = "%r{channick $0} {chanhost $1} has quit {reason $2}";
+    pubmsg = "{pubmsgnick $2 {pubnick \00302$0}}$1";
+  };
+  "fe-common/irc" = {
+    chanmode_change = "%Ymode/%y{channel $0} %Y{mode $1} by {nick $2}";
+    whois = "{nick $0} {nickhost $1@$2}%: ircname : $3";
+    server_chanmode_change = "{netsplit ServerMode}/{channelhilight $0}: {mode $1} by {nick $2}";
+  };
+};
+

@@ -1,0 +1,4 @@
+/SET term_charset utf-8
+/SET theme themes/revolutionary
+/SERVER ADD -auto -network IRCnet irc.libera.chat 6667
+/CONNECT irc.libera.chat
