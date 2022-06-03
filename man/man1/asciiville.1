@@ -40,6 +40,15 @@ Command line options also support running the \f[I]asciiville\f[R]
 window in a tmux session and recording that session using
 \f[I]asciinema\f[R].
 .PP
+When provided filename(s) as argument(s) \f[I]asciiville\f[R] treats the
+files as ascii art and displays each file then waits for the user to
+type \[aq]Enter\[aq] before displaying the next file.
+If the user types \[aq]z\[aq] or \[aq]b\[aq] followed by \[aq]Enter\[aq]
+then \f[I]asciiville\f[R] enters \[dq]zoom/browse\[dq] mode.
+In this mode the user can zoom in and out of the ascii art.
+To zoom in, press \[aq]i\[aq] and to zoom out press \[aq]o\[aq].
+Press any other key to exit zoom/browse mode.
+.PP
 The \f[I]asciiville\f[R] command can also act as a front-end to the
 \f[I]asciisplash\f[R] and \f[I]asciisplash-tmux\f[R] commands when
 invoked with the \f[V]-S\f[R] and \f[V]-T\f[R] command line options.

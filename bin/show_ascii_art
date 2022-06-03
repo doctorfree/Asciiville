@@ -16,6 +16,7 @@ LOLCAT="${LOLCAT_ANIM}"
 artfiles="Friends/tux,Friends/yinyang"
 custom_song=
 art_font_size=4
+bro_font_size=${def_font_size}
 txt_font_size=20
 
 # Default palette used by jp2a
@@ -166,6 +167,37 @@ custom_gallery() {
   }
 }
 
+browser() {
+  bro_font_size=${art_font_size}
+  clear
+  show_art "$1" "\n"
+  while true
+  do
+    read -rsn1 input
+    case "${input}" in
+      i)
+          # Zoom in
+          ((bro_font_size++))
+          # clear
+          termprofset ${termarg} -s ${bro_font_size}
+          # show_art "$1" "\n"
+          ;;
+      o)
+          # Zoom out
+          ((bro_font_size--))
+          # clear
+          termprofset ${termarg} -s ${bro_font_size}
+          # show_art "$1" "\n"
+          ;;
+      *)
+          break
+          ;;
+    esac
+  done
+  bro_font_size=${art_font_size}
+  termprofset ${termarg} -s ${art_font_size}
+}
+
 show_vintage() {
   vintart="$1"
   if [ "${center}" ]
@@ -200,10 +232,33 @@ show_vintage() {
   fi
 }
 
+show_art() {
+  artfile="$1"
+  marg="$2"
+  # columns="$(tput cols)"
+  if [ "${set_font_size}" ]
+  then
+    if [ "${uses_ansi_escape}" ]
+    then
+      while read l
+      do 
+        # line="${marg}$l"
+        # len=${#line}
+        printf "${marg}$l"
+      done < <(/bin/cat "${artfile}")
+    else
+      show_vintage "${artfile}"
+    fi
+    printf "\n"
+  else
+    printf "${marg}"
+    show_vintage "${artfile}"
+  fi
+}
+
 # Display the ascii art
 #   first argument is the file
 #   second argument is prepended on each line of output (e.g. "\t\t")
-#   third is a command to use in a pipe (optional)
 show_ascii() {
   [ -f "$1" ] || {
     [ "${set_font_size}" ] && termprofset ${termarg} -R
@@ -264,41 +319,20 @@ show_ascii() {
     printf "\n"
     ((line++))
   done
-  if [ "${set_font_size}" ]
-  then
-    if [ "${uses_ansi_escape}" ]
-    then
-      if [ "$3" ]
-      then
-        while read l
-        do 
-          printf "${prep}$l"
-        done < <(/bin/cat "${asciiart}") | $3
-      else
-        while read l
-        do 
-          printf "${prep}$l"
-        done < <(/bin/cat "${asciiart}")
-      fi
-    else
-      show_vintage "${asciiart}"
-    fi
-    printf "\n"
-  else
-    printf "${prep}"
-    show_vintage "${asciiart}"
-  fi
+  show_art "${asciiart}" "${prep}"
 
   [ "${viewshow}" ] && {
     printf "\n"
-    # if [ "${have_lolcat}" ]
-    # then
-    #   figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_CONT} | ${LOLCAT}
-    # else
-    #   figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_CONT}
-    # fi
-    # tput civis -- invisible
-    read -p "" answer
+    browse=
+    read -sp "" answer
+    case "${answer}" in
+      b|B|z|Z)
+          browse=1
+          ;;
+      *)
+          ;;
+    esac
+    [ "${browse}" ] && browser "${asciiart}"
   }
   [ "${compressed}" ] && rm -f "${asciiart}"
   [ "${viewshow}" ] && return 4

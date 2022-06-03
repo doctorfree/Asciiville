@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+# browse_art - zoom ascii art from a folder in a Gnome Terminal window
+
+TOOLSHOW="/usr/share/asciiville/tools/bin/browseascii"
+
+have_show=`type -p browseascii`
+
+if [ "${have_show}" ]
+then
+    SHOW="browseascii"
+else
+    if [ -f ${TOOLSHOW} ]
+    then
+        SHOW="bash ${TOOLSHOW}"
+    else
+        echo "Cannot locate the browseascii script"
+        echo "Exiting"
+        exit 1
+    fi
+fi
+
+gnome-terminal --window --full-screen --profile=Asciiville -- ${SHOW} $*

@@ -1028,8 +1028,13 @@ as invoking `xfce4-terminal` with a *--font* option specifying a Monospaced
 font. The `asciiville` command attempts to ensure the use of a Monospaced
 font where it is possible but options do exist for the Asciiville user to
 use whatever the current terminal window might be. In this case, "Use Current
-Terminal", it is up to the Asciiville user to configure the terminal window
-for Monospaced font use.
+Terminal", the Asciiville user may need to manually configure the terminal
+window for Monospaced font use.
+
+When viewing Ascii Art in non-slideshow mode, the user can enter 'z' or 'b'
+followed by 'Return' to enter "zoom/browse" mode. In this mode the user
+can zoom in and out of the ascii art. To zoom in, press 'i' and to zoom
+out press 'o'. Press any other key to exit zoom/browse mode.
 
 #### Usage message for the `asciiville` command
 

@@ -1,0 +1,88 @@
+#!/bin/bash
+#
+
+defsize=4
+fontsize=${defsize}
+
+browser() {
+  while true
+  do
+    read -rsn1 input
+    case "${input}" in
+      i)
+          # Zoom in
+          ((fontsize++))
+          termprofset -s ${fontsize}
+          ;;
+      o)
+          # Zoom out
+          ((fontsize--))
+          termprofset -s ${fontsize}
+          ;;
+      *)
+          break
+          ;;
+    esac
+  done
+  fontsize=${defsize}
+  termprofset -s ${defsize}
+}
+
+wait_input() {
+  browse=
+  while true
+  do
+    read -p "" answer
+    case "${answer}" in
+      b|B)
+          browse=1
+          break
+          ;;
+      *)
+          break
+          ;;
+    esac
+  done
+}
+
+browse=
+termprofset -s ${defsize}
+
+if [ "$1" ]
+then
+  for i in "$@"
+  do
+    case "$i" in
+      *.asc)
+        cat "$i"
+        wait_input
+        [ "${browse}" ] && browser -c "$i"
+        ;;
+      *.asc.gz)
+        gzip -cd "$i"
+        wait_input
+        [ "${browse}" ] && browser -g "$i"
+        ;;
+      *)
+        echo "Unknown filename suffix: $i"
+        echo "Skipping"
+        ;;
+    esac
+  done
+else
+  for i in *.asc
+  do
+    [ "$i" == "*.asc" ] && continue
+    cat "$i"
+    wait_input
+    [ "${browse}" ] && browser -c "$i"
+  done
+  for i in *.asc.gz
+  do
+    [ "$i" == "*.asc.gz" ] && continue
+    gzip -cd "$i"
+    wait_input
+    [ "${browse}" ] && browser -g "$i"
+  done
+fi
+termprofset -R

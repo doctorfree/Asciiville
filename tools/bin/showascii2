@@ -1,4 +1,17 @@
 #!/bin/bash
+#
+# This will read a keypress without the need to press Enter
+# while true
+# do
+#   read -rsn1 input
+#   if [ "$input" = "a" ]; then
+#     echo "hello world"
+#   fi
+# done
+#
+# TODO: Use some input like 'B' or 'b' to indicate enter browse mode
+#       In browse mode read keypresses to pan and zoom the ascii art
+#       Exit browse mode with ESC or some special key press
 
 wait_input() {
   while true
