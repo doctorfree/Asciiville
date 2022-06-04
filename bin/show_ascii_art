@@ -285,23 +285,20 @@ show_ascii() {
   prep="\n${2}"
   numlines=0
   [ "${center}" ] && [ "${set_font_size}" ] && [ "${uses_ansi_escape}" ] && {
-    firstline=`head -1 "${asciiart}"`
-    echo "${firstline}" | grep "^+-------" > /dev/null && {
-      # ascii art with boundary, we know its width
-      awide=`echo "${firstline}" | wc -c`
-      termwide=`stty size | awk '{print $2}'`
-      h_margin="$((termwide - awide))"
-      [ ${h_margin} -lt 0 ] && return 3
-      if [ ${h_margin} -gt 1 ]
-      then
-        numspaces="$((h_margin / 2))"
-      else
-        numspaces=0
-      fi
-      spaces=
-      set_spaces
-      prep="\n${spaces}"
-    }
+    # Filter non-printable characters from first line and get character count
+    awide=`head -1 "${asciiart}" | sed 's/\x1B\[[0-9;]*[A-Za-z]//g' | wc -m`
+    termwide=`stty size | awk '{print $2}'`
+    h_margin="$((termwide - awide))"
+    [ ${h_margin} -lt 0 ] && return 3
+    if [ ${h_margin} -gt 1 ]
+    then
+      numspaces="$((h_margin / 2))"
+    else
+      numspaces=0
+    fi
+    spaces=
+    set_spaces
+    prep="\n${spaces}"
   }
   ahigh=`cat "${asciiart}" | wc -l`
   termhigh=`stty size | awk '{print $1}'`
