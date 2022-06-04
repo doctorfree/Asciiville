@@ -208,49 +208,41 @@ custom_gallery() {
 browser() {
   bro_font_size=${art_font_size}
   figlet -c -k -t "Zoom/Browser Mode"
-  figlet -c -k -t "Zoom  In: 'i' / 'j'"
-  figlet -c -k -t "Zoom Out: 'o' / 'k'"
+  figlet -c -k -t "Zoom  In: 'i' / 'j' / 'n'"
+  figlet -c -k -t "Zoom Out: 'o' / 'k' / 'm'"
   figlet -c -k -t "Help: 'h'  Exit: 'q'"
   while true
   do
     read -rsn1 input
     case "${input}" in
-      i)
-          # Zoom in
+      i)  # Zoom in
           ((bro_font_size++))
-          clear
-          termprofset ${termarg} -s ${bro_font_size}
           ;;
-      o)
-          # Zoom out
+      o)  # Zoom out
           ((bro_font_size--))
-          clear
-          termprofset ${termarg} -s ${bro_font_size}
           ;;
-      j)
-          # Zoom in more
+      j)  # Zoom in more
           bro_font_size=$((bro_font_size + 3))
-          clear
-          termprofset ${termarg} -s ${bro_font_size}
           ;;
-      k)
-          # Zoom out more
+      k)  # Zoom out more
           bro_font_size=$((bro_font_size - 3))
           [ ${bro_font_size} -lt 1 ] && bro_font_size=1
-          clear
-          termprofset ${termarg} -s ${bro_font_size}
           ;;
-      r)
-          # Restore font size
+      n)  # Zoom in most
+          bro_font_size=$((bro_font_size + 9))
+          ;;
+      m)  # Zoom out most
+          bro_font_size=$((bro_font_size - 9))
+          [ ${bro_font_size} -lt 1 ] && bro_font_size=1
+          ;;
+      r)  # Restore font size
           bro_font_size=${art_font_size}
-          clear
-          termprofset ${termarg} -s ${bro_font_size}
           ;;
       q|x)
+          clear
           break
           ;;
-      *)
-          # Display simple help/usage for browser
+      *)  # Display simple help/usage for browser
           clear
           termprofset ${termarg} -s ${txt_font_size}
           printf "\n\n\n\t'i' zoom in\n\t'j' zoom in more"
@@ -258,10 +250,10 @@ browser() {
           printf "\n\t'r' restore to original\n\t'h' display this help"
           printf "\n\t'q' or 'x' to exit browse/zoom mode\n\n\t"
           read -p "Press Enter to continue" answer
-          clear
-          termprofset ${termarg} -s ${bro_font_size}
           ;;
     esac
+    clear
+    termprofset ${termarg} -s ${bro_font_size}
     prep="\n$2"
     numlines=0
     [ "${center}" ] && [ "${set_font_size}" ] && [ "${uses_ansi_escape}" ] && {

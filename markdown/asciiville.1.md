@@ -26,8 +26,10 @@ navigate in zoom/browse mode:
 
 - 'i' zoom in
 - 'j' zoom in more
+- 'n' zoom in even more
 - 'o' zoom out
 - 'k' zoom out more
+- 'm' zoom out even more
 - 'r' restore to original
 - 'h' display a help message
 - 'q' or 'x' to exit zoom/browse mode
