@@ -268,6 +268,9 @@ browser() {
 
 show_vintage() {
   vintart="$1"
+  baseart=`basename "${vintart}"`
+  slow=
+  grep _ "${baseart}" > /dev/null && slow=1
   if [ "${center}" ]
   then
     columns="$(tput cols)"
@@ -278,24 +281,49 @@ show_vintage() {
       [ ${length} -gt ${longest} ] && longest=${length}
     done < "${vintart}"
     margin=$(( (columns - ${longest}) / 2))
+    [ ${margin} -lt 0 ] && margin=0
     padding=`printf '%*s' "${margin}"`
 
-    while IFS= read -r line; do
+    if [ "${slow}" ]
+    then
+      while IFS= read -r line; do
+        if [ "${have_lolcat}" ]
+        then
+          printf "%s%s\n" "${padding}" "${line}" | ${LOLCAT}
+          tput civis -- invisible
+        else
+          printf "%s%s\n" "${padding}" "${line}"
+        fi
+      done < "${vintart}"
+    else
       if [ "${have_lolcat}" ]
       then
-        printf "%s%s\n" "${padding}" "${line}" | ${LOLCAT}
+        /bin/cat "${vintart}" | sed "s/^/${padding}/" | ${LOLCAT}
+        tput civis -- invisible
       else
-        printf "%s%s\n" "${padding}" "${line}"
+        /bin/cat "${vintart}" | sed "s/^/${padding}/"
       fi
-    done < "${vintart}"
-    [ "${have_lolcat}" ] && tput civis -- invisible
+    fi
   else
-    if [ "${have_lolcat}" ]
+    if [ "${slow}" ]
     then
-      /bin/cat "${vintart}" | ${LOLCAT}
-      tput civis -- invisible
+      while IFS= read -r line; do
+        if [ "${have_lolcat}" ]
+        then
+          printf "%s\n" "${line}" | ${LOLCAT}
+          tput civis -- invisible
+        else
+          printf "%s\n" "${line}"
+        fi
+      done < "${vintart}"
     else
-      /bin/cat "${vintart}"
+      if [ "${have_lolcat}" ]
+      then
+        /bin/cat "${vintart}" | ${LOLCAT}
+        tput civis -- invisible
+      else
+        /bin/cat "${vintart}"
+      fi
     fi
   fi
 }
@@ -303,9 +331,6 @@ show_vintage() {
 show_art() {
   artfile="$1"
   marg="$2"
-  # columns="$(tput cols)"
-  # line="${marg}$l"
-  # len=${#line}
   if [ "${set_font_size}" ]
   then
     if [ "${uses_ansi_escape}" ]
@@ -317,7 +342,6 @@ show_art() {
     else
       show_vintage "${artfile}"
     fi
-    # printf "\n"
   else
     printf "${marg}"
     show_vintage "${artfile}"
