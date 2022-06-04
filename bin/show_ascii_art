@@ -138,6 +138,44 @@ set_tabs() {
   done
 }
 
+set_prep() {
+  prepart="$1"
+  # Filter non-printable characters from first line and get character count
+  awide=`head -1 "${prepart}" | sed 's/\x1B\[[0-9;]*[A-Za-z]//g' | wc -m`
+  termwide=`stty size | awk '{print $2}'`
+  mwide=`printf "$2" | wc -c`
+  fullwide=$((awide + mwide))
+  h_margin="$((termwide - fullwide))"
+  if [ ${h_margin} -gt 1 ]
+  then
+    numspaces="$((h_margin / 2))"
+  else
+    numspaces=0
+  fi
+  spaces=
+  set_spaces
+  prep="${prep}${spaces}"
+}
+
+vert_center() {
+  ahigh=`cat "$1" | wc -l`
+  termhigh=`stty size | awk '{print $1}'`
+  v_margin="$((termhigh - ahigh))"
+  if [ ${v_margin} -gt 1 ]
+  then
+    numlines="$((v_margin / 2))"
+  else
+    numlines=0
+  fi
+
+  line=0
+  while [ ${line} -lt ${numlines} ]
+  do
+    printf "\n"
+    ((line++))
+  done
+}
+
 # Apply any gallery customization
 # First argument is folder where art resides
 # Second argument can be -a or -t to set art font or text font size
@@ -169,8 +207,10 @@ custom_gallery() {
 
 browser() {
   bro_font_size=${art_font_size}
-  clear
-  show_art "$1" "\n"
+  figlet -c -k -t "Zoom/Browser Mode"
+  figlet -c -k -t "Zoom  In: 'i' / 'j'"
+  figlet -c -k -t "Zoom Out: 'o' / 'k'"
+  figlet -c -k -t "Help: 'h'  Exit: 'q'"
   while true
   do
     read -rsn1 input
@@ -180,36 +220,31 @@ browser() {
           ((bro_font_size++))
           clear
           termprofset ${termarg} -s ${bro_font_size}
-          show_art "$1" "\n"
           ;;
       o)
           # Zoom out
           ((bro_font_size--))
           clear
           termprofset ${termarg} -s ${bro_font_size}
-          show_art "$1" "\n"
           ;;
-      l)
+      j)
           # Zoom in more
           bro_font_size=$((bro_font_size + 3))
           clear
           termprofset ${termarg} -s ${bro_font_size}
-          show_art "$1" "\n"
           ;;
-      j)
+      k)
           # Zoom out more
           bro_font_size=$((bro_font_size - 3))
           [ ${bro_font_size} -lt 1 ] && bro_font_size=1
           clear
           termprofset ${termarg} -s ${bro_font_size}
-          show_art "$1" "\n"
           ;;
       r)
           # Restore font size
           bro_font_size=${art_font_size}
           clear
           termprofset ${termarg} -s ${bro_font_size}
-          show_art "$1" "\n"
           ;;
       q|x)
           break
@@ -218,16 +253,22 @@ browser() {
           # Display simple help/usage for browser
           clear
           termprofset ${termarg} -s ${txt_font_size}
-          printf "\n\n\n\t'i' zoom in\n\t'l' zoom in more"
-          printf "\n\t'o' zoom out\n\t'j' zoom out more"
+          printf "\n\n\n\t'i' zoom in\n\t'j' zoom in more"
+          printf "\n\t'o' zoom out\n\t'k' zoom out more"
           printf "\n\t'r' restore to original\n\t'h' display this help"
           printf "\n\t'q' or 'x' to exit browse/zoom mode\n\n\t"
           read -p "Press Enter to continue" answer
           clear
           termprofset ${termarg} -s ${bro_font_size}
-          show_art "$1" "\n"
           ;;
     esac
+    prep="\n$2"
+    numlines=0
+    [ "${center}" ] && [ "${set_font_size}" ] && [ "${uses_ansi_escape}" ] && {
+      set_prep "$1" "$2"
+    }
+    vert_center "$1"
+    show_art "$1" "${prep}"
   done
   bro_font_size=${art_font_size}
   termprofset ${termarg} -s ${art_font_size}
@@ -291,6 +332,7 @@ show_art() {
   fi
 }
 
+prep="\n"
 # Display the ascii art
 #   first argument is the file
 #   second argument is prepended on each line of output (e.g. "\t\t")
@@ -317,44 +359,16 @@ show_ascii() {
         ;;
   esac
 
-  prep="\n${2}"
+  prep="\n$2"
   numlines=0
   [ "${center}" ] && [ "${set_font_size}" ] && [ "${uses_ansi_escape}" ] && {
-    # Filter non-printable characters from first line and get character count
-    awide=`head -1 "${asciiart}" | sed 's/\x1B\[[0-9;]*[A-Za-z]//g' | wc -m`
-    termwide=`stty size | awk '{print $2}'`
-    h_margin="$((termwide - awide))"
-    # [ ${h_margin} -lt 0 ] && return 3
-    if [ ${h_margin} -gt 1 ]
-    then
-      numspaces="$((h_margin / 2))"
-    else
-      numspaces=0
-    fi
-    spaces=
-    set_spaces
-    prep="\n${spaces}"
+    set_prep "${asciiart}" "$2"
   }
-  ahigh=`cat "${asciiart}" | wc -l`
-  termhigh=`stty size | awk '{print $1}'`
-  v_margin="$((termhigh - ahigh))"
-  if [ ${v_margin} -gt 1 ]
-  then
-    numlines="$((v_margin / 2))"
-  else
-    numlines=0
-  fi
-
-  line=0
-  while [ ${line} -lt ${numlines} ]
-  do
-    printf "\n"
-    ((line++))
-  done
+  vert_center "${asciiart}"
   show_art "${asciiart}" "${prep}"
 
   [ "${viewshow}" ] && {
-    printf "\n"
+    # printf "\n"
     browse=
     read -sp "" answer
     case "${answer}" in
@@ -364,7 +378,7 @@ show_ascii() {
       *)
           ;;
     esac
-    [ "${browse}" ] && browser "${asciiart}"
+    [ "${browse}" ] && browser "${asciiart}" "$2"
   }
   [ "${compressed}" ] && rm -f "${asciiart}"
   [ "${viewshow}" ] && return 4
