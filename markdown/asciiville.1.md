@@ -21,8 +21,16 @@ When provided filename(s) as argument(s) *asciiville* treats the files as
 ascii art and displays each file then waits for the user to type 'Enter'
 before displaying the next file. If the user types 'z' or 'b' followed by
 'Enter' then *asciiville* enters "zoom/browse" mode. In this mode the user
-can zoom in and out of the ascii art. To zoom in, press 'i' and to zoom
-out press 'o'. Press any other key to exit zoom/browse mode.
+can zoom in and out of the ascii art. Use the following key presses to
+navigate in zoom/browse mode:
+
+- 'i' zoom in
+- 'l' zoom in more
+- 'o' zoom out
+- 'j' zoom out more
+- 'r' restore to original
+- 'h' display a help message
+- 'q' or 'x' to exit zoom/browse mode
 
 The *asciiville* command can also act as a front-end to the *asciisplash* and *asciisplash-tmux* commands when invoked with the `-S` and `-T` command line options.
 

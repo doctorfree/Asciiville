@@ -178,19 +178,54 @@ browser() {
       i)
           # Zoom in
           ((bro_font_size++))
-          # clear
+          clear
           termprofset ${termarg} -s ${bro_font_size}
-          # show_art "$1" "\n"
+          show_art "$1" "\n"
           ;;
       o)
           # Zoom out
           ((bro_font_size--))
-          # clear
+          clear
           termprofset ${termarg} -s ${bro_font_size}
-          # show_art "$1" "\n"
+          show_art "$1" "\n"
+          ;;
+      l)
+          # Zoom in more
+          bro_font_size=$((bro_font_size + 3))
+          clear
+          termprofset ${termarg} -s ${bro_font_size}
+          show_art "$1" "\n"
+          ;;
+      j)
+          # Zoom out more
+          bro_font_size=$((bro_font_size - 3))
+          [ ${bro_font_size} -lt 1 ] && bro_font_size=1
+          clear
+          termprofset ${termarg} -s ${bro_font_size}
+          show_art "$1" "\n"
+          ;;
+      r)
+          # Restore font size
+          bro_font_size=${art_font_size}
+          clear
+          termprofset ${termarg} -s ${bro_font_size}
+          show_art "$1" "\n"
+          ;;
+      q|x)
+          break
           ;;
       *)
-          break
+          # Display simple help/usage for browser
+          clear
+          termprofset ${termarg} -s ${txt_font_size}
+          printf "\n\n\n\t'i' zoom in\n\t'l' zoom in more"
+          printf "\n\t'o' zoom out\n\t'j' zoom out more"
+          printf "\n\t'r' restore to original\n\t'h' display this help"
+          printf "\n\t'q' or 'x' to exit browse/zoom mode\n\n\t"
+          read -p "Press Enter to continue" answer
+          clear
+          termprofset ${termarg} -s ${bro_font_size}
+          show_art "$1" "\n"
           ;;
     esac
   done
@@ -216,11 +251,11 @@ show_vintage() {
       if [ "${have_lolcat}" ]
       then
         printf "%s%s\n" "${padding}" "${line}" | ${LOLCAT}
-        tput civis -- invisible
       else
         printf "%s%s\n" "${padding}" "${line}"
       fi
     done < "${vintart}"
+    [ "${have_lolcat}" ] && tput civis -- invisible
   else
     if [ "${have_lolcat}" ]
     then
@@ -236,20 +271,20 @@ show_art() {
   artfile="$1"
   marg="$2"
   # columns="$(tput cols)"
+  # line="${marg}$l"
+  # len=${#line}
   if [ "${set_font_size}" ]
   then
     if [ "${uses_ansi_escape}" ]
     then
       while read l
       do 
-        # line="${marg}$l"
-        # len=${#line}
         printf "${marg}$l"
       done < <(/bin/cat "${artfile}")
     else
       show_vintage "${artfile}"
     fi
-    printf "\n"
+    # printf "\n"
   else
     printf "${marg}"
     show_vintage "${artfile}"
@@ -289,7 +324,7 @@ show_ascii() {
     awide=`head -1 "${asciiart}" | sed 's/\x1B\[[0-9;]*[A-Za-z]//g' | wc -m`
     termwide=`stty size | awk '{print $2}'`
     h_margin="$((termwide - awide))"
-    [ ${h_margin} -lt 0 ] && return 3
+    # [ ${h_margin} -lt 0 ] && return 3
     if [ ${h_margin} -gt 1 ]
     then
       numspaces="$((h_margin / 2))"
@@ -811,6 +846,9 @@ play_slide_show() {
     done
   fi
 }
+
+# We never want to wrap Ascii Art display
+setterm -linewrap off
 
 [ "${slideshow}" ] && {
   stty -echoctl # hide ^C

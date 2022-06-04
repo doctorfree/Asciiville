@@ -1033,8 +1033,16 @@ window for Monospaced font use.
 
 When viewing Ascii Art in non-slideshow mode, the user can enter 'z' or 'b'
 followed by 'Return' to enter "zoom/browse" mode. In this mode the user
-can zoom in and out of the ascii art. To zoom in, press 'i' and to zoom
-out press 'o'. Press any other key to exit zoom/browse mode.
+can zoom in and out of the ascii art. Use the following key presses to
+navigate in zoom/browse mode:
+
+- 'i' zoom in
+- 'l' zoom in more
+- 'o' zoom out
+- 'j' zoom out more
+- 'r' restore to original
+- 'h' display a help message
+- 'q' or 'x' to exit zoom/browse mode
 
 #### Usage message for the `asciiville` command
 
