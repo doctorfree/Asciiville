@@ -123,9 +123,11 @@ usage() {
   printf "\n\t   'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies',"
   printf "\n\t   'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature',"
   printf "\n\t   'Owls', 'Space', 'Vintage', 'Wallpapers', 'Waterfalls',"
-  printf "\n\t   the name of a custom ascii art folder, or the slideshow"
-  printf "\n\t   keyword 'files' which indicates display a slideshow using"
-  printf "\n\t   the ascii art files provided on the command line."
+  printf "\n\t   the name of a custom ascii art folder, the slideshow keyword"
+  printf "\n\t   'files' which indicates display a slideshow using the ascii"
+  printf "\n\t   art files provided on the command line, or the slideshow"
+  printf "\n\t   argument 'files=/path/to/file' which indicates read the list"
+  printf "\n\t   of slideshow files from the file '/path/to/file'"
   printf "\n\t-Z indicates do not play audio during slideshow/animation\n"
   printf "\nGeneral options:"
   printf "\n\t-k indicates kill Asciiville tmux sessions and ASCIImatics scripts"
@@ -3742,6 +3744,23 @@ do
   [ "${art}" == "${artfiles}" ] && continue
   artfiles="${artfiles},${art}"
 done
+[ "${slideshow:0:6}" == "files=" ] && {
+  showfile=`echo ${slideshow} | awk -F '=' ' { print $2 } '`
+  [ -f "${showfile}" ] && {
+    slideshow="files"
+    while read artslide
+    do
+      [ "${artslide}" ] && {
+        if [ "${artfiles}" ]
+        then
+          artfiles="${artfiles},${artslide}"
+        else
+          artfiles="${artslide}"
+        fi
+      }
+    done < <(cat "${showfile}")
+  }
+}
 [ "${artfiles}" ] && {
   show_art_file "${artfiles}"
   exit 0

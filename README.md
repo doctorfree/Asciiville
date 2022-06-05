@@ -58,9 +58,9 @@ Asciiville includes nearly 1,000 works of ASCII and ANSI Art!
 ## Overview
 
 Asciiville integrations and extensions are aimed at the character
-based terminal user. They enable easy to use seamlessly
-integrated control of a variety of ASCII Art, animation, and
-utilities in a lightweight character based environment.
+based terminal user. They enable easy to use seamlessly integrated
+control of a variety of ASCII Art, animation, and utilities in a
+lightweight character based environment.
 
 At the core of Asciiville is the `asciiville` command which acts as
 a front-end for a variety of terminal commands and `tmux` sessions.
@@ -69,10 +69,23 @@ The `asciiville` command can be used to display Ascii Art either
 as a slideshow or interactively. For example:
 
 ```console
+# Slideshow of Ascii Art in /usr/share/asciiville/art/Art/
 asciiville -V Art
+# Slideshow of Ascii Art in /usr/share/asciiville/art/Vintage/
 asciiville -V Vintage
+# Interactive display of Ascii Art in .../file1 and .../file2
 asciiville file1 file2 ...
+# Slideshow of Ascii Art in file1, file2, and file3
+asciiville -V files file1 file2 file3
+# Slideshow of Ascii Art files listed in /tmp/asciiart.txt
+asciiville -V files=/tmp/asciiart.txt
 ```
+
+Filenames provided to `asciiville`, either on the command line or in
+a specified file, can be absolute paths to files; relative paths to files;
+or relative paths to files in the Asciiville Ascii Art galleries folder.
+Ascii Art filenames may be provided with or without the filename suffix
+(e.g. `Friends/tux.asc` or `Friends/tux.asc.gz` or Friends/tux`).
 
 The `asciiville` command can also be used to invoke commands in a variety of ways:
 
@@ -1118,9 +1131,11 @@ Slideshow/ASCIImatics animation options:
 	   'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies',
 	   'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature',
 	   'Owls', 'Space', 'Vintage', 'Wallpapers', 'Waterfalls',
-	   the name of a custom ascii art folder, or the slideshow
-	   keyword 'files' which indicates display a slideshow using
-	   the ascii art files provided on the command line.
+	   the name of a custom ascii art folder, the slideshow keyword
+	   'files' which indicates display a slideshow using the ascii
+       art files provided on the command line, or the slideshow
+       argument 'files=/path/to/file' which indicates read the list
+       of slideshow files from the file '/path/to/file'
 	-Z indicates do not play audio during slideshow/animation
 
 General options:

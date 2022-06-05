@@ -40,12 +40,44 @@ Command line options also support running the \f[I]asciiville\f[R]
 window in a tmux session and recording that session using
 \f[I]asciinema\f[R].
 .PP
+The \f[V]asciiville\f[R] command can be used to display Ascii Art either
+as a slideshow or interactively.
+For example:
+.IP
+.nf
+\f[C]
+# Slideshow of Ascii Art in /usr/share/asciiville/art/Art/
+asciiville -V Art
+# Slideshow of Ascii Art in /usr/share/asciiville/art/Vintage/
+asciiville -V Vintage
+# Interactive display of Ascii Art in .../file1 and .../file2
+asciiville file1 file2 ...
+# Slideshow of Ascii Art in file1, file2, and file3
+asciiville -V files file1 file2 file3
+# Slideshow of Ascii Art files listed in /tmp/asciiart.txt
+asciiville -V files=/tmp/asciiart.txt
+\f[R]
+.fi
+.PP
+Filenames provided to \f[V]asciiville\f[R], either on the command line
+or in a specified file, can be absolute paths to files; relative paths
+to files; or relative paths to files in the Asciiville Ascii Art
+galleries folder.
+Ascii Art filenames may be provided with or without the filename suffix
+(e.g.
+\f[V]Friends/tux.asc\f[R] or \f[V]Friends/tux.asc.gz\f[R] or
+Friends/tux\[ga]).
+.PP
 When provided filename(s) as argument(s) \f[I]asciiville\f[R] treats the
-files as ascii art and displays each file then waits for the user to
-type \[aq]Enter\[aq] before displaying the next file.
-If the user types \[aq]z\[aq] or \[aq]b\[aq] followed by \[aq]Enter\[aq]
-then \f[I]asciiville\f[R] enters \[dq]zoom/browse\[dq] mode.
-In this mode the user can zoom in and out of the ascii art.
+files as ascii art and displays each file.
+In slideshow mode the display is paused for a configurable number of
+seconds between ascii art files.
+In interactive mode the display waits for the user to type
+\[aq]Enter\[aq] before displaying the next file.
+In this mode, if the user types \[aq]z\[aq] or \[aq]b\[aq] followed by
+\[aq]Enter\[aq] then \f[I]asciiville\f[R] enters \[dq]zoom/browse\[dq]
+mode.
+In zoom/browse mode the user can zoom in and out of the ascii art.
 Use the following key presses to navigate in zoom/browse mode:
 .IP \[bu] 2
 \[aq]i\[aq] zoom in
@@ -66,7 +98,7 @@ Use the following key presses to navigate in zoom/browse mode:
 .IP \[bu] 2
 \[aq]q\[aq] or \[aq]x\[aq] to exit zoom/browse mode
 .PP
-In addition, in non-slideshow mode the user can enter \[aq]s\[aq] or
+In addition, in interactive mode the user can enter \[aq]s\[aq] or
 \[aq]S\[aq] followed by \[aq]Return\[aq] to enter info
 \[dq]slideshow\[dq] mode.
 In slideshow mode the ascii art is displayed for a few seconds then the
@@ -336,9 +368,11 @@ Displays an ascii art slide show
 \[aq]Iterated\[aq], \[aq]Lyapunov\[aq], \[aq]Nature\[aq],
 \[aq]Owls\[aq], \[aq]Space\[aq], \[aq]Vintage\[aq],
 \[aq]Wallpapers\[aq], \[aq]Waterfalls\[aq], the name of a custom ascii
-art folder, or the slideshow keyword \[aq]files\[aq] which indicates
+art folder, the slideshow keyword \[aq]files\[aq] which indicates
 display a slideshow using the ascii art files provided on the command
-line
+line, or the slideshow argument \[aq]files=/path/to/file\[aq] which
+indicates read the list of slideshow files from the file
+\[aq]/path/to/file\[aq]
 .RE
 .TP
 \f[B]-Z\f[R]

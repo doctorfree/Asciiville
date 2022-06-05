@@ -1,9 +1,10 @@
 #!/bin/bash
 #
 ARTDIR="/usr/share/asciiville/art"
-FIG_WELCOME="Welcome To"
-FIG_CONT="Press Enter To Continue"
+FIG_WELCOME="Welcome"
+FIG_TO="To"
 FIG_ASCII="Asciiville"
+FIG_CONT="Press Enter To Continue"
 FIG_FONTS="/usr/share/figlet-fonts"
 LARGE_FONT="Bolger"
 SMALL_FONT="Small"
@@ -189,20 +190,22 @@ custom_gallery() {
   uses_ansi_escape=1
   show_filename=
 
+  art_font_size=${saved_art_size}
+  txt_font_size=${saved_txt_size}
   [ -f ${showdir}/.config ] && {
     . ${showdir}/.config
     [ ${scale_art_font} -eq 1 ] || {
       art_font_size=$((saved_art_size * scale_art_font))
-      [ "${setterm}" == "-a" ] && {
-        [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
-      }
     }
     [ ${scale_txt_font} -eq 1 ] || {
       txt_font_size=$((saved_txt_size * scale_txt_font))
-      [ "${setterm}" == "-t" ] && {
-        [ "${set_font_size}" ] && termprofset ${termarg} -s ${txt_font_size}
-      }
     }
+  }
+  [ "${setterm}" == "-a" ] && {
+    [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
+  }
+  [ "${setterm}" == "-t" ] && {
+    [ "${set_font_size}" ] && termprofset ${termarg} -s ${txt_font_size}
   }
 }
 
@@ -271,7 +274,7 @@ show_vintage() {
   vintart="$1"
   baseart=`basename "${vintart}"`
   slow=
-  grep _ "${baseart}" > /dev/null && slow=1
+  echo ${baseart} | grep _ > /dev/null && slow=1
   if [ "${center}" ]
   then
     columns="$(tput cols)"
@@ -1122,10 +1125,12 @@ clear
   if [ "${have_lolcat}" ]
   then
     figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME} | ${LOLCAT}
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_TO} | ${LOLCAT}
     figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII} | ${LOLCAT}
     tput civis -- invisible
   else
     figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME}
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_TO}
     figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII}
   fi
   figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Ctrl-c     Exits"
@@ -1181,64 +1186,30 @@ else
   for art in "${artarray[@]}"
   do
     clear
-    if [ -f "${ARTDIR}/${art}.asc" ]
-    then
-      custom_gallery "${ARTDIR}" -a
-      show_ascii "${ARTDIR}/${art}.asc" "${tabs}"
-    else
-      if [ -f "${ARTDIR}/${art}.asc.gz" ]
-      then
-        custom_gallery "${ARTDIR}" -a
-        show_ascii "${ARTDIR}/${art}.asc.gz" "${tabs}"
-      else
-        if [ -f "${ARTDIR}/${art}" ]
-        then
-          custom_gallery "${ARTDIR}" -a
-          show_ascii "${ARTDIR}/${art}" "${tabs}"
-        else
-          if [ -f "${art}.asc" ]
-          then
-            artdir=`dirname "${art}.asc"`
-            custom_gallery "${artdir}" -a
-            show_ascii "${art}.asc" "${tabs}"
-          else
-            if [ -f "${art}.asc.gz" ]
-            then
-              artdir=`dirname "${art}.asc.gz"`
-              custom_gallery "${artdir}" -a
-              show_ascii "${art}.asc.gz" "${tabs}"
-            else
-              if [ -f "${art}" ]
-              then
-                artdir=`dirname "${art}"`
-                custom_gallery "${artdir}" -a
-                show_ascii "${art}" "${tabs}"
-              else
-                foundit=
-                for asc in "${ARTDIR}/*/${art}*"
-                do
-                  [ "${asc}" == "${ARTDIR}/*/${art}*" ] && continue 
-                  [ -f "${asc}" ] && {
-                    foundit=1
-                    artdir=`dirname "${asc}"`
-                    custom_gallery "${artdir}" -a
-                    show_ascii "${asc}" "${tabs}"
-                  }
-                done
-                [ "${foundit}" ] || {
-                  echo "Cannot locate ${art}"
-                  continue
-                }
-              fi
-            fi
-          fi
-        fi
-      fi
-    fi
+    foundit=
+    for chkart in "${ARTDIR}/${art}.asc" "${ARTDIR}/${art}.asc.gz" \
+                  "${ARTDIR}/${art}.gz" "${ARTDIR}/${art}" "${art}.asc" \
+                  "${art}.asc.gz" "${art}.gz" "${art}" "${ARTDIR}/*/${art}*"
+    do
+      [ "${chkart}" == "${ARTDIR}/*/${art}*" ] && continue 
+      [ -f "${chkart}" ] && {
+        foundit=1
+        artdir=`dirname "${chkart}"`
+        custom_gallery "${artdir}" -a
+        show_ascii "${chkart}" "${tabs}"
+        break
+      }
+    done
+    [ "${foundit}" ] || {
+      echo "Cannot locate ${art}"
+      continue
+    }
     [ $? -gt 1 ] || {
       [ "${show_filename}" ] && figlet -c -k -t `basename ${art}`
       sleep ${delay}
     }
+    [ ${scale_art_font} -eq 1 ] || art_font_size=${saved_art_size}
+    [ ${scale_txt_font} -eq 1 ] || txt_font_size=${saved_txt_size}
   done
 fi
 

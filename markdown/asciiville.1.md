@@ -17,10 +17,33 @@ Invoked without any arguments or with the `-i` argument, `asciiville` displays a
 # DESCRIPTION
 The *asciiville* command acts as a front-end for launching character based utilities and ascii art in various terminal emulators. Asciiville can be used to launch any specified character based command. Command line options also support running the *asciiville* window in a tmux session and recording that session using *asciinema*.
 
+The `asciiville` command can be used to display Ascii Art either as a slideshow or interactively. For example:
+
+```
+# Slideshow of Ascii Art in /usr/share/asciiville/art/Art/
+asciiville -V Art
+# Slideshow of Ascii Art in /usr/share/asciiville/art/Vintage/
+asciiville -V Vintage
+# Interactive display of Ascii Art in .../file1 and .../file2
+asciiville file1 file2 ...
+# Slideshow of Ascii Art in file1, file2, and file3
+asciiville -V files file1 file2 file3
+# Slideshow of Ascii Art files listed in /tmp/asciiart.txt
+asciiville -V files=/tmp/asciiart.txt
+```
+
+Filenames provided to `asciiville`, either on the command line or in
+a specified file, can be absolute paths to files; relative paths to files;
+or relative paths to files in the Asciiville Ascii Art galleries folder.
+Ascii Art filenames may be provided with or without the filename suffix
+(e.g. `Friends/tux.asc` or `Friends/tux.asc.gz` or Friends/tux`).
+
 When provided filename(s) as argument(s) *asciiville* treats the files as
-ascii art and displays each file then waits for the user to type 'Enter'
-before displaying the next file. If the user types 'z' or 'b' followed by
-'Enter' then *asciiville* enters "zoom/browse" mode. In this mode the user
+ascii art and displays each file. In slideshow mode the display is paused
+for a configurable number of seconds between ascii art files. In interactive
+mode the display waits for the user to type 'Enter' before displaying the next
+file. In this mode, if the user types 'z' or 'b' followed by 'Enter' then
+*asciiville* enters "zoom/browse" mode. In zoom/browse mode the user
 can zoom in and out of the ascii art. Use the following key presses to
 navigate in zoom/browse mode:
 
@@ -34,7 +57,7 @@ navigate in zoom/browse mode:
 - 'h' display a help message
 - 'q' or 'x' to exit zoom/browse mode
 
-In addition, in non-slideshow mode the user can enter 's' or 'S' followed
+In addition, in interactive mode the user can enter 's' or 'S' followed
 by 'Return' to enter info "slideshow" mode. In slideshow mode the ascii art
 is displayed for a few seconds then the next file is displayed. No user
 interaction is possible during slideshow mode other than 'Ctrl-c' to exit.
@@ -212,7 +235,7 @@ Choosing a file in Ranger is done by visiting a directory and selecting a file. 
 **-V 'show'**
 : Displays an ascii art slide show
 
-    'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies', 'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature', 'Owls', 'Space', 'Vintage', 'Wallpapers', 'Waterfalls', the name of a custom ascii art folder, or the slideshow keyword 'files' which indicates display a slideshow using the ascii art files provided on the command line
+    'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies', 'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature', 'Owls', 'Space', 'Vintage', 'Wallpapers', 'Waterfalls', the name of a custom ascii art folder, the slideshow keyword 'files' which indicates display a slideshow using the ascii art files provided on the command line, or the slideshow argument 'files=/path/to/file' which indicates read the list of slideshow files from the file '/path/to/file'
 
 **-Z**
 : Indicates do not play audio during slideshow/animation
