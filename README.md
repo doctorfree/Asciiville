@@ -534,6 +534,10 @@ journal="asciiville"
 style="fancy"
 art_font_size=8
 txt_font_size=28
+defchars='   ...,;:clodxkO0KXNWM'
+revchars='MWNXK0Okxdolc:;,...   '
+revlong='WMZO0QLCJUYXzcvun1il;:,^.. '
+longchars=' ..^,:;li1nuvczXYUJCLQ0OZMW'
 ```
 
 ### Asciiville utilities configuration
