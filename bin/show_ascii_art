@@ -389,6 +389,7 @@ show_ascii() {
 
   [ "${viewshow}" ] && {
     [ "${wait_for_input}" ] && {
+      [ "${show_filename}" ] && figlet -c -k -t `basename ${asciiart}`
       while true
       do
         browse=
@@ -1205,8 +1206,10 @@ else
       continue
     }
     [ $? -gt 1 ] || {
-      [ "${show_filename}" ] && figlet -c -k -t `basename ${art}`
-      sleep ${delay}
+      [ "${wait_for_input}" ] || {
+        [ "${show_filename}" ] && figlet -c -k -t `basename ${art}`
+        sleep ${delay}
+      }
     }
     [ ${scale_art_font} -eq 1 ] || art_font_size=${saved_art_size}
     [ ${scale_txt_font} -eq 1 ] || txt_font_size=${saved_txt_size}
