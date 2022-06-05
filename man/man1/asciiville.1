@@ -66,6 +66,14 @@ Use the following key presses to navigate in zoom/browse mode:
 .IP \[bu] 2
 \[aq]q\[aq] or \[aq]x\[aq] to exit zoom/browse mode
 .PP
+In addition, in non-slideshow mode the user can enter \[aq]s\[aq] or
+\[aq]S\[aq] followed by \[aq]Return\[aq] to enter info
+\[dq]slideshow\[dq] mode.
+In slideshow mode the ascii art is displayed for a few seconds then the
+next file is displayed.
+No user interaction is possible during slideshow mode other than
+\[aq]Ctrl-c\[aq] to exit.
+.PP
 The \f[I]asciiville\f[R] command can also act as a front-end to the
 \f[I]asciisplash\f[R] and \f[I]asciisplash-tmux\f[R] commands when
 invoked with the \f[V]-S\f[R] and \f[V]-T\f[R] command line options.
@@ -327,7 +335,10 @@ Displays an ascii art slide show
 \[aq]Dragonflies\[aq], \[aq]Fractals\[aq], \[aq]Friends\[aq],
 \[aq]Iterated\[aq], \[aq]Lyapunov\[aq], \[aq]Nature\[aq],
 \[aq]Owls\[aq], \[aq]Space\[aq], \[aq]Vintage\[aq],
-\[aq]Wallpapers\[aq], or \[aq]Waterfalls\[aq]
+\[aq]Wallpapers\[aq], \[aq]Waterfalls\[aq], the name of a custom ascii
+art folder, or the slideshow keyword \[aq]files\[aq] which indicates
+display a slideshow using the ascii art files provided on the command
+line
 .RE
 .TP
 \f[B]-Z\f[R]

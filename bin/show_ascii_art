@@ -46,7 +46,7 @@ usage() {
   printf "\n\t[-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level]"
   printf "\n\t[-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-R len]"
   printf "\n\t[-s show] [-S song] [-t first_text] [-T second_text]"
-  printf "\n\t[-h height] [-w width] [-v] [-z] [-Z] [-u]"
+  printf "\n\t[-h height] [-w width] [-W] [-v] [-z] [-Z] [-u]"
   printf "\nWhere:"
   printf "\n\t-a 'art' specifies ascii art file(s) to display"
   printf "\n\t\tmultiple files are separated by a comma with no spaces"
@@ -103,6 +103,7 @@ usage() {
   printf "\n\t-w 'width' specifies the width of the converted ascii art"
   printf "\n\t\tIf only one of 'width' and 'height' is provided,"
   printf "\n\t\tcalculate the other from image aspect ratio"
+  printf "\n\t-W indicates do not wait for input to continue viewing ascii art"
   printf "\n\t-v indicates view ascii art and prompt to continue"
   printf "\n\t-Z indicates no ANSI escape sequences used in ascii art"
   printf "\n\t-z indicates save converted image ascii art in art_dir\n\n"
@@ -384,20 +385,29 @@ show_ascii() {
   show_art "${asciiart}" "${prep}"
 
   [ "${viewshow}" ] && {
-    # printf "\n"
-    browse=
-    read -sp "" answer
-    case "${answer}" in
-      b|B|z|Z)
-          browse=1
-          ;;
-      *)
-          ;;
-    esac
-    [ "${browse}" ] && browser "${asciiart}" "$2"
+    [ "${wait_for_input}" ] && {
+      while true
+      do
+        browse=
+        read -sp "" answer
+        case "${answer}" in
+          b|B|z|Z)
+            browse=1
+            ;;
+          s|S)
+            wait_for_input=
+            break
+            ;;
+          *)
+            break
+            ;;
+        esac
+        [ "${browse}" ] && browser "${asciiart}" "$2"
+      done
+    }
   }
   [ "${compressed}" ] && rm -f "${asciiart}"
-  [ "${viewshow}" ] && return 4
+  [ "${viewshow}" ] && [ "${wait_for_input}" ] && return 4
 }
 
 audio=
@@ -435,9 +445,10 @@ scale_txt_font=1
 set_font_size=1
 uses_ansi_escape=1
 show_filename=
+wait_for_input=1
 have_convert=`type -p convert`
 have_jp2a=`type -p jp2a`
-while getopts "a:A:bBcCD:d:e:Egh:i:I:K:l:LF:f:n:N:oO:Pp:qrR:s:S:t:T:vw:zZu" flag; do
+while getopts "a:A:bBcCD:d:e:Egh:i:I:K:l:LF:f:n:N:oO:Pp:qrR:s:S:t:T:vw:WzZu" flag; do
   case $flag in
       a)
           artfiles="${OPTARG}"
@@ -589,6 +600,9 @@ while getopts "a:A:bBcCD:d:e:Egh:i:I:K:l:LF:f:n:N:oO:Pp:qrR:s:S:t:T:vw:zZu" flag
           ;;
       w)
           width="${OPTARG}"
+          ;;
+      W)
+          wait_for_input=
           ;;
       z)
           save_art=1
@@ -1109,15 +1123,19 @@ clear
   then
     figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME} | ${LOLCAT}
     figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII} | ${LOLCAT}
+    tput civis -- invisible
   else
     figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME}
     figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII}
   fi
   figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Ctrl-c     Exits"
-  figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Enter  Continues"
-  tput civis -- invisible
-  read -p "" answer
-  # sleep ${delay}
+  if [ "${wait_for_input}" ]
+  then
+    figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Enter  Continues"
+    read -p "" answer
+  else
+    sleep ${delay}
+  fi
 }
 
 clear
@@ -1207,13 +1225,20 @@ else
                     show_ascii "${asc}" "${tabs}"
                   }
                 done
-                [ "${foundit}" ] || echo "Cannot locate ${art}"
+                [ "${foundit}" ] || {
+                  echo "Cannot locate ${art}"
+                  continue
+                }
               fi
             fi
           fi
         fi
       fi
     fi
+    [ $? -gt 1 ] || {
+      [ "${show_filename}" ] && figlet -c -k -t `basename ${art}`
+      sleep ${delay}
+    }
   done
 fi
 

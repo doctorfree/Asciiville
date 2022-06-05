@@ -34,6 +34,11 @@ navigate in zoom/browse mode:
 - 'h' display a help message
 - 'q' or 'x' to exit zoom/browse mode
 
+In addition, in non-slideshow mode the user can enter 's' or 'S' followed
+by 'Return' to enter info "slideshow" mode. In slideshow mode the ascii art
+is displayed for a few seconds then the next file is displayed. No user
+interaction is possible during slideshow mode other than 'Ctrl-c' to exit.
+
 The *asciiville* command can also act as a front-end to the *asciisplash* and *asciisplash-tmux* commands when invoked with the `-S` and `-T` command line options.
 
 When invoked with the `-i` option, `asciiville` presents a selection menu and operates in interactive mode. Included in the wide variety of options available in the Asciiville interactive menus are selections to display the *MusicPlayerPlus* and *RoonCommandLine* interactive menus.
@@ -207,7 +212,7 @@ Choosing a file in Ranger is done by visiting a directory and selecting a file. 
 **-V 'show'**
 : Displays an ascii art slide show
 
-    'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies', 'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature', 'Owls', 'Space', 'Vintage', 'Wallpapers', or 'Waterfalls'
+    'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies', 'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature', 'Owls', 'Space', 'Vintage', 'Wallpapers', 'Waterfalls', the name of a custom ascii art folder, or the slideshow keyword 'files' which indicates display a slideshow using the ascii art files provided on the command line
 
 **-Z**
 : Indicates do not play audio during slideshow/animation

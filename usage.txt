@@ -23,7 +23,8 @@ Terminal/Command options:
 	-i indicates start asciiville in interactive mode
 	-I indicates display system info
 	-l indicates use lynx web browser as the default command
-	-L 'level' use lolcat coloring, 'level' can be '1' or '2' (animate)
+	-L 'level' lolcat coloring level
+	   'level' can be '0' (off), '1' (on), or '2' (animate)
 	-r indicates use retro terminal emulator
 	-t indicates use tilix terminal emulator
 	-U indicates set command to Ninvaders
@@ -49,15 +50,17 @@ Slideshow/ASCIImatics animation options:
 	-N indicates use alternate comments in Plasma ASCIImatics scenes
 	-p indicates use Plasma scenes in ASCIImatics display
 	-P script specifies the ASCIImatics script to run
-	-s song specifies a song to accompany an ASCIImatics animation
-		'song' can be the full pathname to an audio file or a
-		relative pathname to an audio file in the MPD music library
-		or ~/Music/
+	-s 'song' specifies a song to accompany an ASCIImatics animation
+	   'song' can be the full pathname to an audio file or a relative
+	   pathname to an audio file in the MPD music library or ~/Music/
 	-S indicates display ASCIImatics splash animation
 	-V 'show' displays an ascii art slide show
-		'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies',
-			'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature',
-			'Owls', 'Space', 'Vintage', 'Wallpapers', or 'Waterfalls'
+	   'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies',
+	   'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature',
+	   'Owls', 'Space', 'Vintage', 'Wallpapers', 'Waterfalls',
+	   the name of a custom ascii art folder, or the slideshow
+	   keyword 'files' which indicates display a slideshow using
+	   the ascii art files provided on the command line.
 	-Z indicates do not play audio during slideshow/animation
 
 General options:

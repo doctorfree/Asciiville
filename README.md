@@ -1031,10 +1031,11 @@ use whatever the current terminal window might be. In this case, "Use Current
 Terminal", the Asciiville user may need to manually configure the terminal
 window for Monospaced font use.
 
-When viewing Ascii Art in non-slideshow mode, the user can enter 'z' or 'b'
-followed by 'Return' to enter "zoom/browse" mode. In this mode the user
-can zoom in and out of the ascii art. Use the following key presses to
-navigate in zoom/browse mode:
+When viewing Ascii Art in non-slideshow mode, for example if `asciiville`
+were invoked with ascii art filenames as arguments, the user can enter 'z'
+or 'b' followed by 'Return' to enter "zoom/browse" mode. In this mode the
+user can zoom in and out of the ascii art. Use the following key presses
+to navigate in zoom/browse mode:
 
 - 'i' zoom in
 - 'j' zoom in more
@@ -1045,6 +1046,11 @@ navigate in zoom/browse mode:
 - 'r' restore to original
 - 'h' display a help message
 - 'q' or 'x' to exit zoom/browse mode
+
+In addition, in non-slideshow mode the user can enter 's' or 'S' followed
+by 'Return' to enter info "slideshow" mode. In slideshow mode the ascii art
+is displayed for a few seconds then the next file is displayed. No user
+interaction is possible during slideshow mode other than 'Ctrl-c' to exit.
 
 #### Usage message for the `asciiville` command
 
@@ -1077,7 +1083,8 @@ Terminal/Command options:
 	-i indicates start asciiville in interactive mode
 	-I indicates display system info
 	-l indicates use lynx web browser as the default command
-	-L 'level' use lolcat coloring, 'level' can be '1' or '2' (animate)
+	-L 'level' lolcat coloring level
+	   'level' can be '0' (off), '1' (on), or '2' (animate)
 	-r indicates use retro terminal emulator
 	-t indicates use tilix terminal emulator
 	-U indicates set command to Ninvaders
@@ -1103,15 +1110,17 @@ Slideshow/ASCIImatics animation options:
 	-N indicates use alternate comments in Plasma ASCIImatics scenes
 	-p indicates use Plasma scenes in ASCIImatics display
 	-P script specifies the ASCIImatics script to run
-	-s song specifies a song to accompany an ASCIImatics animation
-		'song' can be the full pathname to an audio file or a
-		relative pathname to an audio file in the MPD music library
-		or ~/Music/
+	-s 'song' specifies a song to accompany an ASCIImatics animation
+	   'song' can be the full pathname to an audio file or a relative
+	   pathname to an audio file in the MPD music library or ~/Music/
 	-S indicates display ASCIImatics splash animation
 	-V 'show' displays an ascii art slide show
-		'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies',
-			'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature',
-			'Owls', 'Space', 'Vintage', 'Wallpapers', or 'Waterfalls'
+	   'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies',
+	   'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature',
+	   'Owls', 'Space', 'Vintage', 'Wallpapers', 'Waterfalls',
+	   the name of a custom ascii art folder, or the slideshow
+	   keyword 'files' which indicates display a slideshow using
+	   the ascii art files provided on the command line.
 	-Z indicates do not play audio during slideshow/animation
 
 General options:
@@ -1137,7 +1146,7 @@ Usage: show_ascii_art [-a art[,art2,...]] [-A art_dir] [-b] [-B] [-c] [-C]
 	[-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level]
 	[-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-R len]
 	[-s show] [-S song] [-t first_text] [-T second_text]
-	[-h height] [-w width] [-v] [-z] [-Z] [-u]
+	[-h height] [-w width] [-W] [-v] [-z] [-Z] [-u]
 Where:
 	-a 'art' specifies ascii art file(s) to display
 		multiple files are separated by a comma with no spaces
@@ -1194,6 +1203,7 @@ Where:
 	-w 'width' specifies the width of the converted ascii art
 		If only one of 'width' and 'height' is provided,
 		calculate the other from image aspect ratio
+	-W indicates do not wait for input to continue viewing ascii art
 	-v indicates view ascii art and prompt to continue
 	-Z indicates no ANSI escape sequences used in ascii art
 	-z indicates save converted image ascii art in art_dir

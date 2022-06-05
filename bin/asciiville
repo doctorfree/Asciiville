@@ -88,7 +88,8 @@ usage() {
   printf "\n\t-i indicates start asciiville in interactive mode"
   printf "\n\t-I indicates display system info"
   printf "\n\t-l indicates use lynx web browser as the default command"
-  printf "\n\t-L 'level' lolcat coloring: 'level' can be '0' (off), '1' (on), or '2' (animate)"
+  printf "\n\t-L 'level' lolcat coloring level"
+  printf "\n\t   'level' can be '0' (off), '1' (on), or '2' (animate)"
   printf "\n\t-r indicates use retro terminal emulator"
   printf "\n\t-t indicates use tilix terminal emulator"
   printf "\n\t-U indicates set command to Ninvaders"
@@ -114,15 +115,17 @@ usage() {
   printf "\n\t-N indicates use alternate comments in Plasma ASCIImatics scenes"
   printf "\n\t-p indicates use Plasma scenes in ASCIImatics display"
   printf "\n\t-P script specifies the ASCIImatics script to run"
-  printf "\n\t-s song specifies a song to accompany an ASCIImatics animation"
-  printf "\n\t\t'song' can be the full pathname to an audio file or a"
-  printf "\n\t\trelative pathname to an audio file in the MPD music library"
-  printf "\n\t\tor ~/Music/"
+  printf "\n\t-s 'song' specifies a song to accompany an ASCIImatics animation"
+  printf "\n\t   'song' can be the full pathname to an audio file or a relative"
+  printf "\n\t   pathname to an audio file in the MPD music library or ~/Music/"
   printf "\n\t-S indicates display ASCIImatics splash animation"
   printf "\n\t-V 'show' displays an ascii art slide show"
-  printf "\n\t\t'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies',"
-  printf "\n\t\t\t'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature',"
-  printf "\n\t\t\t'Owls', 'Space', 'Vintage', 'Wallpapers', or 'Waterfalls'"
+  printf "\n\t   'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies',"
+  printf "\n\t   'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature',"
+  printf "\n\t   'Owls', 'Space', 'Vintage', 'Wallpapers', 'Waterfalls',"
+  printf "\n\t   the name of a custom ascii art folder, or the slideshow"
+  printf "\n\t   keyword 'files' which indicates display a slideshow using"
+  printf "\n\t   the ascii art files provided on the command line."
   printf "\n\t-Z indicates do not play audio during slideshow/animation\n"
   printf "\nGeneral options:"
   printf "\n\t-k indicates kill Asciiville tmux sessions and ASCIImatics scripts"
@@ -575,6 +578,7 @@ show_art_file() {
     art_dir=
   fi
   showargs="${art_dir} -v -C ${cycarg} -D ${show_interval} ${lolarg} ${audarg}"
+  [ "${slideshow}" == "files" ] && showargs="${showargs} -W"
   save_config
   clear
   if [ "${CURRENT}" ]
