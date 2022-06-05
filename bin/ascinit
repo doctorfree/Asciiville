@@ -654,6 +654,8 @@ CONF="${HOME}/.config/asciiville/config"
   fi
   echo "LOLCAT=lolcat" >> ${CONF}
   echo "" >> ${CONF}
+  echo "shuffle=1" >> ${CONF}
+  echo "length=0" >> ${CONF}
   echo "use_lolcat=1" >> ${CONF}
   echo "use_lol=YES" >> ${CONF}
   echo "journal=\"default\"" >> ${CONF}

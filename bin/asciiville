@@ -41,6 +41,8 @@ ARTDIR=/usr/share/asciiville/art
 MUSEDIR=/usr/share/asciiville/music
 SONG="${MUSEDIR}/Chronos.mp3"
 ALTSONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
+shuffle=
+length=0
 show_interval=5
 art_font_size=4
 txt_font_size=20
@@ -258,6 +260,8 @@ save_config() {
     echo "TILIX=${TILIX}" >> ${CONFIG}
     echo "XFCE4=${XFCE4}" >> ${CONFIG}
     echo "" >> ${CONFIG}
+    echo "shuffle=${shuffle}" >> ${CONFIG}
+    echo "length=${length}" >> ${CONFIG}
     echo "use_lolcat=${use_lolcat}" >> ${CONFIG}
     echo "use_lol=${use_lol}" >> ${CONFIG}
     echo "journal=\"${journal}\"" >> ${CONFIG}
@@ -1186,7 +1190,7 @@ show_select_menu() {
     [ "${have_tetris}" ] && options+=("Tetris Video Game      [${use_tetris}]")
     [ "${have_newsboat}" ] && options+=("Newsboat RSS Feeds     [${use_newsboat}]")
     [ "${have_ranger}" ] && options+=("Ranger File Manager    [${use_ranger}]")
-    [ "${have_tuir}" ] && options+=("Terminal UI for Reddit [${use_tuir}]")
+    [ "${have_tuir}" ] && options+=("Reddit UI              [${use_tuir}]")
     [ "${have_xfce4}" ] && options+=("XFCE4 Terminal         [${use_xfce4}]")
     [ "${have_gnome}" ] && options+=("Gnome Terminal         [${use_gnome}]")
     [ "${have_retro}" ] && options+=("Retro Terminal         [${use_retro}]")
@@ -1299,7 +1303,7 @@ show_select_menu() {
               MTITLE="Ranger File Manager"
               break
               ;;
-          "Terminal"*,*|*,"Terminal"*)
+          "Reddit"*,*|*,"Reddit"*)
               COMMAND=tuir
               MTITLE="Terminal UI for Reddit"
               break
@@ -1495,7 +1499,7 @@ show_art_menu() {
     [ "${have_tilix}" ] && options+=("Tilix Terminal        [${use_tilix}]")
     options+=("Current Terminal      [${use_current}]")
     options+=("Use Tmux              [${usetmux}]")
-    [ "${have_asciinema}" ] && options+=("Record Tmux Session   [${recordstat}]")
+    [ "${have_asciinema}" ] && [ "${TMUX}" ] && options+=("Record Tmux Session   [${recordstat}]")
     options+=("Slideshow Interval    [${show_interval}]")
     options+=("Art Font Size         [${art_font_size}]")
     options+=("Text Font Size        [${txt_font_size}]")
@@ -1867,7 +1871,7 @@ show_animation_menu() {
     options+=("Fullscreen Window [${fullstat}]")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring   [${use_lol}]")
     options+=("Use Tmux              [${usetmux}]")
-    [ "${have_asciinema}" ] && options+=("Record Tmux Session   [${recordstat}]")
+    [ "${have_asciinema}" ] && [ "${TMUX}" ] && options+=("Record Tmux Session   [${recordstat}]")
     options+=("Use Audio             [${audiostat}]")
     [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
     [ "${have_jrnl}" ] && options+=("Journal Menu")
@@ -2432,7 +2436,7 @@ show_main_menu() {
     options+=("Kill Tmux Sessions")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring        [${use_lol}]")
     options+=("Use Tmux                   [${usetmux}]")
-    [ "${have_asciinema}" ] && options+=("Record Tmux Session        [${recordstat}]")
+    [ "${have_asciinema}" ] && [ "${TMUX}" ] && options+=("Record Tmux Session        [${recordstat}]")
     options+=("Fullscreen Window          [${fullstat}]")
     options+=("Default Web Browser        [${default_browser}]")
     options+=("Use Audio                  [${audiostat}]")
@@ -2943,21 +2947,21 @@ select_song() {
 set_show_term() {
   if [ "${GNOME}" ]
   then
-    show_term="Gnome Terminal"
+    show_term="Gnome"
   else
     if [ "${XFCE4}" ]
     then
-      show_term="XFCE4 Terminal"
+      show_term="XFCE4"
     else
       if [ "${TILIX}" ]
       then
-        show_term="Tilix Terminal"
+        show_term="Tilix"
       else
         if [ "${RETRO}" ]
         then
-          show_term="Retro Terminal"
+          show_term="Retro"
         else
-          show_term="Current Terminal"
+          show_term="Current"
         fi
       fi
     fi
@@ -3132,11 +3136,9 @@ show_filename=
 
 cycle=
 noaudio=
-length=0
+randomplay=
 showart=
 show_neofetch=
-shuffle=
-shuffle=
 slideshow=
 while getopts "Aabc:CdD:E:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
   case $flag in
@@ -3281,6 +3283,7 @@ while getopts "Aabc:CdD:E:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
       show_interval=${OPTARG}
       ;;
     E)
+      randomplay=1
       shuffle=1
       length=${OPTARG}
       ;;
@@ -3771,7 +3774,7 @@ done
   exit 0
 }
 
-[ "${shuffle}" ] && {
+[ "${randomplay}" ] && {
   play_random_show ${length}
   exit 0
 }
