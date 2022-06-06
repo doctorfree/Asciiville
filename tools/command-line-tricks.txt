@@ -3,6 +3,11 @@ incorporation into Asciiville and other projects.
 
 ==================================
 
+An introduction to the magic of jq:
+    https://ente.io/blog/tech/jq-diff/
+
+==================================
+
 Several interesting command line tips and tricks can be found at:
     https://www.raellic.com/linux/
 
