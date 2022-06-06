@@ -751,6 +751,7 @@ goodbye() {
 cleanup() {
   goodbye
   tput cnorm
+  setterm -linewrap on
   [ "${fifo_name}" ] && send_done
   [ "${playing}" ] && fade_audio
   exit 0
@@ -1043,6 +1044,7 @@ setterm -linewrap off
   fi
   goodbye
   tput cnorm
+  setterm -linewrap on
   [ "${fifo_name}" ] && send_done
   [ "${playing}" ] && fade_audio
   exit 0
@@ -1087,6 +1089,7 @@ setterm -linewrap off
   fi
   goodbye
   tput cnorm
+  setterm -linewrap on
   [ "${fifo_name}" ] && send_done
   [ "${playing}" ] && fade_audio
   exit 0
@@ -1238,6 +1241,7 @@ fi
 
 goodbye
 tput cnorm
+setterm -linewrap on
 [ "${fifo_name}" ] && send_done
 [ "${playing}" ] && fade_audio
 exit 0
