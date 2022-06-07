@@ -146,6 +146,7 @@ Version 1.4.1 release 1 adds support for:
 * Turn linewrap off during ascii art display
 * Add shuffle and length settings to asciiville config
 * Update sample config with character palette settings
+* Upgrade to Btop++ 1.2.7
 * Fix jrnl default config and journals creation
 * Adapt art font size for each file in file list display mode
 * Add support for slideshow of files provided on command line

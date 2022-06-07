@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 * Center ascii art in zoom/browse mode
 * Turn linewrap off during ascii art display
 * Add shuffle and length settings to asciiville config
+* Upgrade to Btop++ 1.2.7
 * Update sample config with character palette settings
 * Fix jrnl default config and journals creation
 * Adapt art font size for each file in file list display mode
