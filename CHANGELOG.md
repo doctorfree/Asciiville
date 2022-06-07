@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+# Asciiville-1.4.1r1 (2022-06-08)
+
+* Zoomable display of ascii art
+* Center ascii art in zoom/browse mode
+* Turn linewrap off during ascii art display
+* Add shuffle and length settings to asciiville config
+* Update sample config with character palette settings
+* Fix jrnl default config and journals creation
+* Adapt art font size for each file in file list display mode
+* Add support for slideshow of files provided on command line
+* Add support for slideshow/display of files from list in file
+* Add support for centering borderless ascii art
+* Add sample irssi config
+
 # Asciiville-1.4.0r3 (2022-05-31)
 
 * Manual installation and removal for non-Debian/RPM Linux systems

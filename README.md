@@ -58,9 +58,9 @@ Asciiville includes nearly 1,000 works of ASCII and ANSI Art!
 ## Overview
 
 Asciiville integrations and extensions are aimed at the character
-based terminal user. They enable easy to use seamlessly integrated
-control of a variety of ASCII Art, animation, and utilities in a
-lightweight character based environment.
+based terminal and console user. They enable easy to use seamlessly
+integrated control of a variety of ASCII Art, animation, and utilities
+in a lightweight character based environment.
 
 At the core of Asciiville is the `asciiville` command which acts as
 a front-end for a variety of terminal commands and `tmux` sessions.
@@ -87,6 +87,10 @@ or relative paths to files in the Asciiville Ascii Art galleries folder.
 Ascii Art filenames may be provided with or without the filename suffix
 (e.g. `Friends/tux.asc` or `Friends/tux.asc.gz` or Friends/tux`).
 
+When viewing Ascii Art in display mode it is possible to enter 'browse/zoom'
+mode by entering 'b' or 'z' at the keyboard. In this mode the currently
+displayed art can be zoomed in and out. See the [Usage](#usage) section below.
+
 The `asciiville` command can also be used to invoke commands in a variety of ways:
 
 * The lightweight character based system monitor, `btop`
@@ -99,6 +103,8 @@ The `asciiville` command can also be used to invoke commands in a variety of way
 * The lightweight character based disk usage analyzer, `gdu`
 * The lightweight character based journal app, `jrnl`
 * The lightweight character based terminal UI for Reddit, `tuir`
+* Featureful ASCII Art display including slideshow and zoom capabilities
+* Character based ASCII Art and image to ascii conversion utility `jp2a`
 * One or more terminal emulators running a command
 * A tmux session
 * A command line web search
@@ -109,14 +115,13 @@ The `asciiville` command can also be used to invoke commands in a variety of way
 * The AAlib BB demo running in a tmux session (Debian based systems only)
 * The ASCII text-based dungeon game `nethack` with Extended ASCII glyphs
 * The `cmatrix` command that displays the screen from "The Matrix"
-* Character based ASCII Art and image to ascii conversion utility `jp2a`
 * ASCII Art creation tool `aewan`
 * Display system info
 * Display the Phase of the Moon
 * Display a weather report
 * Display the MusicPlayerPlus or RoonCommandLine interactive menus
 * Any character based client the user wishes to run
-* One of several asciimatics animations optionally accompanied by audio
+* Several asciimatics animations optionally accompanied by audio
 
 Without arguments or with the `-i` argument, `asciiville` presents a set
 of interactive menus that can be used to control its behavior.
