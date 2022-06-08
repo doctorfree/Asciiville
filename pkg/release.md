@@ -70,11 +70,7 @@ sudo dnf localinstall ./Asciiville-1.4.1-1.x86_64.rpm
 
 ### Manual installation
 
-On systems for which neither the Debian or RPM packages will suffice,
-install manually by downloading the `Install-bin.sh` script and either
-the gzip'd distribution archive or the zip'd distribution archive.
-After downloading the installation script and distribution archive,
-as a user with sudo privilege execute the commands:
+On systems for which neither the Debian or RPM packages will suffice, install manually by downloading the `Install-bin.sh` script and either the gzip'd distribution archive or the zip'd distribution archive.  After downloading the installation script and distribution archive, as a user with sudo privilege execute the commands:
 
 ```bash
 chmod 755 Install-bin.sh
@@ -120,22 +116,14 @@ Removal of the package on RPM based systems can be accomplished by issuing the c
 sudo dnf remove Asciiville
 ```
 
-On systems for which the manual installation was performed using
-the `Install-bin.sh` script, remove Asciiville manually by downloading
-the `Uninstall-bin.sh` script and, as a user with sudo privilege,
-execute the commands:
+On systems for which the manual installation was performed using the `Install-bin.sh` script, remove Asciiville manually by downloading the `Uninstall-bin.sh` script and, as a user with sudo privilege, execute the commands:
 
 ```bash
 chmod 755 Uninstall-bin.sh
 sudo ./Uninstall-bin.sh
 ```
 
-Note that manual removal of Asciiville using the `Uninstall-bin.sh` script
-will not remove any of the dependencies manually installed above. Manual
-installation and removal of Asciiville is not as robust as packaged
-installation and removal. Hopefully additional platform packaging will be
-available in the future. If you would like to assist with this effort, see the
-['Contributing' section of the Asciiville README](https://github.com/doctorfree/Asciiville#contributing).
+Note that manual removal of Asciiville using the `Uninstall-bin.sh` script will not remove any of the dependencies manually installed above. Manual installation and removal of Asciiville is not as robust as packaged installation and removal. Hopefully additional platform packaging will be available in the future. If you would like to assist with this effort, see the ['Contributing' section of the Asciiville README](https://github.com/doctorfree/Asciiville#contributing).
 
 ## Changelog
 
