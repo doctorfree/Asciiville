@@ -84,7 +84,7 @@ tmux send-keys "tput civis -- invisible" C-m
 tmux send-keys "export PS1=''" C-m
 tmux send-keys "clear" C-m
 
-tmux select-pane -t 0
+tmux select-pane -t 1
 
 if [ "${DISPLAY}" == "" ]
 then
