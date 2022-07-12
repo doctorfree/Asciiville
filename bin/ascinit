@@ -426,6 +426,24 @@ shift $(( OPTIND - 1 ))
   fi
 }
 
+TPM="${HOME}/.tmux/plugins/tpm"
+
+[ -d ${TPM} ] || {
+  have_git=`type -p git`
+  [ "${have_git}" ] && {
+    git clone https://github.com/tmux-plugins/tpm ${TPM}
+  }
+}
+
+[ -d ${TPM} ] && {
+  grep plugins/tpm/tpm ${HOME}/.tmux.conf > /dev/null || {
+    [ -f ${CONFDIR}/tmux-tpm.conf ] && {
+      cat ${CONFDIR}/tmux-tpm.conf >> ${HOME}/.tmux.conf
+      [ -x ${TPM}/bin/install_plugins ] && ${TPM}/bin/install_plugins
+    }
+  }
+}
+
 have_pip=`type -p pip`
 [ "${have_pip}" ] || {
   plat=`uname -s`
@@ -433,11 +451,6 @@ have_pip=`type -p pip`
   then
     python3 -m ensurepip --upgrade
   else
-    debian=
-    [ -f /etc/os-release ] && . /etc/os-release
-    [ "${ID_LIKE}" == "debian" ] && debian=1
-    [ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
-
     if [ "${debian}" ]
     then
       sudo apt install python3-pip
@@ -447,9 +460,15 @@ have_pip=`type -p pip`
   fi
 }
 
-pip list | grep asciimatics > /dev/null || python3 -m pip install asciimatics
-pip list | grep rainbowstream > /dev/null || python3 -m pip install rainbowstream
-pip list | grep tuir > /dev/null || python3 -m pip install tuir
+for pkg in asciimatics rainbowstream tuir
+do
+  if pip list | grep ${pkg} > /dev/null
+  then
+    python -m pip install --upgrade ${pkg} > /dev/null 2>&1
+  else
+    python -m pip install ${pkg} > /dev/null 2>&1
+  fi
+done
 
 # Custom jrnl configuration for this user unless one exists
 [ -d ${CONFDIR}/jrnl ] && {
