@@ -93,8 +93,10 @@ while getopts "abc:dl:r:Rs:tu" flag; do
               then
                 SONG="${HOME}/Music/${OPTARG}"
               else
-                mpd_music=`grep ^music_directory /etc/mpd.conf`
-                [ "${mpd_music}" ] || mpd_music=`grep \#music_directory /etc/mpd.conf`
+                MPDCONF="${HOME}/.config/mpd/mpd.conf"
+                [ -f ${MPDCONF} ] || MPDCONF="/etc/mpd.conf"
+                mpd_music=`grep ^music_directory ${MPDCONF}`
+                [ "${mpd_music}" ] || mpd_music=`grep \#music_directory ${MPDCONF}`
                 mpd_music=`echo ${mpd_music} | awk ' { print $2 } ' | sed -e "s/\"//g"`
                 if [ -f "${mpd_music}/${OPTARG}" ]
                 then
