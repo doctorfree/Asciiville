@@ -82,6 +82,18 @@ else
   cd ..
 fi
 
+# Build endoh1
+if [ -x build ]
+then
+  ./build endo
+else
+  cd endoh1
+  make clobber
+  make everything
+  chmod +x endoh1 endoh1_color
+  cd ..
+fi
+
 # Build jp2a
 if [ -x build ]
 then
@@ -185,6 +197,8 @@ ${SUDO} cp jp2a/src/jp2a ${OUT_DIR}/${DESTDIR}/bin/jp2a
 ${SUDO} cp aewan/aewan ${OUT_DIR}/${DESTDIR}/bin/aewan
 ${SUDO} cp aewan/aecat ${OUT_DIR}/${DESTDIR}/bin/aecat
 ${SUDO} cp aewan/aemakeflic ${OUT_DIR}/${DESTDIR}/bin/aemakeflic
+
+${SUDO} cp -a endoh1 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1
 
 ${SUDO} cp -a share/doc ${OUT_DIR}/${DESTDIR}/share/doc
 
