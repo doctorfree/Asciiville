@@ -10,7 +10,7 @@
 
 CONFDIR=/usr/share/asciiville
 BOLD=$(tput bold)
-NORMAL=$(tput sgr0)
+NORM=$(tput sgr0)
 
 usage() {
   printf "\nUsage: ascinit [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-t] [-u]"
@@ -751,13 +751,13 @@ CONF="${HOME}/.config/asciiville/config"
 touch ${HOME}/.tetris
 
 [ "${quiet}" ] || {
-  printf "\n${BOLD}Asciiville Initialization Complete${NORMAL}\n"
+  printf "\n${BOLD}Asciiville Initialization Complete${NORM}\n"
   [ "${init_twit}" ] || {
     printf "\nAuthorize the Rainbow Stream app at Twitter"
-    printf "\nby running the ${BOLD}'rainbowstream'${NORMAL} command\n"
+    printf "\nby running the ${BOLD}'rainbowstream'${NORM} command\n"
   }
   printf "\nVisit the Asciiville Wiki at:"
-  printf "\n\t${BOLD}https://github.com/doctorfree/Asciiville/wiki${NORMAL}\n"
+  printf "\n\t${BOLD}https://github.com/doctorfree/Asciiville/wiki${NORM}\n"
 }
 
 [ "$ask_anim" ] && {

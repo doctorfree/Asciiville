@@ -25,7 +25,7 @@
 #
 
 BOLD=$(tput bold)
-NORMAL=$(tput sgr0)
+NORM=$(tput sgr0)
 PLEASE="Please enter your"
 COMMAND=btop
 FIG_FONTS="/usr/share/figlet-fonts"
@@ -809,7 +809,7 @@ show_help_menu() {
       select_font Help small
       show_figlet
     }
-    PS3="${BOLD}${PLEASE} choice (numeric or text): ${NORMAL}"
+    PS3="${BOLD}${PLEASE} choice (numeric or text): ${NORM}"
     options=()
     if [ "${have_w3m}" ]
     then
@@ -1167,7 +1167,7 @@ show_select_menu() {
       select_font AsciiAppTerm
       show_figlet
     }
-    PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORMAL}"
+    PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORM}"
     options=()
     [ "${have_aewan}" ] && options+=("Aewan Art Creation     [${use_btop}]")
     [ "${have_btop}" ] && options+=("Btop System Monitor    [${use_btop}]")
@@ -1199,7 +1199,7 @@ show_select_menu() {
     [ "${have_retro}" ] && options+=("Retro Terminal         [${use_retro}]")
     [ "${have_tilix}" ] && options+=("Tilix Terminal         [${use_tilix}]")
     options+=("Current Terminal       [${use_current}]")
-    options+=("${BOLD}Run ${show_comm} in ${show_term}${NORMAL}")
+    options+=("${BOLD}Run ${show_comm} in ${show_term}${NORM}")
     [ "${have_jrnl}" ] && options+=("Journal Menu")
     [ "${have_showascii}" ] && options+=("Ascii Art Menu")
     [ "${have_splash}" ] && options+=("Animations Menu")
@@ -1476,7 +1476,7 @@ show_art_menu() {
       select_font AsciiArt
       show_figlet
     }
-    PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORMAL}"
+    PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORM}"
     options=()
     for ascii_art_dir in ${ARTDIR}/*
     do
@@ -1859,7 +1859,7 @@ show_animation_menu() {
       select_font Asciimatics
       show_figlet
     }
-    PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORMAL}"
+    PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORM}"
     options=()
     [ "${have_asciiart}" ] && options+=("Asciiville Animation")
     [ "${have_asciijulia}" ] && options+=("Julia Set Animation")
@@ -2169,7 +2169,7 @@ show_journal_menu() {
       select_font Journal
       show_figlet
     }
-    PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORMAL}"
+    PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORM}"
     options=()
     options+=("New Journal Entry")
     options+=("All Journal Entries")
@@ -2434,7 +2434,7 @@ show_main_menu() {
       select_font Asciiville
       show_figlet
     }
-    PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORMAL}"
+    PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORM}"
     options=()
     [ "${have_showascii}" ] && options+=("Ascii Art")
     [ "${have_splash}" ] && options+=("ASCII Animations")
