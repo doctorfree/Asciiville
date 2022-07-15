@@ -37,8 +37,10 @@ LOLCAT_NORM="lolcat"
 LOLCAT_ANIM="lolcat --animate --speed=60.0"
 LOLCAT="${LOLCAT_ANIM}"
 MTITLE="Asciiville"
-ARTDIR=/usr/share/asciiville/art
-MUSEDIR=/usr/share/asciiville/music
+ASHARE=/usr/share/asciiville
+DSHARE=/usr/share/doc/asciiville
+ARTDIR=${ASHARE}/art
+MUSEDIR=${ASHARE}/music
 SONG="${MUSEDIR}/Chronos.mp3"
 ALTSONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 shuffle=
@@ -73,6 +75,7 @@ usage() {
   printf "\n\t[-Y] [-z] [-Z] [-u] [file1 [file2 ...]]\n"
   printf "\nTerminal/Command options:"
   printf "\n\t-c 'command' indicates use 'command'"
+  printf "\n\t\tIf 'command' is keyword 'endo' then display ascii fluid simulation"
   printf "\n\t\tIf 'command' is keyword 'maps' then display a map using mapscii"
   printf "\n\t\tIf 'command' is keyword 'moon' then display the phase of the Moon"
   printf "\n\t\tIf 'command' is keyword 'news' then display RSS news feeds"
@@ -250,7 +253,7 @@ save_config() {
     echo "" >> ${CONFIG}
     echo "AUDIO=${AUDIO}" >> ${CONFIG}
     echo "BROWSER=${BROWSER}" >> ${CONFIG}
-    echo "COMMAND=${COMMAND}" >> ${CONFIG}
+    echo "COMMAND=\"${COMMAND}\"" >> ${CONFIG}
     echo "FULLSCREEN=${FULLSCREEN}" >> ${CONFIG}
     echo "LOLCAT=\"${LOLCAT}\"" >> ${CONFIG}
     echo "MTITLE=\"${MTITLE}\"" >> ${CONFIG}
@@ -860,10 +863,10 @@ show_help_menu() {
         "Asciiville README",*|*,"Asciiville README")
           if [ "${have_w3m}" ]
           then
-            w3m /usr/share/doc/asciiville/README.html
+            w3m ${DSHARE}/README.html
           else
             [ "${have_lynx}" ] && {
-              lynx /usr/share/doc/asciiville/README.html
+              lynx ${DSHARE}/README.html
             }
           fi
           break
@@ -1791,7 +1794,7 @@ show_animation_menu() {
   art_menu=
   journal_menu=
   main_menu=
-  MTITLE="ASCIImatics Animation"
+  MTITLE="ASCII Animation"
   while true
   do
     DO_SPLASH=1
@@ -1863,6 +1866,7 @@ show_animation_menu() {
     [ "${have_asciimpplus}" ] && options+=("MPPlus Animation")
     [ "${have_asciiplasma}" ] && options+=("Plasma Animation")
     [ "${have_bb}" ] && options+=("AAlib BB Demo")
+    [ "${have_endo}" ] && options+=("Fluid Simulator")
     [ "${have_xfce4}" ] && options+=("XFCE4 Terminal    [${use_xfce4}]")
     [ "${have_gnome}" ] && options+=("Gnome Terminal    [${use_gnome}]")
     [ "${have_retro}" ] && options+=("Retro Terminal    [${use_retro}]")
@@ -1920,15 +1924,24 @@ show_animation_menu() {
               then
                 if [ "${custom_song}" ]
                 then
-                  bash /usr/share/asciiville/tools/bin/bb-tmux -a -s "${SONG}"
+                  bash ${ASHARE}/tools/bin/bb-tmux -a -s "${SONG}"
                 else
-                  bash /usr/share/asciiville/tools/bin/bb-tmux -a
+                  bash ${ASHARE}/tools/bin/bb-tmux -a
                 fi
               else
-                bash /usr/share/asciiville/tools/bin/bb-tmux
+                bash ${ASHARE}/tools/bin/bb-tmux
               fi
               skip_it_so=1
               export DISPLAY="${SAVED_DISPLAY}"
+              break
+              ;;
+          "Fluid"*,*|*,"Fluid"*)
+              COMMAND="bash -m /usr/bin/show_endo"
+              COMMAND_TMUX="bash -m /usr/bin/show_endo"
+              ASCSPLASH="${COMMAND}"
+              ASCSPLASH_TMUX="${COMMAND_TMUX}"
+              # trap -- '' SIGINT
+              # reset_trap=1
               break
               ;;
           "Journal"*,*|*,"Journal"*)
@@ -2120,6 +2133,10 @@ show_animation_menu() {
     done
     [ "${skip_it_so}" ] || {
       make_it_so
+      # [ "${reset_trap}" ] && {
+      #   trap 'set_user_conf' SIGINT SIGTERM SIGHUP EXIT
+      #   reset_trap=
+      # }
       init_vars
     }
   done
@@ -2420,7 +2437,7 @@ show_main_menu() {
     PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORMAL}"
     options=()
     [ "${have_showascii}" ] && options+=("Ascii Art")
-    [ "${have_splash}" ] && options+=("ASCIImatics Animations")
+    [ "${have_splash}" ] && options+=("ASCII Animations")
     options+=("Apps & Games")
     [ "${have_bb}" ] && {
       [ "$DISPLAY" = "" ] || options+=("AAlib Demo (X11 mode)")
@@ -2569,9 +2586,9 @@ show_main_menu() {
               export DISPLAY=""
               if [ "${AUDIO}" ]
               then
-                bash /usr/share/asciiville/tools/bin/bb-tmux -a
+                bash ${ASHARE}/tools/bin/bb-tmux -a
               else
-                bash /usr/share/asciiville/tools/bin/bb-tmux
+                bash ${ASHARE}/tools/bin/bb-tmux
               fi
               skip_it_so=1
               export DISPLAY="${SAVED_DISPLAY}"
@@ -2580,9 +2597,9 @@ show_main_menu() {
           "AAlib Demo (X11 mode)",*|*,"AAlib Demo (X11 mode)")
               if [ "${AUDIO}" ]
               then
-                bash /usr/share/asciiville/tools/bin/bb-tmux -a
+                bash ${ASHARE}/tools/bin/bb-tmux -a
               else
-                bash /usr/share/asciiville/tools/bin/bb-tmux
+                bash ${ASHARE}/tools/bin/bb-tmux
               fi
               skip_it_so=1
               break
@@ -2653,7 +2670,7 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
-          "ASCIImatics"*,*|*,"ASCIImatics"*)
+          "ASCII"*,*|*,"ASCII"*)
               animation_menu=1
               break 2
               ;;
@@ -2970,9 +2987,9 @@ set_show_term() {
 
 init_vars() {
   MTITLE="Asciiville"
-  COMMAND_TMUX="bash /usr/share/asciiville/tools/bin/btop-tmux"
+  COMMAND_TMUX="bash ${ASHARE}/tools/bin/btop-tmux"
   ASCSPLASH="asciisplash"
-  ASCSPLASH_TMUX="bash /usr/share/asciiville/tools/bin/asciisplash-tmux"
+  ASCSPLASH_TMUX="bash ${ASHARE}/tools/bin/asciisplash-tmux"
 
   INTERACTIVE=
   RECORD=
@@ -3029,6 +3046,12 @@ init_vars
 [ $# -eq 0 ] && INTERACTIVE=1
 have_aewan=`type -p aewan`
 have_btop=`type -p btop`
+if [ -x ${ASHARE}/endoh1/endoh1 ]
+then
+  have_endo=1
+else
+  have_endo=
+fi
 have_mutt=`type -p mutt`
 have_neomutt=`type -p neomutt`
 have_nethack=`type -p nethack`
@@ -3160,6 +3183,10 @@ while getopts "Aabc:CdD:E:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
     c)
       COMMAND="${OPTARG}"
       case "${COMMAND}" in
+      endo|Endo)
+          [ "${have_endo}" ] && bash -m /usr/bin/show_endo
+          break
+          ;;
       maps|Maps)
           [ "${have_mapscii}" ] && mapscii
           break
@@ -3515,11 +3542,11 @@ while getopts "Aabc:CdD:E:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
       fi
       ;;
     v)
-      [ -f "/usr/share/doc/asciiville/VERSION" ] || {
+      [ -f "${DSHARE}/VERSION" ] || {
         echo "Asciiville VERSION file not installed"
         exit 1
       }
-      . "/usr/share/doc/asciiville/VERSION"
+      . "${DSHARE}/VERSION"
       echo "Asciiville version ${VERSION} release ${RELEASE}"
       exit 0
       ;;

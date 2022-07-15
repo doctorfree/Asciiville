@@ -129,7 +129,7 @@ Choosing a file in Ranger is done by visiting a directory and selecting a file. 
 *Terminal/Command options:*
 
 **-c 'command'**
-: Indicates run 'command' in selected terminal window. If *command* is one of the special keywords (*maps*, *moon*, *news*, *reddit*, *search*, *speed*, *translate*, *twitter*, *weather*) then display a map, the phase of the Moon, run the `newsboat` RSS feed reader, perform a web search, perform a speed test, run the `got` text based translation tool, run the command line twitter client, or display a weather report.
+: Indicates run 'command' in selected terminal window. If *command* is one of the special keywords (*endo*, *maps*, *moon*, *news*, *reddit*, *search*, *speed*, *translate*, *twitter*, *weather*) then display fluid dynamics simulations, a map, the phase of the Moon, run the `newsboat` RSS feed reader, perform a web search, perform a speed test, run the `got` text based translation tool, run the command line twitter client, or display a weather report.
 
 **-d**
 : Indicates use disk usage analyzer as command
@@ -284,6 +284,9 @@ Invoked without any arguments, **asciiville** will display an interactive menu
 
 **asciiville -M -t**
 : Launches `mpcplus` music player running in Tilix terminal emulator
+
+**asciiville -c endo**
+: Displays a series of ascii fluid dyanamics simulations using `endoh1`
 
 **asciiville -c maps**
 : Displays a zoomable map of the world using `mapscii`

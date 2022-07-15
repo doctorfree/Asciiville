@@ -1,0 +1,110 @@
+#!/bin/bash
+
+ENDO_DIR=/usr/share/asciiville/endoh1
+ENDO=${ENDO_DIR}/endoh1
+ESRC=${ENDO_DIR}/endoh1.c
+#ALL=("clock.txt" "column.txt" "column2.txt" "column3.txt" "corners.txt" "dripping-pan.txt" "evaporation.txt" "flat.txt" "fountain.txt" "funnel.txt" "funnel2.txt" "funnel3.txt" "glass-half-empty.txt" "leidenfrost.txt" "logo.txt" "pour-out.txt" "tanada.txt")
+ALL=("column.txt" "logo.txt" "pour-out.txt" "tanada.txt")
+
+[ -x ${ENDO} ] || {
+  echo "${ENDO} not found or not executable"
+  exit 1
+}
+
+set +m
+
+clear
+echo ""
+echo "The 'endoh1' entry won honorable mention in the 2012 International"
+echo "Obfuscated C Code contest. This entry's source code when viewed"
+echo "appears to be the word 'Fluid' in a container. When compiled it"
+echo "can take its own source code as input and it displays an ascii"
+echo "character animation of fluid in a heated container. The simulation"
+echo "utilizes the 'Smoothed-particle hydrodynamics' method to model"
+echo "properties of fluid dynamics."
+echo ""
+
+read -p "Press Enter to view the program source code" yn
+
+clear
+echo ""
+
+cat ${ESRC}
+
+next_input() {
+  if [ ${#ALL[@]} -eq 0 ]; then
+    clear
+    exit 0
+  else
+    while true
+    do
+      clear
+      read -p "View another ASCII fluid dynamics animation ('n' to exit)? (y/n) " yn
+      case $yn in
+        [Yy]* )
+            # Seed random generator
+            RANDOM=$$$(date +%s)
+            INPUT=${ALL[ $RANDOM % ${#ALL[@]} ]}
+            ESRC=${ENDO_DIR}/${INPUT}
+            delete=("${INPUT}")
+            for target in "${delete[@]}"; do
+              for i in "${!ALL[@]}"; do
+                if [[ ${ALL[i]} = $target ]]; then
+                  unset 'ALL[i]'
+                fi
+              done
+            done
+            new_array=()
+            for i in "${!ALL[@]}"; do
+              new_array+=( "${ALL[i]}" )
+            done
+            ALL=("${new_array[@]}")
+            unset new_array
+            break
+            ;;
+        [Nn]* )
+            clear
+            exit 0
+            ;;
+          * ) echo "Please answer yes or no."
+            ;;
+      esac
+    done
+  fi
+}
+
+trap 'next_input' SIGINT
+
+while true
+do
+  echo "During an animation use 'Ctrl-c' to start a new animation"
+  read -p "View the ASCII fluid dynamics animations ? (y/n) " yn
+  case $yn in
+    [Yy]* )
+          cols=`tput cols`
+          lines=`tput lines`
+          [ ${cols} -gt 80 ] && [ ${lines} -gt 25 ] || {
+            echo "The ASCII fluid dynamics animation requires a terminal window"
+            echo "of size greater than 80x25"
+            echo ""
+            echo "Resize the terminal window and run this command again"
+            exit 1
+          }
+          while true
+          do
+            clear
+            ${ENDO} < ${ESRC}
+          done
+          break
+          ;;
+    [Nn]* )
+          clear
+          exit 0
+          ;;
+        * ) echo "Please answer yes or no."
+          ;;
+  esac
+done
+
+clear
+exit 0

@@ -149,6 +149,7 @@ Integration is provided for:
 * [asciinema](https://asciinema.org/) - automatically create ascii character based video clips
 * [rainbowstream](https://github.com/orakaro/rainbowstream) - command line character based Twitter client
     * See [the rainbowstream usage manual](https://rainbowstream.readthedocs.io/en/latest/#usage) to get started
+* [endoh1](https://github.com/mame/winner/tree/main/2012/endoh1), ascii fluid dynamics simulation
 * [mapscii](https://github.com/rastapasta/mapscii#readme), zoomable map of the world
 * [cmatrix](https://github.com/abishekvashok/cmatrix), screen from "The Matrix"
 * [nethack](https://en.wikipedia.org/wiki/NetHack), ASCII text dungeon game
@@ -240,6 +241,7 @@ Asciiville adds the following commands to your system:
 * **set_xfce_font** : sets an xfce4-terminal window's font and font size
 * **set_xfce_trans** : sets an xfce4-terminal window's transparency level
 * **show_ascii_art** : display ascii art, convert images to ascii art
+* **show_endo** : display a series of ascii fluid dynamics simulations
 * **show_moon** : display the phase of the Moon
 * **show_weather** : display a weather report
 * **tdraw** : ASCII drawing tool (only added if `go` is installed)
@@ -1088,6 +1090,7 @@ Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-D delay]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
+		If 'command' is keyword 'endo' then display ascii fluid simulation
 		If 'command' is keyword 'maps' then display a map using mapscii
 		If 'command' is keyword 'moon' then display the phase of the Moon
 		If 'command' is keyword 'news' then display RSS news feeds
@@ -1142,9 +1145,9 @@ Slideshow/ASCIImatics animation options:
 	   'Owls', 'Space', 'Vintage', 'Wallpapers', 'Waterfalls',
 	   the name of a custom ascii art folder, the slideshow keyword
 	   'files' which indicates display a slideshow using the ascii
-       art files provided on the command line, or the slideshow
-       argument 'files=/path/to/file' which indicates read the list
-       of slideshow files from the file '/path/to/file'
+	   art files provided on the command line, or the slideshow
+	   argument 'files=/path/to/file' which indicates read the list
+	   of slideshow files from the file '/path/to/file'
 	-Z indicates do not play audio during slideshow/animation
 
 General options:

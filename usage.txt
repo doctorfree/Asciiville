@@ -6,6 +6,7 @@ Usage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-D delay]
 
 Terminal/Command options:
 	-c 'command' indicates use 'command'
+		If 'command' is keyword 'endo' then display ascii fluid simulation
 		If 'command' is keyword 'maps' then display a map using mapscii
 		If 'command' is keyword 'moon' then display the phase of the Moon
 		If 'command' is keyword 'news' then display RSS news feeds
@@ -58,9 +59,11 @@ Slideshow/ASCIImatics animation options:
 	   'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies',
 	   'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature',
 	   'Owls', 'Space', 'Vintage', 'Wallpapers', 'Waterfalls',
-	   the name of a custom ascii art folder, or the slideshow
-	   keyword 'files' which indicates display a slideshow using
-	   the ascii art files provided on the command line.
+	   the name of a custom ascii art folder, the slideshow keyword
+	   'files' which indicates display a slideshow using the ascii
+	   art files provided on the command line, or the slideshow
+	   argument 'files=/path/to/file' which indicates read the list
+	   of slideshow files from the file '/path/to/file'
 	-Z indicates do not play audio during slideshow/animation
 
 General options:
