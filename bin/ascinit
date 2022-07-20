@@ -513,6 +513,17 @@ have_jrnl=`type -p jrnl`
   rm -f /tmp/jrnl$$
 }
 
+# Install the 'rich' command if not already installed
+have_rich=`type -p rich`
+[ "${have_rich}" ] || {
+  have_pipx=`type -p pipx`
+  [ "${have_pipx}" ] || {
+    python3 -m pip install --user pipx 2> /dev/null
+    python3 -m pipx ensurepath 2> /dev/null
+  }
+  pipx install rich-cli
+}
+
 [ "${init_twit}" ] && rainbowstream
 
 create_new_profile() {
