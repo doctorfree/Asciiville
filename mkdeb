@@ -323,6 +323,7 @@ ${SUDO} cp games/nethack/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-ne
 
 ${SUDO} cp -a share/menu "${OUT_DIR}/${DESTDIR}/share/menu"
 ${SUDO} cp -a share/figlet-fonts "${OUT_DIR}/${DESTDIR}/share/figlet-fonts"
+${SUDO} cp -a share/neofetch-themes "${OUT_DIR}/${DESTDIR}/share/neofetch-themes"
 
 ${SUDO} chmod 644 ${OUT_DIR}/${DESTDIR}/share/man/*/*
 ${SUDO} chmod 644 ${OUT_DIR}/${DESTDIR}/share/menu/*
