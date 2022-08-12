@@ -5,24 +5,24 @@ header: User Manual
 footer: asciisplash 1.0.0
 date: March 27, 2022
 ---
-# NAME
+## NAME
 asciisplash - Launch a fun splashy screen of ASCIImatics animations
 
-# SYNOPSIS
+## SYNOPSIS
 **asciisplash** [-a] [-b] [-C] [-c numcycles] [-d] [-j] [-J] [-m] [-p] [-s song] [-u]
 
 **NOTE:** `asciisplash` can be run by invoking `asciiville [-S] ...`
 
 See `man asciiville` for details on how to front-end `asciisplash` with `asciiville`
 
-# DESCRIPTION
+## DESCRIPTION
 The *asciisplash* command plays one of the ASCIImatics animations included in Asciiville.
 It's a fun demonstration of some of the capabilities of the ASCIImatics library. By default,
 *asciisplash* will play a series of animations about MusicPlayerPlus. Command line options
 can be used to tell *asciisplash* to play animations for the Julia Set or a Plasma animation
 as well as play a public domain audio to accompany the ascii art display.
 
-# COMMAND LINE OPTIONS
+## COMMAND LINE OPTIONS
 **-a**
 : indicates play audio accompaniment
 
@@ -58,7 +58,7 @@ as well as play a public domain audio to accompany the ascii art display.
 
 Without any options the MusicPlayerPlus effect will repeat
 
-# EXAMPLES
+## EXAMPLES
 **asciisplash**
 : Without options asciisplash will play a series of animations about MusicPlayerPlus. These will repeat until the 'q' key is pressed.
 
@@ -80,21 +80,21 @@ Without any options the MusicPlayerPlus effect will repeat
 **asciisplash -a -j -s /u/audio/deep.wav**
 : Plays the Julia Set ASCIImatics animation and the audio file `/u/audio/deep.wav` as accompaniment
 
-# AUTHORS
+## AUTHORS
 Written by Ronald Record github@ronrecord.com
 
-# LICENSING
+## LICENSING
 ASCIISPLASH is distributed under an Open Source license.
 See the file LICENSE in the ASCIISPLASH source distribution
 for information on terms &amp; conditions for accessing and
 otherwise using ASCIISPLASH and for a DISCLAIMER OF ALL WARRANTIES.
 
-# BUGS
+## BUGS
 Submit bug reports online at:
 
 https://github.com/doctorfree/Asciiville/issues
 
-# SEE ALSO
+## SEE ALSO
 **asciijulia**(1), **asciimpplus**(1), **asciiplasma**(1), **asciisplash-tmux**(1), **asciiville**(1)
 
 Full documentation and sources at:

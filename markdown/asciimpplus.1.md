@@ -5,19 +5,19 @@ header: User Manual
 footer: asciimpplus 1.0.0
 date: March 27, 2022
 ---
-# NAME
+## NAME
 asciimpplus - Display an ASCIImatics animation featuring ascii art for the MusicPlayerPlus project
 
-# SYNOPSIS
+## SYNOPSIS
 **asciimpplus** [-h] [-d] [-a AUDIO] [-c CYCLE] [-f font]
 
-# DESCRIPTION
+## DESCRIPTION
 The *asciimpplus* command plays one of the ASCIImatics animations included in
 Asciiville. Command line options can be used to tell *asciimpplus* to play
 animations for a specified number of cycles, which audio file to use as
 accompaniment, and specify the font used in the Cycle effect.
 
-# COMMAND LINE OPTIONS
+## COMMAND LINE OPTIONS
 **-h, --help**
 : show this help message and exit
 
@@ -33,7 +33,7 @@ accompaniment, and specify the font used in the Cycle effect.
 **-f FONT, --font FONT**
 : Font for FigletText in Cycle effect, default 'small'
 
-# EXAMPLES
+## EXAMPLES
 **asciimpplus**
 : Without options asciimpplus will display an ASCIImatics animation featuring MusicPlayerPlus. These will continue until the 'q' key is pressed.
 
@@ -46,21 +46,21 @@ accompaniment, and specify the font used in the Cycle effect.
 **asciimpplus -f big**
 : Plays the ASCIImatics animation using the 'big' FigletText font for the Cycle effect
 
-# AUTHORS
+## AUTHORS
 Written by Ronald Record github@ronrecord.com
 
-# LICENSING
+## LICENSING
 ASCIIMPPLUS is distributed under an Open Source license.
 See the file LICENSE in the ASCIIMPPLUS source distribution
 for information on terms &amp; conditions for accessing and
 otherwise using ASCIIMPPLUS and for a DISCLAIMER OF ALL WARRANTIES.
 
-# BUGS
+## BUGS
 Submit bug reports online at:
 
 https://github.com/doctorfree/Asciiville/issues
 
-# SEE ALSO
+## SEE ALSO
 **asciijulia**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1), **asciiville**(1)
 
 Full documentation and sources at:

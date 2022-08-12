@@ -5,13 +5,13 @@ header: User Manual
 footer: termprofset 1.0.0
 date: May 10, 2022
 ---
-# NAME
+## NAME
 termprofset - manipulate the profiles of a Gnome or Tilix terminal, or the font setting of an XFCE4 terminal
 
-# SYNOPSIS
+## SYNOPSIS
 **termprofset** [-f fontname] [-s fontsize] [-p profile] [-glBRStxu]
 
-# DESCRIPTION
+## DESCRIPTION
 The *termprofset* command can be used to set or restore profile settings of a Gnome or Tilix terminal emulator (`gnome-terminal` and `tilix` commands), or the font setting of an XFCE4 terminal emulator (`xfce4-terminal` command). Profile settings that can be configured by *termprofset* are:
 
 - font (font name and font size)
@@ -43,7 +43,7 @@ setting the font size higher for Figlet text display. The font sizes used
 in this command can be controlled via the `art_font_size` and `txt_font_size`
 values in `$HOME/.config/asciiville/config`. Default font sizes are 4 and 20.
 
-# COMMAND LINE OPTIONS
+## COMMAND LINE OPTIONS
 **-B**
 : indicates set background to black, no transparency
 
@@ -85,7 +85,7 @@ Default font is Monospace
 
 Default font size is 4
 
-# EXAMPLES
+## EXAMPLES
 
 **termprofset**
 : Without arguments, termprofset sets the Asciiville Gnome profile with a Monospace font and font size 4
@@ -102,21 +102,21 @@ Default font size is 4
 **termprofset -p default -t -s 18**
 : Sets the default Tilix profile with a Monospace font and font size 18 
 
-# AUTHORS
+## AUTHORS
 Written by Ronald Record github@ronrecord.com
 
-# LICENSING
+## LICENSING
 TERMPROFSET is distributed under an Open Source license.
 See the file LICENSE in the TERMPROFSET source distribution
 for information on terms &amp; conditions for accessing and
 otherwise using TERMPROFSET and for a DISCLAIMER OF ALL WARRANTIES.
 
-# BUGS
+## BUGS
 Submit bug reports online at:
 
 https://github.com/doctorfree/Asciiville/issues
 
-# SEE ALSO
+## SEE ALSO
 **asciimpplus**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1), **asciiville**(1), **show_ascii_art**(1)
 
 Full documentation and sources at:

@@ -5,19 +5,19 @@ header: User Manual
 footer: cbftp 1.0.0
 date: March 27, 2022
 ---
-# NAME
+## NAME
 cbftp - Ncurses FTP and FXP Client
 
-# SYNOPSIS
+## SYNOPSIS
 **cbftp** [-h] [-d] [-a AUDIO] [-c CYCLE]
 
-# DESCRIPTION
+## DESCRIPTION
 The *cbftp* command is an advanced multi-purpose FTP/FXP client that focuses
 on efficient large-scale data spreading, while also supporting most regular
 FTP/FXP use cases in a modern way. It runs in a terminal and provides a
 semi-graphical user interface through ncurses.
 
-# MAJOR FEATURES
+## MAJOR FEATURES
 
 - Spread jobs for efficient many-to-many FTP server data spreading through FXP
 - Transfer jobs for regular file transfer needs: FXP, Upload, Download
@@ -34,7 +34,7 @@ semi-graphical user interface through ncurses.
 - File viewing through external applications when running in a local terminal
 - SOCKS5 proxy support
 
-# CONFIGURATION
+## CONFIGURATION
 
 FTP site details and other settings are stored in the cbftp data file, which
 will be created the first time cbftp is started. It is located at
@@ -42,7 +42,7 @@ will be created the first time cbftp is started. It is located at
 be enabled through the global settings, and your data file will then be
 encrypted with aes-256-cbc.
 
-# GETTING STARTED
+## GETTING STARTED
 
 After starting cbftp (and possibly entering your passphrase), you will end up
 on the main ui screen of the client. This is where your FTP sites will be
@@ -53,14 +53,14 @@ available key bindings at any given time.
 The first thing you will want to do here is probably to add a site, so
 press A.
 
-# USER INTERFACE
+## USER INTERFACE
 
 The cbftp user interface is based on several views - main screen,
 edit site screen, browse screen, etc. The available views can be considered
 as a stack - after you've entered a new view, leaving it will normally take
 you back to where you came from.
 
-# KEY MAPPING
+## KEY MAPPING
 
 ```
 C-c             Quit/Exit program
@@ -193,7 +193,7 @@ r               reset
 Esc/c           Close
 ```
 
-# BROWSING
+## BROWSING
 
 After adding a site, you can browse it by selecting it and pressing b
 from the main screen. This will take you to a different view where the
@@ -203,7 +203,7 @@ Various features are available here, see the legend bar at the bottom.
 The browse screen is also considered a "main window" in cbftp; you can toggle
 back and forth between the browse screen and the main screen by pressing esc.
 
-# STARTING A TRANSFER JOB
+## STARTING A TRANSFER JOB
 
 If you would like to transfer something, there are some ways to start a
 transfer job. The simplest way is to select an item that you wish to download
@@ -233,7 +233,7 @@ Your newly created transfer job will be visible in the main screen of cbftp.
 Transfer jobs use a single slot on each site by default; this can be modified
 in the detailed view of each transfer job.
 
-# STARTING A SPREAD JOB
+## STARTING A SPREAD JOB
 
 A spread job is a larger form of transfer job that spreads an item among
 a selection of multiple sites through FXP. It is an action that does not
@@ -256,7 +256,7 @@ selection.
 
 After selecting sites, press 's' to start the spread job.
 
-# SLOT HANDLING
+## SLOT HANDLING
 
 In many traditional FTP clients, a login slot is "locked" to the UI window
 that it occurs in. To use multiple slots or multiple sites, separate tabs
@@ -286,7 +286,7 @@ be used for download and upload on each site.
 The UI is not built around transfer tabs, since everything happens in the
 backend.
 
-# THE TRANSFER ENGINE
+## THE TRANSFER ENGINE
 
 The transfer engine is the heart of cbftp, and it decides where, when and
 how to perform file transfers. It summarizes information about the state of
@@ -314,7 +314,7 @@ The user has partial control over the transfer patterns by limiting which
 sites that can transfer to where by using the allow/block lists available for
 each site, and also by specifying site priorities.
 
-# SKIPLISTING
+## SKIPLISTING
 
 Cbftp supports advanced skiplisting of what to deny or allow, both on job
 and file basis. Skiplisting can be specified globally, per section, and/or per
@@ -416,7 +416,7 @@ behave as you expect it to do, then you will need to think through if there
 might be other rules that are matching your item too early. Use the pattern
 test feature.
 
-# REMOTE COMMANDS
+## REMOTE COMMANDS
 
 Cbftp supports executing various commands remotely via two interfaces - a
 simple one-way UDP API, and an advanced HTTPS/JSON REST API.
@@ -431,7 +431,7 @@ In the HTTPS/JSON REST API, the password is sent through HTTP Basic auth.
 
 Specifications for the API's are available in the API file.
 
-# CONNECTION DETAILS
+## CONNECTION DETAILS
 
 To see details about what cbftp is doing on each connection to a site,
 select the site from the main screen and press enter. Here you can cycle
@@ -439,7 +439,7 @@ between the connections (if there are multiple) by using the left/right
 arrow keys. You can also force connect/disconnect specific connections
 from this view.
 
-# RAW COMMANDS
+## RAW COMMANDS
 
 To send raw commands to a site, select a site on the main screen and press w.
 You will be presented with a new window where raw commands and their results
@@ -451,7 +451,7 @@ The currently selected file name can be pasted by pressing Insert.
 If you want to send raw commands on a specific connection, go to the specific
 connection (see "connection details" above) and press w there.
 
-# ADD A SITE / EDIT A SITE
+## ADD A SITE / EDIT A SITE
 
 When selecting to add or edit a site, you will be presented with several
 fields where you can enter settings and parameters for your site.
@@ -549,7 +549,7 @@ Field summary:
   will result in the job operating in the specified section directory for
   each site.
 
-# GLOBAL OPTIONS
+## GLOBAL OPTIONS
 
 Most global cbftp settings can be accessed by pressing G from the main screen.
 When you are done editing, press 'd' to save changes.
@@ -602,14 +602,14 @@ Field summary:
   data file.
 - Change encryption key - Set a new encryption key for the data file.
 
-# TRANSFERS
+## TRANSFERS
 
 The transfers screen is available by pressing 't' from the main screen.
 this screen presents a summary of the transfers that cbftp is performing,
 and has performed previously. Select a transfer and press enter for detailed
 information about that specific transfer.
 
-# GLOBAL KEY BINDINGS
+## GLOBAL KEY BINDINGS
 
 There are a few hotkeys that work from (almost) anywhere in the cbftp UI:
 
@@ -626,7 +626,7 @@ There are a few hotkeys that work from (almost) anywhere in the cbftp UI:
 
 They can be configured through the global options screen.
 
-# METRICS
+## METRICS
 
 In the metrics screen, there are a few metrics shown as graphs:
 
@@ -640,7 +640,7 @@ In the metrics screen, there are a few metrics shown as graphs:
   it results in latency when work is queued up, and slightly lower list
   frequency is often preferable over latency.
 
-# SPREAD JOB STATUS
+## SPREAD JOB STATUS
 
 The spread job status screen has a table of files that might seem rather
 unintelligible at a glance.
@@ -687,7 +687,7 @@ The single character marking each file describes the state of the file:
 
 `p` - file exists and the site is download-only in this job
 
-# EXTERNAL SCRIPTS
+## EXTERNAL SCRIPTS
 
 Cbftp can be configured to execute external scripts based on certain triggers.
 There is an intended default directory for scripts at ~/.cbftp/scripts, but
@@ -712,13 +712,13 @@ An example script execution from there might have the following args:
 
 Example scripts are available in the examples directory.
 
-# OTHER UI WINDOWS
+## OTHER UI WINDOWS
 
 There are various other views in the cbftp UI that are not mentioned here in
 this readme, but most are quite self-explanatory with the help of the key
 binding information found in the legend bar. You can probably figure it out.
 
-# FAQ
+## FAQ
 
 Q: Why aren't my IPv6 transfers working?
 
@@ -909,18 +909,18 @@ Q: Where can I donate to show my support for this awesome software?
 
 A: No need, I mostly do this for my own amusement.
 
-# LICENSING
+## LICENSING
 CBFTP is distributed under an Open Source license.
 See the file LICENSE in the CBFTP source distribution
 for information on terms &amp; conditions for accessing and
 otherwise using CBFTP and for a DISCLAIMER OF ALL WARRANTIES.
 
-# BUGS
+## BUGS
 Submit bug reports online at:
 
 https://github.com/doctorfree/Asciiville/issues
 
-# SEE ALSO
+## SEE ALSO
 **asciiart**(1), **asciimpplus**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1), **asciiville**(1)
 
 Full documentation and sources at:

@@ -5,16 +5,16 @@ header: User Manual
 footer: btop 1.0.0
 date: April 27, 2022
 ---
-# NAME
+## NAME
 btop - Resource monitor that shows usage and stats for processor, memory, disks, network and processes.
 
-# SYNOPSIS
+## SYNOPSIS
 **btop** [-h] [-v] [-/+t] [-p <id>] [--utf-force] [--debug]
 
-# DESCRIPTION
+## DESCRIPTION
 The *btop* command is a C++ version and continuation of [bashtop](https://github.com/aristocratos/bashtop) and [bpytop](https://github.com/aristocratos/bpytop).
 
-# COMMAND LINE OPTIONS
+## COMMAND LINE OPTIONS
 
 **-h, --help**
 : show this help message and exit
@@ -40,7 +40,7 @@ The *btop* command is a C++ version and continuation of [bashtop](https://github
 **--debug**
 : start in DEBUG mode: shows microsecond timer for information collect and screen draw functions and sets loglevel to DEBUG
 
-# FEATURES
+## FEATURES
 
 * Easy to use, with a game inspired menu system.
 * Full mouse support, all buttons with a highlighted key is clickable and mouse scroll works in process list and menu boxes.
@@ -57,7 +57,7 @@ The *btop* command is a C++ version and continuation of [bashtop](https://github
 * Selectable symbols for the graphs
 * Custom presets
 
-# KEYBOARD / MOUSE CONTROLS
+## KEYBOARD / MOUSE CONTROLS
 
 - **"Mouse 1"**
 : Clicks buttons and selects in process list.
@@ -164,7 +164,7 @@ The *btop* command is a C++ version and continuation of [bashtop](https://github
 - **"Selected s"**
 : Select or enter signal to send to process.
 
-# THEMES
+## THEMES
 
 Btop++ uses the same theme files as bpytop and bashtop (some color values missing in bashtop themes) .
 
@@ -173,7 +173,7 @@ See [themes](https://github.com/doctorfree/Asciiville/tree/main/btop/themes) fol
 The default themes are in `/usr/share/btop/themes/`. User created themes should be placed in
 `$XDG_CONFIG_HOME/btop/themes` or `$HOME/.config/btop/themes`.
 
-# PREREQUISITES
+## PREREQUISITES
 
 For best experience, a terminal with support for:
 
@@ -188,23 +188,23 @@ Also needs a UTF8 locale and a font that covers:
 * Unicode Block “Geometric Shapes” U+25A0 - U+25FF
 * Unicode Block "Box Drawing" and "Block Elements" U+2500 - U+259F
 
-# AUTHORS
+## AUTHORS
 Btop written by Jakob P. Liljenberg (jakob@qvantnet.com)
 
 Btop man page and front-ends written by Ronald Record (github@ronrecord.com)
 
-# LICENSING
+## LICENSING
 BTOP is distributed under an Open Source license.
 See the file LICENSE in the BTOP source distribution
 for information on terms &amp; conditions for accessing and
 otherwise using BTOP and for a DISCLAIMER OF ALL WARRANTIES.
 
-# BUGS
+## BUGS
 Submit bug reports online at:
 
 https://github.com/doctorfree/Asciiville/issues
 
-# SEE ALSO
+## SEE ALSO
 **asciiville**(1)
 
 Full documentation and sources at:

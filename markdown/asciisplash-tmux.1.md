@@ -5,22 +5,22 @@ header: User Manual
 footer: asciisplash-tmux 1.0.0
 date: March 26, 2022
 ---
-# NAME
+## NAME
 asciisplash-tmux - embeds `asciisplash` in a tmux session
 
-# SYNOPSIS
+## SYNOPSIS
 **asciisplash-tmux** [-a] [-b] [-c num] [-d] [-l script] [-r script] [-R] [-s song] [-t] [-u]
 
 **NOTE:** `asciisplash-tmux` can be run by invoking `asciiville -S -T ...`
 
 See `man asciiville` for details on how to front-end `asciisplash-tmux` with `asciiville`
 
-# DESCRIPTION
+## DESCRIPTION
 The *asciisplash-tmux* command runs the *asciisplash* command in a tmux session. This enables automatic recording with *asciinema*, if desired, and simplifies the process of creating and managing a tmux session.
 
 **NOTE:** The `asciisplash-tmux` command resides in `/usr/share/asciiville/tools/bin/asciisplash-tmux` and is intended as a backend for use by the `asciiville` command.
 
-# COMMAND LINE OPTIONS
+## COMMAND LINE OPTIONS
 **-a**
 : indicates play audio during ASCIImatics display
 
@@ -54,7 +54,7 @@ The *asciisplash-tmux* command runs the *asciisplash* command in a tmux session.
 **Defaults:**
 : single pane, left pane plasma, right pane julia, recording disabled
 
-# EXAMPLES
+## EXAMPLES
 **asciisplash-tmux**
 : Without options, *asciisplash-tmux* displays the plasma asciimatics script in a single pane of a tmux session.
 
@@ -67,7 +67,7 @@ The *asciisplash-tmux* command runs the *asciisplash* command in a tmux session.
 **asciisplash-tmux -d -l plasma -r julia -R**
 : With these options, *asciisplash-tmux* displays the plasma asciimatics script in the left pane of a tmux session, the julia set asciimatics script in the right pane of a tmux session and records the session using asciinema. Recordings are stored in the user's `$HOME/Videos/` folder.
 
-# TMUX USAGE
+## TMUX USAGE
 
 start new:
 
@@ -99,16 +99,16 @@ Kill all the tmux sessions:
 
 In tmux, hit the prefix `ctrl+b` (my modified prefix is ctrl+a) and then:
 
-## List all shortcuts
+### List all shortcuts
 to see all the shortcuts keys in tmux simply use the `bind-key ?` in my case that would be `CTRL-B ?`
 
-## Sessions
+### Sessions
 
     :new<CR>  new session
     s  list sessions
     $  name session
 
-## Windows (tabs)
+### Windows (tabs)
 
     c  create window
     w  list windows
@@ -118,7 +118,7 @@ to see all the shortcuts keys in tmux simply use the `bind-key ?` in my case tha
     ,  name window
     &  kill window
 
-## Panes (splits) 
+### Panes (splits) 
 
     %  vertical split
     "  horizontal split
@@ -134,7 +134,7 @@ to see all the shortcuts keys in tmux simply use the `bind-key ?` in my case tha
     <prefix> } (Move the current pane right)
     <prefix> z toggle pane zoom
 
-## Sync Panes 
+### Sync Panes 
 
 You can do this by switching to the appropriate window, typing your Tmux prefix (commonly Ctrl-B or Ctrl-A) and then a colon to bring up a Tmux command line, and typing:
 
@@ -145,7 +145,7 @@ You can do this by switching to the appropriate window, typing your Tmux prefix 
 You can optionally add on or off to specify which state you want; otherwise the option is simply toggled. This option is specific to one window, so it won’t change the way your other sessions or windows operate. When you’re done, toggle it off again by repeating the command. [tip source](http://blog.sanctum.geek.nz/sync-tmux-panes/)
 
 
-## Resizing Panes
+### Resizing Panes
 
 You can also resize panes if you don’t like the layout defaults. I personally rarely need to do this, though it’s handy to know how. Here is the basic syntax to resize panes:
 
@@ -161,7 +161,7 @@ You can also resize panes if you don’t like the layout defaults. I personally 
     PREFIX : resize-pane -t -L 20 (Resizes the pane with the id of 2 left by 20 cells)
     
     
-## Copy mode:
+### Copy mode:
 
 Pressing `PREFIX [` places us in Copy mode. We can then use our movement keys to move our cursor around the screen. By default, the arrow keys work. we set our configuration file to use Vim keys for moving between windows and resizing panes so we wouldn’t have to take our hands off the home row. tmux has a vi mode for working with the buffer as well. To enable it, add this line to .tmux.conf:
 
@@ -205,14 +205,14 @@ For example, we can use "w" to jump to the next word and "b" to jump back one wo
        Start selection         Space          C-Space
        Transpose chars                        C-t
 
-## Misc
+### Misc
 
     d  detach
     t  big clock
     ?  list shortcuts
     :  prompt
 
-## Configurations Options:
+### Configurations Options:
 
     # Mouse support - set to on if you want to use the mouse
     * setw -g mode-mouse off
@@ -235,26 +235,26 @@ For example, we can use "w" to jump to the next word and "b" to jump back one wo
     unbind Down
     bind Down last-window \; swap-pane -s tmp.1 \; kill-window -t tmp
 
-## TMUX Cheat Sheet References
+### TMUX Cheat Sheet References
 
 * https://tmuxcheatsheet.com/
 * https://gist.github.com/MohamedAlaa/2961058
 
-# AUTHORS
+## AUTHORS
 Written by Ronald Record github@ronrecord.com
 
-# LICENSING
+## LICENSING
 ASCIISPLASH-TMUX is distributed under an Open Source license.
 See the file LICENSE in the ASCIISPLASH-TMUX source distribution
 for information on terms &amp; conditions for accessing and
 otherwise using ASCIISPLASH-TMUX and for a DISCLAIMER OF ALL WARRANTIES.
 
-# BUGS
+## BUGS
 Submit bug reports online at:
 
 https://github.com/doctorfree/Asciiville/issues
 
-# SEE ALSO
+## SEE ALSO
 **asciijulia**(1), **asciimpplus**(1), **asciiplasma**(1), **asciisplash**(1), **asciiville**(1)
 
 Full documentation and sources at:

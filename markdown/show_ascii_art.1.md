@@ -5,13 +5,13 @@ header: User Manual
 footer: show_ascii_art 1.0.0
 date: April 24, 2022
 ---
-# NAME
+## NAME
 show_ascii_art - display ascii art
 
-# SYNOPSIS
+## SYNOPSIS
 **show_ascii_art** [-a art[,art2,...]] [-A art_dir] [-b] [-B] [-c] [-C] [-d font_dir] [-D seconds] [-e term] [-E] [-F large_font] [-f small_font] [-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-R len] [-s show] [-S song] [-t first_text] [-T second_text] [-h height] [-w width] [-W] [-v] [-z] [-Z] [-u]
 
-# DESCRIPTION
+## DESCRIPTION
 The *show_ascii_art* command displays one or more of the ascii art images included in
 Asciiville. Command line options can be used to tell *show_ascii_art* to create
 a new ascii art image from an image file in any format. Other command line
@@ -23,7 +23,7 @@ ascii art display. Rather, use the *asciiville* command which provides options
 for the generation and display of ascii art using *show_ascii_art* as a backend.
 See the **asciiville**(1) man page (`man asciiville`).
 
-# COMMAND LINE OPTIONS
+## COMMAND LINE OPTIONS
 
 **-a 'art'**
 : specifies ascii art file(s) to display
@@ -165,7 +165,7 @@ If only one of 'width' and 'height' is provided, calculate the other from image 
 **-u**
 : displays this usage message and exits
 
-# EXAMPLES
+## EXAMPLES
 **show_ascii_art**
 : Without options show_ascii_art will display an ascii art image and "Welcome to Asciiville" text using Figlet fonts.
 
@@ -178,21 +178,21 @@ If only one of 'width' and 'height' is provided, calculate the other from image 
 **show_ascii_art -i $HOME/Pictures/profile.jpg -h 20 -r**
 : Generates a 20 line ascii art from the JPEG image `$HOME/Pictures/profile.jpg` preserving aspect ratio using the Asciiville *jp2a* utility and displays it along with figlet text using randomly selected fonts.
 
-# AUTHORS
+## AUTHORS
 Written by Ronald Record github@ronrecord.com
 
-# LICENSING
+## LICENSING
 SHOE_ASCII_ART is distributed under an Open Source license.
 See the file LICENSE in the SHOE_ASCII_ART source distribution
 for information on terms &amp; conditions for accessing and
 otherwise using SHOE_ASCII_ART and for a DISCLAIMER OF ALL WARRANTIES.
 
-# BUGS
+## BUGS
 Submit bug reports online at:
 
 https://github.com/doctorfree/Asciiville/issues
 
-# SEE ALSO
+## SEE ALSO
 **asciiart**(1), **asciimpplus**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1), **asciiville**(1)
 
 Full documentation and sources at:

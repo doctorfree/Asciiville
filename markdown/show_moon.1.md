@@ -5,17 +5,17 @@ header: User Manual
 footer: show_moon 1.0.0
 date: May 01, 2022
 ---
-# NAME
+## NAME
 show_moon - Display the phase of the Moon
 
-# SYNOPSIS
+## SYNOPSIS
 **show_moon** [-d date] [-h] [-L location] [-l lang] [-u]
 
-# DESCRIPTION
+## DESCRIPTION
 The *show_moon* command displays the phase of the Moon in ANSI characters.
 Command line options can be used to specify the date, location, and language.
 
-# COMMAND LINE OPTIONS
+## COMMAND LINE OPTIONS
 **-h**
 : indicates show online help message and exit
 
@@ -38,7 +38,7 @@ Command line options can be used to specify the date, location, and language.
 **-u**
 : indicates show this usage message and exit
 
-# EXAMPLES
+## EXAMPLES
 **show_moon**
 : Without options show_moon will display the current phase of the Moon at your current location as given by your IP address
 
@@ -48,21 +48,21 @@ Command line options can be used to specify the date, location, and language.
 **show_moon -d 2022-10-31**
 : Display the phase of the Moon on October 31, 2022 at your current location as given by your IP address
 
-# AUTHORS
+## AUTHORS
 Written by Ronald Record github@ronrecord.com
 
-# LICENSING
+## LICENSING
 SHOW_MOON is distributed under an Open Source license.
 See the file LICENSE in the SHOW_MOON source distribution
 for information on terms &amp; conditions for accessing and
 otherwise using SHOW_MOON and for a DISCLAIMER OF ALL WARRANTIES.
 
-# BUGS
+## BUGS
 Submit bug reports online at:
 
 https://github.com/doctorfree/Asciiville/issues
 
-# SEE ALSO
+## SEE ALSO
 **show_weather**(1), **asciimpplus**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1), **asciiville**(1)
 
 Full documentation and sources at:

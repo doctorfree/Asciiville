@@ -5,19 +5,19 @@ header: User Manual
 footer: asciiplasma 1.0.0
 date: March 27, 2022
 ---
-# NAME
+## NAME
 asciiplasma - Display an ASCIImatics animation featuring the Plasma effect
 
-# SYNOPSIS
+## SYNOPSIS
 **asciiplasma** [-h] [-d] [-a AUDIO] [-c CYCLE] [-f FONT] [-t]
 
-# DESCRIPTION
+## DESCRIPTION
 The *asciiplasma* command plays one of the ASCIImatics animations included in
 Asciiville. Command line options can be used to tell *asciiplasma* to play
 animations for a specified number of cycles, which FigletText font to use,
 which audio file to use as accompaniment, and which comments to use.
 
-# COMMAND LINE OPTIONS
+## COMMAND LINE OPTIONS
 **-h, --help**
 : show this help message and exit
 
@@ -36,7 +36,7 @@ which audio file to use as accompaniment, and which comments to use.
 **-t, --text**
 : Use alternate set of comments
 
-# EXAMPLES
+## EXAMPLES
 **asciiplasma**
 : Without options asciiplasma will display an ASCIImatics animation featuring the Plasma effect. These will continue until the 'q' key is pressed.
 
@@ -46,21 +46,21 @@ which audio file to use as accompaniment, and which comments to use.
 **asciiplasma -a /usr/share/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav -c 5**
 : Plays the Plasma ASCIImatics animation 5 times accompanied by audio then exits 
 
-# AUTHORS
+## AUTHORS
 Written by Ronald Record github@ronrecord.com
 
-# LICENSING
+## LICENSING
 ASCIIPLASMA is distributed under an Open Source license.
 See the file LICENSE in the ASCIIPLASMA source distribution
 for information on terms &amp; conditions for accessing and
 otherwise using ASCIIPLASMA and for a DISCLAIMER OF ALL WARRANTIES.
 
-# BUGS
+## BUGS
 Submit bug reports online at:
 
 https://github.com/doctorfree/Asciiville/issues
 
-# SEE ALSO
+## SEE ALSO
 **asciijulia**(1), **asciimpplus**(1), **asciisplash**(1), **asciisplash-tmux**(1), **asciiville**(1)
 
 Full documentation and sources at:

@@ -16,20 +16,20 @@
 .\}
 .TH "CBFTP" "1" "March 27, 2022" "cbftp 1.0.0" "User Manual"
 .hy
-.SH NAME
+.SS NAME
 .PP
 cbftp - Ncurses FTP and FXP Client
-.SH SYNOPSIS
+.SS SYNOPSIS
 .PP
 \f[B]cbftp\f[R] [-h] [-d] [-a AUDIO] [-c CYCLE]
-.SH DESCRIPTION
+.SS DESCRIPTION
 .PP
 The \f[I]cbftp\f[R] command is an advanced multi-purpose FTP/FXP client
 that focuses on efficient large-scale data spreading, while also
 supporting most regular FTP/FXP use cases in a modern way.
 It runs in a terminal and provides a semi-graphical user interface
 through ncurses.
-.SH MAJOR FEATURES
+.SS MAJOR FEATURES
 .IP \[bu] 2
 Spread jobs for efficient many-to-many FTP server data spreading through
 FXP
@@ -61,7 +61,7 @@ File viewing through external applications when running in a local
 terminal
 .IP \[bu] 2
 SOCKS5 proxy support
-.SH CONFIGURATION
+.SS CONFIGURATION
 .PP
 FTP site details and other settings are stored in the cbftp data file,
 which will be created the first time cbftp is started.
@@ -69,7 +69,7 @@ It is located at \f[V]\[ti]/.cbftp/data\f[R].
 By default it is stored as plain text, but encryption can be enabled
 through the global settings, and your data file will then be encrypted
 with aes-256-cbc.
-.SH GETTING STARTED
+.SS GETTING STARTED
 .PP
 After starting cbftp (and possibly entering your passphrase), you will
 end up on the main ui screen of the client.
@@ -81,14 +81,14 @@ This area is known as \[dq]the legend bar\[dq] and is used to list
 available key bindings at any given time.
 The first thing you will want to do here is probably to add a site, so
 press A.
-.SH USER INTERFACE
+.SS USER INTERFACE
 .PP
 The cbftp user interface is based on several views - main screen, edit
 site screen, browse screen, etc.
 The available views can be considered as a stack - after you\[aq]ve
 entered a new view, leaving it will normally take you back to where you
 came from.
-.SH KEY MAPPING
+.SS KEY MAPPING
 .IP
 .nf
 \f[C]
@@ -222,7 +222,7 @@ r               reset
 Esc/c           Close
 \f[R]
 .fi
-.SH BROWSING
+.SS BROWSING
 .PP
 After adding a site, you can browse it by selecting it and pressing b
 from the main screen.
@@ -233,7 +233,7 @@ Various features are available here, see the legend bar at the bottom.
 The browse screen is also considered a \[dq]main window\[dq] in cbftp;
 you can toggle back and forth between the browse screen and the main
 screen by pressing esc.
-.SH STARTING A TRANSFER JOB
+.SS STARTING A TRANSFER JOB
 .PP
 If you would like to transfer something, there are some ways to start a
 transfer job.
@@ -271,7 +271,7 @@ Your newly created transfer job will be visible in the main screen of
 cbftp.
 Transfer jobs use a single slot on each site by default; this can be
 modified in the detailed view of each transfer job.
-.SH STARTING A SPREAD JOB
+.SS STARTING A SPREAD JOB
 .PP
 A spread job is a larger form of transfer job that spreads an item among
 a selection of multiple sites through FXP.
@@ -294,7 +294,7 @@ Sites that have the same section defined as the one where the selected
 item was located will be available for selection.
 .PP
 After selecting sites, press \[aq]s\[aq] to start the spread job.
-.SH SLOT HANDLING
+.SS SLOT HANDLING
 .PP
 In many traditional FTP clients, a login slot is \[dq]locked\[dq] to the
 UI window that it occurs in.
@@ -328,7 +328,7 @@ can be used for download and upload on each site.
 .PP
 The UI is not built around transfer tabs, since everything happens in
 the backend.
-.SH THE TRANSFER ENGINE
+.SS THE TRANSFER ENGINE
 .PP
 The transfer engine is the heart of cbftp, and it decides where, when
 and how to perform file transfers.
@@ -359,7 +359,7 @@ the rest.
 The user has partial control over the transfer patterns by limiting
 which sites that can transfer to where by using the allow/block lists
 available for each site, and also by specifying site priorities.
-.SH SKIPLISTING
+.SS SKIPLISTING
 .PP
 Cbftp supports advanced skiplisting of what to deny or allow, both on
 job and file basis.
@@ -468,7 +468,7 @@ If the skiplist does not behave as you expect it to do, then you will
 need to think through if there might be other rules that are matching
 your item too early.
 Use the pattern test feature.
-.SH REMOTE COMMANDS
+.SS REMOTE COMMANDS
 .PP
 Cbftp supports executing various commands remotely via two interfaces -
 a simple one-way UDP API, and an advanced HTTPS/JSON REST API.
@@ -483,7 +483,7 @@ In the HTTPS/JSON REST API, the password is sent through HTTP Basic
 auth.
 .PP
 Specifications for the API\[aq]s are available in the API file.
-.SH CONNECTION DETAILS
+.SS CONNECTION DETAILS
 .PP
 To see details about what cbftp is doing on each connection to a site,
 select the site from the main screen and press enter.
@@ -491,7 +491,7 @@ Here you can cycle between the connections (if there are multiple) by
 using the left/right arrow keys.
 You can also force connect/disconnect specific connections from this
 view.
-.SH RAW COMMANDS
+.SS RAW COMMANDS
 .PP
 To send raw commands to a site, select a site on the main screen and
 press w.
@@ -508,7 +508,7 @@ The currently selected file name can be pasted by pressing Insert.
 If you want to send raw commands on a specific connection, go to the
 specific connection (see \[dq]connection details\[dq] above) and press w
 there.
-.SH ADD A SITE / EDIT A SITE
+.SS ADD A SITE / EDIT A SITE
 .PP
 When selecting to add or edit a site, you will be presented with several
 fields where you can enter settings and parameters for your site.
@@ -659,7 +659,7 @@ Spread jobs use sections to match dirs together between sites, i.e.
 creating a section with the same name on different sites and then using
 that section in a spread job will result in the job operating in the
 specified section directory for each site.
-.SH GLOBAL OPTIONS
+.SS GLOBAL OPTIONS
 .PP
 Most global cbftp settings can be accessed by pressing G from the main
 screen.
@@ -750,7 +750,7 @@ Enable/Disable data file encryption - Change the encryption state of the
 data file.
 .IP \[bu] 2
 Change encryption key - Set a new encryption key for the data file.
-.SH TRANSFERS
+.SS TRANSFERS
 .PP
 The transfers screen is available by pressing \[aq]t\[aq] from the main
 screen.
@@ -758,7 +758,7 @@ this screen presents a summary of the transfers that cbftp is
 performing, and has performed previously.
 Select a transfer and press enter for detailed information about that
 specific transfer.
-.SH GLOBAL KEY BINDINGS
+.SS GLOBAL KEY BINDINGS
 .PP
 There are a few hotkeys that work from (almost) anywhere in the cbftp
 UI:
@@ -778,7 +778,7 @@ Usable in lists, tables etc where it might be hard to tell which items
 that are on the same line
 .PP
 They can be configured through the global options screen.
-.SH METRICS
+.SS METRICS
 .PP
 In the metrics screen, there are a few metrics shown as graphs:
 .IP \[bu] 2
@@ -796,7 +796,7 @@ once the CPU load shrinks.
 The idea is to avoid full load on the CPU since it results in latency
 when work is queued up, and slightly lower list frequency is often
 preferable over latency.
-.SH SPREAD JOB STATUS
+.SS SPREAD JOB STATUS
 .PP
 The spread job status screen has a table of files that might seem rather
 unintelligible at a glance.
@@ -847,7 +847,7 @@ uploading
 \f[V]S\f[R] - you are uploading and downloading this file
 .PP
 \f[V]p\f[R] - file exists and the site is download-only in this job
-.SH EXTERNAL SCRIPTS
+.SS EXTERNAL SCRIPTS
 .PP
 Cbftp can be configured to execute external scripts based on certain
 triggers.
@@ -874,13 +874,13 @@ An example script execution from there might have the following args:
 \f[V]<api-token> browse-site <site> <path> <selected-items>\f[R]
 .PP
 Example scripts are available in the examples directory.
-.SH OTHER UI WINDOWS
+.SS OTHER UI WINDOWS
 .PP
 There are various other views in the cbftp UI that are not mentioned
 here in this readme, but most are quite self-explanatory with the help
 of the key binding information found in the legend bar.
 You can probably figure it out.
-.SH FAQ
+.SS FAQ
 .PP
 Q: Why aren\[aq]t my IPv6 transfers working?
 .PP
@@ -1105,18 +1105,18 @@ source tree eventually.
 Q: Where can I donate to show my support for this awesome software?
 .PP
 A: No need, I mostly do this for my own amusement.
-.SH LICENSING
+.SS LICENSING
 .PP
 CBFTP is distributed under an Open Source license.
 See the file LICENSE in the CBFTP source distribution for information on
 terms & conditions for accessing and otherwise using CBFTP and for a
 DISCLAIMER OF ALL WARRANTIES.
-.SH BUGS
+.SS BUGS
 .PP
 Submit bug reports online at:
 .PP
 <https://github.com/doctorfree/Asciiville/issues>
-.SH SEE ALSO
+.SS SEE ALSO
 .PP
 \f[B]asciiart\f[R](1), \f[B]asciimpplus\f[R](1),
 \f[B]asciiplasma\f[R](1), \f[B]asciisplash\f[R](1),

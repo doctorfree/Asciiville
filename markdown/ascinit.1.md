@@ -5,13 +5,13 @@ header: User Manual
 footer: ascinit 1.0.1
 date: May 04, 2022
 ---
-# NAME
+## NAME
 ascinit - Asciiville initialization script
 
-# SYNOPSIS
+## SYNOPSIS
 **ascinit** [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-t] [-u]
 
-# DESCRIPTION
+## DESCRIPTION
 The *ascinit* command should be run as a normal user with `sudo` privilege
 after installing Asciiville. It performs several configuration initializations
 for the user. These include:
@@ -37,7 +37,7 @@ without graphical capabilities then execute the command `ascinit -c`
 rather than `ascinit`. When invoked with the `-c` option the `ascinit`
 command will not install the terminal emulators or create the terminal profiles.
 
-# COMMAND LINE OPTIONS
+## COMMAND LINE OPTIONS
 **-a**
 : indicates do not ask to play an animation when done
 
@@ -68,21 +68,21 @@ command will not install the terminal emulators or create the terminal profiles.
 **-u**
 : indicates display this usage message and exit
 
-# AUTHORS
+## AUTHORS
 Written by Ronald Record github@ronrecord.com
 
-# LICENSING
+## LICENSING
 ASCINIT is distributed under an Open Source license.
 See the file LICENSE in the ASCINIT source distribution
 for information on terms &amp; conditions for accessing and
 otherwise using ASCINIT and for a DISCLAIMER OF ALL WARRANTIES.
 
-# BUGS
+## BUGS
 Submit bug reports online at:
 
 https://github.com/doctorfree/Asciiville/issues
 
-# SEE ALSO
+## SEE ALSO
 **asciiart**(1), **asciimpplus**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1), **asciiville**(1)
 
 Full documentation and sources at:

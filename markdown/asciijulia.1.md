@@ -5,19 +5,19 @@ header: User Manual
 footer: asciijulia 1.0.0
 date: March 27, 2022
 ---
-# NAME
+## NAME
 asciijulia - Display an ASCIImatics animated zoom on a Julia Set
 
-# SYNOPSIS
+## SYNOPSIS
 **asciijulia** [-h] [-d] [-i] [-a AUDIO] [-c CYCLE] [-x XVALUE] [-y YVALUE]
 
-# DESCRIPTION
+## DESCRIPTION
 The *asciijulia* command plays one of the ASCIImatics animations included in
 Asciiville. Command line options can be used to tell *asciijulia* to play
 animations for a specified number of cycles, what complex number to use as the
 starting point for calculations, and which audio file to use as accompaniment.
 
-# COMMAND LINE OPTIONS
+## COMMAND LINE OPTIONS
 **-h, --help**
 : show this help message and exit
 
@@ -39,7 +39,7 @@ starting point for calculations, and which audio file to use as accompaniment.
 **-y YVALUE, --yvalue YVALUE**
 : starting y value of 'c' for the Julia set
 
-# EXAMPLES
+## EXAMPLES
 **asciijulia**
 : Without options asciijulia will display an animated zoom on a Julia Set. These will continue until the 'q' key is pressed.
 
@@ -52,21 +52,21 @@ starting point for calculations, and which audio file to use as accompaniment.
 **asciijulia -x 0.687 -y 0.312**
 : Display an animated zoom on the Julia Set with starting complex coordinates [0.687, 0.312]
 
-# AUTHORS
+## AUTHORS
 Written by Ronald Record github@ronrecord.com
 
-# LICENSING
+## LICENSING
 ASCIIJULIA is distributed under an Open Source license.
 See the file LICENSE in the ASCIIJULIA source distribution
 for information on terms &amp; conditions for accessing and
 otherwise using ASCIIJULIA and for a DISCLAIMER OF ALL WARRANTIES.
 
-# BUGS
+## BUGS
 Submit bug reports online at:
 
 https://github.com/doctorfree/Asciiville/issues
 
-# SEE ALSO
+## SEE ALSO
 **asciimpplus**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1), **asciiville**(1)
 
 Full documentation and sources at:
