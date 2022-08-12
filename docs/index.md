@@ -1,7 +1,7 @@
 (index)=
 
 ```{include} ../README.md
-:end-before: "## Table of contents"
+:end-before: "## Overview"
 ```
 
 ```{toctree}
@@ -10,10 +10,10 @@
 :hidden:
 :titlesonly:
 
-about
+Overview <about>
 Readme <readme>
 quickstart
-installation
+Installation <installation>
 configuration
 ```
 
@@ -31,5 +31,7 @@ reference/index
 
 Contributing <contributing>
 History <history>
+Releases <https://github.com/doctorfree/Asciiville/releases>
+Release Notes <relnotes>
 GitHub <https://github.com/doctorfree/Asciiville>
 ```
