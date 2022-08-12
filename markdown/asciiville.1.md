@@ -5,16 +5,16 @@ header: User Manual
 footer: asciiville 1.0.0
 date: April 16, 2022
 ---
-# NAME
+## NAME
 asciiville - Launch a terminal emulator and specified character based command, ascii art, asciimatics animation, character based Email/FTP/File/Web clients,
 and character based utilities
 
-# SYNOPSIS
+## SYNOPSIS
 **asciiville** [-a] [-A] [-b] [-c command] [-C] [-d] [-D delay] [-E len] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1 [file2 ...]]
 
 Invoked without any arguments or with the `-i` argument, `asciiville` displays an interactive dialog menu.
 
-# DESCRIPTION
+## DESCRIPTION
 The *asciiville* command acts as a front-end for launching character based utilities and ascii art in various terminal emulators. Asciiville can be used to launch any specified character based command. Command line options also support running the *asciiville* window in a tmux session and recording that session using *asciinema*.
 
 The `asciiville` command can be used to display Ascii Art either as a slideshow or interactively. For example:
@@ -72,7 +72,7 @@ Previously started tmux sessions and asciimatics scripts can be quickly and easi
 
 Asciiville preferences are maintained in `$HOME/.config/asciiville/config`. Preferences set in interactive menu mode are preserved over invocations of `asciiville`. For example, if a command and terminal were selected in interactive menu mode then those selections will automatically be applied the next time `asciiville` is run.
 
-# CONFIGURATION
+## CONFIGURATION
 
 The `asciiville` command initializes some configuration settings by reading the file `$HOME/.config/asciiville/config`. These are user configurable and saved each time the `asciiville` command exits. A sample Asciiville configuration file is provided below. In this sample configuration the *ARTDIR* is set to `/usr/share/asciiville/art`, the default Asciiville Ascii Art galleries folder. To change the Ascii Art galleries folder, modify this setting. For example, to change where `asciiville` looks for Ascii Art galleries, this setting could be modified to:
 
@@ -116,7 +116,7 @@ revlong='WMZO0QLCJUYXzcvun1il;:,^.. '
 longchars=' ..^,:;li1nuvczXYUJCLQ0OZMW'
 ```
 
-# SELECTING FILES AND FOLDERS
+## SELECTING FILES AND FOLDERS
 
 In interactive menu mode, **asciiville** may prompt for the selection of ascii art file(s) and folders. The **asciiville** command utilizes the **ranger** file manager command for file and folder selection.
 
@@ -124,7 +124,7 @@ Choosing a directory in Ranger is done by visiting a directory. Use the arrow ke
 
 Choosing a file in Ranger is done by visiting a directory and selecting a file. Use the arrow keys to browse folders. Press 'Enter' or 'Right Arrow' to enter a directory and 'Left Arrow' to go back up a directory. While in a directory, use the arrow keys to navigate to the file you wish to select. To select a single file, press 'Enter' when the file is highlighted. To select multiple files, press 'Space' and navigate to another file. All files selected with 'Space' will be added to your selections when you press 'Enter' on a selected file to complete the selection process.
 
-# COMMAND LINE OPTIONS
+## COMMAND LINE OPTIONS
 
 *Terminal/Command options:*
 
@@ -266,7 +266,7 @@ and need not specify the filename suffix. For example:
 
 Invoked without any arguments, **asciiville** will display an interactive menu
 
-# EXAMPLES
+## EXAMPLES
 **asciiville**
 : Launches `asciiville` in interactive mode with menu selections controlling actions rather than command line arguments, Btop System Monitor is the default command
 
@@ -327,21 +327,21 @@ Invoked without any arguments, **asciiville** will display an interactive menu
 **asciiville -S -j -a**
 : Launch `asciisplash` displaying the Julia Set asciimatics animation with audio
 
-# AUTHORS
+## AUTHORS
 Written by Ronald Record github@ronrecord.com
 
-# LICENSING
+## LICENSING
 ASCIIVILLE is distributed under an Open Source license.
 See the file LICENSE in the ASCIIVILLE source distribution
 for information on terms &amp; conditions for accessing and
 otherwise using ASCIIVILLE and for a DISCLAIMER OF ALL WARRANTIES.
 
-# BUGS
+## BUGS
 Submit bug reports online at:
 
 https://github.com/doctorfree/Asciiville/issues
 
-# SEE ALSO
+## SEE ALSO
 **asciiart**(1), **asciijulia**(1), **asciimpplus**(1), **asciinema**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1), **btop**(1), **cbftp**(1), **ddgr**(1), **jp2a**(1), **lynx**(1), **mutt**(1), **ranger**(1), **show_moon**(1), **show_weather**(1)
 
 Full documentation and sources at:
