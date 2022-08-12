@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-# Asciiville-1.4.1r1 (2022-06-08)
+## Asciiville-1.4.1r1 (2022-06-08)
 
 * Zoomable display of ascii art
 * Center ascii art in zoom/browse mode
@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
 * Add support for centering borderless ascii art
 * Add sample irssi config
 
-# Asciiville-1.4.0r3 (2022-05-31)
+## Asciiville-1.4.0r3 (2022-05-31)
 
 * Manual installation and removal for non-Debian/RPM Linux systems
 * Improved Ascii Art display features
@@ -28,7 +28,7 @@ All notable changes to this project will be documented in this file.
 * Add per-gallery config file support
 * Add Vintage ascii art gallery
 
-# Asciiville-1.4.0r2 (2022-05-24)
+## Asciiville-1.4.0r2 (2022-05-24)
 
 * Better support for console-only deployments
 * Console-based mailcap configs used with `ascinit -c`
@@ -44,7 +44,7 @@ All notable changes to this project will be documented in this file.
 * View individual ascii art via command line
 * Compress ascii art files
 
-# Asciiville-1.4.0r1 (2022-05-17)
+## Asciiville-1.4.0r1 (2022-05-17)
 
 * Add manual installation script for non Debian/RPM systems
 * Support for xfce4-terminal slideshows with FIFO
@@ -67,7 +67,7 @@ All notable changes to this project will be documented in this file.
 * Use architecture in distribution filenames
 * Add menu for generating and viewing ascii art
 
-# Asciiville-1.3.1r2 (2022-05-06)
+## Asciiville-1.3.1r2 (2022-05-06)
 
 * W3M configuration with support for acting as a Markdown pager
 * Mailcap and MIME type enhancements for NeoMutt, Mutt, and W3M
@@ -85,7 +85,7 @@ All notable changes to this project will be documented in this file.
 * Create and check initialization file in asciiville
 * Add selection menu for command and terminal, add select song option
 
-# Asciiville-1.3.1r1 (2022-05-01)
+## Asciiville-1.3.1r1 (2022-05-01)
 
 * Create armhf architecture Debian format package for Raspberry Pi installs
 * With no arguments asciiville brings up a menu
@@ -121,7 +121,7 @@ All notable changes to this project will be documented in this file.
 * Option to play audio during slideshow
 * Create 'Asciiville' profile for Tilix and gnome-terrminal in `ascinit`
 
-# Asciiville-1.3.0r1 (2022-04-20)
+## Asciiville-1.3.0r1 (2022-04-20)
 
 Initial release with support for:
 

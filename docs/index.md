@@ -11,10 +11,16 @@
 :titlesonly:
 
 about
-readme
+Readme <readme>
 quickstart
 installation
 configuration
+```
+
+```{toctree}
+:caption: Reference
+:hidden:
+:titlesonly:
 reference/index
 ```
 
@@ -23,7 +29,7 @@ reference/index
 :hidden:
 :titlesonly:
 
-contributing
-history
+Contributing <contributing>
+History <history>
 GitHub <https://github.com/doctorfree/Asciiville>
 ```
