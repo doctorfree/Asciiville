@@ -6,6 +6,7 @@
 
 ```{toctree}
 :maxdepth: 3
+:hidden:
 
 about
 readme
@@ -17,6 +18,7 @@ reference/index
 
 ```{toctree}
 :caption: Project
+:hidden:
 
 contributing
 history
