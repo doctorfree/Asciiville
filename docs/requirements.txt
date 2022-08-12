@@ -3,3 +3,4 @@
 
 sphinx >= 3.2
 myst-parser >= 0.12.7
+docutils >= 0.17
