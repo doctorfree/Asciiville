@@ -5,8 +5,10 @@
 ```
 
 ```{toctree}
+:caption: Navigation
 :maxdepth: 2
-:includehidden:
+:hidden:
+:titlesonly:
 
 about
 readme
@@ -19,6 +21,7 @@ reference/index
 ```{toctree}
 :caption: Project
 :hidden:
+:titlesonly:
 
 contributing
 history
