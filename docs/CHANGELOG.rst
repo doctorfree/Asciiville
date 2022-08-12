@@ -1,3 +1,6 @@
+Changelog
+=========
+
 Source:
 ```{literalinclude} ../CHANGELOG.md
 :language: md
