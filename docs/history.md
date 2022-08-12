@@ -1,0 +1,4 @@
+(history)=
+
+```{include} ../CHANGELOG.md
+```
