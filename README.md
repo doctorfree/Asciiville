@@ -993,6 +993,8 @@ be logged in.
 
 ## Documentation
 
+**[NEW:]** Asciiville documentation is now available on [Read the Docs](https://asciiville.readthedocs.io/en/latest/index.html)
+
 All Asciiville commands have manual pages. Execute `man <command-name>`
 to view the manual page for a command. The `asciiville` frontend is the primary
 user interface for Asciiville and the manual page for `asciiville` can be
