@@ -2,7 +2,7 @@
 
 (commands)=
 
-# Command Reference
+# Man Pages
 
 ```{include} ../../README.md
 :start-after: "### Man Pages"

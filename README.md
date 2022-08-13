@@ -1030,7 +1030,7 @@ bring up the interactive menu interface.
 - [**asciiplasma**](markdown/asciiplasma.1.md) : asciimatics animation with Plasma effect
 - [**asciisplash-tmux**](markdown/asciisplash-tmux.1.md) : Asciiville asciimatics animations in a tmux session
 - [**asciisplash**](markdown/asciisplash.1.md) : Asciiville asciimatics animations
-- [**mpcinit**](markdown/mpcinit.1.md) : Asciiville initialization
+- [**ascinit**](markdown/ascinit.1.md) : Asciiville initialization
 - [**btop**](markdown/btop.1.md) : Asciiville system monitor
 - [**cbftp**](markdown/cbftp.1.md) : Asciiville FTP client
 - [**show_ascii_art**](markdown/show_ascii_art.1.md) : Display ascii art, convert images to ascii art
