@@ -47,4 +47,4 @@ RoonCommandLine <https://github.com/doctorfree/RoonCommandLine#readme>
 More <https://github.com/doctorfree>
 ```
 
-<iframe src="https://github.com/sponsors/doctorfree/card" title="Sponsor doctorfree" height="300" width="800" style="border: 0;"></iframe>
+<iframe src="https://github.com/sponsors/doctorfree/card" title="Sponsor doctorfree" height="256" width="700" style="border: 0;"></iframe>

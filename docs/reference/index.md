@@ -4,6 +4,11 @@
 
 # Command Reference
 
+```{include} ../../README.md
+:start-after: "### Man Pages"
+:end-before: "### Usage"
+```
+
 ```{toctree}
 :caption: Command Reference
 :maxdepth: 1
