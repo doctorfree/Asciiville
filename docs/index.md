@@ -16,16 +16,10 @@ quickstart
 Installation <installation>
 configuration
 Usage <usage>
+Man Pages <reference/index>
 Examples <examples>
 Adding an Ascii Art Gallery <gallery>
 Ascii Art History <https://github.com/doctorfree/Asciiville/wiki/Ascii-Art-History>
-```
-
-```{toctree}
-:caption: Command Reference
-:hidden:
-:titlesonly:
-reference/index
 ```
 
 ```{toctree}
@@ -53,4 +47,4 @@ RoonCommandLine <https://github.com/doctorfree/RoonCommandLine#readme>
 More <https://github.com/doctorfree>
 ```
 
-<iframe src="https://github.com/sponsors/doctorfree/card" title="Sponsor doctorfree" height="225" width="600" style="border: 0;"></iframe>
+<iframe src="https://github.com/sponsors/doctorfree/card" title="Sponsor doctorfree" height="300" width="800" style="border: 0;"></iframe>
