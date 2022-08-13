@@ -1,4 +1,8 @@
-(index)=
+(reference)=
+
+(commands)=
+
+# Command Reference
 
 ```{toctree}
 :caption: Command Reference
@@ -6,13 +10,13 @@
 :hidden:
 :titlesonly:
 
+Asciiville <asciiville>
 Asciiart <asciiart>
 Asciijulia <asciijulia>
 Asciimpplus <asciimpplus>
 Asciiplasma <asciiplasma>
 Asciisplash-tmux <asciisplash-tmux>
 Asciisplash <asciisplash>
-Asciiville <asciiville>
 Ascinit <ascinit>
 Btop <btop>
 Cbftp <cbftp>
