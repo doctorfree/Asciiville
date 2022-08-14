@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## Asciiville-1.4.1r2 (2022-08-15)
+
+* Add Sphinx documentation for Asciiville docs on Read the Docs
+* Add installation of rich-cli rich command in ascinit
+* Add color display option to show_endo
+* Add show_endo to display ascii fluid dynamics simulations
+* Add endoh1 fluid dynamics ascii animation and build
+* Add Webb telescope images, add tmux plugin manager
+
 ## Asciiville-1.4.1r1 (2022-06-08)
 
 * Zoomable display of ascii art

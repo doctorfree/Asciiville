@@ -1117,9 +1117,23 @@ fi
   RANDOM=$$$(date +%s)
 
   LARGE_FONT=${largefonts[ $RANDOM % ${#largefonts[@]} ]}
-  [ -r "${FIG_FONTS}/${LARGE_FONT}.flf" ] || LARGE_FONT="Standard"
+  [ -r "${FIG_FONTS}/${LARGE_FONT}.flf" ] || {
+    if [ -r "${FIG_FONTS}/Standard.flf" ]
+    then
+      LARGE_FONT="Standard"
+    else
+      LARGE_FONT="standard"
+    fi
+  }
   SMALL_FONT=${smallfonts[ $RANDOM % ${#smallfonts[@]} ]}
-  [ -r "${FIG_FONTS}/${SMALL_FONT}.flf" ] || SMALL_FONT="Standard"
+  [ -r "${FIG_FONTS}/${SMALL_FONT}.flf" ] || {
+    if [ -r "${FIG_FONTS}/Standard.flf" ]
+    then
+      SMALL_FONT="Standard"
+    else
+      SMALL_FONT="standard"
+    fi
+  }
 }
 
 clear

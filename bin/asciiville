@@ -429,7 +429,14 @@ select_font() {
       done
     }
   }
-  [ -r "${FIG_FONTS}/${USE_FONT}.flf" ] || USE_FONT="Standard"
+  [ -r "${FIG_FONTS}/${USE_FONT}.flf" ] || {
+    if [ -r "${FIG_FONTS}/Standard.flf" ]
+    then
+      USE_FONT="Standard"
+    else
+      USE_FONT="standard"
+    fi
+  }
 
   goBig=
   for font in "${smallfonts[@]}"

@@ -50,14 +50,14 @@ Install the package on Debian based systems by executing the commands:
 
 ```bash
 sudo apt update -y
-sudo apt install ./Asciiville_1.4.1-1.amd64.deb
+sudo apt install ./Asciiville_1.4.1-2.amd64.deb
 ```
 
 or, on a Raspberry Pi:
 
 ```bash
 sudo apt update -y
-sudo apt install ./Asciiville_1.4.1-1.armhf.deb
+sudo apt install ./Asciiville_1.4.1-2.armhf.deb
 ```
 
 ### RPM based installation
@@ -65,7 +65,7 @@ sudo apt install ./Asciiville_1.4.1-1.armhf.deb
 Install the package on RPM based systems by executing the command
 ```bash
 sudo dnf update -y
-sudo dnf localinstall ./Asciiville-1.4.1-1.x86_64.rpm
+sudo dnf localinstall ./Asciiville-1.4.1-2.x86_64.rpm
 ```
 
 ### Manual installation
@@ -74,9 +74,9 @@ On systems for which neither the Debian or RPM packages will suffice, install ma
 
 ```bash
 chmod 755 Install-bin.sh
-sudo ./Install-bin.sh /path/to/Asciiville_1.4.1-1.<arch>.tgz
+sudo ./Install-bin.sh /path/to/Asciiville_1.4.1-2.<arch>.tgz
 or
-sudo ./Install-bin.sh /path/to/Asciiville_1.4.1-1.<arch>.zip
+sudo ./Install-bin.sh /path/to/Asciiville_1.4.1-2.<arch>.zip
 ```
 
 ## Configuration
@@ -126,6 +126,15 @@ sudo ./Uninstall-bin.sh
 Note that manual removal of Asciiville using the `Uninstall-bin.sh` script will not remove any of the dependencies manually installed above. Manual installation and removal of Asciiville is not as robust as packaged installation and removal. Hopefully additional platform packaging will be available in the future. If you would like to assist with this effort, see the ['Contributing' section of the Asciiville README](https://github.com/doctorfree/Asciiville#contributing).
 
 ## Changelog
+
+Version 1.4.1 release 2 adds support for:
+
+* Add Sphinx documentation for Asciiville docs on Read the Docs
+* Add installation of rich-cli rich command in ascinit
+* Add color display option to show_endo
+* Add show_endo to display ascii fluid dynamics simulations
+* Add endoh1 fluid dynamics ascii animation and build
+* Add Webb telescope images, add tmux plugin manager
 
 Version 1.4.1 release 1 adds support for:
 
