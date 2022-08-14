@@ -744,6 +744,7 @@ goodbye() {
       figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Ascii Art !"
     fi
     sleep $((delay / 2))
+    clear
     [ "${set_font_size}" ] && termprofset ${termarg} -R
   }
 }
