@@ -1,0 +1,52 @@
+post_install() {
+  grep ^games: /etc/group > /dev/null || {
+    groupadd games
+  }
+  id games &>/dev/null || {
+    useradd -r -c "Games pseudo-user" -g games -d /opt/games -s /bin/false games
+  }
+  chown games /usr/games/bin/nethack
+  chgrp games /usr/games/bin/nethack
+  chmod 04755 /usr/games/bin/nethack
+  ln -r -s /usr/games/bin/nethack /usr/games/nethack
+
+  chown games /usr/games/lib/ninvaders
+  chgrp games /usr/games/lib/ninvaders
+  chmod 0755 /usr/games/lib/ninvaders
+  touch /usr/games/lib/ninvaders/highscore
+  chown games /usr/games/lib/ninvaders/highscore
+  chgrp games /usr/games/lib/ninvaders/highscore
+  chmod 0664 /usr/games/lib/ninvaders/highscore
+
+  chown games /usr/games/bin/ninvaders
+  chgrp games /usr/games/bin/ninvaders
+  chmod 04755 /usr/games/bin/ninvaders
+  ln -r -s /usr/games/bin/ninvaders /usr/games/ninvaders
+
+  chown games /usr/games/bin/tetris
+  chgrp games /usr/games/bin/tetris
+  chmod 04755 /usr/games/bin/tetris
+  ln -r -s /usr/games/bin/tetris /usr/games/tetris
+  chown games /usr/games/bin/gameserver
+  chgrp games /usr/games/bin/gameserver
+  chmod 04755 /usr/games/bin/gameserver
+  ln -r -s /usr/games/bin/gameserver /usr/games/gameserver
+
+  touch /usr/games/var/tetris-hiscores
+  chown games /usr/games/var/tetris-hiscores
+  chgrp games /usr/games/var/tetris-hiscores
+  chmod 0664 /usr/games/var/tetris-hiscores
+  printf "%b\n" "${ascin}"
+}
+
+read -d '' ascin <<'EOF'
+Perform the following post-installation initialization:
+  - Run the 'ascinit' command as your normal user (REQUIRED)
+  - On a Linux console or system without graphical display run `ascinit -c`
+
+Optionally:
+  - Initialize the command line Twitter client by running `rainbowstream`
+  - Configure character-based utilities (see the Asciiville README below)
+
+View details at https://github.com/doctorfree/Asciiville#readme
+EOF

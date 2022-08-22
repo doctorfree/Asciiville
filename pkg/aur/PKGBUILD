@@ -1,0 +1,269 @@
+# Maintainer: Ronald Record <ronaldrecord@gmail.com>
+# Contributor: Aristocratos (jakob@qvantnet.com)
+# Contributor: Sankalp Gulati <sankalp.gulati@upf.edu>
+# Contributor: Bruno T. C. de Oliveira <brunotc@gmail.com>
+# Contributor: Peep Pullerits <solicit@estprog.ee>
+# Contributor: Praveen Kurup <praveen_kurup@jasubhai.com>
+# Contributor: Gerfried Fuchs <alfie@ist.org>
+# Contributor: Arun Prakash Jana <engineerarun@gmail.com>
+# Contributor: Christian Stigen Larsen
+# Contributor: Christoph Raitzig <chris-r@posteo.net>
+# Contributor: Alex Kompel <shurikk@pacbell.net>
+# Contributor: Erik Andersen <andersee@debian.org>
+# Contributor: Scott R. Turner <srt@ucla>
+# Contributor: Anthony Taylor <tonyt@ptialaska.net>
+# Contributor: Patric Mueller <bhaak@gmx.net>
+# Contributor: Warwick W. Allison <warwick@troll.no>
+# Contributor: Alexander Hollinger <alexander.hollinger@gmx.net>
+# Contributor: Sebastian Gutsfeld  <segoh@gmx.net>
+
+# Get the version and release from the VERSION file
+# Move to use of pkgver() function with something like this:
+#   git describe --long | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
+#
+if [ -f VERSION ]
+then
+  . ./VERSION
+else
+  [ "${SRC}" ] || SRC="${HOME}/src/Asciiville"
+  if [ -f ${SRC}/VERSION ]
+  then
+    . ${SRC}/VERSION
+  else
+    VERSION=2.0.1
+    RELEASE=2
+  fi
+fi
+
+pkgname=asciiville
+pkgver=$VERSION
+pkgrel=$RELEASE
+pkgdesc="Create and display ASCII Art, animations. Utilities to perform common operations in a character-based environment. Asciiville includes nearly 1,000 works of ASCII Art"
+arch=('x86_64' 'armv7h')
+url="https://github.com/doctorfree/Asciiville"
+license=('MIT')
+depends=(util-linux boost-libs libcurl-compat ncurses readline figlet tmux python python-pip mplayer dconf w3m ranger jq asciinema speedtest-cli neofetch newsboat ImageMagick libjpeg-turbo libpng cmatrix gnupg pandoc urlscan khard git)
+makedepends=(cmake pandoc zip jdk flex bison libncurses5-dev autotools-dev libjpeg-dev libpng-dev libcurl4-gnutls-dev libncurses5-dev autoconf-archive pkg-config)
+optdepends=('cool-retro-term: cool retro terminal emulator')
+install=asciiville.install
+source=("${pkgname}::git+https://github.com/doctorfree/Asciiville.git")
+sha256sums=('SKIP')
+options=(strip docs !libtool !staticlibs emptydirs zipman purge !debug !lto)
+
+prepare() {
+  cd "${srcdir}/${pkgname}"
+}
+
+build() {
+  cd "${srcdir}/${pkgname}"
+  cd aewan
+  ./configure --prefix=/usr
+  make
+  cd ..
+
+  cd btop
+  make distclean
+  make STATIC=true STRIP=true
+  chmod +x bin/btop
+  cd ..
+
+  cd cbftp
+  make clean
+  make
+  chmod +x bin/*
+  cd ..
+
+  cd endoh1
+  make clobber
+  make everything
+  chmod +x endoh1 endoh1_color
+  cd ..
+
+  cd jp2a
+  autoreconf -vi
+  ./configure --prefix=/usr --enable-curl --enable-termlib
+  make clean
+  make -j
+  chmod +x src/jp2a
+  cd ..
+
+  cd games/nethack
+  ./configure --prefix=/usr/games \
+              --with-owner=games \
+              --with-group=games \
+              --enable-wizmode=doctorwhen
+  make
+  cd ../..
+
+  cd games/ninvaders
+  cmake -B cmake_build
+  cmake --build cmake_build -j2
+  cd ../..
+
+  cd games/tetris
+  [ -f tetris ] || {
+    ./configure.sh --prefix=/usr/games --enable-xlib=no --enable-curses=yes
+    make
+    make gameserver
+  }
+  cd ../..
+}
+
+package() {
+  cd "${srcdir}/${pkgname}"
+  destdir=usr
+
+  for dir in "${destdir}" "${destdir}/share" "${destdir}/share/man" \
+      "${destdir}/share/applications" "${destdir}/share/doc" \
+      "${destdir}/share/doc/${pkgname}" "${destdir}/share/btop" \
+      "${destdir}/share/${pkgname}" "${destdir}/games" "${destdir}/games/bin" \
+      "${destdir}/games/lib" "${destdir}/games/lib/ninvaders" \
+      "${destdir}/games/share" "${destdir}/games/share/doc" \
+      "${destdir}/games/share/doc/tetris" \
+      "${destdir}/games/share/pixmaps" \
+      "${destdir}/games/share/applications"
+  do
+    [ -d ${pkgdir}/${dir} ] || mkdir ${pkgdir}/${dir}
+  done
+
+  for dir in bin
+  do
+    [ -d ${pkgdir}/${destdir}/${dir} ] && rm -rf ${pkgdir}/${destdir}/${dir}
+  done
+
+  cp -a bin ${pkgdir}/${destdir}/bin
+  cp btop/bin/btop ${pkgdir}/${destdir}/bin/btop
+  cp cbftp/bin/* ${pkgdir}/${destdir}/bin
+  cp ddgr/ddgr ${pkgdir}/${destdir}/bin/ddgr
+  cp jp2a/src/jp2a ${pkgdir}/${destdir}/bin/jp2a
+  cp aewan/aewan ${pkgdir}/${destdir}/bin/aewan
+  cp aewan/aecat ${pkgdir}/${destdir}/bin/aecat
+  cp aewan/aemakeflic ${pkgdir}/${destdir}/bin/aemakeflic
+
+  cp -a endoh1 ${pkgdir}/${destdir}/share/${pkgname}/endoh1
+
+  cp -a share/doc ${pkgdir}/${destdir}/share/doc
+
+  # Revised NetHack install using UnNetHack mods
+  cd games/nethack
+  make destdir=${pkgdir} install
+  cp dat/license ${pkgdir}/${destdir}/games/share/nethack/license
+  cd doc
+  make destdir=${pkgdir} manpages
+  cd ../..
+
+  cp ninvaders/LICENSE ${pkgdir}/${destdir}/games/lib/ninvaders
+  cp ninvaders/README.md ${pkgdir}/${destdir}/games/lib/ninvaders
+
+  cp ninvaders/cmake_build/ninvaders ${pkgdir}/${destdir}/games/bin
+
+  # Tetris
+  cp tetris/tetris ${pkgdir}/${destdir}/games/bin
+  cp tetris/gameserver ${pkgdir}/${destdir}/games/bin
+
+  cp tetris/licence.txt ${pkgdir}/${destdir}/games/share/doc/tetris
+  cp tetris/README ${pkgdir}/${destdir}/games/share/doc/tetris
+  cp tetris/INSTALL ${pkgdir}/${destdir}/games/share/doc/tetris
+  cp tetris/tetris.xpm ${pkgdir}/${destdir}/games/share/pixmaps
+  cp tetris/tetris.desktop ${pkgdir}/${destdir}/games/share/applications
+  cd ..
+
+  cp *.desktop "${pkgdir}/${destdir}/share/applications"
+  cp -a conf/console ${pkgdir}/${destdir}/share/${pkgname}/console
+  cp -a conf/got ${pkgdir}/${destdir}/share/${pkgname}/got
+  cp -a conf/jrnl ${pkgdir}/${destdir}/share/${pkgname}/jrnl
+  cp -a conf/khard ${pkgdir}/${destdir}/share/${pkgname}/khard
+  cp -a conf/mutt ${pkgdir}/${destdir}/share/${pkgname}/mutt
+  cp -a conf/mutt_multiple ${pkgdir}/${destdir}/share/${pkgname}/mutt_multiple
+  cp -a conf/neomutt ${pkgdir}/${destdir}/share/${pkgname}/neomutt
+  cp -a conf/newsboat ${pkgdir}/${destdir}/share/${pkgname}/newsboat
+  cp -a conf/w3m ${pkgdir}/${destdir}/share/${pkgname}/w3m
+  cp -a conf/tuir ${pkgdir}/${destdir}/share/${pkgname}/tuir
+  cp conf/tmux.conf ${pkgdir}/${destdir}/share/${pkgname}
+  cp conf/rifle.conf ${pkgdir}/${destdir}/share/${pkgname}
+  cp conf/rainbow_config.json ${pkgdir}/${destdir}/share/${pkgname}
+  cp copyright ${pkgdir}/${destdir}/share/doc/${pkgname}
+  cp LICENSE ${pkgdir}/${destdir}/share/doc/${pkgname}
+  cp NOTICE ${pkgdir}/${destdir}/share/doc/${pkgname}
+  cp CHANGELOG.md ${pkgdir}/${destdir}/share/doc/${pkgname}
+  cp README.md ${pkgdir}/${destdir}/share/doc/${pkgname}
+  pandoc -f gfm README.md | tee ${pkgdir}/${destdir}/share/doc/${pkgname}/README.html > /dev/null
+  cp VERSION ${pkgdir}/${destdir}/share/doc/${pkgname}
+  cp ddgr/README.md ${pkgdir}/${destdir}/share/doc/${pkgname}/README-ddgr.md
+  cp btop/README.md ${pkgdir}/${destdir}/share/doc/${pkgname}/README-btop.md
+  cp btop/LICENSE ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSE-btop
+  cp btop/README.md ${pkgdir}/${destdir}/share/btop/README.md
+  cp btop/LICENSE ${pkgdir}/${destdir}/share/btop/LICENSE
+  cp -a btop/themes ${pkgdir}/${destdir}/share/btop/themes
+  cp btop/btop.desktop "${pkgdir}/${destdir}/share/applications"
+  mkdir -p ${pkgdir}/${destdir}/share/icons
+  mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor
+  mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor/48x48
+  mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor/48x48/apps
+  mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor/scalable
+  mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor/scalable/apps
+  cp btop/Img/icon.png "${pkgdir}/${destdir}/share/icons/hicolor/48x48/apps/btop.png"
+  cp btop/Img/icon.svg "${pkgdir}/${destdir}/share/icons/hicolor/scalable/apps/btop.svg"
+  cp cbftp/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-cbftp
+  cp cbftp/LICENSE ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSE-cbftp
+  cp jp2a/COPYING ${pkgdir}/${destdir}/share/doc/${pkgname}/COPYING-jp2a
+  cp jp2a/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-jp2a
+  cp jp2a/LICENSES ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSES-jp2a
+  cp games/tetris/licence.txt ${pkgdir}/${destdir}/share/doc/${pkgname}/license-tetris
+  cp games/tetris/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-tetris
+  gzip -9 ${pkgdir}/${destdir}/share/doc/${pkgname}/CHANGELOG.md
+
+  cp -a art "${pkgdir}/${destdir}/share/${pkgname}/art"
+  mv "${pkgdir}/${destdir}/share/${pkgname}/art/pics" \
+     "${pkgdir}/${destdir}/share/${pkgname}/pics"
+  cp -a music "${pkgdir}/${destdir}/share/${pkgname}/music"
+  cp -a tools "${pkgdir}/${destdir}/share/${pkgname}/tools"
+
+  gzip ${pkgdir}/${destdir}/share/${pkgname}/art/*/*.asc
+
+  cp -a man/man1 ${pkgdir}/${destdir}/share/man/man1
+  cp ddgr/ddgr.1 ${pkgdir}/${destdir}/share/man/man1
+  cp jp2a/man/jp2a.1 ${pkgdir}/${destdir}/share/man/man1
+  [ -d ${pkgdir}/${destdir}/share/man/man5 ] || {
+    mkdir -p ${pkgdir}/${destdir}/share/man/man5
+  }
+  cp aewan/man/man1/*.1 ${pkgdir}/${destdir}/share/man/man1
+  cp aewan/man/man5/*.5 ${pkgdir}/${destdir}/share/man/man5
+
+  [ -d ${pkgdir}/${destdir}/share/man/man6 ] || {
+    mkdir -p ${pkgdir}/${destdir}/share/man/man6
+  }
+  cp games/nethack/dat/license ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSE-nethack
+  cp games/nethack/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-nethack
+
+  cp -a share/menu "${pkgdir}/${destdir}/share/menu"
+  cp -a share/figlet-fonts "${pkgdir}/${destdir}/share/figlet-fonts"
+  cp -a share/neofetch-themes "${pkgdir}/${destdir}/share/neofetch-themes"
+
+  chmod 644 ${pkgdir}/${destdir}/share/man/*/*
+  chmod 644 ${pkgdir}/${destdir}/share/menu/*
+  chmod 644 ${pkgdir}/${destdir}/share/figlet-fonts/*
+  chmod 755 ${pkgdir}/${destdir}/bin/* \
+            ${pkgdir}/${destdir}/bin \
+            ${pkgdir}/${destdir}/share/menu \
+            ${pkgdir}/${destdir}/share/figlet-fonts \
+            ${pkgdir}/${destdir}/share/man \
+            ${pkgdir}/${destdir}/share/man/*
+  find ${pkgdir}/${destdir}/share/doc/${pkgname} -type d | while read dir
+  do
+    chmod 755 "${dir}"
+  done
+  find ${pkgdir}/${destdir}/share/doc/${pkgname} -type f | while read f
+  do
+    chmod 644 "${f}"
+  done
+  find ${pkgdir}/${destdir}/share/${pkgname} -type d | while read dir
+  do
+    chmod 755 "${dir}"
+  done
+  find ${pkgdir}/${destdir}/share/${pkgname} -type f | while read f
+  do
+    chmod 644 "${f}"
+  done
+  chmod 755 ${pkgdir}/${destdir}/share/${pkgname}/tools/bin/*
+}
