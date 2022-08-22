@@ -187,7 +187,8 @@ package() {
   cp NOTICE ${pkgdir}/${destdir}/share/doc/${pkgname}
   cp CHANGELOG.md ${pkgdir}/${destdir}/share/doc/${pkgname}
   cp README.md ${pkgdir}/${destdir}/share/doc/${pkgname}
-  pandoc -f gfm README.md | tee ${pkgdir}/${destdir}/share/doc/${pkgname}/README.html > /dev/null
+  pandoc -f gfm README.md | \
+    tee ${pkgdir}/${destdir}/share/doc/${pkgname}/README.html > /dev/null
   cp VERSION ${pkgdir}/${destdir}/share/doc/${pkgname}
   cp ddgr/README.md ${pkgdir}/${destdir}/share/doc/${pkgname}/README-ddgr.md
   cp btop/README.md ${pkgdir}/${destdir}/share/doc/${pkgname}/README-btop.md
@@ -202,14 +203,17 @@ package() {
   mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor/48x48/apps
   mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor/scalable
   mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor/scalable/apps
-  cp btop/Img/icon.png "${pkgdir}/${destdir}/share/icons/hicolor/48x48/apps/btop.png"
-  cp btop/Img/icon.svg "${pkgdir}/${destdir}/share/icons/hicolor/scalable/apps/btop.svg"
+  cp btop/Img/icon.png \
+    "${pkgdir}/${destdir}/share/icons/hicolor/48x48/apps/btop.png"
+  cp btop/Img/icon.svg \
+    "${pkgdir}/${destdir}/share/icons/hicolor/scalable/apps/btop.svg"
   cp cbftp/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-cbftp
   cp cbftp/LICENSE ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSE-cbftp
   cp jp2a/COPYING ${pkgdir}/${destdir}/share/doc/${pkgname}/COPYING-jp2a
   cp jp2a/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-jp2a
   cp jp2a/LICENSES ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSES-jp2a
-  cp games/tetris/licence.txt ${pkgdir}/${destdir}/share/doc/${pkgname}/license-tetris
+  cp games/tetris/licence.txt \
+    ${pkgdir}/${destdir}/share/doc/${pkgname}/license-tetris
   cp games/tetris/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-tetris
   gzip -9 ${pkgdir}/${destdir}/share/doc/${pkgname}/CHANGELOG.md
 
@@ -233,8 +237,10 @@ package() {
   [ -d ${pkgdir}/${destdir}/share/man/man6 ] || {
     mkdir -p ${pkgdir}/${destdir}/share/man/man6
   }
-  cp games/nethack/dat/license ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSE-nethack
-  cp games/nethack/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-nethack
+  cp games/nethack/dat/license \
+    ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSE-nethack
+  cp games/nethack/README \
+    ${pkgdir}/${destdir}/share/doc/${pkgname}/README-nethack
 
   cp -a share/menu "${pkgdir}/${destdir}/share/menu"
   cp -a share/figlet-fonts "${pkgdir}/${destdir}/share/figlet-fonts"
