@@ -10,7 +10,7 @@ asciiville - Launch a terminal emulator and specified character based command, a
 and character based utilities
 
 ## SYNOPSIS
-**asciiville** [-a] [-A] [-b] [-c command] [-C] [-d] [-D delay] [-E len] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1 [file2 ...]]
+**asciiville** [-a] [-A] [-b] [-c command] [-C] [-d] [-D delay] [-E len] [-f] [-F] [-g] [-i] [-I] [-jJ] [-kK] [-l] [-L level] [-m] [-M] [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1 [file2 ...]]
 
 Invoked without any arguments or with the `-i` argument, `asciiville` displays an interactive dialog menu.
 
@@ -68,7 +68,7 @@ When invoked with the `-i` option, `asciiville` presents a selection menu and op
 
 The interactive menu interface provides three types of menu options. Some menu selections trigger the execution of a command. Other menu selections are used to set the command that would be run when a terminal emulator is selected. Finally, some menu selections can be used to toggle preferences like *Fullscreen*, *Use Tmux*, and *Record Tmux Session*. Once a command and terminal type have been selected and desired options are set then the command can be executed by selecting the menu entry *Run <command> in <terminal name> Terminal*.
 
-Previously started tmux sessions and asciimatics scripts can be quickly and easily terminated by executing the `asciiville -k` command.
+Previously started tmux sessions and asciimatics scripts can be quickly and easily terminated by executing the `asciiville -K` command.
 
 Asciiville preferences are maintained in `$HOME/.config/asciiville/config`. Preferences set in interactive menu mode are preserved over invocations of `asciiville`. For example, if a command and terminal were selected in interactive menu mode then those selections will automatically be applied the next time `asciiville` is run.
 
@@ -145,6 +145,9 @@ Choosing a file in Ranger is done by visiting a directory and selecting a file. 
 
 **-I**
 : Indicates display system info
+
+**-k**
+: Indicates use kitty terminal emulator
 
 **-l**
 : Indicates use lynx as the default command
@@ -242,7 +245,7 @@ Choosing a file in Ranger is done by visiting a directory and selecting a file. 
 
 *General options:*
 
-**-k**
+**-K**
 : Indicates kill Asciiville tmux sessions and ASCIImatics scripts
 
 **-R**

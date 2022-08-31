@@ -1,0 +1,68 @@
+# Asciiville Kitty tabbed startup session
+#
+# Kitty tab with Bash shell
+new_tab Home
+title Home
+launch bash
+enabled_layouts tall:bias=50;full_size=1
+layout tall
+
+# Kitty tab with Bash shell in Asciiville source directory
+# new_tab Asciiville
+# title Asciiville
+# cd ~/src/Asciiville
+# launch bash
+# enabled_layouts tall:bias=50;full_size=1
+# layout tall 
+
+# Kitty tab with Bash shell in MusicPlayerPlus source directory
+# new_tab MusicPlayerPlus
+# title MusicPlayerPlus
+# cd ~/src/MusicPlayerPlus
+# launch bash
+# enabled_layouts tall:bias=50;full_size=1
+# layout tall 
+
+# Kitty tab with Asciiville interactive menu system
+# new_tab Ascii Menu
+# title Ascii Menu
+# cd ~
+# launch bash -c 'asciiville'
+# enabled_layouts tall:bias=50;full_size=1
+# layout tall 
+
+# Kitty tab with MusicPlayerPlus interactive menu system
+# new_tab Music Menu
+# title Music Menu
+# cd ~
+# launch bash -c 'mpplus -i'
+# enabled_layouts tall:bias=50;full_size=1
+# layout tall 
+
+# Create a window and run the specified command in it
+# launch bash
+# Create a window with some environment variables set and run
+# vim in it
+# launch env FOO=BAR vim
+# Set the title for the next window
+# title Chat with x
+# launch irssi --profile x
+
+# Create a new tab (the part after new_tab is the optional tab
+# name which will be displayed in the tab bar, if omitted, the
+# title of the active window will be used instead)
+# new_tab my tab
+# cd ~/somewhere
+# Set the layouts allowed in this tab
+# enabled_layouts tall, stack
+# Set the current layout
+# layout stack
+# launch bash
+
+# Create a new OS window
+# new_os_window
+# set new window size to 80x25 cells
+# os_window_size 80c 25c
+# launch sh
+# Make the current window the active (focused) window
+# focus

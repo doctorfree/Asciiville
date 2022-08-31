@@ -158,9 +158,10 @@ Integration is provided for:
 * [tmux](https://github.com/tmux/tmux/wiki), a terminal multiplexer
 * [wttr.in](https://github.com/chubin/wttr.in), console-oriented weather report
 * Enhanced key bindings for extended control of terminal windows
-* Several terminal emulators
+* Support for several terminal emulators
     * xfce4-terminal
     * gnome-terminal
+    * kitty
     * tilix
     * cool-retro-term
 * [MusicPlayerPlus](https://github.com/doctorfree/MusicPlayerPlus#readme), character based suite of commands to manage music server and player
@@ -270,8 +271,10 @@ several commands may also be installed as dependencies. These include:
 * **urlscan** : scan for urls in a message
 * **w3m** : text-based web browser
 
-Finally, several terminal emulators are installed during Asciiville
-initialization unless initialization is performed with `ascinit -c`:
+The Kitty terminal emulator is installed during `ascinit`. Several other
+terminal emulators art optionally installed during `ascinit` unless
+initialization is performed with `ascinit -c` or `ascinit -N`. The optional
+terminal emulators are:
 
 * **cool-retro-term**
 * **gnome-terminal**
@@ -330,10 +333,11 @@ This post-installation configuration can install any or all of several
 terminal emulators along with character based tools. Terminal emulators
 supported by Asciiville available during post-install configuration are:
 
-* cool-retro-term
-* gnome-terminal
-* tilix
-* xfce4-terminal
+* kitty (the default and always installed if not already present)
+* cool-retro-term (optionally installed if not present)
+* gnome-terminal (optionally installed if not present)
+* tilix (optionally installed if not present)
+* xfce4-terminal (optionally installed if not present)
 
 Tools installed during post-installation configuration include:
 
@@ -1050,8 +1054,8 @@ Variable width fonts can interfere with the intended display of Ascii Art.
 
 The Asciiville package creates an "Asciiville" profile in the `gnome-terminal`
 and `tilix` terminal emulators to configure use of a Monospaced font as well
-as invoking `xfce4-terminal` with a *--font* option specifying a Monospaced
-font. The `asciiville` command attempts to ensure the use of a Monospaced
+as invoking `kitty` and `xfce4-terminal` with a Monospaced font. The
+`asciiville` command attempts to ensure the use of a Monospaced
 font where it is possible but options do exist for the Asciiville user to
 use whatever the current terminal window might be. In this case, "Use Current
 Terminal", the Asciiville user may need to manually configure the terminal
@@ -1393,8 +1397,8 @@ selected with command line switches.
 If one of the terminal emulators that Asciiville is familiar with is used,
 the font and font size are set for you in a terminal profile or by command
 line arguments. The terminal emulators that Asciiville has integrated into
-its generation and viewing facilities are *gnome-terminal*, *tilix*, and
-*xfce4-terminal*. The currnt terminal window or console screen can also be
+its generation and viewing facilities are *kitty*, *gnome-terminal*, *tilix*,
+and *xfce4-terminal*. The currnt terminal window or console screen can also be
 used but in that case the font and font size will be whatever is already set.
 
 If you use the current terminal window to generate/view ASCII Art then you
@@ -1439,7 +1443,7 @@ display the full height of the ascii art included in Asciiville as the
 font size is too large. To view Asciiville Ascii Art slideshows using
 `cool-retro-term`, first reduce the font scaling in the settings menu
 to about 0.5. All the other terminal emulators supported by default in
-Asciiville (`gnome-terminal`, `tilix`, and `xfce4-terminal`) are
+Asciiville (`kitty`, `gnome-terminal`, `tilix`, and `xfce4-terminal`) are
 dynamically configured during slideshow presentations to scale font sizes
 so ascii art is displayed correctly.
 

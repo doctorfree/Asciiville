@@ -1,7 +1,7 @@
 pkgbase = asciiville
 	pkgdesc = Character based MPD client, spectrum visualizer, Beets library management, plus more
-	pkgver = 1.4.1
-	pkgrel = 2
+	pkgver = v1.4.1r2
+	pkgrel = 1
 	url = https://github.com/doctorfree/Asciiville
 	install = asciiville.install
 	arch = x86_64

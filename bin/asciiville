@@ -50,7 +50,9 @@ art_font_size=4
 txt_font_size=20
 re='^[0-9]+$'
 # fifo name
-fifo_name="/tmp/asciiville_fifo_$$"
+fifo_name="/tmp/asciiville_$$"
+# Kitty socket
+sock_name="/tmp/asckitty_$$"
 
 # Some configuration can be maintained here
 CONFIG="${HOME}/.config/asciiville/config"
@@ -69,7 +71,7 @@ fi
 
 usage() {
   printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-D delay]"
-  printf "\n\t[-E len] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level]"
+  printf "\n\t[-E len] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-K] [-l] [-L level]"
   printf "\n\t[-m] [-M] [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song]"
   printf "\n\t[-S] [-t] [-T] [-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y]"
   printf "\n\t[-Y] [-z] [-Z] [-u] [file1 [file2 ...]]\n"
@@ -92,6 +94,7 @@ usage() {
   printf "\n\t-g indicates use gnome terminal emulator"
   printf "\n\t-i indicates start asciiville in interactive mode"
   printf "\n\t-I indicates display system info"
+  printf "\n\t-k indicates use kitty terminal emulator"
   printf "\n\t-l indicates use lynx web browser as the default command"
   printf "\n\t-L 'level' lolcat coloring level"
   printf "\n\t   'level' can be '0' (off), '1' (on), or '2' (animate)"
@@ -135,7 +138,7 @@ usage() {
   printf "\n\t   of slideshow files from the file '/path/to/file'"
   printf "\n\t-Z indicates do not play audio during slideshow/animation\n"
   printf "\nGeneral options:"
-  printf "\n\t-k indicates kill Asciiville tmux sessions and ASCIImatics scripts"
+  printf "\n\t-K indicates kill Asciiville tmux sessions and ASCIImatics scripts"
   printf "\n\t-R indicates record tmux session with asciinema"
   printf "\n\t-T indicates use a tmux session for either ASCIImatics or command"
   printf "\n\t-v displays the Asciiville version and exits"
@@ -261,6 +264,7 @@ save_config() {
     echo "GNOME=${GNOME}" >> ${CONFIG}
     echo "RETRO=${RETRO}" >> ${CONFIG}
     echo "TILIX=${TILIX}" >> ${CONFIG}
+    echo "KITTY=${KITTY}" >> ${CONFIG}
     echo "XFCE4=${XFCE4}" >> ${CONFIG}
     echo "" >> ${CONFIG}
     echo "shuffle=${shuffle}" >> ${CONFIG}
@@ -289,24 +293,29 @@ set_user_conf() {
 }
 
 select_alt_term() {
-  if [ "${have_gnome}" ]
+  if [ "${have_kitty}" ]
   then
-    GNOME=1
+    KITTY=1
   else
-    if [ "${have_tilix}" ]
+    if [ "${have_gnome}" ]
     then
-      TILIX=1
+      GNOME=1
     else
-      if [ "${have_xfce4}" ]
+      if [ "${have_tilix}" ]
       then
-        XFCE4=1
+        TILIX=1
       else
-        if [ "${have_retro}" ]
+        if [ "${have_xfce4}" ]
         then
-          RETRO=1
+          XFCE4=1
         else
-          echo "Cannot find a terminal emulator I like. Using current window."
-          CURRENT=1
+          if [ "${have_retro}" ]
+          then
+            RETRO=1
+          else
+            echo "Cannot find a terminal emulator I like. Using current window."
+            CURRENT=1
+          fi
         fi
       fi
     fi
@@ -350,55 +359,75 @@ make_it_so() {
     else
       if [ "${FULLSCREEN}" ]
       then
-        if [ "${TILIX}" ]
+        if [ "${KITTY}" ]
         then
-          tilix --title="${MTITLE}" \
-                --full-screen \
-                --window-style=borderless \
-                --profile=Asciiville \
-                --command="${AVCOMM}" 2> /dev/null &
+          kitty --title="${MTITLE}" \
+                --start-as fullscreen \
+                --override font_size=18 \
+                --override draw_minimal_borders=yes \
+                ${AVCOMM} 2> /dev/null &
         else
-          if [ "${XFCE4}" ]
+          if [ "${TILIX}" ]
           then
-            xfce4-terminal --title "${MTITLE}" \
+            tilix --title="${MTITLE}" \
+                  --full-screen \
+                  --window-style=borderless \
+                  --profile=Asciiville \
+                  --command="${AVCOMM}" 2> /dev/null &
+          else
+            if [ "${XFCE4}" ]
+            then
+              xfce4-terminal --title "${MTITLE}" \
+                  --icon=audio-player \
+                  --hide-menubar \
+                  --hide-toolbar \
+                  --hide-scrollbar \
+                  --fullscreen \
+                  --command="${AVCOMM}" &
+            else
+              gnome-terminal -t "${MTITLE}" \
+                  --hide-menubar \
+                  --full-screen \
+                  --profile=Asciiville \
+                  -- ${AVCOMM} &
+            fi
+          fi
+        fi
+      else
+        if [ "${KITTY}" ]
+        then
+          kitty --title="${MTITLE}" \
+                --start-as normal \
+                --override font_size=18 \
+                --override draw_minimal_borders=yes \
+                --override initial_window_width=90c \
+                --override initial_window_height=28c \
+                ${AVCOMM} 2> /dev/null &
+        else
+          if [ "${TILIX}" ]
+          then
+            tilix --title="${MTITLE}" \
+                  --window-style=borderless \
+                  --geometry=90x28+150+25 \
+                  --profile=Asciiville \
+                  --command="${AVCOMM}" 2> /dev/null &
+          else
+            if [ "${XFCE4}" ]
+            then
+              xfce4-terminal --title "${MTITLE}" \
                 --icon=audio-player \
                 --hide-menubar \
                 --hide-toolbar \
                 --hide-scrollbar \
-                --fullscreen \
-                --command="${AVCOMM}" &
-          else
-            gnome-terminal -t "${MTITLE}" \
-                --hide-menubar \
-                --full-screen \
-                --profile=Asciiville \
-                -- ${AVCOMM} &
-          fi
-        fi
-      else
-        if [ "${TILIX}" ]
-        then
-          tilix --title="${MTITLE}" \
-                --window-style=borderless \
-                --geometry=90x28+150+25 \
-                --profile=Asciiville \
-                --command="${AVCOMM}" 2> /dev/null &
-        else
-          if [ "${XFCE4}" ]
-          then
-            xfce4-terminal --title "${MTITLE}" \
-              --icon=audio-player \
-              --hide-menubar \
-              --hide-toolbar \
-              --hide-scrollbar \
-              --geometry 90x28+150+25 \
-              --command="${AVCOMM}" &
-          else
-            gnome-terminal -t "${MTITLE}" \
-                --hide-menubar \
                 --geometry 90x28+150+25 \
-                --profile=Asciiville \
-                -- ${AVCOMM} &
+                --command="${AVCOMM}" &
+            else
+              gnome-terminal -t "${MTITLE}" \
+                  --hide-menubar \
+                  --geometry 90x28+150+25 \
+                  --profile=Asciiville \
+                  -- ${AVCOMM} &
+            fi
           fi
         fi
       fi
@@ -599,7 +628,6 @@ show_art_file() {
   clear
   if [ "${CURRENT}" ]
   then
-    add_fullscreen
     num_exp='^[0-9]+$'
     termname=unknown
     myppid=`ps -e | grep ${PPID} | awk ' { print $1 } '`
@@ -616,12 +644,26 @@ show_art_file() {
 
     case ${termname} in
       gnome-terminal*)
+        add_fullscreen
         show_ascii_art -e gnome ${showargs} -a "${art}"
         ;;
+      kitty*)
+        kitty --listen-on unix:${sock_name} \
+              --title="${art} Slideshow" \
+              --start-as fullscreen \
+              --override allow_remote_control=yes \
+              --override dynamic_background_opacity=yes \
+              --override background=black \
+              --override font_size=18 \
+              --override draw_minimal_borders=yes \
+              show_ascii_art -e kitty -K ${sock_name} ${showargs} -a "${art}"
+        ;;
       tilix*)
+        add_fullscreen
         show_ascii_art -e tilix ${showargs} -a "${art}"
         ;;
       xfce4-terminal*)
+        add_fullscreen
         xfce4-terminal --tab \
              --title "${art} Slideshow" \
              --color-bg=Black \
@@ -633,6 +675,7 @@ show_art_file() {
         wait_for_done
         ;;
       *)
+        add_fullscreen
         show_ascii_art ${showargs} -a "${art}"
         ;;
     esac
@@ -665,9 +708,22 @@ show_art_file() {
                 --profile=Asciiville \
                 --command="show_ascii_art -e tilix ${showargs} -a '${art}'"
         else
-          gnome-terminal --window --full-screen \
-                         --profile=Asciiville \
-                         -- show_ascii_art -e gnome ${showargs} -a "${art}"
+          if [ "${KITTY}" ]
+          then
+            kitty --listen-on unix:${sock_name} \
+              --title="${art} Slideshow" \
+              --start-as fullscreen \
+              --override allow_remote_control=yes \
+              --override dynamic_background_opacity=yes \
+              --override background=black \
+              --override font_size=18 \
+              --override draw_minimal_borders=yes \
+              show_ascii_art -e kitty -K ${sock_name} ${showargs} -a "${art}"
+          else
+            gnome-terminal --window --full-screen \
+                           --profile=Asciiville \
+                           -- show_ascii_art -e gnome ${showargs} -a "${art}"
+          fi
         fi
       fi
     fi
@@ -696,6 +752,17 @@ play_show() {
     case ${termname} in
       gnome-terminal*)
         show_ascii_art -e gnome ${showargs}
+        ;;
+      kitty*)
+        kitty --listen-on unix:${sock_name} \
+              --title="${showname} Slideshow" \
+              --start-as fullscreen \
+              --override allow_remote_control=yes \
+              --override dynamic_background_opacity=yes \
+              --override background=black \
+              --override font_size=18 \
+              --override draw_minimal_borders=yes \
+              show_ascii_art -e kitty -K ${sock_name} ${showargs}
         ;;
       tilix*)
         show_ascii_art -e tilix ${showargs}
@@ -744,9 +811,21 @@ play_show() {
                 --profile=Asciiville \
                 --command="show_ascii_art -e tilix ${showargs}"
         else
-          gnome-terminal --window --full-screen \
-                         --profile=Asciiville \
-                         -- show_ascii_art -e gnome ${showargs}
+          if [ "${KITTY}" ]
+          then
+            kitty --listen-on unix:${sock_name} \
+                  --start-as fullscreen \
+                  --override allow_remote_control=yes \
+                  --override dynamic_background_opacity=yes \
+                  --override background=black \
+                  --override font_size=18 \
+                  --override draw_minimal_borders=yes \
+                  show_ascii_art -e kitty -K ${sock_name} ${showargs}
+          else
+            gnome-terminal --window --full-screen \
+                           --profile=Asciiville \
+                           -- show_ascii_art -e gnome ${showargs}
+          fi
         fi
       fi
     fi
@@ -858,6 +937,7 @@ show_help_menu() {
     [ "${have_w3m}" ] && options+=("W3m Web Browser Man Page")
     [ "${have_retro}" ] && options+=("Retro Terminal Man Page")
     [ "${have_gnome}" ] && options+=("Gnome Terminal Man Page")
+    [ "${have_kitty}" ] && options+=("Kitty Terminal Man Page")
     [ "${have_tilix}" ] && options+=("Tilix Terminal Man Page")
     [ "${have_xfce4}" ] && options+=("Xfce4 Terminal Man Page")
     options+=("Done / Back" "Quit")
@@ -1138,6 +1218,12 @@ show_select_menu() {
         use_w3m="YES"
         ;;
     esac
+    if [ "${KITTY}" ]
+    then
+      use_kitty="YES"
+    else
+      use_kitty="NO"
+    fi
     if [ "${GNOME}" ]
     then
       use_gnome="YES"
@@ -1203,6 +1289,7 @@ show_select_menu() {
     [ "${have_tuir}" ] && options+=("Reddit UI              [${use_tuir}]")
     [ "${have_xfce4}" ] && options+=("XFCE4 Terminal         [${use_xfce4}]")
     [ "${have_gnome}" ] && options+=("Gnome Terminal         [${use_gnome}]")
+    [ "${have_kitty}" ] && options+=("Kitty Terminal         [${use_kitty}]")
     [ "${have_retro}" ] && options+=("Retro Terminal         [${use_retro}]")
     [ "${have_tilix}" ] && options+=("Tilix Terminal         [${use_tilix}]")
     options+=("Current Terminal       [${use_current}]")
@@ -1326,6 +1413,7 @@ show_select_menu() {
           "XFCE4"*,*|*,"XFCE4"*)
               XFCE4=1
               TILIX=
+              KITTY=
               GNOME=
               RETRO=
               CURRENT=
@@ -1333,6 +1421,16 @@ show_select_menu() {
               ;;
           "Gnome"*,*|*,"Gnome"*)
               GNOME=1
+              KITTY=
+              XFCE4=
+              TILIX=
+              RETRO=
+              CURRENT=
+              break
+              ;;
+          "Kitty"*,*|*,"Kitty"*)
+              KITTY=1
+              GNOME=
               XFCE4=
               TILIX=
               RETRO=
@@ -1344,11 +1442,13 @@ show_select_menu() {
               GNOME=
               XFCE4=
               TILIX=
+              KITTY=
               CURRENT=
               break
               ;;
           "Tilix"*,*|*,"Tilix"*)
               TILIX=1
+              KITTY=
               RETRO=
               GNOME=
               XFCE4=
@@ -1358,6 +1458,7 @@ show_select_menu() {
           "Current"*,*|*,"Current"*)
               CURRENT=1
               TILIX=
+              KITTY=
               RETRO=
               GNOME=
               XFCE4=
@@ -1437,6 +1538,12 @@ show_art_menu() {
     else
       recordstat="NO"
     fi
+    if [ "${KITTY}" ]
+    then
+      use_kitty="YES"
+    else
+      use_kitty="NO"
+    fi
     if [ "${GNOME}" ]
     then
       use_gnome="YES"
@@ -1505,6 +1612,7 @@ show_art_menu() {
     [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
     [ "${have_xfce4}" ] && options+=("XFCE4 Terminal        [${use_xfce4}]")
     [ "${have_gnome}" ] && options+=("Gnome Terminal        [${use_gnome}]")
+    [ "${have_kitty}" ] && options+=("Kitty Terminal        [${use_kitty}]")
     [ "${have_retro}" ] && options+=("Retro Terminal        [${use_retro}]")
     [ "${have_tilix}" ] && options+=("Tilix Terminal        [${use_tilix}]")
     options+=("Current Terminal      [${use_current}]")
@@ -1588,6 +1696,7 @@ show_art_menu() {
           "XFCE4"*,*|*,"XFCE4"*)
               XFCE4=1
               TILIX=
+              KITTY=
               GNOME=
               RETRO=
               CURRENT=
@@ -1595,6 +1704,16 @@ show_art_menu() {
               ;;
           "Gnome"*,*|*,"Gnome"*)
               GNOME=1
+              KITTY=
+              XFCE4=
+              TILIX=
+              RETRO=
+              CURRENT=
+              break
+              ;;
+          "Kitty"*,*|*,"Kitty"*)
+              KITTY=1
+              GNOME=
               XFCE4=
               TILIX=
               RETRO=
@@ -1606,11 +1725,13 @@ show_art_menu() {
               GNOME=
               XFCE4=
               TILIX=
+              KITTY=
               CURRENT=
               break
               ;;
           "Tilix"*,*|*,"Tilix"*)
               TILIX=1
+              KITTY=
               RETRO=
               GNOME=
               XFCE4=
@@ -1620,6 +1741,7 @@ show_art_menu() {
           "Current"*,*|*,"Current"*)
               CURRENT=1
               TILIX=
+              KITTY=
               RETRO=
               GNOME=
               XFCE4=
@@ -1813,6 +1935,12 @@ show_animation_menu() {
       audiostat="NO"
       audarg=
     fi
+    if [ "${KITTY}" ]
+    then
+      use_kitty="YES"
+    else
+      use_kitty="NO"
+    fi
     if [ "${GNOME}" ]
     then
       use_gnome="YES"
@@ -1876,6 +2004,7 @@ show_animation_menu() {
     [ "${have_endo}" ] && options+=("Fluid Simulator")
     [ "${have_xfce4}" ] && options+=("XFCE4 Terminal    [${use_xfce4}]")
     [ "${have_gnome}" ] && options+=("Gnome Terminal    [${use_gnome}]")
+    [ "${have_kitty}" ] && options+=("Kitty Terminal    [${use_kitty}]")
     [ "${have_retro}" ] && options+=("Retro Terminal    [${use_retro}]")
     [ "${have_tilix}" ] && options+=("Tilix Terminal    [${use_tilix}]")
     options+=("Current Terminal  [${use_current}]")
@@ -1962,6 +2091,7 @@ show_animation_menu() {
           "XFCE4"*,*|*,"XFCE4"*)
               XFCE4=1
               TILIX=
+              KITTY=
               GNOME=
               RETRO=
               CURRENT=
@@ -1970,6 +2100,17 @@ show_animation_menu() {
               ;;
           "Gnome"*,*|*,"Gnome"*)
               GNOME=1
+              XFCE4=
+              KITTY=
+              TILIX=
+              RETRO=
+              CURRENT=
+              skip_it_so=1
+              break
+              ;;
+          "Kitty"*,*|*,"Kitty"*)
+              KITTY=1
+              GNOME=
               XFCE4=
               TILIX=
               RETRO=
@@ -1982,6 +2123,7 @@ show_animation_menu() {
               GNOME=
               XFCE4=
               TILIX=
+              KITTY=
               CURRENT=
               skip_it_so=1
               break
@@ -1990,6 +2132,7 @@ show_animation_menu() {
               TILIX=1
               RETRO=
               GNOME=
+              KITTY=
               XFCE4=
               CURRENT=
               skip_it_so=1
@@ -1998,6 +2141,7 @@ show_animation_menu() {
           "Current"*,*|*,"Current"*)
               CURRENT=1
               TILIX=
+              KITTY=
               RETRO=
               GNOME=
               XFCE4=
@@ -2969,23 +3113,28 @@ select_song() {
 }
 
 set_show_term() {
-  if [ "${GNOME}" ]
+  if [ "${KITTY}" ]
   then
-    show_term="Gnome"
+    show_term="Kitty"
   else
-    if [ "${XFCE4}" ]
+    if [ "${GNOME}" ]
     then
-      show_term="XFCE4"
+      show_term="Gnome"
     else
-      if [ "${TILIX}" ]
+      if [ "${XFCE4}" ]
       then
-        show_term="Tilix"
+        show_term="XFCE4"
       else
-        if [ "${RETRO}" ]
+        if [ "${TILIX}" ]
         then
-          show_term="Retro"
+          show_term="Tilix"
         else
-          show_term="Current"
+          if [ "${RETRO}" ]
+          then
+            show_term="Retro"
+          else
+            show_term="Current"
+          fi
         fi
       fi
     fi
@@ -3006,6 +3155,7 @@ init_vars() {
 }
 
 have_gnome=`type -p gnome-terminal`
+have_kitty=`type -p kitty`
 have_tilix=`type -p tilix`
 # Check if initialization has been run
 [ -f ${CONFIG} ] || {
@@ -3170,7 +3320,7 @@ randomplay=
 showart=
 show_neofetch=
 slideshow=
-while getopts "Aabc:CdD:E:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
+while getopts "Aabc:CdD:E:fFgiIjJkKlL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
   case $flag in
     A)
       ASCSPLASH="${ASCSPLASH} -i"
@@ -3360,6 +3510,7 @@ while getopts "Aabc:CdD:E:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
         CURRENT=
         XFCE4=
         TILIX=
+        KITTY=
         RETRO=
         GNOME=1
       else
@@ -3385,6 +3536,21 @@ while getopts "Aabc:CdD:E:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
       ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -J"
       ;;
     k)
+      if [ "${have_kitty}" ]
+      then
+        CURRENT=
+        XFCE4=
+        TILIX=
+        RETRO=
+        GNOME=
+        KITTY=1
+      else
+        KITTY=
+        not_in_path kitty -g
+        select_alt_term
+      fi
+      ;;
+    K)
       kill_tmux_sessions
       exit 0
       ;;
@@ -3498,6 +3664,7 @@ while getopts "Aabc:CdD:E:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
         CURRENT=
         XFCE4=
         TILIX=
+        KITTY=
         RETRO=1
         GNOME=
       else
@@ -3528,6 +3695,7 @@ while getopts "Aabc:CdD:E:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
         CURRENT=
         XFCE4=
         TILIX=1
+        KITTY=
         RETRO=
         GNOME=
       else
@@ -3604,6 +3772,7 @@ while getopts "Aabc:CdD:E:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
       CURRENT=1
       XFCE4=
       TILIX=
+      KITTY=
       RETRO=
       GNOME=
       ;;
@@ -3613,6 +3782,7 @@ while getopts "Aabc:CdD:E:fFgiIjJklL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
         CURRENT=
         XFCE4=1
         TILIX=
+        KITTY=
         RETRO=
         GNOME=
       else
@@ -3706,31 +3876,40 @@ shift $((OPTIND-1))
   fi
 }
 
-# If no terminal was specified on the command line, use gnome if available
-[ "${GNOME}" ] || [ "${TILIX}" ] || [ "${RETRO}" ] || [ "${CURRENT}" ] || [ "${XFCE4}" ] || {
+# If no terminal was specified on the command line, use kitty if available
+[ "${KITTY}" ] || [ "${GNOME}" ] || [ "${TILIX}" ] || [ "${RETRO}" ] || [ "${CURRENT}" ] || [ "${XFCE4}" ] || {
   select_alt_term
 }
 
 # Make sure only one terminal is selected
 if [ "${CURRENT}" ]
 then
+  KITTY=
   XFCE4=
   TILIX=
   GNOME=
   RETRO=
 else
-  if [ "${XFCE4}" ]
+  if [ "${KITTY}" ]
   then
     TILIX=
     GNOME=
     RETRO=
+    XFCE4=
   else
-    if [ "${TILIX}" ]
+    if [ "${XFCE4}" ]
     then
+      TILIX=
       GNOME=
       RETRO=
     else
-      [ "${GNOME}" ] && RETRO=
+      if [ "${TILIX}" ]
+      then
+        GNOME=
+        RETRO=
+      else
+        [ "${GNOME}" ] && RETRO=
+      fi
     fi
   fi
 fi

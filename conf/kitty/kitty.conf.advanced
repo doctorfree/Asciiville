@@ -1,0 +1,118 @@
+# Advanced Kitty configuration for reference
+#
+tab_bar_style powerline
+font_family      JetBrains Mono Regular
+italic_font      JetBrains Mono Italic
+bold_font        JetBrains Mono ExtraBold
+bold_italic_font JetBrains Mono ExtraBold Italic
+adjust_line_height  110%
+font_size        16.0
+cursor_shape     block
+cursor_blink_interval     0
+cursor_stop_blinking_after 15.0
+scrollback_lines 4000
+scrollback_pager less +G -R
+wheel_scroll_multiplier 5.0
+click_interval 0.5
+select_by_word_characters -./_~%+#
+mouse_hide_wait 3.0
+enabled_layouts *
+remember_window_size   yes
+initial_window_width   640
+initial_window_height  400
+repaint_delay    10
+visual_bell_duration 0.0
+enable_audio_bell yes
+open_url_modifiers ctrl+shift
+open_url_with default
+term xterm-256color
+window_border_width 2
+window_margin_width 0
+window_padding_width 0
+map ctrl+shift+v        paste_from_clipboard
+map ctrl+shift+s        paste_from_selection
+map ctrl+shift+c        copy_to_clipboard
+map shift+insert        paste_from_selection
+copy_on_select yes
+map super+up         scroll_line_up
+map super+down         scroll_line_down
+map super+shift+up       scroll_page_up
+map super+shift+down      scroll_page_down
+map super+ctrl+shift+k  scroll_home
+map ctrl+ctrl+shift+j   scroll_end
+map super+b       show_scrollback
+map ctrl+shift+enter    new_window
+map super+shift+enter launch --type=window --cwd=current
+map ctrl+shift+w        close_window
+map super+]        next_window
+map ctrl+shift+]        next_window
+map super+[        previous_window
+map super+alt+] move_window_forward
+map super+alt+[ move_window_backward
+map ctrl+shift+[        previous_window
+map ctrl+shift+f        move_window_forward
+map ctrl+shift+b        move_window_backward
+map ctrl+shift+`        move_window_to_top
+map ctrl+shift+1        first_window
+map ctrl+shift+2        second_window
+map ctrl+shift+3        third_window
+map ctrl+shift+4        fourth_window
+map ctrl+shift+5        fifth_window
+map ctrl+shift+6        sixth_window
+map ctrl+shift+7        seventh_window
+map ctrl+shift+8        eighth_window
+map ctrl+shift+9        ninth_window
+map ctrl+shift+0        tenth_window
+map super+1 goto_tab 1
+map super+2 goto_tab 2
+map super+3 goto_tab 3
+map super+4 goto_tab 4
+map super+5 goto_tab 5
+map super+6 goto_tab 6
+map super+7 goto_tab 7
+map super+8 goto_tab 8
+map super+9 goto_tab 999
+map super+o goto_tab -1
+map super+shift+]    next_tab
+map super+shift+[     previous_tab
+map ctrl+shift+t        new_tab
+map ctrl+shift+q        close_tab
+map ctrl+shift+l        next_layout
+map super+l        next_layout
+map super+alt+shift+]        move_tab_forward
+map super+alt+shift+[        move_tab_backward
+map ctrl+shift+alt+t set_tab_title
+map super+shift+t set_tab_title
+tab_switch_strategy last  # last, left, previous
+tab_title_template {index}:{title}
+map super+t new_tab_with_cwd
+map super+е new_tab_with_cwd
+map super+enter new_tab_with_cwd
+update_check_interval 0
+map super+e kitten hints
+map super+shift+e kitten hints --program @
+map super+shift+c kitten hints --type path --program @
+map super+p kitten hints --type path --program -
+map super+shift+p kitten hints --multiple --type path --program -
+map super+i kitten hints --type line --program -
+map super+shift+i kitten hints --multiple --type line --program -
+map super+y kitten hints --type line --program @
+map super+shift+y kitten hints --multiple --type line --program @
+map super+equal    increase_font_size
+map super+minus    decrease_font_size
+map super+0 restore_font_size
+map super+backspace send_text all \x15
+hide_window_decorations yes
+macos_thicken_font 0
+macos_option_as_alt yes
+map super+d pipe @text overlay vim -c 'nnoremap q :q!<CR>' -c 'map $ g_' -c ':silent! %s#\($\n\s*\)\+\%$##' '+$' -
+allow_remote_control yes
+active_border_color #0087ff
+inactive_border_color #cccccc
+active_tab_foreground #75715e
+active_tab_background #353535
+inactive_tab_foreground #75715e
+inactive_tab_background #272822
+include themes/Nameless.conf
+window_padding_width 10
+confirm_os_window_close 1

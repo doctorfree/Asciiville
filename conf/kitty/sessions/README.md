@@ -1,0 +1,47 @@
+## Startup Sessions
+
+You can control the `tabs <tab>`, `kitty window <window>` layout,
+working directory, startup programs, etc. by creating a *session* file and using
+the `kitty --session` command line flag or the `startup_session`
+option in `kitty.conf`. For example:
+
+```
+    # Set the layout for the current tab
+    layout tall
+    # Set the working directory for windows in the current tab
+    cd ~
+    # Create a window and run the specified command in it
+    launch zsh
+    # Create a window with some environment variables set and run vim in it
+    launch --env FOO=BAR vim
+    # Set the title for the next window
+    launch --title "Chat with x" irssi --profile x
+
+    # Create a new tab
+    # The part after new_tab is the optional tab title which will be displayed in
+    # the tab bar, if omitted, the title of the active window will be used instead.
+    new_tab my tab
+    cd ~/somewhere
+    # Set the layouts allowed in this tab
+    enabled_layouts tall,stack
+    # Set the current layout
+    layout stack
+    launch zsh
+
+    # Create a new OS window
+    # Any definitions specifed before the first new_os_window will apply to first OS window.
+    new_os_window
+    # Set new window size to 80x24 cells
+    os_window_size 80c 24c
+    # Set the --class for the new OS window
+    os_window_class mywindow
+    launch sh
+    # Resize the current window (see the resize_window action for details)
+    resize_window wider 2
+    # Make the current window the active (focused) window
+    focus
+    launch emacs
+```
+
+**[Note:]** The `launch <launch>` command when used in a session file cannot
+create new OS windows, or tabs.

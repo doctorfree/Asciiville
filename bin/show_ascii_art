@@ -44,7 +44,7 @@ set -m
 usage() {
   printf "\nUsage: show_ascii_art [-a art[,art2,...]] [-A art_dir] [-b] [-B] [-c] [-C]"
   printf "\n\t[-d font_dir] [-D seconds] [-e term] [-E] [-F large_font] [-f small_font]"
-  printf "\n\t[-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level]"
+  printf "\n\t[-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo|socket] [-l level]"
   printf "\n\t[-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-R len]"
   printf "\n\t[-s show] [-S song] [-t first_text] [-T second_text]"
   printf "\n\t[-h height] [-w width] [-W] [-v] [-z] [-Z] [-u]"
@@ -70,7 +70,7 @@ usage() {
   printf "\n\t-I 'input_dir' generates ascii art from all images in 'input_dir'"
   printf "\n\t\tand saves them in the directory specified with '-O output_dir'"
   printf "\n\t\t(defaults to current directory if '-O output_dir' is specified)"
-  printf "\n\t-K 'fifo_name' use a FIFO to communicate back to caller when done"
+  printf "\n\t-K 'fifo|socket' use a FIFO or socket to communicate back to caller"
   printf "\n\t-l 'level' use lolcat coloring, 'level' can be '1' or '2' (animate)"
   printf "\n\t-L lists the ascii art in the 'art_dir' and exits"
   printf "\n\t-f 'small_font' specifies the figlet font to use for small text"
@@ -480,22 +480,23 @@ while getopts "a:A:bBcCD:d:e:Egh:i:I:K:l:LF:f:n:N:oO:Pp:qrR:s:S:t:T:vw:WzZu" fla
           ;;
       e)
           execute="${OPTARG}"
-          if [ "${execute}" == "gnome" ]
-          then
-            termarg="-g"
-          else
-            if [ "${execute}" == "tilix" ]
-            then
+          case "${execute}" in
+            gnome*)
+              termarg="-g"
+              ;;
+            kitty*)
+              termarg="-k"
+              ;;
+            tilix*)
               termarg="-t"
-            else
-              if [ "${execute}" == "xfce4" ]
-              then
-                termarg="-x"
-              else
-                termarg=
-              fi
-            fi
-          fi
+              ;;
+            xfce4*)
+              termarg="-x"
+              ;;
+            *)
+              termarg=
+              ;;
+          esac
           ;;
       E)
           set_font_size=
@@ -620,6 +621,13 @@ while getopts "a:A:bBcCD:d:e:Egh:i:I:K:l:LF:f:n:N:oO:Pp:qrR:s:S:t:T:vw:WzZu" fla
   esac
 done
 
+# If using Kitty the socket name was passed in with -K socket
+[ "${termarg}" == "-k" ] && {
+  sock_name="${fifo_name}"
+  termarg="-k -K ${sock_name}"
+  fifo_name=
+}
+
 [ "${list}" ] && {
   first=1
   have_asc=1
@@ -653,40 +661,53 @@ done
 [ "${make_inp}" ] || [ "${make_out}" ] && {
   [ "${make_inp}" ] || make_inp="."
   [ "${make_out}" ] || make_out="ascii"
+  have_kitty=`type -p kitty`
   have_gnome=`type -p gnome-terminal`
   have_tilix=`type -p tilix`
   have_xfce4=`type -p xfce4-terminal`
   convargs="-c -f"
   [ "${border}" ] && convargs="-b ${convargs}"
   [ "${charset}" ] && convargs="${convargs} -p ${charset}"
-  if [ "${have_gnome}" ]
+  mkartcomm="make_ascii_art ${convargs} -i"
+  if [ "${have_kitty}" ]
   then
-    echo "Invoking gnome-terminal to convert ${make_inp} to ${make_out}"
-    [ "${set_font_size}" ] && termprofset -S -g -s ${art_font_size}
-    gnome-terminal --window --geometry=320x100 --profile=Asciiville \
-        -- make_ascii_art ${convargs} -i "${make_inp}" -o "${make_out}"
+    echo "Invoking kitty to convert ${make_inp} to ${make_out}"
+    kitty --title="Make Ascii Art" \
+          --start-as normal \
+          --override font_size=${art_font_size} \
+          --override initial_window_width=320c \
+          --override initial_window_height=100c \
+          ${mkartcomm} "${make_inp}" -o "${make_out}"
   else
-    if [ "${have_tilix}" ]
+    if [ "${have_gnome}" ]
     then
-      echo "Invoking Tilix to convert ${make_inp} to ${make_out}"
-      [ "${set_font_size}" ] && termprofset -S -t -s ${art_font_size}
-      tilix --geometry=320x100 \
-            --profile=Asciiville \
-            --window-style=borderless \
-            --command="make_ascii_art ${convargs} -i '${make_inp}' -o '${make_out}'" \
-              2> /dev/null
+      echo "Invoking gnome-terminal to convert ${make_inp} to ${make_out}"
+      [ "${set_font_size}" ] && termprofset -S -g -s ${art_font_size}
+      gnome-terminal --window --geometry=320x100 --profile=Asciiville \
+          -- ${mkartcomm} "${make_inp}" -o "${make_out}"
     else
-      if [ "${have_xfce4}" ]
+      if [ "${have_tilix}" ]
       then
-        [ "${set_font_size}" ] && termprofset -S -x -s ${art_font_size}
-        xfce4-terminal \
-            --hide-menubar \
-            --hide-toolbar \
-            --hide-scrollbar \
-            --geometry=320x100 \
-            --command="make_ascii_art ${convargs} -i '${make_inp}' -o '${make_out}'"
+        echo "Invoking Tilix to convert ${make_inp} to ${make_out}"
+        [ "${set_font_size}" ] && termprofset -S -t -s ${art_font_size}
+        tilix --geometry=320x100 \
+              --profile=Asciiville \
+              --window-style=borderless \
+              --command="${mkartcomm} '${make_inp}' -o '${make_out}'" \
+              2> /dev/null
       else
-        make_ascii_art ${convargs} -i "${make_inp}" -o "${make_out}"
+        if [ "${have_xfce4}" ]
+        then
+          [ "${set_font_size}" ] && termprofset -S -x -s ${art_font_size}
+          xfce4-terminal \
+              --hide-menubar \
+              --hide-toolbar \
+              --hide-scrollbar \
+              --geometry=320x100 \
+              --command="${mkartcomm} '${make_inp}' -o '${make_out}'"
+        else
+          ${mkartcomm} "${make_inp}" -o "${make_out}"
+        fi
       fi
     fi
   fi

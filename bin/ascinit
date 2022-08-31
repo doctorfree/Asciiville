@@ -4,6 +4,7 @@
 #
 # Terminal emulators optionally installed:
 #     gnome-terminal
+#     kitty
 #     tilix
 #     xfce4-terminal
 #     cool-retro-term
@@ -13,7 +14,7 @@ BOLD=$(tput bold)
 NORM=$(tput sgr0)
 
 usage() {
-  printf "\nUsage: ascinit [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-t] [-u]"
+  printf "\nUsage: ascinit [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-r] [-t] [-u]"
   printf "\nWhere:"
   printf "\n\t-a indicates do not ask to play an animation when done"
   printf "\n\t-c indicates console mode - no windowing system, headless config"
@@ -21,8 +22,9 @@ usage() {
   printf "\n\t-m indicates setup user Mutt configuration"
   printf "\n\t-M indicates setup both Mutt and NeoMutt configurations"
   printf "\n\t-n indicates setup user NeoMutt configuration"
-  printf "\n\t-N indicates setup neither Mutt or NeoMutt configuration"
+  printf "\n\t-N do not prompt for installation of additional terminal emulators"
   printf "\n\t-q indicates quiet mode"
+  printf "\n\t-r indicates remove service/package"
   printf "\n\t-t indicates authorize the Rainbow Stream app at Twitter"
   printf "\n\t-u indicates display this usage message and exit\n"
   exit 1
@@ -50,37 +52,19 @@ inst_pkg() {
 }
 
 ask_install() {
-  opt="$1"
-  nam="$2"
-  pkg="$3"
-  echo "The ${opt} option indicates configure ${nam} but ${nam} is not installed"
+  nam="$1"
+  pkg="$2"
+  echo "Attempting to configure ${nam} but ${nam} is not installed"
   echo "Would you like to install ${nam} at this time?"
   while true
   do
     read -p "Install ${nam} ? (y/n) " yn
     case $yn in
       [Yy]* )
-          case ${pkg} in
-            mutt)
-                use_mutt=1
-                ;;
-            neomutt)
-                sudo dnf copr enable flatcap/neomutt -y 2> /dev/null
-                use_neomutt=1
-                ;;
-          esac
           inst_pkg ${pkg}
           break
           ;;
       [Nn]* )
-          case ${pkg} in
-            mutt)
-                use_mutt=
-                ;;
-            neomutt)
-                use_neomutt=
-                ;;
-          esac
           break
           ;;
         * ) echo "Please answer yes or no."
@@ -89,9 +73,139 @@ ask_install() {
   done
 }
 
+install_kitty() {
+  have_kitty=`type -p kitty`
+  [ "${have_kitty}" ] || {
+    [ "${quiet}" ] || {
+      printf "\n\tInstalling Kitty terminal emulator ..."
+    }
+    curl --silent --location \
+      https://sw.kovidgoyal.net/kitty/installer.sh > /tmp/kitty-$$.sh
+    if [ -f /tmp/kitty-$$.sh ]
+    then
+      have_stow=`type -p stow`
+      if [ "${have_stow}" ]
+      then
+        sh /tmp/kitty-$$.sh launch=n dest=~/.local/stow > /dev/null 2>&1
+        cd ~/.local/stow
+        stow kitty.app
+        LOCAL=".local/stow"
+      else
+        sh /tmp/kitty-$$.sh launch=n > /dev/null 2>&1
+        LOCAL=".local"
+      fi
+      rm -f /tmp/kitty-$$.sh
+      # Create a symbolic link to add kitty to PATH
+      # (assuming ~/.local/bin is in your system-wide PATH)
+      [ -d ~/.local/bin ] || mkdir -p ~/.local/bin
+      [ -x ~/.local/bin/kitty ] || {
+        ln -s ~/${LOCAL}/kitty.app/bin/kitty ~/.local/bin/
+      }
+      # Link the kitty man pages somewhere it can be found by the man command
+      [ -d ~/.local/share/man/man1 ] || mkdir -p ~/.local/share/man/man1
+      [ -f ~/.local/share/man/man1/kitty.1 ] || {
+        [ -d ${HOME}/.local/share/man/man1 ] || \
+          mkdir -p ${HOME}/.local/share/man/man1
+        ln -s ~/${LOCAL}/kitty.app/share/man/man1/kitty.1 \
+           ~/.local/share/man/man1/
+      }
+      [ -d ~/.local/share/man/man5 ] || mkdir -p ~/.local/share/man/man5
+      [ -f ~/.local/share/man/man5/kitty.conf.5 ] || {
+        [ -d ${HOME}/.local/share/man/man5 ] || \
+          mkdir -p ${HOME}/.local/share/man/man5
+        ln -s ~/${LOCAL}/kitty.app/share/man/man5/kitty.conf.5 \
+           ~/.local/share/man/man5/
+      }
+      # Place the kitty.desktop file somewhere it can be found by the OS
+      [ -d ~/.local/share/applications ] || mkdir -p ~/.local/share/applications
+      [ -f ~/.local/share/applications/kitty.desktop ] || {
+        cp ~/${LOCAL}/kitty.app/share/applications/kitty.desktop \
+           ~/.local/share/applications/
+      }
+      # If you want to open text files and images in kitty via your file manager
+      # also add the kitty-open.desktop file
+      [ -f ~/.local/share/applications/kitty-open.desktop ] || {
+        cp ~/${LOCAL}/kitty.app/share/applications/kitty-open.desktop \
+           ~/.local/share/applications/
+      }
+      # Update the paths to the kitty and its icon in the kitty.desktop file(s)
+      sed -i "s|Icon=kitty|Icon=/home/${MPP_USER}/${LOCAL}/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
+      sed -i "s|Exec=kitty|Exec=/home/${MPP_USER}/${LOCAL}/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+      [ "${quiet}" ] || printf " done!\n"
+    else
+      printf "\n${BOLD}ERROR:${NORM} Download of Kitty installation script failed"
+      printf "\nSee https://sw.kovidgoyal.net/kitty/binary/#manually-installing"
+      printf "\nto manually install the Kitty terminal emulator\n"
+    fi
+  }
+}
+
+remove_kitty() {
+  rm -rf ~/.local/kitty.app
+  rm -f ~/.local/bin/kitty
+  rm -f ~/.local/share/applications/kitty.desktop
+  rm -f ~/.local/share/applications/kitty-open.desktop
+  rm -f ~/.local/share/man/man1/kitty.1
+  rm -f ~/.local/share/man/man5/kitty.conf.5
+}
+
+# Clear the Bash cache so we know for sure if something is installed
+hash -r
+
+[ "$1" == "kitty" ] && {
+  [ "${remove}" ] && {
+    printf "\nRemoving Kitty terminal emulator.\n\n"
+    while true
+    do
+      read -p "Do you wish to continue with Kitty removal ? (y/n) " yn
+      case $yn in
+          [Yy]* )
+                break
+                ;;
+          [Nn]* )
+                printf "\nKitty removal aborted."
+                printf "\nExiting.\n\n"
+                exit 0
+                ;;
+              * ) echo "Please answer yes or no."
+                ;;
+      esac
+    done
+    remove_kitty
+    printf "\n${BOLD}Kitty removed${NORM}"
+    printf "\nTo re-install Kitty run ${BOLD}'ascinit kitty'${NORM}\n\n"
+    exit 0
+  }
+  [ "${quiet}" ] || {
+    printf "\nInstalling Kitty terminal emulator\n"
+  }
+  while true
+  do
+    read -p "Do you wish to continue with Kitty installation ? (y/n) " yn
+    case $yn in
+      [Yy]* )
+            break
+            ;;
+      [Nn]* )
+            printf "\nKitty installation aborted."
+            printf "\nExiting.\n\n"
+            exit 0
+            ;;
+          * ) echo "Please answer yes or no."
+            ;;
+    esac
+  done
+  install_kitty
+  [ "${quiet}" ] || {
+    printf "\n\n${BOLD}Kitty terminal emulator installed${NORM}\n"
+  }
+  exit 0
+}
+
 have_mutt=`type -p mutt`
 have_neomutt=`type -p neomutt`
 have_gnome=`type -p gnome-terminal`
+have_kitty=`type -p kitty`
 have_tilix=`type -p tilix`
 have_xfce4=`type -p xfce4-terminal`
 have_retro=`type -p cool-retro-term`
@@ -107,11 +221,11 @@ ask_anim=1
 console=
 debug=
 init_twit=
+inst_terms=1
 quiet=
-use_mutt=
-use_neomutt=1
+remove=
 
-while getopts "acdmMnNqtu" flag; do
+while getopts "acdmMNnqrtu" flag; do
   case $flag in
     a)
         ask_anim=
@@ -123,43 +237,23 @@ while getopts "acdmMnNqtu" flag; do
         debug=1
         ;;
     m)
-        if [ "${have_mutt}" ]
-        then
-          use_mutt=1
-          use_neomutt=
-        else
-          ask_install -m Mutt mutt
-        fi
+        [ "${have_mutt}" ] || ask_install Mutt mutt
         ;;
     n)
-        if [ "${have_neomutt}" ]
-        then
-          use_mutt=
-          use_neomutt=1
-        else
-          ask_install -n NeoMutt neomutt
-        fi
+        [ "${have_neomutt}" ] || ask_install NeoMutt neomutt
         ;;
     M)
-        if [ "${have_mutt}" ]
-        then
-          use_mutt=1
-        else
-          ask_install -M Mutt mutt
-        fi
-        if [ "${have_neomutt}" ]
-        then
-          use_neomutt=1
-        else
-          ask_install -M NeoMutt neomutt
-        fi
+        [ "${have_mutt}" ] || ask_install Mutt mutt
+        [ "${have_neomutt}" ] || ask_install NeoMutt neomutt
         ;;
     N)
-        use_mutt=
-        use_neomutt=
+        inst_terms=
         ;;
     q)
         quiet=1
+        ;;
+    r)
+        remove=1
         ;;
     t)
         init_twit=1
@@ -323,6 +417,23 @@ shift $(( OPTIND - 1 ))
     mkdir -p ${HOME}/.contacts/friends
   }
 }
+
+install_kitty
+KITTYCONFDIR="${HOME}/.config/kitty"
+KITTYCONF="${KITTYCONFDIR}/asciiville.conf"
+# Setup default kitty configuration for this user unless one exists
+[ "${quiet}" ] || {
+  printf "\n\tInstalling Kitty configuration in ${KITTYCONFDIR} ..."
+}
+# If there is no user kitty config folder then copy the
+# MusicPlayerPlus kitty config folder into the user's home
+if [ -d ${KITTYCONFDIR} ]
+then
+  cp -an ${CONFDIR}/kitty ${CONF}
+else
+  cp -a ${CONFDIR}/kitty ${KITTYCONFDIR}
+fi
+[ -f ${KITTYCONFDIR}/kitty.conf ] || cp ${KITTYCONF} ${KITTYCONFDIR}/kitty.conf
 
 # Setup default rifle configuration for this user unless one exists
 [ -f ${CONFDIR}/rifle.conf ] && {
@@ -601,59 +712,69 @@ create_new_profile() {
 }
 
 [ "${console}" ] || {
-  [ "${have_gnome}" ] || inst_pkg gnome-terminal
-  [ "${have_tilix}" ] || inst_pkg tilix
-  [ "${have_xfce4}" ] || inst_pkg xfce4-terminal
-  [ "${have_retro}" ] || inst_pkg cool-retro-term
-  # If no gnome-terminal Asciiville profile exists, create one
-  declare -a profiles
-  profile_name="Asciiville"
+  [ "${inst_terms}" ] && {
+    [ "${have_gnome}" ] || ask_install Gnome-Terminal gnome-terminal
+    [ "${have_tilix}" ] || ask_install Tilix tilix
+    [ "${have_xfce4}" ] || ask_install Xfce4-terminal xfce4-terminal
+    [ "${have_retro}" ] || ask_install Cool-Retro-Term cool-retro-term
+    have_gnome=`type -p gnome-terminal`
+    have_tilix=`type -p tilix`
+    have_xfce4=`type -p xfce4-terminal`
+    have_retro=`type -p cool-retro-term`
+  }
+  [ "${have_gnome}" ] && {
+    # If no gnome-terminal Asciiville profile exists, create one
+    declare -a profiles
+    profile_name="Asciiville"
 
-  profile_exists=
-  dconfdir=/org/gnome/terminal/legacy/profiles:
+    profile_exists=
+    dconfdir=/org/gnome/terminal/legacy/profiles:
 
-  # profiles=($(gconftool-2 -R $gconfdir | grep $gconfdir | cut -d/ -f5 |  \
-  #          cut -d: -f1))
-  profiles=($(gsettings get org.gnome.Terminal.ProfilesList list | tr -d "[]\',"))
+    # profiles=($(gconftool-2 -R $gconfdir | grep $gconfdir | cut -d/ -f5 |  \
+    #          cut -d: -f1))
+    profiles=($(gsettings get org.gnome.Terminal.ProfilesList list | tr -d "[]\',"))
 
-  if [ "$profiles" = "" ]
-  then
-    create_new_profile gnome ${profile_name}
-  else
-    for i in ${!profiles[*]}
-    do
-      visname="$(dconf read $dconfdir/:${profiles[i]}/visible-name)"
-      [ "${visname}" == "'${profile_name}'" ] && profile_exists=1
-      [ "$profile_exists" ] && break
-    done
-  fi
+    if [ "$profiles" = "" ]
+    then
+      create_new_profile gnome ${profile_name}
+    else
+      for i in ${!profiles[*]}
+      do
+        visname="$(dconf read $dconfdir/:${profiles[i]}/visible-name)"
+        [ "${visname}" == "'${profile_name}'" ] && profile_exists=1
+        [ "$profile_exists" ] && break
+      done
+    fi
 
-  [ "$profile_exists" ] || {
-    # Create an Asciiville profile in gnome-terminal for this user
-    create_new_profile gnome ${profile_name}
+    [ "$profile_exists" ] || {
+      # Create an Asciiville profile in gnome-terminal for this user
+      create_new_profile gnome ${profile_name}
+    }
   }
 
-  # Create Asciiville Tilix profile, similar to Gnome-terminal's
-  profile_exists=
-  dconfdir=/com/gexperts/Tilix/profiles
+  [ "${have_tilix}" ] && {
+    # Create Asciiville Tilix profile, similar to Gnome-terminal's
+    profile_exists=
+    dconfdir=/com/gexperts/Tilix/profiles
 
-  profiles=($(gsettings get com.gexperts.Tilix.ProfilesList list | tr -d "[]\',"))
+    profiles=($(gsettings get com.gexperts.Tilix.ProfilesList list | tr -d "[]\',"))
 
-  if [ "$profiles" = "" ]
-  then
-    create_new_profile tilix ${profile_name}
-  else
-    for i in ${!profiles[*]}
-    do
-      visname="$(dconf read $dconfdir/${profiles[i]}/visible-name)"
-      [ "${visname}" == "'${profile_name}'" ] && profile_exists=1
-      [ "$profile_exists" ] && break
-    done
-  fi
+    if [ "$profiles" = "" ]
+    then
+      create_new_profile tilix ${profile_name}
+    else
+      for i in ${!profiles[*]}
+      do
+        visname="$(dconf read $dconfdir/${profiles[i]}/visible-name)"
+        [ "${visname}" == "'${profile_name}'" ] && profile_exists=1
+        [ "$profile_exists" ] && break
+      done
+    fi
 
-  [ "$profile_exists" ] || {
-    # Create an Asciiville profile in Tilix for this user
-    create_new_profile tilix ${profile_name}
+    [ "$profile_exists" ] || {
+      # Create an Asciiville profile in Tilix for this user
+      create_new_profile tilix ${profile_name}
+    }
   }
 }
 
@@ -707,7 +828,6 @@ CONF="${HOME}/.config/asciiville/config"
   echo "COMMAND=btop" >> ${CONF}
   echo "FULLSCREEN=" >> ${CONF}
   echo "MTITLE=\"Btop++ System Monitor\"" >> ${CONF}
-  have_gnome=`type -p gnome-terminal`
   if [ "${have_gnome}" ]
   then
     echo "CURRENT=" >> ${CONF}

@@ -22,14 +22,13 @@ termprofset - manipulate the profiles of a Gnome or Tilix terminal, or
 the font setting of an XFCE4 terminal
 .SS SYNOPSIS
 .PP
-\f[B]termprofset\f[R] [-f fontname] [-s fontsize] [-p profile]
-[-glBRStxu]
+\f[B]termprofset\f[R] [-f fontname] [-s fontsize] [-p profile] [-K
+socket] [-gklBRStxu]
 .SS DESCRIPTION
 .PP
 The \f[I]termprofset\f[R] command can be used to set or restore profile
-settings of a Gnome or Tilix terminal emulator (\f[V]gnome-terminal\f[R]
-and \f[V]tilix\f[R] commands), or the font setting of an XFCE4 terminal
-emulator (\f[V]xfce4-terminal\f[R] command).
+settings of a Gnome or Tilix terminal emulator, or the font setting of a
+Kitty or XFCE4 terminal emulator.
 Profile settings that can be configured by \f[I]termprofset\f[R] are:
 .IP \[bu] 2
 font (font name and font size)
@@ -109,6 +108,12 @@ indicates save original settings
 .TP
 \f[B]-g\f[R]
 indicates use Gnome terminal emulator
+.TP
+\f[B]-k\f[R]
+indicates use Kitty terminal emulator
+.TP
+\f[B]-K \[aq]socket\[aq]\f[R]
+specifies the socket on which Kitty remote control commands are sent
 .TP
 \f[B]-l\f[R]
 indicates list current profile settings and exit

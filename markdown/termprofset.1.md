@@ -9,10 +9,10 @@ date: May 10, 2022
 termprofset - manipulate the profiles of a Gnome or Tilix terminal, or the font setting of an XFCE4 terminal
 
 ## SYNOPSIS
-**termprofset** [-f fontname] [-s fontsize] [-p profile] [-glBRStxu]
+**termprofset** [-f fontname] [-s fontsize] [-p profile] [-K socket] [-gklBRStxu]
 
 ## DESCRIPTION
-The *termprofset* command can be used to set or restore profile settings of a Gnome or Tilix terminal emulator (`gnome-terminal` and `tilix` commands), or the font setting of an XFCE4 terminal emulator (`xfce4-terminal` command). Profile settings that can be configured by *termprofset* are:
+The *termprofset* command can be used to set or restore profile settings of a Gnome or Tilix terminal emulator, or the font setting of a Kitty or XFCE4 terminal emulator. Profile settings that can be configured by *termprofset* are:
 
 - font (font name and font size)
 - use-system-font
@@ -64,6 +64,12 @@ values in `$HOME/.config/asciiville/config`. Default font sizes are 4 and 20.
 
 **-g**
 : indicates use Gnome terminal emulator
+
+**-k**
+: indicates use Kitty terminal emulator
+
+**-K 'socket'**
+: specifies the socket on which Kitty remote control commands are sent
 
 **-l**
 : indicates list current profile settings and exit

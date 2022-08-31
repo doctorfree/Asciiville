@@ -24,7 +24,7 @@ Email/FTP/File/Web clients, and character based utilities
 .SS SYNOPSIS
 .PP
 \f[B]asciiville\f[R] [-a] [-A] [-b] [-c command] [-C] [-d] [-D delay]
-[-E len] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-l] [-L level] [-m] [-M]
+[-E len] [-f] [-F] [-g] [-i] [-I] [-jJ] [-kK] [-l] [-L level] [-m] [-M]
 [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song] [-S] [-t] [-T] [-U]
 [-v] [-V show] [-w] [-W] [-x] [-X] [-y] [-Y] [-z] [-Z] [-u] [file1
 [file2 ...]]
@@ -129,7 +129,7 @@ are set then the command can be executed by selecting the menu entry
 \f[I]Run in Terminal\f[R].
 .PP
 Previously started tmux sessions and asciimatics scripts can be quickly
-and easily terminated by executing the \f[V]asciiville -k\f[R] command.
+and easily terminated by executing the \f[V]asciiville -K\f[R] command.
 .PP
 Asciiville preferences are maintained in
 \f[V]$HOME/.config/asciiville/config\f[R].
@@ -274,6 +274,9 @@ Indicates start asciiville in interactive mode
 \f[B]-I\f[R]
 Indicates display system info
 .TP
+\f[B]-k\f[R]
+Indicates use kitty terminal emulator
+.TP
 \f[B]-l\f[R]
 Indicates use lynx as the default command
 .TP
@@ -381,7 +384,7 @@ Indicates do not play audio during slideshow/animation
 .PP
 \f[I]General options:\f[R]
 .TP
-\f[B]-k\f[R]
+\f[B]-K\f[R]
 Indicates kill Asciiville tmux sessions and ASCIImatics scripts
 .TP
 \f[B]-R\f[R]

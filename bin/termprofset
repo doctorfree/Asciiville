@@ -4,6 +4,7 @@
 #               or XFCE4 terminal font settings
 #
 # Written May, 2020 by Ronald Record <ronaldrecord@gmail.com>
+# Modified Aug, 2022 by Ronald Record to add Kitty support
 #
 # From https://ncona.com/2019/11/configuring-gnome-terminal-programmatically/
 #
@@ -18,6 +19,7 @@
 CONF_DIR="${HOME}/.config"
 SAVE_DIR="${CONF_DIR}/asciiville"
 SAVE_GNOME="${SAVE_DIR}/gnome"
+SAVE_KITTY="${SAVE_DIR}/kitty"
 SAVE_TILIX="${SAVE_DIR}/tilix"
 SAVE_XFCE4="${SAVE_DIR}/xfce4"
 RC="${CONF_DIR}/xfce4/terminal/terminalrc"
@@ -31,7 +33,8 @@ TILIX_PATH="/com/gexperts/Tilix/profiles/"
 TILIX_LIST="com.gexperts.Tilix.ProfilesList"
 
 usage() {
-  printf "\nUsage: termprofset [-f fontname] [-s fontsize] [-p profile] [-glBRStxu]"
+  printf "\nUsage: termprofset [-f fontname] [-s fontsize] [-p profile]"
+  printf "\n\t[-K socket] [-gklBRStxu]"
   printf "\nWhere:"
   printf "\n\t-B indicates set background to black, no transparency"
   printf "\n\t-f 'fontname' specifies the font name to set terminal's font to"
@@ -40,11 +43,13 @@ usage() {
   printf "\n\t-R indicates restore original saved settings and exit"
   printf "\n\t-S indicates save original settings"
   printf "\n\t-g indicates use Gnome terminal emulator"
+  printf "\n\t-k indicates use Kitty terminal emulator"
+  printf "\n\t-K 'socket' specifies the Kitty control socket name"
   printf "\n\t-l indicates list current profile settings and exit"
   printf "\n\t-t indicates use Tilix terminal emulator"
   printf "\n\t-x indicates use Xfce4 terminal emulator"
   printf "\n\t-u displays this usage message and exits"
-  printf "\n\nDefault terminal emulator is Gnome"
+  printf "\n\nDefault terminal emulator is Kitty"
   printf "\nDefault terminal profile is Asciiville"
   printf "\nDefault font is Monospace"
   printf "\nDefault font size is 4\n"
@@ -57,23 +62,37 @@ PROF_NAME="Asciiville"
 SET_BLACK=
 SAVE_ORIG=
 REST_ORIG=
-USE_GNOME=1
-TERM_NAME=Gnome
+TERM_NAME=Kitty
+USE_KITTY=1
+USE_GNOME=
 USE_TILIX=
 USE_XFCE4=
 SHOW_LIST=
-while getopts "Bgf:lp:Rs:Stxu" flag; do
+KITTY_SOCKET="/tmp/asckitty"
+while getopts "Bgf:kK:lp:Rs:Stxu" flag; do
   case $flag in
     B)
       SET_BLACK=1
       ;;
     g)
+      USE_KITTY=
       USE_TILIX=
       USE_XFCE4=
       USE_GNOME=1
+      TERM_NAME=Gnome
       ;;
     f)
       FONT_NAME="${OPTARG}"
+      ;;
+    K)
+      KITTY_SOCKET="${OPTARG}"
+      ;;
+    k)
+      USE_TILIX=
+      USE_GNOME=
+      USE_KITTY=1
+      USE_XFCE4=
+      TERM_NAME=Kitty
       ;;
     l)
       SHOW_LIST=1
@@ -93,10 +112,12 @@ while getopts "Bgf:lp:Rs:Stxu" flag; do
     t)
       USE_TILIX=1
       USE_GNOME=
+      USE_KITTY=
       USE_XFCE4=
       TERM_NAME=Tilix
       ;;
     x)
+      USE_KITTY=
       USE_TILIX=
       USE_GNOME=
       USE_XFCE4=1
@@ -109,176 +130,220 @@ while getopts "Bgf:lp:Rs:Stxu" flag; do
 done
 
 # Which terminal are we using?
-if [ "${USE_GNOME}" ]
+if [ "${USE_KITTY}" ]
 then
-  T_PROF="${GNOME_PROF}"
-  T_PATH="${GNOME_PATH}"
-  T_LIST="${GNOME_LIST}"
-  T_SAVE="${SAVE_GNOME}"
+  T_PROF=
+  T_PATH=
+  T_LIST=
+  T_SAVE="${SAVE_KITTY}"
 else
-  if [ "${USE_TILIX}" ]
+  if [ "${USE_GNOME}" ]
   then
-    T_PROF="${TILIX_PROF}"
-    T_PATH="${TILIX_PATH}"
-    T_LIST="${TILIX_LIST}"
-    T_SAVE="${SAVE_TILIX}"
+    T_PROF="${GNOME_PROF}"
+    T_PATH="${GNOME_PATH}"
+    T_LIST="${GNOME_LIST}"
+    T_SAVE="${SAVE_GNOME}"
   else
-    if [ "${USE_XFCE4}" ]
+    if [ "${USE_TILIX}" ]
     then
-      T_PROF=
-      T_PATH=
-      T_LIST=
-      T_SAVE="${SAVE_XFCE4}"
-      have_set_xfce4=`type -p set_xfce_font`
-      have_set_trans=`type -p set_xfce_trans`
+      T_PROF="${TILIX_PROF}"
+      T_PATH="${TILIX_PATH}"
+      T_LIST="${TILIX_LIST}"
+      T_SAVE="${SAVE_TILIX}"
     else
-      echo "Unknown/Unsupported terminal emulator. Exiting."
-      usage
+      if [ "${USE_XFCE4}" ]
+      then
+        T_PROF=
+        T_PATH=
+        T_LIST=
+        T_SAVE="${SAVE_XFCE4}"
+        have_set_xfce4=`type -p set_xfce_font`
+        have_set_trans=`type -p set_xfce_trans`
+      else
+        echo "Unknown/Unsupported terminal emulator. Exiting."
+        usage
+      fi
     fi
   fi
 fi
 
 # Restore the saved original terminal settings and exit
 [ "${REST_ORIG}" ] && {
-  if [ "${USE_XFCE4}" ]
+  if [ "${USE_KITTY}" ]
   then
-    [ -f "${T_SAVE}" ] && cp "${T_SAVE}" "${RC}"
+    # Restore settings
+    kitty @ --to unix:${KITTY_SOCKET} set-font-size 0
+    kitty @ --to unix:${KITTY_SOCKET} set-colors --reset
   else
-    [ -f "${T_SAVE}" ] && {
-      . "${T_SAVE}"
-      gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
-                font "${current_font}"
-      gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
-                use-system-font ${use_system_font}
-      gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
-                use-theme-colors ${use_theme}
-      gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
-                background-color "${background}"
-      gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
-                foreground-color "${foreground}"
-    }
+    if [ "${USE_XFCE4}" ]
+    then
+      [ -f "${T_SAVE}" ] && cp "${T_SAVE}" "${RC}"
+    else
+      [ -f "${T_SAVE}" ] && {
+        . "${T_SAVE}"
+        gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
+                  font "${current_font}"
+        gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
+                  use-system-font ${use_system_font}
+        gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
+                  use-theme-colors ${use_theme}
+        gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
+                  background-color "${background}"
+        gsettings set ${T_PROF}:${T_PATH}:${TERM_PROF}/ \
+                  foreground-color "${foreground}"
+      }
+    fi
   fi
   exit 0
 }
 
-if [ "${USE_XFCE4}" ]
+if [ "${USE_KITTY}" ]
 then
+  # Get the current font and settings
+  # kitty @ --to unix:${KITTY_SOCKET} get-colors [options] ...
+  # kitty @ --to unix:${KITTY_SOCKET} set-colors --reset
   [ "${SHOW_LIST}" ] && {
-    echo "Current font settings for ${TERM_NAME}:"
-    [ "${have_set_xfce4}" ] && set_xfce_font
+    echo "Don't know how to get current font settings for ${TERM_NAME}"
     exit 0
   }
 else
-  # Get the current font, settings, and profile id
-  TERM_PROF=
-  if [ "${PROF_NAME}" == "default" ]
+  if [ "${USE_XFCE4}" ]
   then
-    TERM_PROF=`gsettings get ${T_LIST} default | awk -F \' '{print $2}'`
+    [ "${SHOW_LIST}" ] && {
+      echo "Current font settings for ${TERM_NAME}:"
+      [ "${have_set_xfce4}" ] && set_xfce_font
+      exit 0
+    }
   else
-    profiles=($(gsettings get ${T_LIST} list | tr -d "[]\',"))
-    if [ "$profiles" = "" ]
+    # Get the current font, settings, and profile id
+    TERM_PROF=
+    if [ "${PROF_NAME}" == "default" ]
     then
-      echo "No profiles detected. Exiting."
-      usage
+      TERM_PROF=`gsettings get ${T_LIST} default | awk -F \' '{print $2}'`
     else
-      if [ "${USE_GNOME}" ]
+      profiles=($(gsettings get ${T_LIST} list | tr -d "[]\',"))
+      if [ "$profiles" = "" ]
       then
-        P_PATH="${T_PATH}:"
+        echo "No profiles detected. Exiting."
+        usage
       else
-        P_PATH="${T_PATH}"
+        if [ "${USE_GNOME}" ]
+        then
+          P_PATH="${T_PATH}:"
+        else
+          P_PATH="${T_PATH}"
+        fi
+        for i in ${!profiles[*]}
+        do
+          visname="$(dconf read ${P_PATH}${profiles[i]}/visible-name)"
+          [ "${visname}" == "'${PROF_NAME}'" ] && {
+            TERM_PROF="${profiles[i]}"
+            break
+          }
+        done
       fi
-      for i in ${!profiles[*]}
-      do
-        visname="$(dconf read ${P_PATH}${profiles[i]}/visible-name)"
-        [ "${visname}" == "'${PROF_NAME}'" ] && {
-          TERM_PROF="${profiles[i]}"
-          break
-        }
-      done
+      [ "${TERM_PROF}" ] || {
+        echo "Could not locate ${PROF_NAME} profile. Exiting."
+        usage
+      }
     fi
-    [ "${TERM_PROF}" ] || {
-      echo "Could not locate ${PROF_NAME} profile. Exiting."
-      usage
+    #
+    USE_SYSTEM_FONT=`gsettings get \
+        ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-system-font`
+    CURR_FONT=`gsettings get \
+        ${T_PROF}:${T_PATH}:${TERM_PROF}/ font`
+    USE_THEME=`gsettings get \
+        ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-theme-colors`
+    USE_BACK=`gsettings get \
+        ${T_PROF}:${T_PATH}:${TERM_PROF}/ background-color`
+    USE_FORE=`gsettings get \
+        ${T_PROF}:${T_PATH}:${TERM_PROF}/ foreground-color`
+    [ "${SHOW_LIST}" ] && {
+      echo "Current settings for ${PROF_NAME} profile in ${TERM_NAME}:"
+      echo "font=${CURR_FONT}"
+      echo "use-system-font=${USE_SYSTEM_FONT}"
+      echo "use-theme-colors=${USE_THEME}"
+      echo "background-color=${USE_BACK}"
+      echo "foreground-color=${USE_FORE}"
+      exit 0
     }
   fi
-  #
-  USE_SYSTEM_FONT=`gsettings get \
-      ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-system-font`
-  CURR_FONT=`gsettings get \
-      ${T_PROF}:${T_PATH}:${TERM_PROF}/ font`
-  USE_THEME=`gsettings get \
-      ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-theme-colors`
-  USE_BACK=`gsettings get \
-      ${T_PROF}:${T_PATH}:${TERM_PROF}/ background-color`
-  USE_FORE=`gsettings get \
-      ${T_PROF}:${T_PATH}:${TERM_PROF}/ foreground-color`
-  [ "${SHOW_LIST}" ] && {
-    echo "Current settings for ${PROF_NAME} profile in ${TERM_NAME}:"
-    echo "font=${CURR_FONT}"
-    echo "use-system-font=${USE_SYSTEM_FONT}"
-    echo "use-theme-colors=${USE_THEME}"
-    echo "background-color=${USE_BACK}"
-    echo "foreground-color=${USE_FORE}"
-    exit 0
-  }
 fi
 
 # Save the current terminal settings
 [ "${SAVE_ORIG}" ] && {
   [ -d "${CONF_DIR}" ] || mkdir "${CONF_DIR}"
   [ -d "${SAVE_DIR}" ] || mkdir "${SAVE_DIR}"
-  if [ "${USE_XFCE4}" ]
+  if [ "${USE_KITTY}" ]
   then
-    [ -f "${RC}" ] && cp "${RC}" "${T_SAVE}"
-  else
-    echo "TERM_PROF=\"${TERM_PROF}\"" > ${T_SAVE}
-    echo "current_font=\"${CURR_FONT}\"" >> ${T_SAVE}
-    echo "use_system_font=${USE_SYSTEM_FONT}" >> ${T_SAVE}
-    echo "use_theme=${USE_THEME}" >> ${T_SAVE}
-    echo "background=\"${USE_BACK}\"" >> ${T_SAVE}
-    echo "foreground=\"${USE_FORE}\"" >> ${T_SAVE}
-  fi
-}
-
-#
-# Finally, we can use gsettings to change the properties we care about.
-#
-if [ "${USE_GNOME}" ]
-then
-  gsettings set \
-    ${T_PROF}:${T_PATH}:${TERM_PROF}/ font "'${FONT_NAME} ${FONT_SIZE}'"
-  gsettings set \
-    ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-system-font false
-  gsettings set \
-    ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-theme-colors false
-  gsettings set \
-    ${T_PROF}:${T_PATH}:${TERM_PROF}/ background-color '#000000'
-  gsettings set \
-    ${T_PROF}:${T_PATH}:${TERM_PROF}/ foreground-color '#AFAFAF'
-else
-  if [ "${USE_TILIX}" ]
-  then
-    gsettings set \
-      ${T_PROF}:${T_PATH}${TERM_PROF}/ font "'${FONT_NAME} ${FONT_SIZE}'"
-    gsettings set \
-      ${T_PROF}:${T_PATH}${TERM_PROF}/ use-system-font false
-    gsettings set \
-      ${T_PROF}:${T_PATH}${TERM_PROF}/ use-theme-colors false
-    gsettings set \
-      ${T_PROF}:${T_PATH}${TERM_PROF}/ background-color '#000000'
-    gsettings set \
-      ${T_PROF}:${T_PATH}${TERM_PROF}/ foreground-color '#AFAFAF'
+    touch "${T_SAVE}"
   else
     if [ "${USE_XFCE4}" ]
     then
-      [ "${have_set_xfce4}" ] && set_xfce_font -f "${FONT_NAME}" -s ${FONT_SIZE}
-      # Set background to black, no transparency, and exit
-      [ "${SET_BLACK}" ] && {
-        [ "${have_set_trans}" ] && set_xfce_trans 1 black
-      }
+      [ -f "${RC}" ] && cp "${RC}" "${T_SAVE}"
     else
-      echo "Unknown/Unsupported terminal emulator. Exiting."
-      usage
+      echo "TERM_PROF=\"${TERM_PROF}\"" > ${T_SAVE}
+      echo "current_font=\"${CURR_FONT}\"" >> ${T_SAVE}
+      echo "use_system_font=${USE_SYSTEM_FONT}" >> ${T_SAVE}
+      echo "use_theme=${USE_THEME}" >> ${T_SAVE}
+      echo "background=\"${USE_BACK}\"" >> ${T_SAVE}
+      echo "foreground=\"${USE_FORE}\"" >> ${T_SAVE}
+    fi
+  fi
+}
+
+if [ "${USE_KITTY}" ]
+then
+  # Set the font name and size
+  kitty @ --to unix:${KITTY_SOCKET} set-font-size ${FONT_SIZE}
+  # Set background to black, no transparency
+  [ "${SET_BLACK}" ] && {
+    # 'dynamic_background_opacity' option in kitty.conf must be
+    # turned on to be able to set background opacity
+    kitty @ --to unix:${KITTY_SOCKET} set-background-opacity 1.0
+    kitty @ --to unix:${KITTY_SOCKET} set-colors background=black
+  }
+else
+  #
+  # With Gnome and Tilix use gsettings to change the properties we care about
+  #
+  if [ "${USE_GNOME}" ]
+  then
+    gsettings set \
+      ${T_PROF}:${T_PATH}:${TERM_PROF}/ font "'${FONT_NAME} ${FONT_SIZE}'"
+    gsettings set \
+      ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-system-font false
+    gsettings set \
+      ${T_PROF}:${T_PATH}:${TERM_PROF}/ use-theme-colors false
+    gsettings set \
+      ${T_PROF}:${T_PATH}:${TERM_PROF}/ background-color '#000000'
+    gsettings set \
+      ${T_PROF}:${T_PATH}:${TERM_PROF}/ foreground-color '#AFAFAF'
+  else
+    if [ "${USE_TILIX}" ]
+    then
+      gsettings set \
+        ${T_PROF}:${T_PATH}${TERM_PROF}/ font "'${FONT_NAME} ${FONT_SIZE}'"
+      gsettings set \
+        ${T_PROF}:${T_PATH}${TERM_PROF}/ use-system-font false
+      gsettings set \
+        ${T_PROF}:${T_PATH}${TERM_PROF}/ use-theme-colors false
+      gsettings set \
+        ${T_PROF}:${T_PATH}${TERM_PROF}/ background-color '#000000'
+      gsettings set \
+        ${T_PROF}:${T_PATH}${TERM_PROF}/ foreground-color '#AFAFAF'
+    else
+      if [ "${USE_XFCE4}" ]
+      then
+        [ "${have_set_xfce4}" ] && set_xfce_font -f "${FONT_NAME}" -s ${FONT_SIZE}
+        # Set background to black, no transparency, and exit
+        [ "${SET_BLACK}" ] && {
+          [ "${have_set_trans}" ] && set_xfce_trans 1 black
+        }
+      else
+        echo "Unknown/Unsupported terminal emulator. Exiting."
+        usage
+      fi
     fi
   fi
 fi

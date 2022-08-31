@@ -1,0 +1,8 @@
+new_tab js_project
+cd ${PROJECT_DIR}
+title vim
+launch zsh -c 'nvim'
+launch zsh -c 'yarn && yarn start'
+launch zsh
+enabled_layouts tall:bias=50;full_size=1
+layout tall
