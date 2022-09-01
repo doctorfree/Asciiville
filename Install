@@ -39,7 +39,12 @@ get_available_packages() {
     [ "${pkgs}" == "${SCRIPT_DIR}/releases/${PKG_VER}/*.${SUF}" ] || {
       for pkg in ${pkgs}
       do
-        pkgname=`basename ${pkg} | sed -e "s/_${PKG_VER}-${PKG_REL}.${ARCH}.${SUF}//"` 
+        if [ "${arch}" ]
+        then
+          pkgname=`basename ${pkg} | sed -e "s/-v${PKG_VER}r${PKG_REL}-${PACKAGE}-${ARCH}.${SUF}//"` 
+        else
+          pkgname=`basename ${pkg} | sed -e "s/_${PKG_VER}-${PKG_REL}.${ARCH}.${SUF}//"` 
+        fi
         PKG_AVAILABLE="${PKG_AVAILABLE} ${pkgname}"
       done
     }
@@ -71,12 +76,15 @@ install_selected() {
 }
 
 debian=
+arch=
 have_apt=`type -p apt`
 have_dpkg=`type -p dpkg`
 have_rpm=`type -p rpm`
 have_dnf=`type -p dnf`
+have_pac=`type -p pacman`
 [ -f /etc/os-release ] && . /etc/os-release
 [ "${ID_LIKE}" == "debian" ] && debian=1
+[ "${ID}" == "arch" ] && arch=1
 [ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
 
 if [ "${debian}" ]
@@ -88,8 +96,14 @@ then
   }
   ARCH=${DEB_ARCH}
 else
-  SUF=rpm
-  ARCH=${RPM_ARCH}
+  if [ "${arch}" ]
+  then
+    SUF=zst
+    ARCH=`uname -m`
+  else
+    SUF=rpm
+    ARCH=${RPM_ARCH}
+  fi
 fi
 
 get_available_packages
@@ -149,7 +163,12 @@ get_available_packages
 
 for PKG_NAME in ${PKG_NAMES}
 do
-  PKG="${SCRIPT_DIR}/releases/${PKG_VER}/${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.${SUF}"
+  if [ "${arch}" ]
+  then
+    PKG="${SRC}/${SRC_NAME}/releases/${PKG_VER}/${PKG_NAME}-v${PKG_VER}r${PKG_REL}-${PACKAGE}-${ARCH}.pkg.tar.${SUF}"
+  else
+    PKG="${SCRIPT_DIR}/releases/${PKG_VER}/${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.${SUF}"
+  fi
   [ -f "${PKG}" ] || {
     echo "${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.${SUF} not found."
     for pkgs in ${SCRIPT_DIR}/releases/*/${PKG_NAME}_*.${SUF}
@@ -179,16 +198,26 @@ do
       fi
     fi
   else
-    if [ "${have_dnf}" ]
+    if [ "${arch}" ]
     then
-      sudo dnf update -y -q
-      sudo dnf localinstall "${PKG}"
-    else
-      if [ "${have_rpm}" ]
+      if [ "${have_pac}" ]
       then
-        sudo rpm -i "${PKG}"
+        sudo pacman -U "${PKG}"
       else
-        echo "Cannot locate either dnf or rpm to install. Skipping."
+        echo "Cannot locate pacman to install. Skipping."
+      fi
+    else
+      if [ "${have_dnf}" ]
+      then
+        sudo dnf update -y -q
+        sudo dnf localinstall "${PKG}"
+      else
+        if [ "${have_rpm}" ]
+        then
+          sudo rpm -i "${PKG}"
+        else
+          echo "Cannot locate either dnf or rpm to install. Skipping."
+        fi
       fi
     fi
   fi

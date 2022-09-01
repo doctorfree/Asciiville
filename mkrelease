@@ -38,7 +38,7 @@ done
 shift $(( OPTIND - 1 ))
 
 [ "$CLEAN" ] && ./clean
-[ "$PACKAGE" ] && ./mkdeb
+[ "$PACKAGE" ] && ./mkpkg
 
 cp pkg/Install-bin.sh releases/${VERSION}/Install-bin.sh
 cp pkg/Uninstall-bin.sh releases/${VERSION}/Uninstall-bin.sh
@@ -46,7 +46,7 @@ cp pkg/Uninstall-bin.sh releases/${VERSION}/Uninstall-bin.sh
 ANNO="Asciiville Version ${VERSION} Release ${RELEASE}"
 gittag v${VERSION}r${RELEASE} ${ANNO}
 
-echo "Copy Fedora RPM and Raspberry Pi Debian package to releases/${VERSION}"
+echo "Copy RPMs, Arch pkgs, and Raspberry Pi pkgs to releases/${VERSION}"
 
 read -p "Press Enter to continue" answer
 

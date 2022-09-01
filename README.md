@@ -1589,9 +1589,14 @@ git clone https://github.com/doctorfree/Asciiville
 cd Asciiville
 ```
 
-On Debian based systems, run the command `./mkdeb` in the `Asciiville` directory.
+Run the command `./mkpkg` to create an installation package in
+`./releases/<version>`.
 
-On RPM based systems, run the command `./mkrpm` in the `Asciiville` directory.
+On Debian based systems `./mkpkg` runs the command `./pkg/mkdeb.sh`.
+
+On RPM based systems `./mkpkg` runs the command `./pkg/mkrpm.sh`.
+
+On Arch based systems `./mkpkg` runs the command `./pkg/mkaur.sh`.
 
 A successful compilation and packaging will produce distribution/installation
 files in `./releases/<version>/`.
@@ -1811,10 +1816,10 @@ Invoke the `build` script with the game or utility you wish to compile as
 an argument. For example, to compile the btop++ system monitor from source,
 run the command `./build btop`.
 
-On Debian and RPM based systems the Asciiville installation package can be
-created with the `mkdeb` and `mkrpm` scripts. These scripts invoke the `build`
-script for each of the projects included with Asciiville, populate a distribution
-tree, and call the respective packaging utilities. Packages are saved in the
+On Arch, Debian, and RPM based systems the Asciiville installation package can
+be created with the `mkpkg` script. This script invokes the `build` script
+for each of the projects included with Asciiville, populates a distribution
+tree, and calls the respective packaging utilities. Packages are saved in the
 `./releases/<version>/` folder. Once a package has been created it can be
 installed with the `Install` script.
 

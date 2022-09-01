@@ -1,0 +1,23 @@
+#!/bin/bash
+
+debian=
+arch=
+
+export __ASC_SRC__=`pwd`
+
+[ -f /etc/os-release ] && . /etc/os-release
+[ "${ID_LIKE}" == "debian" ] && debian=1
+[ "${ID}" == "arch" ] && arch=1
+[ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
+
+if [ "${debian}" ]
+then
+  pkg/mkdeb.sh $*
+else
+  if [ "${arch}" ]
+  then
+    pkg/mkaur.sh $*
+  else
+    pkg/mkrpm.sh $*
+  fi
+fi
