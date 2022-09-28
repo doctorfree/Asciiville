@@ -10,6 +10,7 @@
 #     cool-retro-term
 
 CONFDIR=/usr/share/asciiville
+USERCONF="${HOME}/.config"
 BOLD=$(tput bold)
 NORM=$(tput sgr0)
 
@@ -76,7 +77,7 @@ ask_install() {
 install_kitty() {
   [ "${have_kitty}" ] || {
     [ "${quiet}" ] || {
-      printf "\n\tInstalling Kitty terminal emulator ..."
+      printf "\n\tInstalling kitty terminal emulator ..."
     }
     curl --silent --location \
       https://sw.kovidgoyal.net/kitty/installer.sh > /tmp/kitty-$$.sh
@@ -132,9 +133,9 @@ install_kitty() {
       sed -i "s|Exec=kitty|Exec=/home/${MPP_USER}/${LOCAL}/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
       [ "${quiet}" ] || printf " done!\n"
     else
-      printf "\n${BOLD}ERROR:${NORM} Download of Kitty installation script failed"
+      printf "\n${BOLD}ERROR:${NORM} Download of kitty installation script failed"
       printf "\nSee https://sw.kovidgoyal.net/kitty/binary/#manually-installing"
-      printf "\nto manually install the Kitty terminal emulator\n"
+      printf "\nto manually install the kitty terminal emulator\n"
     fi
   }
 }
@@ -154,10 +155,10 @@ hash -r
 have_kitty=`type -p kitty`
 [ "$1" == "kitty" ] && {
   [ "${remove}" ] && {
-    printf "\nRemoving Kitty terminal emulator.\n\n"
+    printf "\nRemoving kitty terminal emulator.\n\n"
     while true
     do
-      read -p "Do you wish to continue with Kitty removal ? (y/n) " yn
+      read -p "Do you wish to continue with kitty removal ? (y/n) " yn
       case $yn in
           [Yy]* )
                 break
@@ -173,15 +174,15 @@ have_kitty=`type -p kitty`
     done
     remove_kitty
     printf "\n${BOLD}Kitty removed${NORM}"
-    printf "\nTo re-install Kitty run ${BOLD}'ascinit kitty'${NORM}\n\n"
+    printf "\nTo re-install kitty run ${BOLD}'ascinit kitty'${NORM}\n\n"
     exit 0
   }
   [ "${quiet}" ] || {
-    printf "\nInstalling Kitty terminal emulator\n"
+    printf "\nInstalling kitty terminal emulator\n"
   }
   while true
   do
-    read -p "Do you wish to continue with Kitty installation ? (y/n) " yn
+    read -p "Do you wish to continue with kitty installation ? (y/n) " yn
     case $yn in
       [Yy]* )
             break
@@ -331,22 +332,22 @@ shift $(( OPTIND - 1 ))
   inst_pkg neomutt
 }
 [ -d ${CONFDIR}/neomutt ] && {
-  [ -d ${HOME}/.config/neomutt ] || {
-    cp -a ${CONFDIR}/neomutt ${HOME}/.config/neomutt
+  [ -d ${USERCONF}/neomutt ] || {
+    cp -a ${CONFDIR}/neomutt ${USERCONF}/neomutt
     [ "${console}" ] && {
       [ -f ${CONFDIR}/console/neomutt/mailcap ] && {
-        cp ${CONFDIR}/console/neomutt/mailcap ${HOME}/.config/neomutt/mailcap
+        cp ${CONFDIR}/console/neomutt/mailcap ${USERCONF}/neomutt/mailcap
       }
     }
-    chmod 600 ${HOME}/.config/neomutt/accounts/*
-    chmod 750 ${HOME}/.config/neomutt/accounts
-    [ -d ${HOME}/.config/neomutt/tmp ] || mkdir ${HOME}/.config/neomutt/tmp
-    chmod 750 ${HOME}/.config/neomutt/tmp
+    chmod 600 ${USERCONF}/neomutt/accounts/*
+    chmod 750 ${USERCONF}/neomutt/accounts
+    [ -d ${USERCONF}/neomutt/tmp ] || mkdir ${USERCONF}/neomutt/tmp
+    chmod 750 ${USERCONF}/neomutt/tmp
     [ "${quiet}" ] || {
       echo ""
-      echo "A ${HOME}/.config/neomutt/ NeoMutt email client configuration"
+      echo "A ${USERCONF}/neomutt/ NeoMutt email client configuration"
       echo "has been created for you. Edit your name, email address, and"
-      echo "email account credentials in ${HOME}/.config/neomutt/accounts/*"
+      echo "email account credentials in ${USERCONF}/neomutt/accounts/*"
       echo ""
       echo "A good starting point for the NeoMutt user is the NeoMutt Guide at:"
       echo "https://neomutt.org/guide/"
@@ -402,9 +403,9 @@ shift $(( OPTIND - 1 ))
 
 # Setup default khard configuration for this user unless one exists
 [ -d ${CONFDIR}/khard ] && {
-  [ -d ${HOME}/.config/khard ] || {
-    cp -a ${CONFDIR}/khard ${HOME}/.config/khard
-    chmod 640 ${HOME}/.config/khard/khard.conf
+  [ -d ${USERCONF}/khard ] || {
+    cp -a ${CONFDIR}/khard ${USERCONF}/khard
+    chmod 640 ${USERCONF}/khard/khard.conf
   }
   [ -d ${HOME}/.contacts ] || {
     mkdir -p ${HOME}/.contacts
@@ -418,28 +419,44 @@ shift $(( OPTIND - 1 ))
 }
 
 install_kitty
-KITTYCONFDIR="${HOME}/.config/kitty"
+KITTYCONFDIR="${USERCONF}/kitty"
 KITTYCONF="${KITTYCONFDIR}/asciiville.conf"
 # Setup default kitty configuration for this user unless one exists
 [ "${quiet}" ] || {
-  printf "\n\tInstalling Kitty configuration in ${KITTYCONFDIR} ..."
+  printf "\n\tInstalling kitty configuration in ${KITTYCONFDIR} ..."
 }
 # If there is no user kitty config folder then copy the
 # MusicPlayerPlus kitty config folder into the user's home
 if [ -d ${KITTYCONFDIR} ]
 then
-  cp -an ${CONFDIR}/kitty ${CONF}
+  cp -an ${CONFDIR}/kitty ${USERCONF}
 else
   cp -a ${CONFDIR}/kitty ${KITTYCONFDIR}
 fi
+[ -f ${KITTYCONF} ] && {
+  if [ "${BROWSER}" ]
+  then
+    # If the user has set the BROWSER environment variable then use it
+    browser_app=`echo "${BROWSER}" | awk ' { print $1 } '`
+    browser_app=`basename ${browser_app}`
+    have_browser=`type -p ${browser_app}`
+    [ "${have_browser}" ] || BROWSER=default
+  else
+    BROWSER=default
+    have_browser=1
+  fi
+  cat "${KITTYCONF}" | sed -e "s%__SET__BROWSER__%${BROWSER}%" > /tmp/browser$$
+  cp /tmp/browser$$ "${KITTYCONF}"
+  rm -f /tmp/browser$$
+}
 [ -f ${KITTYCONFDIR}/kitty.conf ] || cp ${KITTYCONF} ${KITTYCONFDIR}/kitty.conf
 
 # Setup default rifle configuration for this user unless one exists
 [ -f ${CONFDIR}/rifle.conf ] && {
-  [ -f ${HOME}/.config/ranger/rifle.conf ] || {
-    [ -d ${HOME}/.config ] || mkdir -p ${HOME}/.config
-    [ -d ${HOME}/.config/ranger ] || mkdir -p ${HOME}/.config/ranger
-    cp ${CONFDIR}/rifle.conf ${HOME}/.config/ranger/rifle.conf
+  [ -f ${USERCONF}/ranger/rifle.conf ] || {
+    [ -d ${USERCONF}/ || mkdir -p ${USERCONF}
+    [ -d ${USERCONF}/ranger ] || mkdir -p ${USERCONF}/ranger
+    cp ${CONFDIR}/rifle.conf ${USERCONF}/ranger/rifle.conf
   }
 }
 
@@ -452,14 +469,14 @@ fi
 
 # Setup default tuir configuration for this user unless one exists
 [ -d ${CONFDIR}/tuir ] && {
-  [ -d ${HOME}/.config/tuir ] || {
-    cp -a ${CONFDIR}/tuir ${HOME}/.config/tuir
+  [ -d ${USERCONF}/tuir ] || {
+    cp -a ${CONFDIR}/tuir ${USERCONF}/tuir
     [ "${console}" ] && {
       [ -f ${CONFDIR}/console/tuir/mailcap ] && {
-        cp ${CONFDIR}/console/tuir/mailcap ${HOME}/.config/tuir/mailcap
+        cp ${CONFDIR}/console/tuir/mailcap ${USERCONF}/tuir/mailcap
       }
     }
-    chmod 600 ${HOME}/.config/tuir/tuir.cfg
+    chmod 600 ${USERCONF}/tuir/tuir.cfg
   }
 }
 
@@ -582,16 +599,16 @@ done
 
 # Custom jrnl configuration for this user unless one exists
 [ -d ${CONFDIR}/jrnl ] && {
-  if [ -d ${HOME}/.config/jrnl ]
+  if [ -d ${USERCONF}/jrnl ]
   then
     for jc in ${CONFDIR}/jrnl/*
     do
       [ "${jc}" == "${CONFDIR}/jrnl/*" ] && continue
       bj=`basename ${jc}`
-      [ -f ${HOME}/.config/jrnl/${bj} ] || cp ${jc} ${HOME}/.config/jrnl/${bj}
+      [ -f ${USERCONF}/jrnl/${bj} ] || cp ${jc} ${USERCONF}/jrnl/${bj}
     done
   else
-    cp -a ${CONFDIR}/jrnl ${HOME}/.config/jrnl
+    cp -a ${CONFDIR}/jrnl ${USERCONF}/jrnl
   fi
   [ -d ${HOME}/.local/share/jrnl ] || {
     [ -d ${HOME}/.local ] || mkdir ${HOME}/.local
@@ -792,15 +809,15 @@ have_go=`type -p go`
   }
   # Setup default got configuration for this user unless one exists
   [ -f ${CONFDIR}/got/config.yml ] && {
-    [ -f ${HOME}/.config/got/config.yml ] || {
-      [ -d ${HOME}/.config ] || mkdir -p ${HOME}/.config
-      [ -d ${HOME}/.config/got ] || mkdir -p ${HOME}/.config/got
-      cp ${CONFDIR}/got/config.yml ${HOME}/.config/got/config.yml
+    [ -f ${USERCONF}/got/config.yml ] || {
+      [ -d ${USERCONF}/ || mkdir -p ${USERCONF}
+      [ -d ${USERCONF}/got ] || mkdir -p ${USERCONF}/got
+      cp ${CONFDIR}/got/config.yml ${USERCONF}/got/config.yml
       [ "${LANG}" ] && {
         lang=`echo ${LANG} | awk -F '.' '{print $1}' | awk -F '_' '{print $1}'`
         [ "${lang}" == "en" ] || {
-          cat ${HOME}/.config/got/config.yml | sed -e "s/source: en/source: ${lang}/" -e "s/target: es/target: en/" > /tmp/gotconf$$
-          cp /tmp/gotconf$$ ${HOME}/.config/got/config.yml
+          cat ${USERCONF}/got/config.yml | sed -e "s/source: en/source: ${lang}/" -e "s/target: es/target: en/" > /tmp/gotconf$$
+          cp /tmp/gotconf$$ ${USERCONF}/got/config.yml
           rm -f /tmp/gotconf$$
         }
       }
@@ -816,9 +833,9 @@ have_go=`type -p go`
   }
 }
 
-CONF="${HOME}/.config/asciiville/config"
-[ -d ${HOME}/.config ] || mkdir ${HOME}/.config
-[ -d ${HOME}/.config/asciiville ] || mkdir ${HOME}/.config/asciiville
+CONF="${USERCONF}/asciiville/config"
+[ -d ${USERCONF} ] || mkdir ${USERCONF}
+[ -d ${USERCONF}/asciiville ] || mkdir ${USERCONF}/asciiville
 [ -f ${CONF} ] || {
   touch ${CONF}
   echo "ARTDIR=/usr/share/asciiville/art" >> ${CONF}

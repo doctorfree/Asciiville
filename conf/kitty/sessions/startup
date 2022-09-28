@@ -1,39 +1,40 @@
 # Asciiville Kitty tabbed startup session
 #
 # Kitty tab with Bash shell
-new_tab Home
-title Home
+new_tab
 launch bash
 enabled_layouts tall:bias=50;full_size=1
 layout tall
 
+# Kitty tab for SSH sessions
+# new_tab
+# launch bash
+# enabled_layouts tall:bias=50;full_size=1
+# layout tall
+
 # Kitty tab with Bash shell in Asciiville source directory
-# new_tab Asciiville
-# title Asciiville
+# new_tab
 # cd ~/src/Asciiville
 # launch bash
 # enabled_layouts tall:bias=50;full_size=1
 # layout tall 
 
 # Kitty tab with Bash shell in MusicPlayerPlus source directory
-# new_tab MusicPlayerPlus
-# title MusicPlayerPlus
+# new_tab
 # cd ~/src/MusicPlayerPlus
 # launch bash
 # enabled_layouts tall:bias=50;full_size=1
 # layout tall 
 
 # Kitty tab with Asciiville interactive menu system
-# new_tab Ascii Menu
-# title Ascii Menu
+# new_tab
 # cd ~
 # launch bash -c 'asciiville'
 # enabled_layouts tall:bias=50;full_size=1
 # layout tall 
 
 # Kitty tab with MusicPlayerPlus interactive menu system
-# new_tab Music Menu
-# title Music Menu
+# new_tab
 # cd ~
 # launch bash -c 'mpplus -i'
 # enabled_layouts tall:bias=50;full_size=1

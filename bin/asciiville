@@ -365,6 +365,7 @@ make_it_so() {
                 --start-as fullscreen \
                 --override font_size=18 \
                 --override draw_minimal_borders=yes \
+                --override tab_bar_min_tabs=2 \
                 ${AVCOMM} 2> /dev/null &
         else
           if [ "${TILIX}" ]
@@ -402,6 +403,7 @@ make_it_so() {
                 --override draw_minimal_borders=yes \
                 --override initial_window_width=90c \
                 --override initial_window_height=28c \
+                --override tab_bar_min_tabs=2 \
                 ${AVCOMM} 2> /dev/null &
         else
           if [ "${TILIX}" ]
@@ -656,6 +658,7 @@ show_art_file() {
               --override background=black \
               --override font_size=18 \
               --override draw_minimal_borders=yes \
+              --override tab_bar_min_tabs=2 \
               show_ascii_art -e kitty -K ${sock_name} ${showargs} -a "${art}"
         ;;
       tilix*)
@@ -718,6 +721,7 @@ show_art_file() {
               --override background=black \
               --override font_size=18 \
               --override draw_minimal_borders=yes \
+              --override tab_bar_min_tabs=2 \
               show_ascii_art -e kitty -K ${sock_name} ${showargs} -a "${art}"
           else
             gnome-terminal --window --full-screen \
@@ -762,6 +766,7 @@ play_show() {
               --override background=black \
               --override font_size=18 \
               --override draw_minimal_borders=yes \
+              --override tab_bar_min_tabs=2 \
               show_ascii_art -e kitty -K ${sock_name} ${showargs}
         ;;
       tilix*)
@@ -820,6 +825,7 @@ play_show() {
                   --override background=black \
                   --override font_size=18 \
                   --override draw_minimal_borders=yes \
+                  --override tab_bar_min_tabs=2 \
                   show_ascii_art -e kitty -K ${sock_name} ${showargs}
           else
             gnome-terminal --window --full-screen \

@@ -677,6 +677,7 @@ done
           --override font_size=${art_font_size} \
           --override initial_window_width=320c \
           --override initial_window_height=100c \
+          --override tab_bar_min_tabs=2 \
           ${mkartcomm} "${make_inp}" -o "${make_out}"
   else
     if [ "${have_gnome}" ]
