@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rm -rf fedora
+scp -r ronnie@10.0.1.202:/home/ronnie/transfers/fedora fedora

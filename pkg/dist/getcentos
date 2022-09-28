@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rm -rf centos
+scp -r ronnie@10.0.1.181:/home/ronnie/transfers/centos centos

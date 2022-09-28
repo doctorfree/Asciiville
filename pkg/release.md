@@ -2,6 +2,7 @@
 
 1. [Overview](#overview)
 1. [Installation](#installation)
+    1. [Arch Linux based installation](#arch-linux-based-installation)
     1. [Debian based installation](#debian-based-installation)
     1. [RPM based installation](#rpm-based-installation)
     1. [Manual installation](#manual-installation)
@@ -42,7 +43,15 @@ Supported features include:
 
 ## Installation
 
-Download the [latest Debian or RPM package format release](https://github.com/doctorfree/Asciiville/releases) for your platform.
+Download the [latest Arch, Debian, or RPM package format release](https://github.com/doctorfree/Asciiville/releases) for your platform.
+
+### Arch Linux based installation
+
+Install the package on Arch Linux based systems by executing the command:
+
+```bash
+sudo pacman -U ./Asciiville_1.4.1-2-x86_64.pkg.tar.zst
+```
 
 ### Debian based installation
 
@@ -70,7 +79,7 @@ sudo dnf localinstall ./Asciiville-1.4.1-2.x86_64.rpm
 
 ### Manual installation
 
-On systems for which neither the Debian or RPM packages will suffice, install manually by downloading the `Install-bin.sh` script and either the gzip'd distribution archive or the zip'd distribution archive.  After downloading the installation script and distribution archive, as a user with sudo privilege execute the commands:
+On systems for which the Arch, Debian, or RPM packages will not suffice, install manually by downloading the `Install-bin.sh` script and either the gzip'd distribution archive or the zip'd distribution archive.  After downloading the installation script and distribution archive, as a user with sudo privilege execute the commands:
 
 ```bash
 chmod 755 Install-bin.sh
@@ -104,6 +113,13 @@ asciisplash -a -i
 ```
 
 ## Removal
+
+Removal of the package on Arch Linux based systems can be accomplished by issuing the command:
+
+```bash
+sudo pacman -Rs asciiville
+```
+
 Removal of the package on Debian based systems can be accomplished by issuing the command:
 
 ```bash

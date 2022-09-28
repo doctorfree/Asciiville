@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rm -rf arch
+scp -r doctorwhen@10.0.1.65:/home/doctorwhen/transfers/arch arch

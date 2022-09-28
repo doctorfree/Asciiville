@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rm -rf rpi
+scp -r pi@10.0.1.85:/home/pi/transfers/rpi rpi
