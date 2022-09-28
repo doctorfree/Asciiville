@@ -16,6 +16,7 @@ Asciiville includes nearly 1,000 works of ASCII and ANSI Art!
 1. [Quickstart](#quickstart)
 1. [Requirements](#requirements)
 1. [Installation](#installation)
+    1. [Arch Linux package installation](#arch-linux-package-installation)
     1. [Debian package installation](#debian-package-installation)
     1. [RPM package installation](#rpm-package-installation)
     1. [Manual installation](#manual-installation)
@@ -233,6 +234,7 @@ Asciiville adds the following commands to your system:
 * **ddgr** : command line web search
 * **gameserver** : multi-player game server
 * **got** : text based translation tool (only added if `go` is installed)
+* **gum** : a tool for glamorous shell scripts (only added if `go` is installed)
 * **jp2a** : image to ascii conversion utility
 * **make_ascii_art** : generate ascii art from images
 * **mapscii** : character based zoomable map of the world
@@ -286,7 +288,7 @@ Additional detail and info can be found in the
 
 ## Quickstart
 
-* Install the latest Debian or RPM format installation package from the [Asciiville Releases](https://github.com/doctorfree/Asciiville/releases) page
+* Install the latest Arch, Debian, or RPM format installation package from the [Asciiville Releases](https://github.com/doctorfree/Asciiville/releases) page
 * Run the `ascinit` command
     * Must be done as a normal user with `sudo` privilege
 	* Run `ascinit -c` to perform a console initialization (no graphical utilities)
@@ -307,9 +309,9 @@ This should display a waterfall rendered with characters as ascii art.
 
 ## Requirements
 
-Asciiville can be installed on Debian or RPM based Linux systems.
-All of the following dependencies/requirements are automatically
-installed if needed when using the Debian or RPM format package install.
+Asciiville can be installed on Arch Linux, Debian based Linux systems, or
+RPM based Linux systems. All of the following dependencies/requirements are automatically
+installed if needed when using the Arch, Debian, or RPM format package install.
 
 * asciinema
 * cmatrix
@@ -343,6 +345,7 @@ Tools installed during post-installation configuration include:
 
 * asciimatics
 * got (if the `go` command is installed)
+* gum (if the `go` command is installed)
 * jrnl
 * mutt
 * neomutt
@@ -350,26 +353,44 @@ Tools installed during post-installation configuration include:
 * rainbowstream
 * tdraw (if the `go` command is installed)
 
-Asciiville does not install the `go` command. In order for the `got` and
-`tdraw` commands to be installed during post-installation configuration,
+Asciiville does not install the `go` command. In order for the `got`, `gum`,
+and `tdraw` commands to be installed during post-installation configuration,
 the `go` command needs to be previously installed. On most Debian based
-systems `go` can be installed with the command `sudo apt install golang-go`.
-On RPM based systems `go` can be installed with a command like
-`sudo dnf install golang`. See
-[https://go.dev/doc/install](https://go.dev/doc/install)
-for a guide on installing `go` on your system.
+systems `go` can be installed with `sudo apt install golang-go`. On RPM
+based systems `go` can be installed with `sudo dnf install golang`. On
+Arch Linux `go` can be installed with `sudo pacman -S go`. See
+[https://go.dev/doc/install](https://go.dev/doc/install) for a guide on
+installing `go` on your system.
 
 ## Installation
 
-Asciiville v1.3.0 and later can be installed on Linux systems using
-either the Debian packaging format or the Red Hat Package Manager (RPM).
-Currently tested platforms include Ubuntu Linux 20.04, Fedora Linux 35,
-and Raspbian Linux Bullseye. Installation packages are provided for
-the `amd64` and `armhf` architectures in Debian packaging format and the
-`x86_64` architecture in Red Hat package manager (RPM) format.
+Asciiville v1.4.1r2 and later can be installed on Linux systems using
+the Arch Linux packaging format, the Debian packaging format, or the
+Red Hat Package Manager (RPM). Currently tested platforms include Arch
+Linux 2022.07.01, Ubuntu Linux 20.04, Fedora Linux 35, and Raspbian Linux
+Bullseye. Installation packages are provided for the `amd64` and `armhf`
+architectures in Debian packaging format and the `x86_64` architecture
+in Red Hat package manager (RPM) format and Arch Linux packaging format.
 
 See the [Build](#build) section below to compile and build a package on
 an Linux platform other than those for which packages are provided.
+
+### Arch Linux package installation
+
+The `pacman` package manager is one of the major distinguishing features of
+Arch Linux. It combines a simple binary package format with an easy-to-use build
+system. The goal of *pacman* is to make it possible to easily manage packages,
+whether they are from the official repositories or the user's own builds.
+
+To install on an Arch based Linux system, download the latest Arch format
+package from the
+[Asciiville Releases](https://github.com/doctorfree/Asciiville/releases).
+
+Install the Asciiville package by executing the command
+
+```console
+sudo pacman -U ./Asciiville_<version>-<release>-x86_64.pkg.tar.zst
+```
 
 ### Debian package installation
 
@@ -426,7 +447,7 @@ sudo yum localinstall ./Asciiville_<version>-<release>.x86_64.rpm
 
 ### Manual installation
 
-On systems for which neither the Debian or RPM packages will suffice,
+On systems for which the Arch, Debian, or RPM packages will not suffice,
 install manually by downloading the `Install-bin.sh` script and either
 the gzip'd distribution archive or the zip'd distribution archive.
 After downloading the installation script and distribution archive,
@@ -1553,9 +1574,15 @@ see `/usr/bin/asciiart`.
 
 ## Build
 
-To compile and build a Debian or RPM format package on a Linux architecture
+To compile and build an Arch, Debian, or RPM format package on a Linux architecture
 for which a package is not provided, an appropriate development environment
 must be installed.
+
+On an Arch Linux based system:
+
+```console
+sudo pacman -S --needed base-devel ncurses pandoc zip
+```
 
 On a Debian based system:
 
@@ -1602,6 +1629,14 @@ A successful compilation and packaging will produce distribution/installation
 files in `./releases/<version>/`.
 
 ## Removal
+
+On Arch based Linux systems where the Asciiville package was installed
+using the Asciiville Arch format package, remove the Asciiville
+package by executing the command:
+
+```console
+    sudo pacman -Rs asciiville
+```
 
 On Debian based Linux systems where the Asciiville package was installed
 using the Asciiville Debian format package, remove the Asciiville

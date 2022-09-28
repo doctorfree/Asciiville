@@ -810,6 +810,10 @@ have_go=`type -p go`
   [ "${have_tdraw}" ] || {
     go install github.com/aca/tdraw@latest > /dev/null 2>&1
   }
+  have_gum=`type -p gum`
+  [ "${have_gum}" ] || {
+    go install github.com/charmbracelet/gum@latest > /dev/null 2>&1
+  }
 }
 
 CONF="${HOME}/.config/asciiville/config"
