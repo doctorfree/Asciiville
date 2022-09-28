@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo rm -rf dist releases
+sudo rm -rf dist releases asciiville
 cd aewan
 [ -f Makefile ] && make distclean
 rm -f configure
