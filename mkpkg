@@ -16,18 +16,22 @@ export __MPP_SRC__=`pwd`
 
 if [ "${debian}" ]
 then
+  sudo apt update
   pkg/mkdeb.sh
 else
   if [ "${arch}" ]
   then
+    sudo pacman -Syy
     pkg/mkaur.sh
   else
     if [ "${centos}" ]
     then
+      sudo dnf update
       pkg/mkrpm.sh centos
     else
       if [ "${fedora}" ]
       then
+        sudo dnf update
         pkg/mkrpm.sh fedora
       else
         echo "Unsupported platform"
