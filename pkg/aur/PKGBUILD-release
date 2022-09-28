@@ -11,7 +11,6 @@ depends=(util-linux libcurl-compat ncurses readline figlet tmux python python-pi
 makedepends=(cmake pandoc zip autoconf-archive pkgconf)
 optdepends=('cool-retro-term: cool retro terminal emulator')
 install=asciiville.install
-source=("${pkgname}::git+https://github.com/doctorfree/Asciiville.git")
 source=("${pkgname}::git+https://github.com/doctorfree/Asciiville.git#tag=${pkgver}")
 sha256sums=('SKIP')
 
@@ -22,8 +21,10 @@ prepare() {
 build() {
   cd "${srcdir}/${pkgname}"
   cd aewan
+  autoreconf -vi
   ./configure --prefix=/usr
   make
+  chmod +x aewan aecat aemakeflic
   cd ..
 
   cd btop
@@ -53,6 +54,10 @@ build() {
   cd ..
 
   cd games/nethack
+  cd sys/autoconf
+  ./bootstrap.sh
+  cd ../..
+  chmod 755 configure
   ./configure --prefix=/usr/games \
               --with-owner=games \
               --with-group=games \
