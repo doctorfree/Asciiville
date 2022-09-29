@@ -36,21 +36,26 @@ inst_pkg() {
   [ "${quiet}" ] || echo "Installing ${PKG}"
   if [ "${debian}" ]
   then
-    if [ "${have_apt}" ]
+    if [ "${APT}" ]
     then
-      sudo apt install "${PKG}" -y
+      sudo ${APT} install $1 > /dev/null 2>&1
     else
       [ "${quiet}" ] || echo "Cannot locate apt to install. Skipping."
     fi
   else
-    if [ "${have_dnf}" ]
+    if [ "${fedora}" ]
     then
-      sudo dnf install "${PKG}" -y
+      if [ "${DNF}" ]
+      then
+        sudo ${DNF} install $1 > /dev/null 2>&1
+      else
+        [ "${quiet}" ] || echo "Cannot locate dnf to install. Skipping."
+      fi
     else
-      [ "${quiet}" ] || echo "Cannot locate dnf to install. Skipping."
+      [ "${arch}" ] && sudo pacman -U --noconfirm $1 > /dev/null 2>&1
     fi
   fi
-}
+} 
 
 ask_install() {
   nam="$1"
@@ -210,12 +215,84 @@ have_tilix=`type -p tilix`
 have_xfce4=`type -p xfce4-terminal`
 have_retro=`type -p cool-retro-term`
 have_apt=`type -p apt`
+have_aptget=`type -p apt-get`
 have_dnf=`type -p dnf`
+have_yum=`type -p yum`
 
+arch=
 debian=
-[ -f /etc/os-release ] && . /etc/os-release
-[ "${ID_LIKE}" == "debian" ] && debian=1
-[ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
+fedora=
+mach=`uname -m`
+APT=
+DNF=
+if [ -f /etc/os-release ]
+then
+  . /etc/os-release
+  [ "${ID}" == "debian" ] || [ "${ID_LIKE}" == "debian" ] && debian=1
+  [ "${ID}" == "arch" ] && arch=1
+  [ "${ID}" == "fedora" ] && fedora=1
+else
+  if [ -f /etc/arch-release ]
+  then
+    arch=1
+  else
+    case "${mach}" in
+      arm*)
+        debian=1
+        ;;
+      x86*)
+        if [ "${have_apt}" ]
+        then
+          debian=1
+        else
+          if [ -f /etc/fedora-release ]
+          then
+            fedora=1
+          else
+            if [ "${have_dnf}" ] || [ "${have_yum}" ]
+            then
+              # Use Fedora RPM for all other rpm based systems
+              fedora=1
+            else
+              echo "Unknown operating system distribution"
+            fi
+          fi
+        fi
+        ;;
+      *)
+        echo "Unknown machine architecture"
+        ;;
+    esac
+  fi
+fi
+
+[ "${debian}" ] && {
+  if [ "${have_apt}" ]
+  then
+    APT="apt -q -y"
+  else
+    if [ "${have_aptget}" ]
+    then
+      APT="apt-get -q -y"
+    else
+      echo "Could not locate apt or apt-get."
+    fi
+  fi
+}
+
+[ "${fedora}" ] && {
+  if [ "${have_dnf}" ]
+  then
+    DNF="dnf --assumeyes --quiet"
+  else
+    if [ "${have_yum}" ]
+    then
+      DNF="yum --assumeyes --quiet"
+    else
+      echo "Could not locate dnf or yum."
+    fi
+  fi
+}
 
 ask_anim=1
 console=
@@ -327,9 +404,12 @@ shift $(( OPTIND - 1 ))
 }
 
 # NeoMutt configuration user setup
-[ "${have_neomutt}" ] || [ "${debian}" ] || {
-  sudo dnf copr enable flatcap/neomutt -y 2> /dev/null
-  inst_pkg neomutt
+[ "${have_neomutt}" ] || {
+  [ "${fedora}" ] && {
+    sudo dnf install dnf-plugins-core -y 2> /dev/null
+    sudo dnf copr enable flatcap/neomutt -y 2> /dev/null
+    inst_pkg neomutt
+  }
 }
 [ -d ${CONFDIR}/neomutt ] && {
   [ -d ${USERCONF}/neomutt ] || {
@@ -580,9 +660,14 @@ have_pip=`type -p pip`
   else
     if [ "${debian}" ]
     then
-      sudo apt install python3-pip
+      sudo ${APT} install python3-pip > /dev/null 2>&1
     else
-      sudo dnf install python3-pip
+      if [ "${arch}" ]
+      then
+        sudo pacman -U --noconfirm python-pip > /dev/null 2>&1
+      else
+        sudo ${DNF} install python3-pip > /dev/null 2>&1
+      fi
     fi
   fi
 }

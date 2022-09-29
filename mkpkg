@@ -1,7 +1,6 @@
 #!/bin/bash
 
 arch=
-centos=
 debian=
 fedora=
 
@@ -10,7 +9,6 @@ export __MPP_SRC__=`pwd`
 [ -f /etc/os-release ] && . /etc/os-release
 [ "${ID_LIKE}" == "debian" ] && debian=1
 [ "${ID}" == "arch" ] && arch=1
-[ "${ID}" == "centos" ] && centos=1
 [ "${ID}" == "fedora" ] && fedora=1
 [ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
 
@@ -24,18 +22,12 @@ else
     sudo pacman -Syy
     pkg/mkaur.sh
   else
-    if [ "${centos}" ]
+    if [ "${fedora}" ]
     then
       sudo dnf update
-      pkg/mkrpm.sh centos
+      pkg/mkrpm.sh fedora
     else
-      if [ "${fedora}" ]
-      then
-        sudo dnf update
-        pkg/mkrpm.sh fedora
-      else
-        echo "Unsupported platform"
-      fi
+      echo "Unsupported platform"
     fi
   fi
 fi
