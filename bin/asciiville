@@ -86,6 +86,7 @@ usage() {
   printf "\n\t\tIf 'command' is keyword 'reddit' then display Reddit terminal UI"
   printf "\n\t\tIf 'command' is keyword 'search' then a web search is performed"
   printf "\n\t\tIf 'command' is keyword 'speed' then a speed test is performed"
+  printf "\n\t\tIf 'command' is keyword 'splash' then show Asciiville splash screen"
   printf "\n\t\tIf 'command' is keyword 'translate' then the translation tool is run"
   printf "\n\t\tIf 'command' is keyword 'twitter' then a Twitter client is run"
   printf "\n\t\tIf 'command' is keyword 'weather' then display a weather report"
@@ -3418,6 +3419,17 @@ while getopts "Aabc:CdD:E:fFgiIjJkKlL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
           ;;
       speed|Speed)
           [ "${have_speed}" ] && speedtest-cli
+          exit 0
+          ;;
+      splash|Splash)
+          [ "${have_curl}" ] && {
+            [ -x ${TOOLSBIN}/asciifetch ] && {
+              clear
+              ${TOOLSBIN}/asciifetch -a
+              clear
+              ${TOOLSBIN}/asciifetch -z
+            }
+          }
           exit 0
           ;;
       translate|Translate)

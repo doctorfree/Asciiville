@@ -6,9 +6,10 @@ have_gum=$(type -p gum)
 [ "${have_gum}" ] || exit 1
 
 usage() {
-    printf "\nUsage: asciifetch [-a] [-z] [-u]"
+    printf "\nUsage: asciifetch [-a] [-k] [-z] [-u]"
 	printf "\nWhere:"
 	printf "\n\t-a indicates animate display"
+	printf "\n\t-k indicates do not exit"
 	printf "\n\t-z indicates zoom display"
 	printf "\n\t-u displays this usage message and exits\n"
 	exit 1
@@ -57,18 +58,57 @@ animate() {
     tput cup ${LINES} 0
 }
 
-#zoom() {
-#}
+zoom() {
+    sock_name="/tmp/fetch_kitty$$"
+    size=64
+    r_size=$((size+1))
+    interval="0.1"
+    kitty --title="Asciiville Zoom" \
+          --start-as fullscreen \
+          --override allow_remote_control=yes \
+          --override dynamic_background_opacity=yes \
+          --override background=black \
+          --override cursor=#000000 \
+          --override font_size=${size} \
+          --override draw_minimal_borders=yes \
+          --override tab_bar_min_tabs=2 \
+          --listen-on unix:${sock_name} \
+          /usr/share/asciiville/tools/bin/asciifetch -k 2> /dev/null &
+    sleep 1
+    size=$((size-1))
+    kitty @ --to unix:${sock_name} set-background-opacity 1.0
+    kitty @ --to unix:${sock_name} send-text ""
+    kitty @ --to unix:${sock_name} send-text ""
+    while [ ${size} -gt 0 ]
+    do
+        kitty @ --to unix:${sock_name} set-font-size ${size}
+        size=$((size-1))
+    done
+    sleep 0.2
+    size=2
+    while [ ${size} -lt ${r_size} ]
+    do
+        kitty @ --to unix:${sock_name} set-font-size ${size}
+        size=$((size+1))
+    done
+    sleep 1
+    kitty @ --to unix:${sock_name} close-window
+}
 
 animate=
 zoom=
-while getopts "azu" flag; do
+keepalive=
+while getopts "akzu" flag; do
     case $flag in
         a)
             animate=1
             ;;
+        k)
+            keepalive=1
+            ;;
         z)
-            zoom=1
+            have_kitty=`type -p kitty`
+            [ "${have_kitty}" ] && zoom=1
             ;;
         u)
             usage
@@ -121,6 +161,13 @@ print_test() {
     printf '%b' "\033[A"
 
     [ "${animate}" ] && animate
+    [ "${zoom}" ] && zoom
+    [ "${keepalive}" ] && {
+      while true
+      do
+        sleep 1
+      done
+    }
     exit 0
 }
 
