@@ -41,6 +41,7 @@ ASHARE=/usr/share/asciiville
 DSHARE=/usr/share/doc/asciiville
 ARTDIR=${ASHARE}/art
 MUSEDIR=${ASHARE}/music
+TOOLSBIN=${ASHARE}/tools/bin
 SONG="${MUSEDIR}/Chronos.mp3"
 ALTSONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 shuffle=
@@ -2067,12 +2068,12 @@ show_animation_menu() {
               then
                 if [ "${custom_song}" ]
                 then
-                  bash ${ASHARE}/tools/bin/bb-tmux -a -s "${SONG}"
+                  bash ${TOOLSBIN}/bb-tmux -a -s "${SONG}"
                 else
-                  bash ${ASHARE}/tools/bin/bb-tmux -a
+                  bash ${TOOLSBIN}/bb-tmux -a
                 fi
               else
-                bash ${ASHARE}/tools/bin/bb-tmux
+                bash ${TOOLSBIN}/bb-tmux
               fi
               skip_it_so=1
               export DISPLAY="${SAVED_DISPLAY}"
@@ -2605,7 +2606,7 @@ show_main_menu() {
     [ "${have_curl}" ] && options+=("Phase of the Moon")
     options+=("Run ${show_comm} in ${show_term}")
     [ "${have_ddgr}" ] && options+=("Search the Web")
-    [ "${have_curl}" ] && [ -x ${ASHARE}/tools/bin/pokefetch ] && {
+    [ "${have_curl}" ] && [ -x ${TOOLSBIN}/pokefetch ] && {
       options+=("Show a Pokemon")
     }
     [ "${have_speed}" ] && options+=("Speed Test")
@@ -2747,9 +2748,9 @@ show_main_menu() {
               export DISPLAY=""
               if [ "${AUDIO}" ]
               then
-                bash ${ASHARE}/tools/bin/bb-tmux -a
+                bash ${TOOLSBIN}/bb-tmux -a
               else
-                bash ${ASHARE}/tools/bin/bb-tmux
+                bash ${TOOLSBIN}/bb-tmux
               fi
               skip_it_so=1
               export DISPLAY="${SAVED_DISPLAY}"
@@ -2758,9 +2759,9 @@ show_main_menu() {
           "AAlib Demo (X11 mode)",*|*,"AAlib Demo (X11 mode)")
               if [ "${AUDIO}" ]
               then
-                bash ${ASHARE}/tools/bin/bb-tmux -a
+                bash ${TOOLSBIN}/bb-tmux -a
               else
-                bash ${ASHARE}/tools/bin/bb-tmux
+                bash ${TOOLSBIN}/bb-tmux
               fi
               skip_it_so=1
               break
@@ -2772,15 +2773,15 @@ show_main_menu() {
               break
               ;;
           "Show a Pok"*,*|*,"Show a Pok"*)
-              ${ASHARE}/tools/bin/pokefetch
+              ${TOOLSBIN}/pokefetch
               read -p "Press Enter to continue" answer
               skip_it_so=1
               break
               ;;
           "Weather"*,*|*,"Weather"*)
               printf "\n"
-              [ -x ${ASHARE}/tools/bin/weatherfetch ] && {
-                ${ASHARE}/tools/bin/weatherfetch
+              [ -x ${TOOLSBIN}/weatherfetch ] && {
+                ${TOOLSBIN}/weatherfetch
               }
               printf "\n"
               curl wttr.in?AFQn1 2> /dev/null | tail -n +6
@@ -3165,9 +3166,9 @@ set_show_term() {
 
 init_vars() {
   MTITLE="Asciiville"
-  COMMAND_TMUX="bash ${ASHARE}/tools/bin/btop-tmux"
+  COMMAND_TMUX="bash ${TOOLSBIN}/btop-tmux"
   ASCSPLASH="asciisplash"
-  ASCSPLASH_TMUX="bash ${ASHARE}/tools/bin/asciisplash-tmux"
+  ASCSPLASH_TMUX="bash ${TOOLSBIN}/asciisplash-tmux"
 
   INTERACTIVE=
   RECORD=
@@ -3401,8 +3402,8 @@ while getopts "Aabc:CdD:E:fFgiIjJkKlL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
           ;;
       pok*|Pok*)
           [ "${have_curl}" ] && {
-            [ -x ${ASHARE}/tools/bin/pokefetch ] && {
-              ${ASHARE}/tools/bin/pokefetch
+            [ -x ${TOOLSBIN}/pokefetch ] && {
+              ${TOOLSBIN}/pokefetch
             }
           }
           exit 0
@@ -3429,8 +3430,8 @@ while getopts "Aabc:CdD:E:fFgiIjJkKlL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
           ;;
       weather|Weather)
           [ "${have_curl}" ] && {
-            [ -x ${ASHARE}/tools/bin/weatherfetch ] && {
-              ${ASHARE}/tools/bin/weatherfetch
+            [ -x ${TOOLSBIN}/weatherfetch ] && {
+              ${TOOLSBIN}/weatherfetch
             }
             printf "\n"
             curl wttr.in?AFQn1 2> /dev/null | tail -n +6
@@ -4034,7 +4035,51 @@ done
   [ "${FULLSCREEN}" ] && add_fullscreen
   trap 'set_user_conf' SIGINT SIGTERM SIGHUP EXIT
   clear
-  echo ""
+  [ -x ${TOOLSBIN}/asciifetch ] && {
+    LINES=$(tput lines)
+    quarter=$((LINES / 4))
+    interval="0.1"
+
+    tput cup ${LINES} 0
+    ${TOOLSBIN}/asciifetch
+
+    line=0
+    while [ ${line} -lt ${quarter} ]
+    do
+      sleep ${interval}
+      printf "\n"
+      line=$((line+1))
+    done
+
+    line=0
+    tput cup 0 0
+    while [ ${line} -lt ${quarter} ]
+    do
+      sleep ${interval}
+      tput ri
+      line=$((line+1))
+    done
+
+    line=0
+    tput cup ${LINES} 0
+    while [ ${line} -lt ${quarter} ]
+    do
+      sleep ${interval}
+      printf "\n"
+      line=$((line+1))
+    done
+
+    line=0
+    tput cup 0 0
+    while [ ${line} -lt ${quarter} ]
+    do
+      sleep ${interval}
+      tput ri
+      line=$((line+1))
+    done
+    tput cup ${LINES} 0
+    sleep 2
+  }
   show_main_menu
 }
 
