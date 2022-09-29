@@ -4036,49 +4036,8 @@ done
   trap 'set_user_conf' SIGINT SIGTERM SIGHUP EXIT
   clear
   [ -x ${TOOLSBIN}/asciifetch ] && {
-    LINES=$(tput lines)
-    quarter=$((LINES / 4))
-    interval="0.1"
-
-    tput cup ${LINES} 0
-    ${TOOLSBIN}/asciifetch
-
-    line=0
-    while [ ${line} -lt ${quarter} ]
-    do
-      sleep ${interval}
-      printf "\n"
-      line=$((line+1))
-    done
-
-    line=0
-    tput cup 0 0
-    while [ ${line} -lt ${quarter} ]
-    do
-      sleep ${interval}
-      tput ri
-      line=$((line+1))
-    done
-
-    line=0
-    tput cup ${LINES} 0
-    while [ ${line} -lt ${quarter} ]
-    do
-      sleep ${interval}
-      printf "\n"
-      line=$((line+1))
-    done
-
-    line=0
-    tput cup 0 0
-    while [ ${line} -lt ${quarter} ]
-    do
-      sleep ${interval}
-      tput ri
-      line=$((line+1))
-    done
-    tput cup ${LINES} 0
-    sleep 2
+    ${TOOLSBIN}/asciifetch -a
+    [ $? -eq 0 ] || tput cup 0 0
   }
   show_main_menu
 }

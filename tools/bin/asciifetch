@@ -5,6 +5,78 @@
 have_gum=$(type -p gum)
 [ "${have_gum}" ] || exit 1
 
+usage() {
+    printf "\nUsage: asciifetch [-a] [-z] [-u]"
+	printf "\nWhere:"
+	printf "\n\t-a indicates animate display"
+	printf "\n\t-z indicates zoom display"
+	printf "\n\t-u displays this usage message and exits\n"
+	exit 1
+}
+
+animate() {
+    LINES=$(tput lines)
+    quarter=$((LINES / 4))
+    interval="0.1"
+    line=0
+    while [ ${line} -lt ${quarter} ]
+    do
+        sleep ${interval}
+        printf "\n"
+        line=$((line+1))
+    done
+
+    line=0
+    tput cup 0 0
+    while [ ${line} -lt ${quarter} ]
+    do
+        sleep ${interval}
+        tput ri
+        line=$((line+1))
+    done
+
+    line=0
+    tput cup ${LINES} 0
+    while [ ${line} -lt ${quarter} ]
+    do
+        sleep ${interval}
+        printf "\n"
+        line=$((line+1))
+    done
+
+    line=0
+    tput cup 0 0
+    while [ ${line} -lt ${quarter} ]
+    do
+        sleep ${interval}
+        tput ri
+        line=$((line+1))
+    done
+
+    sleep 2
+    tput cup ${LINES} 0
+}
+
+#zoom() {
+#}
+
+animate=
+zoom=
+while getopts "azu" flag; do
+    case $flag in
+        a)
+            animate=1
+            ;;
+        z)
+            zoom=1
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
 title=$(gum style --bold --foreground 12 "$(figlet Asciiville)")
 subtitle=$(gum style --italic --foreground 12 'The Ultimate in Ascii Art')
 info=$(gum join --vertical --align center "${title}" "${subtitle}")
@@ -40,15 +112,16 @@ terminal_width=${terminal_size#* }
 prompt_height=${PROMPT_HEIGHT#-1}
 
 print_test() {
-	no_color=$(printf '%b' "${1}" | sed -e 's/\x1B\[[0-9;]*[JKmsu]//g')
+    no_color=$(printf '%b' "${1}" | sed -e 's/\x1B\[[0-9;]*[JKmsu]//g')
 
-	[ "$(printf '%s' "${no_color}" | wc --lines)" -gt $(( terminal_height - prompt_height )) ] && return 1
-	[ "$(printf '%s' "${no_color}" | wc --max-line-length)" -gt "${terminal_width}" ] && return 1
+    [ "$(printf '%s' "${no_color}" | wc --lines)" -gt $(( terminal_height - prompt_height )) ] && return 1
+    [ "$(printf '%s' "${no_color}" | wc --max-line-length)" -gt "${terminal_width}" ] && return 1
 
-	gum style --align center --width="${terminal_width}" "${1}" ''
-	printf '%b' "\033[A"
+    gum style --align center --width="${terminal_width}" "${1}" ''
+    printf '%b' "\033[A"
 
-	exit 0
+    [ "${animate}" ] && animate
+    exit 0
 }
 
 
