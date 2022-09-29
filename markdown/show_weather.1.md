@@ -9,13 +9,17 @@ date: May 01, 2022
 show_weather - Display a weather report
 
 ## SYNOPSIS
-**show_weather** [-h] [-L location] [-l lang] [-u]
+**show_weather** [-f format] [-h] [-L location] [-l lang] [-u]
 
 ## DESCRIPTION
 The *show_weather* command displays a weather report in ANSI characters.
 Command line options can be used to specify the location, and language.
 
 ## COMMAND LINE OPTIONS
+
+**-f 'format'**
+: specifies a format string (default: AFQn1)
+
 **-h**
 : indicates show online help message and exit
 
@@ -31,9 +35,6 @@ Command line options can be used to specify the location, and language.
 	Supported languages:
 		am ar af be bn ca da de el et fr fa hi hu ia id it lt
 		mg nb nl oc pl pt-br ro ru ta tr th uk vi zh-cn zh-tw
-
-**-s**
-: indicates use v1 server
 
 **-u**
 : indicates show this usage message and exit

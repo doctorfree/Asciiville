@@ -3,7 +3,8 @@
 # show_weather - display a weather report in ANSI characters
 
 usage() {
-  printf "\nUsage: show_weather [-h] [-L location] [-l lang] [-u]"
+  printf "\nUsage: show_weather [-f format] [-h] [-L location] [-l lang] [-u]"
+  printf "\n\t-f 'format' specifies a format string (default: AFQn1)"
   printf "\n\t-h indicates show online help message and exit"
   printf "\n\t-L 'location' specifies the location key to use"
   printf "\n\t\tUse any of the location types described in the help document"
@@ -11,30 +12,32 @@ usage() {
   printf "\n\t-l 'lang' specifies the language code"
   printf "\n\tSupported languages:"
   printf "\n\t\tam ar af be bn ca da de el et fr fa hi hu ia id it lt mg nb nl oc pl pt-br ro ru ta tr th uk vi zh-cn zh-tw"
-  printf "\n\t-s indicates use v1 server"
   printf "\n\t-u indicates show this usage message and exit\n"
   [ "${showhelp}" ] && curl ${server}/:help
   exit 1
 }
 
+lang=
 langopt=
 location=
 showhelp=
-server="v2.wttr.in"
-while getopts "hL:l:su" flag; do
+server="wttr.in"
+format="AFQn1"
+while getopts "f:hL:l:u" flag; do
     case $flag in
+        f)
+            format="${OPTARG}"
+            ;;
         h)
             showhelp=1
             ;;
         L)
-            location="/${OPTARG}"
+            location="${OPTARG}"
             location=`echo ${location} | sed -e "s/ /+/g"`
             ;;
         l)
-            langopt="&lang=${OPTARG}"
-            ;;
-        s)
-            server="wttr.in"
+            lang="${OPTARG}"
+            langopt="&lang=${lang}"
             ;;
         u)
             usage
@@ -43,9 +46,32 @@ while getopts "hL:l:su" flag; do
 done
 shift $(( OPTIND - 1 ))
 
+have_curl=`type -p curl`
+[ "${have_curl}" ] || {
+  echo "This command requires curl. No curl command is found in the execution PATH."
+  usage
+}
+
+printf "\n"
 [ "${showhelp}" ] && {
   curl ${server}/:help
   exit 0
 }
 
-curl ${server}${location}?AF${langopt} 2> /dev/null
+if [ -x ${ASHARE}/tools/bin/weatherfetch ]
+then
+  if [ "${lang}" ]
+  then
+    ${ASHARE}/tools/bin/weatherfetch -l ${lang} ${location}
+  else
+    ${ASHARE}/tools/bin/weatherfetch ${location}
+  fi
+  printf "\n"
+  [ "${location}" ] && location="/${location}"
+  curl ${server}${location}?${format}${langopt} 2> /dev/null
+else
+  format=`echo "${format}" | sed -e "s/Q/q/"`
+  [ "${location}" ] && location="/${location}"
+  curl ${server}${location}?${format}${langopt} 2> /dev/null
+fi
+printf "\n"

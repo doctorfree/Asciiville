@@ -118,6 +118,7 @@ The `asciiville` command can also be used to invoke commands in a variety of way
 * The `cmatrix` command that displays the screen from "The Matrix"
 * ASCII Art creation tool `aewan`
 * Display system info
+* Display a random Pokemon
 * Display the Phase of the Moon
 * Display a weather report
 * Display the MusicPlayerPlus or RoonCommandLine interactive menus
@@ -1337,6 +1338,10 @@ Display a zoomable map of the world using `mapscii`:
 Display the Phase of the Moon using `wttr.in`:
 
 `asciiville -c moon`
+
+Display a random Pokemon:
+
+`asciiville -c pokemon`
 
 Run the `ddgr` command line web search in the current terminal window:
 

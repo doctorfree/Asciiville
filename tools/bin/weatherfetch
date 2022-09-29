@@ -5,12 +5,58 @@
 have_gum=$(type -p gum)
 [ "${have_gum}" ] || exit 1
 
+debug=
+lang=
 main_color=6
+server="wttr.in"
 
-data=$(curl -fsLS "https://wttr.in/$*?format=j1")
+usage() {
+    printf "\nUsage: weatherfetch [-d] [-l lang] [-u] [location]"
+	printf "\nWhere:"
+	printf "\n\t-d indicates debug mode"
+	printf "\n\t-l lang indicates the language code to use"
+	printf "\n\tlocation indicates the location to use"
+	printf "\n\t-u displays this usage message and exits"
+	printf "\nDefault language code is 'en', default location is current location"
+	printf "\nExample: weatherfetch -l de Berlin\n"
+	exit 1
+}
 
-location=$(curl -fsLS "https://wttr.in/$*?format=%l")
+while getopts "dl:u" flag; do
+    case $flag in
+        d)
+            debug=1
+            ;;
+        l)
+            lang="${OPTARG}"
+            server="${lang}.wttr.in"
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+data=$(curl -fsLS "https://${server}/$*?format=j1")
+
+[ "${debug}" ] && {
+	echo "${data}" > /tmp/fetch$$
+    echo "Debug data is saved in /tmp/fetch$$"
+}
+
+location=$(curl -fsLS "https://${server}/$*?format=%l")
+[ "${debug}" ] && {
+	echo "${location}" > /tmp/location$$
+    echo "Debug location data is saved in /tmp/location$$"
+}
 description=$(echo "${data}" | jq --raw-output .weather[0].hourly[7].weatherDesc[0].value)
+if [ "${lang}" ]
+then
+  desc=$(echo "${data}" | jq --raw-output .weather[0].hourly[7].lang_${lang}[0].value)
+else
+  desc="${description}"
+fi
 humidity=$(echo "${data}" | jq --raw-output .weather[0].hourly[7].humidity)
 temperature=$(echo "${data}" | jq --raw-output .weather[0].hourly[7].tempF)
 temperature_feels=$(echo "${data}" | jq --raw-output .weather[0].hourly[7].FeelsLikeF)
@@ -40,7 +86,7 @@ esac
 
 info="[1;38;5;${main_color}m${location}[0m
 ----------------
-[1;38;5;${main_color}mDescription:[0m ${description}
+[1;38;5;${main_color}mDescription:[0m ${desc}
 [1;38;5;${main_color}mHumidity:[0m ${humidity}%
 [1;38;5;${main_color}mTemperature:[0m ${temperature}(${temperature_feels})°F
 [1;38;5;${main_color}mDew Point:[0m ${dewpoint}°F
