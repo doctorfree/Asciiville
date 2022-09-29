@@ -81,6 +81,7 @@ usage() {
   printf "\n\t\tIf 'command' is keyword 'maps' then display a map using mapscii"
   printf "\n\t\tIf 'command' is keyword 'moon' then display the phase of the Moon"
   printf "\n\t\tIf 'command' is keyword 'news' then display RSS news feeds"
+  printf "\n\t\tIf 'command' is keyword 'pokemon' then display a Pokemon"
   printf "\n\t\tIf 'command' is keyword 'reddit' then display Reddit terminal UI"
   printf "\n\t\tIf 'command' is keyword 'search' then a web search is performed"
   printf "\n\t\tIf 'command' is keyword 'speed' then a speed test is performed"
@@ -2604,6 +2605,9 @@ show_main_menu() {
     [ "${have_curl}" ] && options+=("Phase of the Moon")
     options+=("Run ${show_comm} in ${show_term}")
     [ "${have_ddgr}" ] && options+=("Search the Web")
+    [ "${have_curl}" ] && [ -x ${ASHARE}/tools/bin/pokefetch ] && {
+      options+=("Show a Pokemon")
+    }
     [ "${have_speed}" ] && options+=("Speed Test")
     [ "${have_rainbow}" ] && options+=("Twitter Client")
     [ "${have_curl}" ] && options+=("Weather Report")
@@ -2767,8 +2771,20 @@ show_main_menu() {
               skip_it_so=1
               break
               ;;
+          "Show a Pok"*,*|*,"Show a Pok"*)
+              ${ASHARE}/tools/bin/pokefetch
+              read -p "Press Enter to continue" answer
+              skip_it_so=1
+              break
+              ;;
           "Weather"*,*|*,"Weather"*)
-              curl v2.wttr.in?AF 2> /dev/null
+              printf "\n"
+              [ -x ${ASHARE}/tools/bin/weatherfetch ] && {
+                ${ASHARE}/tools/bin/weatherfetch
+              }
+              printf "\n"
+              curl wttr.in?AFQn1 2> /dev/null | tail -n +6
+              printf "\n"
               read -p "Press Enter to continue" answer
               skip_it_so=1
               break
@@ -3348,20 +3364,18 @@ while getopts "Aabc:CdD:E:fFgiIjJkKlL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
       case "${COMMAND}" in
       endo|Endo)
           [ "${have_endo}" ] && bash -m /usr/bin/show_endo
-          break
+          exit 0
           ;;
       maps|Maps)
           [ "${have_mapscii}" ] && mapscii
-          break
+          exit 0
           ;;
       moon|Moon)
-          [ "${have_curl}" ] && {
-            curl wttr.in/Moon?AF 2> /dev/null
-            read -p "Press Enter to continue" answer
-          }
-          break
+          [ "${have_curl}" ] && curl wttr.in/Moon?AF 2> /dev/null
+          exit 0
           ;;
       news|News)
+          COMMAND=newsboat
           MTITLE="Asciiville News"
           [ "${have_newsboat}" ] || {
             not_in_path newsboat -c
@@ -3385,32 +3399,43 @@ while getopts "Aabc:CdD:E:fFgiIjJkKlL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
           }
           break
           ;;
+      pok*|Pok*)
+          [ "${have_curl}" ] && {
+            [ -x ${ASHARE}/tools/bin/pokefetch ] && {
+              ${ASHARE}/tools/bin/pokefetch
+            }
+          }
+          exit 0
+          ;;
       reddit|Reddit)
           [ "${have_tuir}" ] && tuir
-          break
+          exit 0
           ;;
       search|Search)
           [ "${have_ddgr}" ] && ddgr
-          break
+          exit 0
           ;;
       speed|Speed)
           [ "${have_speed}" ] && speedtest-cli
-          break
+          exit 0
           ;;
       translate|Translate)
           [ "${have_got}" ] && got
-          break
+          exit 0
           ;;
       twitter|Twitter)
           [ "${have_rainbow}" ] && rainbowstream
-          break
+          exit 0
           ;;
       weather|Weather)
-          break
           [ "${have_curl}" ] && {
-            curl v2.wttr.in?AF 2> /dev/null
-            read -p "Press Enter to continue" answer
+            [ -x ${ASHARE}/tools/bin/weatherfetch ] && {
+              ${ASHARE}/tools/bin/weatherfetch
+            }
+            printf "\n"
+            curl wttr.in?AFQn1 2> /dev/null | tail -n +6
           }
+          exit 0
           ;;
       *)
           FIRST=`echo ${COMMAND} | awk ' { print $1 } '`

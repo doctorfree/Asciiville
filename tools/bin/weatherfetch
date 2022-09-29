@@ -12,8 +12,9 @@ data=$(curl -fsLS "https://wttr.in/$*?format=j1")
 location=$(curl -fsLS "https://wttr.in/$*?format=%l")
 description=$(echo "${data}" | jq --raw-output .weather[0].hourly[7].weatherDesc[0].value)
 humidity=$(echo "${data}" | jq --raw-output .weather[0].hourly[7].humidity)
-temperature=$(echo "${data}" | jq --raw-output .weather[0].hourly[7].tempC)
-temperature_feels=$(echo "${data}" | jq --raw-output .weather[0].hourly[7].FeelsLikeC)
+temperature=$(echo "${data}" | jq --raw-output .weather[0].hourly[7].tempF)
+temperature_feels=$(echo "${data}" | jq --raw-output .weather[0].hourly[7].FeelsLikeF)
+dewpoint=$(echo "${data}" | jq --raw-output .weather[0].hourly[7].DewPointF)
 wind_speed=$(echo "${data}" | jq --raw-output .weather[0].hourly[7].windspeedKmph)
 precipitation=$(echo "${data}" | jq --raw-output .weather[0].hourly[7].precipMM)
 pressure=$(echo "${data}" | jq --raw-output .weather[0].hourly[7].pressure)
@@ -41,7 +42,8 @@ info="[1;38;5;${main_color}m${location}[0m
 ----------------
 [1;38;5;${main_color}mDescription:[0m ${description}
 [1;38;5;${main_color}mHumidity:[0m ${humidity}%
-[1;38;5;${main_color}mTemperature:[0m ${temperature}(${temperature_feels})°C
+[1;38;5;${main_color}mTemperature:[0m ${temperature}(${temperature_feels})°F
+[1;38;5;${main_color}mDew Point:[0m ${dewpoint}°F
 [1;38;5;${main_color}mWind:[0m${wind_direction} ${wind_speed}km/h
 [1;38;5;${main_color}mPrecipitation:[0m ${precipitation}mm
 [1;38;5;${main_color}mPressure:[0m ${pressure}hPa"
