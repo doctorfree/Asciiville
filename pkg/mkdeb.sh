@@ -199,6 +199,8 @@ ${SUDO} cp aewan/aecat ${OUT_DIR}/${DESTDIR}/bin/aecat
 ${SUDO} cp aewan/aemakeflic ${OUT_DIR}/${DESTDIR}/bin/aemakeflic
 
 ${SUDO} cp -a endoh1 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1
+${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1/endoh1
+${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1/endoh1_color
 
 ${SUDO} cp -a share/doc ${OUT_DIR}/${DESTDIR}/share/doc
 

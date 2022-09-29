@@ -5,8 +5,36 @@
 have_gum=$(type -p gum)
 [ "${have_gum}" ] || exit 1
 
+usage() {
+    printf "\nUsage: pokefetch [-i id] [-n name] [-u]"
+	printf "\nWhere:"
+	printf "\n\t-i 'id' specifies the Pokemon ID to retrieve"
+	printf "\n\t-n 'name' specifies the Pokemon name to retrieve"
+	printf "\n\t-u displays this usage message and exits"
+	printf "\nDefault: random Pokemon ID"
+	printf "\nExample: pokefetch -n Genesect\n"
+	exit 1
+}
 
-pokemon=${1:-$(shuf -i 1-905 -n 1)}
+pokemon=
+while getopts "i:n:u" flag; do
+    case $flag in
+        i)
+            pokemon="$OPTARG"
+			[ ${pokemon} -lt 1 ] || [ ${pokemon} -gt 905 ] && pokemon= 
+            ;;
+        n)
+            pokemon="$OPTARG"
+            pokemon=`echo "${pokemon}" | tr '[:upper:]' '[:lower:]'`
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+[ "${pokemon}" ] || pokemon=${1:-$(shuf -i 1-905 -n 1)}
 
 data_pokemon=$(curl -fsLS "https://pokeapi.co/api/v2/pokemon/${pokemon}")
 data_species=$(curl -fsLS "$(echo "${data_pokemon}" | jq --raw-output .species.url)")

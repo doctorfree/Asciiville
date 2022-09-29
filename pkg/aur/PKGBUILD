@@ -134,6 +134,8 @@ package() {
   cp aewan/aemakeflic ${pkgdir}/${destdir}/bin/aemakeflic
 
   cp -a endoh1 ${pkgdir}/${destdir}/share/${pkgname}/endoh1
+  chmod 755 ${pkgdir}/${destdir}/share/${pkgname}/endoh1/endoh1
+  chmod 755 ${pkgdir}/${destdir}/share/${pkgname}/endoh1/endoh1_color
 
   cp -a share/doc ${pkgdir}/${destdir}/share/doc
 

@@ -246,6 +246,7 @@ Asciiville adds the following commands to your system:
 * **set_xfce_trans** : sets an xfce4-terminal window's transparency level
 * **show_ascii_art** : display ascii art, convert images to ascii art
 * **show_endo** : display a series of ascii fluid dynamics simulations
+* **show_pokemon** : display a Pokemon pocket monster
 * **show_moon** : display the phase of the Moon
 * **show_weather** : display a weather report
 * **tdraw** : ASCII drawing tool (only added if `go` is installed)
@@ -1063,6 +1064,7 @@ bring up the interactive menu interface.
 - [**cbftp**](markdown/cbftp.1.md) : Asciiville FTP client
 - [**show_ascii_art**](markdown/show_ascii_art.1.md) : Display ascii art, convert images to ascii art
 - [**show_moon**](markdown/show_moon.1.md) : Display the phase of the Moon
+- [**show_pokemon**](markdown/show_pokemon.1.md) : Display a Pokemon pocket monster
 - [**show_weather**](markdown/show_weather.1.md) : Display a weather report
 - [**termprofset**](markdown/termprofset.1.md) : Manipulate default terminal profile or font settings
 

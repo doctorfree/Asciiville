@@ -1,0 +1,43 @@
+#!/bin/bash
+#
+# show_pokemon - display a random Pokemon
+
+usage() {
+  printf "\nUsage: show_pokemon [-i id] [-n name] [-u]"
+  printf "\n\t-i 'id' specifies the Pokemon ID to retrieve"
+  printf "\n\t-n 'name' specifies the Pokemon name to retrieve"
+  printf "\n\t-u indicates show this usage message and exit\n"
+  exit 1
+}
+
+args=
+while getopts "i:n:u" flag; do
+    case $flag in
+        i)
+            [ "${args}" ] && {
+              echo "Only one of -i and -n is allowed."
+              usage
+            }
+            id=${OPTARG}
+            args="-i ${id}"
+            ;;
+        n)
+            [ "${args}" ] && {
+              echo "Only one of -i and -n is allowed."
+              usage
+            }
+            name=${OPTARG}
+            args="-n ${name}"
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+have_curl=`type -p curl`
+[ "${have_curl}" ] && {
+  TOOLSBIN="/usr/share/asciiville/tools/bin"
+  [ -x ${TOOLSBIN}/pokefetch ] && ${TOOLSBIN}/pokefetch ${args}
+}
