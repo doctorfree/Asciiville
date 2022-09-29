@@ -34,6 +34,11 @@ build() {
   cd ..
 
   cd cbftp
+  NCW="src/ui/ncurseswrap.h"
+  cp ${NCW} /tmp/nc_save$$
+  cat ${NCW} | sed -e "s%ncursesw/curses.h%ncurses.h%" > /tmp/nc$$
+  cp /tmp/nc$$ ${NCW}
+  rm -f /tmp/nc$$
   make clean
   make
   chmod +x bin/*
