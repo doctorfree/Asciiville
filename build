@@ -66,7 +66,17 @@ build_cbftp() {
   #   sudo apt upgrade -y
   #   sudo apt install make g++ libssl-dev libncursesw5-dev
   #
-  [ -f bin/cbftp ] || make
+  [ -f bin/cbftp ] || {
+    [ -f /etc/arch-release ] && {
+      NCW="src/ui/ncurseswrap.h"
+      cp ${NCW} /tmp/nc_save$$
+      cat ${NCW} | sed -e "s%ncursesw/curses.h%ncurses.h%" > /tmp/nc$$
+      cp /tmp/nc$$ ${NCW}
+      rm -f /tmp/nc$$
+    }
+    make
+    [ -f /tmp/nc_save$$ ] && cp /tmp/nc_save$$ ${NCW}
+  }
   chmod +x bin/*
 
   [ "${INSTALL}" ] && {
