@@ -1,14 +1,20 @@
 #!/bin/bash
-
-# Prepare ----------------------------------------------------------------------
+#
+# asciifetch - display, animate, zoom Asciiville splash screen using Kitty
+#
+# Written by Ronald Joe Record <ronaldrecord@gmail.com>
+#
+# Based on https://github.com/info-mono/diyfetch/blob/main/examples/brandfetch
+# from the diyfetch project by Nguyen Nhadt Anh <nnbnh@protonmail.com>
 
 have_gum=$(type -p gum)
 [ "${have_gum}" ] || exit 1
 
 usage() {
-    printf "\nUsage: asciifetch [-a] [-k] [-z] [-u]"
+    printf "\nUsage: asciifetch [-a] [-f] [-k] [-z] [-u]"
 	printf "\nWhere:"
 	printf "\n\t-a indicates animate display"
+	printf "\n\t-f indicates fullscreen zoom"
 	printf "\n\t-k indicates do not exit"
 	printf "\n\t-z indicates zoom display"
 	printf "\n\t-u displays this usage message and exits\n"
@@ -79,10 +85,12 @@ animate() {
 zoom() {
     tooldir="/usr/share/asciiville/tools/bin"
     sock_name="/tmp/fetch_kitty$$"
-    init_size=38
+    init_size=34
     interval="0.1"
     kitty --title="Asciiville Zoom" \
-          --start-as fullscreen \
+          --start-as ${fullscreen} \
+          --override initial_window_width=94c \
+          --override initial_window_height=26c \
           --override allow_remote_control=yes \
           --override dynamic_background_opacity=yes \
           --override background=black \
@@ -99,7 +107,7 @@ zoom() {
 
     while true
     do
-      size=$((init_size-2))
+      size=${init_size}
       opacity="1.0"
 
       [ -S ${sock_name} ] || break
@@ -126,7 +134,7 @@ zoom() {
       sleep 2
       if [ "${keepalive}" ]
       then
-        size=$((init_size-2))
+        size=${init_size}
       else
         break
       fi
@@ -135,17 +143,16 @@ zoom() {
 }
 
 animate=
-zoom=
+fullscreen=normal
 keepalive=
-# kitty_pid=
-figfont=Small
-while getopts "af:kzu" flag; do
+zoom=
+while getopts "afkzu" flag; do
     case $flag in
         a)
             animate=1
             ;;
         f)
-            figfont="${OPTARG}"
+            fullscreen=fullscreen
             ;;
         k)
             keepalive=1
@@ -162,13 +169,8 @@ done
 shift $(( OPTIND - 1 ))
 
 trap 'cleanup' SIGINT SIGKILL SIGTERM
-FIG_FONTS="/usr/share/figlet-fonts"
-figdir="-d ${FIG_FONTS}"
-[ -d "${FIG_FONTS}" ] || figdir=
-#figcom="figlet -c ${figdir} -f ${figfont} -k -t"
-figcom="figlet ${figdir} -f ${figfont}"
 
-title=$(gum style --bold --foreground 12 "$(${figcom} Asciiville)")
+title=$(gum style --bold --foreground 12 "$(figlet Asciiville)")
 subtitle=$(gum style --italic --foreground 12 'The Ultimate in Ascii Art')
 info=$(gum join --vertical --align center "${title}" "${subtitle}")
 
@@ -193,9 +195,6 @@ art=$(gum style --foreground "${main_color}" '          ,~-.
 color=$(gum style '[0;30m   [0;31m   [0;32m   [0;33m   [0;34m   [0;35m   [0;36m   [0;37m [0m
 [0;90m   [0;91m   [0;92m   [0;93m   [0;94m   [0;95m   [0;96m   [0;97m [0m')
 
-
-# Display ------------------------------------------------------------------------------------------
-
 sleep 1
 terminal_size=$(stty size)
 terminal_height=${terminal_size% *}
@@ -203,7 +202,7 @@ terminal_width=${terminal_size#* }
 
 prompt_height=${PROMPT_HEIGHT#-1}
 
-print_test() {
+print_info() {
     no_color=$(printf '%b' "${1}" | sed -e 's/\x1B\[[0-9;]*[JKmsu]//g')
 
     [ "$(printf '%s' "${no_color}" | wc --lines)" -gt $(( terminal_height - prompt_height )) ] && return 1
@@ -228,13 +227,13 @@ tput cup ${terminal_height} 0
 
 # Landscape layout
 group_info_color=$(gum join --vertical --align center "${info}" '' "${color}")
-print_test "$(gum join --horizontal --align center "${art}" '  ' "${group_info_color}")"
+print_info "$(gum join --horizontal --align center "${art}" '  ' "${group_info_color}")"
 
 # Portrait layout
-print_test "$(gum join --vertical --align center "${art}" '' "${group_info_color}")"
+print_info "$(gum join --vertical --align center "${art}" '' "${group_info_color}")"
 
 # Other layout
-print_test "${group_info_color}"
-print_test "${info}"
+print_info "${group_info_color}"
+print_info "${info}"
 
 exit 1
