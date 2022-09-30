@@ -34,7 +34,11 @@ sha256sums=('SKIP')
 
 prepare() {
   cd "${srcdir}/${pkgname}"
-  if [ -z $(getent group games) -a $(getent passwd games) ]
+  needgroup=
+  needuser=
+  grep ^games: /etc/group > /dev/null || needgroup=1
+  id games > /dev/null 2>&1 || needuser=1
+  if [ "${needgroup}" ] || [ "${needuser}" ]
   then
     cat << DOC
 --> The Asciiville build requires user games:games to exist
@@ -42,7 +46,7 @@ prepare() {
 # groupadd games
 # useradd -r -c "Games pseudo-user" -g games -d /opt/games -s /bin/false games
 DOC
-   exit
+   exit 1
   fi
 }
 

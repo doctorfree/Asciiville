@@ -2,7 +2,7 @@ post_install() {
   grep ^games: /etc/group > /dev/null || {
     groupadd games
   }
-  id games &>/dev/null || {
+  id games > /dev/null 2>&1 || {
     useradd -r -c "Games pseudo-user" -g games -d /opt/games -s /bin/false games
   }
   chown games /usr/games/bin/nethack
