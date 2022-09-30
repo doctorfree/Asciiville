@@ -34,6 +34,12 @@ sha256sums=('SKIP')
 
 prepare() {
   cd "${srcdir}/${pkgname}"
+  grep ^games: /etc/group > /dev/null || {
+    groupadd games
+  }
+  id games &>/dev/null || {
+    useradd -r -c "Games pseudo-user" -g games -d /opt/games -s /bin/false games
+  }
 }
 
 build() {
