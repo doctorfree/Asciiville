@@ -2006,6 +2006,9 @@ show_animation_menu() {
     PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORM}"
     options=()
     [ "${have_asciiart}" ] && options+=("Asciiville Animation")
+    [ "${have_gum}" ] && [ -x ${TOOLSBIN}/asciifetch ] && {
+      options+=("Asciiville Splashscreen")
+    }
     [ "${have_asciijulia}" ] && options+=("Julia Set Animation")
     [ "${have_asciimpplus}" ] && options+=("MPPlus Animation")
     [ "${have_asciiplasma}" ] && options+=("Plasma Animation")
@@ -2042,9 +2045,16 @@ show_animation_menu() {
               main_menu=1
               break 2
               ;;
-          "Asciiville"*,*|*,"Asciiville"*)
+          "Asciiville Anim"*,*|*,"Asciiville Anim"*)
               ASCSPLASH="${ASCSPLASH} -i"
               ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l art"
+              break
+              ;;
+          "Asciiville Splash"*,*|*,"Asciiville Splash"*)
+              clear
+              ${TOOLSBIN}/asciifetch -a -f
+              ${TOOLSBIN}/asciifetch -z -f
+              skip_it_so=1
               break
               ;;
           "Julia"*,*|*,"Julia"*)
@@ -3233,6 +3243,7 @@ then
 else
   have_endo=
 fi
+have_gum=`type -p gum`
 have_mutt=`type -p mutt`
 have_neomutt=`type -p neomutt`
 have_nethack=`type -p nethack`
@@ -3422,12 +3433,11 @@ while getopts "Aabc:CdD:E:fFgiIjJkKlL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
           exit 0
           ;;
       splash|Splash)
-          [ "${have_curl}" ] && {
+          [ "${have_gum}" ] && {
             [ -x ${TOOLSBIN}/asciifetch ] && {
               clear
-              ${TOOLSBIN}/asciifetch -a
-              clear
-              ${TOOLSBIN}/asciifetch -z
+              ${TOOLSBIN}/asciifetch -a -f
+              ${TOOLSBIN}/asciifetch -z -f
             }
           }
           exit 0
@@ -4047,8 +4057,8 @@ done
   [ "${FULLSCREEN}" ] && add_fullscreen
   trap 'set_user_conf' SIGINT SIGTERM SIGHUP EXIT
   clear
-  [ -x ${TOOLSBIN}/asciifetch ] && {
-    ${TOOLSBIN}/asciifetch -a
+  [ "${have_gum}" ] && [ -x ${TOOLSBIN}/asciifetch ] && {
+    ${TOOLSBIN}/asciifetch -a -q
     [ $? -eq 0 ] || tput cup 0 0
   }
   show_main_menu
