@@ -10,12 +10,14 @@ else
   have_dpkg=`type -p dpkg`
   have_rpm=`type -p rpm`
   have_dnf=`type -p dnf`
+  have_pac=`type -p pacman`
   [ -f /etc/os-release ] && . /etc/os-release
   [ "${ID_LIKE}" == "debian" ] && debian=1
+  [ "${ID}" == "arch" ] && arch=1
   [ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
 
   PKG=asciiville
-  [ "${debian}" ] || PKG=Asciiville
+  [ "${debian}" ] || [ "${arch}" ] || PKG=Asciiville
 
   if [ "${debian}" ]
   then
@@ -27,19 +29,29 @@ else
       then
         sudo dpkg -r "${PKG}"
       else
-        echo "Cannot locate either apt or dpkg to remove. Skipping."
+        echo "Cannot locate apt or dpkg to remove. Skipping."
       fi
     fi
   else
-    if [ "${have_dnf}" ]
+    if [ "${arch}" ]
     then
-      sudo dnf remove "${PKG}"
-    else
-      if [ "${have_rpm}" ]
+      if [ "${have_pac}" ]
       then
-        sudo rpm -e "${PKG}"
+        sudo pacman -Rs "${PKG}"
       else
-        echo "Cannot locate either dnf or rpm to remove. Skipping."
+        echo "Cannot locate pacman to remove. Skipping."
+      fi
+    else
+      if [ "${have_dnf}" ]
+      then
+        sudo dnf remove "${PKG}"
+      else
+        if [ "${have_rpm}" ]
+        then
+          sudo rpm -e "${PKG}"
+        else
+          echo "Cannot locate either dnf or rpm to remove. Skipping."
+        fi
       fi
     fi
   fi
