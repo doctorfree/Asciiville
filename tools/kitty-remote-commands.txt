@@ -1,0 +1,38 @@
+# See https://sw.kovidgoyal.net/kitty/overview/#remote-control
+#
+# Kitty in remote control via socket has the following known commands:
+#
+# set-background-image
+# detach-window
+# get-colors
+# focus-tab
+# ls
+# detach-tab
+# set-tab-title
+# set-enabled-layouts
+# create-marker
+# select-window
+# env
+# kitten
+# resize-window
+# set-tab-color
+# launch
+# disable-ligatures
+# close-tab
+# new-window
+# resize-os-window
+# set-spacing
+# scroll-window
+# get-text
+# set-window-title
+# set-font-size
+# set-window-logo
+# set-colors
+# set-background-opacity
+# goto-layout
+# send-text
+# signal-child
+# close-window
+# focus-window
+# last-used-layout
+# remove-marker

@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+# wait_for_pid - wait for pid provided by first argument to exit
+#                then send signal to parent pid
+#
+# Useful when a process needs to wait on a child to exit but also
+# needs to continue to execute (e.g. the parent is acting as the
+# controller of the child, issuing commands over a socket). The
+# parent cannot suspend execution to wait for the child to exit.
+# Instead, the parent can spawn this process to wait on the pid.
+
+wait_pid=$1
+
+# Can't use 'wait', that requires this process be the parent of the pid
+# Use tail instead of wait
+tail --pid=${wait_pid} -f /dev/null
+
+kill -USR1 ${PPID}
