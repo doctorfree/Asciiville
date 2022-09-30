@@ -2,6 +2,7 @@
 
 #include "termint.h"
 #include "virtualview.h"
+#include <ctime>
 
 void printSlider(VirtualView* vv, unsigned int row, unsigned int xpos, unsigned int totalspan, unsigned int currentviewspan) {
   printSlider(vv, row, 0, xpos, totalspan, currentviewspan);
