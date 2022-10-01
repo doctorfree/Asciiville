@@ -11,8 +11,7 @@
 # sudo dpkg -i "${PKG}"
 # sudo apt-get install -f
 
-PKG_NAMES="Asciiville"
-APT_NAMES="asciiville"
+PKG_NAMES="Asciiville asciiville"
 DEB_ARCH=amd64
 RPM_ARCH=x86_64
 BOLD=$(tput bold)
