@@ -344,6 +344,8 @@ while getopts "acdmMNnqrtu" flag; do
 done
 shift $(( OPTIND - 1 ))
 
+[ -d ${USERCONF} ] || mkdir -p ${USERCONF}
+
 # Mutt configuration user setup
 [ "${have_mutt}" ] && {
   [ -f ${CONFDIR}/mutt/muttrc ] && {
@@ -550,7 +552,6 @@ fi
 # Setup default rifle configuration for this user unless one exists
 [ -f ${CONFDIR}/rifle.conf ] && {
   [ -f ${USERCONF}/ranger/rifle.conf ] || {
-    [ -d ${USERCONF} ] || mkdir -p ${USERCONF}
     [ -d ${USERCONF}/ranger ] || mkdir -p ${USERCONF}/ranger
     cp ${CONFDIR}/rifle.conf ${USERCONF}/ranger/rifle.conf
   }
