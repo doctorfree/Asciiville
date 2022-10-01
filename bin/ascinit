@@ -792,10 +792,10 @@ done
 # Install the 'jrnl' command if not already installed
 have_jrnl=`type -p jrnl`
 [ "${have_jrnl}" ] || {
+  [ "${have_pipx}" ] || install_pipx
   [ "${quiet}" ] || {
     printf "\n\tInstalling and configuring jrnl ..."
   }
-  [ "${have_pipx}" ] || install_pipx
   pipx install jrnl > /dev/null 2>&1
   echo "Welcome to @jrnl" > /tmp/jrnl$$
   echo "" >> /tmp/jrnl$$
@@ -1064,7 +1064,7 @@ CONF="${USERCONF}/asciiville/config"
 [ -d ${USERCONF}/asciiville ] || mkdir ${USERCONF}/asciiville
 [ -f ${CONF} ] || {
   [ "${quiet}" ] || {
-    printf "\nAsciiville configuration in ${CONF} ..."
+    printf "\n\nAsciiville configuration in ${CONF} ..."
   }
   touch ${CONF}
   echo "ARTDIR=/usr/share/asciiville/art" >> ${CONF}
