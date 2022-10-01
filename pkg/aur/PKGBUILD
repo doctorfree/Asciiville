@@ -182,6 +182,7 @@ package() {
   cp -a conf/got ${pkgdir}/${destdir}/share/${pkgname}/got
   cp -a conf/jrnl ${pkgdir}/${destdir}/share/${pkgname}/jrnl
   cp -a conf/khard ${pkgdir}/${destdir}/share/${pkgname}/khard
+  cp -a conf/kitty ${pkgdir}/${destdir}/share/${pkgname}/kitty
   cp -a conf/mutt ${pkgdir}/${destdir}/share/${pkgname}/mutt
   cp -a conf/mutt_multiple ${pkgdir}/${destdir}/share/${pkgname}/mutt_multiple
   cp -a conf/neomutt ${pkgdir}/${destdir}/share/${pkgname}/neomutt
