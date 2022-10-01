@@ -4,7 +4,7 @@ arch=
 debian=
 fedora=
 
-export __MPP_SRC__=`pwd`
+export __ASC_SRC__=`pwd`
 
 [ -f /etc/os-release ] && . /etc/os-release
 [ "${ID_LIKE}" == "debian" ] && debian=1
