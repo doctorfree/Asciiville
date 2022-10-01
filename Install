@@ -164,7 +164,7 @@ for PKG_NAME in ${PKG_NAMES}
 do
   if [ "${arch}" ]
   then
-    PKG="${SRC}/${SRC_NAME}/releases/${PKG_VER}/${PKG_NAME}-v${PKG_VER}r${PKG_REL}-${PACKAGE}-${ARCH}.pkg.tar.${SUF}"
+    PKG="${SCRIPT_DIR}/releases/${PKG_VER}/${PKG_NAME}-v${PKG_VER}r${PKG_REL}-${PACKAGE}-${ARCH}.pkg.tar.${SUF}"
   else
     PKG="${SCRIPT_DIR}/releases/${PKG_VER}/${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.${SUF}"
   fi
