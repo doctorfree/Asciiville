@@ -74,9 +74,15 @@ ask_install() {
 }
 
 install_pipx() {
+  [ "${quiet}" ] || {
+    printf "\n\tInstalling pipx ..."
+  }
   python3 -m pip install --user pipx > /dev/null 2>&1
   python3 -m pipx ensurepath --force > /dev/null 2>&1
   have_pipx=`type -p pipx`
+  [ "${quiet}" ] || {
+    printf " done"
+  }
 }
 
 install_kitty() {
@@ -563,25 +569,43 @@ fi
   rm -f /tmp/browser$$
 }
 [ -f ${KITTYCONFDIR}/kitty.conf ] || cp ${KITTYCONF} ${KITTYCONFDIR}/kitty.conf
+[ "${quiet}" ] || {
+  printf " done"
+}
 
 # Setup default rifle configuration for this user unless one exists
 [ -f ${CONFDIR}/rifle.conf ] && {
   [ -f ${USERCONF}/ranger/rifle.conf ] || {
+    [ "${quiet}" ] || {
+      printf "\n\tInstalling Ranger rifle configuration in ${USERCONF}/ranger/ ..."
+    }
     [ -d ${USERCONF}/ranger ] || mkdir -p ${USERCONF}/ranger
     cp ${CONFDIR}/rifle.conf ${USERCONF}/ranger/rifle.conf
+    [ "${quiet}" ] || {
+      printf " done"
+    }
   }
 }
 
 # Setup default rainbowstream configuration for this user unless one exists
 [ -f ${CONFDIR}/rainbow_config.json ] && {
   [ -f ${HOME}/.rainbow_config.json ] || {
+    [ "${quiet}" ] || {
+      printf "\n\tSetup rainbowstream configuration as ${HOME}/.rainbow_config.json ..."
+    }
     cp ${CONFDIR}/rainbow_config.json ${HOME}/.rainbow_config.json
+    [ "${quiet}" ] || {
+      printf " done"
+    }
   }
 }
 
 # Setup default tuir configuration for this user unless one exists
 [ -d ${CONFDIR}/tuir ] && {
   [ -d ${USERCONF}/tuir ] || {
+    [ "${quiet}" ] || {
+      printf "\n\tInstalling tuir configuration in ${USERCONF}/tuir ..."
+    }
     cp -a ${CONFDIR}/tuir ${USERCONF}/tuir
     [ "${console}" ] && {
       [ -f ${CONFDIR}/console/tuir/mailcap ] && {
@@ -589,6 +613,9 @@ fi
       }
     }
     chmod 600 ${USERCONF}/tuir/tuir.cfg
+    [ "${quiet}" ] || {
+      printf " done"
+    }
   }
 }
 
@@ -661,7 +688,13 @@ fi
       done
     }
   else
+    [ "${quiet}" ] || {
+      printf "\n\tInstalling tmux configuration in ${HOME}/.tmux.conf ..."
+    }
     cp ${CONFDIR}/tmux.conf ${HOME}/.tmux.conf
+    [ "${quiet}" ] || {
+      printf " done"
+    }
   fi
 }
 
@@ -677,14 +710,23 @@ TPM="${HOME}/.tmux/plugins/tpm"
 [ -d ${TPM} ] && {
   grep plugins/tpm/tpm ${HOME}/.tmux.conf > /dev/null || {
     [ -f ${CONFDIR}/tmux-tpm.conf ] && {
+      [ "${quiet}" ] || {
+        printf "\n\tSetting up tmux plugin manager and installing plugins ..."
+      }
       cat ${CONFDIR}/tmux-tpm.conf >> ${HOME}/.tmux.conf
       [ -x ${TPM}/bin/install_plugins ] && ${TPM}/bin/install_plugins
+      [ "${quiet}" ] || {
+        printf " done"
+      }
     }
   }
 }
 
 have_pip=`type -p pip`
 [ "${have_pip}" ] || {
+  [ "${quiet}" ] || {
+    printf "\n\tInstalling pip ..."
+  }
   plat=`uname -s`
   if [ "$plat" == "Darwin" ]
   then
@@ -702,6 +744,9 @@ have_pip=`type -p pip`
       fi
     fi
   fi
+  [ "${quiet}" ] || {
+    printf " done"
+  }
 }
 
 for pkg in asciimatics rainbowstream tuir
@@ -710,7 +755,13 @@ do
   then
     python -m pip install --upgrade ${pkg} > /dev/null 2>&1
   else
+    [ "${quiet}" ] || {
+      printf "\n\tInstalling ${pkg} ..."
+    }
     python -m pip install ${pkg} > /dev/null 2>&1
+    [ "${quiet}" ] || {
+      printf " done"
+    }
   fi
 done
 
@@ -741,24 +792,36 @@ done
 # Install the 'jrnl' command if not already installed
 have_jrnl=`type -p jrnl`
 [ "${have_jrnl}" ] || {
+  [ "${quiet}" ] || {
+    printf "\n\tInstalling and configuring jrnl ..."
+  }
   [ "${have_pipx}" ] || install_pipx
   pipx install jrnl > /dev/null 2>&1
   echo "Welcome to @jrnl" > /tmp/jrnl$$
   echo "" >> /tmp/jrnl$$
   echo "A simple command line journal application" >> /tmp/jrnl$$
-  jrnl < /tmp/jrnl$$
+  jrnl < /tmp/jrnl$$ > /dev/null 2>&1
   echo "Installed @Asciiville" > /tmp/jrnl$$
   echo "" >> /tmp/jrnl$$
   echo "See https://github.com/doctorfree/Asciiville#readme" >> /tmp/jrnl$$
-  jrnl asciiville < /tmp/jrnl$$
+  jrnl asciiville < /tmp/jrnl$$ > /dev/null 2>&1
   rm -f /tmp/jrnl$$
+  [ "${quiet}" ] || {
+    printf " done"
+  }
 }
 
 # Install the 'rich' command if not already installed
 have_rich=`type -p rich`
 [ "${have_rich}" ] || {
   [ "${have_pipx}" ] || install_pipx
-  pipx install rich-cli
+  [ "${quiet}" ] || {
+    printf "\n\tInstalling rich-cli ..."
+  }
+  pipx install rich-cli > /dev/null 2>&1
+  [ "${quiet}" ] || {
+    printf " done"
+  }
 }
 
 [ "${init_twit}" ] && rainbowstream
@@ -766,6 +829,9 @@ have_rich=`type -p rich`
 create_new_profile() {
   local proterm="$1"
   local proname="$2"
+  [ "${quiet}" ] || {
+    printf "\n\tCreating '${proname}' ${proterm} terminal profile ..."
+  }
   if [ "${proterm}" == "gnome" ]
   then
     local profile_ids=($(dconf list $dconfdir/ | grep ^: |\
@@ -835,6 +901,9 @@ create_new_profile() {
   fi
   dconf write $profile_path/use-system-font "false" 2> /dev/null
   dconf write $profile_path/font "'Monospace 18'" 2> /dev/null
+  [ "${quiet}" ] || {
+    printf " done"
+  }
 }
 
 [ "${console}" ] || {
@@ -912,7 +981,9 @@ create_new_profile() {
 }
 
 [ "${have_go}" ] || {
-  [ "${quiet}" ] || echo "Installing go"
+  [ "${quiet}" ] || {
+    printf "\n\tInstalling go ..."
+  }
   if [ "${debian}" ]
   then
     if [ "${APT}" ]
@@ -934,12 +1005,21 @@ create_new_profile() {
       [ "${arch}" ] && sudo pacman -U --noconfirm go > /dev/null 2>&1
     fi
   fi
+  [ "${quiet}" ] || {
+    printf " done"
+  }
   have_go=`type -p go`
 }
 [ "${have_go}" ] && {
   have_got=`type -p got`
   [ "${have_got}" ] || {
+    [ "${quiet}" ] || {
+      printf "\n\tInstalling got ..."
+    }
     go install github.com/fedeztk/got/cmd/got@latest > /dev/null 2>&1
+    [ "${quiet}" ] || {
+      printf " done"
+    }
   }
   # Setup default got configuration for this user unless one exists
   [ -f ${CONFDIR}/got/config.yml ] && {
@@ -959,11 +1039,23 @@ create_new_profile() {
   }
   have_tdraw=`type -p tdraw`
   [ "${have_tdraw}" ] || {
+    [ "${quiet}" ] || {
+      printf "\n\tInstalling tdraw ..."
+    }
     go install github.com/aca/tdraw@latest > /dev/null 2>&1
+    [ "${quiet}" ] || {
+      printf " done"
+    }
   }
   have_gum=`type -p gum`
   [ "${have_gum}" ] || {
+    [ "${quiet}" ] || {
+      printf "\n\tInstalling gum ..."
+    }
     go install github.com/charmbracelet/gum@latest > /dev/null 2>&1
+    [ "${quiet}" ] || {
+      printf " done"
+    }
   }
 }
 
@@ -971,6 +1063,9 @@ CONF="${USERCONF}/asciiville/config"
 [ -d ${USERCONF} ] || mkdir ${USERCONF}
 [ -d ${USERCONF}/asciiville ] || mkdir ${USERCONF}/asciiville
 [ -f ${CONF} ] || {
+  [ "${quiet}" ] || {
+    printf "\nAsciiville configuration in ${CONF} ..."
+  }
   touch ${CONF}
   echo "ARTDIR=/usr/share/asciiville/art" >> ${CONF}
   echo "MUSEDIR=/usr/share/asciiville/music" >> ${CONF}
@@ -1046,6 +1141,9 @@ CONF="${USERCONF}/asciiville/config"
   echo "revchars='MWNXK0Okxdolc:;,...   '" >> ${CONF}
   echo "revlong='WMZO0QLCJUYXzcvun1il;:,^.. '" >> ${CONF}
   echo "longchars=' ..^,:;li1nuvczXYUJCLQ0OZMW'" >> ${CONF}
+  [ "${quiet}" ] || {
+    printf " done"
+  }
 }
 touch ${HOME}/.tetris
 
