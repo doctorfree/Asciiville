@@ -137,10 +137,10 @@ package() {
 
   # Revised NetHack install using UnNetHack mods
   cd games/nethack
-  make destdir=${pkgdir} install
+  make DESTDIR=${pkgdir} install
   cp dat/license ${pkgdir}/${destdir}/games/share/nethack/license
   cd doc
-  make destdir=${pkgdir} manpages
+  make DESTDIR=${pkgdir} manpages
   cd ../..
 
   cp ninvaders/LICENSE ${pkgdir}/${destdir}/games/lib/ninvaders
