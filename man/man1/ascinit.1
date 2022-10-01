@@ -29,9 +29,7 @@ The \f[I]ascinit\f[R] command should be run as a normal user with
 It performs several configuration initializations for the user.
 These include:
 .IP \[bu] 2
-Installing terminal emulators if no \f[V]-c\f[R] option is provided
-.IP \[bu] 2
-Asciiville profiles in Gnome and Tilix terminals are created
+The Kitty terminal emulator is installed and configured
 .IP \[bu] 2
 Mutt and/or NeoMutt startup files are customized
 .IP \[bu] 2
@@ -42,6 +40,11 @@ default Ranger and Rifle configuration files are created
 Asciimatics and Rainbowstream installation is performed
 .IP \[bu] 2
 Optionally authorizing the Rainbow Stream app with Twitter
+.IP \[bu] 2
+Optionally additional terminal emulators can be installed and configured
+.IP \[bu] 2
+Asciiville profiles in Gnome and Tilix terminals are created, if
+installed
 .PP
 Although command line options are provided to control the action(s) of
 the \f[V]ascinit\f[R] command (see below), the typical invocation will
@@ -49,8 +52,9 @@ simply be \f[V]ascinit\f[R] with no options.
 This default invocation performs a NeoMutt configuration, does not
 configure Mutt, configures Tmux and Ranger and Rifle, installs
 Asciimatics and Rainbowstream if not already installed, does not
-authorize Rainbow Stream with Twitter, installs the terminal emulators,
-and creates an Asciiville profile in the terminals.
+authorize Rainbow Stream with Twitter, installs the Kitty terminal
+emulator, and creates an Asciiville profile in gnome-terminal and tilix
+if installed.
 .PP
 If initialization is being performed on a headless system or a system
 without graphical capabilities then execute the command
@@ -80,7 +84,7 @@ indicates setup both Mutt and NeoMutt configurations
 indicates setup user NeoMutt configuration
 .TP
 \f[B]-N\f[R]
-indicates setup neither Mutt or NeoMutt configuration
+indicates prompt for installation of additional terminal emulators
 .TP
 \f[B]-q\f[R]
 indicates quiet mode
