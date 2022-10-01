@@ -234,8 +234,8 @@ Asciiville adds the following commands to your system:
 * **datafilewrite** : encrypts the content of a cbftp plain text data file
 * **ddgr** : command line web search
 * **gameserver** : multi-player game server
-* **got** : text based translation tool (only added if `go` is installed)
-* **gum** : a tool for glamorous shell scripts (only added if `go` is installed)
+* **got** : text based translation tool
+* **gum** : a tool for glamorous shell scripts
 * **jp2a** : image to ascii conversion utility
 * **make_ascii_art** : generate ascii art from images
 * **mapscii** : character based zoomable map of the world
@@ -249,7 +249,7 @@ Asciiville adds the following commands to your system:
 * **show_pokemon** : display a Pokemon pocket monster
 * **show_moon** : display the phase of the Moon
 * **show_weather** : display a weather report
-* **tdraw** : ASCII drawing tool (only added if `go` is installed)
+* **tdraw** : ASCII drawing tool
 * **termprofset** : set/restore default profile or font settings for the Gnome, Xfce4, and Tilix terminals
 * **tetris** : classic video game
 
@@ -346,23 +346,14 @@ supported by Asciiville available during post-install configuration are:
 Tools installed during post-installation configuration include:
 
 * asciimatics
-* got (if the `go` command is installed)
-* gum (if the `go` command is installed)
+* got
+* gum
 * jrnl
 * mutt
 * neomutt
 * pipx
 * rainbowstream
-* tdraw (if the `go` command is installed)
-
-Asciiville does not install the `go` command. In order for the `got`, `gum`,
-and `tdraw` commands to be installed during post-installation configuration,
-the `go` command needs to be previously installed. On most Debian based
-systems `go` can be installed with `sudo apt install golang-go`. On RPM
-based systems `go` can be installed with `sudo dnf install golang`. On
-Arch Linux `go` can be installed with `sudo pacman -S go`. See
-[https://go.dev/doc/install](https://go.dev/doc/install) for a guide on
-installing `go` on your system.
+* tdraw
 
 ## Installation
 
