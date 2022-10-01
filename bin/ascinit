@@ -101,7 +101,6 @@ install_kitty() {
       fi
       rm -f /tmp/kitty-$$.sh
       # Create a symbolic link to add kitty to PATH
-      # (assuming ~/.local/bin is in your system-wide PATH)
       [ -d ~/.local/bin ] || mkdir -p ~/.local/bin
       [ -x ~/.local/bin/kitty ] || {
         ln -s ~/${LOCAL}/kitty.app/bin/kitty ~/.local/bin/
@@ -153,6 +152,14 @@ remove_kitty() {
   rm -f ~/.local/share/man/man1/kitty.1
   rm -f ~/.local/share/man/man5/kitty.conf.5
 }
+
+pathadd() {
+  if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+    PATH="$1${PATH:+":$PATH"}"
+  fi
+}
+
+pathadd "${HOME}/.local/bin"
 
 # Clear the Bash cache so we know for sure if something is installed
 hash -r
@@ -534,7 +541,7 @@ fi
 # Setup default rifle configuration for this user unless one exists
 [ -f ${CONFDIR}/rifle.conf ] && {
   [ -f ${USERCONF}/ranger/rifle.conf ] || {
-    [ -d ${USERCONF}/ || mkdir -p ${USERCONF}
+    [ -d ${USERCONF} ] || mkdir -p ${USERCONF}
     [ -d ${USERCONF}/ranger ] || mkdir -p ${USERCONF}/ranger
     cp ${CONFDIR}/rifle.conf ${USERCONF}/ranger/rifle.conf
   }
