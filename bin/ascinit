@@ -73,6 +73,12 @@ ask_install() {
   done
 }
 
+install_pipx() {
+  python3 -m pip install --user pipx > /dev/null 2>&1
+  python3 -m pipx ensurepath --force > /dev/null 2>&1
+  have_pipx=`type -p pipx`
+}
+
 install_kitty() {
   [ "${have_kitty}" ] || {
     [ "${quiet}" ] || {
@@ -159,7 +165,16 @@ pathadd "${HOME}/.local/bin"
 # Clear the Bash cache so we know for sure if something is installed
 hash -r
 
+have_go=`type -p go`
+[ "${have_go}" ] || {
+  [ -x /usr/local/go/bin/go ] && {
+    pathadd "/usr/local/go/bin"
+    have_go=`type -p go`
+  }
+}
+have_pipx=`type -p pipx`
 have_kitty=`type -p kitty`
+
 [ "$1" == "kitty" ] && {
   [ "${remove}" ] && {
     printf "\nRemoving kitty terminal emulator.\n\n"
@@ -722,15 +737,12 @@ done
   touch ${HOME}/.local/share/jrnl/asciiville.txt
   chmod 600 ${HOME}/.local/share/jrnl/asciiville.txt
 }
+
 # Install the 'jrnl' command if not already installed
 have_jrnl=`type -p jrnl`
 [ "${have_jrnl}" ] || {
-  have_pipx=`type -p pipx`
-  [ "${have_pipx}" ] || {
-    python3 -m pip install --user pipx 2> /dev/null
-    python3 -m pipx ensurepath 2> /dev/null
-  }
-  pipx install jrnl 2> /dev/null
+  [ "${have_pipx}" ] || install_pipx
+  pipx install jrnl > /dev/null 2>&1
   echo "Welcome to @jrnl" > /tmp/jrnl$$
   echo "" >> /tmp/jrnl$$
   echo "A simple command line journal application" >> /tmp/jrnl$$
@@ -745,11 +757,7 @@ have_jrnl=`type -p jrnl`
 # Install the 'rich' command if not already installed
 have_rich=`type -p rich`
 [ "${have_rich}" ] || {
-  have_pipx=`type -p pipx`
-  [ "${have_pipx}" ] || {
-    python3 -m pip install --user pipx 2> /dev/null
-    python3 -m pipx ensurepath 2> /dev/null
-  }
+  [ "${have_pipx}" ] || install_pipx
   pipx install rich-cli
 }
 
@@ -903,7 +911,31 @@ create_new_profile() {
   }
 }
 
-have_go=`type -p go`
+[ "${have_go}" ] || {
+  [ "${quiet}" ] || echo "Installing go"
+  if [ "${debian}" ]
+  then
+    if [ "${APT}" ]
+    then
+      sudo ${APT} install golang > /dev/null 2>&1
+    else
+      [ "${quiet}" ] || echo "Cannot locate apt to install. Skipping."
+    fi
+  else
+    if [ "${fedora}" ]
+    then
+      if [ "${DNF}" ]
+      then
+        sudo ${DNF} install golang-bin > /dev/null 2>&1
+      else
+        [ "${quiet}" ] || echo "Cannot locate dnf to install. Skipping."
+      fi
+    else
+      [ "${arch}" ] && sudo pacman -U --noconfirm go > /dev/null 2>&1
+    fi
+  fi
+  have_go=`type -p go`
+}
 [ "${have_go}" ] && {
   have_got=`type -p got`
   [ "${have_got}" ] || {
