@@ -16,7 +16,7 @@ fedora=
 if [ "${debian}" ]
 then
   PKGS="build-essential autotools-dev autoconf libtool cmake pkg-config \
-        libncurses-dev coreutils git make tar zstd make g++ libjpeg-dev, \
+        libncurses-dev coreutils git make tar zstd make g++ libjpeg62-turbo-dev \
         libpng-dev libssl-dev libncursesw5-dev gcc-10 g++-10 cpp-10"
   if [ "$1" == "-r" ]
   then
