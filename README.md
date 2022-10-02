@@ -130,7 +130,7 @@ of interactive menus that can be used to control its behavior.
 
 Integration is provided for:
 
-* [aewan](aewan/README), Ascii Art creation tool
+* [aewan](https://github.com/doctorfree/asciiville-aewan#readme), Ascii Art creation tool
 * [btop](btop/README.md), character based system monitor
 * [cbftp](cbftp/README), character based FTP client
 * [ddgr](ddgr/README.md), command line web search
@@ -1029,7 +1029,7 @@ Run the `asciiville` command with no arguments or the `-i` argument to
 bring up the interactive menu interface.
 
 ### Aewan README
-- [aewan](aewan/README), Introduction to the Aewan ascii art creation tool
+- [aewan](https://github.com/doctorfree/asciiville-aewan#readme), Introduction to the Aewan ascii art creation tool
 
 ### Btop++ README
 - [**btop/README.md**](btop/README.md) - Introduction to the btop system monitor
@@ -1840,11 +1840,11 @@ bison, libncurses5-dev, autotools-dev, libjpeg-dev, libpng-dev,
 libcurl4-gnutls-dev, libncurses5-dev, autoconf-archive, pkg-config
 
 Not all are required to build a specific utility or game. Utilities and games
-built from source in Asciiville include aewan, btop++, cbftp, ddgr, jp2a,
+built from source in Asciiville include btop++, cbftp, ddgr, jp2a,
 nethack, ninvaders, and tetris.
 
 The build script `build` in the top-level directory of the Asciiville repository
-can be used to compile aewan, btop, cbftp, jp2a, nethack, ninvaders, and tetris.
+can be used to compile btop, cbftp, jp2a, nethack, ninvaders, and tetris.
 Invoke the `build` script with the game or utility you wish to compile as
 an argument. For example, to compile the btop++ system monitor from source,
 run the command `./build btop`.

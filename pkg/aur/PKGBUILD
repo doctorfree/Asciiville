@@ -52,13 +52,6 @@ DOC
 
 build() {
   cd "${srcdir}/${pkgname}"
-  cd aewan
-  autoreconf -vi
-  ./configure --prefix=/usr
-  make
-  chmod +x aewan aecat aemakeflic
-  cd ..
-
   cd btop
   make distclean
   make STATIC=true STRIP=true
@@ -143,9 +136,6 @@ package() {
   cp cbftp/bin/* ${pkgdir}/${destdir}/bin
   cp ddgr/ddgr ${pkgdir}/${destdir}/bin/ddgr
   cp jp2a/src/jp2a ${pkgdir}/${destdir}/bin/jp2a
-  cp aewan/aewan ${pkgdir}/${destdir}/bin/aewan
-  cp aewan/aecat ${pkgdir}/${destdir}/bin/aecat
-  cp aewan/aemakeflic ${pkgdir}/${destdir}/bin/aemakeflic
 
   cp -a endoh1 ${pkgdir}/${destdir}/share/${pkgname}/endoh1
   chmod 755 ${pkgdir}/${destdir}/share/${pkgname}/endoh1/endoh1
@@ -241,8 +231,6 @@ package() {
   [ -d ${pkgdir}/${destdir}/share/man/man5 ] || {
     mkdir -p ${pkgdir}/${destdir}/share/man/man5
   }
-  cp aewan/man/man1/*.1 ${pkgdir}/${destdir}/share/man/man1
-  cp aewan/man/man5/*.5 ${pkgdir}/${destdir}/share/man/man5
 
   [ -d ${pkgdir}/${destdir}/share/man/man6 ] || {
     mkdir -p ${pkgdir}/${destdir}/share/man/man6

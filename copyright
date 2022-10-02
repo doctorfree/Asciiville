@@ -7,10 +7,6 @@ Files: *
 Copyright: 2021-2022 Ronald Record <ronaldrecord@gmail.com>
 License: MIT
 
-Files: aewan/*
-Copyright: 2004 Bruno Takahashi C. de Oliveira
-License: GPL-2
-
 Files: btop/*
 Copyright: 2021 Aristocratos (jakob@qvantnet.com)
 License: Apache-2

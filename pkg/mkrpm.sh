@@ -33,17 +33,6 @@ OUT_DIR="${SRC}/${SRC_NAME}/dist/${PKG_NAME}_${PKG_VER}"
 
 cd "${SRC}/${SRC_NAME}"
 
-# Build aewan
-if [ -x build ]
-then
-  ./build aewan
-else
-  cd aewan
-  ./configure --prefix=/usr
-  make
-  cd ..
-fi
-
 # Build btop
 if [ -x build ]
 then
@@ -163,9 +152,6 @@ ${SUDO} cp btop/bin/btop ${OUT_DIR}/${DESTDIR}/bin/btop
 ${SUDO} cp jp2a/src/jp2a ${OUT_DIR}/${DESTDIR}/bin/jp2a
 ${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
 ${SUDO} cp ddgr/ddgr ${OUT_DIR}/${DESTDIR}/bin/ddgr
-${SUDO} cp aewan/aewan ${OUT_DIR}/${DESTDIR}/bin/aewan
-${SUDO} cp aewan/aecat ${OUT_DIR}/${DESTDIR}/bin/aecat
-${SUDO} cp aewan/aemakeflic ${OUT_DIR}/${DESTDIR}/bin/aemakeflic
 
 ${SUDO} cp -a endoh1 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1
 ${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1/endoh1
@@ -284,8 +270,6 @@ ${SUDO} cp jp2a/man/jp2a.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
 [ -d ${OUT_DIR}/${DESTDIR}/share/man/man5 ] || {
   ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/man/man5
 }
-${SUDO} cp aewan/man/man1/*.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
-${SUDO} cp aewan/man/man5/*.5 ${OUT_DIR}/${DESTDIR}/share/man/man5
 
 [ -d ${OUT_DIR}/${DESTDIR}/share/man/man6 ] || {
   ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/man/man6
