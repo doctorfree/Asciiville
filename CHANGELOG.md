@@ -2,8 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
-## Asciiville-1.4.1r2 (2022-08-15)
+## Asciiville-1.4.1r2 (2022-10-02)
 
+* Install go in ascinit if not present
+* Use Kitty as default terminal emulator if available, if not then use gnome-terminal
+* Porting changes to support several modern compiler constraints
+* Integration of asciifetch in asciiville menu
+* Add signal handling and child process wait to asciifetch to enable kitty remote control
+* Add zoom and keepalive to asciifetch
+* Add splash screen to interactive startup
+* Add show_pokemon command
+* Add language and arg processing to weatherfetch, enhance show_weather command
+* Add Pokemon display to commands and menu, enhanced weather report using weatherfetch
+* Patch cbftp if on Arch to accomodate their unified ncurses implementation
+* Use format string to avoid error when -Werror=format-security is enabled
+* Fix aewan build in PKGBUILD
+* Kitty integration, update Kitty configuration, set Kitty url opener in ascinit
+* Add gum install to ascinit
+* Add diyfetch examples to tools/bin
 * Add Sphinx documentation for Asciiville docs on Read the Docs
 * Add installation of rich-cli rich command in ascinit
 * Add color display option to show_endo

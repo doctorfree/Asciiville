@@ -149,7 +149,7 @@ Version: ${PKG_VER}-${PKG_REL}
 Section: misc
 Priority: optional
 Architecture: ${ARCH}
-Depends: uuid-runtime, python3, python3-pip, python3-venv, tmux, mplayer, w3m, neomutt, newsboat, ranger, jq, asciinema, speedtest-cli, libaa-bin, libaa1, bb, neofetch, figlet, imagemagick, dconf-cli, libncurses-dev, libjpeg-dev, libpng-dev, cmatrix, gnupg, pandoc, urlscan, khard, git
+Depends: uuid-runtime, python3, python3-pip, python3-venv, tmux, mplayer, w3m, neomutt, newsboat, ranger, jq, asciinema, speedtest-cli, libaa-bin, libaa1, bb, neofetch, figlet, imagemagick, dconf-cli, libncurses-dev, libjpeg62-turbo-dev, libpng-dev, cmatrix, gnupg, pandoc, urlscan, khard, git, ruby
 Maintainer: ${DEBFULLNAME} <${DEBEMAIL}>
 Installed-Size: 192000
 Build-Depends: debhelper (>= 11)

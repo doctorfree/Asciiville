@@ -15,9 +15,10 @@ fedora=
 
 if [ "${debian}" ]
 then
-  PKGS="build-essential autotools-dev autoconf libtool pkg-config \
-        libncurses-dev coreutils git make tar zstd make g++ \
-        libssl-dev libncursesw5-dev gcc-10 g++-10 cpp-10"
+  PKGS="build-essential autotools-dev autoconf libtool cmake flex bison \
+        pkg-config libncurses-dev coreutils git make tar zstd make g++ \
+        libjpeg62-turbo-dev libpng-dev libssl-dev libncursesw5-dev gcc-10 \
+        g++-10 cpp-10"
   if [ "$1" == "-r" ]
   then
     sudo apt remove ${PKGS}
@@ -30,7 +31,7 @@ then
 else
   if [ "${arch}" ]
   then
-    PKGS="base-devel ncurses"
+    PKGS="base-devel cmake ncurses flex bison"
     if [ "$1" == "-r" ]
     then
       sudo pacman -Rs ${PKGS}
@@ -48,7 +49,8 @@ else
     sudo ${PINS} makecache
     if [ "${fedora}" ]
     then
-      PKGS="ncurses-devel libtool automake"
+      PKGS="cmake ncurses-devel flex bison libtool automake \
+            libjpeg-turbo-devel libpng-devel"
       if [ "$1" == "-r" ]
       then
         sudo ${PINS} -y remove ${PKGS}
@@ -63,7 +65,8 @@ else
       if [ "${centos}" ]
       then
         sudo alternatives --set python /usr/bin/python3
-        PKGS="ncurses-devel libtool automake"
+        PKGS="cmake ncurses-devel flex bison libtool automake \
+              libjpeg-turbo-devel libpng-devel"
         if [ "$1" == "-r" ]
         then
           sudo ${PINS} -y remove ${PKGS}

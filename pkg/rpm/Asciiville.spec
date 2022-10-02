@@ -2,7 +2,7 @@ Name: Asciiville
 Version:    %{_version}
 Release:    %{_release}
 BuildArch:  x86_64
-Requires: util-linux, python3, python3-pip, tmux, mplayer, w3m, ranger, jq, asciinema, speedtest-cli, ncurses, neofetch, newsboat, figlet, ImageMagick, dconf, libjpeg-turbo, libpng, cmatrix, gnupg, pandoc, urlscan, khard, git
+Requires: util-linux, python3, python3-pip, tmux, mplayer, w3m, ranger, jq, asciinema, speedtest-cli, ncurses, neofetch, newsboat, figlet, ImageMagick, dconf, libjpeg-turbo, libpng, cmatrix, gnupg, pandoc, urlscan, khard, git, ruby, wget
 URL:        https://github.com/doctorfree/Asciiville
 Vendor:     Doctorwhen's Bodacious Laboratory
 Packager:   ronaldrecord@gmail.com
@@ -69,6 +69,10 @@ zip_inst=`type -p zip`
 if [ "${zip_inst}" ]
 then
   pyfig_inst=`type -p pyfiglet`
+  [ "${pyfig_inst}" ] || {
+    ${PYTHON} -m pip install pyfiglet
+    pyfig_inst=`type -p pyfiglet`
+  }
   if [ "${pyfig_inst}" ]
   then
     if [ -d ${FIGLET_DIR} ]
