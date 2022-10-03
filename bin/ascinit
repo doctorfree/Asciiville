@@ -77,8 +77,8 @@ install_pipx() {
   [ "${quiet}" ] || {
     printf "\n\tInstalling pipx ..."
   }
-  python3 -m pip install --user pipx > /dev/null 2>&1
-  python3 -m pipx ensurepath --force > /dev/null 2>&1
+  ${PYTHON} -m pip install --user pipx > /dev/null 2>&1
+  ${PYTHON} -m pipx ensurepath --force > /dev/null 2>&1
   have_pipx=`type -p pipx`
   [ "${quiet}" ] || {
     printf " done"
@@ -439,6 +439,38 @@ while getopts "acdmMNnqrtu" flag; do
   esac
 done
 shift $(( OPTIND - 1 ))
+
+argument=`echo "$1" | tr '[:upper:]' '[:lower:]'`
+
+function check_py_version
+{
+  # Full version number e.g. 2.7.1
+  python_version="$(echo "$($1 -V 2>&1)" | sed -e "s/^.* \(.*\)$/\\1/g")"
+
+  # Return (the first letter -lt "3")
+  ! [ "$(echo $python_version | head -c 1 )" -lt "3" ]
+}
+
+PYTHON=""
+POTENTIAL_BINARIES=( "python" "python3" "python3.6" "python3.5" "python3.7" "python3.4" "python3.3" "python3.8" "python3.2" "python3.1" )
+PY3_SUPPORT=false
+
+for i in "${POTENTIAL_BINARIES[@]}"
+do
+    PYTHON="$i"
+
+    if  $(check_py_version ${PYTHON}) ;
+    then
+        PY3_SUPPORT=true
+        break
+    fi
+done
+
+if [ ! ${PY3_SUPPORT} ]
+then
+    echo "[ERROR] Could not find python3 binary, please add it to your \$PATH before continuing"
+    exit
+fi
 
 [ -d ${USERCONF} ] || mkdir -p ${USERCONF}
 
@@ -813,7 +845,7 @@ have_pip=`type -p pip`
   plat=`uname -s`
   if [ "$plat" == "Darwin" ]
   then
-    python3 -m ensurepip --upgrade
+    ${PYTHON} -m ensurepip --upgrade
   else
     if [ "${debian}" ]
     then
@@ -832,21 +864,46 @@ have_pip=`type -p pip`
   }
 }
 
-for pkg in asciimatics rainbowstream tuir
+for pkg in asciimatics ddgr rainbowstream socli tuir
 do
   if pip list | grep ${pkg} > /dev/null
   then
-    python -m pip install --upgrade ${pkg} > /dev/null 2>&1
+    ${PYTHON} -m pip install --upgrade ${pkg} > /dev/null 2>&1
   else
     [ "${quiet}" ] || {
       printf "\n\tInstalling ${pkg} ..."
     }
-    python -m pip install ${pkg} > /dev/null 2>&1
+    ${PYTHON} -m pip install ${pkg} > /dev/null 2>&1
     [ "${quiet}" ] || {
       printf " done"
     }
   fi
 done
+
+have_googler=`type -p googler`
+[ "${have_googler}" ] || {
+  [ -f ${HOME}/.local/bin/googler ] || {
+    [ -d ${HOME}/.local ] || mkdir -p ${HOME}/.local
+    [ -d ${HOME}/.local/bin ] || mkdir -p ${HOME}/.local/bin
+    GGDL_URL="https://raw.githubusercontent.com/jarun/googler"
+    GGDL_VER="v4.3.2"
+    [ "${quiet}" ] || {
+      printf "\n\tInstalling googler ..."
+    }
+    curl --silent -o ${HOME}/.local/bin/googler \
+                     ${GGDL_URL}/${GGDL_VER}/googler 2> /dev/null
+    curl --silent -o ${HOME}/.local/share/man/man1/googler.1 \
+                     ${GGDL_URL}/${GGDL_VER}/googler.1 2> /dev/null
+    [ "${quiet}" ] || {
+      printf " done"
+    }
+  }
+
+  [ -f ${HOME}/.local/bin/googler ] && {
+    chmod +x ${HOME}/.local/bin/googler
+    ${HOME}/.local/bin/googler -u > /dev/null 2>&1
+  }
+}
 
 # Custom jrnl configuration for this user unless one exists
 [ -d ${CONFDIR}/jrnl ] && {
