@@ -151,7 +151,6 @@ ${SUDO} cp -a bin ${OUT_DIR}/${DESTDIR}/bin
 ${SUDO} cp btop/bin/btop ${OUT_DIR}/${DESTDIR}/bin/btop
 ${SUDO} cp jp2a/src/jp2a ${OUT_DIR}/${DESTDIR}/bin/jp2a
 ${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
-${SUDO} cp ddgr/ddgr ${OUT_DIR}/${DESTDIR}/bin/ddgr
 
 ${SUDO} cp -a endoh1 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1
 ${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1/endoh1
@@ -232,7 +231,6 @@ ${SUDO} cp CHANGELOG.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} pandoc -f gfm README.md | ${SUDO} tee ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README.html > /dev/null
 ${SUDO} cp VERSION ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
-${SUDO} cp ddgr/README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-ddgr.md
 ${SUDO} cp btop/README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-btop.md
 ${SUDO} cp btop/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-btop
 ${SUDO} cp btop/README.md ${OUT_DIR}/${DESTDIR}/share/btop/README.md
@@ -265,7 +263,6 @@ ${SUDO} cp -a tools "${OUT_DIR}/${DESTDIR}/share/${PKG}/tools"
 ${SUDO} gzip ${OUT_DIR}/${DESTDIR}/share/${PKG}/art/*/*.asc
 
 ${SUDO} cp -a man/man1 ${OUT_DIR}/${DESTDIR}/share/man/man1
-${SUDO} cp ddgr/ddgr.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
 ${SUDO} cp jp2a/man/jp2a.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
 [ -d ${OUT_DIR}/${DESTDIR}/share/man/man5 ] || {
   ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/man/man5

@@ -63,11 +63,6 @@ jp2a/src/jp2a
 jp2a/config.*
 jp2a/install-sh
 
-ddgr/build/
-ddgr/dist/
-ddgr/*.bak
-ddgr/ddgr.py
-
 GTAGS
 GRTAGS
 TAGS

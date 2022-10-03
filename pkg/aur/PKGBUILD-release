@@ -116,7 +116,6 @@ package() {
   cp -a bin ${pkgdir}/${destdir}/bin
   cp btop/bin/btop ${pkgdir}/${destdir}/bin/btop
   cp cbftp/bin/* ${pkgdir}/${destdir}/bin
-  cp ddgr/ddgr ${pkgdir}/${destdir}/bin/ddgr
   cp jp2a/src/jp2a ${pkgdir}/${destdir}/bin/jp2a
 
   cp -a endoh1 ${pkgdir}/${destdir}/share/${pkgname}/endoh1
@@ -172,7 +171,6 @@ package() {
   pandoc -f gfm README.md | \
     tee ${pkgdir}/${destdir}/share/doc/${pkgname}/README.html > /dev/null
   cp VERSION ${pkgdir}/${destdir}/share/doc/${pkgname}
-  cp ddgr/README.md ${pkgdir}/${destdir}/share/doc/${pkgname}/README-ddgr.md
   cp btop/README.md ${pkgdir}/${destdir}/share/doc/${pkgname}/README-btop.md
   cp btop/LICENSE ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSE-btop
   cp btop/README.md ${pkgdir}/${destdir}/share/btop/README.md
@@ -208,7 +206,6 @@ package() {
   gzip ${pkgdir}/${destdir}/share/${pkgname}/art/*/*.asc
 
   cp -a man/man1 ${pkgdir}/${destdir}/share/man/man1
-  cp ddgr/ddgr.1 ${pkgdir}/${destdir}/share/man/man1
   cp jp2a/man/jp2a.1 ${pkgdir}/${destdir}/share/man/man1
   [ -d ${pkgdir}/${destdir}/share/man/man5 ] || {
     mkdir -p ${pkgdir}/${destdir}/share/man/man5
