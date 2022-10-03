@@ -69,6 +69,10 @@ zip_inst=`type -p zip`
 if [ "${zip_inst}" ]
 then
   pyfig_inst=`type -p pyfiglet`
+  [ "${pyfig_inst}" ] || {
+    ${PYTHON} -m pip install pyfiglet
+    pyfig_inst=`type -p pyfiglet`
+  }
   if [ "${pyfig_inst}" ]
   then
     if [ -d ${FIGLET_DIR} ]

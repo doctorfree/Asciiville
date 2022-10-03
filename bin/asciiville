@@ -161,6 +161,28 @@ usage() {
   exit 1
 }
 
+check_display() {
+  consolemode=0
+  if [ "${DISPLAY}" ]
+  then
+    # First check if on a console screen
+    have_tty=`type -p tty`
+    [ "${have_tty}" ] && {
+      tty=$(tty)
+      echo "${tty}" | grep /dev/tty > /dev/null && consolemode=1
+      echo "${tty}" | grep /dev/con > /dev/null && consolemode=1
+    }
+    # Next check if this is an SSH session
+    [ ${consolemode} -eq 0 ] && {
+      # Check if this is an SSH session
+      [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] && consolemode=1
+    }
+  else
+    consolemode=1
+  fi
+  return ${consolemode}
+}
+
 kill_tmux_sessions() {
   SESSIONS="asciiville asciisplash"
   for session in ${SESSIONS}
@@ -2610,7 +2632,8 @@ show_main_menu() {
     [ "${have_splash}" ] && options+=("ASCII Animations")
     options+=("Apps & Games")
     [ "${have_bb}" ] && {
-      [ "$DISPLAY" = "" ] || options+=("AAlib Demo (X11 mode)")
+      check_display
+      [ $? -eq 0 ] && options+=("AAlib Demo (X11 mode)")
     }
     [ "${have_bb}" ] && options+=("AAlib Demo (Curses mode)")
     [ "${have_mapscii}" ] && options+=("Mapscii World Map")
@@ -2618,7 +2641,8 @@ show_main_menu() {
     options+=("Run ${show_comm} in ${show_term}")
     [ "${have_ddgr}" ] && options+=("Search the Web")
     [ "${have_curl}" ] && [ -x ${TOOLSBIN}/pokefetch ] && {
-      options+=("Show a Pokemon")
+      check_display
+      [ $? -eq 0 ] && options+=("Show a Pokemon")
     }
     [ "${have_speed}" ] && options+=("Speed Test")
     [ "${have_rainbow}" ] && options+=("Twitter Client")
@@ -3413,12 +3437,16 @@ while getopts "Aabc:CdD:E:fFgiIjJkKlL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
           break
           ;;
       pok*|Pok*)
-          [ "${have_curl}" ] && {
-            [ -x ${TOOLSBIN}/pokefetch ] && {
-              ${TOOLSBIN}/pokefetch
+          check_display
+          [ $? -eq 0 ] && {
+            [ "${have_curl}" ] && {
+              [ -x ${TOOLSBIN}/pokefetch ] && {
+                ${TOOLSBIN}/pokefetch
+                exit 0
+              }
             }
           }
-          exit 0
+          INTERACTIVE=1
           ;;
       reddit|Reddit)
           [ "${have_tuir}" ] && tuir

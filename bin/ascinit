@@ -786,7 +786,7 @@ TPM="${HOME}/.tmux/plugins/tpm"
 [ -d ${TPM} ] || {
   have_git=`type -p git`
   [ "${have_git}" ] && {
-    git clone https://github.com/tmux-plugins/tpm ${TPM}
+    git clone https://github.com/tmux-plugins/tpm ${TPM} > /dev/null 2>&1
   }
 }
 
@@ -1107,7 +1107,7 @@ create_new_profile() {
   # Setup default got configuration for this user unless one exists
   [ -f ${CONFDIR}/got/config.yml ] && {
     [ -f ${USERCONF}/got/config.yml ] || {
-      [ -d ${USERCONF}/ || mkdir -p ${USERCONF}
+      [ -d ${USERCONF} ] || mkdir -p ${USERCONF}
       [ -d ${USERCONF}/got ] || mkdir -p ${USERCONF}/got
       cp ${CONFDIR}/got/config.yml ${USERCONF}/got/config.yml
       [ "${LANG}" ] && {
