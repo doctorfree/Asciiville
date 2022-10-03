@@ -25,7 +25,7 @@ usage() {
   exit 1
 }
 
-inst_pkg() {
+install_package() {
   PKG="$1"
   [ "${quiet}" ] || echo "Installing ${PKG}"
   if [ "${debian}" ]
@@ -61,7 +61,7 @@ ask_install() {
     read -p "Install ${nam} ? (y/n) " yn
     case $yn in
       [Yy]* )
-          inst_pkg ${pkg}
+          install_package ${pkg}
           break
           ;;
       [Nn]* )
@@ -82,6 +82,81 @@ install_pipx() {
   have_pipx=`type -p pipx`
   [ "${quiet}" ] || {
     printf " done"
+  }
+}
+
+install_external_package() {
+  [ "${have_curl}" ] || {
+    install_package curl
+    have_curl=`type -p curl`
+  }
+  [ "${have_jq}" ] || {
+    install_package jq
+    have_jq=`type -p jq`
+  }
+  DL_URL=
+  [ "${have_curl}" ] && [ "${have_jq}" ] && {
+    if [ "${arch}" ]
+    then
+      DL_URL=$(curl --silent "${API_URL}" | \
+               jq --raw-output '.assets | .[]?.browser_download_url' | \
+               grep "\.pkg\.tar\.zst")
+    else
+      if [ "${centos}" ]
+      then
+        DL_URL=$(curl --silent "${API_URL}" | \
+                 jq --raw-output '.assets | .[]?.browser_download_url' | \
+                 grep "\.el.*x86_64\.rpm")
+      else
+        if [ "${fedora}" ]
+        then
+          DL_URL=$(curl --silent "${API_URL}" | \
+                   jq --raw-output '.assets | .[]?.browser_download_url' | \
+                   grep "\.fc.*x86_64\.rpm")
+        else
+          if [ "${debian}" ]
+          then
+            if [ "${mach}" == "x86_64" ]
+            then
+              DL_URL=$(curl --silent "${API_URL}" | \
+                       jq --raw-output '.assets | .[]?.browser_download_url' | \
+                       grep "\.amd64\.deb")
+            else
+              DL_URL=$(curl --silent "${API_URL}" | \
+                       jq --raw-output '.assets | .[]?.browser_download_url' | \
+                       grep "\.arm.*\.deb")
+            fi
+          else
+            printf "\n\tNo ${PROJECT} release asset found for this platform ..."
+          fi
+        fi
+      fi
+    fi
+  }
+
+  [ "${DL_URL}" ] && {
+    printf "\n\tInstalling ${PROJECT} ..."
+    if [ "${debian}" ]
+    then
+      [ "${have_wget}" ] || {
+        install_package wget
+        have_wget=`type -p wget`
+      }
+      [ "${have_wget}" ] && {
+        TEMP_DEB="$(mktemp --suffix=.deb)"
+        wget --quiet -O "${TEMP_DEB}" "${DL_URL}" > /dev/null 2>&1
+        chmod 644 "${TEMP_DEB}"
+        [ "${APT}" ] && sudo ${APT} install "${TEMP_DEB}" > /dev/null 2>&1
+        rm -f "${TEMP_DEB}"
+      }
+    else
+      if [ "${centos}" ] || [ "${fedora}" ]
+      then
+        [ "${DNF}" ] && sudo ${DNF} install ${DL_URL} > /dev/null 2>&1
+      else
+        [ "${arch}" ] && sudo pacman -U --noconfirm ${DL_URL} > /dev/null 2>&1
+      fi
+    fi
   }
 }
 
@@ -367,6 +442,14 @@ shift $(( OPTIND - 1 ))
 
 [ -d ${USERCONF} ] || mkdir -p ${USERCONF}
 
+# Install aewan if not already present
+[ -x /usr/bin/aewan ] || {
+  OWNER=doctorfree
+  PROJECT=asciiville-aewan
+  API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
+  install_external_package
+}
+
 # Mutt configuration user setup
 [ "${have_mutt}" ] && {
   [ -f ${CONFDIR}/mutt/muttrc ] && {
@@ -433,7 +516,7 @@ shift $(( OPTIND - 1 ))
   [ "${fedora}" ] && {
     sudo dnf install dnf-plugins-core -y 2> /dev/null
     sudo dnf copr enable flatcap/neomutt -y 2> /dev/null
-    inst_pkg neomutt
+    install_package neomutt
   }
 }
 [ -d ${CONFDIR}/neomutt ] && {
@@ -533,7 +616,7 @@ case "${mach}" in
       # If none of Gnome, Tilix, or XFCE terminal emulators are installed
       # then install the Gnome terminal emulator
       [ "${have_gnome}" ] || [ "${have_tilix}" ] || [ "${have_xfce4}" ] || {
-        inst_pkg gnome-terminal
+        install_package gnome-terminal
         have_gnome=`type -p gnome-terminal`
       }
       ;;
