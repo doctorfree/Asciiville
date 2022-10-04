@@ -1,0 +1,432 @@
+#!/bin/bash
+#
+## @file any2ascii
+## @brief Convert from any audio/video or image format to Ascii
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2022, Ronald Joe Record, all rights reserved.
+## @date Written 4-Oct-2022
+## @version 1.0.0
+##
+##   This program works by either linking or copying any2ascii to a file
+##   which specifies the desired input and output formats by its name.
+##   Alternately, the -i and -o command line options can be used to specify
+##   the input and output file formats.
+##
+##   For example, if you want to convert from WMV to MP4 then you could
+##   create a symbolic link from any2ascii to wmv2mp4 as follows:
+##       ln -s any2ascii wmv2mp4
+##   Similarly, symbolic links (or copies or hard links) could be created
+##   to convert from any (3 lowercase letter representation) audio/video format
+##   to any other audio/video format. Commonly used conversions include:
+##       wmv2mkv avi2mpg wmv2mp4 and so on.
+##
+##   Naming restricton: [3 lowercase letter input]2[3 lowercase letter output]
+##   for a 7 letter name with "2" in the middle. The 3 letter prefix and suffix
+##   must also be a filename suffix that ffmpeg recognizes as a valid
+##   audio/video format.
+##
+##   For example, the following are filenames that conform to this restriction:
+##       ape2m4a flv2mp4 mkv2mp4 wmv2mp4 avi2mpg wmv2mkv wma2m4a
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# The Software is provided "as is", without warranty of any kind, express or
+# implied, including but not limited to the warranties of merchantability,
+# fitness for a particular purpose and noninfringement. In no event shall the
+# authors or copyright holders be liable for any claim, damages or other
+# liability, whether in an action of contract, tort or otherwise, arising from,
+# out of or in connection with the Software or the use or other dealings in
+# the Software.
+#
+# TODO: add conversion of image formats. Use something like
+#       convert somefile.gif jpg:- | jp2a - --width=80
+
+ME=`basename $0`
+if [ "$ME" = "any2ascii" ]
+then
+    PRE="wmv"
+    SUF="mp4"
+    INP="WMV"
+    DIR="MP4"
+else
+    PRE="${ME:0:3}"
+    SUF="${ME:4:3}"
+    INP=`echo $PRE | tr '[:lower:]' '[:upper:]'`
+    DIR=`echo $SUF | tr '[:lower:]' '[:upper:]'`
+fi
+
+CODEC=
+SIZE=
+OVER=
+TELL=
+USAGE=
+ACODEC=
+VCODEC=
+PRESET="-preset slow"
+QSCALE=
+RATE=
+ASAMPLE=
+VSAMPLE=
+THREAD=
+ITUNES=
+
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
+usage() {
+  printf "\nUsage: $ME [-A] [-a audio codec] [-v video codec] [-c codec] [-p preset]"
+  printf "\n\t\t[-i input format (lower case)] [-o output format (lower case)]"
+  printf "\n\t\t[-q scale] [-r rate] [-b audio bitrate] [-z video bitrate] [-S strategy]"
+  printf "\n\t\t[-s size] [-t threads] [-I] [-d] [-y] [-u] file1 [file2 ...]"
+  printf "\n\nWhere:\n\t-d indicates tell me what you would do"
+  printf "\n\t-A indicates without audio"
+  printf "\n\t-i input format specifies the 3 letter lower case input format"
+  printf "\n\t-o output format specifies the 3 letter lower case output format"
+  printf "\n\t-a audio codec specifies the output audio codec"
+  printf "\n\t-v video codec specifies the output video codec"
+  printf "\n\t-S strategy specifies the ascii conversion strategy"
+  printf "\n\t\tcan be one of 'ascii-color', 'just-ascii', 'filled-ascii'"
+  printf "\n\t-s size specifies the output video size (widthxheight)"
+  printf "\n\t-c codec specifies the output codec"
+  printf "\n\t-I indicates add the converted file to Apple Music"
+  printf "\n\t-p preset specifies the ffmpeg preset to use"
+  printf "\n\t\t Useful presets:"
+  printf "\n\t\t ultrafast superfast veryfast faster fast medium slow"
+  printf "\n\t\t slower veryslow. Default preset is 'slow'"
+  printf "\n\t-q scale specifies the qscale variable bit rate quality"
+  printf "\n\t-r rate specifies the rate for Constant Rate Factor (CRF)"
+  printf "\n\t\tencoding. Use \"-r 0\" to disable for formats other than x264"
+  printf "\n\t-b bitrate specifies the bitrate (default 128k)"
+  printf "\n\t-t threads specifies the number of threads to use"
+  printf "\n\t-y indicates overwrite output files without asking"
+  printf "\n\t-u displays this usage message\n"
+  printf "\nCurrent invocation defaults to:\n\nffmpeg -i INPUT -loglevel warning -strict -2 $OPTS OUTPUT\n"
+  printf "\nExamples:"
+  printf "\n\tThe most common use is conversion using the default parameters"
+  printf "\n\t\t$ME $INP/example.$SUF"
+  printf "\n\tCopy audio and video codecs, convert the container"
+  printf "\n\t\t$ME -c copy $INP/example.$SUF"
+  printf "\n\tSpecify output video size of 640 width by 480 height"
+  printf "\n\t\t$ME -s 640x480 $INP/example.$SUF"
+  printf "\n\tSpecify libx264 output video codec and use ipod640 preset"
+  printf "\n\t\t$ME -v libx264 -p ipod640 $INP/example.$SUF"
+  printf "\n\tSpecify 512k bitrate and add converted file to Apple Music"
+  printf "\n\t\t$ME -b 512k -I $INP/example.$SUF"
+  printf "\n\tSpecify libx264 output video codec and variable bit rate"
+  printf "\n\t\t$ME -v libx264 -r 0 -q 3 $INP/example.$SUF\n"
+  exit 1
+}
+
+WITH_AUDIO="--with-audio"
+STRATEGY="ascii-color"
+while getopts Aa:b:c:i:o:p:q:r:t:S:s:v:z:Iydu flag; do
+    case $flag in
+        A)
+            WITH_AUDIO=
+            ;;
+        a)
+            ACODEC="-acodec $OPTARG"
+            ;;
+        b)
+            ASAMPLE="-ab $OPTARG"
+            ;;
+        i)
+            PRE=$OPTARG
+            INP=`echo $PRE | tr '[:lower:]' '[:upper:]'`
+            ;;
+        o)
+            SUF=$OPTARG
+            DIR=`echo $SUF | tr '[:lower:]' '[:upper:]'`
+            ;;
+        z)
+            VSAMPLE="-vb $OPTARG"
+            ;;
+        c)
+            CODEC="-codec $OPTARG"
+            ;;
+        d)
+            TELL=1
+            ;;
+        i)
+            inst=`type -p osascript`
+            if [ "$inst" ]
+            then
+                ITUNES=1
+            else
+                echo "AppleScript is not supported on this platform."
+                echo "Unable to automate the installation in Apple Music."
+            fi
+            ;;
+        p)
+            PRESET="-preset $OPTARG"
+            ;;
+        q)
+            QSCALE="-qscale $OPTARG"
+            RATE=
+            ;;
+        r)
+            if [ $OPTARG -eq 0 ]
+            then
+                RATE=
+            else
+                RATE="-crf $OPTARG"
+            fi
+            ;;
+        S)
+            STRATEGY="$OPTARG"
+            case "${STRATEGY}" in
+                color|ascii-color)
+                  STRATEGY="ascii-color"
+                  ;;
+                just|just-ascii)
+                  STRATEGY="just-ascii"
+                  ;;
+                filled|filled-ascii)
+                  STRATEGY="filled-ascii"
+                  ;;
+                *)
+                  STRATEGY="ascii-color"
+                  ;;
+            esac
+            ;;
+        s)
+            SIZE="-s $OPTARG"
+            ;;
+        t)
+            THREAD="-threads $OPTARG"
+            ;;
+        y)
+            OVER="-y"
+            ;;
+        v)
+            VCODEC="-vcodec $OPTARG"
+            ;;
+        u)
+            USAGE=1
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+# Set ffmpeg conversion options based upon the desired output format
+[ "$SUF" = "mp4" ] && {
+    VCODEC="-vcodec libx264"
+## See http://slhck.info/articles/crf for info on Constant Rate Factor (CRF)
+    RATE="-crf 23"
+    ASAMPLE="-ab 128k"
+    THREAD="-threads 0"
+}
+[ "$SUF" = "wmv" ] && {
+    ACODEC="-acodec adpcm_ms"
+    VCODEC="-vcodec msmpeg4"
+## See http://www.kilobitspersecond.com/2007/05/24/ffmpeg-quality-comparison
+    QSCALE="-qscale 5"
+    ASAMPLE="-ab 128k"
+    THREAD="-threads 0"
+}
+[ "$SUF" = "avi" ] && {
+    ACODEC="-acodec adpcm_ms"
+    VCODEC="-vcodec libxvid"
+    QSCALE="-qscale 5"
+    ASAMPLE="-ab 128k"
+    THREAD="-threads 0"
+}
+[ "$SUF" = "mp3" ] && {
+    ACODEC="-acodec libmp3lame"
+    PRESET=""
+    VCODEC="-vn -c:v copy"
+    QSCALE="-qscale:a 0"
+    THREAD="-threads 0"
+}
+# TODO: Add desired default settings for other format encodings here.
+#
+# Set any options specified on the command line - the sed part is just
+# removing any leading or trailing spaces.
+OPTS=`echo "$OVER $ACODEC $CODEC $SIZE $VCODEC $PRESET $QSCALE $RATE $ASAMPLE $VSAMPLE $THREAD" | sed -e 's/^ *//' -e 's/ *$//'`
+# Check for incompatible ffmpeg arguments
+[ "$RATE" ] && [ "$QSCALE" ] && {
+    printf "\nCannot specify both constant and variable bit rate values."
+    printf "\nCurrent invocation would invoke:\n\nffmpeg -i INPUT -loglevel warning -strict -2 $OPTS OUTPUT\n"
+    printf "\nExiting.\n"
+    exit 1
+}
+
+# Display usage message and exit if -u was given on the command line.
+# We delay until now in order to gather up all the other command line options.
+[ "$USAGE" ] && usage
+
+pathadd() {
+  if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+    PATH="$1${PATH:+":$PATH"}"
+  fi
+}
+
+function check_py_version
+{
+  # Full version number e.g. 2.7.1
+  python_version="$(echo "$($1 -V 2>&1)" | sed -e "s/^.* \(.*\)$/\\1/g")"
+
+  # Return (the first letter -lt "3")
+  ! [ "$(echo $python_version | head -c 1 )" -lt "3" ]
+}
+
+pathadd "${HOME}/.local/bin"
+have_v2a=`type -p video-to-ascii`
+[ "${have_v2a}" ] || {
+    PYTHON=""
+    POTENTIAL_BINARIES=( "python" "python3" "python3.6" "python3.5" "python3.7" "python3.4" "python3.3" "python3.8" "python3.2" "python3.1" )
+    PY3_SUPPORT=false
+    for i in "${POTENTIAL_BINARIES[@]}"
+    do
+        PYTHON="$i"
+        if  $(check_py_version ${PYTHON}) ;
+        then
+            PY3_SUPPORT=true
+            break
+        fi
+    done
+
+    if [ ! ${PY3_SUPPORT} ]
+    then
+        echo "[ERROR] Could not find python3 binary, please add it to your \$PATH before continuing"
+        exit
+    fi
+
+    for pkg in future xtermcolor ffmpeg-python pyaudio
+    do
+      if pip list | grep ${pkg} > /dev/null
+      then
+        ${PYTHON} -m pip install --upgrade ${pkg} > /dev/null 2>&1
+      else
+        [ "${quiet}" ] || {
+          printf "\n\tInstalling ${pkg} ..."
+        }
+        ${PYTHON} -m pip install ${pkg} > /dev/null 2>&1
+        [ "${quiet}" ] || {
+          printf " done"
+        }
+      fi
+    done
+
+    pkg=video-to-ascii
+    if pip list | grep ${pkg} > /dev/null
+    then
+      ${PYTHON} -m pip install --upgrade ${pkg} \
+          --install-option="--with-audio" > /dev/null 2>&1
+    else
+      [ "${quiet}" ] || {
+        printf "\n\tInstalling ${pkg} ..."
+      }
+      ${PYTHON} -m pip install ${pkg} \
+          --install-option="--with-audio" > /dev/null 2>&1
+      [ "${quiet}" ] || {
+        printf " done"
+      }
+    fi
+}
+
+have_v2a=`type -p video-to-ascii`
+[ "${have_v2a}" ] || {
+  echo "video-to-ascii command not found or not in PATH."
+  echo "Skipping conversion and exiting."
+  exit 1
+}
+
+V2A="${have_v2a}"
+
+have_kitty=`type -p kitty`
+have_gnome=`type -p gnome-terminal`
+have_tilix=`type -p tilix`
+have_xfce4=`type -p xfce4-terminal`
+art_font_size=6
+mkascii() {
+  echo "${V2A} -f $i --strategy ${STRATEGY} ${WITH_AUDIO} --output ${v}.sh"
+  mkvidcomm="${V2A} -f $i --strategy ${STRATEGY} ${WITH_AUDIO} --output ${v}.sh"
+  if [ "${have_kitty}" ]
+  then
+    echo "Invoking kitty to convert $i to ${v}.sh"
+    kitty --title="Make Ascii Art" \
+          --start-as normal \
+          --override font_size=${art_font_size} \
+          --override initial_window_width=320c \
+          --override initial_window_height=80c \
+          --override tab_bar_min_tabs=2 \
+          ${mkvidcomm} 2> /dev/null
+  else
+    if [ "${have_gnome}" ]
+    then
+      echo "Invoking gnome-terminal to convert ${i} to ${v}.sh"
+      [ "${set_font_size}" ] && termprofset -S -g -s ${art_font_size}
+      gnome-terminal --window --geometry=320x100 --profile=Asciiville \
+          -- ${mkvidcomm} 2> /dev/null
+    else
+      if [ "${have_tilix}" ]
+      then
+        echo "Invoking Tilix to convert ${i} to ${v}.sh"
+        [ "${set_font_size}" ] && termprofset -S -t -s ${art_font_size}
+        tilix --geometry=320x100 \
+              --profile=Asciiville \
+              --window-style=borderless \
+              --command="${mkvidcomm}" 2> /dev/null
+      else
+        if [ "${have_xfce4}" ]
+        then
+          [ "${set_font_size}" ] && termprofset -S -x -s ${art_font_size}
+          xfce4-terminal \
+              --hide-menubar \
+              --hide-toolbar \
+              --hide-scrollbar \
+              --geometry=320x100 \
+              --command="${mkvidcomm} 2> /dev/null"
+        else
+          ${mkvidcomm} 2> /dev/null
+        fi
+      fi
+    fi
+  fi
+  [ -f "${v}.sh" ] && chmod 755 "${v}.sh"
+}
+
+[ -d "$DIR" ] || {
+    printf "\nOutput directory $DIR does not exist or is not a directory.\n"
+    while true
+    do
+        read -p "Do you want to create the output directory ? (y/n) " yn
+        case $yn in
+            [Yy]* ) mkdir -p "$DIR"; break;;
+            [Nn]* ) printf "\nExiting.\n"; exit 1;;
+                * ) echo "Please answer yes or no.";;
+        esac
+    done
+}
+
+for i in "$@"
+do
+    [ -f "$i" ] || {
+        echo "Input file $i does not exist or is not a regular file. Skipping."
+        continue
+    }
+    # Set the output directory and filename
+    d=`dirname "$i"`
+    if [ "$d" = "." ]
+    then
+        v=${DIR}/`echo "$i" | sed -e "s/\.${PRE}//"`
+    else
+        # I always have to guess how many backslashes to use. I love sed.
+        # Anyway, we need to turn slashes into backslashed slashes so the
+        # subsequent sed to set the output directory will work.
+        INP=`echo "$d" | sed -e 's/\//\\\\\//g'`
+        v=`echo "$i" | sed -e "s/${INP}/${DIR}/" -e "s/\.${PRE}//"`
+    fi
+    mkascii
+done

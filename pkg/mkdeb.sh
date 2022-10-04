@@ -149,7 +149,7 @@ Version: ${PKG_VER}-${PKG_REL}
 Section: misc
 Priority: optional
 Architecture: ${ARCH}
-Depends: uuid-runtime, python3, python3-pip, python3-venv, tmux, mplayer, w3m, neomutt, newsboat, ranger, curl, jq, wget, asciinema, speedtest-cli, libaa-bin, libaa1, bb, neofetch, figlet, imagemagick, dconf-cli, libncurses-dev, libjpeg-dev, libpng-dev, cmatrix, gnupg, pandoc, urlscan, khard, git
+Depends: uuid-runtime, python3, python3-dev, python3-pip, python3-venv, tmux, mplayer, w3m, neomutt, newsboat, ranger, curl, jq, wget, asciinema, speedtest-cli, libaa-bin, libaa1, bb, neofetch, figlet, imagemagick, dconf-cli, libncurses-dev, libjpeg-dev, libpng-dev, cmatrix, gnupg, pandoc, urlscan, khard, git, libportaudio2, libportaudiocpp0, portaudio19-dev
 Maintainer: ${DEBFULLNAME} <${DEBEMAIL}>
 Installed-Size: 192000
 Build-Depends: debhelper (>= 11)

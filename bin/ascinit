@@ -864,7 +864,8 @@ have_pip=`type -p pip`
   }
 }
 
-for pkg in asciimatics ddgr rainbowstream socli tuir
+for pkg in asciimatics ddgr rainbowstream socli tuir \
+           future xtermcolor ffmpeg-python pyaudio
 do
   if pip list | grep ${pkg} > /dev/null
   then
@@ -879,6 +880,22 @@ do
     }
   fi
 done
+
+pkg=video-to-ascii
+if pip list | grep ${pkg} > /dev/null
+then
+  ${PYTHON} -m pip install --upgrade ${pkg} \
+      --install-option="--with-audio" > /dev/null 2>&1
+else
+  [ "${quiet}" ] || {
+    printf "\n\tInstalling ${pkg} ..."
+  }
+  ${PYTHON} -m pip install ${pkg} \
+      --install-option="--with-audio" > /dev/null 2>&1
+  [ "${quiet}" ] || {
+    printf " done"
+  }
+fi
 
 have_googler=`type -p googler`
 [ "${have_googler}" ] || {
