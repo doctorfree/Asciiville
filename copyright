@@ -15,10 +15,6 @@ Files: cbftp/*
 Copyright: 2011-present The cbftp development team
 License: MIT
 
-Files: jp2a/*
-Copyright: 2006-2016 Christian Stigen Larsen, 2020 Christoph Raitzig, 2022 Ronald Record
-License: GPL-2
-
 Files: games/nethack/*
 Copyright: 1993-2002 NetHack Development Team
 License: Nethack General Public License

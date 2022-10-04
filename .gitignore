@@ -54,15 +54,6 @@ btop/btop
 cbftp/bin
 .*/
 
-jp2a/INSTALL
-jp2a/Makefile
-jp2a/src/Makefile
-jp2a/Makefile.in
-jp2a/src/Makefile.in
-jp2a/src/jp2a
-jp2a/config.*
-jp2a/install-sh
-
 GTAGS
 GRTAGS
 TAGS

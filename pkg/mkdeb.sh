@@ -83,20 +83,6 @@ else
   cd ..
 fi
 
-# Build jp2a
-if [ -x build ]
-then
-  ./build jp2a
-else
-  cd jp2a
-  autoreconf -vi
-  ./configure --prefix=/usr --enable-curl --enable-termlib
-  make clean
-  make -j
-  chmod +x src/jp2a
-  cd ..
-fi
-
 # Build nethack
 if [ -x build ]
 then
@@ -181,7 +167,6 @@ done
 ${SUDO} cp -a bin ${OUT_DIR}/${DESTDIR}/bin
 ${SUDO} cp btop/bin/btop ${OUT_DIR}/${DESTDIR}/bin/btop
 ${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
-${SUDO} cp jp2a/src/jp2a ${OUT_DIR}/${DESTDIR}/bin/jp2a
 
 ${SUDO} cp -a endoh1 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1
 ${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1/endoh1
@@ -278,9 +263,6 @@ ${SUDO} cp btop/Img/icon.png "${OUT_DIR}/${DESTDIR}/share/icons/hicolor/48x48/ap
 ${SUDO} cp btop/Img/icon.svg "${OUT_DIR}/${DESTDIR}/share/icons/hicolor/scalable/apps/btop.svg"
 ${SUDO} cp cbftp/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-cbftp
 ${SUDO} cp cbftp/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-cbftp
-${SUDO} cp jp2a/COPYING ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/COPYING-jp2a
-${SUDO} cp jp2a/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-jp2a
-${SUDO} cp jp2a/LICENSES ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSES-jp2a
 ${SUDO} cp games/tetris/licence.txt ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/license-tetris
 ${SUDO} cp games/tetris/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-tetris
 ${SUDO} gzip -9 ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/CHANGELOG.md
@@ -294,7 +276,6 @@ ${SUDO} cp -a tools "${OUT_DIR}/${DESTDIR}/share/${PKG}/tools"
 ${SUDO} gzip ${OUT_DIR}/${DESTDIR}/share/${PKG}/art/*/*.asc
 
 ${SUDO} cp -a man/man1 ${OUT_DIR}/${DESTDIR}/share/man/man1
-${SUDO} cp jp2a/man/jp2a.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
 [ -d ${OUT_DIR}/${DESTDIR}/share/man/man5 ] || {
   ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/man/man5
 }

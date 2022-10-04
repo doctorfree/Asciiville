@@ -74,25 +74,6 @@ build_endo() {
   }
 }
 
-build_jp2a() {
-  #
-  # Repo: https://github.com/doctorfree/Asciiville
-  #
-  # Fork of Repo: https://github.com/cslarsen/jp2a
-  #
-  [ -f src/jp2a ] || {
-    prefix="--prefix=/usr"
-    [ "${PREFIX}" ] && prefix="--prefix=${PREFIX}"
-    autoreconf -vi
-    ./configure ${prefix} --enable-curl --enable-termlib
-    make -j
-  }
-
-  chmod +x src/jp2a
-
-  [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
-}
-
 build_nethack() {
   #
   # Repo: https://github.com/doctorfree/Asciiville
@@ -151,7 +132,7 @@ usage() {
     printf "\n\t-u displays this usage message and exits\n"
     printf "\nNo arguments: build btop, configure with prefix=/usr, build\n"
     printf "\n'project' can be one or more of 'btop', 'cbftp',"
-    printf "\n'jp2a', 'nethack', 'ninvaders', and 'tetris'\n"
+    printf "\n'nethack', 'ninvaders', and 'tetris'\n"
     exit 1
 }
 
@@ -197,14 +178,6 @@ do
       [ -d ${PROJ} ] && {
         cd ${PROJ}
         build_endo
-        cd ..
-      }
-      ;;
-    jp2a)
-      PROJ=jp2a
-      [ -d ${PROJ} ] && {
-        cd ${PROJ}
-        build_jp2a
         cd ..
       }
       ;;

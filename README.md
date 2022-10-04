@@ -240,7 +240,8 @@ Asciiville adds the following commands to your system:
 * **gameserver** : multi-player game server
 * **got** : text based translation tool
 * **gum** : a tool for glamorous shell scripts
-* **jp2a** : image to ascii conversion utility
+* **any2a** : any image format to ascii conversion utility
+* **jp2a** : jpg/png image to ascii conversion utility
 * **make_ascii_art** : generate ascii art from images
 * **mapscii** : character based zoomable map of the world
 * **nethack** : character based dungeon game
@@ -1847,11 +1848,11 @@ bison, libncurses5-dev, autotools-dev, libjpeg-dev, libpng-dev,
 libcurl4-gnutls-dev, libncurses5-dev, autoconf-archive, pkg-config
 
 Not all are required to build a specific utility or game. Utilities and games
-built from source in Asciiville include btop++, cbftp, jp2a,
+built from source in Asciiville include btop++, cbftp,
 nethack, ninvaders, and tetris.
 
 The build script `build` in the top-level directory of the Asciiville repository
-can be used to compile btop, cbftp, jp2a, nethack, ninvaders, and tetris.
+can be used to compile btop, cbftp, nethack, ninvaders, and tetris.
 Invoke the `build` script with the game or utility you wish to compile as
 an argument. For example, to compile the btop++ system monitor from source,
 run the command `./build btop`.

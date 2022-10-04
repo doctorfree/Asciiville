@@ -75,14 +75,6 @@ build() {
   chmod +x endoh1 endoh1_color
   cd ..
 
-  cd jp2a
-  autoreconf -vi
-  ./configure --prefix=/usr --enable-curl --enable-termlib
-  make clean
-  make -j
-  chmod +x src/jp2a
-  cd ..
-
   cd games/nethack
   cd sys/autoconf
   ./bootstrap.sh
@@ -134,7 +126,6 @@ package() {
   cp -a bin ${pkgdir}/${destdir}/bin
   cp btop/bin/btop ${pkgdir}/${destdir}/bin/btop
   cp cbftp/bin/* ${pkgdir}/${destdir}/bin
-  cp jp2a/src/jp2a ${pkgdir}/${destdir}/bin/jp2a
 
   cp -a endoh1 ${pkgdir}/${destdir}/share/${pkgname}/endoh1
   chmod 755 ${pkgdir}/${destdir}/share/${pkgname}/endoh1/endoh1
@@ -207,9 +198,6 @@ package() {
     "${pkgdir}/${destdir}/share/icons/hicolor/scalable/apps/btop.svg"
   cp cbftp/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-cbftp
   cp cbftp/LICENSE ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSE-cbftp
-  cp jp2a/COPYING ${pkgdir}/${destdir}/share/doc/${pkgname}/COPYING-jp2a
-  cp jp2a/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-jp2a
-  cp jp2a/LICENSES ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSES-jp2a
   cp games/tetris/licence.txt \
     ${pkgdir}/${destdir}/share/doc/${pkgname}/license-tetris
   cp games/tetris/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-tetris
@@ -224,7 +212,6 @@ package() {
   gzip ${pkgdir}/${destdir}/share/${pkgname}/art/*/*.asc
 
   cp -a man/man1 ${pkgdir}/${destdir}/share/man/man1
-  cp jp2a/man/jp2a.1 ${pkgdir}/${destdir}/share/man/man1
   [ -d ${pkgdir}/${destdir}/share/man/man5 ] || {
     mkdir -p ${pkgdir}/${destdir}/share/man/man5
   }
