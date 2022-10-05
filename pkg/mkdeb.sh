@@ -97,17 +97,6 @@ else
   cd ../..
 fi
 
-# Build ninvaders
-if [ -x build ]
-then
-  ./build ninvaders
-else
-  cd games/ninvaders
-  cmake -B cmake_build
-  cmake --build cmake_build -j2
-  cd ../..
-fi
-
 # Build tetris
 if [ -x build ]
 then
@@ -149,7 +138,7 @@ for dir in "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
            "${DESTDIR}/share/doc/${PKG}" "${DESTDIR}/share/btop" \
            "${DESTDIR}/share/${PKG}" "${DESTDIR}/games" "${DESTDIR}/games/bin" \
-           "${DESTDIR}/games/lib" "${DESTDIR}/games/lib/ninvaders" \
+           "${DESTDIR}/games/lib" \
            "${DESTDIR}/games/share" "${DESTDIR}/games/share/doc" \
            "${DESTDIR}/games/share/doc/tetris" \
            "${DESTDIR}/games/share/pixmaps" \
@@ -185,22 +174,6 @@ ${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/bin/nethack
 ${SUDO} chmod 04755 ${OUT_DIR}/${DESTDIR}/games/bin/nethack
 ${SUDO} ln -r -s ${OUT_DIR}/${DESTDIR}/games/bin/nethack ${OUT_DIR}/${DESTDIR}/games/nethack
 cd ../..
-
-${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders
-${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders
-${SUDO} chmod 0755 ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders
-${SUDO} touch ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/highscore
-${SUDO} cp ninvaders/LICENSE ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders
-${SUDO} cp ninvaders/README.md ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders
-${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/highscore
-${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/highscore
-${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/*
-
-${SUDO} cp ninvaders/cmake_build/ninvaders ${OUT_DIR}/${DESTDIR}/games/bin
-${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/bin/ninvaders
-${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/bin/ninvaders
-${SUDO} chmod 04755 ${OUT_DIR}/${DESTDIR}/games/bin/ninvaders
-${SUDO} ln -r -s ${OUT_DIR}/${DESTDIR}/games/bin/ninvaders ${OUT_DIR}/${DESTDIR}/games/ninvaders
 
 # Tetris
 ${SUDO} cp tetris/tetris ${OUT_DIR}/${DESTDIR}/games/bin

@@ -1848,11 +1848,10 @@ bison, libncurses5-dev, autotools-dev, libjpeg-dev, libpng-dev,
 libcurl4-gnutls-dev, libncurses5-dev, autoconf-archive, pkg-config
 
 Not all are required to build a specific utility or game. Utilities and games
-built from source in Asciiville include btop++, cbftp,
-nethack, ninvaders, and tetris.
+built from source in Asciiville include btop++, cbftp, nethack, and tetris.
 
 The build script `build` in the top-level directory of the Asciiville repository
-can be used to compile btop, cbftp, nethack, ninvaders, and tetris.
+can be used to compile btop, cbftp, nethack, and tetris.
 Invoke the `build` script with the game or utility you wish to compile as
 an argument. For example, to compile the btop++ system monitor from source,
 run the command `./build btop`.

@@ -108,13 +108,6 @@ build_nethack() {
   [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
 }
 
-build_ninvaders() {
-  [ -f cmake_build/ninvaders ] || {
-    cmake -B cmake_build
-    cmake --build cmake_build -j2
-  }
-}
-
 build_tetris() {
   [ -f tetris ] || {
     ./configure.sh --prefix=/usr/games --enable-xlib=no --enable-curses=yes
@@ -132,7 +125,7 @@ usage() {
     printf "\n\t-u displays this usage message and exits\n"
     printf "\nNo arguments: build btop, configure with prefix=/usr, build\n"
     printf "\n'project' can be one or more of 'btop', 'cbftp',"
-    printf "\n'nethack', 'ninvaders', and 'tetris'\n"
+    printf "\n'nethack', and 'tetris'\n"
     exit 1
 }
 
@@ -186,14 +179,6 @@ do
       [ -d ${PROJ} ] && {
         cd ${PROJ}
         build_nethack
-        cd ../..
-      }
-      ;;
-    ninvaders)
-      PROJ=games/ninvaders
-      [ -d ${PROJ} ] && {
-        cd ${PROJ}
-        build_ninvaders
         cd ../..
       }
       ;;

@@ -69,11 +69,6 @@ build() {
   make
   cd ../..
 
-  cd games/ninvaders
-  cmake -B cmake_build
-  cmake --build cmake_build -j2
-  cd ../..
-
   cd games/tetris
   [ -f tetris ] || {
     ./configure.sh --prefix=/usr/games --enable-xlib=no --enable-curses=yes
@@ -91,7 +86,7 @@ package() {
       "${destdir}/share/applications" "${destdir}/share/doc" \
       "${destdir}/share/doc/${pkgname}" "${destdir}/share/btop" \
       "${destdir}/share/${pkgname}" "${destdir}/games" "${destdir}/games/bin" \
-      "${destdir}/games/lib" "${destdir}/games/lib/ninvaders" \
+      "${destdir}/games/lib" \
       "${destdir}/games/share" "${destdir}/games/share/doc" \
       "${destdir}/games/share/doc/tetris" \
       "${destdir}/games/share/pixmaps" \
@@ -122,11 +117,6 @@ package() {
   cd doc
   make DESTDIR=${pkgdir} manpages
   cd ../..
-
-  cp ninvaders/LICENSE ${pkgdir}/${destdir}/games/lib/ninvaders
-  cp ninvaders/README.md ${pkgdir}/${destdir}/games/lib/ninvaders
-
-  cp ninvaders/cmake_build/ninvaders ${pkgdir}/${destdir}/games/bin
 
   # Tetris
   cp tetris/tetris ${pkgdir}/${destdir}/games/bin

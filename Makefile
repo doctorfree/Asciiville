@@ -66,9 +66,9 @@ else
 endif
 endif
 
-.PHONY: all info aur deb rpm btop cbftp nethack ninvaders clean
+.PHONY: all info aur deb rpm btop cbftp nethack clean
 
-all: btop cbftp nethack ninvaders aur deb rpm
+all: btop cbftp nethack aur deb rpm
 
 info:
 	@$(FIG_CMD)
@@ -84,9 +84,6 @@ cbftp: info
 
 nethack: info
 	@./build nethack
-
-ninvaders: info
-	@./build ninvaders
 
 deb: info
 	@./mkpkg

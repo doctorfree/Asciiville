@@ -1,7 +1,6 @@
 #!/bin/bash
 
-AVILLE_DIRS="/usr/games/lib/ninvaders \
-/usr/games/share/doc/nethack \
+AVILLE_DIRS="/usr/games/share/doc/nethack \
 /usr/games/share/doc/tetris \
 /usr/games/share/nethack \
 /usr/games/var/nethack \
@@ -31,11 +30,9 @@ AVILLE_FILES="/usr/bin/asciiart \
 /usr/bin/termprofset \
 /usr/games/bin/gameserver \
 /usr/games/bin/nethack \
-/usr/games/bin/ninvaders \
 /usr/games/bin/tetris \
 /usr/games/gameserver \
 /usr/games/nethack \
-/usr/games/ninvaders \
 /usr/games/share/applications/tetris.desktop \
 /usr/games/share/pixmaps/tetris.xpm \
 /usr/games/tetris \
