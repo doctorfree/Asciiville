@@ -23,7 +23,9 @@ tab-size = 4
 #include <robin_hood.h>
 #include <filesystem>
 
-using std::string, std::vector, robin_hood::unordered_flat_map;
+using std::string;
+using std::vector;
+using robin_hood::unordered_flat_map;
 
 //* Functions and variables for reading and writing the btop config file
 namespace Config {
@@ -63,7 +65,7 @@ namespace Config {
 	bool _locked(const string& name);
 
 	//* Return bool for config key <name>
-	inline const bool& getB(const string& name) { return bools.at(name); }
+    inline bool getB(const string& name) { return bools.at(name); }
 
 	//* Return integer for config key <name>
 	inline const int& getI(const string& name) { return ints.at(name); }
@@ -79,7 +81,7 @@ namespace Config {
 	bool stringValid(const string& name, const string& value);
 
 	//* Set config key <name> to bool <value>
-	inline void set(const string& name, const bool& value) {
+    inline void set(const string& name, bool value) {
 		if (_locked(name)) boolsTmp.insert_or_assign(name, value);
 		else bools.at(name) = value;
 	}
@@ -111,10 +113,3 @@ namespace Config {
 	//* Write the config file to disk
 	void write();
 }
-
-
-
-
-
-
-

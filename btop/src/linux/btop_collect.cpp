@@ -16,6 +16,7 @@ indent = tab
 tab-size = 4
 */
 
+#include <robin_hood.h>
 #include <fstream>
 #include <ranges>
 #include <cmath>
@@ -34,12 +35,22 @@ tab-size = 4
 #include <btop_config.hpp>
 #include <btop_tools.hpp>
 
-using std::ifstream, std::numeric_limits, std::streamsize, std::round, std::max, std::min;
-using std::clamp, std::string_literals::operator""s, std::cmp_equal, std::cmp_less, std::cmp_greater;
+using std::clamp;
+using std::cmp_equal;
+using std::cmp_greater;
+using std::cmp_less;
+using std::ifstream;
+using std::max;
+using std::min;
+using std::numeric_limits;
+using std::round;
+using std::streamsize;
+
 namespace fs = std::filesystem;
 namespace rng = std::ranges;
-using namespace Tools;
 
+using namespace Tools;
+using namespace std::literals; // for operator""s
 //? --------------------------------------------------- FUNCTIONS -----------------------------------------------------
 
 namespace Cpu {
@@ -49,7 +60,8 @@ namespace Cpu {
 	vector<string> available_sensors = {"Auto"};
 	cpu_info current_cpu;
 	fs::path freq_path = "/sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq";
-	bool got_sensors = false, cpu_temp_only = false;
+    bool got_sensors{};     // defaults to false
+    bool cpu_temp_only{};   // defaults to false
 
 	//* Populate found_sensors map
 	bool get_sensors();
@@ -63,9 +75,9 @@ namespace Cpu {
 	struct Sensor {
 		fs::path path;
 		string label;
-		int64_t temp = 0;
-		int64_t high = 0;
-		int64_t crit = 0;
+        int64_t temp{}; // defaults to 0
+        int64_t high{}; // defaults to 0
+        int64_t crit{}; // defaults to 0
 	};
 
 	unordered_flat_map<string, Sensor> found_sensors;
@@ -94,7 +106,7 @@ namespace Shared {
 		if (passwd_path.empty())
 			Logger::warning("Could not read /etc/passwd, will show UID instead of username.");
 
-		coreCount = sysconf(_SC_NPROCESSORS_ONLN);
+		coreCount = sysconf(_SC_NPROCESSORS_CONF);
 		if (coreCount < 1) {
 			coreCount = 1;
 			Logger::warning("Could not determine number of cores, defaulting to 1.");
@@ -143,7 +155,10 @@ namespace Cpu {
 	bool has_battery = true;
 	tuple<int, long, string> current_bat;
 
-	const array<string, 10> time_names = {"user", "nice", "system", "idle", "iowait", "irq", "softirq", "steal", "guest", "guest_nice"};
+    const array time_names {
+        "user"s, "nice"s, "system"s, "idle"s, "iowait"s,
+        "irq"s, "softirq"s, "steal"s, "guest"s, "guest_nice"s
+    };
 
 	unordered_flat_map<string, long long> cpu_old = {
 			{"totals", 0},
@@ -386,11 +401,14 @@ namespace Cpu {
 	}
 
 	string get_cpuHz() {
-		static int failed = 0;
-		if (failed > 4) return ""s;
+        static int failed{}; // defaults to 0
+
+        if (failed > 4)
+            return ""s;
+
 		string cpuhz;
 		try {
-			double hz = 0.0;
+            double hz{}; // defaults to 0.0
 			//? Try to get freq from /sys/devices/system/cpu/cpufreq/policy first (faster)
 			if (not freq_path.empty()) {
 				hz = stod(readfile(freq_path, "0.0")) / 1000;
@@ -415,7 +433,8 @@ namespace Cpu {
 				}
 			}
 
-			if (hz <= 1 or hz >= 1000000) throw std::runtime_error("Failed to read /sys/devices/system/cpu/cpufreq/policy and /proc/cpuinfo.");
+            if (hz <= 1 or hz >= 1000000)
+                throw std::runtime_error("Failed to read /sys/devices/system/cpu/cpufreq/policy and /proc/cpuinfo.");
 
 			if (hz >= 1000) {
 				if (hz >= 10000) cpuhz = to_string((int)round(hz / 1000)); // Future proof until we reach THz speeds :)
@@ -427,9 +446,10 @@ namespace Cpu {
 
 		}
 		catch (const std::exception& e) {
-			if (++failed < 5) return ""s;
+            if (++failed < 5)
+                return ""s;
 			else {
-				Logger::warning("get_cpuHZ() : " + (string)e.what());
+                Logger::warning("get_cpuHZ() : " + string{e.what()});
 				return ""s;
 			}
 		}
@@ -444,7 +464,9 @@ namespace Cpu {
 		//? Try to get core mapping from /proc/cpuinfo
 		ifstream cpuinfo(Shared::procPath / "cpuinfo");
 		if (cpuinfo.good()) {
-			int cpu, core, n = 0;
+            int cpu{};  // defaults to 0
+            int core{}; // defaults to 0
+            int n{};    // defaults to 0
 			for (string instr; cpuinfo >> instr;) {
 				if (instr == "processor") {
 					cpuinfo.ignore(SSmax, ':');
@@ -513,51 +535,56 @@ namespace Cpu {
 
 		//? Get paths to needed files and check for valid values on first run
 		if (batteries.empty() and has_battery) {
-			if (fs::exists("/sys/class/power_supply")) {
-				for (const auto& d : fs::directory_iterator("/sys/class/power_supply")) {
-					//? Only consider online power supplies of type Battery or UPS
-					//? see kernel docs for details on the file structure and contents
-					//? https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-class-power
-					battery new_bat;
-					fs::path bat_dir;
-					try {
-						if (not d.is_directory()
-							or not fs::exists(d.path() / "type")
-							or not fs::exists(d.path() / "present")
-							or stoi(readfile(d.path() / "present")) != 1)
+			try {
+				if (fs::exists("/sys/class/power_supply")) {
+					for (const auto& d : fs::directory_iterator("/sys/class/power_supply")) {
+						//? Only consider online power supplies of type Battery or UPS
+						//? see kernel docs for details on the file structure and contents
+						//? https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-class-power
+						battery new_bat;
+						fs::path bat_dir;
+						try {
+							if (not d.is_directory()
+								or not fs::exists(d.path() / "type")
+								or not fs::exists(d.path() / "present")
+								or stoi(readfile(d.path() / "present")) != 1)
+								continue;
+							string dev_type = readfile(d.path() / "type");
+							if (is_in(dev_type, "Battery", "UPS")) {
+								bat_dir = d.path();
+								new_bat.base_dir = d.path();
+								new_bat.device_type = dev_type;
+							}
+						} catch (...) {
+							//? skip power supplies not conforming to the kernel standard
 							continue;
-						string dev_type = readfile(d.path() / "type");
-						if (is_in(dev_type, "Battery", "UPS")) {
-							bat_dir = d.path();
-							new_bat.base_dir = d.path();
-							new_bat.device_type = dev_type;
 						}
-					} catch (...) {
-						//? skip power supplies not conforming to the kernel standard
-						continue;
+
+						if (fs::exists(bat_dir / "energy_now")) new_bat.energy_now = bat_dir / "energy_now";
+						else if (fs::exists(bat_dir / "charge_now")) new_bat.energy_now = bat_dir / "charge_now";
+						else new_bat.use_energy = false;
+
+						if (fs::exists(bat_dir / "energy_full")) new_bat.energy_full = bat_dir / "energy_full";
+						else if (fs::exists(bat_dir / "charge_full")) new_bat.energy_full = bat_dir / "charge_full";
+						else new_bat.use_energy = false;
+
+						if (not new_bat.use_energy and not fs::exists(bat_dir / "capacity")) {
+							continue;
+						}
+
+						if (fs::exists(bat_dir / "power_now")) new_bat.power_now = bat_dir / "power_now";
+						else if (fs::exists(bat_dir / "current_now")) new_bat.power_now = bat_dir / "current_now";
+
+						if (fs::exists(bat_dir / "AC0/online")) new_bat.online = bat_dir / "AC0/online";
+						else if (fs::exists(bat_dir / "AC/online")) new_bat.online = bat_dir / "AC/online";
+
+						batteries[bat_dir.filename()] = new_bat;
+						Config::available_batteries.push_back(bat_dir.filename());
 					}
-
-					if (fs::exists(bat_dir / "energy_now")) new_bat.energy_now = bat_dir / "energy_now";
-					else if (fs::exists(bat_dir / "charge_now")) new_bat.energy_now = bat_dir / "charge_now";
-					else new_bat.use_energy = false;
-
-					if (fs::exists(bat_dir / "energy_full")) new_bat.energy_full = bat_dir / "energy_full";
-					else if (fs::exists(bat_dir / "charge_full")) new_bat.energy_full = bat_dir / "charge_full";
-					else new_bat.use_energy = false;
-
-					if (not new_bat.use_energy and not fs::exists(bat_dir / "capacity")) {
-						continue;
-					}
-
-					if (fs::exists(bat_dir / "power_now")) new_bat.power_now = bat_dir / "power_now";
-					else if (fs::exists(bat_dir / "current_now")) new_bat.power_now = bat_dir / "current_now";
-
-					if (fs::exists(bat_dir / "AC0/online")) new_bat.online = bat_dir / "AC0/online";
-					else if (fs::exists(bat_dir / "AC/online")) new_bat.online = bat_dir / "AC/online";
-
-					batteries[bat_dir.filename()] = new_bat;
-					Config::available_batteries.push_back(bat_dir.filename());
 				}
+			}
+			catch (...) {
+				batteries.clear();
 			}
 			if (batteries.empty()) {
 				has_battery = false;
@@ -632,7 +659,7 @@ namespace Cpu {
 		return {percent, seconds, status};
 	}
 
-	auto collect(const bool no_update) -> cpu_info& {
+    auto collect(bool no_update) -> cpu_info& {
 		if (Runner::stopping or (no_update and not current_cpu.cpu_percent.at("total").empty())) return current_cpu;
 		auto& cpu = current_cpu;
 
@@ -647,70 +674,93 @@ namespace Cpu {
 			cread.close();
 
 			//? Get cpu total times for all cores from /proc/stat
+			string cpu_name;
 			cread.open(Shared::procPath / "stat");
-			for (int i = 0; cread.good() and cread.peek() == 'c'; i++) {
-				cread.ignore(SSmax, ' ');
+			int i = 0;
+			for (; i <= Shared::coreCount; i++) {
 
-				//? Expected on kernel 2.6.3> : 0=user, 1=nice, 2=system, 3=idle, 4=iowait, 5=irq, 6=softirq, 7=steal, 8=guest, 9=guest_nice
-				vector<long long> times;
-				long long total_sum = 0;
-
-				for (uint64_t val; cread >> val; total_sum += val) {
-					times.push_back(val);
+				//? Make sure to add zero value for missing core values if at end of file
+				if ((not cread.good() or cread.peek() != 'c') and i <= Shared::coreCount) {
+					if (i == 0) throw std::runtime_error("Failed to parse /proc/stat");
+					else cpu.core_percent.at(i-1).push_back(0);
 				}
-				cread.clear();
-				if (times.size() < 4) throw std::runtime_error("Malformatted /proc/stat");
+				else {
+					if (i == 0) cread.ignore(SSmax, ' ');
+					else {
+						cread >> cpu_name;
+						int cpuNum = std::stoi(cpu_name.substr(3));
+						if (cpuNum > Shared::coreCount - 1) throw std::runtime_error("Mismatch betweeen /proc/stat core count and previously detected core count");
+						//? Add zero value for core if core number is missing from /proc/stat
+						while (i - 1 < cpuNum) {
+							cpu.core_percent.at(i-1).push_back(0);
+							if (cpu.core_percent.at(i-1).size() > 40) cpu.core_percent.at(i-1).pop_front();
+							i++;
+						}
+					}
 
-				//? Subtract fields 8-9 and any future unknown fields
-				const long long totals = max(0ll, total_sum - (times.size() > 8 ? std::accumulate(times.begin() + 8, times.end(), 0) : 0));
+					//? Expected on kernel 2.6.3> : 0=user, 1=nice, 2=system, 3=idle, 4=iowait, 5=irq, 6=softirq, 7=steal, 8=guest, 9=guest_nice
+					vector<long long> times;
+					long long total_sum = 0;
 
-				//? Add iowait field if present
-				const long long idles = max(0ll, times.at(3) + (times.size() > 4 ? times.at(4) : 0));
+					for (uint64_t val; cread >> val; total_sum += val) {
+						times.push_back(val);
+					}
+					cread.clear();
+					if (times.size() < 4) throw std::runtime_error("Malformatted /proc/stat");
 
-				//? Calculate values for totals from first line of stat
-				if (i == 0) {
-					const long long calc_totals = max(1ll, totals - cpu_old.at("totals"));
-					const long long calc_idles = max(1ll, idles - cpu_old.at("idles"));
-					cpu_old.at("totals") = totals;
-					cpu_old.at("idles") = idles;
+					//? Subtract fields 8-9 and any future unknown fields
+					const long long totals = max(0ll, total_sum - (times.size() > 8 ? std::accumulate(times.begin() + 8, times.end(), 0) : 0));
 
-					//? Total usage of cpu
-					cpu.cpu_percent.at("total").push_back(clamp((long long)round((double)(calc_totals - calc_idles) * 100 / calc_totals), 0ll, 100ll));
+					//? Add iowait field if present
+					const long long idles = max(0ll, times.at(3) + (times.size() > 4 ? times.at(4) : 0));
 
-					//? Reduce size if there are more values than needed for graph
-					while (cmp_greater(cpu.cpu_percent.at("total").size(), width * 2)) cpu.cpu_percent.at("total").pop_front();
+					//? Calculate values for totals from first line of stat
+					if (i == 0) {
+						const long long calc_totals = max(1ll, totals - cpu_old.at("totals"));
+						const long long calc_idles = max(1ll, idles - cpu_old.at("idles"));
+						cpu_old.at("totals") = totals;
+						cpu_old.at("idles") = idles;
 
-					//? Populate cpu.cpu_percent with all fields from stat
-					for (int ii = 0; const auto& val : times) {
-						cpu.cpu_percent.at(time_names.at(ii)).push_back(clamp((long long)round((double)(val - cpu_old.at(time_names.at(ii))) * 100 / calc_totals), 0ll, 100ll));
-						cpu_old.at(time_names.at(ii)) = val;
+						//? Total usage of cpu
+						cpu.cpu_percent.at("total").push_back(clamp((long long)round((double)(calc_totals - calc_idles) * 100 / calc_totals), 0ll, 100ll));
 
 						//? Reduce size if there are more values than needed for graph
-						while (cmp_greater(cpu.cpu_percent.at(time_names.at(ii)).size(), width * 2)) cpu.cpu_percent.at(time_names.at(ii)).pop_front();
+						while (cmp_greater(cpu.cpu_percent.at("total").size(), width * 2)) cpu.cpu_percent.at("total").pop_front();
 
-						if (++ii == 10) break;
+						//? Populate cpu.cpu_percent with all fields from stat
+						for (int ii = 0; const auto& val : times) {
+							cpu.cpu_percent.at(time_names.at(ii)).push_back(clamp((long long)round((double)(val - cpu_old.at(time_names.at(ii))) * 100 / calc_totals), 0ll, 100ll));
+							cpu_old.at(time_names.at(ii)) = val;
+
+							//? Reduce size if there are more values than needed for graph
+							while (cmp_greater(cpu.cpu_percent.at(time_names.at(ii)).size(), width * 2)) cpu.cpu_percent.at(time_names.at(ii)).pop_front();
+
+							if (++ii == 10) break;
+						}
+						continue;
+					}
+					//? Calculate cpu total for each core
+					else {
+						if (i > Shared::coreCount) break;
+						const long long calc_totals = max(0ll, totals - core_old_totals.at(i-1));
+						const long long calc_idles = max(0ll, idles - core_old_idles.at(i-1));
+						core_old_totals.at(i-1) = totals;
+						core_old_idles.at(i-1) = idles;
+
+						cpu.core_percent.at(i-1).push_back(clamp((long long)round((double)(calc_totals - calc_idles) * 100 / calc_totals), 0ll, 100ll));
 					}
 				}
-				//? Calculate cpu total for each core
-				else {
-					if (i > Shared::coreCount) break;
-					const long long calc_totals = max(0ll, totals - core_old_totals.at(i-1));
-					const long long calc_idles = max(0ll, idles - core_old_idles.at(i-1));
-					core_old_totals.at(i-1) = totals;
-					core_old_idles.at(i-1) = idles;
 
-					cpu.core_percent.at(i-1).push_back(clamp((long long)round((double)(calc_totals - calc_idles) * 100 / calc_totals), 0ll, 100ll));
-
-					//? Reduce size if there are more values than needed for graph
-					if (cpu.core_percent.at(i-1).size() > 40) cpu.core_percent.at(i-1).pop_front();
-
-				}
+				//? Reduce size if there are more values than needed for graph
+				if (cpu.core_percent.at(i-1).size() > 40) cpu.core_percent.at(i-1).pop_front();
 			}
+
+			if (i < Shared::coreCount + 1) throw std::runtime_error("Failed to parse /proc/stat");
 		}
 		catch (const std::exception& e) {
-			Logger::debug("get_cpuHz() : " + (string)e.what());
+            Logger::debug("Cpu::collect() : " + string{e.what()});
 			if (cread.bad()) throw std::runtime_error("Failed to read /proc/stat");
-			else throw std::runtime_error("collect() : " + (string)e.what());
+            else throw std::runtime_error("Cpu::collect() : " + string{e.what()});
 		}
 
 		if (Config::getB("show_cpu_freq"))
@@ -727,12 +777,18 @@ namespace Cpu {
 }
 
 namespace Mem {
-	bool has_swap = false;
+    bool has_swap{}; // defaults to false
 	vector<string> fstab;
 	fs::file_time_type fstab_time;
-	int disk_ios = 0;
+    int disk_ios{}; // defaults to 0
 	vector<string> last_found;
 	const std::regex zfs_size_regex("^size\\s+\\d\\s+(\\d+)");
+
+	//?* Find the filepath to the specified ZFS object's stat file
+	fs::path get_zfs_stat_file(const string& device_name, size_t dataset_name_start, bool zfs_hide_datasets);
+
+	//?* Collect total ZFS pool io stats
+	bool zfs_collect_pool_total_stats(struct disk_info &disk);
 
 	mem_info current_mem {};
 
@@ -750,12 +806,12 @@ namespace Mem {
 		return totalMem;
 	}
 
-	auto collect(const bool no_update) -> mem_info& {
+    auto collect(bool no_update) -> mem_info& {
 		if (Runner::stopping or (no_update and not current_mem.percent.at("used").empty())) return current_mem;
-		auto& show_swap = Config::getB("show_swap");
-		auto& swap_disk = Config::getB("swap_disk");
-		auto& show_disks = Config::getB("show_disks");
-		auto& zfs_arc_cached = Config::getB("zfs_arc_cached");
+        auto show_swap = Config::getB("show_swap");
+        auto swap_disk = Config::getB("swap_disk");
+        auto show_disks = Config::getB("show_disks");
+        auto zfs_arc_cached = Config::getB("zfs_arc_cached");
 		auto totalMem = get_totalMem();
 		auto& mem = current_mem;
 
@@ -843,8 +899,9 @@ namespace Mem {
 			try {
 				auto& disks_filter = Config::getS("disks_filter");
 				bool filter_exclude = false;
-				auto& use_fstab = Config::getB("use_fstab");
-				auto& only_physical = Config::getB("only_physical");
+                auto use_fstab = Config::getB("use_fstab");
+                auto only_physical = Config::getB("only_physical");
+                auto zfs_hide_datasets = Config::getB("zfs_hide_datasets");
 				auto& disks = mem.disks;
 				ifstream diskread;
 
@@ -918,15 +975,19 @@ namespace Mem {
 								continue;
 						}
 
+						//? Skip ZFS datasets if zfs_hide_datasets option is enabled
+						size_t zfs_dataset_name_start = 0;
+						if (fstype == "zfs" && (zfs_dataset_name_start = dev.find('/')) != std::string::npos && zfs_hide_datasets) continue;
+
 						if ((not use_fstab and not only_physical)
 						or (use_fstab and v_contains(fstab, mountpoint))
 						or (not use_fstab and only_physical and v_contains(fstypes, fstype))) {
 							found.push_back(mountpoint);
 							if (not v_contains(last_found, mountpoint)) redraw = true;
 
-							//? Save mountpoint, name, dev path and path to /sys/block stat file
+							//? Save mountpoint, name, fstype, dev path and path to /sys/block stat file
 							if (not disks.contains(mountpoint)) {
-								disks[mountpoint] = disk_info{fs::canonical(dev, ec), fs::path(mountpoint).filename()};
+								disks[mountpoint] = disk_info{fs::canonical(dev, ec), fs::path(mountpoint).filename(), fstype};
 								if (disks.at(mountpoint).dev.empty()) disks.at(mountpoint).dev = dev;
 								#ifdef SNAPPED
 									if (mountpoint == "/mnt") disks.at(mountpoint).name = "root";
@@ -941,12 +1002,27 @@ namespace Mem {
 										else
 											disks.at(mountpoint).stat = "/sys/block/" + devname + "/stat";
 										break;
+									//? Set ZFS stat filepath
+									} else if (fstype == "zfs") {
+										disks.at(mountpoint).stat = get_zfs_stat_file(dev, zfs_dataset_name_start, zfs_hide_datasets);
+										if (disks.at(mountpoint).stat.empty()) {
+											Logger::debug("Failed to get ZFS stat file for device " + dev);
+										}
+										break;
 									}
 									devname.resize(devname.size() - 1);
 									c++;
 								}
 							}
 
+							//? If zfs_hide_datasets option was switched, refresh stat filepath
+							if (fstype == "zfs" && ((zfs_hide_datasets && !is_directory(disks.at(mountpoint).stat))
+								|| (!zfs_hide_datasets && is_directory(disks.at(mountpoint).stat)))) {
+								disks.at(mountpoint).stat = get_zfs_stat_file(dev, zfs_dataset_name_start, zfs_hide_datasets);
+								if (disks.at(mountpoint).stat.empty()) {
+									Logger::debug("Failed to get ZFS stat file for device " + dev);
+								}
+							}
 						}
 					}
 					//? Remove disks no longer mounted or filtered out
@@ -988,7 +1064,7 @@ namespace Mem {
 				#endif
 				if (swap_disk and has_swap) {
 					mem.disks_order.push_back("swap");
-					if (not disks.contains("swap")) disks["swap"] = {"", "swap"};
+					if (not disks.contains("swap")) disks["swap"] = {"", "swap", "swap"};
 					disks.at("swap").total = mem.stats.at("swap_total");
 					disks.at("swap").used = mem.stats.at("swap_used");
 					disks.at("swap").free = mem.stats.at("swap_free");
@@ -1003,50 +1079,226 @@ namespace Mem {
 					#endif
 
 				//? Get disks IO
-				int64_t sectors_read, sectors_write, io_ticks;
+				int64_t sectors_read, sectors_write, io_ticks, io_ticks_temp;
 				disk_ios = 0;
 				for (auto& [ignored, disk] : disks) {
 					if (disk.stat.empty() or access(disk.stat.c_str(), R_OK) != 0) continue;
+					if (disk.fstype == "zfs" && zfs_hide_datasets && zfs_collect_pool_total_stats(disk)) {
+						disk_ios++;
+						continue;
+					}
 					diskread.open(disk.stat);
 					if (diskread.good()) {
 						disk_ios++;
-						for (int i = 0; i < 2; i++) { diskread >> std::ws; diskread.ignore(SSmax, ' '); }
-						diskread >> sectors_read;
-						if (disk.io_read.empty())
-							disk.io_read.push_back(0);
-						else
-							disk.io_read.push_back(max((int64_t)0, (sectors_read - disk.old_io.at(0)) * 512));
-						disk.old_io.at(0) = sectors_read;
-						while (cmp_greater(disk.io_read.size(), width * 2)) disk.io_read.pop_front();
+						//? ZFS Pool Support
+						if (disk.fstype == "zfs") {
+							// skip first three lines
+							for (int i = 0; i < 3; i++) diskread.ignore(numeric_limits<streamsize>::max(), '\n');
+							// skip characters until '4' is reached, indicating data type 4, next value will be out target
+							diskread.ignore(numeric_limits<streamsize>::max(), '4');
+							diskread >> io_ticks;
 
-						for (int i = 0; i < 3; i++) { diskread >> std::ws; diskread.ignore(SSmax, ' '); }
-						diskread >> sectors_write;
-						if (disk.io_write.empty())
-							disk.io_write.push_back(0);
-						else
-							disk.io_write.push_back(max((int64_t)0, (sectors_write - disk.old_io.at(1)) * 512));
-						disk.old_io.at(1) = sectors_write;
-						while (cmp_greater(disk.io_write.size(), width * 2)) disk.io_write.pop_front();
+							// skip characters until '4' is reached, indicating data type 4, next value will be out target
+							diskread.ignore(numeric_limits<streamsize>::max(), '4');
+							diskread >> sectors_write; // nbytes written
+							if (disk.io_write.empty())
+								disk.io_write.push_back(0);
+							else
+								disk.io_write.push_back(max((int64_t)0, (sectors_write - disk.old_io.at(1))));
+							disk.old_io.at(1) = sectors_write;
+							while (cmp_greater(disk.io_write.size(), width * 2)) disk.io_write.pop_front();
 
-						for (int i = 0; i < 2; i++) { diskread >> std::ws; diskread.ignore(SSmax, ' '); }
-						diskread >> io_ticks;
-						if (disk.io_activity.empty())
-							disk.io_activity.push_back(0);
-						else
-							disk.io_activity.push_back(clamp((long)round((double)(io_ticks - disk.old_io.at(2)) / (uptime - old_uptime) / 10), 0l, 100l));
-						disk.old_io.at(2) = io_ticks;
-						while (cmp_greater(disk.io_activity.size(), width * 2)) disk.io_activity.pop_front();
+							// skip characters until '4' is reached, indicating data type 4, next value will be out target
+							diskread.ignore(numeric_limits<streamsize>::max(), '4');
+							diskread >> io_ticks_temp;
+							io_ticks += io_ticks_temp;
+
+							// skip characters until '4' is reached, indicating data type 4, next value will be out target
+							diskread.ignore(numeric_limits<streamsize>::max(), '4');
+							diskread >> sectors_read; // nbytes read
+							if (disk.io_read.empty())
+								disk.io_read.push_back(0);
+							else
+								disk.io_read.push_back(max((int64_t)0, (sectors_read - disk.old_io.at(0))));
+							disk.old_io.at(0) = sectors_read;
+							while (cmp_greater(disk.io_read.size(), width * 2)) disk.io_read.pop_front();
+
+							if (disk.io_activity.empty())
+								disk.io_activity.push_back(0);
+							else
+								disk.io_activity.push_back(max((int64_t)0, (io_ticks - disk.old_io.at(2))));
+							disk.old_io.at(2) = io_ticks;
+							while (cmp_greater(disk.io_activity.size(), width * 2)) disk.io_activity.pop_front();
+						} else {
+							for (int i = 0; i < 2; i++) { diskread >> std::ws; diskread.ignore(SSmax, ' '); }
+							diskread >> sectors_read;
+							if (disk.io_read.empty())
+								disk.io_read.push_back(0);
+							else
+								disk.io_read.push_back(max((int64_t)0, (sectors_read - disk.old_io.at(0)) * 512));
+							disk.old_io.at(0) = sectors_read;
+							while (cmp_greater(disk.io_read.size(), width * 2)) disk.io_read.pop_front();
+
+							for (int i = 0; i < 3; i++) { diskread >> std::ws; diskread.ignore(SSmax, ' '); }
+							diskread >> sectors_write;
+							if (disk.io_write.empty())
+								disk.io_write.push_back(0);
+							else
+								disk.io_write.push_back(max((int64_t)0, (sectors_write - disk.old_io.at(1)) * 512));
+							disk.old_io.at(1) = sectors_write;
+							while (cmp_greater(disk.io_write.size(), width * 2)) disk.io_write.pop_front();
+
+							for (int i = 0; i < 2; i++) { diskread >> std::ws; diskread.ignore(SSmax, ' '); }
+							diskread >> io_ticks;
+							if (disk.io_activity.empty())
+								disk.io_activity.push_back(0);
+							else
+								disk.io_activity.push_back(clamp((long)round((double)(io_ticks - disk.old_io.at(2)) / (uptime - old_uptime) / 10), 0l, 100l));
+							disk.old_io.at(2) = io_ticks;
+							while (cmp_greater(disk.io_activity.size(), width * 2)) disk.io_activity.pop_front();
+						}
+					} else {
+                        Logger::debug("Error in Mem::collect() : when opening " + string{disk.stat});
 					}
 					diskread.close();
 				}
 				old_uptime = uptime;
 			}
 			catch (const std::exception& e) {
-				Logger::warning("Error in Mem::collect() : " + (string)e.what());
+                Logger::warning("Error in Mem::collect() : " + string{e.what()});
 			}
 		}
 
 		return mem;
+	}
+
+	fs::path get_zfs_stat_file(const string& device_name, size_t dataset_name_start, bool zfs_hide_datasets) {
+		fs::path zfs_pool_stat_path;
+		if (zfs_hide_datasets) {
+			zfs_pool_stat_path = Shared::procPath / "spl/kstat/zfs" / device_name;
+			if (access(zfs_pool_stat_path.c_str(), R_OK) == 0) {
+				return zfs_pool_stat_path;
+			} else {
+				Logger::debug("Cant access folder: " + zfs_pool_stat_path.string());
+				return "";
+			}
+		}
+
+		ifstream filestream;
+		string filename;
+		string name_compare;
+
+		if (dataset_name_start != std::string::npos) { // device is a dataset
+			zfs_pool_stat_path = Shared::procPath / "spl/kstat/zfs" / device_name.substr(0, dataset_name_start);
+		} else { // device is a pool
+			zfs_pool_stat_path = Shared::procPath / "spl/kstat/zfs" / device_name;
+		}
+
+		// looking through all files that start with 'objset' to find the one containing `device_name` object stats
+		for (const auto& file: fs::directory_iterator(zfs_pool_stat_path)) {
+			filename = file.path().filename();
+			if (filename.starts_with("objset")) {
+				filestream.open(file.path());
+				if (filestream.good()) {
+					// skip first two lines
+					for (int i = 0; i < 2; i++) filestream.ignore(numeric_limits<streamsize>::max(), '\n');
+					// skip characters until '7' is reached, indicating data type 7, next value will be object name
+					filestream.ignore(numeric_limits<streamsize>::max(), '7');
+					filestream >> name_compare;
+					if (name_compare == device_name) {
+						filestream.close();
+						if (access(file.path().c_str(), R_OK) == 0) {
+							return file.path();
+						} else {
+							Logger::debug("Can't access file: " + file.path().string());
+							return "";
+						}
+					}
+				}
+				filestream.close();
+			}
+		}
+
+		Logger::debug("Could not read directory: " + zfs_pool_stat_path.string());
+		return "";
+	}
+
+	bool zfs_collect_pool_total_stats(struct disk_info &disk) {
+		ifstream diskread;
+
+        int64_t bytes_read;
+        int64_t bytes_write;
+        int64_t io_ticks;
+        int64_t bytes_read_total{};     // defaults to 0
+        int64_t bytes_write_total{};    // defaults to 0
+        int64_t io_ticks_total{};       // defaults to 0
+        int64_t objects_read{};         // defaults to 0
+
+		// looking through all files that start with 'objset'
+		for (const auto& file: fs::directory_iterator(disk.stat)) {
+			if ((file.path().filename()).string().starts_with("objset")) {
+				diskread.open(file.path());
+				if (diskread.good()) {
+					try {
+						// skip first three lines
+						for (int i = 0; i < 3; i++) diskread.ignore(numeric_limits<streamsize>::max(), '\n');
+						// skip characters until '4' is reached, indicating data type 4, next value will be out target
+						diskread.ignore(numeric_limits<streamsize>::max(), '4');
+						diskread >> io_ticks;
+						io_ticks_total += io_ticks;
+
+						// skip characters until '4' is reached, indicating data type 4, next value will be out target
+						diskread.ignore(numeric_limits<streamsize>::max(), '4');
+						diskread >> bytes_write;
+						bytes_write_total += bytes_write;
+
+						// skip characters until '4' is reached, indicating data type 4, next value will be out target
+						diskread.ignore(numeric_limits<streamsize>::max(), '4');
+						diskread >> io_ticks;
+						io_ticks_total += io_ticks;
+
+						// skip characters until '4' is reached, indicating data type 4, next value will be out target
+						diskread.ignore(numeric_limits<streamsize>::max(), '4');
+						diskread >> bytes_read;
+						bytes_read_total += bytes_read;
+					} catch (const std::exception& e) {
+						continue;
+					}
+
+					// increment read objects counter if no errors were encountered
+					objects_read++;
+				} else {
+					Logger::debug("Could not read file: " + file.path().string());
+				}
+				diskread.close();
+			}
+		}
+
+		// if for some reason no objects were read
+		if (objects_read == 0) return false;
+
+		if (disk.io_write.empty())
+			disk.io_write.push_back(0);
+		else
+			disk.io_write.push_back(max((int64_t)0, (bytes_write_total - disk.old_io.at(1))));
+		disk.old_io.at(1) = bytes_write_total;
+		while (cmp_greater(disk.io_write.size(), width * 2)) disk.io_write.pop_front();
+
+		if (disk.io_read.empty())
+			disk.io_read.push_back(0);
+		else
+			disk.io_read.push_back(max((int64_t)0, (bytes_read_total - disk.old_io.at(0))));
+		disk.old_io.at(0) = bytes_read_total;
+		while (cmp_greater(disk.io_read.size(), width * 2)) disk.io_read.pop_front();
+
+		if (disk.io_activity.empty())
+			disk.io_activity.push_back(0);
+		else
+			disk.io_activity.push_back(max((int64_t)0, (io_ticks_total - disk.old_io.at(2))));
+		disk.old_io.at(2) = io_ticks_total;
+		while (cmp_greater(disk.io_activity.size(), width * 2)) disk.io_activity.pop_front();
+
+		return true;
 	}
 
 }
@@ -1056,11 +1308,11 @@ namespace Net {
 	net_info empty_net = {};
 	vector<string> interfaces;
 	string selected_iface;
-	int errors = 0;
+    int errors{}; // defaults to 0
 	unordered_flat_map<string, uint64_t> graph_max = { {"download", {}}, {"upload", {}} };
 	unordered_flat_map<string, array<int, 2>> max_count = { {"download", {}}, {"upload", {}} };
-	bool rescale = true;
-	uint64_t timestamp = 0;
+    bool rescale{true};
+    uint64_t timestamp{}; // defaults to 0
 
 	//* RAII wrapper for getifaddrs
 	class getifaddr_wrapper {
@@ -1072,11 +1324,11 @@ namespace Net {
 		auto operator()() -> struct ifaddrs* { return ifaddr; }
 	};
 
-	auto collect(const bool no_update) -> net_info& {
+    auto collect(bool no_update) -> net_info& {
 		auto& net = current_net;
 		auto& config_iface = Config::getS("net_iface");
-		auto& net_sync = Config::getB("net_sync");
-		auto& net_auto = Config::getB("net_auto");
+        auto net_sync = Config::getB("net_sync");
+        auto net_auto = Config::getB("net_auto");
 		auto new_timestamp = time_ms();
 
 		if (not no_update and errors < 3) {
@@ -1094,7 +1346,7 @@ namespace Net {
 			string ipv4, ipv6;
 
 			//? Iteration over all items in getifaddrs() list
-			for (auto* ifa = if_wrap(); ifa != NULL; ifa = ifa->ifa_next) {
+            for (auto* ifa = if_wrap(); ifa != NULL; ifa = ifa->ifa_next) {
 				if (ifa->ifa_addr == NULL) continue;
 				family = ifa->ifa_addr->sa_family;
 				const auto& iface = ifa->ifa_name;
@@ -1127,7 +1379,7 @@ namespace Net {
 					auto& saved_stat = net.at(iface).stat.at(dir);
 					auto& bandwidth = net.at(iface).bandwidth.at(dir);
 
-					uint64_t val = 0;
+                    uint64_t val{}; // defaults to 0
 					try { val = (uint64_t)stoull(readfile(sys_file, "0")); }
 					catch (const std::invalid_argument&) {}
 					catch (const std::out_of_range&) {}
@@ -1248,80 +1500,19 @@ namespace Proc {
 	unordered_flat_map<string, string> uid_user;
 	string current_sort;
 	string current_filter;
-	bool current_rev = false;
+    bool current_rev{}; // defaults to false
 
 	fs::file_time_type passwd_time;
 
 	uint64_t cputimes;
 	int collapse = -1, expand = -1;
-	uint64_t old_cputimes = 0;
-	atomic<int> numpids = 0;
-	int filter_found = 0;
+    uint64_t old_cputimes{};    // defaults to 0
+    atomic<int> numpids{};      // defaults to 0
+    int filter_found{};         // defaults to 0
 
 	detail_container detailed;
-
-	//* Generate process tree list
-	void _tree_gen(proc_info& cur_proc, vector<proc_info>& in_procs, vector<std::reference_wrapper<proc_info>>& out_procs, int cur_depth, const bool collapsed, const string& filter, bool found=false, const bool no_update=false, const bool should_filter=false) {
-		auto cur_pos = out_procs.size();
-		bool filtering = false;
-
-		//? If filtering, include children of matching processes
-		if (not found and (should_filter or not filter.empty())) {
-			if (not s_contains(std::to_string(cur_proc.pid), filter)
-			and not s_contains(cur_proc.name, filter)
-			and not s_contains(cur_proc.cmd, filter)
-			and not s_contains(cur_proc.user, filter)) {
-				filtering = true;
-				cur_proc.filtered = true;
-				filter_found++;
-			}
-			else {
-				found = true;
-				cur_depth = 0;
-			}
-		}
-		else if (cur_proc.filtered) cur_proc.filtered = false;
-
-		//? Set tree index position for process if not filtered out or currently in a collapsed sub-tree
-		if (not collapsed and not filtering) {
-			out_procs.push_back(std::ref(cur_proc));
-			cur_proc.tree_index = out_procs.size() - 1;
-			//? Try to find name of the binary file and append to program name if not the same
-			if (cur_proc.short_cmd.empty() and not cur_proc.cmd.empty()) {
-				std::string_view cmd_view = cur_proc.cmd;
-				cmd_view = cmd_view.substr((size_t)0, min(cmd_view.find(' '), cmd_view.size()));
-				cmd_view = cmd_view.substr(min(cmd_view.find_last_of('/') + 1, cmd_view.size()));
-				cur_proc.short_cmd = (string)cmd_view;
-			}
-		}
-		else {
-			cur_proc.tree_index = in_procs.size();
-		}
-
-		//? Recursive iteration over all children
-		int children = 0;
-		for (auto& p : rng::equal_range(in_procs, cur_proc.pid, rng::less{}, &proc_info::ppid)) {
-			if (not no_update and not filtering and (collapsed or cur_proc.collapsed)) {
-				out_procs.back().get().cpu_p += p.cpu_p;
-				out_procs.back().get().mem += p.mem;
-				out_procs.back().get().threads += p.threads;
-				filter_found++;
-			}
-			if (collapsed and not filtering) {
-				cur_proc.filtered = true;
-			}
-			else children++;
-			_tree_gen(p, in_procs, out_procs, cur_depth + 1, (collapsed ? true : cur_proc.collapsed), filter, found, no_update, should_filter);
-		}
-		if (collapsed or filtering) return;
-
-		//? Add tree terminator symbol if it's the last child in a sub-tree
-		if (out_procs.size() > cur_pos + 1 and not out_procs.back().get().prefix.ends_with("]─"))
-			out_procs.back().get().prefix.replace(out_procs.back().get().prefix.size() - 8, 8, " └─ ");
-
-		//? Add collapse/expand symbols if process have any children
-		out_procs.at(cur_pos).get().prefix = " │ "s * cur_depth + (children > 0 ? (cur_proc.collapsed ? "[+]─" : "[-]─") : " ├─ ");
-	}
+	constexpr size_t KTHREADD = 2;
+	static robin_hood::unordered_set<size_t> kernels_procs = {KTHREADD};
 
 	//* Get detailed info for selected process
 	void _collect_details(const size_t pid, const uint64_t uptime, vector<proc_info>& procs) {
@@ -1421,17 +1612,18 @@ namespace Proc {
 	}
 
 	//* Collects and sorts process information from /proc
-	auto collect(const bool no_update) -> vector<proc_info>& {
+    auto collect(bool no_update) -> vector<proc_info>& {
 		const auto& sorting = Config::getS("proc_sorting");
-		const auto& reverse = Config::getB("proc_reversed");
+        auto reverse = Config::getB("proc_reversed");
 		const auto& filter = Config::getS("proc_filter");
-		const auto& per_core = Config::getB("proc_per_core");
-		const auto& tree = Config::getB("proc_tree");
-		const auto& show_detailed = Config::getB("show_detailed");
+        auto per_core = Config::getB("proc_per_core");
+        auto should_filter_kernel = Config::getB("proc_filter_kernel");
+        auto tree = Config::getB("proc_tree");
+        auto show_detailed = Config::getB("show_detailed");
 		const size_t detailed_pid = Config::getI("detailed_pid");
 		bool should_filter = current_filter != filter;
 		if (should_filter) current_filter = filter;
-		const bool sorted_change = (sorting != current_sort or reverse != current_rev or should_filter);
+        bool sorted_change = (sorting != current_sort or reverse != current_rev or should_filter);
 		if (sorted_change) {
 			current_sort = sorting;
 			current_rev = reverse;
@@ -1440,10 +1632,14 @@ namespace Proc {
 		string long_string;
 		string short_str;
 
+		static vector<size_t> found;
+
 		const double uptime = system_uptime();
 
 		const int cmult = (per_core) ? Shared::coreCount : 1;
 		bool got_detailed = false;
+
+        static size_t proc_clear_count{}; // defaults to 0
 
 		//* Use pids from last update if only changing filter, sorting or tree options
 		if (no_update and not current_procs.empty()) {
@@ -1452,6 +1648,16 @@ namespace Proc {
 		//* ---------------------------------------------Collection start----------------------------------------------
 		else {
 			should_filter = true;
+			found.clear();
+
+			//? First make sure kernel proc cache is cleared.
+			if (should_filter_kernel and ++proc_clear_count >= 256) {
+				//? Clearing the cache is used in the event of a pid wrap around.
+				//? In that event processes that acquire old kernel pids would also be filtered out so we need to manually clean the cache every now and then.
+				kernels_procs.clear();
+				kernels_procs.emplace(KTHREADD);
+				proc_clear_count = 0;
+			}
 
 			auto totalMem = Mem::get_totalMem();
 			int totalMem_len = to_string(totalMem >> 10).size();
@@ -1488,21 +1694,26 @@ namespace Proc {
 			pread.close();
 
 			//? Iterate over all pids in /proc
-			vector<size_t> found;
 			for (const auto& d: fs::directory_iterator(Shared::procPath)) {
 				if (Runner::stopping)
 					return current_procs;
+
 				if (pread.is_open()) pread.close();
 
 				const string pid_str = d.path().filename();
 				if (not isdigit(pid_str[0])) continue;
 
 				const size_t pid = stoul(pid_str);
+
+				if (should_filter_kernel and kernels_procs.contains(pid)) {
+					continue;
+				}
+
 				found.push_back(pid);
 
 				//? Check if pid already exists in current_procs
 				auto find_old = rng::find(current_procs, pid, &proc_info::pid);
-				bool no_cache = false;
+                bool no_cache{}; // defaults to false
 				if (find_old == current_procs.end()) {
 					current_procs.push_back({pid});
 					find_old = current_procs.end() - 1;
@@ -1631,6 +1842,11 @@ namespace Proc {
 
 				pread.close();
 
+				if (should_filter_kernel and new_proc.ppid == KTHREADD) {
+					kernels_procs.emplace(new_proc.pid);
+					found.pop_back();
+				}
+
 				if (x-offset < 24) continue;
 
 				//? Get RSS memory from /proc/[pid]/statm if value from /proc/[pid]/stat looks wrong
@@ -1657,7 +1873,7 @@ namespace Proc {
 				}
 			}
 
-			//? Clear dead processes from current_procs
+			//? Clear dead processes from current_procs and remove kernel processes if enabled
 			auto eraser = rng::remove_if(current_procs, [&](const auto& element){ return not v_contains(found, element.pid); });
 			current_procs.erase(eraser.begin(), eraser.end());
 
@@ -1673,50 +1889,6 @@ namespace Proc {
 			old_cputimes = cputimes;
 		}
 		//* ---------------------------------------------Collection done-----------------------------------------------
-
-		//* Sort processes
-		if (sorted_change or not no_update) {
-			if (reverse) {
-				switch (v_index(sort_vector, sorting)) {
-					case 0: rng::stable_sort(current_procs, rng::less{}, &proc_info::pid); 		break;
-					case 1: rng::stable_sort(current_procs, rng::less{}, &proc_info::name);		break;
-					case 2: rng::stable_sort(current_procs, rng::less{}, &proc_info::cmd); 		break;
-					case 3: rng::stable_sort(current_procs, rng::less{}, &proc_info::threads); 	break;
-					case 4: rng::stable_sort(current_procs, rng::less{}, &proc_info::user); 	break;
-					case 5: rng::stable_sort(current_procs, rng::less{}, &proc_info::mem); 		break;
-					case 6: rng::stable_sort(current_procs, rng::less{}, &proc_info::cpu_p);   	break;
-					case 7: rng::stable_sort(current_procs, rng::less{}, &proc_info::cpu_c);   	break;
-				}
-			} else {
-				switch (v_index(sort_vector, sorting)) {
-						case 0: rng::stable_sort(current_procs, rng::greater{}, &proc_info::pid); 		break;
-						case 1: rng::stable_sort(current_procs, rng::greater{}, &proc_info::name);		break;
-						case 2: rng::stable_sort(current_procs, rng::greater{}, &proc_info::cmd); 		break;
-						case 3: rng::stable_sort(current_procs, rng::greater{}, &proc_info::threads); 	break;
-						case 4: rng::stable_sort(current_procs, rng::greater{}, &proc_info::user); 	break;
-						case 5: rng::stable_sort(current_procs, rng::greater{}, &proc_info::mem); 		break;
-						case 6: rng::stable_sort(current_procs, rng::greater{}, &proc_info::cpu_p);   	break;
-						case 7: rng::stable_sort(current_procs, rng::greater{}, &proc_info::cpu_c);   	break;
-				}
-			}
-
-			//* When sorting with "cpu lazy" push processes over threshold cpu usage to the front regardless of cumulative usage
-			if (not tree and not reverse and sorting == "cpu lazy") {
-				double max = 10.0, target = 30.0;
-				for (size_t i = 0, x = 0, offset = 0; i < current_procs.size(); i++) {
-					if (i <= 5 and current_procs.at(i).cpu_p > max)
-						max = current_procs.at(i).cpu_p;
-					else if (i == 6)
-						target = (max > 30.0) ? max : 10.0;
-					if (i == offset and current_procs.at(i).cpu_p > 30.0)
-						offset++;
-					else if (current_procs.at(i).cpu_p > target) {
-						rotate(current_procs.begin() + offset, current_procs.begin() + i, current_procs.begin() + i + 1);
-						if (++x > 10) break;
-					}
-				}
-			}
-		}
 
 		//* Match filter if defined
 		if (should_filter) {
@@ -1740,8 +1912,14 @@ namespace Proc {
 			}
 		}
 
+		//* Sort processes
+		if (sorted_change or not no_update) {
+			proc_sorter(current_procs, sorting, reverse, tree);
+		}
+
 		//* Generate tree view if enabled
 		if (tree and (not no_update or should_filter or sorted_change)) {
+			bool locate_selection = false;
 			if (auto find_pid = (collapse != -1 ? collapse : expand); find_pid != -1) {
 				auto collapser = rng::find(current_procs, find_pid, &proc_info::pid);
 				if (collapser != current_procs.end()) {
@@ -1754,24 +1932,49 @@ namespace Proc {
 					else if (expand > -1) {
 						collapser->collapsed = false;
 					}
+					if (Config::ints.at("proc_selected") > 0) locate_selection = true;
 				}
 				collapse = expand = -1;
 			}
 			if (should_filter or not filter.empty()) filter_found = 0;
 
-			vector<std::reference_wrapper<proc_info>> tree_procs;
+			vector<tree_proc> tree_procs;
 			tree_procs.reserve(current_procs.size());
 
+			for (auto& p : current_procs) {
+				if (not v_contains(found, p.ppid)) p.ppid = 0;
+			}
+
 			//? Stable sort to retain selected sorting among processes with the same parent
-			rng::stable_sort(current_procs, rng::less{}, &proc_info::ppid);
+			rng::stable_sort(current_procs, rng::less{}, & proc_info::ppid);
 
 			//? Start recursive iteration over processes with the lowest shared parent pids
 			for (auto& p : rng::equal_range(current_procs, current_procs.at(0).ppid, rng::less{}, &proc_info::ppid)) {
 				_tree_gen(p, current_procs, tree_procs, 0, false, filter, false, no_update, should_filter);
 			}
 
+			//? Recursive sort over tree structure to account for collapsed processes in the tree
+			int index = 0;
+			tree_sort(tree_procs, sorting, reverse, index, current_procs.size());
+
+			//? Add tree begin symbol to first item if childless
+			if (tree_procs.size() > 0 and tree_procs.front().children.empty() and tree_procs.front().entry.get().prefix.size() >= 8)
+				tree_procs.front().entry.get().prefix.replace(tree_procs.front().entry.get().prefix.size() - 8, 8, " ┌─ ");
+
+			//? Add tree terminator symbol to last item if childless
+			if (tree_procs.size() > 0 and tree_procs.back().children.empty() and tree_procs.back().entry.get().prefix.size() >= 8)
+				tree_procs.back().entry.get().prefix.replace(tree_procs.back().entry.get().prefix.size() - 8, 8, " └─ ");
+
 			//? Final sort based on tree index
-			rng::stable_sort(current_procs, rng::less{}, &proc_info::tree_index);
+			rng::sort(current_procs, rng::less{}, & proc_info::tree_index);
+
+			//? Move current selection/view to the selected process when collapsing/expanding in the tree
+			if (locate_selection) {
+				int loc = rng::find(current_procs, Proc::selected_pid, &proc_info::pid)->tree_index;
+				if (Config::ints.at("proc_start") >= loc or Config::ints.at("proc_start") <= loc - Proc::select_max)
+					Config::ints.at("proc_start") = max(0, loc - 1);
+				Config::ints.at("proc_selected") = loc - Config::ints.at("proc_start") + 1;
+			}
 		}
 
 		numpids = (int)current_procs.size() - filter_found;
@@ -1793,6 +1996,6 @@ namespace Tools {
 			catch (const std::invalid_argument&) {}
 			catch (const std::out_of_range&) {}
 		}
-		throw std::runtime_error("Failed get uptime from from " + (string)Shared::procPath + "/uptime");
+        throw std::runtime_error("Failed get uptime from from " + string{Shared::procPath} + "/uptime");
 	}
 }

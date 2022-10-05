@@ -26,9 +26,14 @@ tab-size = 4
 #include <btop_shared.hpp>
 #include <btop_tools.hpp>
 
-using std::array, std::atomic, std::string_view, std::string_literals::operator""s;
+using std::array;
+using std::atomic;
+using std::string_view;
+
 namespace fs = std::filesystem;
 namespace rng = std::ranges;
+
+using namespace std::literals;
 using namespace Tools;
 
 //* Functions and variables for reading and writing the btop config file
@@ -92,9 +97,13 @@ namespace Config {
 
 		{"proc_mem_bytes", 		"#* Show process memory as bytes instead of percent."},
 
+		{"proc_cpu_graphs",     "#* Show cpu graph for each process."},
+
 		{"proc_info_smaps",		"#* Use /proc/[pid]/smaps for memory information in the process info box (very slow but more accurate)"},
 
 		{"proc_left",			"#* Show proc box on left side of screen instead of right."},
+
+        {"proc_filter_kernel",  "#* (Linux) Filter processes tied to the Linux kernel(similar behavior to htop)."},
 
 		{"cpu_graph_upper", 	"#* Sets the CPU stat shown in upper half of the CPU graph, \"total\" is always available.\n"
 								"#* Select from a list of detected attributes from the options menu."},
@@ -152,6 +161,8 @@ namespace Config {
 		{"only_physical", 		"#* Filter out non physical disks. Set this to False to include network disks, RAM disks and similar."},
 
 		{"use_fstab", 			"#* Read disks list from /etc/fstab. This also disables only_physical."},
+
+		{"zfs_hide_datasets",		"#* Setting this to True will hide all datasets, and only show ZFS pools. (IO stats will be calculated per-pool)"},
 
 		{"disk_free_priv",		"#* Set to true to show available disk space for privileged users."},
 
@@ -220,8 +231,10 @@ namespace Config {
 		{"proc_gradient", true},
 		{"proc_per_core", false},
 		{"proc_mem_bytes", true},
+		{"proc_cpu_graphs", true},
 		{"proc_info_smaps", false},
 		{"proc_left", false},
+        {"proc_filter_kernel", false},
 		{"cpu_invert_lower", true},
 		{"cpu_single_graph", false},
 		{"cpu_bottom", false},
@@ -238,6 +251,7 @@ namespace Config {
 		{"show_disks", true},
 		{"only_physical", true},
 		{"use_fstab", true},
+		{"zfs_hide_datasets", false},
 		{"show_io_stat", true},
 		{"io_mode", false},
 		{"base_10_sizes", false},
@@ -261,6 +275,7 @@ namespace Config {
 		{"net_upload", 100},
 		{"detailed_pid", 0},
 		{"selected_pid", 0},
+		{"selected_depth", 0},
 		{"proc_start", 0},
 		{"proc_selected", 0},
 		{"proc_last_selected", 0},
@@ -368,7 +383,7 @@ namespace Config {
 			return false;
 		}
 		catch (const std::exception& e) {
-			validError = (string)e.what();
+            validError = string{e.what()};
 			return false;
 		}
 
@@ -469,6 +484,7 @@ namespace Config {
 				strings.at("selected_name") = Proc::selected_name;
 				ints.at("proc_start") = Proc::start;
 				ints.at("proc_selected") = Proc::selected;
+				ints.at("selected_depth") = Proc::selected_depth;
 			}
 
 			for (auto& item : stringsTmp) {
@@ -487,7 +503,7 @@ namespace Config {
 			boolsTmp.clear();
 		}
 		catch (const std::exception& e) {
-			Global::exit_error_msg = "Exception during Config::unlock() : " + (string)e.what();
+            Global::exit_error_msg = "Exception during Config::unlock() : " + string{e.what()};
 			clean_quit(1);
 		}
 

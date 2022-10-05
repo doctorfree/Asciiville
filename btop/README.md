@@ -5,7 +5,7 @@
 </a>
 
 ![Linux](https://img.shields.io/badge/-Linux-grey?logo=linux)
-![OSX](https://img.shields.io/badge/-OSX-black?logo=apple)
+![macOS](https://img.shields.io/badge/-OSX-black?logo=apple)
 ![FreeBSD](https://img.shields.io/badge/-FreeBSD-red?logo=freebsd)
 ![Usage](https://img.shields.io/badge/Usage-System%20resource%20monitor-yellow)
 ![c++20](https://img.shields.io/badge/cpp-c%2B%2B20-green)
@@ -15,7 +15,7 @@
 [![Coffee](https://img.shields.io/badge/-Buy%20me%20a%20Coffee-grey?logo=Ko-fi)](https://ko-fi.com/aristocratos)
 [![btop](https://snapcraft.io/btop/badge.svg)](https://snapcraft.io/btop)
 [![Continuous Build Linux](https://github.com/aristocratos/btop/actions/workflows/continuous-build-linux.yml/badge.svg)](https://github.com/aristocratos/btop/actions/workflows/continuous-build-linux.yml)
-[![Continuous Build MacOS](https://github.com/aristocratos/btop/actions/workflows/continuous-build-macos.yml/badge.svg)](https://github.com/aristocratos/btop/actions/workflows/continuous-build-macos.yml)
+[![Continuous Build macOS](https://github.com/aristocratos/btop/actions/workflows/continuous-build-macos.yml/badge.svg)](https://github.com/aristocratos/btop/actions/workflows/continuous-build-macos.yml)
 
 ## Index
 
@@ -28,9 +28,9 @@
 * [Prerequisites](#prerequisites) (Read this if you are having issues!)
 * [Screenshots](#screenshots)
 * [Keybindings](#help-menu)
-* [Installation Linux/OSX](#installation)
+* [Installation Linux/macOS](#installation)
 * [Compilation Linux](#compilation-linux)
-* [Compilation OSX](#compilation-osx)
+* [Compilation macOS](#compilation-macos-osx)
 * [Compilation FreeBSD](#compilation-freebsd)
 * [Installing the snap](#installing-the-snap)
 * [Configurability](#configurability)
@@ -38,18 +38,24 @@
 
 ## News
 
+##### 28 August 2022
+
+[![btop4win](https://github.com/aristocratos/btop4win/raw/master/Img/logo.png)](https://github.com/aristocratos/btop4win)
+
+First release of btop4win available at https://github.com/aristocratos/btop4win
+
 ##### 16 January 2022
 
 Release v1.2.0 with FreeBSD support. No release binaries for FreeBSD provided as of yet.
 
 Again a big thanks to [@joske](https://github.com/joske) for his porting efforts!
 
-Since compatibility with Linux, MacOS and FreeBSD are done, the focus going forward will be on new features like GPU monitoring.
+Since compatibility with Linux, macOS and FreeBSD are done, the focus going forward will be on new features like GPU monitoring.
 
 ##### 13 November 2021
 
-Release v1.1.0 with OSX support. Binaries in [continuous-build-macos](https://github.com/aristocratos/btop/actions/workflows/continuous-build-macos.yml) are only x86 for now.
-Macos binaries + installer are included for both x86 and ARM64 (Apple Silicon) in the releases.
+Release v1.1.0 with macOS support. Binaries in [continuous-build-macos](https://github.com/aristocratos/btop/actions/workflows/continuous-build-macos.yml) are only x86 for now.
+macOS binaries + installer are included for both x86 and ARM64 (Apple Silicon) in the releases.
 
 Big thank you to [@joske](https://github.com/joske) who wrote the vast majority of the implementation!
 
@@ -58,12 +64,12 @@ Big thank you to [@joske](https://github.com/joske) who wrote the vast majority 
 
 ##### 30 October 2021
 
-Work on the OSX and FreeBSD branches, both initiated and mostly worked on by [@joske](https://github.com/joske), will likely be completed in the coming weeks.
-The OSX branch has some memory leaks that needs to be sorted out and both have some issues with the processes cpu usage calculation and other smaller issues that needs fixing.
+Work on the OSX [macOS] and FreeBSD branches, both initiated and mostly worked on by [@joske](https://github.com/joske), will likely be completed in the coming weeks.
+The OSX [macOS] branch has some memory leaks that needs to be sorted out and both have some issues with the processes cpu usage calculation and other smaller issues that needs fixing.
 
 If you want to help out, test for bugs/fix bugs or just try out the branches:
 
-**OSX**
+**macOS / OSX**
 ```bash
 # Install and use Homebrew or MacPorts package managers for easy dependency installation
 brew install coreutils make gcc@11
@@ -82,12 +88,12 @@ git checkout freebsd
 gmake
 ```
 
-Note that GNU make (`gmake`) is recommended but not required for OSX but it is required on FreeBSD.
+Note that GNU make (`gmake`) is recommended but not required for macOS/OSX but it is required on FreeBSD.
 
 
 ##### 6 October 2021
 
-OsX development have been started by [@joske](https://github.com/joske), big thanks :)
+macOS development have been started by [@joske](https://github.com/joske), big thanks :)
 See branch [OSX](https://github.com/aristocratos/btop/tree/OSX) for current progress.
 
 ##### 18 September 2021
@@ -102,7 +108,7 @@ Please report any bugs to the [Issues](https://github.com/aristocratos/btop/issu
 
 The development plan right now:
 
-* 1.1.0 Mac OsX support
+* 1.1.0 macOS [OSX] support
 * 1.2.0 FreeBSD support
 * 1.3.0 Support for GPU monitoring
 * 1.X.0 Other platforms and features...
@@ -112,13 +118,11 @@ Windows support is not in the plans as of now, but if anyone else wants to take 
 ##### 5 May 2021
 
 This project is gonna take some time until it has complete feature parity with bpytop, since all system information gathering will have to be written from scratch without any external libraries.
-And will need some help in the form of code contributions to get complete support for BSD and OSX.
+And will need some help in the form of code contributions to get complete support for BSD and macOS/OSX.
 
 </details>
 
 ## Documents
-
-**[Man page](../markdown/btop.1.md)**
 
 **[CHANGELOG.md](CHANGELOG.md)**
 
@@ -144,9 +148,9 @@ C++ version and continuation of [bashtop](https://github.com/aristocratos/bashto
 * Send any signal to selected process.
 * UI menu for changing all config file options.
 * Auto scaling graph for network usage.
-* Shows IO activity and speeds for disks
+* Shows IO activity and speeds for disks.
 * Battery meter
-* Selectable symbols for the graphs
+* Selectable symbols for the graphs.
 * Custom presets
 * And more...
 
@@ -173,7 +177,7 @@ Any support is greatly appreciated!
 
 For best experience, a terminal with support for:
 
-* 24-bit truecolor ([See list of terminals with truecolor support](https://gist.github.com/XVilka/8346728))
+* 24-bit truecolor ([See list of terminals with truecolor support](https://github.com//termstandard/colors))
 * 256-color terminals are supported through 24-bit to 256-color conversion when setting "truecolor" to False in the options or with "-lc/--low-color" arguments.
 * 16 color TTY mode will be activated if a real tty device is detected. Can be forced with "-t/--tty_on" arguments.
 * Wide characters (Are sometimes problematic in web-based terminals)
@@ -276,6 +280,19 @@ Also needs a UTF8 locale and a font that covers:
     sudo zypper in btop
     ```
   * For all other versions, see [openSUSE Software: btop](https://software.opensuse.org/package/btop)
+* **Fedora**
+    ```bash
+    sudo dnf install btop
+	```
+* **RHEL/AlmaLinux 8+**
+    ```bash
+    sudo dnf install epel-release
+	sudo dnf install btop
+	```
+* **FreeBSD**
+	```sh
+	pkg install btop
+	```
 
 
 **Binary release on Homebrew (macOS (x86_64 & ARM64) / Linux (x86_64))**
@@ -377,7 +394,7 @@ Also needs a UTF8 locale and a font that covers:
    make help
    ```
 
-## Compilation OSX
+## Compilation macOS OSX
 
    Needs GCC 10 or higher, (GCC 11 or above strongly recommended for better CPU efficiency in the compiled binary).
 
@@ -550,20 +567,28 @@ Also needs a UTF8 locale and a font that covers:
 ## Installing the snap
 [![btop](https://snapcraft.io/btop/badge.svg)](https://snapcraft.io/btop)
 
+### Note: there are now two snaps available: `btop` and `btop-desktop`. The desktop version is much larger and includes the desktop entries needed to allow for launching `btop` with a click.
+
  * **Install the snap**
 
     ```bash
     sudo snap install btop
+    or
+    sudo snap install btop-desktop
     ```
  * **Install the latest snap from the edge channel**
    ```
    sudo snap install btop --edge
+   or
+   sudo snap install btop-desktop --edge
    ```
 
  * **Connect the interface**
 
     ```bash
 	sudo snap connect btop:removable-media
+	or 
+	sudo snap connect btop-desktop:removable-media
 	```
 
 

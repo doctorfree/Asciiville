@@ -4,7 +4,6 @@ summary: Resource monitor that shows usage and stats
 description: |
   Resource monitor that shows usage and stats for processor, memory, disks, network and processes.
   C++ version and continuation of bashtop and bpytop.
-
 license: Apache-2.0
 
 base: core20

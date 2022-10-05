@@ -32,8 +32,18 @@ tab-size = 4
 #include <btop_draw.hpp>
 #include <btop_shared.hpp>
 
-using std::deque, robin_hood::unordered_flat_map, std::array, std::views::iota, std::ref, std::max, std::min, std::ceil, std::clamp;
+using robin_hood::unordered_flat_map;
+using std::array;
+using std::ceil;
+using std::clamp;
+using std::deque;
+using std::max;
+using std::min;
+using std::ref;
+using std::views::iota;
+
 using namespace Tools;
+
 namespace fs = std::filesystem;
 namespace rng = std::ranges;
 
@@ -41,11 +51,11 @@ namespace Menu {
 
    atomic<bool> active (false);
    string bg;
-   bool redraw = true;
+   bool redraw{true};
    int currentMenu = -1;
    msgBox messageBox;
-   int signalToSend = 0;
-   int signalKillRet = 0;
+   int signalToSend{};  // defaults to 0
+   int signalKillRet{}; // defaults to 0
 
    const array<string, 32> P_Signals = {
 	   	"0",
@@ -111,7 +121,7 @@ namespace Menu {
 		{"4", "Toggle PROC box."},
 		{"d", "Toggle disks view in MEM box."},
 		{"F2, o", "Shows options."},
-		{"F1, h", "Shows this window."},
+		{"F1, ?, h", "Shows this window."},
 		{"ctrl + z", "Sleep program and put in background."},
 		{"q, ctrl + c", "Quits program."},
 		{"+, -", "Add/Subtract 100ms to/from update timer."},
@@ -469,6 +479,15 @@ namespace Menu {
 				"This also disables only_physical.",
 				"",
 				"True or False."},
+			{"zfs_hide_datasets",
+				"(Linux) Hide ZFS datasets in disks list.",
+				"",
+				"Setting this to True will hide all datasets,",
+				"and only show ZFS pools.",
+				"",
+				"(IO stats will be calculated per-pool)",
+				"",
+				"True or False."},
 			{"disk_free_priv",
 				"(Linux) Type of available disk space.",
 				"",
@@ -598,14 +617,23 @@ namespace Menu {
 				" ",
 				"Will show percentage of total memory",
 				"if False."},
+			{"proc_cpu_graphs",
+				"Show cpu graph for each process.",
+				"",
+				"True or False"},
+            {"proc_filter_kernel",
+                "(Linux) Filter kernel processes from output.",
+                "",
+                "Set to 'True' to filter out internal",
+                "processes started by the Linux kernel."},
 		}
 	};
 
 	msgBox::msgBox() {}
 	msgBox::msgBox(int width, int boxtype, vector<string> content, string title)
 	: width(width), boxtype(boxtype) {
-		const auto& tty_mode = Config::getB("tty_mode");
-		const auto& rounded = Config::getB("rounded_corners");
+        auto tty_mode = Config::getB("tty_mode");
+        auto rounded = Config::getB("rounded_corners");
 		const auto& right_up = (tty_mode or not rounded ? Symbols::right_up : Symbols::round_right_up);
 		const auto& left_up = (tty_mode or not rounded ? Symbols::left_up : Symbols::round_left_up);
 		const auto& right_down = (tty_mode or not rounded ? Symbols::right_down : Symbols::round_right_down);
@@ -694,8 +722,11 @@ namespace Menu {
 	};
 
 	int signalChoose(const string& key) {
-		auto& s_pid = (Config::getB("show_detailed") and Config::getI("selected_pid") == 0 ? Config::getI("detailed_pid") : Config::getI("selected_pid"));
-		static int x = 0, y = 0, selected_signal = -1;
+        auto s_pid = (Config::getB("show_detailed") and Config::getI("selected_pid") == 0 ? Config::getI("detailed_pid") : Config::getI("selected_pid"));
+        static int x{}; // defaults to 0
+        static int y{}; // defaults to 0
+        static int selected_signal = -1;
+
 		if (bg.empty()) selected_signal = -1;
 		auto& out = Global::overlay;
 		int retval = Changed;
@@ -821,7 +852,7 @@ namespace Menu {
 	}
 
 	int signalSend(const string& key) {
-		auto& s_pid = (Config::getB("show_detailed") and Config::getI("selected_pid") == 0 ? Config::getI("detailed_pid") : Config::getI("selected_pid"));
+        auto s_pid = (Config::getB("show_detailed") and Config::getI("selected_pid") == 0 ? Config::getI("detailed_pid") : Config::getI("selected_pid"));
 		if (s_pid == 0) return Closed;
 		if (redraw) {
 			atomic_wait(Runner::active);
@@ -894,10 +925,11 @@ namespace Menu {
 
 	int mainMenu(const string& key) {
 		enum MenuItems { Options, Help, Quit };
-		static int y = 0, selected = 0;
+        static int y{};         // defaults to 0
+        static int selected{};  // defaults to 0
 		static vector<string> colors_selected;
 		static vector<string> colors_normal;
-		auto& tty_mode = Config::getB("tty_mode");
+        auto tty_mode = Config::getB("tty_mode");
 		if (bg.empty()) selected = 0;
 		int retval = Changed;
 
@@ -951,7 +983,6 @@ namespace Menu {
 			retval = NoChange;
 		}
 
-
 		if (retval == Changed) {
 			auto& out = Global::overlay;
 			out = bg + Fx::reset + Fx::b;
@@ -968,14 +999,23 @@ namespace Menu {
 			out += Fx::reset;
 		}
 
-
 		return (redraw ? Changed : retval);
 	}
 
 	int optionsMenu(const string& key) {
 		enum Predispositions { isBool, isInt, isString, is2D, isBrowseable, isEditable};
-		static int y = 0, x = 0, height = 0, page = 0, pages = 0, selected = 0, select_max = 0, item_height = 0, selected_cat = 0, max_items = 0, last_sel = 0;
-		static bool editing = false;
+        static int y{};                 // defaults to 0
+        static int x{};                 // defaults to 0
+        static int height{};            // defaults to 0
+        static int page{};              // defaults to 0
+        static int pages{};             // defaults to 0
+        static int selected{};          // defaults to 0
+        static int select_max{};        // defaults to 0
+        static int item_height{};       // defaults to 0
+        static int selected_cat{};      // defaults to 0
+        static int max_items{};         // defaults to 0
+        static int last_sel{};          // defaults to 0
+        static bool editing{};          // defaults to false
 		static Draw::TextEdit editor;
 		static string warnings;
 		static bitset<8> selPred;
@@ -994,8 +1034,8 @@ namespace Menu {
 			{"cpu_sensor", std::cref(Cpu::available_sensors)},
 			{"selected_battery", std::cref(Config::available_batteries)},
 		};
-		auto& tty_mode = Config::getB("tty_mode");
-		auto& vim_keys = Config::getB("vim_keys");
+        auto tty_mode = Config::getB("tty_mode");
+        auto vim_keys = Config::getB("vim_keys");
 		if (max_items == 0) {
 			for (const auto& cat : categories) {
 				if ((int)cat.size() > max_items) max_items = cat.size();
@@ -1007,9 +1047,9 @@ namespace Menu {
 			Theme::updateThemes();
 		}
 		int retval = Changed;
-		bool recollect = false;
-		bool screen_redraw = false;
-		bool theme_refresh = false;
+        bool recollect{};       // defaults to false
+        bool screen_redraw{};   // defaults to false
+        bool theme_refresh{};   // defaults to false
 
 		//? Draw background if needed else process input
 		if (redraw) {
@@ -1302,7 +1342,12 @@ namespace Menu {
 	}
 
 	int helpMenu(const string& key) {
-		static int y = 0, x = 0, height = 0, page = 0, pages = 0;
+        static int y{};         // defaults to 0
+        static int x{};         // defaults to 0
+        static int height{};    // defaults to 0
+        static int page{};      // defaults to 0
+        static int pages{};     // defaults to 0
+
 		if (bg.empty()) page = 0;
 		int retval = Changed;
 

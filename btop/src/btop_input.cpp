@@ -30,8 +30,11 @@ tab-size = 4
 #include <btop_draw.hpp>
 #include <signal.h>
 
-using std::cin, std::vector, std::string_literals::operator""s;
+using std::cin;
+using std::vector;
+
 using namespace Tools;
+using namespace std::literals; // for operator""s
 namespace rng = std::ranges;
 
 namespace Input {
@@ -235,8 +238,8 @@ namespace Input {
 	void process(const string& key) {
 		if (key.empty()) return;
 		try {
-			auto& filtering = Config::getB("proc_filtering");
-			auto& vim_keys = Config::getB("vim_keys");
+            auto filtering = Config::getB("proc_filtering");
+            auto vim_keys = Config::getB("vim_keys");
 			auto help_key = (vim_keys ? "H" : "h");
 			auto kill_key = (vim_keys ? "K" : "k");
 			//? Global input actions
@@ -249,7 +252,7 @@ namespace Input {
 					Menu::show(Menu::Menus::Main);
 					return;
 				}
-				else if (is_in(key, "F1", help_key)) {
+				else if (is_in(key, "F1", "?", help_key)) {
 					Menu::show(Menu::Menus::Help);
 					return;
 				}
@@ -354,7 +357,16 @@ namespace Input {
 								const auto& current_selection = Config::getI("proc_selected");
 								if (current_selection == line - y - 1) {
 									redraw = true;
-									goto proc_mouse_enter;
+									if (Config::getB("proc_tree")) {
+										const int x_pos = col - Proc::x;
+										const int offset = Config::getI("selected_depth") * 3;
+										if (x_pos > offset and x_pos < 4 + offset) {
+											process("space");
+											return;
+										}
+									}
+									process("enter");
+									return;
 								}
 								else if (current_selection == 0 or line - y - 1 == 0)
 									redraw = true;
@@ -380,7 +392,6 @@ namespace Input {
 						keep_going = true;
 				}
 				else if (key == "enter") {
-					proc_mouse_enter:
 					if (Config::getI("proc_selected") == 0 and not Config::getB("show_detailed")) {
 						return;
 					}
@@ -537,9 +548,8 @@ namespace Input {
 			}
 		}
 
-
 		catch (const std::exception& e) {
-			throw std::runtime_error("Input::process(\"" + key + "\") : " + (string)e.what());
+            throw std::runtime_error("Input::process(\"" + key + "\") : " + string{e.what()});
 		}
 	}
 
