@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## Asciiville-2.0.0r1 (2022-10-10)
+
+* Modularize Asciiville installation and initialization
+  * Remove aewan, jp2a, and ninvaders from source, build, and packaging
+  * use external build and packaging to install in `ascinit`
+* Update btop to 1.2.9
+* Install the kitty terminfo entry when installing kitty
+* Add any2ascii command and its dependencies
+* Add asciibrow command
+
 ## Asciiville-1.4.1r2 (2022-10-02)
 
 * Install go in ascinit if not present
