@@ -22,7 +22,6 @@ AVILLE_FILES="/usr/bin/asciiart \
 /usr/bin/cbftp-debug \
 /usr/bin/datafilecat \
 /usr/bin/datafilewrite \
-/usr/bin/jp2a \
 /usr/bin/make_ascii_art \
 /usr/bin/set_xfce_font \
 /usr/bin/set_xfce_trans \
@@ -52,7 +51,6 @@ AVILLE_FILES="/usr/bin/asciiart \
 /usr/share/man/man1/ascinit.1 \
 /usr/share/man/man1/btop.1 \
 /usr/share/man/man1/cbftp.1 \
-/usr/share/man/man1/jp2a.1 \
 /usr/share/man/man1/show_ascii_art.1 \
 /usr/share/man/man1/show_moon.1 \
 /usr/share/man/man1/show_weather.1 \

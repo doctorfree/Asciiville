@@ -80,7 +80,6 @@ endoh1/endoh1
 endoh1/endoh1_color
 games/asciisector
 games/lib/AsciiSector
-games/ninvaders/cmake_build
 games/nethack/compile
 games/nethack/src/nethack
 
