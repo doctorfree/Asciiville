@@ -48,33 +48,11 @@ stage/
 
 README.html
 
-aewan/Makefile
-aewan/aecat
-aewan/aemakeflic
-aewan/aewan
-aewan/config.log
-aewan/config.status
-aewan/depends
-
 btop/build
 btop/bin
 btop/btop
 cbftp/bin
 .*/
-
-jp2a/INSTALL
-jp2a/Makefile
-jp2a/src/Makefile
-jp2a/Makefile.in
-jp2a/src/Makefile.in
-jp2a/src/jp2a
-jp2a/config.*
-jp2a/install-sh
-
-ddgr/build/
-ddgr/dist/
-ddgr/*.bak
-ddgr/ddgr.py
 
 GTAGS
 GRTAGS
@@ -102,7 +80,6 @@ endoh1/endoh1
 endoh1/endoh1_color
 games/asciisector
 games/lib/AsciiSector
-games/ninvaders/cmake_build
 games/nethack/compile
 games/nethack/src/nethack
 

@@ -66,9 +66,9 @@ else
 endif
 endif
 
-.PHONY: all info aur deb rpm aewan btop cbftp jp2a nethack ninvaders clean
+.PHONY: all info aur deb rpm btop cbftp nethack clean
 
-all: aewan btop cbftp jp2a nethack ninvaders aur deb rpm
+all: btop cbftp nethack aur deb rpm
 
 info:
 	@$(FIG_CMD)
@@ -76,23 +76,14 @@ info:
 	@printf "\033[1;96mARCH       \033[1;93m?| \033[0m$(ARCH)\n"
 	@printf "\033[1;93mCXX        \033[1;93m?| \033[0m$(CXX) \033[1;93m(\033[97m$(CXX_VERSION)\033[93m)\n"
 
-aewan: info
-	@./build aewan
-
 btop: info
 	@./build btop
 
 cbftp: info
 	@./build cbftp
 
-jp2a: info
-	@./build jp2a
-
 nethack: info
 	@./build nethack
-
-ninvaders: info
-	@./build ninvaders
 
 deb: info
 	@./mkpkg

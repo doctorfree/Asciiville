@@ -1,8 +1,0 @@
-PROJECT_NAME           = @PACKAGE_NAME@
-PROJECT_NUMBER         = @PACKAGE_VERSION@
-PROJECT_BRIEF          = "Convert JPEG and PNG images to ASCII"
-OUTPUT_DIRECTORY       = doxygen-doc
-STRIP_FROM_PATH        = @top_srcdir@
-OPTIMIZE_OUTPUT_FOR_C  = YES
-INPUT                  = include
-PREDEFINED             = FEAT_CURL

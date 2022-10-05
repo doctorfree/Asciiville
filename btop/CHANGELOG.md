@@ -1,3 +1,37 @@
+## v1.2.9
+
+* Fixed: Memory values not clearing properly when not in graph mode in mem box
+
+* Changed: kyli0x theme color update, by @kyli0x
+
+* Added: Elementarish theme, by @dennismayr
+
+* Added: key "?" to see help, by @mohi001
+
+* Added: solarized_light theme, by @Fingerzam
+
+* Changed: Made ZFS stats collection compatible with zfs_pools_only option, by @simplepad
+
+* Changed: Rewrite of process sorting and tree generation including fixes for tree sorting and mouse support
+
+* Added: Option to hide the small cpu graphs for processes
+
+* Changed: Small graphs now show colors for each character
+
+* Fixed: Getting selfpath on macos (fix for finding theme folder)
+
+## v1.2.8
+
+* Added: Support for ZFS pool io stats monitoring, by @simplepad
+
+* Added: Filtering of kernel processes, by @0xJoeMama
+
+* Added: New theme everforest-dark-hard, by @iambeingtracked
+
+* Added: New theme tomorrow-night, by @appuchias
+
+* Changed: Disable battery monitoring if it fails instead of exiting
+
 ## v1.2.7
 
 * Fixed: Disk IO stats for individual partitions instead of whole disk (Linux)

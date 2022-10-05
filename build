@@ -3,34 +3,6 @@
 # build - compile and optionally install Asciiville components
 #
 
-build_aewan() {
-  #
-  # Repo: https://github.com/doctorfree/Asciiville
-  #
-  # Fork of Repo: http://aewan.sourceforge.net/
-  #
-  [ -f aewan ] || {
-    prefix="--prefix=/usr"
-    [ "${PREFIX}" ] && prefix="--prefix=${PREFIX}"
-    autoreconf -vi
-    ./configure ${prefix}
-    make
-  }
-  chmod +x aewan aecat aemakeflic
-
-  [ "${INSTALL}" ] && {
-    [ -d ${PREFIX}/usr ] || sudo mkdir -p ${PREFIX}/usr
-    [ -d ${PREFIX}/usr/bin ] || sudo mkdir -p ${PREFIX}/usr/bin
-    sudo cp aewan aecat aemakeflic ${PREFIX}/usr/bin
-    [ -d ${PREFIX}/usr/share ] || sudo mkdir -p ${PREFIX}/usr/share
-    [ -d ${PREFIX}/usr/share/man ] || sudo mkdir -p ${PREFIX}/usr/share/man
-    [ -d ${PREFIX}/usr/share/man/man1 ] || sudo mkdir -p ${PREFIX}/usr/share/man/man1
-    [ -d ${PREFIX}/usr/share/man/man5 ] || sudo mkdir -p ${PREFIX}/usr/share/man/man5
-    sudo cp man/man1/*.1 ${PREFIX}/usr/share/man/man1
-    sudo cp man/man5/*.5 ${PREFIX}/usr/share/man/man5
-  }
-}
-
 build_btop() {
   # Repo: https://github.com/doctorfree/Asciiville
   #
@@ -102,25 +74,6 @@ build_endo() {
   }
 }
 
-build_jp2a() {
-  #
-  # Repo: https://github.com/doctorfree/Asciiville
-  #
-  # Fork of Repo: https://github.com/cslarsen/jp2a
-  #
-  [ -f src/jp2a ] || {
-    prefix="--prefix=/usr"
-    [ "${PREFIX}" ] && prefix="--prefix=${PREFIX}"
-    autoreconf -vi
-    ./configure ${prefix} --enable-curl --enable-termlib
-    make -j
-  }
-
-  chmod +x src/jp2a
-
-  [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
-}
-
 build_nethack() {
   #
   # Repo: https://github.com/doctorfree/Asciiville
@@ -155,13 +108,6 @@ build_nethack() {
   [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
 }
 
-build_ninvaders() {
-  [ -f cmake_build/ninvaders ] || {
-    cmake -B cmake_build
-    cmake --build cmake_build -j2
-  }
-}
-
 build_tetris() {
   [ -f tetris ] || {
     ./configure.sh --prefix=/usr/games --enable-xlib=no --enable-curses=yes
@@ -178,8 +124,8 @@ usage() {
     printf "\n\t-p prefix specifies installation prefix (default /usr)"
     printf "\n\t-u displays this usage message and exits\n"
     printf "\nNo arguments: build btop, configure with prefix=/usr, build\n"
-    printf "\n'project' can be one or more of 'aewan', 'btop', 'cbftp',"
-    printf "\n'jp2a', 'nethack', 'ninvaders', and 'tetris'\n"
+    printf "\n'project' can be one or more of 'btop', 'cbftp',"
+    printf "\n'nethack', and 'tetris'\n"
     exit 1
 }
 
@@ -204,14 +150,6 @@ shift $(( OPTIND - 1 ))
 for project in $*
 do
   case "${project}" in
-    aewan)
-      PROJ=aewan
-      [ -d ${PROJ} ] && {
-        cd ${PROJ}
-        build_aewan
-        cd ..
-      }
-      ;;
     btop)
       PROJ=btop
       [ -d ${PROJ} ] && {
@@ -236,27 +174,11 @@ do
         cd ..
       }
       ;;
-    jp2a)
-      PROJ=jp2a
-      [ -d ${PROJ} ] && {
-        cd ${PROJ}
-        build_jp2a
-        cd ..
-      }
-      ;;
     nethack)
       PROJ=games/nethack
       [ -d ${PROJ} ] && {
         cd ${PROJ}
         build_nethack
-        cd ../..
-      }
-      ;;
-    ninvaders)
-      PROJ=games/ninvaders
-      [ -d ${PROJ} ] && {
-        cd ${PROJ}
-        build_ninvaders
         cd ../..
       }
       ;;

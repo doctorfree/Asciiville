@@ -2,7 +2,7 @@ Name: Asciiville
 Version:    %{_version}
 Release:    %{_release}
 BuildArch:  x86_64
-Requires: util-linux, python3, python3-pip, tmux, mplayer, w3m, ranger, jq, asciinema, speedtest-cli, ncurses, neofetch, newsboat, figlet, ImageMagick, dconf, libjpeg-turbo, libpng, cmatrix, gnupg, pandoc, urlscan, khard, git, ruby, wget
+Requires: util-linux, python3, python3-pip, tmux, mplayer, w3m, ranger, curl, jq, wget, asciinema, speedtest-cli, ncurses, neofetch, newsboat, figlet, ImageMagick, dconf, libjpeg-turbo, libpng, cmatrix, gnupg, pandoc, urlscan, khard, git
 URL:        https://github.com/doctorfree/Asciiville
 Vendor:     Doctorwhen's Bodacious Laboratory
 Packager:   ronaldrecord@gmail.com
@@ -90,7 +90,6 @@ fi
 %files
 %defattr(-,root,root)
 %attr(4755, games, games) /usr/games/bin/*
-%attr(0644, games, games) /usr/games/lib/ninvaders/*
 %attr(0664, games, games) /usr/games/var/tetris-hiscores
 %attr(0755, games, games) /usr/games/var/nethack/bones
 %attr(0755, games, games) /usr/games/var/nethack/level
@@ -115,7 +114,6 @@ fi
 /usr/share/*
 /usr/games/gameserver
 /usr/games/nethack
-/usr/games/ninvaders
 /usr/games/tetris
 /usr/games/share/*
 

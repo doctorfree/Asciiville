@@ -2,7 +2,7 @@
 title: BTOP
 section: 1
 header: User Manual
-footer: btop 1.0.0
+footer: btop 1.2.9
 date: April 27, 2022
 ---
 ## NAME

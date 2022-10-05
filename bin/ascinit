@@ -25,7 +25,7 @@ usage() {
   exit 1
 }
 
-inst_pkg() {
+install_package() {
   PKG="$1"
   [ "${quiet}" ] || echo "Installing ${PKG}"
   if [ "${debian}" ]
@@ -61,7 +61,7 @@ ask_install() {
     read -p "Install ${nam} ? (y/n) " yn
     case $yn in
       [Yy]* )
-          inst_pkg ${pkg}
+          install_package ${pkg}
           break
           ;;
       [Nn]* )
@@ -77,11 +77,89 @@ install_pipx() {
   [ "${quiet}" ] || {
     printf "\n\tInstalling pipx ..."
   }
-  python3 -m pip install --user pipx > /dev/null 2>&1
-  python3 -m pipx ensurepath --force > /dev/null 2>&1
+  ${PYTHON} -m pip install --user pipx > /dev/null 2>&1
+  ${PYTHON} -m pipx ensurepath --force > /dev/null 2>&1
   have_pipx=`type -p pipx`
   [ "${quiet}" ] || {
     printf " done"
+  }
+}
+
+install_external_package() {
+  have_curl=`type -p curl`
+  [ "${have_curl}" ] || {
+    install_package curl
+    have_curl=`type -p curl`
+  }
+  have_jq=`type -p jq`
+  [ "${have_jq}" ] || {
+    install_package jq
+    have_jq=`type -p jq`
+  }
+  have_wget=`type -p wget`
+  [ "${have_wget}" ] || {
+    install_package wget
+    have_wget=`type -p wget`
+  }
+  DL_URL=
+  [ "${have_curl}" ] && [ "${have_jq}" ] && {
+    if [ "${arch}" ]
+    then
+      DL_URL=$(curl --silent "${API_URL}" | \
+               jq --raw-output '.assets | .[]?.browser_download_url' | \
+               grep "\.pkg\.tar\.zst")
+    else
+      if [ "${centos}" ]
+      then
+        DL_URL=$(curl --silent "${API_URL}" | \
+                 jq --raw-output '.assets | .[]?.browser_download_url' | \
+                 grep "\.el.*x86_64\.rpm")
+      else
+        if [ "${fedora}" ]
+        then
+          DL_URL=$(curl --silent "${API_URL}" | \
+                   jq --raw-output '.assets | .[]?.browser_download_url' | \
+                   grep "\.fc.*x86_64\.rpm")
+        else
+          if [ "${debian}" ]
+          then
+            if [ "${mach}" == "x86_64" ]
+            then
+              DL_URL=$(curl --silent "${API_URL}" | \
+                       jq --raw-output '.assets | .[]?.browser_download_url' | \
+                       grep "\.amd64\.deb")
+            else
+              DL_URL=$(curl --silent "${API_URL}" | \
+                       jq --raw-output '.assets | .[]?.browser_download_url' | \
+                       grep "\.arm.*\.deb")
+            fi
+          else
+            printf "\n\tNo ${PROJECT} release asset found for this platform ..."
+          fi
+        fi
+      fi
+    fi
+  }
+
+  [ "${DL_URL}" ] && {
+    printf "\n\tInstalling ${PROJECT} ..."
+    if [ "${debian}" ]
+    then
+      [ "${have_wget}" ] && {
+        TEMP_DEB="$(mktemp --suffix=.deb)"
+        wget --quiet -O "${TEMP_DEB}" "${DL_URL}" > /dev/null 2>&1
+        chmod 644 "${TEMP_DEB}"
+        [ "${APT}" ] && sudo ${APT} install "${TEMP_DEB}" > /dev/null 2>&1
+        rm -f "${TEMP_DEB}"
+      }
+    else
+      if [ "${centos}" ] || [ "${fedora}" ]
+      then
+        [ "${DNF}" ] && sudo ${DNF} install ${DL_URL} > /dev/null 2>&1
+      else
+        [ "${arch}" ] && sudo pacman -U --noconfirm ${DL_URL} > /dev/null 2>&1
+      fi
+    fi
   }
 }
 
@@ -100,47 +178,59 @@ install_kitty() {
         sh /tmp/kitty-$$.sh launch=n dest=~/.local/stow > /dev/null 2>&1
         cd ~/.local/stow
         stow kitty.app
-        LOCAL=".local/stow"
+        LOCAL=".local/stow/kitty.app"
       else
         sh /tmp/kitty-$$.sh launch=n > /dev/null 2>&1
-        LOCAL=".local"
+        LOCAL=".local/kitty.app"
       fi
       rm -f /tmp/kitty-$$.sh
       # Create a symbolic link to add kitty to PATH
       [ -d ~/.local/bin ] || mkdir -p ~/.local/bin
       [ -x ~/.local/bin/kitty ] || {
-        ln -s ~/${LOCAL}/kitty.app/bin/kitty ~/.local/bin/
+        ln -s ~/${LOCAL}/bin/kitty ~/.local/bin/
       }
       # Link the kitty man pages somewhere it can be found by the man command
       [ -d ~/.local/share/man/man1 ] || mkdir -p ~/.local/share/man/man1
       [ -f ~/.local/share/man/man1/kitty.1 ] || {
         [ -d ${HOME}/.local/share/man/man1 ] || \
           mkdir -p ${HOME}/.local/share/man/man1
-        ln -s ~/${LOCAL}/kitty.app/share/man/man1/kitty.1 \
+        ln -s ~/${LOCAL}/share/man/man1/kitty.1 \
            ~/.local/share/man/man1/
       }
       [ -d ~/.local/share/man/man5 ] || mkdir -p ~/.local/share/man/man5
       [ -f ~/.local/share/man/man5/kitty.conf.5 ] || {
         [ -d ${HOME}/.local/share/man/man5 ] || \
           mkdir -p ${HOME}/.local/share/man/man5
-        ln -s ~/${LOCAL}/kitty.app/share/man/man5/kitty.conf.5 \
+        ln -s ~/${LOCAL}/share/man/man5/kitty.conf.5 \
            ~/.local/share/man/man5/
       }
       # Place the kitty.desktop file somewhere it can be found by the OS
       [ -d ~/.local/share/applications ] || mkdir -p ~/.local/share/applications
       [ -f ~/.local/share/applications/kitty.desktop ] || {
-        cp ~/${LOCAL}/kitty.app/share/applications/kitty.desktop \
+        cp ~/${LOCAL}/share/applications/kitty.desktop \
            ~/.local/share/applications/
       }
       # If you want to open text files and images in kitty via your file manager
       # also add the kitty-open.desktop file
       [ -f ~/.local/share/applications/kitty-open.desktop ] || {
-        cp ~/${LOCAL}/kitty.app/share/applications/kitty-open.desktop \
+        cp ~/${LOCAL}/share/applications/kitty-open.desktop \
            ~/.local/share/applications/
       }
       # Update the paths to the kitty and its icon in the kitty.desktop file(s)
-      sed -i "s|Icon=kitty|Icon=/home/${MPP_USER}/${LOCAL}/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
-      sed -i "s|Exec=kitty|Exec=/home/${MPP_USER}/${LOCAL}/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+      sed -i "s|Icon=kitty|Icon=/home/${MPP_USER}/${LOCAL}/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
+      sed -i "s|Exec=kitty|Exec=/home/${MPP_USER}/${LOCAL}/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+      # Install the Kitty terminfo entry
+      [ -f "${HOME}/.terminfo/x/xterm-kitty" ] || {
+        [ -f "${HOME}/${LOCAL}/lib/kitty/terminfo/kitty.terminfo" ] && {
+          have_tic=`type -p tic`
+          [ "${have_tic}" ] && {
+            [ -d ${HOME}/.terminfo ] || mkdir -p ${HOME}/.terminfo
+            [ -d ${HOME}/.terminfo/x ] || mkdir -p ${HOME}/.terminfo/x
+            tic -x -o ${HOME}/.terminfo \
+              "${HOME}/${LOCAL}/lib/kitty/terminfo/kitty.terminfo" > /dev/null 2>&1
+          }
+        }
+      }
       [ "${quiet}" ] || printf " done!\n"
     else
       printf "\n${BOLD}ERROR:${NORM} Download of kitty installation script failed"
@@ -365,7 +455,61 @@ while getopts "acdmMNnqrtu" flag; do
 done
 shift $(( OPTIND - 1 ))
 
+argument=`echo "$1" | tr '[:upper:]' '[:lower:]'`
+
+function check_py_version
+{
+  # Full version number e.g. 2.7.1
+  python_version="$(echo "$($1 -V 2>&1)" | sed -e "s/^.* \(.*\)$/\\1/g")"
+
+  # Return (the first letter -lt "3")
+  ! [ "$(echo $python_version | head -c 1 )" -lt "3" ]
+}
+
+PYTHON=""
+POTENTIAL_BINARIES=( "python" "python3" "python3.6" "python3.5" "python3.7" "python3.4" "python3.3" "python3.8" "python3.2" "python3.1" )
+PY3_SUPPORT=false
+
+for i in "${POTENTIAL_BINARIES[@]}"
+do
+    PYTHON="$i"
+
+    if  $(check_py_version ${PYTHON}) ;
+    then
+        PY3_SUPPORT=true
+        break
+    fi
+done
+
+if [ ! ${PY3_SUPPORT} ]
+then
+    echo "[ERROR] Could not find python3 binary, please add it to your \$PATH before continuing"
+    exit
+fi
+
 [ -d ${USERCONF} ] || mkdir -p ${USERCONF}
+
+# Install aewan if not already present
+[ -x /usr/bin/aewan ] || {
+  OWNER=doctorfree
+  PROJECT=asciiville-aewan
+  API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
+  install_external_package
+}
+# Install any2ascii if not already present
+[ -x /usr/bin/jp2a ] || {
+  OWNER=doctorfree
+  PROJECT=any2ascii
+  API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
+  install_external_package
+}
+# Install ninvaders if not already present
+[ -x /usr/games/bin/ninvaders ] || {
+  OWNER=doctorfree
+  PROJECT=ninvaders
+  API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
+  install_external_package
+}
 
 # Mutt configuration user setup
 [ "${have_mutt}" ] && {
@@ -433,7 +577,7 @@ shift $(( OPTIND - 1 ))
   [ "${fedora}" ] && {
     sudo dnf install dnf-plugins-core -y 2> /dev/null
     sudo dnf copr enable flatcap/neomutt -y 2> /dev/null
-    inst_pkg neomutt
+    install_package neomutt
   }
 }
 [ -d ${CONFDIR}/neomutt ] && {
@@ -533,7 +677,7 @@ case "${mach}" in
       # If none of Gnome, Tilix, or XFCE terminal emulators are installed
       # then install the Gnome terminal emulator
       [ "${have_gnome}" ] || [ "${have_tilix}" ] || [ "${have_xfce4}" ] || {
-        inst_pkg gnome-terminal
+        install_package gnome-terminal
         have_gnome=`type -p gnome-terminal`
       }
       ;;
@@ -730,7 +874,7 @@ have_pip=`type -p pip`
   plat=`uname -s`
   if [ "$plat" == "Darwin" ]
   then
-    python3 -m ensurepip --upgrade
+    ${PYTHON} -m ensurepip --upgrade
   else
     if [ "${debian}" ]
     then
@@ -749,21 +893,63 @@ have_pip=`type -p pip`
   }
 }
 
-for pkg in asciimatics rainbowstream tuir
+for pkg in asciimatics ddgr rainbowstream socli tuir \
+           future xtermcolor ffmpeg-python pyaudio
 do
   if pip list | grep ${pkg} > /dev/null
   then
-    python -m pip install --upgrade ${pkg} > /dev/null 2>&1
+    ${PYTHON} -m pip install --upgrade ${pkg} > /dev/null 2>&1
   else
     [ "${quiet}" ] || {
       printf "\n\tInstalling ${pkg} ..."
     }
-    python -m pip install ${pkg} > /dev/null 2>&1
+    ${PYTHON} -m pip install ${pkg} > /dev/null 2>&1
     [ "${quiet}" ] || {
       printf " done"
     }
   fi
 done
+
+pkg=video-to-ascii
+if pip list | grep ${pkg} > /dev/null
+then
+  ${PYTHON} -m pip install --upgrade ${pkg} \
+      --install-option="--with-audio" > /dev/null 2>&1
+else
+  [ "${quiet}" ] || {
+    printf "\n\tInstalling ${pkg} ..."
+  }
+  ${PYTHON} -m pip install ${pkg} \
+      --install-option="--with-audio" > /dev/null 2>&1
+  [ "${quiet}" ] || {
+    printf " done"
+  }
+fi
+
+have_googler=`type -p googler`
+[ "${have_googler}" ] || {
+  [ -f ${HOME}/.local/bin/googler ] || {
+    [ -d ${HOME}/.local ] || mkdir -p ${HOME}/.local
+    [ -d ${HOME}/.local/bin ] || mkdir -p ${HOME}/.local/bin
+    GGDL_URL="https://raw.githubusercontent.com/jarun/googler"
+    GGDL_VER="v4.3.2"
+    [ "${quiet}" ] || {
+      printf "\n\tInstalling googler ..."
+    }
+    curl --silent -o ${HOME}/.local/bin/googler \
+                     ${GGDL_URL}/${GGDL_VER}/googler 2> /dev/null
+    curl --silent -o ${HOME}/.local/share/man/man1/googler.1 \
+                     ${GGDL_URL}/${GGDL_VER}/googler.1 2> /dev/null
+    [ "${quiet}" ] || {
+      printf " done"
+    }
+  }
+
+  [ -f ${HOME}/.local/bin/googler ] && {
+    chmod +x ${HOME}/.local/bin/googler
+    ${HOME}/.local/bin/googler -u > /dev/null 2>&1
+  }
+}
 
 # Custom jrnl configuration for this user unless one exists
 [ -d ${CONFDIR}/jrnl ] && {

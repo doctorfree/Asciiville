@@ -60,19 +60,6 @@ post_install() {
   chmod 04755 /usr/games/bin/nethack
   ln -r -s /usr/games/bin/nethack /usr/games/nethack
 
-  chown games /usr/games/lib/ninvaders
-  chgrp games /usr/games/lib/ninvaders
-  chmod 0755 /usr/games/lib/ninvaders
-  touch /usr/games/lib/ninvaders/highscore
-  chown games /usr/games/lib/ninvaders/highscore
-  chgrp games /usr/games/lib/ninvaders/highscore
-  chmod 0664 /usr/games/lib/ninvaders/highscore
-
-  chown games /usr/games/bin/ninvaders
-  chgrp games /usr/games/bin/ninvaders
-  chmod 04755 /usr/games/bin/ninvaders
-  ln -r -s /usr/games/bin/ninvaders /usr/games/ninvaders
-
   chown games /usr/games/bin/tetris
   chgrp games /usr/games/bin/tetris
   chmod 04755 /usr/games/bin/tetris

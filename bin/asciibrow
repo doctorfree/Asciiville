@@ -1,0 +1,58 @@
+#!/bin/bash
+#
+# asciibrow - frontend using mpv/socli/w3m for opening urls
+#
+# usage: asciibrow url
+
+usage() {
+    printf "\nUsage: asciibrow url\n\n"
+    exit 1
+}
+
+[ "$1" ] || usage
+url=$1
+
+if [[ $url == *"youtube.com/watch"* ]]; then
+      have_mpv=`type -p mpv`
+      [ "${have_mpv}" ] || {
+          printf "\nURL $url requires 'mpv' but mpv not found."
+          printf "\nExiting."
+          usage
+      }
+      mpv $url 1>/dev/null 2>/dev/null &
+elif [[ $url == *"stackoverflow.com/questions/"* ]]; then
+      have_kitty=`type -p kitty`
+      [ "${have_kitty}" ] || {
+          printf "\nURL $url requires 'kitty' but kitty not found."
+          printf "\nExiting."
+          usage
+      }
+      have_socli=`type -p socli`
+      [ "${have_socli}" ] || {
+          printf "\nURL $url requires 'socli' but socli not found."
+          printf "\nExiting."
+          usage
+      }
+      query=`echo $url | awk -F/ '{ print $6 }' | tr "-" " "`
+      kitty --title="${url}" \
+            --start-as normal \
+            --override tab_bar_min_tabs=2 \
+            socli $query 2> /dev/null &
+else
+      have_kitty=`type -p kitty`
+      [ "${have_kitty}" ] || {
+          printf "\nURL $url requires 'kitty' but kitty not found."
+          printf "\nExiting."
+          usage
+      }
+      have_w3m=`type -p w3m`
+      [ "${have_w3m}" ] || {
+          printf "\nURL $url requires 'w3m' but w3m not found."
+          printf "\nExiting."
+          usage
+      }
+      kitty --title="${url}" \
+            --start-as normal \
+            --override tab_bar_min_tabs=2 \
+            bash -c "w3m -dump $url | less" 2> /dev/null &
+fi

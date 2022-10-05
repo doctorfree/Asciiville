@@ -7,7 +7,7 @@ pkgdesc="Create and display ASCII Art, animations. Utilities to perform common o
 arch=('x86_64' 'armv7h')
 url="https://github.com/doctorfree/Asciiville"
 license=('MIT')
-depends=(util-linux libcurl-compat ncurses readline figlet python-pyfiglet tmux python python-pip mplayer dconf w3m ranger jq asciinema speedtest-cli neofetch neomutt newsboat imagemagick libjpeg-turbo libpng cmatrix gnupg pandoc urlscan khard git lolcat)
+depends=(util-linux libcurl-compat ncurses readline figlet tmux python python-pip mplayer dconf w3m ranger curl jq wget asciinema speedtest-cli neofetch neomutt newsboat imagemagick libjpeg-turbo libpng cmatrix gnupg pandoc urlscan khard git)
 makedepends=(cmake pandoc zip autoconf-archive pkgconf)
 optdepends=('cool-retro-term: cool retro terminal emulator')
 install=asciiville.install
@@ -34,13 +34,6 @@ DOC
 
 build() {
   cd "${srcdir}/${pkgname}"
-  cd aewan
-  autoreconf -vi
-  ./configure --prefix=/usr
-  make
-  chmod +x aewan aecat aemakeflic
-  cd ..
-
   cd btop
   make distclean
   make STATIC=true STRIP=true
@@ -64,14 +57,6 @@ build() {
   chmod +x endoh1 endoh1_color
   cd ..
 
-  cd jp2a
-  autoreconf -vi
-  ./configure --prefix=/usr --enable-curl --enable-termlib
-  make clean
-  make -j
-  chmod +x src/jp2a
-  cd ..
-
   cd games/nethack
   cd sys/autoconf
   ./bootstrap.sh
@@ -82,11 +67,6 @@ build() {
               --with-group=games \
               --enable-wizmode=doctorwhen
   make
-  cd ../..
-
-  cd games/ninvaders
-  cmake -B cmake_build
-  cmake --build cmake_build -j2
   cd ../..
 
   cd games/tetris
@@ -106,7 +86,7 @@ package() {
       "${destdir}/share/applications" "${destdir}/share/doc" \
       "${destdir}/share/doc/${pkgname}" "${destdir}/share/btop" \
       "${destdir}/share/${pkgname}" "${destdir}/games" "${destdir}/games/bin" \
-      "${destdir}/games/lib" "${destdir}/games/lib/ninvaders" \
+      "${destdir}/games/lib" \
       "${destdir}/games/share" "${destdir}/games/share/doc" \
       "${destdir}/games/share/doc/tetris" \
       "${destdir}/games/share/pixmaps" \
@@ -123,11 +103,6 @@ package() {
   cp -a bin ${pkgdir}/${destdir}/bin
   cp btop/bin/btop ${pkgdir}/${destdir}/bin/btop
   cp cbftp/bin/* ${pkgdir}/${destdir}/bin
-  cp ddgr/ddgr ${pkgdir}/${destdir}/bin/ddgr
-  cp jp2a/src/jp2a ${pkgdir}/${destdir}/bin/jp2a
-  cp aewan/aewan ${pkgdir}/${destdir}/bin/aewan
-  cp aewan/aecat ${pkgdir}/${destdir}/bin/aecat
-  cp aewan/aemakeflic ${pkgdir}/${destdir}/bin/aemakeflic
 
   cp -a endoh1 ${pkgdir}/${destdir}/share/${pkgname}/endoh1
   chmod 755 ${pkgdir}/${destdir}/share/${pkgname}/endoh1/endoh1
@@ -142,11 +117,6 @@ package() {
   cd doc
   make DESTDIR=${pkgdir} manpages
   cd ../..
-
-  cp ninvaders/LICENSE ${pkgdir}/${destdir}/games/lib/ninvaders
-  cp ninvaders/README.md ${pkgdir}/${destdir}/games/lib/ninvaders
-
-  cp ninvaders/cmake_build/ninvaders ${pkgdir}/${destdir}/games/bin
 
   # Tetris
   cp tetris/tetris ${pkgdir}/${destdir}/games/bin
@@ -182,7 +152,6 @@ package() {
   pandoc -f gfm README.md | \
     tee ${pkgdir}/${destdir}/share/doc/${pkgname}/README.html > /dev/null
   cp VERSION ${pkgdir}/${destdir}/share/doc/${pkgname}
-  cp ddgr/README.md ${pkgdir}/${destdir}/share/doc/${pkgname}/README-ddgr.md
   cp btop/README.md ${pkgdir}/${destdir}/share/doc/${pkgname}/README-btop.md
   cp btop/LICENSE ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSE-btop
   cp btop/README.md ${pkgdir}/${destdir}/share/btop/README.md
@@ -201,9 +170,6 @@ package() {
     "${pkgdir}/${destdir}/share/icons/hicolor/scalable/apps/btop.svg"
   cp cbftp/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-cbftp
   cp cbftp/LICENSE ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSE-cbftp
-  cp jp2a/COPYING ${pkgdir}/${destdir}/share/doc/${pkgname}/COPYING-jp2a
-  cp jp2a/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-jp2a
-  cp jp2a/LICENSES ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSES-jp2a
   cp games/tetris/licence.txt \
     ${pkgdir}/${destdir}/share/doc/${pkgname}/license-tetris
   cp games/tetris/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-tetris
@@ -218,13 +184,9 @@ package() {
   gzip ${pkgdir}/${destdir}/share/${pkgname}/art/*/*.asc
 
   cp -a man/man1 ${pkgdir}/${destdir}/share/man/man1
-  cp ddgr/ddgr.1 ${pkgdir}/${destdir}/share/man/man1
-  cp jp2a/man/jp2a.1 ${pkgdir}/${destdir}/share/man/man1
   [ -d ${pkgdir}/${destdir}/share/man/man5 ] || {
     mkdir -p ${pkgdir}/${destdir}/share/man/man5
   }
-  cp aewan/man/man1/*.1 ${pkgdir}/${destdir}/share/man/man1
-  cp aewan/man/man5/*.5 ${pkgdir}/${destdir}/share/man/man5
 
   [ -d ${pkgdir}/${destdir}/share/man/man6 ] || {
     mkdir -p ${pkgdir}/${destdir}/share/man/man6

@@ -36,6 +36,7 @@ Asciiville includes nearly 1,000 works of ASCII and ANSI Art!
     1. [Btop++ README](#btop++-readme)
     1. [Cbftp README](#cbftp-readme)
     1. [Ddgr README](#ddgr-readme)
+    1. [Googler README](#googler-readme)
     1. [Man Pages](#man-pages)
     1. [Usage](#usage)
     1. [Example invocations](#example-invocations)
@@ -130,10 +131,11 @@ of interactive menus that can be used to control its behavior.
 
 Integration is provided for:
 
-* [aewan](aewan/README), Ascii Art creation tool
+* [aewan](https://github.com/doctorfree/asciiville-aewan#readme), Ascii Art creation tool
 * [btop](btop/README.md), character based system monitor
 * [cbftp](cbftp/README), character based FTP client
-* [ddgr](ddgr/README.md), command line web search
+* [ddgr](https://github.com/jarun/ddgr#readme), command line web search using DuckDuckGo
+* [googler](https://github.com/jarun/googler#readme), command line web search using Google
 * [jrnl](https://jrnl.sh/en/stable/), a simple command line journal application
 * [khard](https://github.com/lucc/khard), address book for the Unix console
 * [w3m](http://w3m.sourceforge.net/), another character based web browser
@@ -225,6 +227,7 @@ Asciiville adds the following commands to your system:
 * **btop** : character based system monitor
 * **cbftp** : character based FTP client
 * **ascinit** : one-time initializaton of a user's Asciiville configuration
+* **asciibrow** : browse the web in character mode
 * **asciisplash** : fun ascii art screens using ASCIImatics animations. Ascii art commands:
     * **asciiart** : ASCIImatics animated art images
     * **asciijulia** : ASCIImatics animated zoom on a Julia Set
@@ -232,11 +235,13 @@ Asciiville adds the following commands to your system:
     * **asciimpplus** : ASCIImatics animated Music Player Plus splash screen
 * **datafilecat** : decrypts the content of a cbftp data file
 * **datafilewrite** : encrypts the content of a cbftp plain text data file
-* **ddgr** : command line web search
+* **ddgr** : command line web search using DuckDuckGo
+* **googler** : command line web search using Google
 * **gameserver** : multi-player game server
 * **got** : text based translation tool
 * **gum** : a tool for glamorous shell scripts
-* **jp2a** : image to ascii conversion utility
+* **any2a** : any image format to ascii conversion utility
+* **jp2a** : jpg/png image to ascii conversion utility
 * **make_ascii_art** : generate ascii art from images
 * **mapscii** : character based zoomable map of the world
 * **nethack** : character based dungeon game
@@ -1029,7 +1034,7 @@ Run the `asciiville` command with no arguments or the `-i` argument to
 bring up the interactive menu interface.
 
 ### Aewan README
-- [aewan](aewan/README), Introduction to the Aewan ascii art creation tool
+- [aewan](https://github.com/doctorfree/asciiville-aewan#readme), Introduction to the Aewan ascii art creation tool
 
 ### Btop++ README
 - [**btop/README.md**](btop/README.md) - Introduction to the btop system monitor
@@ -1039,7 +1044,10 @@ bring up the interactive menu interface.
 - [**Video on Cbftp**](https://youtu.be/dOIwg9nMF10) - Video introduction to the cbftp FTP client
 
 ### Ddgr README
-- [ddgr](ddgr/README.md), Introduction to the command line web search utility
+- [ddgr](https://github.com/jarun/ddgr#readme), Introduction to the ddgr command line web search utility
+
+### Googler README
+- [googler](https://github.com/jarun/googler#readme), Introduction to the googler command line web search utility
 
 ### Man Pages
 
@@ -1840,11 +1848,10 @@ bison, libncurses5-dev, autotools-dev, libjpeg-dev, libpng-dev,
 libcurl4-gnutls-dev, libncurses5-dev, autoconf-archive, pkg-config
 
 Not all are required to build a specific utility or game. Utilities and games
-built from source in Asciiville include aewan, btop++, cbftp, ddgr, jp2a,
-nethack, ninvaders, and tetris.
+built from source in Asciiville include btop++, cbftp, nethack, and tetris.
 
 The build script `build` in the top-level directory of the Asciiville repository
-can be used to compile aewan, btop, cbftp, jp2a, nethack, ninvaders, and tetris.
+can be used to compile btop, cbftp, nethack, and tetris.
 Invoke the `build` script with the game or utility you wish to compile as
 an argument. For example, to compile the btop++ system monitor from source,
 run the command `./build btop`.

@@ -47,17 +47,6 @@ OUT_DIR="${SRC}/${SRC_NAME}/dist/${PKG_NAME}_${PKG_VER}"
 
 cd "${SRC}/${SRC_NAME}"
 
-# Build aewan
-if [ -x build ]
-then
-  ./build aewan
-else
-  cd aewan
-  ./configure --prefix=/usr
-  make
-  cd ..
-fi
-
 # Build btop
 if [ -x build ]
 then
@@ -94,20 +83,6 @@ else
   cd ..
 fi
 
-# Build jp2a
-if [ -x build ]
-then
-  ./build jp2a
-else
-  cd jp2a
-  autoreconf -vi
-  ./configure --prefix=/usr --enable-curl --enable-termlib
-  make clean
-  make -j
-  chmod +x src/jp2a
-  cd ..
-fi
-
 # Build nethack
 if [ -x build ]
 then
@@ -119,17 +94,6 @@ else
               --with-group=games \
               --enable-wizmode=doctorwhen
   make
-  cd ../..
-fi
-
-# Build ninvaders
-if [ -x build ]
-then
-  ./build ninvaders
-else
-  cd games/ninvaders
-  cmake -B cmake_build
-  cmake --build cmake_build -j2
   cd ../..
 fi
 
@@ -160,7 +124,7 @@ Version: ${PKG_VER}-${PKG_REL}
 Section: misc
 Priority: optional
 Architecture: ${ARCH}
-Depends: uuid-runtime, python3, python3-pip, python3-venv, tmux, mplayer, w3m, neomutt, newsboat, ranger, jq, asciinema, speedtest-cli, libaa-bin, libaa1, bb, neofetch, figlet, imagemagick, dconf-cli, libncurses-dev, libjpeg62-turbo-dev, libpng-dev, cmatrix, gnupg, pandoc, urlscan, khard, git, ruby
+Depends: uuid-runtime, python3, python3-dev, python3-pip, python3-venv, tmux, mplayer, w3m, neomutt, newsboat, ranger, curl, jq, wget, asciinema, speedtest-cli, libaa-bin, libaa1, bb, neofetch, figlet, imagemagick, dconf-cli, libncurses-dev, libjpeg-dev, libpng-dev, cmatrix, gnupg, pandoc, urlscan, khard, git, libportaudio2, libportaudiocpp0, portaudio19-dev
 Maintainer: ${DEBFULLNAME} <${DEBEMAIL}>
 Installed-Size: 192000
 Build-Depends: debhelper (>= 11)
@@ -174,7 +138,7 @@ for dir in "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
            "${DESTDIR}/share/doc/${PKG}" "${DESTDIR}/share/btop" \
            "${DESTDIR}/share/${PKG}" "${DESTDIR}/games" "${DESTDIR}/games/bin" \
-           "${DESTDIR}/games/lib" "${DESTDIR}/games/lib/ninvaders" \
+           "${DESTDIR}/games/lib" \
            "${DESTDIR}/games/share" "${DESTDIR}/games/share/doc" \
            "${DESTDIR}/games/share/doc/tetris" \
            "${DESTDIR}/games/share/pixmaps" \
@@ -192,11 +156,6 @@ done
 ${SUDO} cp -a bin ${OUT_DIR}/${DESTDIR}/bin
 ${SUDO} cp btop/bin/btop ${OUT_DIR}/${DESTDIR}/bin/btop
 ${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
-${SUDO} cp ddgr/ddgr ${OUT_DIR}/${DESTDIR}/bin/ddgr
-${SUDO} cp jp2a/src/jp2a ${OUT_DIR}/${DESTDIR}/bin/jp2a
-${SUDO} cp aewan/aewan ${OUT_DIR}/${DESTDIR}/bin/aewan
-${SUDO} cp aewan/aecat ${OUT_DIR}/${DESTDIR}/bin/aecat
-${SUDO} cp aewan/aemakeflic ${OUT_DIR}/${DESTDIR}/bin/aemakeflic
 
 ${SUDO} cp -a endoh1 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1
 ${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1/endoh1
@@ -215,22 +174,6 @@ ${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/bin/nethack
 ${SUDO} chmod 04755 ${OUT_DIR}/${DESTDIR}/games/bin/nethack
 ${SUDO} ln -r -s ${OUT_DIR}/${DESTDIR}/games/bin/nethack ${OUT_DIR}/${DESTDIR}/games/nethack
 cd ../..
-
-${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders
-${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders
-${SUDO} chmod 0755 ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders
-${SUDO} touch ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/highscore
-${SUDO} cp ninvaders/LICENSE ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders
-${SUDO} cp ninvaders/README.md ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders
-${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/highscore
-${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/highscore
-${SUDO} chmod 0644 ${OUT_DIR}/${DESTDIR}/games/lib/ninvaders/*
-
-${SUDO} cp ninvaders/cmake_build/ninvaders ${OUT_DIR}/${DESTDIR}/games/bin
-${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/bin/ninvaders
-${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/bin/ninvaders
-${SUDO} chmod 04755 ${OUT_DIR}/${DESTDIR}/games/bin/ninvaders
-${SUDO} ln -r -s ${OUT_DIR}/${DESTDIR}/games/bin/ninvaders ${OUT_DIR}/${DESTDIR}/games/ninvaders
 
 # Tetris
 ${SUDO} cp tetris/tetris ${OUT_DIR}/${DESTDIR}/games/bin
@@ -277,7 +220,6 @@ ${SUDO} cp CHANGELOG.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} pandoc -f gfm README.md | ${SUDO} tee ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README.html > /dev/null
 ${SUDO} cp VERSION ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
-${SUDO} cp ddgr/README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-ddgr.md
 ${SUDO} cp btop/README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-btop.md
 ${SUDO} cp btop/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-btop
 ${SUDO} cp btop/README.md ${OUT_DIR}/${DESTDIR}/share/btop/README.md
@@ -294,9 +236,6 @@ ${SUDO} cp btop/Img/icon.png "${OUT_DIR}/${DESTDIR}/share/icons/hicolor/48x48/ap
 ${SUDO} cp btop/Img/icon.svg "${OUT_DIR}/${DESTDIR}/share/icons/hicolor/scalable/apps/btop.svg"
 ${SUDO} cp cbftp/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-cbftp
 ${SUDO} cp cbftp/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-cbftp
-${SUDO} cp jp2a/COPYING ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/COPYING-jp2a
-${SUDO} cp jp2a/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-jp2a
-${SUDO} cp jp2a/LICENSES ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSES-jp2a
 ${SUDO} cp games/tetris/licence.txt ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/license-tetris
 ${SUDO} cp games/tetris/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-tetris
 ${SUDO} gzip -9 ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/CHANGELOG.md
@@ -310,13 +249,9 @@ ${SUDO} cp -a tools "${OUT_DIR}/${DESTDIR}/share/${PKG}/tools"
 ${SUDO} gzip ${OUT_DIR}/${DESTDIR}/share/${PKG}/art/*/*.asc
 
 ${SUDO} cp -a man/man1 ${OUT_DIR}/${DESTDIR}/share/man/man1
-${SUDO} cp ddgr/ddgr.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
-${SUDO} cp jp2a/man/jp2a.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
 [ -d ${OUT_DIR}/${DESTDIR}/share/man/man5 ] || {
   ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/man/man5
 }
-${SUDO} cp aewan/man/man1/*.1 ${OUT_DIR}/${DESTDIR}/share/man/man1
-${SUDO} cp aewan/man/man5/*.5 ${OUT_DIR}/${DESTDIR}/share/man/man5
 
 [ -d ${OUT_DIR}/${DESTDIR}/share/man/man6 ] || {
   ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/man/man6
