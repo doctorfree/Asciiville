@@ -86,13 +86,20 @@ install_pipx() {
 }
 
 install_external_package() {
+  have_curl=`type -p curl`
   [ "${have_curl}" ] || {
     install_package curl
     have_curl=`type -p curl`
   }
+  have_jq=`type -p jq`
   [ "${have_jq}" ] || {
     install_package jq
     have_jq=`type -p jq`
+  }
+  have_wget=`type -p wget`
+  [ "${have_wget}" ] || {
+    install_package wget
+    have_wget=`type -p wget`
   }
   DL_URL=
   [ "${have_curl}" ] && [ "${have_jq}" ] && {
@@ -138,10 +145,6 @@ install_external_package() {
     printf "\n\tInstalling ${PROJECT} ..."
     if [ "${debian}" ]
     then
-      [ "${have_wget}" ] || {
-        install_package wget
-        have_wget=`type -p wget`
-      }
       [ "${have_wget}" ] && {
         TEMP_DEB="$(mktemp --suffix=.deb)"
         wget --quiet -O "${TEMP_DEB}" "${DL_URL}" > /dev/null 2>&1
