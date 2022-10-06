@@ -126,8 +126,6 @@ package() {
   chmod 755 ${pkgdir}/${destdir}/share/${pkgname}/endoh1/endoh1
   chmod 755 ${pkgdir}/${destdir}/share/${pkgname}/endoh1/endoh1_color
 
-  cp -a share/doc ${pkgdir}/${destdir}/share/doc
-
   # Revised NetHack install using UnNetHack mods
   cd games/nethack
   make DESTDIR=${pkgdir} install

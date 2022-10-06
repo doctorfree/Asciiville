@@ -161,8 +161,6 @@ ${SUDO} cp -a endoh1 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1
 ${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1/endoh1
 ${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1/endoh1_color
 
-${SUDO} cp -a share/doc ${OUT_DIR}/${DESTDIR}/share/doc
-
 # Revised NetHack install using UnNetHack mods
 cd games/nethack
 ${SUDO} make DESTDIR=${OUT_DIR} install
