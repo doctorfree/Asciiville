@@ -1129,10 +1129,10 @@ show_help_menu() {
         "Terminal"*"Controls",*|*,"Terminal"*"Controls")
           if [ "${have_w3m}" ]
           then
-            w3m /usr/share/doc/tuir/CONTROLS.md
+            w3m ${HOME}/.config/tuir/CONTROLS.md
           else
             [ "${have_lynx}" ] && {
-              lynx /usr/share/doc/tuir/CONTROLS.md
+              lynx ${HOME}/.config/tuir/CONTROLS.md
             }
           fi
           break

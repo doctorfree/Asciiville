@@ -746,10 +746,19 @@ fi
 
 # Setup default tuir configuration for this user unless one exists
 [ -d ${CONFDIR}/tuir ] && {
-  [ -d ${USERCONF}/tuir ] || {
-    [ "${quiet}" ] || {
-      printf "\n\tInstalling tuir configuration in ${USERCONF}/tuir ..."
+  [ "${quiet}" ] || {
+    printf "\n\tInstalling tuir configuration in ${USERCONF}/tuir ..."
+  }
+  if [ -d ${USERCONF}/tuir ]
+  then
+    cp -an ${CONFDIR}/tuir ${USERCONF}
+    [ "${console}" ] && {
+      [ -f ${CONFDIR}/console/tuir/mailcap ] && {
+        cp ${CONFDIR}/console/tuir/mailcap ${USERCONF}/tuir/mailcap
+      }
     }
+    chmod 600 ${USERCONF}/tuir/tuir.cfg
+  else
     cp -a ${CONFDIR}/tuir ${USERCONF}/tuir
     [ "${console}" ] && {
       [ -f ${CONFDIR}/console/tuir/mailcap ] && {
@@ -757,9 +766,9 @@ fi
       }
     }
     chmod 600 ${USERCONF}/tuir/tuir.cfg
-    [ "${quiet}" ] || {
-      printf " done"
-    }
+  fi
+  [ "${quiet}" ] || {
+    printf " done"
   }
 }
 
