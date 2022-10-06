@@ -893,7 +893,7 @@ have_pip=`type -p pip`
   }
 }
 
-for pkg in asciimatics ddgr rainbowstream socli tuir \
+for pkg in asciimatics ddgr rainbowstream socli \
            future xtermcolor ffmpeg-python pyaudio
 do
   if pip list | grep ${pkg} > /dev/null
@@ -909,6 +909,23 @@ do
     }
   fi
 done
+
+have_tuir=`type -p tuir`
+[ "${have_tuir}" ] || {
+  [ -d tuir ] && mv tuir tuir$$
+  git clone https://gitlab.com/ajak/tuir.git > /dev/null 2>&1
+  [ -d tuir ] && {
+    cd tuir
+    cat requirements.txt | sed -e "s/requests=.*/requests>=2.20.0/" > /tmp/tuireq$$
+    cp /tmp/tuireq$$ requirements.txt
+    rm -f /tmp/tuireq$$
+    TUIR_DIR=`pwd`
+    ${PYTHON} -m pip install -e "${TUIR_DIR}" > /dev/null 2>&1
+    cd ..
+    rm -rf tuir
+  }
+  [ -d tuir$$ ] && mv tuir$$ tuir
+}
 
 pkg=video-to-ascii
 if pip list | grep ${pkg} > /dev/null
