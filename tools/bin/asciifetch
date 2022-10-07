@@ -67,6 +67,7 @@ cleanup() {
 animate() {
   tput civis -- invisible
   interval="0.1"
+  lastinterval="0.2"
   liftlines=$((terminal_height / 4))
   while true
   do
@@ -101,7 +102,7 @@ animate() {
     tput cup 0 0
     while [ ${line} -lt ${liftlines} ]
     do
-      sleep ${interval}
+      sleep ${lastinterval}
       tput ri
       line=$((line+1))
     done
