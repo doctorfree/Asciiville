@@ -18,7 +18,7 @@ artfiles="Friends/tux,Friends/yinyang"
 custom_song=
 art_font_size=4
 bro_font_size=${def_font_size}
-txt_font_size=20
+txt_font_size=18
 
 # Default palette used by jp2a
 # defchars="   ...',;:clodxkO0KXNWM"
@@ -1276,7 +1276,7 @@ then
           --override font_size=${art_font_size} \
           --override draw_minimal_borders=yes \
           --override tab_bar_min_tabs=2 \
-          show_ascii_art -e kitty -K ${sock_name} -q "/tmp/${image_name}$$.asc"
+          show_ascii_art -C -e kitty -K ${sock_name} -q "/tmp/${image_name}$$.asc"
   else
     show_ascii "/tmp/${image_name}$$.asc" "${tabs}"
   fi
@@ -1293,7 +1293,7 @@ else
           --override font_size=${art_font_size} \
           --override draw_minimal_borders=yes \
           --override tab_bar_min_tabs=2 \
-          show_ascii_art -e kitty -K ${sock_name} -q ${args}
+          show_ascii_art -C -e kitty -K ${sock_name} -q ${args}
   else
     stty -echoctl # hide ^C
     trap 'cleanup' SIGINT SIGTERM
