@@ -627,7 +627,6 @@ custom_gallery() {
   uses_ansi_escape=1
   scale_art_font=1
   scale_txt_font=1
-  show_filename=
   [ -f ${gallery_dir}/.config ] && {
     . ${gallery_dir}/.config
     [ "${set_font_size}" ] || fontargs="-E"
@@ -3371,7 +3370,6 @@ set_font_size=1
 uses_ansi_escape=1
 scale_art_font=1
 scale_txt_font=1
-show_filename=
 
 cycle=
 noaudio=

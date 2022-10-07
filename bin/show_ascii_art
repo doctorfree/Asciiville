@@ -414,6 +414,7 @@ show_ascii() {
   [ "${viewshow}" ] && [ "${wait_for_input}" ] && return 4
 }
 
+args="$*"
 audio=
 border=
 center=
@@ -424,6 +425,7 @@ colors=
 cycle=
 execute=
 fifo_name=
+sock_name=
 termarg=
 grayscale=
 list=
@@ -622,7 +624,7 @@ while getopts "a:A:bBcCD:d:e:Egh:i:I:K:l:LF:f:n:N:oO:Pp:qrR:s:S:t:T:vw:WzZu" fla
 done
 
 # If using Kitty the socket name was passed in with -K socket
-[ "${termarg}" == "-k" ] && {
+[ "${termarg}" == "-k" ] && [ "${fifo_name}" ] && {
   sock_name="${fifo_name}"
   termarg="-k -K ${sock_name}"
   fifo_name=
@@ -676,7 +678,7 @@ done
           --start-as normal \
           --override font_size=${art_font_size} \
           --override initial_window_width=320c \
-          --override initial_window_height=100c \
+          --override initial_window_height=96c \
           --override tab_bar_min_tabs=2 \
           ${mkartcomm} "${make_inp}" -o "${make_out}"
   else
@@ -684,14 +686,14 @@ done
     then
       echo "Invoking gnome-terminal to convert ${make_inp} to ${make_out}"
       [ "${set_font_size}" ] && termprofset -S -g -s ${art_font_size}
-      gnome-terminal --window --geometry=320x100 --profile=Asciiville \
+      gnome-terminal --window --geometry=320x96 --profile=Asciiville \
           -- ${mkartcomm} "${make_inp}" -o "${make_out}"
     else
       if [ "${have_tilix}" ]
       then
         echo "Invoking Tilix to convert ${make_inp} to ${make_out}"
         [ "${set_font_size}" ] && termprofset -S -t -s ${art_font_size}
-        tilix --geometry=320x100 \
+        tilix --geometry=320x96 \
               --profile=Asciiville \
               --window-style=borderless \
               --command="${mkartcomm} '${make_inp}' -o '${make_out}'" \
@@ -704,7 +706,7 @@ done
               --hide-menubar \
               --hide-toolbar \
               --hide-scrollbar \
-              --geometry=320x100 \
+              --geometry=320x96 \
               --command="${mkartcomm} '${make_inp}' -o '${make_out}'"
         else
           ${mkartcomm} "${make_inp}" -o "${make_out}"
@@ -1185,6 +1187,36 @@ clear
 }
 
 clear
+
+# If using Kitty, open a new window with a socket to set font size with
+termname=unknown
+if [ "${sock_name}" ]
+then
+  sleep 1
+else
+  num_exp='^[0-9]+$'
+  myppid=`ps -e | grep ${PPID} | awk ' { print $1 } '`
+  myppid=`echo ${myppid} | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`
+  if [[ ${myppid} =~ ${num_exp} ]]
+  then
+    parent=`ps -o ppid= -p ${myppid}`
+    parent=`echo ${parent} | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`
+    if [[ ${parent} =~ ${num_exp} ]]
+    then
+      termname=`ps -e | grep ${parent} | awk ' { print $4 } '`
+    fi
+  fi
+
+  [ "${termname}" == "bash" ] && {
+    gparent=`ps -o ppid= -p ${parent}`
+    gparent=`echo ${gparent} | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`
+    if [[ ${gparent} =~ ${num_exp} ]]
+    then
+      termname=`ps -e | grep ${gparent} | awk ' { print $4 } '`
+    fi
+  }
+fi
+
 [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
 viewshow=1
 if [ "${input_image}" ]
@@ -1214,46 +1246,90 @@ then
     [ -f /tmp/${image_name}$$.jpg ] || {
       cp "${input_image}" /tmp/${image_name}$$.jpg
     }
-    # FYI, to get an image width: identify -format "%w" yinyang.jpg
-    jp2a ${border} ${colors} ${colordepth} ${grayscale} ${size} ${charopt} \
-         --output=/tmp/"${image_name}"$$.asc "/tmp/${image_name}$$.jpg"
+
+    if [ "${termname}" == "kitty" ]
+    then
+      kitty --title="Convert to Ascii" \
+            --start-as normal \
+            --override initial_window_width=320c \
+            --override initial_window_height=96c \
+            --override background=black \
+            --override font_size=${art_font_size} \
+            --override draw_minimal_borders=yes \
+            --override tab_bar_min_tabs=2 \
+            jp2a ${border} ${colors} ${colordepth} ${grayscale} ${size} ${charopt} \
+                 --output=/tmp/"${image_name}"$$.asc "/tmp/${image_name}$$.jpg"
+    else
+      jp2a ${border} ${colors} ${colordepth} ${grayscale} ${size} ${charopt} \
+           --output=/tmp/"${image_name}"$$.asc "/tmp/${image_name}$$.jpg"
+    fi
   fi
-  show_ascii "/tmp/${image_name}$$.asc" "${tabs}"
+  if [ "${termname}" == "kitty" ]
+  then
+    sock_name=/tmp/kitty$$
+    kitty --title="Show Ascii Art" \
+          --listen-on unix:${sock_name} \
+          --start-as normal \
+          --override initial_window_width=320c \
+          --override initial_window_height=96c \
+          --override background=black \
+          --override font_size=${art_font_size} \
+          --override draw_minimal_borders=yes \
+          --override tab_bar_min_tabs=2 \
+          show_ascii_art -e kitty -K ${sock_name} -q "/tmp/${image_name}$$.asc"
+  else
+    show_ascii "/tmp/${image_name}$$.asc" "${tabs}"
+  fi
 else
-  stty -echoctl # hide ^C
-  trap 'cleanup' SIGINT SIGTERM
-  tput civis -- invisible
-  IFS=',' read -r -a artarray <<< "${artfiles}"
-  for art in "${artarray[@]}"
-  do
-    clear
-    foundit=
-    for chkart in "${ARTDIR}/${art}.asc" "${ARTDIR}/${art}.asc.gz" \
-                  "${ARTDIR}/${art}.gz" "${ARTDIR}/${art}" "${art}.asc" \
-                  "${art}.asc.gz" "${art}.gz" "${art}" "${ARTDIR}/*/${art}*"
+  if [ "${termname}" == "kitty" ]
+  then
+    sock_name=/tmp/kitty$$
+    kitty --title="Show Ascii Art" \
+          --listen-on unix:${sock_name} \
+          --start-as normal \
+          --override initial_window_width=320c \
+          --override initial_window_height=96c \
+          --override background=black \
+          --override font_size=${art_font_size} \
+          --override draw_minimal_borders=yes \
+          --override tab_bar_min_tabs=2 \
+          show_ascii_art -e kitty -K ${sock_name} -q ${args}
+  else
+    stty -echoctl # hide ^C
+    trap 'cleanup' SIGINT SIGTERM
+    tput civis -- invisible
+    IFS=',' read -r -a artarray <<< "${artfiles}"
+    for art in "${artarray[@]}"
     do
-      [ "${chkart}" == "${ARTDIR}/*/${art}*" ] && continue 
-      [ -f "${chkart}" ] && {
-        foundit=1
-        artdir=`dirname "${chkart}"`
-        custom_gallery "${artdir}" -a
-        show_ascii "${chkart}" "${tabs}"
-        break
+      clear
+      foundit=
+      for chkart in "${ARTDIR}/${art}.asc" "${ARTDIR}/${art}.asc.gz" \
+                    "${ARTDIR}/${art}.gz" "${ARTDIR}/${art}" "${art}.asc" \
+                    "${art}.asc.gz" "${art}.gz" "${art}" "${ARTDIR}/*/${art}*"
+      do
+        [ "${chkart}" == "${ARTDIR}/*/${art}*" ] && continue 
+        [ -f "${chkart}" ] && {
+          foundit=1
+          artdir=`dirname "${chkart}"`
+          custom_gallery "${artdir}" -a
+          show_ascii "${chkart}" "${tabs}"
+          break
+        }
+      done
+      [ "${foundit}" ] || {
+        echo "Cannot locate ${art}"
+        continue
       }
+      [ $? -gt 1 ] || {
+        [ "${wait_for_input}" ] || {
+          [ "${show_filename}" ] && figlet -c -k -t `basename ${art}`
+          sleep ${delay}
+        }
+      }
+      [ ${scale_art_font} -eq 1 ] || art_font_size=${saved_art_size}
+      [ ${scale_txt_font} -eq 1 ] || txt_font_size=${saved_txt_size}
     done
-    [ "${foundit}" ] || {
-      echo "Cannot locate ${art}"
-      continue
-    }
-    [ $? -gt 1 ] || {
-      [ "${wait_for_input}" ] || {
-        [ "${show_filename}" ] && figlet -c -k -t `basename ${art}`
-        sleep ${delay}
-      }
-    }
-    [ ${scale_art_font} -eq 1 ] || art_font_size=${saved_art_size}
-    [ ${scale_txt_font} -eq 1 ] || txt_font_size=${saved_txt_size}
-  done
+  fi
 fi
 
 [ -f "/tmp/${image_name}$$.asc" ] && {

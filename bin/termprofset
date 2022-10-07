@@ -172,8 +172,10 @@ fi
   if [ "${USE_KITTY}" ]
   then
     # Restore settings
-    kitty @ --to unix:${KITTY_SOCKET} set-font-size 0
-    kitty @ --to unix:${KITTY_SOCKET} set-colors --reset
+    [ -S ${KITTY_SOCKET} ] && {
+      kitty @ --to unix:${KITTY_SOCKET} set-font-size 0
+      kitty @ --to unix:${KITTY_SOCKET} set-colors --reset
+    }
   else
     if [ "${USE_XFCE4}" ]
     then
@@ -294,14 +296,16 @@ fi
 
 if [ "${USE_KITTY}" ]
 then
-  # Set the font name and size
-  kitty @ --to unix:${KITTY_SOCKET} set-font-size ${FONT_SIZE}
-  # Set background to black, no transparency
-  [ "${SET_BLACK}" ] && {
-    # 'dynamic_background_opacity' option in kitty.conf must be
-    # turned on to be able to set background opacity
-    kitty @ --to unix:${KITTY_SOCKET} set-background-opacity 1.0
-    kitty @ --to unix:${KITTY_SOCKET} set-colors background=black
+  [ -S ${KITTY_SOCKET} ] && {
+    # Set the font name and size
+    kitty @ --to unix:${KITTY_SOCKET} set-font-size ${FONT_SIZE}
+    # Set background to black, no transparency
+    [ "${SET_BLACK}" ] && {
+      # 'dynamic_background_opacity' option in kitty.conf must be
+      # turned on to be able to set background opacity
+      kitty @ --to unix:${KITTY_SOCKET} set-background-opacity 1.0
+      kitty @ --to unix:${KITTY_SOCKET} set-colors background=black
+    }
   }
 else
   #

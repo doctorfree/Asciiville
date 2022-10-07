@@ -359,7 +359,7 @@ mkascii() {
           --start-as normal \
           --override font_size=${art_font_size} \
           --override initial_window_width=320c \
-          --override initial_window_height=80c \
+          --override initial_window_height=96c \
           --override tab_bar_min_tabs=2 \
           ${mkvidcomm} 2> /dev/null
   else
@@ -367,14 +367,14 @@ mkascii() {
     then
       echo "Invoking gnome-terminal to convert ${i} to ${v}.sh"
       [ "${set_font_size}" ] && termprofset -S -g -s ${art_font_size}
-      gnome-terminal --window --geometry=320x100 --profile=Asciiville \
+      gnome-terminal --window --geometry=320x96 --profile=Asciiville \
           -- ${mkvidcomm} 2> /dev/null
     else
       if [ "${have_tilix}" ]
       then
         echo "Invoking Tilix to convert ${i} to ${v}.sh"
         [ "${set_font_size}" ] && termprofset -S -t -s ${art_font_size}
-        tilix --geometry=320x100 \
+        tilix --geometry=320x96 \
               --profile=Asciiville \
               --window-style=borderless \
               --command="${mkvidcomm}" 2> /dev/null
@@ -386,7 +386,7 @@ mkascii() {
               --hide-menubar \
               --hide-toolbar \
               --hide-scrollbar \
-              --geometry=320x100 \
+              --geometry=320x96 \
               --command="${mkvidcomm} 2> /dev/null"
         else
           ${mkvidcomm} 2> /dev/null
