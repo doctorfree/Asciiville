@@ -203,6 +203,8 @@ package() {
   chmod 644 ${pkgdir}/${destdir}/share/figlet-fonts/*
   chmod 755 ${pkgdir}/${destdir}/bin/* \
             ${pkgdir}/${destdir}/bin \
+            ${pkgdir}/${destdir}/share/asciiville/newsboat/*.sh \
+            ${pkgdir}/${destdir}/share/asciiville/newsboat/contrib/*.sh \
             ${pkgdir}/${destdir}/share/menu \
             ${pkgdir}/${destdir}/share/figlet-fonts \
             ${pkgdir}/${destdir}/share/man \

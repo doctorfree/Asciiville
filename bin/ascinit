@@ -643,11 +643,23 @@ fi
 
 # Setup default newsboat configuration for this user unless one exists
 [ -d ${CONFDIR}/newsboat ] && {
-  [ -d ${HOME}/.newsboat ] || {
-    cp -a ${CONFDIR}/newsboat ${HOME}/.newsboat
-    chmod 600 ${HOME}/.newsboat/urls
-    chmod 755 ${HOME}/.newsboat/bookmark.sh
-  }
+  if [ -d ${HOME}/.config/newsboat ]
+  then
+    cp -an ${CONFDIR}/newsboat ${HOME}/.config
+  else
+    [ -d ${HOME}/.newsboat ] || {
+      cp -a ${CONFDIR}/newsboat ${HOME}/.config/newsboat
+    }
+  fi
+}
+[ -f ${HOME}/.config/newsboat/urls ] && {
+  chmod 600 ${HOME}/.config/newsboat/urls
+}
+[ -f ${HOME}/.config/newsboat/bookmark.sh ] && {
+  chmod 755 ${HOME}/.config/newsboat/bookmark.sh
+}
+[ -f ${HOME}/.config/newsboat/kitty-img-pager.sh ] && {
+  chmod 755 ${HOME}/.config/newsboat/kitty-img-pager.sh
 }
 
 # Setup default khard configuration for this user unless one exists

@@ -132,7 +132,7 @@ bookmark-autopilot yes
 # Default value: ""
 #
 # bookmark-cmd "~/bin/delicious-bookmark.sh"
-bookmark-cmd ~/.newsboat/bookmark.sh
+bookmark-cmd ~/.config/newsboat/bookmark.sh
 
 ####  bookmark-interactive
 #
@@ -167,7 +167,7 @@ browser "w3m %u"
 #
 # Syntax: <path>
 #
-# Default value: "~/.newsboat/cache.db"
+# Default value: "~/.config/newsboat/cache.db"
 #
 # cache-file "/tmp/testcache.db"
 
@@ -216,7 +216,7 @@ confirm-exit no
 #
 # Default value: ""
 #
-# cookie-cache "~/.newsboat/cookies.txt"
+# cookie-cache "~/.config/newsboat/cookies.txt"
 
 ####  datetime-format
 #
@@ -332,7 +332,7 @@ download-timeout 10
 #
 # Default value: ""
 #
-# error-log "~/.newsboat/error.log"
+# error-log "~/.config/newsboat/error.log"
 
 ####  external-url-viewer
 #
@@ -427,7 +427,7 @@ feed-sort-order unreadarticlecount-asc
 #
 # Default value: ""
 #
-# feedhq-passwordfile "~/.newsboat/feedhq-pw.txt"
+# feedhq-passwordfile "~/.config/newsboat/feedhq-pw.txt"
 
 ####  feedhq-passwordeval
 #
@@ -439,7 +439,7 @@ feed-sort-order unreadarticlecount-asc
 #
 # Default value: ""
 #
-# feedhq-passwordeval "gpg --decrypt ~/.newsboat/feedhq-password.gpg"
+# feedhq-passwordeval "gpg --decrypt ~/.config/newsboat/feedhq-password.gpg"
 
 ####  feedhq-show-special-feeds
 #
@@ -628,22 +628,22 @@ goto-next-feed no
 #
 # Default value: n/a
 #
-# include "~/.newsboat/colors"
-# include "~/.newsboat/colorschemes/commander
-include "~/.newsboat/colorschemes/cyanism
-# include "~/.newsboat/colorschemes/greenscreen
-# include "~/.newsboat/colorschemes/gruvbox
-# include "~/.newsboat/colorschemes/inkpot
-# include "~/.newsboat/colorschemes/kinda-maia
-# include "~/.newsboat/colorschemes/light
-# include "~/.newsboat/colorschemes/nord
-# include "~/.newsboat/colorschemes/plain
-# include "~/.newsboat/colorschemes/psychedelic
-# include "~/.newsboat/colorschemes/schleichfahrt
-# include "~/.newsboat/colorschemes/simple
-# include "~/.newsboat/colorschemes/solarized-dark
-# include "~/.newsboat/colorschemes/solarized-light
-# include "~/.newsboat/colorschemes/universal-color
+# include "~/.config/newsboat/colors"
+# include "~/.config/newsboat/colorschemes/commander
+include "~/.config/newsboat/colorschemes/cyanism
+# include "~/.config/newsboat/colorschemes/greenscreen
+# include "~/.config/newsboat/colorschemes/gruvbox
+# include "~/.config/newsboat/colorschemes/inkpot
+# include "~/.config/newsboat/colorschemes/kinda-maia
+# include "~/.config/newsboat/colorschemes/light
+# include "~/.config/newsboat/colorschemes/nord
+# include "~/.config/newsboat/colorschemes/plain
+# include "~/.config/newsboat/colorschemes/psychedelic
+# include "~/.config/newsboat/colorschemes/schleichfahrt
+# include "~/.config/newsboat/colorschemes/simple
+# include "~/.config/newsboat/colorschemes/solarized-dark
+# include "~/.config/newsboat/colorschemes/solarized-light
+# include "~/.config/newsboat/colorschemes/universal-color
 
 ####  itemview-title-format
 #
@@ -721,7 +721,7 @@ include "~/.newsboat/colorschemes/cyanism
 #
 # Default value: ""
 #
-# inoreader-passwordfile "~/.newsboat/inoreader-pw.txt"
+# inoreader-passwordfile "~/.config/newsboat/inoreader-pw.txt"
 
 ####  inoreader-passwordeval
 #
@@ -733,7 +733,7 @@ include "~/.newsboat/colorschemes/cyanism
 #
 # Default value: ""
 #
-# inoreader-passwordeval "gpg --decrypt ~/.newsboat/inoreader-password.gpg"
+# inoreader-passwordeval "gpg --decrypt ~/.config/newsboat/inoreader-password.gpg"
 
 ####  inoreader-show-special-feeds
 #
@@ -771,6 +771,7 @@ include "~/.newsboat/colorschemes/cyanism
 # Default value: n/a
 #
 # macro k open ; reload ; quit
+macro i set pager "~/.config/newsboat/kitty-img-pager.sh"; open; set pager internal
 
 ####  mark-as-read-on-hover
 #
@@ -858,7 +859,7 @@ include "~/.newsboat/colorschemes/cyanism
 #
 # Default value: ""
 #
-# newsblur-passwordfile "~/.newsboat/newsblur-pw.txt"
+# newsblur-passwordfile "~/.config/newsboat/newsblur-pw.txt"
 
 ####  newsblur-passwordeval
 #
@@ -870,7 +871,7 @@ include "~/.newsboat/colorschemes/cyanism
 #
 # Default value: ""
 #
-# newsblur-passwordeval "gpg --decrypt ~/.newsboat/newsblur-password.gpg"
+# newsblur-passwordeval "gpg --decrypt ~/.config/newsboat/newsblur-password.gpg"
 
 ####  newsblur-url
 #
@@ -993,7 +994,7 @@ include "~/.newsboat/colorschemes/cyanism
 #
 # Default value: ""
 #
-# ocnews-passwordfile "~/.newsboat/ocnews-pw.txt"
+# ocnews-passwordfile "~/.config/newsboat/ocnews-pw.txt"
 
 ####  ocnews-passwordeval
 #
@@ -1005,7 +1006,7 @@ include "~/.newsboat/colorschemes/cyanism
 #
 # Default value: ""
 #
-# ocnews-passwordeval "gpg --decrypt ~/.newsboat/ocnews-password.gpg"
+# ocnews-passwordeval "gpg --decrypt ~/.config/newsboat/ocnews-password.gpg"
 
 ####  ocnews-url
 #
@@ -1082,7 +1083,7 @@ include "~/.newsboat/colorschemes/cyanism
 #
 # Default value: ""
 #
-# oldreader-passwordfile "~/.newsboat/oldreader-pw.txt"
+# oldreader-passwordfile "~/.config/newsboat/oldreader-pw.txt"
 
 ####  oldreader-passwordeval
 #
@@ -1094,7 +1095,7 @@ include "~/.newsboat/colorschemes/cyanism
 #
 # Default value: ""
 #
-# oldreader-passwordeval "gpg --decrypt ~/.newsboat/oldreader-password.gpg"
+# oldreader-passwordeval "gpg --decrypt ~/.config/newsboat/oldreader-password.gpg"
 
 ####  oldreader-show-special-feeds
 #
@@ -1515,7 +1516,7 @@ text-width 80
 #
 # Default value: ""
 #
-# ttrss-passwordfile "~/.newsboat/ttrss-pw.txt"
+# ttrss-passwordfile "~/.config/newsboat/ttrss-pw.txt"
 
 ####  ttrss-passwordeval
 #
@@ -1527,7 +1528,7 @@ text-width 80
 #
 # Default value: ""
 #
-# ttrss-passwordeval "gpg --decrypt ~/.newsboat/ttrss-password.gpg"
+# ttrss-passwordeval "gpg --decrypt ~/.config/newsboat/ttrss-password.gpg"
 
 ####  ttrss-url
 #
@@ -1568,8 +1569,8 @@ unbind-key C feedlist
 ####  urls-source
 #
 # This configuration command sets the source where URLs shall be retrieved
-# from. By default, this is ~/.newsboat/urls. Alternatively, you can set it to
-# `opml`, which enables newsboat's OPML online subscription mode, to `ttrss`
+# from. By default, this is ~/.config/newsboat/urls. Alternatively, you can set it
+# to `opml`, which enables newsboat's OPML online subscription mode, to `ttrss`
 # which enables newsboat's Tiny Tiny RSS support, to `oldreader`, which enables
 # newsboat's The Old Reader support, to `newsblur`, which enables NewsBlur
 # support, or `feedhq` for FeedHQ support, or `ocnews` for ownCloud News
