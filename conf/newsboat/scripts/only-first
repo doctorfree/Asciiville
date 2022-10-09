@@ -1,0 +1,50 @@
+#!/usr/bin/env ruby -W0
+# Filter RSS feeds for only the first item
+# Designed to be called as newsboat filter script, for example:
+#    "filter:~/.config/newsboat/scripts/only-last:https://www.heise.de/rss/heise.rdf"
+#
+#
+# Copyright (c) 2021, Timm Heuss
+#
+# Based on
+# rss-tag-filter
+# https://github.com/kouya/snownews/blob/master/contrib/untested/rss-tag-filter
+# Copyright (c) 2005, Joe Mason <joe@notcharles.ca>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to permit
+# persons to whom the Software is furnished to do so, subject to the
+# following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+# OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+# NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+# DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+# OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+# USE OR OTHER DEALINGS IN THE SOFTWARE.
+#
+
+require 'rss/2.0'
+
+# parse the RSS
+rss_source = STDIN.read
+begin
+  rss = RSS::Parser.parse(rss_source)
+rescue RSS::InvalidRSSError
+  rss = RSS::Parser.parse(rss_source, false)    # no validation
+end
+
+item = rss.channel.items[0]
+rss.channel.items.clear()
+rss.channel.items.push(item)
+
+# write the modified rss
+STDOUT.puts(rss)
+

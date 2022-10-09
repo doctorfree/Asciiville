@@ -1,0 +1,44 @@
+#!/bin/bash
+set -o errexit
+set -o pipefail
+set -o nounset
+
+
+
+
+
+
+url="$1"
+title="$2"
+title=$(echo "$title" | sed -e 's/ (matches.*$//') 
+
+rawcontent=$(wget -q -O - "$url")
+
+# First try, with readability
+description=$(echo "$rawcontent" | readability "$url" | html2md | awk '{print "> "$0}')
+
+# Not enough content? Second try without readability
+if [[ $(echo "$description" | wc -l) -le 3 ]]; then
+	description=$(echo "$rawcontent" | html2md | awk '{print "> "$0}')
+fi
+
+
+file=$(date '+%Y-%m-%d')
+
+cd "$TH_PROJECTS_FOLDER/vimwiki" || exit 1
+
+
+echo "
+
+## $title 
+
+> $description
+
+<$url>
+(Last access $(date '+%Y-%m-%d'))" >> ./"$file.md"
+
+
+git add "$file.md"
+git commit -m "$file.md (auto commit)" -n > /dev/null
+
+exit 0

@@ -267,7 +267,7 @@ ${SUDO} chmod 644 ${OUT_DIR}/${DESTDIR}/share/figlet-fonts/*
 ${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/bin/* \
                   ${OUT_DIR}/${DESTDIR}/bin \
                   ${OUT_DIR}/${DESTDIR}/share/asciiville/newsboat/*.sh \
-                  ${OUT_DIR}/${DESTDIR}/share/asciiville/newsboat/contrib/*.sh \
+                  ${OUT_DIR}/${DESTDIR}/share/asciiville/newsboat/scripts/*.sh \
                   ${OUT_DIR}/${DESTDIR}/share/menu \
                   ${OUT_DIR}/${DESTDIR}/share/figlet-fonts \
                   ${OUT_DIR}/${DESTDIR}/share/man \

@@ -1,0 +1,19 @@
+
+#!/bin/sh
+
+url="$1"
+title="$2"
+title=$(echo "$title" | sed -e 's/ (matches.*$//') 
+# tags="$3"
+# feed="$4"
+
+mpvsocket="$HOME/mpvsocket"
+
+
+if [[ -e "$mpvsocket" ]]; then
+	echo loadfile \"$url\" append-play >> "$mpvsocket"
+	exit 0
+fi
+
+mpv --input-ipc-server=$mpvsocket "$url" &> /dev/null &
+exit 0

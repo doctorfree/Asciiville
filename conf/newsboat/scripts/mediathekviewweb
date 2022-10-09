@@ -1,0 +1,17 @@
+#!/bin/bash
+set -o errexit
+set -o pipefail
+set -o nounset
+
+channel="$1"
+title="$2"
+url="https://mediathekviewweb.de/feed?future=false&query="
+
+# https://github.com/mediathekview/mediathekviewweb#erweiterte-suche
+query=""
+[[ ! -z $channel ]] && query="$query !$channel"
+[[ ! -z $title ]] && query="$query #$title"
+query=$(echo "$query" | jq -sRr @uri)
+
+
+curl --fail "$url$query"
