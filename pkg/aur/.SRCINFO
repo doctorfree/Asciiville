@@ -1,6 +1,6 @@
 pkgbase = asciiville
 	pkgdesc = Create and display ASCII Art, animations. Utilities to perform common operations in a character-based environment. Asciiville includes nearly 1,000 works of ASCII Art
-	pkgver = v1.4.1r2
+	pkgver = v2.0.0r1
 	pkgrel = 1
 	url = https://github.com/doctorfree/Asciiville
 	install = asciiville.install
