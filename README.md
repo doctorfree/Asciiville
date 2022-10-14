@@ -316,9 +316,16 @@ This should display a waterfall rendered with characters as ascii art.
 
 ## Requirements
 
-Asciiville can be installed on Arch Linux, Debian based Linux systems, or
-RPM based Linux systems. All of the following dependencies/requirements are automatically
-installed if needed when using the Arch, Debian, or RPM format package install.
+Asciiville can be installed on Arch Linux, Debian based Linux systems,
+and RPM based Linux systems.
+
+Installation and initialization require admistrative privilege. The `ascinit`
+command, executed after installing Asciiville, installs several packages
+and therefore requires access to the Internet along with administrative
+privilege (e.g. `sudo` privilege).
+
+All of the following dependencies/requirements are automatically installed
+if needed when using the Arch, Debian, or RPM format package install.
 
 * asciinema
 * cmatrix

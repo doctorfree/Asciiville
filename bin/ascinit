@@ -170,7 +170,7 @@ install_kitty() {
     }
     curl --silent --location \
       https://sw.kovidgoyal.net/kitty/installer.sh > /tmp/kitty-$$.sh
-    if [ -f /tmp/kitty-$$.sh ]
+    if [ -s /tmp/kitty-$$.sh ]
     then
       have_stow=`type -p stow`
       if [ "${have_stow}" ]
@@ -315,9 +315,6 @@ have_kitty=`type -p kitty`
     esac
   done
   install_kitty
-  [ "${quiet}" ] || {
-    printf "\n\n${BOLD}Kitty terminal emulator installed${NORM}\n"
-  }
   exit 0
 }
 
