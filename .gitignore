@@ -165,6 +165,7 @@ conf/cool-retro-term/*
 pics/*
 releases/*
 tmp/*
+.obsidian/*
 
 # vim files
 .*.sw[a-z]
