@@ -8,8 +8,6 @@ utilities to perform common operations in a text-only environment.
 
 Asciiville includes nearly 1,000 works of ASCII and ANSI Art!
 
-![Analytics](https://repobeats.axiom.co/api/embed/c2120cb2c3c075db8a9ad5d0f75269406fc07012.svg "Repobeats analytics image")
-
 ## Table of contents
 
 1. [Overview](#overview)
@@ -1884,3 +1882,5 @@ If you are just modifying the shell scripts or configuration files then
 you don't need to worry about the extensive list of dependencies listed above.
 
 Feel free to email me at github@ronrecord.com with questions or comments.
+
+![Analytics](https://repobeats.axiom.co/api/embed/c2120cb2c3c075db8a9ad5d0f75269406fc07012.svg "Repobeats analytics image")
