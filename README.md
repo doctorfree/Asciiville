@@ -8,6 +8,8 @@ utilities to perform common operations in a text-only environment.
 
 Asciiville includes nearly 1,000 works of ASCII and ANSI Art!
 
+![Analytics](https://repobeats.axiom.co/api/embed/c2120cb2c3c075db8a9ad5d0f75269406fc07012.svg "Repobeats analytics image")
+
 ## Table of contents
 
 1. [Overview](#overview)
