@@ -6,8 +6,11 @@ have_gum=$(type -p gum)
 [ "${have_gum}" ] || exit 1
 
 usage() {
-    printf "\nUsage: pokefetch [-i id] [-n name] [-u]"
+    printf "\nUsage: pokefetch [-aA] [-i id] [-n name] [-u]"
 	printf "\nWhere:"
+	printf "\n\t-a indicates no art"
+	printf "\n\t-A indicates do not use ANSI code sequences (e.g. for colors)"
+	printf "\n\t\t-A implies -a since retrieved art includes ANSI code sequences"
 	printf "\n\t-i 'id' specifies the Pokemon ID to retrieve"
 	printf "\n\t-n 'name' specifies the Pokemon name to retrieve"
 	printf "\n\t-u displays this usage message and exits"
@@ -17,8 +20,17 @@ usage() {
 }
 
 pokemon=
-while getopts "i:n:u" flag; do
+fetchart=1
+use_ansi=1
+while getopts "aAi:n:u" flag; do
     case $flag in
+        a)
+            fetchart=
+            ;;
+        A)
+            fetchart=
+            use_ansi=
+            ;;
         i)
             pokemon="$OPTARG"
 			[ ${pokemon} -lt 1 ] || [ ${pokemon} -gt 905 ] && pokemon= 
@@ -42,7 +54,12 @@ data_species=$(curl -fsLS "$(echo "${data_pokemon}" | jq --raw-output .species.u
 id=$(echo "${data_species}" | jq --raw-output .id)
 name=$(echo "${data_species}" | jq --raw-output '.names | .[] | select(.language.name == "en").name')
 category=$(echo "${data_species}" | jq --raw-output '.genera | .[] | select(.language.name == "en").genus')
-title="▐[1;7m No.$(printf '%03d' "${id}") [0m▌ [1m${name} - ${category}[0m"
+if [ "${use_ansi}" ]
+then
+  title="▐[1;7m No.$(printf '%03d' "${id}") [0m▌ [1m${name} - ${category}[0m"
+else
+  title=" Number $(printf '%03d' "${id}") ${name} - ${category}"
+fi
 
 for type in $(echo "${data_pokemon}" | jq --raw-output '.types | .[].type.name' | tr '[:lower:]' '[:upper:]'); do
 	case "${type}" in
@@ -66,12 +83,22 @@ for type in $(echo "${data_pokemon}" | jq --raw-output '.types | .[].type.name' 
 		FAIRY)    color=13 ;;
 	esac
 
-	types="${types} [7;38;5;${color}m ${type} [0m "
+    if [ "${use_ansi}" ]
+    then
+	  types="${types} [7;38;5;${color}m ${type} [0m "
+	else
+	  types="${types} ${type} "
+	fi
 done
 
 height=$(awk "BEGIN{ print $(echo "${data_pokemon}" | jq --raw-output .height) / 10 }")
 weight=$(awk "BEGIN{ print $(echo "${data_pokemon}" | jq --raw-output .weight) / 10 }")
-status=$(gum style --align center --width 44 "${types}" "Height: [1m${height}m[0m      Weight: [1m${weight}kg[0m")
+if [ "${use_ansi}" ]
+then
+  status=$(gum style --align center --width 44 "${types}" "Height: [1m${height}m[0m      Weight: [1m${weight}kg[0m")
+else
+  status=$(gum style --align center --width 44 "${types}" "Height: ${height}m      Weight: ${weight}kg")
+fi
 
 info=$(gum join --vertical "${title}" '' "${status}")
 
@@ -79,9 +106,11 @@ entries=$(gum style --border normal --padding '0 1' --width 42 "$(echo "${data_s
 jq --raw-output 'last(.flavor_text_entries | .[] | select(.language.name == "en")).flavor_text' | tr -d "\n")")
 
 pokemon_path=$(echo "${data_pokemon}" | jq --raw-output .name)
-art=$(gum style "$(curl -fsLS \
-"https://gitlab.com/phoneybadger/pokemon-colorscripts/-/raw/main/colorscripts/small/regular/${pokemon_path}" \
-| sed -e 's/$/[0m/g')")
+[ "${fetchart}" ] && {
+  art=$(gum style "$(curl -fsLS \
+    "https://gitlab.com/phoneybadger/pokemon-colorscripts/-/raw/main/colorscripts/small/regular/${pokemon_path}" \
+    | sed -e 's/$/[0m/g')")
+}
 
 
 # Display ------------------------------------------------------------------------------------------
@@ -99,7 +128,7 @@ print_test() {
 	[ "$(printf '%s' "${no_color}" | wc --max-line-length)" -gt "${terminal_width}" ] && return 1
 
 	gum style --align center --width="${terminal_width}" "${1}" ''
-	printf '%b' "\033[A"
+    [ "${use_ansi}" ] && printf '%b' "\033[A"
 
 	exit 0
 }
@@ -107,10 +136,12 @@ print_test() {
 
 # Landscape layout
 group_info_entries=$(gum join --vertical "${info}" '' "${entries}")
-print_test "$(gum join --horizontal --align center "${art}" '  ' "${group_info_entries}")"
+[ "${fetchart}" ] && {
+  print_test "$(gum join --horizontal --align center "${art}" '  ' "${group_info_entries}")"
 
-# Portrait layout
-print_test "$(gum join --vertical --align center "${info}" '' "${art}" "${entries}")"
+  # Portrait layout
+  print_test "$(gum join --vertical --align center "${info}" '' "${art}" "${entries}")"
+}
 
 # Other layout
 print_test "${group_info_entries}"
