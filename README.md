@@ -240,6 +240,7 @@ Asciiville adds the following commands to your system:
 * **gameserver** : multi-player game server
 * **got** : text based translation tool
 * **gum** : a tool for glamorous shell scripts
+* **vhs** : script a terminal session and save it as a GIF
 * **any2a** : any image format to ascii conversion utility
 * **jp2a** : jpg/png image to ascii conversion utility
 * **make_ascii_art** : generate ascii art from images
@@ -360,6 +361,7 @@ Tools installed during post-installation configuration include:
 * asciimatics
 * got
 * gum
+* vhs
 * jrnl
 * mutt
 * neomutt

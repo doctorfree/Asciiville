@@ -1232,6 +1232,28 @@ create_new_profile() {
   have_go=`type -p go`
 }
 [ "${have_go}" ] && {
+  # Install GUM
+  have_gum=`type -p gum`
+  [ "${have_gum}" ] || {
+    [ "${quiet}" ] || {
+      printf "\n\tInstalling gum ..."
+    }
+    go install github.com/charmbracelet/gum@latest > /dev/null 2>&1
+    [ "${quiet}" ] || {
+      printf " done"
+    }
+  }
+  # Install VHS
+  have_vhs=`type -p vhs`
+  [ "${have_vhs}" ] || {
+    [ "${quiet}" ] || {
+      printf "\n\tInstalling vhs ..."
+    }
+    go install github.com/charmbracelet/vhs@latest > /dev/null 2>&1
+    [ "${quiet}" ] || {
+      printf " done"
+    }
+  # Install GOT
   have_got=`type -p got`
   [ "${have_got}" ] || {
     [ "${quiet}" ] || {
@@ -1258,22 +1280,13 @@ create_new_profile() {
       }
     }
   }
+  # Install TDRAW
   have_tdraw=`type -p tdraw`
   [ "${have_tdraw}" ] || {
     [ "${quiet}" ] || {
       printf "\n\tInstalling tdraw ..."
     }
     go install github.com/aca/tdraw@latest > /dev/null 2>&1
-    [ "${quiet}" ] || {
-      printf " done"
-    }
-  }
-  have_gum=`type -p gum`
-  [ "${have_gum}" ] || {
-    [ "${quiet}" ] || {
-      printf "\n\tInstalling gum ..."
-    }
-    go install github.com/charmbracelet/gum@latest > /dev/null 2>&1
     [ "${quiet}" ] || {
       printf " done"
     }
