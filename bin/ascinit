@@ -1253,6 +1253,7 @@ create_new_profile() {
     [ "${quiet}" ] || {
       printf " done"
     }
+  }
   # Install GOT
   have_got=`type -p got`
   [ "${have_got}" ] || {
