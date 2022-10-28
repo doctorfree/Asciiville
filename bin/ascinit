@@ -862,26 +862,24 @@ fi
 
 TPM="${HOME}/.tmux/plugins/tpm"
 
+status_dots=
 [ -d ${TPM} ] || {
   have_git=`type -p git`
   [ "${have_git}" ] && {
+    [ "${quiet}" ] || {
+      printf "\n\tInstalling tmux plugins ..."
+      status_dots=1
+    }
     git clone https://github.com/tmux-plugins/tpm ${TPM} > /dev/null 2>&1
   }
 }
 
-[ -d ${TPM} ] && {
-  grep plugins/tpm/tpm ${HOME}/.tmux.conf > /dev/null || {
-    [ -f ${CONFDIR}/tmux-tpm.conf ] && {
-      [ "${quiet}" ] || {
-        printf "\n\tSetting up tmux plugin manager and installing plugins ..."
-      }
-      cat ${CONFDIR}/tmux-tpm.conf >> ${HOME}/.tmux.conf
-      [ -x ${TPM}/bin/install_plugins ] && ${TPM}/bin/install_plugins
-      [ "${quiet}" ] || {
-        printf " done"
-      }
-    }
+[ -x ${TPM}/bin/install_plugins ] && ${TPM}/bin/install_plugins > /dev/null 2>&1
+[ "${status_dots}" ] && {
+  [ "${quiet}" ] || {
+    printf " done"
   }
+  status_dots=
 }
 
 have_pip=`type -p pip`
