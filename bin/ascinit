@@ -9,19 +9,37 @@ BOLD=$(tput bold)
 NORM=$(tput sgr0)
 
 usage() {
-  printf "\nUsage: ascinit [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-r] [-t] [-u]"
-  printf "\nWhere:"
-  printf "\n\t-a indicates do not ask to play an animation when done"
-  printf "\n\t-c indicates console mode - no windowing system, headless config"
-  printf "\n\t-d indicates debug mode"
-  printf "\n\t-m indicates setup user Mutt configuration"
-  printf "\n\t-M indicates setup both Mutt and NeoMutt configurations"
-  printf "\n\t-n indicates setup user NeoMutt configuration"
-  printf "\n\t-N indicates prompt for installation of additional terminal emulators"
-  printf "\n\t-q indicates quiet mode"
-  printf "\n\t-r indicates remove service/package"
-  printf "\n\t-t indicates authorize the Rainbow Stream app at Twitter"
-  printf "\n\t-u indicates display this usage message and exit\n"
+  if [ "${have_rich}" ]
+  then
+    rich "[bold]Usage:[/] [bold italic green]ascinit[/] [cyan]\[-a] \[-c] \[-d] \[-m] \[-M] \[-n] \[-N] \[-q] \[-r] \[-t] \[-u][/]" --print
+    rich "[bold]Where:[/]" --print
+    rich "    [cyan]-a[/] indicates [yellow]do not ask to play an animation when done[/]" --print
+    rich "    [cyan]-c[/] indicates [yellow]console mode - no windowing system, headless config[/]" --print
+    rich "    [cyan]-d[/] indicates [yellow]debug mode[/]" --print
+    rich "    [cyan]-m[/] indicates [yellow]setup user Mutt configuration[/]" --print
+    rich "    [cyan]-M[/] indicates [yellow]setup both Mutt and NeoMutt configurations[/]" --print
+    rich "    [cyan]-n[/] indicates [yellow]setup user NeoMutt configuration[/]" --print
+    rich "    [cyan]-N[/] indicates [yellow]prompt for installation of additional terminal emulators[/]" --print
+    rich "    [cyan]-q[/] indicates [yellow]quiet mode[/]" --print
+    rich "    [cyan]-r[/] indicates [yellow]remove service/package[/]" --print
+    rich "    [cyan]-t[/] indicates [yellow]authorize the Rainbow Stream app at Twitter[/]" --print
+    rich "    [cyan]-u[/] indicates [yellow]display this usage message and exit[/]" --print
+    printf "\n"
+  else
+    printf "\nUsage: ascinit [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-r] [-t] [-u]"
+    printf "\nWhere:"
+    printf "\n\t-a indicates do not ask to play an animation when done"
+    printf "\n\t-c indicates console mode - no windowing system, headless config"
+    printf "\n\t-d indicates debug mode"
+    printf "\n\t-m indicates setup user Mutt configuration"
+    printf "\n\t-M indicates setup both Mutt and NeoMutt configurations"
+    printf "\n\t-n indicates setup user NeoMutt configuration"
+    printf "\n\t-N indicates prompt for installation of additional terminal emulators"
+    printf "\n\t-q indicates quiet mode"
+    printf "\n\t-r indicates remove service/package"
+    printf "\n\t-t indicates authorize the Rainbow Stream app at Twitter"
+    printf "\n\t-u indicates display this usage message and exit\n"
+  fi
   exit 1
 }
 
@@ -324,6 +342,7 @@ have_gnome=`type -p gnome-terminal`
 have_tilix=`type -p tilix`
 have_xfce4=`type -p xfce4-terminal`
 have_retro=`type -p cool-retro-term`
+have_rich=`type -p rich`
 have_apt=`type -p apt`
 have_aptget=`type -p apt-get`
 have_dnf=`type -p dnf`
@@ -1031,7 +1050,6 @@ have_jrnl=`type -p jrnl`
 }
 
 # Install the 'rich' command if not already installed
-have_rich=`type -p rich`
 [ "${have_rich}" ] || {
   [ "${have_pipx}" ] || install_pipx
   [ "${quiet}" ] || {

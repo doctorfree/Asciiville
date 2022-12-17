@@ -71,93 +71,190 @@ then
 fi
 
 usage() {
-  printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-D delay]"
-  printf "\n\t[-E len] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-K] [-l] [-L level]"
-  printf "\n\t[-m] [-M] [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song]"
-  printf "\n\t[-S] [-t] [-T] [-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y]"
-  printf "\n\t[-Y] [-z] [-Z] [-u] [file1 [file2 ...]]\n"
-  printf "\nTerminal/Command options:"
-  printf "\n\t-c 'command' indicates use 'command'"
-  printf "\n\t\tIf 'command' is keyword 'endo' then display ascii fluid simulation"
-  printf "\n\t\tIf 'command' is keyword 'maps' then display a map using mapscii"
-  printf "\n\t\tIf 'command' is keyword 'moon' then display the phase of the Moon"
-  printf "\n\t\tIf 'command' is keyword 'news' then display RSS news feeds"
-  printf "\n\t\tIf 'command' is keyword 'pokemon' then display a Pokemon"
-  printf "\n\t\tIf 'command' is keyword 'reddit' then display Reddit terminal UI"
-  printf "\n\t\tIf 'command' is keyword 'search' then a web search is performed"
-  printf "\n\t\tIf 'command' is keyword 'speed' then a speed test is performed"
-  printf "\n\t\tIf 'command' is keyword 'splash' then show Asciiville splash screen"
-  printf "\n\t\tIf 'command' is keyword 'translate' then the translation tool is run"
-  printf "\n\t\tIf 'command' is keyword 'twitter' then a Twitter client is run"
-  printf "\n\t\tIf 'command' is keyword 'weather' then display a weather report"
-  printf "\n\t\tOtherwise, 'command' will be executed in a terminal window"
-  printf "\n\t-d indicates use disk usage analyzer as default command"
-  printf "\n\t-f indicates use cbftp/ncftp as the default command"
-  printf "\n\t-F indicates fullscreen display"
-  printf "\n\t-g indicates use gnome terminal emulator"
-  printf "\n\t-i indicates start asciiville in interactive mode"
-  printf "\n\t-I indicates display system info"
-  printf "\n\t-k indicates use kitty terminal emulator"
-  printf "\n\t-l indicates use lynx web browser as the default command"
-  printf "\n\t-L 'level' lolcat coloring level"
-  printf "\n\t   'level' can be '0' (off), '1' (on), or '2' (animate)"
-  printf "\n\t-r indicates use retro terminal emulator"
-  printf "\n\t-t indicates use tilix terminal emulator"
-  printf "\n\t-U indicates set command to Ninvaders"
-  printf "\n\t-w indicates use w3m web browser as the default command"
-  printf "\n\t-W indicates use cmatrix as the default command"
-  printf "\n\t-x indicates use xfce4 terminal emulator"
-  printf "\n\t-X indicates run commands in current terminal window"
-  printf "\n\t-y indicates use ranger file manager as the default command"
-  printf "\n\t-Y indicates use NetHack dungeon game as the default command"
-  printf "\n\t-z indicates use neomutt email client as the default command"
-  printf "\nSlideshow/ASCIImatics animation options:"
-  printf "\n\t-A indicates use Asciiville scenes in ASCIImatics display"
-  printf "\n\t-a indicates play audio during display"
-  printf "\n\t-b indicates use backup audio during display"
-  printf "\n\t-C indicates cycle slideshow endlessly (Ctrl-c to exit show)"
-  printf "\n\t-D 'delay' specifies delay, in seconds, between art display (default 5)"
-  printf "\n\t-E 'len' indicates random slideshow of length 'len' (0 infinite)"
-  printf "\n\t-j indicates use Julia Set scenes in ASCIImatics display"
-  printf "\n\t-J indicates Julia Set with several runs using different parameters"
-  printf "\n\t-m indicates use MusicPlayerPlus scenes in ASCIImatics display"
-  printf "\n\t-M indicates use MusicPlayerPlus MPD client as default command"
-  printf "\n\t-n num specifies the number of times to cycle ASCIImatics scenes"
-  printf "\n\t-N indicates use alternate comments in Plasma ASCIImatics scenes"
-  printf "\n\t-p indicates use Plasma scenes in ASCIImatics display"
-  printf "\n\t-P script specifies the ASCIImatics script to run"
-  printf "\n\t-s 'song' specifies a song to accompany an ASCIImatics animation"
-  printf "\n\t   'song' can be the full pathname to an audio file or a relative"
-  printf "\n\t   pathname to an audio file in the MPD music library or ~/Music/"
-  printf "\n\t-S indicates display ASCIImatics splash animation"
-  printf "\n\t-V 'show' displays an ascii art slide show"
-  printf "\n\t   'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies',"
-  printf "\n\t   'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature',"
-  printf "\n\t   'Owls', 'Space', 'Vintage', 'Wallpapers', 'Waterfalls',"
-  printf "\n\t   the name of a custom ascii art folder, the slideshow keyword"
-  printf "\n\t   'files' which indicates display a slideshow using the ascii"
-  printf "\n\t   art files provided on the command line, or the slideshow"
-  printf "\n\t   argument 'files=/path/to/file' which indicates read the list"
-  printf "\n\t   of slideshow files from the file '/path/to/file'"
-  printf "\n\t-Z indicates do not play audio during slideshow/animation\n"
-  printf "\nGeneral options:"
-  printf "\n\t-K indicates kill Asciiville tmux sessions and ASCIImatics scripts"
-  printf "\n\t-R indicates record tmux session with asciinema"
-  printf "\n\t-T indicates use a tmux session for either ASCIImatics or command"
-  printf "\n\t-v displays the Asciiville version and exits"
-  printf "\n\t-u displays this usage message and exits\n"
-  printf "\nRemaining arguments are filenames of ascii art to display"
-  printf "\n\tAscii art filenames can be relative to the Ascii Art Gallery folder"
-  printf "\n\tand need not specify the filename suffix. For example:"
-  printf "\n\t\tasciiville -L 2 Friends/tux Doctorwhen/Capitola_Village_Vivid\n"
-  printf "\nInvoked without any arguments, 'asciiville' will display an interactive menu\n"
-  printf "\nType 'man asciiville' for detailed usage info on Asciiville"
-  printf "\nType 'man asciisplash' for detailed usage info on Asciisplash"
-  printf "\nType 'man btop' for detailed usage info on the Btop system monitor"
-  printf "\nType 'man lynx' for detailed usage info on the Lynx web browser"
-  printf "\nType 'man neomutt' for detailed usage info on the NeoMutt email client"
-  printf "\nType 'man cbftp' for detailed usage info on the Cbftp FTP client"
-  printf "\nType 'man ranger' for detailed usage info on the Ranger file manager\n"
+  if [ "${have_rich}" ]
+  then
+    rich "[bold]Usage:[/] [bold italic green]asciiville[/] [cyan]\[-a] \[-A] \[-b] \[-c[/] [yellow]command[/][cyan]] \[-C] \[-d] \[-D[/] [yellow]delay[/][cyan]][/]" --print
+    rich "    [cyan]\[-E[/] [yellow]len[/][cyan]] \[-f] \[-F] \[-g] \[-i] \[-I] \[-jJ] \[-k] \[-K] \[-l] \[-L[/] [yellow]level[/][cyan]][/]" --print
+    rich "    [cyan]\[-m] \[-M] \[-N] \[-n[/] [yellow]num[/][cyan]] \[-p] \[-P[/] [yellow]script[/][cyan]] \[-r] \[-R] \[-s[/] [yellow]song[/][cyan]][/]" --print
+    rich "    [cyan]\[-S] \[-t] \[-T] \[-U] \[-v] \[-V[/] [yellow]show[/][cyan]] \[-w] \[-W] \[-x] \[-X] \[-y][/]" --print
+    rich "    [cyan]\[-Y] \[-z] \[-Z] \[-u] \[[/][yellow]file1 \[file2 ...][/][cyan]][/]" --print
+    printf "\n"
+    rich "[bold]Terminal/Command options:[/]" --print
+    rich "    [cyan]-c[/] [yellow]'command'[/] indicates use '[bold]command[/]'" --print
+    rich "        If '[bold]command[/]' is keyword '[magenta]endo[/]' then [italic]display ascii fluid simulation[/]" --print
+    rich "        If '[bold]command[/]' is keyword '[magenta]maps[/]' then [italic]display a map using mapscii[/]" --print
+    rich "        If '[bold]command[/]' is keyword '[magenta]moon[/]' then [italic]display the phase of the Moon[/]" --print
+    rich "        If '[bold]command[/]' is keyword '[magenta]news[/]' then [italic]display RSS news feeds[/]" --print
+    rich "        If '[bold]command[/]' is keyword '[magenta]pokemon[/]' then [italic]display a Pokemon[/]" --print
+    rich "        If '[bold]command[/]' is keyword '[magenta]reddit[/]' then [italic]display Reddit terminal UI[/]" --print
+    rich "        If '[bold]command[/]' is keyword '[magenta]search[/]' then [italic]a web search is performed[/]" --print
+    rich "        If '[bold]command[/]' is keyword '[magenta]speed[/]' then [italic]a speed test is performed[/]" --print
+    rich "        If '[bold]command[/]' is keyword '[magenta]splash[/]' then [italic]show Asciiville splash screen[/]" --print
+    rich "        If '[bold]command[/]' is keyword '[magenta]translate[/]' then [italic]the translation tool is run[/]" --print
+    rich "        If '[bold]command[/]' is keyword '[magenta]twitter[/]' then [italic]a Twitter client is run[/]" --print
+    rich "        If '[bold]command[/]' is keyword '[magenta]weather[/]' then [italic]display a weather report[/]" --print
+    rich "        Otherwise, '[bold]command[/]' will be executed in a terminal window" --print
+    rich "    [cyan]-d[/] indicates [italic] use disk usage analyzer as default command[/]" --print
+    rich "    [cyan]-f[/] indicates [italic] use cbftp/ncftp as the default command[/]" --print
+    rich "    [cyan]-F[/] indicates [italic] fullscreen display[/]" --print
+    rich "    [cyan]-g[/] indicates [italic] use gnome terminal emulator[/]" --print
+    rich "    [cyan]-i[/] indicates [italic] start asciiville in interactive mode[/]" --print
+    rich "    [cyan]-I[/] indicates [italic] display system info[/]" --print
+    rich "    [cyan]-k[/] indicates [italic] use kitty terminal emulator[/]" --print
+    rich "    [cyan]-l[/] indicates [italic] use lynx web browser as the default command[/]" --print
+    rich "    [cyan]-L[/] [yellow]'level'[/] lolcat coloring level" --print
+    rich "       [yellow]'level'[/] can be '[yellow]0[/]' (off), '[yellow]1[/]' (on), or '[yellow]2[/]' (animate)" --print
+    rich "    [cyan]-r[/] indicates [italic] use retro terminal emulator[/]" --print
+    rich "    [cyan]-t[/] indicates [italic] use tilix terminal emulator[/]" --print
+    rich "    [cyan]-U[/] indicates [italic] set command to Ninvaders[/]" --print
+    rich "    [cyan]-w[/] indicates [italic] use w3m web browser as the default command[/]" --print
+    rich "    [cyan]-W[/] indicates [italic] use cmatrix as the default command[/]" --print
+    rich "    [cyan]-x[/] indicates [italic] use xfce4 terminal emulator[/]" --print
+    rich "    [cyan]-X[/] indicates [italic] run commands in current terminal window[/]" --print
+    rich "    [cyan]-y[/] indicates [italic] use ranger file manager as the default command[/]" --print
+    rich "    [cyan]-Y[/] indicates [italic] use NetHack dungeon game as the default command[/]" --print
+    rich "    [cyan]-z[/] indicates [italic] use neomutt email client as the default command[/]" --print
+    rich "[bold]Slideshow/ASCIImatics animation options:[/]" --print
+    rich "    [cyan]-A[/] indicates [italic] use Asciiville scenes in ASCIImatics display[/]" --print
+    rich "    [cyan]-a[/] indicates [italic] play audio during display[/]" --print
+    rich "    [cyan]-b[/] indicates [italic] use backup audio during display[/]" --print
+    rich "    [cyan]-C[/] indicates [italic] cycle slideshow endlessly[/] (Ctrl-c to exit show)" --print
+    rich "    [cyan]-D[/] [yellow]'delay'[/] specifies [yellow]delay[/], in seconds, between art display (default 5)" --print
+    rich "    [cyan]-E[/] [yellow]'len'[/] indicates [italic] random slideshow of length [yellow]'len'[/] (0 infinite)[/]" --print
+    rich "    [cyan]-j[/] indicates [italic] use Julia Set scenes in ASCIImatics display[/]" --print
+    rich "    [cyan]-J[/] indicates [italic] Julia Set with several runs using different parameters[/]" --print
+    rich "    [cyan]-m[/] indicates [italic] use MusicPlayerPlus scenes in ASCIImatics display[/]" --print
+    rich "    [cyan]-M[/] indicates [italic] use MusicPlayerPlus MPD client as default command[/]" --print
+    rich "    [cyan]-n[/] [yellow]num[/] specifies the number of times to cycle ASCIImatics scenes" --print
+    rich "    [cyan]-N[/] indicates [italic] use alternate comments in Plasma ASCIImatics scenes[/]" --print
+    rich "    [cyan]-p[/] indicates [italic] use Plasma scenes in ASCIImatics display[/]" --print
+    rich "    [cyan]-P[/] [yellow]script[/] specifies the ASCIImatics script to run" --print
+    rich "    [cyan]-s[/] [yellow]'song'[/] specifies a song to accompany an ASCIImatics animation" --print
+    rich "       [yellow]'song'[/] can be the full pathname to an audio file or a relative" --print
+    rich "       pathname to an audio file in the MPD music library or ~/Music/" --print
+    rich "    [cyan]-S[/] indicates [italic] display ASCIImatics splash animation[/]" --print
+    rich "    [cyan]-V[/] [yellow]'show'[/] displays an ascii art slide show" --print
+    rich "       [yellow]'show'[/] can be one of [yellow]'Art', 'Doctorwhen', 'Dragonflies',[/]" --print
+    rich "       [yellow]'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature',[/]" --print
+    rich "       [yellow]'Owls', 'Space', 'Vintage', 'Wallpapers', 'Waterfalls',[/]" --print
+    rich "       the name of a custom ascii art folder, the slideshow keyword" --print
+    rich "       [yellow]'files'[/] which indicates [italic] display a slideshow using the ascii[/]" --print
+    rich "       [italic]art files provided on the command line[/], or the slideshow" --print
+    rich "       argument [yellow]'files=/path/to/file'[/] which indicates [italic] read the list[/]" --print
+    rich "       [italic]of slideshow files from the file[/] [yellow]'/path/to/file'[/]" --print
+    rich "    [cyan]-Z[/] indicates [italic] do not play audio during slideshow/animation[/]" --print
+    printf "\n"
+    rich "[bold]General options:[/]" --print
+    rich "    [cyan]-K[/] indicates [italic] kill Asciiville tmux sessions and ASCIImatics scripts[/]" --print
+    rich "    [cyan]-R[/] indicates [italic] record tmux session with asciinema[/]" --print
+    rich "    [cyan]-T[/] indicates [italic] use a tmux session for either ASCIImatics or command[/]" --print
+    rich "    [cyan]-v[/] displays the Asciiville version and exits" --print
+    rich "    [cyan]-u[/] displays this usage message and exits" --print
+    printf "\n"
+    rich "Remaining arguments are filenames of ascii art to display" --print
+    rich "    Ascii art filenames can be relative to the Ascii Art Gallery folder" --print
+    rich "    and need not specify the filename suffix. For example:" --print
+    rich "        [green]asciiville[/] [cyan]-L[/] [yellow]2[/] [magenta]Friends/tux Doctorwhen/Capitola_Village_Vivid[/]" --print
+    printf "\n"
+    rich "Invoked without any arguments, [green]'asciiville'[/] will display an interactive menu" --print
+    printf "\n"
+    rich "Type [green]'man asciiville'[/] for detailed usage info on Asciiville" --print
+    rich "Type [green]'man asciisplash'[/] for detailed usage info on Asciisplash" --print
+    rich "Type [green]'man btop'[/] for detailed usage info on the Btop system monitor" --print
+    rich "Type [green]'man lynx'[/] for detailed usage info on the Lynx web browser" --print
+    rich "Type [green]'man neomutt'[/] for detailed usage info on the NeoMutt email client" --print
+    rich "Type [green]'man cbftp'[/] for detailed usage info on the Cbftp FTP client" --print
+    rich "Type [green]'man ranger'[/] for detailed usage info on the Ranger file manager" --print
+    printf "\n"
+  else
+    printf "\nUsage: asciiville [-a] [-A] [-b] [-c command] [-C] [-d] [-D delay]"
+    printf "\n\t[-E len] [-f] [-F] [-g] [-i] [-I] [-jJ] [-k] [-K] [-l] [-L level]"
+    printf "\n\t[-m] [-M] [-N] [-n num] [-p] [-P script] [-r] [-R] [-s song]"
+    printf "\n\t[-S] [-t] [-T] [-U] [-v] [-V show] [-w] [-W] [-x] [-X] [-y]"
+    printf "\n\t[-Y] [-z] [-Z] [-u] [file1 [file2 ...]]\n"
+    printf "\nTerminal/Command options:"
+    printf "\n\t-c 'command' indicates use 'command'"
+    printf "\n\t\tIf 'command' is keyword 'endo' then display ascii fluid simulation"
+    printf "\n\t\tIf 'command' is keyword 'maps' then display a map using mapscii"
+    printf "\n\t\tIf 'command' is keyword 'moon' then display the phase of the Moon"
+    printf "\n\t\tIf 'command' is keyword 'news' then display RSS news feeds"
+    printf "\n\t\tIf 'command' is keyword 'pokemon' then display a Pokemon"
+    printf "\n\t\tIf 'command' is keyword 'reddit' then display Reddit terminal UI"
+    printf "\n\t\tIf 'command' is keyword 'search' then a web search is performed"
+    printf "\n\t\tIf 'command' is keyword 'speed' then a speed test is performed"
+    printf "\n\t\tIf 'command' is keyword 'splash' then show Asciiville splash screen"
+    printf "\n\t\tIf 'command' is keyword 'translate' then the translation tool is run"
+    printf "\n\t\tIf 'command' is keyword 'twitter' then a Twitter client is run"
+    printf "\n\t\tIf 'command' is keyword 'weather' then display a weather report"
+    printf "\n\t\tOtherwise, 'command' will be executed in a terminal window"
+    printf "\n\t-d indicates use disk usage analyzer as default command"
+    printf "\n\t-f indicates use cbftp/ncftp as the default command"
+    printf "\n\t-F indicates fullscreen display"
+    printf "\n\t-g indicates use gnome terminal emulator"
+    printf "\n\t-i indicates start asciiville in interactive mode"
+    printf "\n\t-I indicates display system info"
+    printf "\n\t-k indicates use kitty terminal emulator"
+    printf "\n\t-l indicates use lynx web browser as the default command"
+    printf "\n\t-L 'level' lolcat coloring level"
+    printf "\n\t   'level' can be '0' (off), '1' (on), or '2' (animate)"
+    printf "\n\t-r indicates use retro terminal emulator"
+    printf "\n\t-t indicates use tilix terminal emulator"
+    printf "\n\t-U indicates set command to Ninvaders"
+    printf "\n\t-w indicates use w3m web browser as the default command"
+    printf "\n\t-W indicates use cmatrix as the default command"
+    printf "\n\t-x indicates use xfce4 terminal emulator"
+    printf "\n\t-X indicates run commands in current terminal window"
+    printf "\n\t-y indicates use ranger file manager as the default command"
+    printf "\n\t-Y indicates use NetHack dungeon game as the default command"
+    printf "\n\t-z indicates use neomutt email client as the default command"
+    printf "\nSlideshow/ASCIImatics animation options:"
+    printf "\n\t-A indicates use Asciiville scenes in ASCIImatics display"
+    printf "\n\t-a indicates play audio during display"
+    printf "\n\t-b indicates use backup audio during display"
+    printf "\n\t-C indicates cycle slideshow endlessly (Ctrl-c to exit show)"
+    printf "\n\t-D 'delay' specifies delay, in seconds, between art display (default 5)"
+    printf "\n\t-E 'len' indicates random slideshow of length 'len' (0 infinite)"
+    printf "\n\t-j indicates use Julia Set scenes in ASCIImatics display"
+    printf "\n\t-J indicates Julia Set with several runs using different parameters"
+    printf "\n\t-m indicates use MusicPlayerPlus scenes in ASCIImatics display"
+    printf "\n\t-M indicates use MusicPlayerPlus MPD client as default command"
+    printf "\n\t-n num specifies the number of times to cycle ASCIImatics scenes"
+    printf "\n\t-N indicates use alternate comments in Plasma ASCIImatics scenes"
+    printf "\n\t-p indicates use Plasma scenes in ASCIImatics display"
+    printf "\n\t-P script specifies the ASCIImatics script to run"
+    printf "\n\t-s 'song' specifies a song to accompany an ASCIImatics animation"
+    printf "\n\t   'song' can be the full pathname to an audio file or a relative"
+    printf "\n\t   pathname to an audio file in the MPD music library or ~/Music/"
+    printf "\n\t-S indicates display ASCIImatics splash animation"
+    printf "\n\t-V 'show' displays an ascii art slide show"
+    printf "\n\t   'show' can be one of 'Art', 'Doctorwhen', 'Dragonflies',"
+    printf "\n\t   'Fractals', 'Friends', 'Iterated', 'Lyapunov', 'Nature',"
+    printf "\n\t   'Owls', 'Space', 'Vintage', 'Wallpapers', 'Waterfalls',"
+    printf "\n\t   the name of a custom ascii art folder, the slideshow keyword"
+    printf "\n\t   'files' which indicates display a slideshow using the ascii"
+    printf "\n\t   art files provided on the command line, or the slideshow"
+    printf "\n\t   argument 'files=/path/to/file' which indicates read the list"
+    printf "\n\t   of slideshow files from the file '/path/to/file'"
+    printf "\n\t-Z indicates do not play audio during slideshow/animation\n"
+    printf "\nGeneral options:"
+    printf "\n\t-K indicates kill Asciiville tmux sessions and ASCIImatics scripts"
+    printf "\n\t-R indicates record tmux session with asciinema"
+    printf "\n\t-T indicates use a tmux session for either ASCIImatics or command"
+    printf "\n\t-v displays the Asciiville version and exits"
+    printf "\n\t-u displays this usage message and exits\n"
+    printf "\nRemaining arguments are filenames of ascii art to display"
+    printf "\n\tAscii art filenames can be relative to the Ascii Art Gallery folder"
+    printf "\n\tand need not specify the filename suffix. For example:"
+    printf "\n\t\tasciiville -L 2 Friends/tux Doctorwhen/Capitola_Village_Vivid\n"
+    printf "\nInvoked without any arguments, 'asciiville' will display an interactive menu\n"
+    printf "\nType 'man asciiville' for detailed usage info on Asciiville"
+    printf "\nType 'man asciisplash' for detailed usage info on Asciisplash"
+    printf "\nType 'man btop' for detailed usage info on the Btop system monitor"
+    printf "\nType 'man lynx' for detailed usage info on the Lynx web browser"
+    printf "\nType 'man neomutt' for detailed usage info on the NeoMutt email client"
+    printf "\nType 'man cbftp' for detailed usage info on the Cbftp FTP client"
+    printf "\nType 'man ranger' for detailed usage info on the Ranger file manager\n"
+  fi
   exit 1
 }
 
@@ -3297,6 +3394,7 @@ have_cbftp=`type -p cbftp`
 have_ncftp=`type -p ncftp`
 have_lolcat=`type -p lolcat`
 have_rainbow=`type -p rainbowstream`
+have_rich=`type -p rich`
 have_roon=`type -p roon`
 have_speed=`type -p speedtest-cli`
 have_splash=`type -p asciisplash`
