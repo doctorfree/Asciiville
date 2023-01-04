@@ -61,14 +61,19 @@ CONFIG="${HOME}/.config/asciiville/config"
 saved_art_size=${art_font_size}
 saved_txt_size=${txt_font_size}
 
+if [ `echo $PATH | grep -c /.local/bin` -ne "1" ]
+then
+  PATH="$PATH:$HOME/.local/bin"
+fi
 if [ `echo $PATH | grep -c /usr/local/bin` -ne "1" ]
 then
-  export PATH="$PATH:/usr/local/bin"
+  PATH="$PATH:/usr/local/bin"
 fi
 if [ `echo $PATH | grep -c /usr/games` -ne "1" ]
 then
-  export PATH="$PATH:/usr/games"
+  PATH="$PATH:/usr/games"
 fi
+export PATH
 
 usage() {
   if [ "${have_rich}" ]

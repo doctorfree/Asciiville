@@ -12,6 +12,11 @@ usage() {
 [ "$1" ] || usage
 url=$1
 
+if [ `echo $PATH | grep -c /.local/bin` -ne "1" ]
+then
+  export PATH="$PATH:$HOME/.local/bin"
+fi
+
 if [[ $url == *"youtube.com/watch"* ]]; then
       have_mpv=`type -p mpv`
       [ "${have_mpv}" ] || {

@@ -20,6 +20,11 @@ art_font_size=4
 bro_font_size=${def_font_size}
 txt_font_size=18
 
+if [ `echo $PATH | grep -c /.local/bin` -ne "1" ]
+then
+  export PATH="$PATH:$HOME/.local/bin"
+fi
+
 # Default palette used by jp2a
 # defchars="   ...',;:clodxkO0KXNWM"
 defchars="   ...,;:clodxkO0KXNWM"

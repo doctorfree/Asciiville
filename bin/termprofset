@@ -32,6 +32,11 @@ TILIX_PROF="com.gexperts.Tilix.Profile"
 TILIX_PATH="/com/gexperts/Tilix/profiles/"
 TILIX_LIST="com.gexperts.Tilix.ProfilesList"
 
+if [ `echo $PATH | grep -c /.local/bin` -ne "1" ]
+then
+  export PATH="$PATH:$HOME/.local/bin"
+fi
+
 usage() {
   printf "\nUsage: termprofset [-f fontname] [-s fontsize] [-p profile]"
   printf "\n\t[-K socket] [-gklBRStxu]"

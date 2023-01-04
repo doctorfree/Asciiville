@@ -12,6 +12,11 @@ have_gum=$(type -p gum)
 have_wmctrl=`type -p wmctrl`
 have_xprop=`type -p xprop`
 
+if [ `echo $PATH | grep -c /.local/bin` -ne "1" ]
+then
+  export PATH="$PATH:$HOME/.local/bin"
+fi
+
 usage() {
   printf "\nUsage: asciifetch [-a] [-f] [-k] [-q] [-z] [-u]"
   printf "\nWhere:"
