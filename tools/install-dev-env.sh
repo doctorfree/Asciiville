@@ -50,7 +50,7 @@ else
     if [ "${fedora}" ]
     then
       PKGS="cmake ncurses-devel flex bison libtool automake \
-            libjpeg-turbo-devel libpng-devel"
+            libjpeg-turbo-devel libpng-devel glibc-static libstdc++-static"
       if [ "$1" == "-r" ]
       then
         sudo ${PINS} -y remove ${PKGS}
