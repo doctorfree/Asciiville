@@ -25,8 +25,8 @@ prepare() {
     cat << DOC
 --> The Asciiville build requires user games:games to exist
 --> You can use the following commands to create this user:
-# groupadd games
-# useradd -r -c "Games pseudo-user" -g games -d /opt/games -s /bin/false games
+# sudo groupadd games
+# sudo useradd -r -c "Games pseudo-user" -g games -d /opt/games -s /bin/false games
 DOC
    exit 1
   fi
