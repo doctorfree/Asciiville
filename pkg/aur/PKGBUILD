@@ -42,7 +42,7 @@ prepare() {
   then
     cat << DOC
 --> The Asciiville build requires user games:games to exist
---> You can use the following commands to do create this user:
+--> You can use the following commands to create this user:
 # groupadd games
 # useradd -r -c "Games pseudo-user" -g games -d /opt/games -s /bin/false games
 DOC
