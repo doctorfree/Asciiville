@@ -182,6 +182,13 @@ install_external_package() {
 }
 
 install_kitty() {
+  have_stow=`type -p stow`
+  if [ "${have_stow}" ]
+  then
+    LOCAL=".local/stow/kitty.app"
+  else
+    LOCAL=".local/kitty.app"
+  fi
   [ "${have_kitty}" ] || {
     [ "${quiet}" ] || {
       printf "\n\tInstalling kitty terminal emulator ..."
@@ -190,16 +197,13 @@ install_kitty() {
       https://sw.kovidgoyal.net/kitty/installer.sh > /tmp/kitty-$$.sh
     if [ -s /tmp/kitty-$$.sh ]
     then
-      have_stow=`type -p stow`
       if [ "${have_stow}" ]
       then
         sh /tmp/kitty-$$.sh launch=n dest=~/.local/stow > /dev/null 2>&1
         cd ~/.local/stow
         stow kitty.app
-        LOCAL=".local/stow/kitty.app"
       else
         sh /tmp/kitty-$$.sh launch=n > /dev/null 2>&1
-        LOCAL=".local/kitty.app"
       fi
       rm -f /tmp/kitty-$$.sh
       # Create a symbolic link to add kitty to PATH
@@ -237,18 +241,6 @@ install_kitty() {
       # Update the paths to the kitty and its icon in the kitty.desktop file(s)
       sed -i "s|Icon=kitty|Icon=/home/${MPP_USER}/${LOCAL}/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
       sed -i "s|Exec=kitty|Exec=/home/${MPP_USER}/${LOCAL}/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
-      # Install the Kitty terminfo entry
-      [ -f "${HOME}/.terminfo/x/xterm-kitty" ] || {
-        [ -f "${HOME}/${LOCAL}/lib/kitty/terminfo/kitty.terminfo" ] && {
-          have_tic=`type -p tic`
-          [ "${have_tic}" ] && {
-            [ -d ${HOME}/.terminfo ] || mkdir -p ${HOME}/.terminfo
-            [ -d ${HOME}/.terminfo/x ] || mkdir -p ${HOME}/.terminfo/x
-            tic -x -o ${HOME}/.terminfo \
-              "${HOME}/${LOCAL}/lib/kitty/terminfo/kitty.terminfo" > /dev/null 2>&1
-          }
-        }
-      }
       [ "${quiet}" ] || printf " done!\n"
     else
       printf "\n${BOLD}ERROR:${NORM} Download of kitty installation script failed"
@@ -256,6 +248,32 @@ install_kitty() {
       printf "\nto manually install the kitty terminal emulator\n"
     fi
     have_kitty=`type -p kitty`
+  }
+  # Install the Kitty terminfo entry
+  KITERM="${HOME}/.terminfo/x/xterm-kitty"
+  [ -f "${KITERM}" ] || {
+    [ -d ${HOME}/.terminfo ] || mkdir -p ${HOME}/.terminfo
+    [ -d ${HOME}/.terminfo/x ] || mkdir -p ${HOME}/.terminfo/x
+    have_tic=`type -p tic`
+    [ "${have_tic}" ] && {
+      [ -f "${HOME}/${LOCAL}/lib/kitty/terminfo/kitty.terminfo" ] && {
+        tic -x -o ${HOME}/.terminfo \
+          "${HOME}/${LOCAL}/lib/kitty/terminfo/kitty.terminfo" > /dev/null 2>&1
+      }
+    }
+    [ -f "${KITERM}" ] || {
+      if [ -f "${HOME}/${LOCAL}/lib/kitty/terminfo/x/xterm-kitty" ]
+      then
+        cp "${HOME}/${LOCAL}/lib/kitty/terminfo/x/xterm-kitty" "${KITERM}"
+      else
+        if [ -f "${HOME}/${LOCAL}/share/terminfo/x/xterm-kitty" ]
+        then
+          cp "${HOME}/${LOCAL}/share/terminfo/x/xterm-kitty" "${KITERM}"
+        else
+          [ "${quiet}" ] || printf "\nUnable to create Kitty terminfo entry ${KITERM}\n"
+        fi
+      fi
+    }
   }
 }
 
