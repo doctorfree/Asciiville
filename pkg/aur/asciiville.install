@@ -58,15 +58,18 @@ post_install() {
   chown games /usr/games/bin/nethack
   chgrp games /usr/games/bin/nethack
   chmod 04755 /usr/games/bin/nethack
+  rm -f /usr/games/nethack
   ln -r -s /usr/games/bin/nethack /usr/games/nethack
 
   chown games /usr/games/bin/tetris
   chgrp games /usr/games/bin/tetris
   chmod 04755 /usr/games/bin/tetris
+  rm -f /usr/games/tetris
   ln -r -s /usr/games/bin/tetris /usr/games/tetris
   chown games /usr/games/bin/gameserver
   chgrp games /usr/games/bin/gameserver
   chmod 04755 /usr/games/bin/gameserver
+  rm -f /usr/games/gameserver
   ln -r -s /usr/games/bin/gameserver /usr/games/gameserver
 
   touch /usr/games/var/tetris-hiscores

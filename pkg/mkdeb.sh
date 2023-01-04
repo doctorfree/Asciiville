@@ -170,6 +170,7 @@ ${SUDO} make DESTDIR=${OUT_DIR} manpages
 ${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/bin/nethack
 ${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/bin/nethack
 ${SUDO} chmod 04755 ${OUT_DIR}/${DESTDIR}/games/bin/nethack
+${SUDO} rm -f ${OUT_DIR}/${DESTDIR}/games/nethack
 ${SUDO} ln -r -s ${OUT_DIR}/${DESTDIR}/games/bin/nethack ${OUT_DIR}/${DESTDIR}/games/nethack
 cd ../..
 
@@ -178,11 +179,13 @@ ${SUDO} cp tetris/tetris ${OUT_DIR}/${DESTDIR}/games/bin
 ${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/bin/tetris
 ${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/bin/tetris
 ${SUDO} chmod 04755 ${OUT_DIR}/${DESTDIR}/games/bin/tetris
+${SUDO} rm -f ${OUT_DIR}/${DESTDIR}/games/tetris
 ${SUDO} ln -r -s ${OUT_DIR}/${DESTDIR}/games/bin/tetris ${OUT_DIR}/${DESTDIR}/games/tetris
 ${SUDO} cp tetris/gameserver ${OUT_DIR}/${DESTDIR}/games/bin
 ${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/bin/gameserver
 ${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/bin/gameserver
 ${SUDO} chmod 04755 ${OUT_DIR}/${DESTDIR}/games/bin/gameserver
+${SUDO} rm -f ${OUT_DIR}/${DESTDIR}/games/gameserver
 ${SUDO} ln -r -s ${OUT_DIR}/${DESTDIR}/games/bin/gameserver ${OUT_DIR}/${DESTDIR}/games/gameserver
 
 ${SUDO} cp tetris/licence.txt ${OUT_DIR}/${DESTDIR}/games/share/doc/tetris
