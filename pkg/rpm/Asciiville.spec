@@ -31,6 +31,7 @@ then
 else
   PYTHON="python"
 fi
+${PYTHON} -m pip install setuptools
 ${PYTHON} -m pip install asciimatics
 ${PYTHON} -m pip install rainbowstream
 npm_inst=`type -p npm`

@@ -1,4 +1,5 @@
 post_install() {
+  python -m pip install setuptools
   python -m pip install asciimatics
   python -m pip install rainbowstream
   npm_inst=`type -p npm`
