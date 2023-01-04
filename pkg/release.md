@@ -153,102 +153,14 @@ Version 2.0.0 release 1 adds support for:
 * Install the kitty terminfo entry when installing kitty
 * Add any2ascii command and its dependencies
 * Add asciibrow command
+* Use rich to format usage messages if available
+* Add kitty session startup for zsh users
+* Add Jekyll theme for Github Pages
+* Update tmux configuration
+* Add VHS install in ascinit
+* Improve newsboat config, additional newsboat scripts
+* Use HOME/.config/newsboat for Newsboat config
+* Use kitty for image display in Newsboat
+* Center ascii art when displaying in Kitty
 
-Version 1.4.1 release 2 adds support for:
-
-* Install go in ascinit if not present
-* Use Kitty as default terminal emulator if available, if not then use gnome-terminal
-* Porting changes to support several modern compiler constraints
-* Integration of asciifetch in asciiville menu
-* Add signal handling and child process wait to asciifetch to enable kitty remote control
-* Add zoom and keepalive to asciifetch
-* Add splash screen to interactive startup
-* Add show_pokemon command
-* Add language and arg processing to weatherfetch, enhance show_weather command
-* Add Pokemon display to commands and menu, enhanced weather report using weatherfetch
-* Patch cbftp if on Arch to accomodate their unified ncurses implementation
-* Use format string to avoid error when -Werror=format-security is enabled
-* Fix aewan build in PKGBUILD
-* Kitty integration, update Kitty configuration, set Kitty url opener in ascinit
-* Add gum install to ascinit
-* Add diyfetch examples to tools/bin
-* Add Sphinx documentation for Asciiville docs on Read the Docs
-* Add installation of rich-cli rich command in ascinit
-* Add color display option to show_endo
-* Add show_endo to display ascii fluid dynamics simulations
-* Add endoh1 fluid dynamics ascii animation and build
-* Add Webb telescope images, add tmux plugin manager
-
-Version 1.4.1 release 1 adds support for:
-
-* Zoomable display of ascii art
-* Center ascii art in zoom/browse mode
-* Turn linewrap off during ascii art display
-* Add shuffle and length settings to asciiville config
-* Update sample config with character palette settings
-* Upgrade to Btop++ 1.2.7
-* Fix jrnl default config and journals creation
-* Adapt art font size for each file in file list display mode
-* Add support for slideshow of files provided on command line
-* Add support for slideshow/display of files from list in file
-* Add support for centering borderless ascii art
-* Add sample irssi config
-
-Version 1.4.0 added support for:
-
-* Manual installation and removal for non-Debian/RPM Linux systems
-* Improved Ascii Art display features
-* Additional Ascii Art
-* Shuffle and random display modes now supported
-* Several bug fixes
-* Add aewan ascii art creation tools
-* Add per-gallery config file support
-* Add Vintage ascii art gallery
-* Better support for console-only deployments
-* Console-based mailcap configs used with `ascinit -c`
-* Add sample NNTP account in NeoMutt (use NeoMutt to read Usenet newsgroups)
-* Use encrypted credentials for NNTP server authenticaton
-* Add preconfigured Cruzio account for NeoMutt
-* Mailcap improvements for mutt, neomutt, and tuir
-* Use jp2a in mailcaps for images
-* Add support for TUIR - Terminal UI for Reddit
-* Add khard contact management integration and configuration
-* Add support for selecting multiple ascii art files with ranger
-* Add ascii art selection to menus
-* View individual ascii art via command line
-* Compress ascii art files
-* Add manual installation script for non Debian/RPM systems
-* Beginning with version 1.4.0 a console-only setup is supported
-    * No graphical utilities are installed if `ascinit -c` used
-    * Console screen used exclusively for display
-* Support for xfce4-terminal slideshows with FIFO
-* Updated NetHack to latest development snapshot
-* Add several new Ascii Art galleries
-* Add new text-based games
-* Add termprofset command to manage terminal profile settings
-* Add `newsboat` RSS Feed reader
-* Maintain Asciiville preferences in `$HOME/.config/asciiville/config`
-* Move installation of terminal emulators to ascinit
-* Add `got` translation tool
-* Add `tdraw` ascii drawing tool
-* Dynamically generate Art folder menu entries
-* Add menu for generating and viewing ascii art
-* User generated ASCII Art galleries can be added to menu
-
-Version 1.3.1 included:
-
-* W3M configuration with support for acting as a Markdown pager
-* Mailcap and MIME type enhancements for NeoMutt, Mutt, and W3M
-* NeoMutt and Mutt configuration in `ascinit`
-* Enhanced Mutt/NeoMutt mailcap, auto view text/html MIME type
-* Support for GPG encrypted passwords in NeoMutt
-* Extended Help menu in `asciiville`
-* Colorized `man` command output in Help menus
-* Add support and integration for `jrnl` Journal application
-* Add Matrix and NetHack commands
-* Additional freely licensed songs for slideshow and animation audio tracks
-* Rename all Ascii Art files to use `.asc` filename suffix
-* Add rifle config for opening .asc files
-* Simplify menus, match partial responses when possible
-* Create and check initialization file in asciiville
-* Add selection menu for command and terminal, add select song option
+See [CHANGELOG.md](https://github.com/doctorfree/Asciiville/blob/master/CHANGELOG.md) for a full list of changes in every Asciiville release

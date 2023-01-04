@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Asciiville-2.0.0r1 (2022-10-10)
+## Asciiville-2.0.0r1 (2023-01-05)
 
 * Modularize Asciiville installation and initialization
   * Remove aewan, jp2a, and ninvaders from source, build, and packaging
@@ -11,6 +11,15 @@ All notable changes to this project will be documented in this file.
 * Install the kitty terminfo entry when installing kitty
 * Add any2ascii command and its dependencies
 * Add asciibrow command
+* Use rich to format usage messages if available
+* Add kitty session startup for zsh users
+* Add Jekyll theme for Github Pages
+* Update tmux configuration
+* Add VHS install in ascinit
+* Improve newsboat config, additional newsboat scripts
+* Use HOME/.config/newsboat for Newsboat config
+* Use kitty for image display in Newsboat
+* Center ascii art when displaying in Kitty
 
 ## Asciiville-1.4.1r2 (2022-10-02)
 
