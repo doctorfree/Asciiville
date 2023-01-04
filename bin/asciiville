@@ -3393,6 +3393,10 @@ have_neo=`type -p neofetch`
 have_cbftp=`type -p cbftp`
 have_ncftp=`type -p ncftp`
 have_lolcat=`type -p lolcat`
+[ "${have_lolcat}" ] || {
+  use_lolcat=
+  use_lol="NO"
+}
 have_rainbow=`type -p rainbowstream`
 have_rich=`type -p rich`
 have_roon=`type -p roon`

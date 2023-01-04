@@ -1,3 +1,9 @@
 #!/bin/bash
 
-cat /proc/asound/cards | lolcat
+have_lolcat=`type -p lolcat`
+if [ "${have_lolcat}" ]
+then
+  cat /proc/asound/cards | lolcat
+else
+  cat /proc/asound/cards
+fi
