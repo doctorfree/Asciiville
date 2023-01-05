@@ -2,9 +2,17 @@
 PKG="asciiville"
 PKG_NAME="Asciiville"
 DESTDIR="usr"
-ARCH=`uname -m`
+ARCH=`uname -s`
 SUDO=sudo
 HERE=`pwd`
+USER=`id -u -n`
+#GROUP=`id -g -n`
+
+[ "${USER}" == "root" ] && {
+  echo "macInstall must be run as a non-root user with sudo privilege"
+  echo "Exiting"
+  exit 1
+}
 
 [ -f VERSION ] || {
   echo "macInstall must be run in the root of the Asciiville source folder"
@@ -64,7 +72,7 @@ for dir in "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/games/share/applications"
 do
     [ -d ${OUT_DIR}/${dir} ] || ${SUDO} mkdir ${OUT_DIR}/${dir}
-    ${SUDO} chown root:root ${OUT_DIR}/${dir}
+    ${SUDO} chown root:wheel ${OUT_DIR}/${dir}
 done
 
 for dir in bin
@@ -194,9 +202,9 @@ do
   ${SUDO} chmod 644 "${f}"
 done
 ${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/tools/bin/*
-${SUDO} chown -R root:root ${OUT_DIR}/${DESTDIR}/share
-${SUDO} chown -R root:root ${OUT_DIR}/${DESTDIR}/bin
-${SUDO} chown -R games:games ${OUT_DIR}/${DESTDIR}/games/var
+${SUDO} chown -R root:wheel ${OUT_DIR}/${DESTDIR}/share
+${SUDO} chown -R root:wheel ${OUT_DIR}/${DESTDIR}/bin
+#${SUDO} chown -R ${USER}:${GROUP} ${OUT_DIR}/${DESTDIR}/games/var
 
 cd dist
 cd ${PKG_NAME}_${PKG_VER}
