@@ -27,7 +27,13 @@ else
       sudo dnf update
       pkg/mkrpm.sh fedora
     else
-      echo "Unsupported platform"
+      platform=`uname -s`
+      if [ "${platform}" == "Darwin" ]
+      then
+        pkg/mkmac.sh
+      else
+        echo "Unsupported platform"
+      fi
     fi
   fi
 fi
