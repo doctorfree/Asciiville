@@ -6,7 +6,6 @@ ARCH=`uname -s`
 SUDO=sudo
 HERE=`pwd`
 USER=`id -u -n`
-GROUP=`id -g -n`
 
 [ "${USER}" == "root" ] && {
   echo "macInstall must be run as a non-root user with sudo privilege"
@@ -29,17 +28,8 @@ umask 0022
 # Subdirectory in which to create the distribution files
 OUT_DIR="${HERE}/dist/${PKG_NAME}_${PKG_VER}"
 
-# Install btop
-have_brew=`type -p brew`
-if [ "${have_brew}" ]
-then
-  brew install btop
-else
-  echo "Brew must be installed to install btop"
-  echo "After installing Brew, run 'brew install btop'"
-fi
-
 # Build cbftp
+have_brew=`type -p brew`
 [ "${have_brew}" ] && {
   brew install coreutils make gcc@12 openssl
 }

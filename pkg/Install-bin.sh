@@ -75,6 +75,16 @@ do
   esac
 done
 
+platform=`uname -s`
+have_brew=`type -p brew`
+have_btop=`type -p btop`
+[ "${platform}" == "Darwin" ] && [ "${have_brew}" ] && {
+  [ "${have_btop}" ] || {
+    echo "Installing btop with Brew"
+    brew install btop
+  }
+}
+
 unzip_inst=`type -p unzip`
 if [ "${pkgsuf}" == "tgz" ]
 then

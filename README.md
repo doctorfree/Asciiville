@@ -319,7 +319,9 @@ This should display a waterfall rendered with characters as ascii art.
 ## Requirements
 
 Asciiville can be installed on Arch Linux, Debian based Linux systems,
-and RPM based Linux systems.
+and RPM based Linux systems using the platform native packaging format.
+Apple macOS users can install Asciiville manually using the provided
+installation script and `Darwin` distribution archive.
 
 Installation and initialization require admistrative privilege. The `ascinit`
 command, executed after installing Asciiville, installs several packages
@@ -382,6 +384,9 @@ in Red Hat package manager (RPM) format and Arch Linux packaging format.
 
 See the [Build](#build) section below to compile and build a package on
 an Linux platform other than those for which packages are provided.
+
+Asciiville v2.0.0r2 and later can be installed on Apple macOS systems
+using the provided installation script and `Darwin` distribution archive.
 
 ### Arch Linux package installation
 
@@ -457,15 +462,15 @@ sudo yum localinstall ./Asciiville_<version>-<release>.x86_64.rpm
 
 On systems for which the Arch, Debian, or RPM packages will not suffice,
 install manually by downloading the `Install-bin.sh` script and either
-the gzip'd distribution archive or the zip'd distribution archive.
-After downloading the installation script and distribution archive,
-as a user with sudo privilege execute the commands:
+the gzip'd distribution archive or the zip'd distribution archive for
+your platform. After downloading the installation script and distribution
+archive, as a user with sudo privilege execute the commands:
 
 ```bash
 chmod 755 Install-bin.sh
-sudo ./Install-bin.sh /path/to/Asciiville_1.4.0-3.<arch>.tgz
+sudo ./Install-bin.sh /path/to/Asciiville_<version>-<release>.<arch>.tgz
 or
-sudo ./Install-bin.sh /path/to/Asciiville_1.4.0-3.<arch>.zip
+sudo ./Install-bin.sh /path/to/Asciiville_<version>-<release>.<arch>.zip
 ```
 
 ### BB AAlib Demo
