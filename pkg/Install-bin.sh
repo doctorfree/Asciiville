@@ -88,7 +88,7 @@ have_btop=`type -p btop`
 unzip_inst=`type -p unzip`
 if [ "${pkgsuf}" == "tgz" ]
 then
-  sudo tar -xzf ${PATH_TO_ARCHIVE} -C /
+  sudo tar -mxzf ${PATH_TO_ARCHIVE} -C /
 else
   if [ "${pkgsuf}" == "zip" ]
   then

@@ -192,17 +192,20 @@ do
   ${SUDO} chmod 644 "${f}"
 done
 ${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/tools/bin/*
-${SUDO} chown -R root:wheel ${OUT_DIR}/${DESTDIR}/share
-${SUDO} chown -R root:wheel ${OUT_DIR}/${DESTDIR}/bin
-${SUDO} chown -R root:wheel ${OUT_DIR}/${DESTDIR}/games/var
 ${SUDO} chmod 775 ${OUT_DIR}/${DESTDIR}/games/var
+${SUDO} chown -R root:wheel ${OUT_DIR}/${DESTDIR}
+#${SUDO} chown -R root:wheel ${OUT_DIR}/${DESTDIR}/share
+#${SUDO} chown -R root:wheel ${OUT_DIR}/${DESTDIR}/bin
+#${SUDO} chown -R root:wheel ${OUT_DIR}/${DESTDIR}/games/var
 
-cd dist
-cd ${PKG_NAME}_${PKG_VER}
+cd ${OUT_DIR}
 echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
 ${SUDO} tar cf - usr | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.tgz
+
+echo "Creating zip archive of ${PKG_NAME} ${PKG_VER} distribution"
+${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.zip usr
 
 cd ..
 [ -d ../releases ] || mkdir ../releases
 [ -d ../releases/${PKG_VER} ] || mkdir ../releases/${PKG_VER}
-${SUDO} cp *.tgz ../releases/${PKG_VER}
+${SUDO} cp *.tgz *.zip ../releases/${PKG_VER}
