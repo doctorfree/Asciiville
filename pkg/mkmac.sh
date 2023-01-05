@@ -6,7 +6,7 @@ ARCH=`uname -s`
 SUDO=sudo
 HERE=`pwd`
 USER=`id -u -n`
-#GROUP=`id -g -n`
+GROUP=`id -g -n`
 
 [ "${USER}" == "root" ] && {
   echo "macInstall must be run as a non-root user with sudo privilege"
@@ -65,7 +65,7 @@ for dir in "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
            "${DESTDIR}/share/doc/${PKG}" "${DESTDIR}/share/btop" \
            "${DESTDIR}/share/${PKG}" "${DESTDIR}/games" "${DESTDIR}/games/bin" \
-           "${DESTDIR}/games/lib" \
+           "${DESTDIR}/games/lib" "${DESTDIR}/games/var" \
            "${DESTDIR}/games/share" "${DESTDIR}/games/share/doc" \
            "${DESTDIR}/games/share/doc/tetris" \
            "${DESTDIR}/games/share/pixmaps" \
@@ -89,15 +89,15 @@ ${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1/endoh1_color
 
 # Tetris
 ${SUDO} cp games/tetris/tetris ${OUT_DIR}/${DESTDIR}/games/bin
-${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/bin/tetris
-${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/bin/tetris
-${SUDO} chmod 04755 ${OUT_DIR}/${DESTDIR}/games/bin/tetris
+${SUDO} chown root ${OUT_DIR}/${DESTDIR}/games/bin/tetris
+${SUDO} chgrp wheel ${OUT_DIR}/${DESTDIR}/games/bin/tetris
+${SUDO} chmod 02755 ${OUT_DIR}/${DESTDIR}/games/bin/tetris
 ${SUDO} rm -f ${OUT_DIR}/${DESTDIR}/games/tetris
 ${SUDO} ln -r -s ${OUT_DIR}/${DESTDIR}/games/bin/tetris ${OUT_DIR}/${DESTDIR}/games/tetris
 ${SUDO} cp games/tetris/gameserver ${OUT_DIR}/${DESTDIR}/games/bin
-${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/bin/gameserver
-${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/bin/gameserver
-${SUDO} chmod 04755 ${OUT_DIR}/${DESTDIR}/games/bin/gameserver
+${SUDO} chown root ${OUT_DIR}/${DESTDIR}/games/bin/gameserver
+${SUDO} chgrp wheel ${OUT_DIR}/${DESTDIR}/games/bin/gameserver
+${SUDO} chmod 02755 ${OUT_DIR}/${DESTDIR}/games/bin/gameserver
 ${SUDO} rm -f ${OUT_DIR}/${DESTDIR}/games/gameserver
 ${SUDO} ln -r -s ${OUT_DIR}/${DESTDIR}/games/bin/gameserver ${OUT_DIR}/${DESTDIR}/games/gameserver
 
@@ -107,8 +107,8 @@ ${SUDO} cp games/tetris/INSTALL ${OUT_DIR}/${DESTDIR}/games/share/doc/tetris
 ${SUDO} cp games/tetris/tetris.xpm ${OUT_DIR}/${DESTDIR}/games/share/pixmaps
 ${SUDO} cp games/tetris/tetris.desktop ${OUT_DIR}/${DESTDIR}/games/share/applications
 ${SUDO} touch ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
-${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
-${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
+${SUDO} chown root ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
+${SUDO} chgrp wheel ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
 ${SUDO} chmod 0664 ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
@@ -204,7 +204,8 @@ done
 ${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/tools/bin/*
 ${SUDO} chown -R root:wheel ${OUT_DIR}/${DESTDIR}/share
 ${SUDO} chown -R root:wheel ${OUT_DIR}/${DESTDIR}/bin
-#${SUDO} chown -R ${USER}:${GROUP} ${OUT_DIR}/${DESTDIR}/games/var
+${SUDO} chown -R root:wheel ${OUT_DIR}/${DESTDIR}/games/var
+${SUDO} chmod 775 ${OUT_DIR}/${DESTDIR}/games/var
 
 cd dist
 cd ${PKG_NAME}_${PKG_VER}
