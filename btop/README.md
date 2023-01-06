@@ -16,6 +16,7 @@
 [![btop](https://snapcraft.io/btop/badge.svg)](https://snapcraft.io/btop)
 [![Continuous Build Linux](https://github.com/aristocratos/btop/actions/workflows/continuous-build-linux.yml/badge.svg)](https://github.com/aristocratos/btop/actions/workflows/continuous-build-linux.yml)
 [![Continuous Build macOS](https://github.com/aristocratos/btop/actions/workflows/continuous-build-macos.yml/badge.svg)](https://github.com/aristocratos/btop/actions/workflows/continuous-build-macos.yml)
+[![Continuous Build FreeBSD](https://github.com/aristocratos/btop/actions/workflows/continuous-build-freebsd.yml/badge.svg)](https://github.com/aristocratos/btop/actions/workflows/continuous-build-freebsd.yml)
 
 ## Index
 
@@ -327,7 +328,9 @@ Also needs a UTF8 locale and a font that covers:
 
 3. **Compile**
 
-   Append `STATIC=true` to `make` command for static compilation.
+   Append `VERBOSE=true` to display full compiler/linker commands.
+
+   Append `STATIC=true` for static compilation.
 
    Notice! If using LDAP Authentication, usernames will show as UID number for LDAP users if compiling statically with glibc.
 
@@ -397,6 +400,8 @@ Also needs a UTF8 locale and a font that covers:
 ## Compilation macOS OSX
 
    Needs GCC 10 or higher, (GCC 11 or above strongly recommended for better CPU efficiency in the compiled binary).
+   
+   GCC 12 needed for macOS Ventura. If you get linker errors on Ventura you'll need to upgrade your command line tools (Version 14.0) is bugged.
 
    The makefile also needs GNU coreutils and `sed`.
 
@@ -405,7 +410,7 @@ Also needs a UTF8 locale and a font that covers:
 1. **Install dependencies (example for Homebrew)**
 
    ``` bash
-   brew install coreutils make gcc@11
+   brew install coreutils make gcc@12
    ```
 
 2. **Clone repository**
@@ -417,7 +422,9 @@ Also needs a UTF8 locale and a font that covers:
 
 3. **Compile**
 
-   Append `STATIC=true` to `make` command for static compilation (only libgcc and libstdc++ will be static!).
+   Append `VERBOSE=true` to display full compiler/linker commands.
+   
+   Append `STATIC=true` for static compilation (only libgcc and libstdc++ will be static!).
 
    Append `QUIET=true` for less verbose output.
 
@@ -501,7 +508,7 @@ Also needs a UTF8 locale and a font that covers:
 
 3. **Compile**
 
-   Append `STATIC=true` to `make` command for static compilation.
+   Append `VERBOSE=true` to display full compiler/linker commands.
 
    Append `QUIET=true` for less verbose output.
 
@@ -618,7 +625,7 @@ force_tty = False
 
 #* Define presets for the layout of the boxes. Preset 0 is always all boxes shown with default settings. Max 9 presets.
 #* Format: "box_name:P:G,box_name:P:G" P=(0 or 1) for alternate positions, G=graph symbol to use for box.
-#* Use withespace " " as separator between different presets.
+#* Use whitespace " " as separator between different presets.
 #* Example: "cpu:0:default,mem:0:tty,proc:1:default cpu:0:braille,proc:0:tty"
 presets = "cpu:1:default,proc:0:default cpu:0:default,mem:0:default,net:0:default cpu:0:block,net:0:tty"
 
