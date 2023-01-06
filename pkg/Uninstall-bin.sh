@@ -70,3 +70,7 @@ user=`id -u -n`
 
 rm -f ${AVILLE_FILES}
 rm -rf ${AVILLE_DIRS}
+if [ -f /etc/profile.d/asciiville.sh ]
+then
+  rm -f /etc/profile.d/asciiville.sh
+fi
