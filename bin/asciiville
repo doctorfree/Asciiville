@@ -3394,6 +3394,7 @@ have_ncdu=`type -p ncdu`
 have_mapscii=`type -p mapscii`
 have_mpcplus=`type -p mpcplus`
 have_mpplus=`type -p mpplus`
+have_mplayer=`type -p mplayer`
 have_neo=`type -p neofetch`
 have_cbftp=`type -p cbftp`
 have_ncftp=`type -p ncftp`
@@ -4116,9 +4117,15 @@ fi
   audarg=
 }
 [ "${AUDIO}" ] && {
-  audarg="-P -S ${SONG}"
-  ASCSPLASH="${ASCSPLASH} -a"
-  ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
+  if [ "${have_mplayer}" ]
+  then
+    audarg="-P -S ${SONG}"
+    ASCSPLASH="${ASCSPLASH} -a"
+    ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
+  else
+    AUDIO=
+    audarg=
+  fi
 }
 
 if [ "${cycle}" ]

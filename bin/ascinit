@@ -978,6 +978,13 @@ have_brew=`type -p brew`
     }
     brew install -q btop
   }
+  have_mplayer=`type -p mplayer`
+  [ "${have_mplayer}" ] || {
+    [ "${quiet}" ] || {
+      printf "\nInstalling mplayer with Brew\n"
+    }
+    brew install -q mplayer
+  }
 }
 
 have_tuir=`type -p tuir`
@@ -1450,7 +1457,13 @@ touch ${HOME}/.tetris
       read -p "View an ASCII animation ? (y/n) " yn
       case $yn in
         [Yy]* )
-              asciisplash -c 1 -a -i
+              have_mplayer=`type -p mplayer`
+              if [ "${have_mplayer}" ]
+              then
+                asciisplash -c 1 -a -i
+              else
+                asciisplash -c 1 -i
+              fi
               break
               ;;
         [Nn]* )

@@ -1,7 +1,4 @@
 post_install() {
-  python -m pip install setuptools
-  python -m pip install asciimatics
-  python -m pip install rainbowstream
   npm_inst=`type -p npm`
   if [ "${npm_inst}" ]
   then
@@ -38,6 +35,10 @@ post_install() {
   if [ "${zip_inst}" ]
   then
     pyfig_inst=`type -p pyfiglet`
+    [ "${pyfig_inst}" ] || {
+      python -m pip install pyfiglet
+      pyfig_inst=`type -p pyfiglet`
+    }
     if [ "${pyfig_inst}" ]
     then
       if [ -d ${FIGLET_DIR} ]

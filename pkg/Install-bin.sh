@@ -99,7 +99,8 @@ export PATH=${PATH}:/usr/local/bin:/snap/bin
 npm_inst=`type -p npm`
 if [ "${npm_inst}" ]
 then
-  npm install -g mapscii
+  npm config set registry https://registry.npmjs.org/
+  npm install -g mapscii > /dev/null 2>&1
 fi
 
 lol_inst=`type -p lolcat`
@@ -144,7 +145,7 @@ then
 fi
 
 echo "Installation of ${pkgname} Version ${pkgver} Release ${pkgrel}"
-echo "for architecture ${pkgarc} complete."
+echo "for architecture ${pkgarc} complete. Add '/usr/local/bin' to PATH."
 echo ""
 echo "The manual installation of ${pkgname} does not automatically"
 echo "install dependencies. Package names vary from platform to platform."
@@ -158,7 +159,8 @@ echo "cmatrix, gnupg, pandoc, util-linux"
 echo ""
 echo "After installing dependencies, initialize the Asciiville environment."
 echo "As a normal user with sudo privilege, execute the Asciiville"
-echo "initialization command 'ascinit' or 'ascinit -c' for headless systems"
+echo "initialization command '/usr/local/bin/ascinit' or"
+echo "'/usr/local/bin/ascinit -c' for headless systems"
 echo "(systems on which there is no X11 windowing system)"
 
 exit 0
