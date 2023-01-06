@@ -38,6 +38,6 @@ shift $(( OPTIND - 1 ))
 
 have_curl=`type -p curl`
 [ "${have_curl}" ] && {
-  TOOLSBIN="/usr/share/asciiville/tools/bin"
+  TOOLSBIN="/usr/local/share/asciiville/tools/bin"
   [ -x ${TOOLSBIN}/pokefetch ] && ${TOOLSBIN}/pokefetch ${args}
 }

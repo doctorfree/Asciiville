@@ -52,9 +52,9 @@ build_cbftp() {
   chmod +x bin/*
 
   [ "${INSTALL}" ] && {
-    [ -d ${PREFIX}/usr ] || sudo mkdir -p ${PREFIX}/usr
-    [ -d ${PREFIX}/usr/bin ] || sudo mkdir -p ${PREFIX}/usr/bin
-    sudo cp bin/* ${PREFIX}/usr/bin
+    [ -d ${PREFIX}/usr/local ] || sudo mkdir -p ${PREFIX}/usr/local
+    [ -d ${PREFIX}/usr/local/bin ] || sudo mkdir -p ${PREFIX}/usr/local/bin
+    sudo cp bin/* ${PREFIX}/usr/local/bin
   }
 }
 
@@ -68,9 +68,9 @@ build_endo() {
   chmod +x endoh1 endoh1_color
 
   [ "${INSTALL}" ] && {
-    [ -d ${PREFIX}/usr ] || sudo mkdir -p ${PREFIX}/usr
-    [ -d ${PREFIX}/usr/bin ] || sudo mkdir -p ${PREFIX}/usr/bin
-    sudo cp endoh1 endoh1_color ${PREFIX}/usr/bin
+    [ -d ${PREFIX}/usr/local ] || sudo mkdir -p ${PREFIX}/usr/local
+    [ -d ${PREFIX}/usr/local/bin ] || sudo mkdir -p ${PREFIX}/usr/local/bin
+    sudo cp endoh1 endoh1_color ${PREFIX}/usr/local/bin
   }
 }
 
@@ -99,7 +99,7 @@ build_nethack() {
     ./bootstrap.sh
     cd ../..
     chmod 755 configure
-    ./configure --prefix=/usr/games \
+    ./configure --prefix=/usr/local/games \
                 --with-owner=games \
                 --with-group=games \
                 --enable-wizmode=doctorwhen
@@ -110,7 +110,7 @@ build_nethack() {
 
 build_tetris() {
   [ -f tetris ] || {
-    ./configure.sh --prefix=/usr/games --enable-xlib=no --enable-curses=yes
+    ./configure.sh --prefix=/usr/local/games --enable-xlib=no --enable-curses=yes
     make
     make gameserver
   }
@@ -121,9 +121,9 @@ usage() {
     printf "\nUsage: ./build [-i] [-p prefix] [-u] project [project2 ...]"
     printf "\nWhere:"
     printf "\n\t-i indicates install"
-    printf "\n\t-p prefix specifies installation prefix (default /usr)"
+    printf "\n\t-p prefix specifies installation prefix (default /usr/local)"
     printf "\n\t-u displays this usage message and exits\n"
-    printf "\nNo arguments: build btop, configure with prefix=/usr, build\n"
+    printf "\nNo arguments: build btop, configure with prefix=/usr/local, build\n"
     printf "\n'project' can be one or more of 'btop', 'cbftp',"
     printf "\n'nethack', and 'tetris'\n"
     exit 1
@@ -131,7 +131,7 @@ usage() {
 
 PROJ=btop
 INSTALL=
-PREFIX=/usr
+PREFIX=/usr/local
 while getopts "ip:u" flag; do
     case $flag in
         i)

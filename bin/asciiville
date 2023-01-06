@@ -28,7 +28,7 @@ BOLD=$(tput bold)
 NORM=$(tput sgr0)
 PLEASE="Please enter your"
 COMMAND=btop
-FIG_FONTS="/usr/share/figlet-fonts"
+FIG_FONTS="/usr/local/share/figlet-fonts"
 HOME_FIG_FONTS="${HOME}/src/Asciiville/share/figlet-fonts"
 FIG_TEXT="Asciiville"
 USE_FONT="Standard"
@@ -37,8 +37,8 @@ LOLCAT_NORM="lolcat"
 LOLCAT_ANIM="lolcat --animate --speed=60.0"
 LOLCAT="${LOLCAT_ANIM}"
 MTITLE="Asciiville"
-ASHARE=/usr/share/asciiville
-DSHARE=/usr/share/doc/asciiville
+ASHARE=/usr/local/share/asciiville
+DSHARE=/usr/local/share/doc/asciiville
 ARTDIR=${ASHARE}/art
 MUSEDIR=${ASHARE}/music
 TOOLSBIN=${ASHARE}/tools/bin
@@ -69,9 +69,9 @@ if [ `echo $PATH | grep -c /usr/local/bin` -ne "1" ]
 then
   PATH="$PATH:/usr/local/bin"
 fi
-if [ `echo $PATH | grep -c /usr/games` -ne "1" ]
+if [ `echo $PATH | grep -c /usr/local/games` -ne "1" ]
 then
-  PATH="$PATH:/usr/games"
+  PATH="$PATH:/usr/local/games"
 fi
 export PATH
 
@@ -1161,10 +1161,10 @@ show_help_menu() {
         "Mutt Full"*,*|*,"Mutt Full"*)
           if [ "${have_w3m}" ]
           then
-            w3m /usr/share/doc/mutt/html/index.html
+            w3m /usr/local/share/doc/mutt/html/index.html
           else
             [ "${have_lynx}" ] && {
-              lynx /usr/share/doc/mutt/html/index.html
+              lynx /usr/local/share/doc/mutt/html/index.html
             }
           fi
           break
@@ -1172,10 +1172,10 @@ show_help_menu() {
         "NeoMutt Full"*,*|*,"NeoMutt Full"*)
           if [ "${have_w3m}" ]
           then
-            w3m /usr/share/doc/neomutt/html/index.html
+            w3m /usr/local/share/doc/neomutt/html/index.html
           else
             [ "${have_lynx}" ] && {
-              lynx /usr/share/doc/neomutt/html/index.html
+              lynx /usr/local/share/doc/neomutt/html/index.html
             }
           fi
           break
@@ -1185,16 +1185,16 @@ show_help_menu() {
           break
           ;;
         "NetHack Guide"*,*|*,"NetHack Guide"*)
-          less /usr/games/share/doc/nethack/Guidebook.txt
+          less /usr/local/games/share/doc/nethack/Guidebook.txt
           break
           ;;
         "Newsboat Full"*,*|*,"Newsboat Full"*)
           if [ "${have_w3m}" ]
           then
-            w3m /usr/share/doc/newsboat/newsboat.html
+            w3m /usr/local/share/doc/newsboat/newsboat.html
           else
             [ "${have_lynx}" ] && {
-              lynx /usr/share/doc/newsboat/newsboat.html
+              lynx /usr/local/share/doc/newsboat/newsboat.html
             }
           fi
           break
@@ -2214,8 +2214,8 @@ show_animation_menu() {
               break
               ;;
           "Fluid"*,*|*,"Fluid"*)
-              COMMAND="bash -m /usr/bin/show_endo"
-              COMMAND_TMUX="bash -m /usr/bin/show_endo"
+              COMMAND="bash -m /usr/local/bin/show_endo"
+              COMMAND_TMUX="bash -m /usr/local/bin/show_endo"
               ASCSPLASH="${COMMAND}"
               ASCSPLASH_TMUX="${COMMAND_TMUX}"
               # trap -- '' SIGINT
@@ -3505,7 +3505,7 @@ while getopts "Aabc:CdD:E:fFgiIjJkKlL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
       COMMAND="${OPTARG}"
       case "${COMMAND}" in
       endo|Endo)
-          [ "${have_endo}" ] && bash -m /usr/bin/show_endo
+          [ "${have_endo}" ] && bash -m /usr/local/bin/show_endo
           exit 0
           ;;
       maps|Maps)

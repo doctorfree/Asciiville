@@ -3,7 +3,7 @@
 # ascinit - initialize Asciiville configuration files, install needed utilities
 #
 
-CONFDIR=/usr/share/asciiville
+CONFDIR=/usr/local/share/asciiville
 USERCONF="${HOME}/.config"
 BOLD=$(tput bold)
 NORM=$(tput sgr0)
@@ -524,21 +524,21 @@ fi
 [ -d ${USERCONF} ] || mkdir -p ${USERCONF}
 
 # Install aewan if not already present
-[ -x /usr/bin/aewan ] || {
+[ -x /usr/local/bin/aewan ] || {
   OWNER=doctorfree
   PROJECT=asciiville-aewan
   API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
   install_external_package
 }
 # Install any2ascii if not already present
-[ -x /usr/bin/jp2a ] || {
+[ -x /usr/local/bin/jp2a ] || {
   OWNER=doctorfree
   PROJECT=any2ascii
   API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
   install_external_package
 }
 # Install ninvaders if not already present
-[ -x /usr/games/bin/ninvaders ] || {
+[ -x /usr/local/games/bin/ninvaders ] || {
   OWNER=doctorfree
   PROJECT=ninvaders
   API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
@@ -1336,8 +1336,8 @@ CONF="${USERCONF}/asciiville/config"
     printf "\n\nAsciiville configuration in ${CONF} ..."
   }
   touch ${CONF}
-  echo "ARTDIR=/usr/share/asciiville/art" >> ${CONF}
-  echo "MUSEDIR=/usr/share/asciiville/music" >> ${CONF}
+  echo "ARTDIR=/usr/local/share/asciiville/art" >> ${CONF}
+  echo "MUSEDIR=/usr/local/share/asciiville/music" >> ${CONF}
   echo "SONG=\"${MUSEDIR}/Chronos.mp3\"" >> ${CONF}
   echo "ALTSONG=\"${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav\"" >> ${CONF}
   echo "" >> ${CONF}

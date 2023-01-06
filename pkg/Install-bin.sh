@@ -105,21 +105,6 @@ else
   fi
 fi
 
-[ "${platform}" == "Darwin" ] && {
-  destdir="/usr/local/Asciiville"
-  [ -d "${destdir}" ] && {
-    cd "${destdir}"
-    while read folder
-    do
-      [ -d "/usr/${folder}" ] || ln -s "${destdir}/${folder}" "/usr/${folder}"
-    done < <(find bin games share -type d)
-    while read filename
-    do
-      [ -f "/usr/${filename}" ] || ln -s "${destdir}/${filename}" "/usr/${filename}"
-    done < <(find bin games share -type f)
-  }
-}
-
 export PATH=${PATH}:/usr/local/bin:/snap/bin
 python3_inst=`type -p python3`
 if [ "${python3_inst}" ]
@@ -160,7 +145,7 @@ then
   fi
 fi
 
-FIGLET_DIR="/usr/share/figlet-fonts"
+FIGLET_DIR="/usr/local/share/figlet-fonts"
 FIGLET_ZIP="figlet-fonts.zip"
 zip_inst=`type -p zip`
 if [ "${zip_inst}" ]

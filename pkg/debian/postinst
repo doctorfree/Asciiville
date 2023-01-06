@@ -60,7 +60,7 @@ case "$1" in
       fi
     fi
 
-    FIGLET_DIR="/usr/share/figlet-fonts"
+    FIGLET_DIR="/usr/local/share/figlet-fonts"
     FIGLET_ZIP="figlet-fonts.zip"
     zip_inst=`type -p zip`
     if [ "${zip_inst}" ]

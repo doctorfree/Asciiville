@@ -72,9 +72,9 @@ The `asciiville` command can be used to display Ascii Art either
 as a slideshow or interactively. For example:
 
 ```console
-# Slideshow of Ascii Art in /usr/share/asciiville/art/Art/
+# Slideshow of Ascii Art in /usr/local/share/asciiville/art/Art/
 asciiville -V Art
-# Slideshow of Ascii Art in /usr/share/asciiville/art/Vintage/
+# Slideshow of Ascii Art in /usr/local/share/asciiville/art/Vintage/
 asciiville -V Vintage
 # Interactive display of Ascii Art in .../file1 and .../file2
 asciiville file1 file2 ...
@@ -178,7 +178,7 @@ The Asciiville project includes many curated Ascii Art galleries.
 These include hundreds of high resolution Ascii Art files created
 by Asciiville author and artist, Dr. Ronald Joe Record. The Asciiville
 package, when installed, provides the following Ascii Art galleries
-located in the default Ascii Art Gallery folder `/usr/share/asciiville/art/`:
+located in the default Ascii Art Gallery folder `/usr/local/share/asciiville/art/`:
 
 ```
 Art - A collection of fine art transformed into Ascii Art
@@ -206,8 +206,8 @@ Beginning with Asciiville version 1.4.0 release 2, Asciiville will ship with
 gzip compressed ascii art gallery files. If you wish to compress your current
 pre-1.4.0r2 Asciiville ascii art gallery files then download and install
 [show_ascii_art](https://github.com/doctorfree/Asciiville/blob/main/bin/show_ascii_art).
-Install the updated `show_ascii_art` by copying it to `/usr/bin/` with the
-command `sudo cp show_ascii_art /usr/bin`.
+Install the updated `show_ascii_art` by copying it to `/usr/local/bin/` with the
+command `sudo cp show_ascii_art /usr/local/bin`.
 
 When creating custom ascii art galleries for use with Asciiville, compression
 is optional but can be used to reduce the disk size of ascii art files.  When
@@ -524,7 +524,7 @@ ascinit -c
 ```
 
 A sample Asciiville configuration file is provided below. In this sample
-configuration the *ARTDIR* is set to `/usr/share/asciiville/art`, the default
+configuration the *ARTDIR* is set to `/usr/local/share/asciiville/art`, the default
 Asciiville Ascii Art galleries folder. To change the Ascii Art galleries folder,
 modify this setting. For example, to change where `asciiville` looks for
 Ascii Art galleries, this setting could be modified to:
@@ -534,7 +534,7 @@ ARTDIR=${HOME}/Pictures/AsciiArt
 ```
 
 Asciiville commands would then look in `$HOME/Pictures/AsciiArt`
-for Ascii Art galleries rather than `/usr/share/asciiville/art`.
+for Ascii Art galleries rather than `/usr/local/share/asciiville/art`.
 
 Of particular interest are the `art_font_size` and `txt_font_size`
 configuration settings. These control the size of the font used to
@@ -558,8 +558,8 @@ that fills most of the screen.
 A sample Asciiville configuration file `$HOME/.config/asciiville/config`:
 
 ```
-ARTDIR=/usr/share/asciiville/art
-MUSEDIR=/usr/share/asciiville/music
+ARTDIR=/usr/local/share/asciiville/art
+MUSEDIR=/usr/local/share/asciiville/music
 SONG=/home/ronnie/Music/Buckingham_Green.mp3
 ALTSONG=/Epic_Dramatic-Yuriy_Bespalov.wav
 AUDIO=1
@@ -736,7 +736,7 @@ To transfer a previously generated GnuPG key pair from another system, see
 
 The Asciiville NeoMutt configuration includes some custom key bindings
 to ease NeoMutt navigation. These are documented in
-`/usr/share/asciiville/neomutt/cheatsheet.md`.
+`/usr/local/share/asciiville/neomutt/cheatsheet.md`.
 
 The primary differences between the Asciiville NeoMutt key bindings
 and the default are as follows:
@@ -963,7 +963,7 @@ Asciiville `ascinit` skips NeoMutt initialization and configuration if it
 detects an existing `$HOME/.config/neomutt/` folder. If you have already
 configured NeoMutt then `ascinit` does not touch the existing configuration.
 However, you may want to examine the NeoMutt configuration provided in
-Asciiville by viewing the files in `/usr/share/asciiville/neomutt/`. If you
+Asciiville by viewing the files in `/usr/local/share/asciiville/neomutt/`. If you
 want to use the Asciiville NeoMutt setup files rather than your previously
 configured setup, move the existing `$HOME/.config/neomutt/` folder aside
 and rerun `ascinit`.
@@ -992,7 +992,7 @@ Google account, create an App password for NeoMutt. See
 Asciiville `ascinit` Mutt initialization does not overwrite any previously
 existing Mutt configuration files in `$HOME/.mutt/`. However, you may want
 to examine the Mutt configuration provided in Asciiville by viewing the files
-in `/usr/share/asciiville/mutt/`. If you want to use the Asciiville Mutt setup
+in `/usr/local/share/asciiville/mutt/`. If you want to use the Asciiville Mutt setup
 files rather than your previously configured setup, move the existing
 `$HOME/.mutt/` folder aside and rerun `ascinit`.
 
@@ -1223,7 +1223,7 @@ Where:
 		multiple files are separated by a comma with no spaces
 		(e.g. '-a Friends/tux,Doctorwhen/Capitola_Village_Vivid')
 		'art' can be the relative path to a file in:
-			/usr/share/asciiville/art
+			/usr/local/share/asciiville/art
 		or the path to a file, with or without file extension
 	-A 'art_dir' specifies the path to the ascii art folder
 	-b when generating ascii art use a border
@@ -1401,11 +1401,11 @@ arguments or the `-i` argument). From the main Asciiville menu select
 the list of slideshows available in the Asciiville Art menu.
 
 Additional ASCII Art galleries can be added to the Asciiville Art menu
-by creating and populating a directory in `/usr/share/asciiville/art/`
+by creating and populating a directory in `/usr/local/share/asciiville/art/`
 with ASCII Art files. The convention in Asciiville is for ASCII Art
 filenames to end with the suffix `.asc` so generate or locate ASCII Art
 files, make sure the filenames end in `.asc`, and copy them to a new
-folder in `/usr/share/asciiville/art/`. The new ASCII Art gallery will
+folder in `/usr/local/share/asciiville/art/`. The new ASCII Art gallery will
 show up in the menu listing the available ASCII Art slideshows the next
 time you run `asciiville`.
 
@@ -1493,9 +1493,9 @@ Asciiville ascii art viewing utilities including slideshow display utilize
 intelligent and configurable font size changes to render ascii art in higher
 quality. Each Asciiville ascii art gallery can be configured with options
 to control some of these font size and display features. To configure a
-gallery, add or edit the file `/usr/share/asciiville/art/<gallery>/.config`.
+gallery, add or edit the file `/usr/local/share/asciiville/art/<gallery>/.config`.
 An example Asciiville gallery configuration file can be found in
-`/usr/share/asciiville/art/Vintage/.config`:
+`/usr/local/share/asciiville/art/Vintage/.config`:
 
 ```
 scale_art_font=2
@@ -1580,18 +1580,18 @@ by the `pyfiglet` Python package. These fonts are used by the `asciimatics`
 Python package. To view a complete list of the installed `pyfiglet` fonts,
 run the command `pyfiglet -l`. To see an example rendering of each of the
 installed `pyfiglet` fonts including those installed by `Asciiville`,
-run the command `bash /usr/share/asciiville/tools/bin/show_figlet_fonts`.
+run the command `bash /usr/local/share/asciiville/tools/bin/show_figlet_fonts`.
 There are many fonts so you may wish to redirect the output of the
-`bash /usr/share/asciiville/tools/bin/show_figlet_fonts` command for use
+`bash /usr/local/share/asciiville/tools/bin/show_figlet_fonts` command for use
 with an editor or pager:
 
 ```
-bash /usr/share/asciiville/tools/bin/show_figlet_fonts > figlet-fonts-examples.txt
+bash /usr/local/share/asciiville/tools/bin/show_figlet_fonts > figlet-fonts-examples.txt
 less figlet-fonts-examples.txt
 ```
 
 For an example of how to use the Figlet Fonts in an asciimatics animation,
-see `/usr/bin/asciiart`.
+see `/usr/local/bin/asciiart`.
 
 ## Build
 
@@ -1882,7 +1882,7 @@ It's not necessary to have C/C++ expertise to contribute to Asciiville
 development. Many of the Asciiville commands are Bash scripts and require
 no compilaton. Script commands reside in the `bin` directory. To modify a
 shell script, install Asciiville and edit the `bin/<script>` you wish to
-improve. Simply copy the revised script to `/usr/bin` and test your changes.
+improve. Simply copy the revised script to `/usr/local/bin` and test your changes.
 Modifying the configuration files is a little more tricky. Configuration
 files generally live in the `conf` directory but each has its own installation
 location and some are modified by the `ascinit` command during installation.

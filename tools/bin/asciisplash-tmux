@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # asciisplash-tmux - display ASCIImatics splash screens in a tmux session
-MUSEDIR=/usr/share/asciiville/music
+MUSEDIR=/usr/local/share/asciiville/music
 SONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 PLASMA_SONG="${MUSEDIR}/Chronos.mp3"
 NATURE_SONG="${MUSEDIR}/Moving-Ahead-RA.mp3"

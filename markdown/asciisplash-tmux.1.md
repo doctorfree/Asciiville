@@ -18,7 +18,7 @@ See `man asciiville` for details on how to front-end `asciisplash-tmux` with `as
 ## DESCRIPTION
 The *asciisplash-tmux* command runs the *asciisplash* command in a tmux session. This enables automatic recording with *asciinema*, if desired, and simplifies the process of creating and managing a tmux session.
 
-**NOTE:** The `asciisplash-tmux` command resides in `/usr/share/asciiville/tools/bin/asciisplash-tmux` and is intended as a backend for use by the `asciiville` command.
+**NOTE:** The `asciisplash-tmux` command resides in `/usr/local/share/asciiville/tools/bin/asciisplash-tmux` and is intended as a backend for use by the `asciiville` command.
 
 ## COMMAND LINE OPTIONS
 **-a**
