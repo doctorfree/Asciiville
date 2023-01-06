@@ -10,6 +10,10 @@ AVILLE_DIRS="/usr/local/games/share/doc/nethack \
 /usr/local/share/figlet-fonts"
 
 AVILLE_FILES="/usr/local/bin/asciiart \
+/usr/local/bin/any2ascii \
+/usr/local/bin/asciibrow \
+/usr/local/bin/show_endo \
+/usr/local/bin/show_pokemon \
 /usr/local/bin/asciijulia \
 /usr/local/bin/asciimpplus \
 /usr/local/bin/asciiplasma \
@@ -50,6 +54,7 @@ AVILLE_FILES="/usr/local/bin/asciiart \
 /usr/local/share/man/man1/cbftp.1 \
 /usr/local/share/man/man1/show_ascii_art.1 \
 /usr/local/share/man/man1/show_moon.1 \
+/usr/local/share/man/man1/show_pokemon.1 \
 /usr/local/share/man/man1/show_weather.1 \
 /usr/local/share/man/man1/termprofset.1 \
 /usr/local/share/man/man6/dgn_comp.6 \
