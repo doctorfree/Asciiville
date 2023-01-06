@@ -58,6 +58,16 @@ sock_name="/tmp/asckitty_$$"
 # Some configuration can be maintained here
 CONFIG="${HOME}/.config/asciiville/config"
 [ -f ${CONFIG} ] && . ${CONFIG}
+
+# Backwards compatibility with older Asciiville config
+[ -d "${ARTDIR}" ] || {
+  LOC_ARTDIR=`echo "${ARTDIR}" | sed -e "s%/usr/%/usr/local/%"`
+  [ -d "${LOC_ARTDIR}" ] && ARTDIR="${LOC_ARTDIR}"
+}
+[ -d "${MUSEDIR}" ] || {
+  LOC_MUSEDIR=`echo "${MUSEDIR}" | sed -e "s%/usr/%/usr/local/%"`
+  [ -d "${LOC_MUSEDIR}" ] && MUSEDIR="${LOC_MUSEDIR}"
+}
 saved_art_size=${art_font_size}
 saved_txt_size=${txt_font_size}
 
