@@ -1,7 +1,4 @@
 post_install() {
-  python -m pip install setuptools
-  python -m pip install asciimatics
-  python -m pip install rainbowstream
   npm_inst=`type -p npm`
   if [ "${npm_inst}" ]
   then
@@ -32,12 +29,16 @@ post_install() {
     fi
   fi
 
-  FIGLET_DIR="/usr/share/figlet-fonts"
+  FIGLET_DIR="/usr/local/share/figlet-fonts"
   FIGLET_ZIP="figlet-fonts.zip"
   zip_inst=`type -p zip`
   if [ "${zip_inst}" ]
   then
     pyfig_inst=`type -p pyfiglet`
+    [ "${pyfig_inst}" ] || {
+      python -m pip install pyfiglet
+      pyfig_inst=`type -p pyfiglet`
+    }
     if [ "${pyfig_inst}" ]
     then
       if [ -d ${FIGLET_DIR} ]
@@ -56,27 +57,27 @@ post_install() {
   id games > /dev/null 2>&1 || {
     useradd -r -c "Games pseudo-user" -g games -d /opt/games -s /bin/false games
   }
-  chown games /usr/games/bin/nethack
-  chgrp games /usr/games/bin/nethack
-  chmod 04755 /usr/games/bin/nethack
-  rm -f /usr/games/nethack
-  ln -r -s /usr/games/bin/nethack /usr/games/nethack
+  chown games /usr/local/games/bin/nethack
+  chgrp games /usr/local/games/bin/nethack
+  chmod 04755 /usr/local/games/bin/nethack
+  rm -f /usr/local/games/nethack
+  ln -r -s /usr/local/games/bin/nethack /usr/local/games/nethack
 
-  chown games /usr/games/bin/tetris
-  chgrp games /usr/games/bin/tetris
-  chmod 04755 /usr/games/bin/tetris
-  rm -f /usr/games/tetris
-  ln -r -s /usr/games/bin/tetris /usr/games/tetris
-  chown games /usr/games/bin/gameserver
-  chgrp games /usr/games/bin/gameserver
-  chmod 04755 /usr/games/bin/gameserver
-  rm -f /usr/games/gameserver
-  ln -r -s /usr/games/bin/gameserver /usr/games/gameserver
+  chown games /usr/local/games/bin/tetris
+  chgrp games /usr/local/games/bin/tetris
+  chmod 04755 /usr/local/games/bin/tetris
+  rm -f /usr/local/games/tetris
+  ln -r -s /usr/local/games/bin/tetris /usr/local/games/tetris
+  chown games /usr/local/games/bin/gameserver
+  chgrp games /usr/local/games/bin/gameserver
+  chmod 04755 /usr/local/games/bin/gameserver
+  rm -f /usr/local/games/gameserver
+  ln -r -s /usr/local/games/bin/gameserver /usr/local/games/gameserver
 
-  touch /usr/games/var/tetris-hiscores
-  chown games /usr/games/var/tetris-hiscores
-  chgrp games /usr/games/var/tetris-hiscores
-  chmod 0664 /usr/games/var/tetris-hiscores
+  touch /usr/local/games/var/tetris-hiscores
+  chown games /usr/local/games/var/tetris-hiscores
+  chgrp games /usr/local/games/var/tetris-hiscores
+  chmod 0664 /usr/local/games/var/tetris-hiscores
   printf "%b\n" "${ascin}"
 }
 

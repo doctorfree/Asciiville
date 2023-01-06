@@ -49,7 +49,7 @@ Guidebook.dvi:	Guidebook.tex
 #	tbl tmac.n Guidebook.mn | groff -Wall -Tdvi > Guidebook.dvi
 
 GAME    = nethack
-MANDIR	= /usr/share/man/man6
+MANDIR	= /usr/local/share/man/man6
 MANEXT	= 6
 
 # manual installation for most BSD-style systems

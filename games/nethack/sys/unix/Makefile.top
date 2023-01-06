@@ -16,7 +16,7 @@ EXEEXT = @EXEEXT@
 # MAKE = make
 
 # make NetHack
-PREFIX	 = /usr
+PREFIX	 = /usr/local
 GAME     = nethack
 # GAME     = nethack.prg
 GAMEUID  = games

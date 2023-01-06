@@ -4,9 +4,6 @@
 
 PKG="asciiville"
 PKG_NAME="Asciiville"
-FULLNAME="Ronald Record"
-EMAIL="ronaldrecord@gmail.com"
-DESTDIR="usr"
 ARCH=x86_64
 SUDO=sudo
 GCI=

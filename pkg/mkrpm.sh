@@ -2,7 +2,7 @@
 PKG="asciiville"
 SRC_NAME="Asciiville"
 PKG_NAME="Asciiville"
-DESTDIR="usr"
+DESTDIR="usr/local"
 SRC=${HOME}/src
 SUDO=sudo
 GCI=
@@ -75,7 +75,7 @@ then
   ./build nethack
 else
   cd games/nethack
-  ./configure --prefix=/usr/games \
+  ./configure --prefix=/usr/local/games \
               --with-owner=games \
               --with-group=games \
               --enable-wizmode=doctorwhen
@@ -90,7 +90,7 @@ then
 else
   cd games/tetris
   [ -f tetris ] || {
-    ./configure.sh --prefix=/usr/games --enable-xlib=no --enable-curses=yes
+    ./configure.sh --prefix=/usr/local/games --enable-xlib=no --enable-curses=yes
     make
     make gameserver
   }
@@ -103,7 +103,7 @@ mkdir dist
 [ -d ${OUT_DIR} ] && rm -rf ${OUT_DIR}
 mkdir ${OUT_DIR}
 
-for dir in "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
+for dir in "usr" "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
            "${DESTDIR}/share/doc/${PKG}" "${DESTDIR}/share/btop" \
            "${DESTDIR}/share/${PKG}" "${DESTDIR}/games" "${DESTDIR}/games/bin" \
@@ -310,14 +310,14 @@ ${SUDO} cp ${OUT_DIR}/RPMS/*/*.rpm dist
 
 cd ${OUT_DIR}
 echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
-${SUDO} tar cf - usr | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.tgz
+${SUDO} tar cf - usr/local/*/* | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.tgz
 
 have_zip=`type -p zip`
 [ "${have_zip}" ] || {
   ${SUDO} yum install zip -y
 }
 echo "Creating zip archive of ${PKG_NAME} ${PKG_VER} distribution"
-${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.zip usr
+${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.zip usr/local/*/*
 cd ../..
 
 [ "${GCI}" ] || {

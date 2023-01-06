@@ -26,6 +26,8 @@ tab-size = 4
 #include <netdb.h>
 #include <ifaddrs.h>
 #include <net/if.h>
+#include <arpa/inet.h> // for inet_ntop()
+
 
 #if !(defined(STATIC_BUILD) && defined(__GLIBC__))
 	#include <pwd.h>
@@ -106,10 +108,13 @@ namespace Shared {
 		if (passwd_path.empty())
 			Logger::warning("Could not read /etc/passwd, will show UID instead of username.");
 
-		coreCount = sysconf(_SC_NPROCESSORS_CONF);
+		coreCount = sysconf(_SC_NPROCESSORS_ONLN);
 		if (coreCount < 1) {
-			coreCount = 1;
-			Logger::warning("Could not determine number of cores, defaulting to 1.");
+			coreCount = sysconf(_SC_NPROCESSORS_CONF);
+			if (coreCount < 1) {
+				coreCount = 1;
+				Logger::warning("Could not determine number of cores, defaulting to 1.");
+			}
 		}
 
 		pageSize = sysconf(_SC_PAGE_SIZE);
@@ -131,6 +136,7 @@ namespace Shared {
 		Cpu::core_old_totals.insert(Cpu::core_old_totals.begin(), Shared::coreCount, 0);
 		Cpu::core_old_idles.insert(Cpu::core_old_idles.begin(), Shared::coreCount, 0);
 		Cpu::collect();
+		if (Runner::coreNum_reset) Runner::coreNum_reset = false;
 		for (auto& [field, vec] : Cpu::current_cpu.cpu_percent) {
 			if (not vec.empty()) Cpu::available_fields.push_back(field);
 		}
@@ -663,6 +669,9 @@ namespace Cpu {
 		if (Runner::stopping or (no_update and not current_cpu.cpu_percent.at("total").empty())) return current_cpu;
 		auto& cpu = current_cpu;
 
+		if (Config::getB("show_cpu_freq"))
+			cpuHz = get_cpuHz();
+
 		ifstream cread;
 
 		try {
@@ -677,22 +686,37 @@ namespace Cpu {
 			string cpu_name;
 			cread.open(Shared::procPath / "stat");
 			int i = 0;
-			for (; i <= Shared::coreCount; i++) {
-
+			int target = Shared::coreCount;
+			for (; i <= target or (cread.good() and cread.peek() == 'c'); i++) {
 				//? Make sure to add zero value for missing core values if at end of file
-				if ((not cread.good() or cread.peek() != 'c') and i <= Shared::coreCount) {
+				if ((not cread.good() or cread.peek() != 'c') and i <= target) {
 					if (i == 0) throw std::runtime_error("Failed to parse /proc/stat");
-					else cpu.core_percent.at(i-1).push_back(0);
+					else {
+						//? Fix container sizes if new cores are detected
+						while (cmp_less(cpu.core_percent.size(), i)) {
+							core_old_totals.push_back(0);
+							core_old_idles.push_back(0);
+							cpu.core_percent.push_back({});
+						}
+						cpu.core_percent.at(i-1).push_back(0);
+					}
 				}
 				else {
 					if (i == 0) cread.ignore(SSmax, ' ');
 					else {
 						cread >> cpu_name;
 						int cpuNum = std::stoi(cpu_name.substr(3));
-						if (cpuNum > Shared::coreCount - 1) throw std::runtime_error("Mismatch betweeen /proc/stat core count and previously detected core count");
+						if (cpuNum >= target - 1) target = cpuNum + (cread.peek() == 'c' ? 2 : 1);
+
 						//? Add zero value for core if core number is missing from /proc/stat
 						while (i - 1 < cpuNum) {
-							cpu.core_percent.at(i-1).push_back(0);
+							//? Fix container sizes if new cores are detected
+							while (cmp_less(cpu.core_percent.size(), i)) {
+								core_old_totals.push_back(0);
+								core_old_idles.push_back(0);
+								cpu.core_percent.push_back({});
+							}
+							cpu.core_percent[i-1].push_back(0);
 							if (cpu.core_percent.at(i-1).size() > 40) cpu.core_percent.at(i-1).pop_front();
 							i++;
 						}
@@ -741,7 +765,12 @@ namespace Cpu {
 					}
 					//? Calculate cpu total for each core
 					else {
-						if (i > Shared::coreCount) break;
+						//? Fix container sizes if new cores are detected
+						while (cmp_less(cpu.core_percent.size(), i)) {
+							core_old_totals.push_back(0);
+							core_old_idles.push_back(0);
+							cpu.core_percent.push_back({});
+						}
 						const long long calc_totals = max(0ll, totals - core_old_totals.at(i-1));
 						const long long calc_idles = max(0ll, idles - core_old_idles.at(i-1));
 						core_old_totals.at(i-1) = totals;
@@ -755,16 +784,20 @@ namespace Cpu {
 				if (cpu.core_percent.at(i-1).size() > 40) cpu.core_percent.at(i-1).pop_front();
 			}
 
-			if (i < Shared::coreCount + 1) throw std::runtime_error("Failed to parse /proc/stat");
+			//? Notify main thread to redraw screen if we found more cores than previously detected
+			if (cmp_greater(cpu.core_percent.size(), Shared::coreCount)) {
+				Logger::debug("Changing CPU max corecount from " + to_string(Shared::coreCount) + " to " + to_string(cpu.core_percent.size()) + ".");
+				Runner::coreNum_reset = true;
+				Shared::coreCount = cpu.core_percent.size();
+				while (cmp_less(current_cpu.temp.size(), cpu.core_percent.size() + 1)) current_cpu.temp.push_back({0});
+			}
+
 		}
 		catch (const std::exception& e) {
             Logger::debug("Cpu::collect() : " + string{e.what()});
 			if (cread.bad()) throw std::runtime_error("Failed to read /proc/stat");
             else throw std::runtime_error("Cpu::collect() : " + string{e.what()});
 		}
-
-		if (Config::getB("show_cpu_freq"))
-			cpuHz = get_cpuHz();
 
 		if (Config::getB("check_temp") and got_sensors)
 			update_sensors();
@@ -868,7 +901,8 @@ namespace Mem {
 				mem.stats.at("cached") += arc_size;
 				mem.stats.at("available") += arc_size;
 			}
-			mem.stats.at("used") = totalMem - mem.stats.at("available");
+			mem.stats.at("used") = totalMem - (mem.stats.at("available") <= totalMem ? mem.stats.at("available") : mem.stats.at("free"));
+
 			if (mem.stats.at("swap_total") > 0) mem.stats.at("swap_used") = mem.stats.at("swap_total") - mem.stats.at("swap_free");
 		}
 		else
@@ -894,6 +928,7 @@ namespace Mem {
 
 		//? Get disks stats
 		if (show_disks) {
+			static vector<string> ignore_list;
 			double uptime = system_uptime();
 			auto free_priv = Config::getB("disk_free_priv");
 			try {
@@ -966,7 +1001,7 @@ namespace Mem {
 						diskread >> dev >> mountpoint >> fstype;
 						diskread.ignore(SSmax, '\n');
 
-						if (v_contains(found, mountpoint)) continue;
+						if (v_contains(ignore_list, mountpoint) or v_contains(found, mountpoint)) continue;
 
 						//? Match filter if not empty
 						if (not filter.empty()) {
@@ -1025,6 +1060,7 @@ namespace Mem {
 							}
 						}
 					}
+
 					//? Remove disks no longer mounted or filtered out
 					if (swap_disk and has_swap) found.push_back("swap");
 					for (auto it = disks.begin(); it != disks.end();) {
@@ -1041,11 +1077,14 @@ namespace Mem {
 				diskread.close();
 
 				//? Get disk/partition stats
+				bool new_ignored = false;
 				for (auto& [mountpoint, disk] : disks) {
-					if (std::error_code ec; not fs::exists(mountpoint, ec)) continue;
+					if (std::error_code ec; not fs::exists(mountpoint, ec) or v_contains(ignore_list, mountpoint)) continue;
 					struct statvfs64 vfs;
 					if (statvfs64(mountpoint.c_str(), &vfs) < 0) {
-						Logger::warning("Failed to get disk/partition stats with statvfs() for: " + mountpoint);
+						Logger::warning("Failed to get disk/partition stats for mount \""+ mountpoint + "\" with statvfs64 error code: " + to_string(errno) + ". Ignoring...");
+						ignore_list.push_back(mountpoint);
+						new_ignored = true;
 						continue;
 					}
 					disk.total = vfs.f_blocks * vfs.f_frsize;
@@ -1053,6 +1092,16 @@ namespace Mem {
 					disk.used = disk.total - disk.free;
 					disk.used_percent = round((double)disk.used * 100 / disk.total);
 					disk.free_percent = 100 - disk.used_percent;
+				}
+
+				//? Remove any problematic disks added to the ignore_list
+				if (new_ignored) {
+					for (auto it = disks.begin(); it != disks.end();) {
+						if (v_contains(ignore_list, it->first))
+							it = disks.erase(it);
+						else
+							it++;
+					}
 				}
 
 				//? Setup disks order in UI and add swap if enabled
@@ -1325,6 +1374,7 @@ namespace Net {
 	};
 
     auto collect(bool no_update) -> net_info& {
+		if (Runner::stopping) return empty_net;
 		auto& net = current_net;
 		auto& config_iface = Config::getS("net_iface");
         auto net_sync = Config::getB("net_sync");
@@ -1341,32 +1391,53 @@ namespace Net {
 				return empty_net;
 			}
 			int family = 0;
-			char ip[NI_MAXHOST];
+			static_assert(INET6_ADDRSTRLEN >= INET_ADDRSTRLEN); // 46 >= 16, compile-time assurance.
+			enum { IPBUFFER_MAXSIZE = INET6_ADDRSTRLEN }; // manually using the known biggest value, guarded by the above static_assert
+			char ip[IPBUFFER_MAXSIZE];
 			interfaces.clear();
 			string ipv4, ipv6;
 
 			//? Iteration over all items in getifaddrs() list
-            for (auto* ifa = if_wrap(); ifa != NULL; ifa = ifa->ifa_next) {
+			for (auto* ifa = if_wrap(); ifa != NULL; ifa = ifa->ifa_next) {
 				if (ifa->ifa_addr == NULL) continue;
 				family = ifa->ifa_addr->sa_family;
 				const auto& iface = ifa->ifa_name;
-
-				//? Get IPv4 address
-				if (family == AF_INET) {
-					if (getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in), ip, NI_MAXHOST, NULL, 0, NI_NUMERICHOST) == 0)
-						net[iface].ipv4 = ip;
-				}
-				//? Get IPv6 address
-				else if (family == AF_INET6) {
-					if (getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in6), ip, NI_MAXHOST, NULL, 0, NI_NUMERICHOST) == 0)
-						net[iface].ipv6 = ip;
-				}
 
 				//? Update available interfaces vector and get status of interface
 				if (not v_contains(interfaces, iface)) {
 					interfaces.push_back(iface);
 					net[iface].connected = (ifa->ifa_flags & IFF_RUNNING);
+
+					// An interface can have more than one IP of the same family associated with it,
+					// but we pick only the first one to show in the NET box.
+					// Note: Interfaces without any IPv4 and IPv6 set are still valid and monitorable!
+					net[iface].ipv4.clear();
+					net[iface].ipv6.clear();
 				}
+
+
+				//? Get IPv4 address
+				if (family == AF_INET) {
+					if (net[iface].ipv4.empty()) {
+						if (NULL != inet_ntop(family, &(reinterpret_cast<struct sockaddr_in*>(ifa->ifa_addr)->sin_addr), ip, IPBUFFER_MAXSIZE)) {
+							net[iface].ipv4 = ip;
+						} else {
+							int errsv = errno;
+							Logger::error("Net::collect() -> Failed to convert IPv4 to string for iface " + string(iface) + ", errno: " + strerror(errsv));
+						}
+					}
+				}
+				//? Get IPv6 address
+				else if (family == AF_INET6) {
+					if (net[iface].ipv6.empty()) {
+						if (NULL != inet_ntop(family, &(reinterpret_cast<struct sockaddr_in6*>(ifa->ifa_addr)->sin6_addr), ip, IPBUFFER_MAXSIZE)) {
+							net[iface].ipv6 = ip;
+						} else {
+							int errsv = errno;
+							Logger::error("Net::collect() -> Failed to convert IPv6 to string for iface " + string(iface) + ", errno: " + strerror(errsv));
+						}
+					}
+				} //else, ignoring family==AF_PACKET (see man 3 getifaddrs) which is the first one in the `for` loop.
 			}
 
 			//? Get total recieved and transmitted bytes + device address if no ip was found
@@ -1613,6 +1684,7 @@ namespace Proc {
 
 	//* Collects and sorts process information from /proc
     auto collect(bool no_update) -> vector<proc_info>& {
+		if (Runner::stopping) return current_procs;
 		const auto& sorting = Config::getS("proc_sorting");
         auto reverse = Config::getB("proc_reversed");
 		const auto& filter = Config::getS("proc_filter");
@@ -1673,6 +1745,7 @@ namespace Proc {
 						getline(pread, r_user, ':');
 						pread.ignore(SSmax, ':');
 						getline(pread, r_uid, ':');
+						if (uid_user.contains(r_uid)) break;
 						uid_user[r_uid] = r_user;
 						pread.ignore(SSmax, '\n');
 					}
@@ -1812,7 +1885,7 @@ namespace Proc {
 								next_x = 19;
 								continue;
 							case 19: //? Nice value
-								new_proc.p_nice = stoull(short_str);
+								new_proc.p_nice = stoll(short_str);
 								continue;
 							case 20: //? Number of threads
 								new_proc.threads = stoull(short_str);

@@ -1,6 +1,6 @@
-FIG_FONTS = /usr/share/figlet-fonts
+FIG_FONTS = /usr/local/share/figlet-fonts
 FONT = Lean
-PREFIX ?= /usr
+PREFIX ?= /usr/local
 BINDIR ?= $(PREFIX)/bin
 MANDIR ?= $(PREFIX)/share/man/man1
 DOCDIR ?= $(PREFIX)/share/doc/asciiville

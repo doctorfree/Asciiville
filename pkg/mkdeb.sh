@@ -4,7 +4,7 @@ SRC_NAME="Asciiville"
 PKG_NAME="Asciiville"
 DEBFULLNAME="Ronald Record"
 DEBEMAIL="ronaldrecord@gmail.com"
-DESTDIR="usr"
+DESTDIR="usr/local"
 SRC=${HOME}/src
 ARCH=amd64
 SUDO=sudo
@@ -89,7 +89,7 @@ then
   ./build nethack
 else
   cd games/nethack
-  ./configure --prefix=/usr/games \
+  ./configure --prefix=/usr/local/games \
               --with-owner=games \
               --with-group=games \
               --enable-wizmode=doctorwhen
@@ -104,7 +104,7 @@ then
 else
   cd games/tetris
   [ -f tetris ] || {
-    ./configure.sh --prefix=/usr/games --enable-xlib=no --enable-curses=yes
+    ./configure.sh --prefix=/usr/local/games --enable-xlib=no --enable-curses=yes
     make
     make gameserver
   }
@@ -134,7 +134,7 @@ Description: Console Ascii Art and Utilities" > ${OUT_DIR}/DEBIAN/control
 
 chmod 644 ${OUT_DIR}/DEBIAN/control
 
-for dir in "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
+for dir in "usr" "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
            "${DESTDIR}/share/doc/${PKG}" "${DESTDIR}/share/btop" \
            "${DESTDIR}/share/${PKG}" "${DESTDIR}/games" "${DESTDIR}/games/bin" \
@@ -301,7 +301,7 @@ echo "Building ${PKG_NAME}_${PKG_VER} Debian package"
 ${SUDO} dpkg --build ${PKG_NAME}_${PKG_VER} ${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.deb
 cd ${PKG_NAME}_${PKG_VER}
 echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
-${SUDO} tar cf - usr | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.tgz
+${SUDO} tar cf - usr/local/*/* | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.tgz
 
 have_zip=`type -p zip`
 [ "${have_zip}" ] || {
@@ -309,7 +309,7 @@ have_zip=`type -p zip`
   ${SUDO} apt-get install zip -y
 }
 echo "Creating zip archive of ${PKG_NAME} ${PKG_VER} distribution"
-${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.zip usr
+${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.zip usr/local/*/*
 cd ..
 
 [ "${GCI}" ] || {

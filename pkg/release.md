@@ -146,6 +146,7 @@ Note that manual removal of Asciiville using the `Uninstall-bin.sh` script will 
 
 Version 2.0.0 release 2 adds support for:
 
+* Installation location moved from `/usr` to `/usr/local`
 * Apple macOS manual installation
 
 Version 2.0.0 release 1 adds support for:

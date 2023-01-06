@@ -121,7 +121,7 @@ animate() {
 }
 
 zoom() {
-  tooldir="/usr/share/asciiville/tools/bin"
+  tooldir="/usr/local/share/asciiville/tools/bin"
   sock_name="/tmp/fetch_kitty$$"
   init_size=32
   interval="0.1"

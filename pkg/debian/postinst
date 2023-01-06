@@ -27,9 +27,6 @@ case "$1" in
     else
       PYTHON="python"
     fi
-    ${PYTHON} -m pip install setuptools
-    ${PYTHON} -m pip install asciimatics
-    ${PYTHON} -m pip install rainbowstream
     npm_inst=`type -p npm`
     if [ "${npm_inst}" ]
     then
@@ -60,7 +57,7 @@ case "$1" in
       fi
     fi
 
-    FIGLET_DIR="/usr/share/figlet-fonts"
+    FIGLET_DIR="/usr/local/share/figlet-fonts"
     FIGLET_ZIP="figlet-fonts.zip"
     zip_inst=`type -p zip`
     if [ "${zip_inst}" ]

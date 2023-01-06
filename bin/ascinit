@@ -3,10 +3,10 @@
 # ascinit - initialize Asciiville configuration files, install needed utilities
 #
 
-CONFDIR=/usr/share/asciiville
+CONFDIR=/usr/local/share/asciiville
 USERCONF="${HOME}/.config"
-BOLD=$(tput bold)
-NORM=$(tput sgr0)
+BOLD=$(tput bold 2>/dev/null)
+NORMAL=$(tput sgr0 2>/dev/null)
 
 usage() {
   if [ "${have_rich}" ]
@@ -524,25 +524,31 @@ fi
 [ -d ${USERCONF} ] || mkdir -p ${USERCONF}
 
 # Install aewan if not already present
-[ -x /usr/bin/aewan ] || {
-  OWNER=doctorfree
-  PROJECT=asciiville-aewan
-  API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
-  install_external_package
+[ -x /usr/local/bin/aewan ] || {
+  [ -x /usr/bin/aewan ] || {
+    OWNER=doctorfree
+    PROJECT=asciiville-aewan
+    API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
+    install_external_package
+  }
 }
 # Install any2ascii if not already present
-[ -x /usr/bin/jp2a ] || {
-  OWNER=doctorfree
-  PROJECT=any2ascii
-  API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
-  install_external_package
+[ -x /usr/local/bin/jp2a ] || {
+  [ -x /usr/bin/jp2a ] || {
+    OWNER=doctorfree
+    PROJECT=any2ascii
+    API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
+    install_external_package
+  }
 }
 # Install ninvaders if not already present
-[ -x /usr/games/bin/ninvaders ] || {
-  OWNER=doctorfree
-  PROJECT=ninvaders
-  API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
-  install_external_package
+[ -x /usr/local/games/bin/ninvaders ] || {
+  [ -x /usr/games/bin/ninvaders ] || {
+    OWNER=doctorfree
+    PROJECT=ninvaders
+    API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
+    install_external_package
+  }
 }
 
 # Mutt configuration user setup
@@ -919,13 +925,13 @@ status_dots=
   status_dots=
 }
 
+platform=`uname -s`
 have_pip=`type -p pip`
 [ "${have_pip}" ] || {
   [ "${quiet}" ] || {
     printf "\n\tInstalling pip ..."
   }
-  plat=`uname -s`
-  if [ "$plat" == "Darwin" ]
+  if [ "$platform" == "Darwin" ]
   then
     ${PYTHON} -m ensurepip --upgrade
   else
@@ -962,6 +968,30 @@ do
     }
   fi
 done
+
+have_mapscii=`type -p mapscii`
+[ "${have_mapscii}" ] || {
+  npm_inst=`type -p npm`
+  [ "${npm_inst}" ] && npm install mapscii > /dev/null 2>&1
+}
+
+have_brew=`type -p brew`
+[ "${platform}" == "Darwin" ] && [ "${have_brew}" ] && {
+  have_btop=`type -p btop`
+  [ "${have_btop}" ] || {
+    [ "${quiet}" ] || {
+      printf "\nInstalling btop with Brew\n"
+    }
+    brew install -q btop
+  }
+  have_mplayer=`type -p mplayer`
+  [ "${have_mplayer}" ] || {
+    [ "${quiet}" ] || {
+      printf "\nInstalling mplayer with Brew\n"
+    }
+    brew install -q mplayer
+  }
+}
 
 have_tuir=`type -p tuir`
 [ "${have_tuir}" ] || {
@@ -1336,8 +1366,8 @@ CONF="${USERCONF}/asciiville/config"
     printf "\n\nAsciiville configuration in ${CONF} ..."
   }
   touch ${CONF}
-  echo "ARTDIR=/usr/share/asciiville/art" >> ${CONF}
-  echo "MUSEDIR=/usr/share/asciiville/music" >> ${CONF}
+  echo "ARTDIR=/usr/local/share/asciiville/art" >> ${CONF}
+  echo "MUSEDIR=/usr/local/share/asciiville/music" >> ${CONF}
   echo "SONG=\"${MUSEDIR}/Chronos.mp3\"" >> ${CONF}
   echo "ALTSONG=\"${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav\"" >> ${CONF}
   echo "" >> ${CONF}
@@ -1433,7 +1463,13 @@ touch ${HOME}/.tetris
       read -p "View an ASCII animation ? (y/n) " yn
       case $yn in
         [Yy]* )
-              asciisplash -c 1 -a -i
+              have_mplayer=`type -p mplayer`
+              if [ "${have_mplayer}" ]
+              then
+                asciisplash -c 1 -a -i
+              else
+                asciisplash -c 1 -i
+              fi
               break
               ;;
         [Nn]* )

@@ -170,7 +170,7 @@ Btop++ uses the same theme files as bpytop and bashtop (some color values missin
 
 See [themes](https://github.com/doctorfree/Asciiville/tree/main/btop/themes) folder for available themes.
 
-The default themes are in `/usr/share/btop/themes/`. User created themes should be placed in
+The default themes are in `/usr/local/share/btop/themes/`. User created themes should be placed in
 `$XDG_CONFIG_HOME/btop/themes` or `$HOME/.config/btop/themes`.
 
 ## PREREQUISITES

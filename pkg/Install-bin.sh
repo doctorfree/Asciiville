@@ -75,16 +75,6 @@ do
   esac
 done
 
-platform=`uname -s`
-have_brew=`type -p brew`
-have_btop=`type -p btop`
-[ "${platform}" == "Darwin" ] && [ "${have_brew}" ] && {
-  [ "${have_btop}" ] || {
-    echo "Installing btop with Brew"
-    brew install btop
-  }
-}
-
 unzip_inst=`type -p unzip`
 if [ "${pkgsuf}" == "tgz" ]
 then
@@ -105,36 +95,12 @@ else
   fi
 fi
 
-[ "${platform}" == "Darwin" ] && {
-  destdir="/usr/local/Asciiville"
-  [ -d "${destdir}" ] && {
-    cd "${destdir}"
-    while read folder
-    do
-      [ -d "/usr/${folder}" ] || ln -s "${destdir}/${folder}" "/usr/${folder}"
-    done < <(find bin games share -type d)
-    while read filename
-    do
-      [ -f "/usr/${filename}" ] || ln -s "${destdir}/${filename}" "/usr/${filename}"
-    done < <(find bin games share -type f)
-  }
-}
-
 export PATH=${PATH}:/usr/local/bin:/snap/bin
-python3_inst=`type -p python3`
-if [ "${python3_inst}" ]
-then
-  PYTHON="python3"
-else
-  PYTHON="python"
-fi
-${PYTHON} -m pip install setuptools
-${PYTHON} -m pip install asciimatics
-${PYTHON} -m pip install rainbowstream
 npm_inst=`type -p npm`
 if [ "${npm_inst}" ]
 then
-  npm install -g mapscii
+  npm config set registry https://registry.npmjs.org/
+  npm install -g mapscii > /dev/null 2>&1
 fi
 
 lol_inst=`type -p lolcat`
@@ -160,7 +126,7 @@ then
   fi
 fi
 
-FIGLET_DIR="/usr/share/figlet-fonts"
+FIGLET_DIR="/usr/local/share/figlet-fonts"
 FIGLET_ZIP="figlet-fonts.zip"
 zip_inst=`type -p zip`
 if [ "${zip_inst}" ]
@@ -179,7 +145,7 @@ then
 fi
 
 echo "Installation of ${pkgname} Version ${pkgver} Release ${pkgrel}"
-echo "for architecture ${pkgarc} complete."
+echo "for architecture ${pkgarc} complete. Add '/usr/local/bin' to PATH."
 echo ""
 echo "The manual installation of ${pkgname} does not automatically"
 echo "install dependencies. Package names vary from platform to platform."
@@ -193,7 +159,8 @@ echo "cmatrix, gnupg, pandoc, util-linux"
 echo ""
 echo "After installing dependencies, initialize the Asciiville environment."
 echo "As a normal user with sudo privilege, execute the Asciiville"
-echo "initialization command 'ascinit' or 'ascinit -c' for headless systems"
+echo "initialization command '/usr/local/bin/ascinit' or"
+echo "'/usr/local/bin/ascinit -c' for headless systems"
 echo "(systems on which there is no X11 windowing system)"
 
 exit 0

@@ -1,14 +1,14 @@
 #!/bin/bash
 #
-ARTDIR="/usr/share/asciiville/art"
+ARTDIR="/usr/local/share/asciiville/art"
 FIG_WELCOME="Welcome"
 FIG_TO="To"
 FIG_ASCII="Asciiville"
 FIG_CONT="Press Enter To Continue"
-FIG_FONTS="/usr/share/figlet-fonts"
+FIG_FONTS="/usr/local/share/figlet-fonts"
 LARGE_FONT="Bolger"
 SMALL_FONT="Small"
-MUSEDIR=/usr/share/asciiville/music
+MUSEDIR=/usr/local/share/asciiville/music
 SONG="${MUSEDIR}/Chronos.mp3"
 ALTSONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 LOLCAT_NORM="lolcat"

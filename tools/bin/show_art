@@ -2,7 +2,7 @@
 #
 # show_art - view ascii art from a folder in a Gnome Terminal window
 
-TOOLSHOW="/usr/share/asciiville/tools/bin/showascii"
+TOOLSHOW="/usr/local/share/asciiville/tools/bin/showascii"
 
 have_show=`type -p showascii`
 

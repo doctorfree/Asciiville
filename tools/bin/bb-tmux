@@ -3,7 +3,7 @@
 # bb-tmux - display bb in a tmux session
 
 SESSION=bb
-SONG="/usr/share/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav"
+SONG="/usr/local/share/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav"
 
 set -m
 

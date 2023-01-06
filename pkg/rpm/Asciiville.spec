@@ -31,9 +31,6 @@ then
 else
   PYTHON="python"
 fi
-${PYTHON} -m pip install setuptools
-${PYTHON} -m pip install asciimatics
-${PYTHON} -m pip install rainbowstream
 npm_inst=`type -p npm`
 if [ "${npm_inst}" ]
 then
@@ -64,7 +61,7 @@ then
   fi
 fi
 
-FIGLET_DIR="/usr/share/figlet-fonts"
+FIGLET_DIR="/usr/local/share/figlet-fonts"
 FIGLET_ZIP="figlet-fonts.zip"
 zip_inst=`type -p zip`
 if [ "${zip_inst}" ]
@@ -90,32 +87,32 @@ fi
 
 %files
 %defattr(-,root,root)
-%attr(4755, games, games) /usr/games/bin/*
-%attr(0664, games, games) /usr/games/var/tetris-hiscores
-%attr(0755, games, games) /usr/games/var/nethack/bones
-%attr(0755, games, games) /usr/games/var/nethack/level
-%attr(0755, games, games) /usr/games/var/nethack/saves
-%attr(0644, games, games) /usr/games/var/nethack/logfile
-%attr(0644, games, games) /usr/games/var/nethack/perm
-%attr(0644, games, games) /usr/games/var/nethack/record
-%attr(0644, games, games) /usr/games/var/nethack/xlogfile
-%exclude %dir /usr/share/man/man1
-%exclude %dir /usr/share/man/man6
-%exclude %dir /usr/share/man
-%exclude %dir /usr/share/doc
-%exclude %dir /usr/share/menu
-%exclude %dir /usr/share
-%exclude %dir /usr/bin
-%exclude %dir /usr/games
-%exclude %dir /usr/games/bin
-%exclude %dir /usr/games/lib
-%exclude %dir /usr/games/share
-%exclude %dir /usr/games/var
-/usr/bin/*
-/usr/share/*
-/usr/games/gameserver
-/usr/games/nethack
-/usr/games/tetris
-/usr/games/share/*
+%attr(4755, games, games) /usr/local/games/bin/*
+%attr(0664, games, games) /usr/local/games/var/tetris-hiscores
+%attr(0755, games, games) /usr/local/games/var/nethack/bones
+%attr(0755, games, games) /usr/local/games/var/nethack/level
+%attr(0755, games, games) /usr/local/games/var/nethack/saves
+%attr(0644, games, games) /usr/local/games/var/nethack/logfile
+%attr(0644, games, games) /usr/local/games/var/nethack/perm
+%attr(0644, games, games) /usr/local/games/var/nethack/record
+%attr(0644, games, games) /usr/local/games/var/nethack/xlogfile
+%exclude %dir /usr/local/share/man/man1
+%exclude %dir /usr/local/share/man/man6
+%exclude %dir /usr/local/share/man
+%exclude %dir /usr/local/share/doc
+%exclude %dir /usr/local/share/menu
+%exclude %dir /usr/local/share
+%exclude %dir /usr/local/bin
+%exclude %dir /usr/local/games
+%exclude %dir /usr/local/games/bin
+%exclude %dir /usr/local/games/lib
+%exclude %dir /usr/local/games/share
+%exclude %dir /usr/local/games/var
+/usr/local/bin/*
+/usr/local/share/*
+/usr/local/games/gameserver
+/usr/local/games/nethack
+/usr/local/games/tetris
+/usr/local/games/share/*
 
 %changelog

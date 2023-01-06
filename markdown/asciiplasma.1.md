@@ -43,7 +43,7 @@ which audio file to use as accompaniment, and which comments to use.
 **asciiplasma -c 10**
 : Plays the Plasma ASCIImatics animation 10 times then exits 
 
-**asciiplasma -a /usr/share/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav -c 5**
+**asciiplasma -a /usr/local/share/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav -c 5**
 : Plays the Plasma ASCIImatics animation 5 times accompanied by audio then exits 
 
 ## AUTHORS

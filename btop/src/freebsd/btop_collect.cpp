@@ -19,13 +19,15 @@ tab-size = 4
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <ifaddrs.h>
 #include <libproc.h>
+// man 3 getifaddrs: "BUGS: If	both <net/if.h>	and <ifaddrs.h>	are being included, <net/if.h> must be included before <ifaddrs.h>"
 #include <net/if.h>
+#include <ifaddrs.h>
 #include <net/if_dl.h>
 #include <net/route.h>
 #include <netdb.h>
 #include <netinet/tcp_fsm.h>
+#include <netinet/in.h> // for inet_ntop stuff
 #include <pwd.h>
 #include <sys/_timeval.h>
 #include <sys/endian.h>
@@ -820,7 +822,9 @@ namespace Net {
 				return empty_net;
 			}
 			int family = 0;
-			char ip[NI_MAXHOST];
+			static_assert(INET6_ADDRSTRLEN >= INET_ADDRSTRLEN); // 46 >= 16, compile-time assurance.
+			enum { IPBUFFER_MAXSIZE = INET6_ADDRSTRLEN }; // manually using the known biggest value, guarded by the above static_assert
+			char ip[IPBUFFER_MAXSIZE];
 			interfaces.clear();
 			string ipv4, ipv6;
 
@@ -829,22 +833,40 @@ namespace Net {
 				if (ifa->ifa_addr == NULL) continue;
 				family = ifa->ifa_addr->sa_family;
 				const auto &iface = ifa->ifa_name;
-				//? Get IPv4 address
-				if (family == AF_INET) {
-					if (getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr), ip, NI_MAXHOST, NULL, 0, NI_NUMERICHOST) == 0)
-						net[iface].ipv4 = ip;
-				}
-				//? Get IPv6 address
-				// else if (family == AF_INET6) {
-				// 	if (getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in6), ip, NI_MAXHOST, NULL, 0, NI_NUMERICHOST) == 0)
-				// 		net[iface].ipv6 = ip;
-				// }
-
 				//? Update available interfaces vector and get status of interface
 				if (not v_contains(interfaces, iface)) {
 					interfaces.push_back(iface);
 					net[iface].connected = (ifa->ifa_flags & IFF_RUNNING);
+
+					// An interface can have more than one IP of the same family associated with it,
+					// but we pick only the first one to show in the NET box.
+					// Note: Interfaces without any IPv4 and IPv6 set are still valid and monitorable!
+					net[iface].ipv4.clear();
+					net[iface].ipv6.clear();
 				}
+				//? Get IPv4 address
+				if (family == AF_INET) {
+					if (net[iface].ipv4.empty()) {
+						if (NULL != inet_ntop(family, &(reinterpret_cast<struct sockaddr_in*>(ifa->ifa_addr)->sin_addr), ip, IPBUFFER_MAXSIZE)) {
+
+							net[iface].ipv4 = ip;
+						} else {
+							int errsv = errno;
+							Logger::error("Net::collect() -> Failed to convert IPv4 to string for iface " + string(iface) + ", errno: " + strerror(errsv));
+						}
+					}
+				}
+				//? Get IPv6 address
+				else if (family == AF_INET6) {
+					if (net[iface].ipv6.empty()) {
+						if (NULL != inet_ntop(family, &(reinterpret_cast<struct sockaddr_in6*>(ifa->ifa_addr)->sin6_addr), ip, IPBUFFER_MAXSIZE)) {
+							net[iface].ipv6 = ip;
+						} else {
+							int errsv = errno;
+							Logger::error("Net::collect() -> Failed to convert IPv6 to string for iface " + string(iface) + ", errno: " + strerror(errsv));
+						}
+					}
+				}  //else, ignoring family==AF_LINK (see man 3 getifaddrs)
 			}
 
 			unordered_flat_map<string, std::tuple<uint64_t, uint64_t>> ifstats;

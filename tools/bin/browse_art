@@ -2,7 +2,7 @@
 #
 # browse_art - zoom ascii art from a folder in a Gnome Terminal window
 
-TOOLSHOW="/usr/share/asciiville/tools/bin/browseascii"
+TOOLSHOW="/usr/local/share/asciiville/tools/bin/browseascii"
 
 have_show=`type -p browseascii`
 
