@@ -5,8 +5,8 @@
 
 CONFDIR=/usr/local/share/asciiville
 USERCONF="${HOME}/.config"
-BOLD=$(tput bold)
-NORM=$(tput sgr0)
+BOLD=$(tput bold 2>/dev/null)
+NORMAL=$(tput sgr0 2>/dev/null)
 
 usage() {
   if [ "${have_rich}" ]
@@ -525,24 +525,30 @@ fi
 
 # Install aewan if not already present
 [ -x /usr/local/bin/aewan ] || {
-  OWNER=doctorfree
-  PROJECT=asciiville-aewan
-  API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
-  install_external_package
+  [ -x /usr/bin/aewan ] || {
+    OWNER=doctorfree
+    PROJECT=asciiville-aewan
+    API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
+    install_external_package
+  }
 }
 # Install any2ascii if not already present
 [ -x /usr/local/bin/jp2a ] || {
-  OWNER=doctorfree
-  PROJECT=any2ascii
-  API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
-  install_external_package
+  [ -x /usr/bin/jp2a ] || {
+    OWNER=doctorfree
+    PROJECT=any2ascii
+    API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
+    install_external_package
+  }
 }
 # Install ninvaders if not already present
 [ -x /usr/local/games/bin/ninvaders ] || {
-  OWNER=doctorfree
-  PROJECT=ninvaders
-  API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
-  install_external_package
+  [ -x /usr/games/bin/ninvaders ] || {
+    OWNER=doctorfree
+    PROJECT=ninvaders
+    API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
+    install_external_package
+  }
 }
 
 # Mutt configuration user setup
