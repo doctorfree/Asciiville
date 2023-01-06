@@ -105,6 +105,11 @@ else
   fi
 fi
 
+[ "${platform}" == "Darwin" ] && {
+  # TODO
+  echo "Create symbolic links here as needed"
+}
+
 export PATH=${PATH}:/usr/local/bin:/snap/bin
 python3_inst=`type -p python3`
 if [ "${python3_inst}" ]
