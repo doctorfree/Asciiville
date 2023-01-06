@@ -925,13 +925,13 @@ status_dots=
   status_dots=
 }
 
+platform=`uname -s`
 have_pip=`type -p pip`
 [ "${have_pip}" ] || {
   [ "${quiet}" ] || {
     printf "\n\tInstalling pip ..."
   }
-  plat=`uname -s`
-  if [ "$plat" == "Darwin" ]
+  if [ "$platform" == "Darwin" ]
   then
     ${PYTHON} -m ensurepip --upgrade
   else
@@ -968,6 +968,17 @@ do
     }
   fi
 done
+
+have_brew=`type -p brew`
+[ "${platform}" == "Darwin" ] && [ "${have_brew}" ] && {
+  have_btop=`type -p btop`
+  [ "${have_btop}" ] || {
+    [ "${quiet}" ] || {
+      printf "\nInstalling btop with Brew\n"
+    }
+    brew install -q btop
+  }
+}
 
 have_tuir=`type -p tuir`
 [ "${have_tuir}" ] || {

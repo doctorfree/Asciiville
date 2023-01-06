@@ -75,16 +75,6 @@ do
   esac
 done
 
-platform=`uname -s`
-have_brew=`type -p brew`
-have_btop=`type -p btop`
-[ "${platform}" == "Darwin" ] && [ "${have_brew}" ] && {
-  [ "${have_btop}" ] || {
-    echo "Installing btop with Brew"
-    brew install btop
-  }
-}
-
 unzip_inst=`type -p unzip`
 if [ "${pkgsuf}" == "tgz" ]
 then
@@ -106,16 +96,6 @@ else
 fi
 
 export PATH=${PATH}:/usr/local/bin:/snap/bin
-python3_inst=`type -p python3`
-if [ "${python3_inst}" ]
-then
-  PYTHON="python3"
-else
-  PYTHON="python"
-fi
-${PYTHON} -m pip install setuptools
-${PYTHON} -m pip install asciimatics
-${PYTHON} -m pip install rainbowstream
 npm_inst=`type -p npm`
 if [ "${npm_inst}" ]
 then
