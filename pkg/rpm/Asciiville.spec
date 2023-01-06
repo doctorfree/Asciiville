@@ -88,13 +88,13 @@ if [ -d /etc/profile.d ]
 then
   if [ -f /etc/profile.d/asciiville.sh ]
   then
-    echo 'export PATH=$PATH:/usr/local/bin:/usr/local/games' >> /etc/profile.d/asciiville.sh
+    echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >> /etc/profile.d/asciiville.sh
   else
-    echo 'export PATH=$PATH:/usr/local/bin:/usr/local/games' > /etc/profile.d/asciiville.sh
+    echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' > /etc/profile.d/asciiville.sh
   fi
 else
   [ -f /etc/profile ] && {
-    echo 'export PATH=$PATH:/usr/local/bin:/usr/local/games' >> /etc/profile
+    echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >> /etc/profile
   }
 fi
 if [ -d /etc/zsh ]
@@ -107,7 +107,7 @@ then
   fi
 else
   [ -f /etc/zshrc ] && {
-    echo 'export PATH=$PATH:/usr/local/bin:/usr/local/games' >> /etc/zshrc
+    echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >> /etc/zshrc
   }
 fi
 
