@@ -103,7 +103,7 @@ mkdir dist
 [ -d ${OUT_DIR} ] && rm -rf ${OUT_DIR}
 mkdir ${OUT_DIR}
 
-for dir in "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
+for dir in "usr" "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
            "${DESTDIR}/share/doc/${PKG}" "${DESTDIR}/share/btop" \
            "${DESTDIR}/share/${PKG}" "${DESTDIR}/games" "${DESTDIR}/games/bin" \

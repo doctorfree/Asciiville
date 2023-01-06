@@ -134,7 +134,7 @@ Description: Console Ascii Art and Utilities" > ${OUT_DIR}/DEBIAN/control
 
 chmod 644 ${OUT_DIR}/DEBIAN/control
 
-for dir in "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
+for dir in "usr" "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
            "${DESTDIR}/share/doc/${PKG}" "${DESTDIR}/share/btop" \
            "${DESTDIR}/share/${PKG}" "${DESTDIR}/games" "${DESTDIR}/games/bin" \
