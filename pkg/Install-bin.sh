@@ -88,7 +88,7 @@ have_btop=`type -p btop`
 unzip_inst=`type -p unzip`
 if [ "${pkgsuf}" == "tgz" ]
 then
-  sudo tar -mxzf ${PATH_TO_ARCHIVE} -C /
+  tar -mxzf ${PATH_TO_ARCHIVE} -C /
 else
   if [ "${pkgsuf}" == "zip" ]
   then
@@ -97,7 +97,7 @@ else
       echo "Install-bin.sh requires 'unzip' to install a 'zip' archive"
       usage
     }
-    sudo unzip ${PATH_TO_ARCHIVE} –d /
+    unzip ${PATH_TO_ARCHIVE} –d /
   else
     echo "Unrecognized filename suffix '${pkgsuf}'"
     echo "Install-bin.sh requires a filename suffix of 'tgz' or 'zip'"
@@ -106,8 +106,18 @@ else
 fi
 
 [ "${platform}" == "Darwin" ] && {
-  # TODO
-  echo "Create symbolic links here as needed"
+  destdir="/usr/local/Asciiville"
+  [ -d "${destdir}" ] && {
+    cd "${destdir}"
+    while read folder
+    do
+      [ -d "/usr/${folder}" ] || ln -s "${destdir}/${folder}" "/usr/${folder}"
+    done < <(find bin games share -type d)
+    while read filename
+    do
+      [ -f "/usr/${filename}" ] || ln -s "${destdir}/${filename}" "/usr/${filename}"
+    done < <(find bin games share -type f)
+  }
 }
 
 export PATH=${PATH}:/usr/local/bin:/snap/bin
