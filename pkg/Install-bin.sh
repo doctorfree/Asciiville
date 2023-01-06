@@ -99,7 +99,6 @@ export PATH=${PATH}:/usr/local/bin:/snap/bin
 npm_inst=`type -p npm`
 if [ "${npm_inst}" ]
 then
-  npm config set registry https://registry.npmjs.org/
   npm install -g mapscii > /dev/null 2>&1
 fi
 
