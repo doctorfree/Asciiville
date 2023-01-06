@@ -975,21 +975,36 @@ have_mapscii=`type -p mapscii`
   [ "${npm_inst}" ] && npm install mapscii > /dev/null 2>&1
 }
 
+# Use Brew on macOS to install some requirements
 have_brew=`type -p brew`
-[ "${platform}" == "Darwin" ] && [ "${have_brew}" ] && {
-  have_btop=`type -p btop`
-  [ "${have_btop}" ] || {
-    [ "${quiet}" ] || {
-      printf "\nInstalling btop with Brew\n"
-    }
-    brew install -q btop
+[ "${platform}" == "Darwin" ] && {
+  [ "${have_brew}" ] || {
+    # Install Brew
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    have_brew=`type -p brew`
   }
-  have_mplayer=`type -p mplayer`
-  [ "${have_mplayer}" ] || {
-    [ "${quiet}" ] || {
-      printf "\nInstalling mplayer with Brew\n"
+  [ "${have_brew}" ] && {
+    have_btop=`type -p btop`
+    [ "${have_btop}" ] || {
+      [ "${quiet}" ] || {
+        printf "\nInstalling btop with Brew\n"
+      }
+      brew install -q btop
     }
-    brew install -q mplayer
+    have_figlet=`type -p figlet`
+    [ "${have_figlet}" ] || {
+      [ "${quiet}" ] || {
+        printf "\nInstalling figlet with Brew\n"
+      }
+      brew install -q figlet
+    }
+    have_mplayer=`type -p mplayer`
+    [ "${have_mplayer}" ] || {
+      [ "${quiet}" ] || {
+        printf "\nInstalling mplayer with Brew\n"
+      }
+      brew install -q mplayer
+    }
   }
 }
 
