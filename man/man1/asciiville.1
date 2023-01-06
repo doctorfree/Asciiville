@@ -46,9 +46,9 @@ For example:
 .IP
 .nf
 \f[C]
-# Slideshow of Ascii Art in /usr/share/asciiville/art/Art/
+# Slideshow of Ascii Art in /usr/local/share/asciiville/art/Art/
 asciiville -V Art
-# Slideshow of Ascii Art in /usr/share/asciiville/art/Vintage/
+# Slideshow of Ascii Art in /usr/local/share/asciiville/art/Vintage/
 asciiville -V Vintage
 # Interactive display of Ascii Art in .../file1 and .../file2
 asciiville file1 file2 ...
@@ -146,8 +146,8 @@ These are user configurable and saved each time the \f[V]asciiville\f[R]
 command exits.
 A sample Asciiville configuration file is provided below.
 In this sample configuration the \f[I]ARTDIR\f[R] is set to
-\f[V]/usr/share/asciiville/art\f[R], the default Asciiville Ascii Art
-galleries folder.
+\f[V]/usr/local/share/asciiville/art\f[R], the default Asciiville Ascii
+Art galleries folder.
 To change the Ascii Art galleries folder, modify this setting.
 For example, to change where \f[V]asciiville\f[R] looks for Ascii Art
 galleries, this setting could be modified to:
@@ -159,7 +159,8 @@ ARTDIR=${HOME}/Pictures/AsciiArt
 .fi
 .PP
 Asciiville commands would then look in \f[V]$HOME/Pictures/AsciiArt\f[R]
-for Ascii Art galleries rather than \f[V]/usr/share/asciiville/art\f[R].
+for Ascii Art galleries rather than
+\f[V]/usr/local/share/asciiville/art\f[R].
 .PP
 Of particular interest are the \f[V]art_font_size\f[R] and
 \f[V]txt_font_size\f[R] configuration settings.
@@ -188,8 +189,8 @@ A sample Asciiville configuration file
 .IP
 .nf
 \f[C]
-ARTDIR=/usr/share/asciiville/art
-MUSEDIR=/usr/share/asciiville/music
+ARTDIR=/usr/local/share/asciiville/art
+MUSEDIR=/usr/local/share/asciiville/music
 SONG=/home/ronnie/Music/Buckingham_Green.mp3
 ALTSONG=/Epic_Dramatic-Yuriy_Bespalov.wav
 AUDIO=1
