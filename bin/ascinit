@@ -969,6 +969,12 @@ do
   fi
 done
 
+have_mapscii=`type -p mapscii`
+[ "${have_mapscii}" ] || {
+  npm_inst=`type -p npm`
+  [ "${npm_inst}" ] && npm install mapscii > /dev/null 2>&1
+}
+
 have_brew=`type -p brew`
 [ "${platform}" == "Darwin" ] && [ "${have_brew}" ] && {
   have_btop=`type -p btop`
