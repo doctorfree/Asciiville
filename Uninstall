@@ -3,7 +3,7 @@
 plat=`uname -s`
 if [ "$plat" == "Darwin" ]
 then
-    ./macUninstall
+    sudo pkg/Uninstall-bin.sh
 else
   debian=
   have_apt=`type -p apt`

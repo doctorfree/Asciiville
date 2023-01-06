@@ -32,6 +32,47 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 PKG_VER=${VERSION}
 PKG_REL=${RELEASE}
 
+platform=`uname -s`
+
+[ "${platform}" == "Darwin" ] && {
+  darwin_archive=
+  if [ -f releases/${PKG_VER}/Asciiville_${PKG_VER}-${PKG_REL}.Darwin.tgz ]
+  then
+    darwin_archive="releases/${PKG_VER}/Asciiville_${PKG_VER}-${PKG_REL}.Darwin.tgz"
+  else
+    if [ -f releases/${PKG_VER}/Asciiville_${PKG_VER}-${PKG_REL}.Darwin.zip ]
+    then
+      darwin_archive="releases/${PKG_VER}/Asciiville_${PKG_VER}-${PKG_REL}.Darwin.zip"
+    else
+      # Look for other versions
+      for release in releases/*/Asciiville_*-*.Darwin.*
+      do
+        [ "${release}" == "releases/*/Asciiville_*-*.Darwin.*" ] && {
+          echo "No Darwin release archives located in ./releases/..."
+          echo "Download the latest Asciiville release archive for macOS at"
+          echo "https://github.com/doctorfree/Asciiville/releases/latest"
+          echo "Exiting"
+          exit 1
+        }
+        echo "Located Asciiville release archive for macOS:"
+        echo "    ${release}"
+      done
+    fi
+  fi
+  if [ "${darwin_archive}" ]
+  then
+    sudo pkg/Install-bin.sh ${darwin_archive}
+    exit 0
+  else
+    echo "Version and Release in VERSION do not match located release archive(s)"
+    echo "Install one of these located release archives manually with the command:"
+    echo "    sudo pkg/Install-bin.sh releases/.../<archive_name>.Darwin.<suffix>"
+    echo "Exiting without installing"
+    exit 1
+  fi
+  exit 1
+}
+
 get_available_packages() {
   for pkgs in ${SCRIPT_DIR}/releases/${PKG_VER}/*.${SUF}
   do
