@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## Asciiville-2.0.0r2 (2023-01-07)
 
+* Move installation location from `/usr` to `/usr/local`
 * Add support for Apple macOSS manual installation
 
 ## Asciiville-2.0.0r1 (2023-01-05)
