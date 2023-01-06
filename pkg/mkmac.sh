@@ -1,7 +1,7 @@
 #!/bin/bash
 PKG="asciiville"
 PKG_NAME="Asciiville"
-DESTDIR="usr/local"
+DESTDIR="usr/local/Asciiville"
 ARCH=`uname -s`
 SUDO=sudo
 HERE=`pwd`
@@ -51,7 +51,8 @@ mkdir dist
 [ -d ${OUT_DIR} ] && rm -rf ${OUT_DIR}
 mkdir ${OUT_DIR}
 
-for dir in usr "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
+for dir in "usr" "usr/local" \
+           "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
            "${DESTDIR}/share/doc/${PKG}" "${DESTDIR}/share/btop" \
            "${DESTDIR}/share/${PKG}" "${DESTDIR}/games" "${DESTDIR}/games/bin" \
