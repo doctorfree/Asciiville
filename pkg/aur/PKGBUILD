@@ -218,7 +218,7 @@ package() {
 
   [ -d ${pkgdir}/usr/share ] || mkdir -p ${pkgdir}/usr/share
   [ "${destdir}" == "usr" ] || {
-    mv ${pkgdir}/${destdir}/share/man ] ${pkgdir}/usr/share/man
+    mv ${pkgdir}/${destdir}/share/man ] ${pkgdir}/usr/share
   }
   chmod 644 ${pkgdir}/usr/share/man/*/*
   chmod 644 ${pkgdir}/${destdir}/share/menu/*
