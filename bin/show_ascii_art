@@ -20,6 +20,14 @@ art_font_size=4
 bro_font_size=${def_font_size}
 txt_font_size=18
 
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+  KITTY_QUIT_OPT="--override macos_quit_when_last_window_closed=yes"
+else
+  KITTY_QUIT_OPT=
+fi
+
 if [ `echo $PATH | grep -c /.local/bin` -ne "1" ]
 then
   export PATH="$PATH:$HOME/.local/bin"
@@ -216,11 +224,10 @@ custom_gallery() {
 
 browser() {
   bro_font_size=${art_font_size}
-  columns="$(tput cols)"
-  figlet -c -k -w ${columns} "Zoom/Browser Mode"
-  figlet -c -k -w ${columns} "Zoom  In: 'i' / 'j' / 'n'"
-  figlet -c -k -w ${columns} "Zoom Out: 'o' / 'k' / 'm'"
-  figlet -c -k -w ${columns} "Help: 'h'  Exit: 'q'"
+  figlet -c -k -t "Zoom/Browser Mode" 2> /dev/null
+  figlet -c -k -t "Zoom  In: 'i' / 'j' / 'n'" 2> /dev/null
+  figlet -c -k -t "Zoom Out: 'o' / 'k' / 'm'" 2> /dev/null
+  figlet -c -k -t "Help: 'h'  Exit: 'q'" 2> /dev/null
   while true
   do
     read -rsn1 input
@@ -396,8 +403,7 @@ show_ascii() {
   [ "${viewshow}" ] && {
     [ "${wait_for_input}" ] && {
       [ "${show_filename}" ] && {
-        columns="$(tput cols)"
-        figlet -c -k -w ${columns} `basename ${asciiart}`
+        figlet -c -k -t `basename ${asciiart}` 2> /dev/null
       }
       while true
       do
@@ -691,6 +697,7 @@ done
           --override initial_window_height=96c \
           --override tab_bar_min_tabs=2 \
           --override startup_session=none \
+          ${KITTY_QUIT_OPT} \
           ${mkartcomm} "${make_inp}" -o "${make_out}"
   else
     if [ "${have_gnome}" ]
@@ -763,21 +770,20 @@ goodbye() {
   [ "${quiet}" ] || {
     [ "${set_font_size}" ] && termprofset ${termarg} -s ${txt_font_size}
     printf "\n\n\n"
-    columns="$(tput cols)"
     if [ "${have_lolcat}" ]
     then
-      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -w ${columns} "Thanks For" | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Thanks For" 2> /dev/null | ${LOLCAT}
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -w ${columns} "Viewing" | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Viewing" 2> /dev/null | ${LOLCAT}
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -w ${columns} "Ascii Art !" | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Ascii Art !" 2> /dev/null | ${LOLCAT}
       tput civis -- invisible
     else
-      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -w ${columns} "Thanks For"
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Thanks For" 2> /dev/null
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -w ${columns} "Viewing"
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Viewing" 2> /dev/null
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -w ${columns} "Ascii Art !"
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Ascii Art !" 2> /dev/null
     fi
     sleep $((delay / 2))
     clear
@@ -835,23 +841,22 @@ play_random_show() {
     f=( ${showdir}/* )
     ((k=RANDOM%${#f[@]}))
     art="${f[k]}"
-    columns="$(tput cols)"
     [ "${first}" ] && {
       [ "${quiet}" ] || {
         [ "${set_font_size}" ] && termprofset ${termarg} -s ${txt_font_size}
         printf "\n\n\n"
         if [ "${have_lolcat}" ]
         then
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} ${FIG_WELCOME} | ${LOLCAT}
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} ${FIG_ASCII} | ${LOLCAT}
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} "Ascii Art" | ${LOLCAT}
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} 2> /dev/null | ${LOLCAT}
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} 2> /dev/null | ${LOLCAT}
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art" 2> /dev/null | ${LOLCAT}
           tput civis -- invisible
         else
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} ${FIG_WELCOME}
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} ${FIG_ASCII}
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} "Ascii Art"
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} 2> /dev/null
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} 2> /dev/null
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art" 2> /dev/null
         fi
-        figlet -c -d "${FIG_FONTS}" -f "Digital" -k -w ${columns} "Ctrl-c  Exits"
+        figlet -c -d "${FIG_FONTS}" -f "Digital" -k -t "Ctrl-c  Exits" 2> /dev/null
         sleep ${delay}
       }
       first=
@@ -860,7 +865,7 @@ play_random_show() {
     [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
     show_ascii "${art}"
     [ $? -gt 1 ] || {
-      [ "${show_filename}" ] && figlet -c -k -w ${columns} `basename ${art}`
+      [ "${show_filename}" ] && figlet -c -k -t `basename ${art}` 2> /dev/null
       sleep ${delay}
       [ ${showlength} -eq 0 ] || ((numslide++))
     }
@@ -891,22 +896,21 @@ play_slide_show() {
   done
   # Apply any gallery customization
   custom_gallery "${SLIDE_DIR}"
-  columns="$(tput cols)"
   [ "${quiet}" ] || {
     [ "${set_font_size}" ] && termprofset ${termarg} -s ${txt_font_size}
     printf "\n\n\n"
     if [ "${have_lolcat}" ]
     then
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} ${FIG_WELCOME} | ${LOLCAT}
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} ${FIG_ASCII} | ${LOLCAT}
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} "Ascii Art" | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} 2> /dev/null | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} 2> /dev/null | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art" 2> /dev/null | ${LOLCAT}
       tput civis -- invisible
     else
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} ${FIG_WELCOME}
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} ${FIG_ASCII}
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} "Ascii Art"
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} 2> /dev/null
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} 2> /dev/null
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art" 2> /dev/null
     fi
-    figlet -c -d "${FIG_FONTS}" -f "Digital" -k -w ${columns} "Ctrl-c  Exits"
+    figlet -c -d "${FIG_FONTS}" -f "Digital" -k -t "Ctrl-c  Exits" 2> /dev/null
     sleep ${delay}
   }
   if [ "${randomshow}" ]
@@ -923,7 +927,7 @@ play_slide_show() {
       [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
       show_ascii "${art}"
       [ $? -gt 1 ] || {
-        [ "${show_filename}" ] && figlet -c -k -w ${columns} `basename ${art}`
+        [ "${show_filename}" ] && figlet -c -k -t `basename ${art}` 2> /dev/null
         sleep ${delay}
         [ ${showlength} -eq 0 ] || ((numslide++))
       }
@@ -937,7 +941,7 @@ play_slide_show() {
       [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
       show_ascii "${art}"
       [ $? -gt 1 ] || {
-        [ "${show_filename}" ] && figlet -c -k -w ${columns} `basename ${art}`
+        [ "${show_filename}" ] && figlet -c -k -t `basename ${art}` 2> /dev/null
         sleep ${delay}
       }
     done
@@ -1203,22 +1207,21 @@ clear
 [ "${quiet}" ] || {
   [ "${set_font_size}" ] && termprofset ${termarg} -s ${txt_font_size}
   printf "\n\n\n"
-  columns="$(tput cols)"
   if [ "${have_lolcat}" ]
   then
-    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -w ${columns} ${FIG_WELCOME} | ${LOLCAT}
-    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -w ${columns} ${FIG_TO} | ${LOLCAT}
-    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -w ${columns} ${FIG_ASCII} | ${LOLCAT}
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME} 2> /dev/null | ${LOLCAT}
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_TO} 2> /dev/null | ${LOLCAT}
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII} 2> /dev/null | ${LOLCAT}
     tput civis -- invisible
   else
-    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -w ${columns} ${FIG_WELCOME}
-    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -w ${columns} ${FIG_TO}
-    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -w ${columns} ${FIG_ASCII}
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME} 2> /dev/null
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_TO} 2> /dev/null
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII} 2> /dev/null
   fi
-  figlet -c -d "${FIG_FONTS}" -f "Small" -k -w ${columns} "Ctrl-c     Exits"
+  figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Ctrl-c     Exits" 2> /dev/null
   if [ "${wait_for_input}" ]
   then
-    figlet -c -d "${FIG_FONTS}" -f "Small" -k -w ${columns} "Enter  Continues"
+    figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Enter  Continues" 2> /dev/null
     read -p "" answer
   else
     sleep ${delay}
@@ -1297,6 +1300,7 @@ then
             --override draw_minimal_borders=yes \
             --override tab_bar_min_tabs=2 \
             --override startup_session=none \
+            ${KITTY_QUIT_OPT} \
             jp2a ${border} ${colors} ${colordepth} ${grayscale} ${size} ${charopt} \
                  --output=/tmp/"${image_name}"$$.asc "/tmp/${image_name}$$.jpg"
     else
@@ -1317,6 +1321,7 @@ then
           --override draw_minimal_borders=yes \
           --override tab_bar_min_tabs=2 \
           --override startup_session=none \
+          ${KITTY_QUIT_OPT} \
           show_ascii_art -C -e kitty -K ${sock_name} -q "/tmp/${image_name}$$.asc"
   else
     show_ascii "/tmp/${image_name}$$.asc" "${tabs}"
@@ -1335,6 +1340,7 @@ else
           --override draw_minimal_borders=yes \
           --override tab_bar_min_tabs=2 \
           --override startup_session=none \
+          ${KITTY_QUIT_OPT} \
           show_ascii_art -C -e kitty -K ${sock_name} -q ${args}
   else
     stty -echoctl # hide ^C
@@ -1365,8 +1371,7 @@ else
       [ $? -gt 1 ] || {
         [ "${wait_for_input}" ] || {
           [ "${show_filename}" ] && {
-            columns="$(tput cols)"
-            figlet -c -k -w ${columns} `basename ${art}`
+            figlet -c -k -t `basename ${art}` 2> /dev/null
           }
           sleep ${delay}
         }

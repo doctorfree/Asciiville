@@ -55,6 +55,14 @@ fifo_name="/tmp/asciiville_$$"
 # Kitty socket
 sock_name="/tmp/asckitty_$$"
 
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+  KITTY_QUIT_OPT="--override macos_quit_when_last_window_closed=yes"
+else
+  KITTY_QUIT_OPT=
+fi
+
 # Some configuration can be maintained here
 CONFIG="${HOME}/.config/asciiville/config"
 [ -f ${CONFIG} ] && . ${CONFIG}
@@ -504,6 +512,7 @@ make_it_so() {
                 --override draw_minimal_borders=yes \
                 --override tab_bar_min_tabs=2 \
                 --override startup_session=none \
+                ${KITTY_QUIT_OPT} \
                 ${AVCOMM} 2> /dev/null &
         else
           if [ "${TILIX}" ]
@@ -543,6 +552,7 @@ make_it_so() {
                 --override initial_window_height=28c \
                 --override tab_bar_min_tabs=2 \
                 --override startup_session=none \
+                ${KITTY_QUIT_OPT} \
                 ${AVCOMM} 2> /dev/null &
         else
           if [ "${TILIX}" ]
@@ -798,6 +808,7 @@ show_art_file() {
               --override draw_minimal_borders=yes \
               --override tab_bar_min_tabs=2 \
               --override startup_session=none \
+              ${KITTY_QUIT_OPT} \
               show_ascii_art -e kitty -K ${sock_name} ${showargs} -a "${art}"
         ;;
       tilix*)
@@ -862,6 +873,7 @@ show_art_file() {
               --override draw_minimal_borders=yes \
               --override tab_bar_min_tabs=2 \
               --override startup_session=none \
+              ${KITTY_QUIT_OPT} \
               show_ascii_art -e kitty -K ${sock_name} ${showargs} -a "${art}"
           else
             gnome-terminal --window --full-screen \
@@ -908,6 +920,7 @@ play_show() {
               --override draw_minimal_borders=yes \
               --override tab_bar_min_tabs=2 \
               --override startup_session=none \
+              ${KITTY_QUIT_OPT} \
               show_ascii_art -e kitty -K ${sock_name} ${showargs}
         ;;
       tilix*)
@@ -968,6 +981,7 @@ play_show() {
                   --override draw_minimal_borders=yes \
                   --override tab_bar_min_tabs=2 \
                   --override startup_session=none \
+                  ${KITTY_QUIT_OPT} \
                   show_ascii_art -e kitty -K ${sock_name} ${showargs}
           else
             gnome-terminal --window --full-screen \
@@ -1017,21 +1031,20 @@ play_slide_show() {
 }
 
 show_figlet() {
-  columns="$(tput cols)"
   if [ "${use_lolcat}" ]
   then
     if [ "${USE_FONT}" == "Lean" ]
     then
-      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -w ${columns} ${FIG_TEXT} | tr ' _/' ' ()' | ${LOLCAT}
+      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} 2> /dev/null | tr ' _/' ' ()' | ${LOLCAT}
     else
-      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -w ${columns} ${FIG_TEXT} | ${LOLCAT}
+      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} 2> /dev/null | ${LOLCAT}
     fi
   else
     if [ "${USE_FONT}" == "Lean" ]
     then
-      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -w ${columns} ${FIG_TEXT} | tr ' _/' ' ()'
+      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} 2> /dev/null | tr ' _/' ' ()'
     else
-      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -w ${columns} ${FIG_TEXT}
+      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} 2> /dev/null
     fi
   fi
 }

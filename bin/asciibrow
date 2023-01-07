@@ -17,6 +17,14 @@ then
   export PATH="$PATH:$HOME/.local/bin"
 fi
 
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+  KITTY_QUIT_OPT="--override macos_quit_when_last_window_closed=yes"
+else
+  KITTY_QUIT_OPT=
+fi
+
 if [[ $url == *"youtube.com/watch"* ]]; then
       have_mpv=`type -p mpv`
       [ "${have_mpv}" ] || {
@@ -43,6 +51,7 @@ elif [[ $url == *"stackoverflow.com/questions/"* ]]; then
             --start-as normal \
             --override tab_bar_min_tabs=2 \
             --override startup_session=none \
+            ${KITTY_QUIT_OPT} \
             socli $query 2> /dev/null &
 else
       have_kitty=`type -p kitty`
@@ -61,5 +70,6 @@ else
             --start-as normal \
             --override tab_bar_min_tabs=2 \
             --override startup_session=none \
+            ${KITTY_QUIT_OPT} \
             bash -c "w3m -dump $url | less" 2> /dev/null &
 fi

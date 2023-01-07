@@ -354,6 +354,13 @@ mkascii() {
   mkvidcomm="${V2A} -f $i --strategy ${STRATEGY} ${WITH_AUDIO} --output ${v}.sh"
   if [ "${have_kitty}" ]
   then
+    platform=`uname -s`
+    if [ "${platform}" == "Darwin" ]
+    then
+      KITTY_QUIT_OPT="--override macos_quit_when_last_window_closed=yes"
+    else
+      KITTY_QUIT_OPT=
+    fi
     echo "Invoking kitty to convert $i to ${v}.sh"
     kitty --title="Make Ascii Art" \
           --start-as normal \
@@ -362,6 +369,7 @@ mkascii() {
           --override initial_window_height=96c \
           --override tab_bar_min_tabs=2 \
           --override startup_session=none \
+          ${KITTY_QUIT_OPT} \
           ${mkvidcomm} 2> /dev/null
   else
     if [ "${have_gnome}" ]

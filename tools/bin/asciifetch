@@ -17,6 +17,14 @@ then
   export PATH="$PATH:$HOME/.local/bin"
 fi
 
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+  KITTY_QUIT_OPT="--override macos_quit_when_last_window_closed=yes"
+else
+  KITTY_QUIT_OPT=
+fi
+
 usage() {
   printf "\nUsage: asciifetch [-a] [-f] [-k] [-q] [-z] [-u]"
   printf "\nWhere:"
@@ -137,6 +145,7 @@ zoom() {
         --override draw_minimal_borders=yes \
         --override tab_bar_min_tabs=2 \
         --override startup_session=none \
+        ${KITTY_QUIT_OPT} \
         --listen-on unix:${sock_name} \
         ${tooldir}/asciifetch -k 2> /dev/null &
   kitty_pid=$!
