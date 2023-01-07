@@ -198,7 +198,11 @@ package() {
   cp -a share/figlet-fonts "${pkgdir}/${destdir}/share/figlet-fonts"
   cp -a share/neofetch-themes "${pkgdir}/${destdir}/share/neofetch-themes"
 
-  chmod 644 ${pkgdir}/${destdir}/share/man/*/*
+  [ -d ${pkgdir}/usr/share ] || mkdir -p ${pkgdir}/usr/share
+  [ "${destdir}" == "usr" ] || {
+    mv ${pkgdir}/${destdir}/share/man ] ${pkgdir}/usr/share/man
+  }
+  chmod 644 ${pkgdir}/usr/share/man/*/*
   chmod 644 ${pkgdir}/${destdir}/share/menu/*
   chmod 644 ${pkgdir}/${destdir}/share/figlet-fonts/*
   chmod 755 ${pkgdir}/${destdir}/bin/* \
@@ -207,8 +211,8 @@ package() {
             ${pkgdir}/${destdir}/share/asciiville/newsboat/scripts/*.sh \
             ${pkgdir}/${destdir}/share/menu \
             ${pkgdir}/${destdir}/share/figlet-fonts \
-            ${pkgdir}/${destdir}/share/man \
-            ${pkgdir}/${destdir}/share/man/*
+            ${pkgdir}/usr/share/man \
+            ${pkgdir}/usr/share/man/*
   find ${pkgdir}/${destdir}/share/doc/${pkgname} -type d | while read dir
   do
     chmod 755 "${dir}"
