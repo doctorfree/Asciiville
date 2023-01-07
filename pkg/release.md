@@ -13,6 +13,8 @@
 
 ## Overview
 
+Asciiville version 2.0.0 release 2 adds support for Apple macOS installation, initialization, and use. Installation on macOS must be performed using the [manual installation](#manual-installation) described below.
+
 **[Note:]** Version 2.0.0 release 2 and later install all Asciiville components in `/usr/local/...` rather than `/usr/...`. It may be necessary to add `/usr/local/bin` to your shell's PATH environment variable (some effort has been made to do this automatically).
 
 Supported features include:
