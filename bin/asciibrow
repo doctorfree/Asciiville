@@ -42,6 +42,7 @@ elif [[ $url == *"stackoverflow.com/questions/"* ]]; then
       kitty --title="${url}" \
             --start-as normal \
             --override tab_bar_min_tabs=2 \
+            --override startup_session=none \
             socli $query 2> /dev/null &
 else
       have_kitty=`type -p kitty`
@@ -59,5 +60,6 @@ else
       kitty --title="${url}" \
             --start-as normal \
             --override tab_bar_min_tabs=2 \
+            --override startup_session=none \
             bash -c "w3m -dump $url | less" 2> /dev/null &
 fi

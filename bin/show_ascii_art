@@ -685,6 +685,7 @@ done
           --override initial_window_width=320c \
           --override initial_window_height=96c \
           --override tab_bar_min_tabs=2 \
+          --override startup_session=none \
           ${mkartcomm} "${make_inp}" -o "${make_out}"
   else
     if [ "${have_gnome}" ]
@@ -1262,6 +1263,7 @@ then
             --override font_size=${art_font_size} \
             --override draw_minimal_borders=yes \
             --override tab_bar_min_tabs=2 \
+            --override startup_session=none \
             jp2a ${border} ${colors} ${colordepth} ${grayscale} ${size} ${charopt} \
                  --output=/tmp/"${image_name}"$$.asc "/tmp/${image_name}$$.jpg"
     else
@@ -1281,6 +1283,7 @@ then
           --override font_size=${art_font_size} \
           --override draw_minimal_borders=yes \
           --override tab_bar_min_tabs=2 \
+          --override startup_session=none \
           show_ascii_art -C -e kitty -K ${sock_name} -q "/tmp/${image_name}$$.asc"
   else
     show_ascii "/tmp/${image_name}$$.asc" "${tabs}"
@@ -1298,6 +1301,7 @@ else
           --override font_size=${art_font_size} \
           --override draw_minimal_borders=yes \
           --override tab_bar_min_tabs=2 \
+          --override startup_session=none \
           show_ascii_art -C -e kitty -K ${sock_name} -q ${args}
   else
     stty -echoctl # hide ^C

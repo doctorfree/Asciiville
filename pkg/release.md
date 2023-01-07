@@ -52,7 +52,7 @@ Download the [latest Arch, Debian, or RPM package format release](https://github
 
 Install the package on Arch Linux based systems by executing the command:
 
-```bash
+```shell
 sudo pacman -U ./Asciiville_2.0.0-2-x86_64.pkg.tar.zst
 ```
 
@@ -60,14 +60,14 @@ sudo pacman -U ./Asciiville_2.0.0-2-x86_64.pkg.tar.zst
 
 Install the package on Debian based systems by executing the commands:
 
-```bash
+```shell
 sudo apt update -y
 sudo apt install ./Asciiville_2.0.0-2.amd64.deb
 ```
 
 or, on a Raspberry Pi:
 
-```bash
+```shell
 sudo apt update -y
 sudo apt install ./Asciiville_2.0.0-2.armhf.deb
 ```
@@ -75,7 +75,7 @@ sudo apt install ./Asciiville_2.0.0-2.armhf.deb
 ### RPM based installation
 
 Install the package on RPM based systems by executing the command
-```bash
+```shell
 sudo dnf update -y
 sudo dnf localinstall ./Asciiville-2.0.0-2.x86_64.rpm
 ```
@@ -84,11 +84,18 @@ sudo dnf localinstall ./Asciiville-2.0.0-2.x86_64.rpm
 
 On systems for which the Arch, Debian, or RPM packages will not suffice, install manually by downloading the `Install-bin.sh` script and either the gzip'd distribution archive or the zip'd distribution archive.  After downloading the installation script and distribution archive, as a user with sudo privilege execute the commands:
 
-```bash
+```shell
 chmod 755 Install-bin.sh
 sudo ./Install-bin.sh /path/to/Asciiville_2.0.0-2.<arch>.tgz
 or
 sudo ./Install-bin.sh /path/to/Asciiville_2.0.0-2.<arch>.zip
+```
+
+For example, to install Asciiville version 2.0.0 release 2 on Apple macOS using the installation script and archive previously downloaded to `$HOME/Downloads/`:
+
+```shell
+chmod 755 ~/Downloads/Install-bin.sh
+sudo ~/Downloads/Install-bin.sh ~/Downloads/Asciiville_2.0.0-2.Darwin.tgz
 ```
 
 ## Configuration
@@ -119,25 +126,25 @@ asciisplash -a -i
 
 Removal of the package on Arch Linux based systems can be accomplished by issuing the command:
 
-```bash
+```shell
 sudo pacman -Rs asciiville
 ```
 
 Removal of the package on Debian based systems can be accomplished by issuing the command:
 
-```bash
+```shell
 sudo apt remove asciiville
 ```
 
 Removal of the package on RPM based systems can be accomplished by issuing the command:
 
-```bash
+```shell
 sudo dnf remove Asciiville
 ```
 
 On systems for which the manual installation was performed using the `Install-bin.sh` script, remove Asciiville manually by downloading the `Uninstall-bin.sh` script and, as a user with sudo privilege, execute the commands:
 
-```bash
+```shell
 chmod 755 Uninstall-bin.sh
 sudo ./Uninstall-bin.sh
 ```

@@ -503,6 +503,7 @@ make_it_so() {
                 --override font_size=18 \
                 --override draw_minimal_borders=yes \
                 --override tab_bar_min_tabs=2 \
+                --override startup_session=none \
                 ${AVCOMM} 2> /dev/null &
         else
           if [ "${TILIX}" ]
@@ -541,6 +542,7 @@ make_it_so() {
                 --override initial_window_width=90c \
                 --override initial_window_height=28c \
                 --override tab_bar_min_tabs=2 \
+                --override startup_session=none \
                 ${AVCOMM} 2> /dev/null &
         else
           if [ "${TILIX}" ]
@@ -795,6 +797,7 @@ show_art_file() {
               --override font_size=18 \
               --override draw_minimal_borders=yes \
               --override tab_bar_min_tabs=2 \
+              --override startup_session=none \
               show_ascii_art -e kitty -K ${sock_name} ${showargs} -a "${art}"
         ;;
       tilix*)
@@ -858,6 +861,7 @@ show_art_file() {
               --override font_size=18 \
               --override draw_minimal_borders=yes \
               --override tab_bar_min_tabs=2 \
+              --override startup_session=none \
               show_ascii_art -e kitty -K ${sock_name} ${showargs} -a "${art}"
           else
             gnome-terminal --window --full-screen \
@@ -903,6 +907,7 @@ play_show() {
               --override font_size=18 \
               --override draw_minimal_borders=yes \
               --override tab_bar_min_tabs=2 \
+              --override startup_session=none \
               show_ascii_art -e kitty -K ${sock_name} ${showargs}
         ;;
       tilix*)
@@ -962,6 +967,7 @@ play_show() {
                   --override font_size=18 \
                   --override draw_minimal_borders=yes \
                   --override tab_bar_min_tabs=2 \
+                  --override startup_session=none \
                   show_ascii_art -e kitty -K ${sock_name} ${showargs}
           else
             gnome-terminal --window --full-screen \

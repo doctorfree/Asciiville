@@ -136,6 +136,7 @@ zoom() {
         --override font_size=${size} \
         --override draw_minimal_borders=yes \
         --override tab_bar_min_tabs=2 \
+        --override startup_session=none \
         --listen-on unix:${sock_name} \
         ${tooldir}/asciifetch -k 2> /dev/null &
   kitty_pid=$!

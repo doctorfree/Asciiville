@@ -361,6 +361,7 @@ mkascii() {
           --override initial_window_width=320c \
           --override initial_window_height=96c \
           --override tab_bar_min_tabs=2 \
+          --override startup_session=none \
           ${mkvidcomm} 2> /dev/null
   else
     if [ "${have_gnome}" ]
