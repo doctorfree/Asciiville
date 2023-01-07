@@ -216,10 +216,11 @@ custom_gallery() {
 
 browser() {
   bro_font_size=${art_font_size}
-  figlet -c -k -t "Zoom/Browser Mode"
-  figlet -c -k -t "Zoom  In: 'i' / 'j' / 'n'"
-  figlet -c -k -t "Zoom Out: 'o' / 'k' / 'm'"
-  figlet -c -k -t "Help: 'h'  Exit: 'q'"
+  columns="$(tput cols)"
+  figlet -c -k -w ${columns} "Zoom/Browser Mode"
+  figlet -c -k -w ${columns} "Zoom  In: 'i' / 'j' / 'n'"
+  figlet -c -k -w ${columns} "Zoom Out: 'o' / 'k' / 'm'"
+  figlet -c -k -w ${columns} "Help: 'h'  Exit: 'q'"
   while true
   do
     read -rsn1 input
@@ -394,7 +395,10 @@ show_ascii() {
 
   [ "${viewshow}" ] && {
     [ "${wait_for_input}" ] && {
-      [ "${show_filename}" ] && figlet -c -k -t `basename ${asciiart}`
+      [ "${show_filename}" ] && {
+        columns="$(tput cols)"
+        figlet -c -k -w ${columns} `basename ${asciiart}`
+      }
       while true
       do
         browse=
@@ -759,20 +763,21 @@ goodbye() {
   [ "${quiet}" ] || {
     [ "${set_font_size}" ] && termprofset ${termarg} -s ${txt_font_size}
     printf "\n\n\n"
+    columns="$(tput cols)"
     if [ "${have_lolcat}" ]
     then
-      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Thanks For" | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -w ${columns} "Thanks For" | ${LOLCAT}
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Viewing" | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -w ${columns} "Viewing" | ${LOLCAT}
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Ascii Art !" | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -w ${columns} "Ascii Art !" | ${LOLCAT}
       tput civis -- invisible
     else
-      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Thanks For"
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -w ${columns} "Thanks For"
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Viewing"
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -w ${columns} "Viewing"
       printf "\n\n"
-      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Ascii Art !"
+      figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -w ${columns} "Ascii Art !"
     fi
     sleep $((delay / 2))
     clear
@@ -821,22 +826,23 @@ play_random_show() {
     f=( ${showdir}/* )
     ((k=RANDOM%${#f[@]}))
     art="${f[k]}"
+    columns="$(tput cols)"
     [ "${first}" ] && {
       [ "${quiet}" ] || {
         [ "${set_font_size}" ] && termprofset ${termarg} -s ${txt_font_size}
         printf "\n\n\n"
         if [ "${have_lolcat}" ]
         then
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} | ${LOLCAT}
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} | ${LOLCAT}
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art" | ${LOLCAT}
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} ${FIG_WELCOME} | ${LOLCAT}
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} ${FIG_ASCII} | ${LOLCAT}
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} "Ascii Art" | ${LOLCAT}
           tput civis -- invisible
         else
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME}
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII}
-          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art"
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} ${FIG_WELCOME}
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} ${FIG_ASCII}
+          figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} "Ascii Art"
         fi
-        figlet -c -d "${FIG_FONTS}" -f "Digital" -k -t "Ctrl-c  Exits"
+        figlet -c -d "${FIG_FONTS}" -f "Digital" -k -w ${columns} "Ctrl-c  Exits"
         sleep ${delay}
       }
       first=
@@ -845,7 +851,7 @@ play_random_show() {
     [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
     show_ascii "${art}"
     [ $? -gt 1 ] || {
-      [ "${show_filename}" ] && figlet -c -k -t `basename ${art}`
+      [ "${show_filename}" ] && figlet -c -k -w ${columns} `basename ${art}`
       sleep ${delay}
       [ ${showlength} -eq 0 ] || ((numslide++))
     }
@@ -876,21 +882,22 @@ play_slide_show() {
   done
   # Apply any gallery customization
   custom_gallery "${SLIDE_DIR}"
+  columns="$(tput cols)"
   [ "${quiet}" ] || {
     [ "${set_font_size}" ] && termprofset ${termarg} -s ${txt_font_size}
     printf "\n\n\n"
     if [ "${have_lolcat}" ]
     then
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} | ${LOLCAT}
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} | ${LOLCAT}
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art" | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} ${FIG_WELCOME} | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} ${FIG_ASCII} | ${LOLCAT}
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} "Ascii Art" | ${LOLCAT}
       tput civis -- invisible
     else
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME}
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII}
-      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art"
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} ${FIG_WELCOME}
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} ${FIG_ASCII}
+      figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -w ${columns} "Ascii Art"
     fi
-    figlet -c -d "${FIG_FONTS}" -f "Digital" -k -t "Ctrl-c  Exits"
+    figlet -c -d "${FIG_FONTS}" -f "Digital" -k -w ${columns} "Ctrl-c  Exits"
     sleep ${delay}
   }
   if [ "${randomshow}" ]
@@ -907,7 +914,7 @@ play_slide_show() {
       [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
       show_ascii "${art}"
       [ $? -gt 1 ] || {
-        [ "${show_filename}" ] && figlet -c -k -t `basename ${art}`
+        [ "${show_filename}" ] && figlet -c -k -w ${columns} `basename ${art}`
         sleep ${delay}
         [ ${showlength} -eq 0 ] || ((numslide++))
       }
@@ -921,7 +928,7 @@ play_slide_show() {
       [ "${set_font_size}" ] && termprofset ${termarg} -s ${art_font_size}
       show_ascii "${art}"
       [ $? -gt 1 ] || {
-        [ "${show_filename}" ] && figlet -c -k -t `basename ${art}`
+        [ "${show_filename}" ] && figlet -c -k -w ${columns} `basename ${art}`
         sleep ${delay}
       }
     done
@@ -1172,21 +1179,22 @@ clear
 [ "${quiet}" ] || {
   [ "${set_font_size}" ] && termprofset ${termarg} -s ${txt_font_size}
   printf "\n\n\n"
+  columns="$(tput cols)"
   if [ "${have_lolcat}" ]
   then
-    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME} | ${LOLCAT}
-    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_TO} | ${LOLCAT}
-    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII} | ${LOLCAT}
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -w ${columns} ${FIG_WELCOME} | ${LOLCAT}
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -w ${columns} ${FIG_TO} | ${LOLCAT}
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -w ${columns} ${FIG_ASCII} | ${LOLCAT}
     tput civis -- invisible
   else
-    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME}
-    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_TO}
-    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII}
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -w ${columns} ${FIG_WELCOME}
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -w ${columns} ${FIG_TO}
+    figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -w ${columns} ${FIG_ASCII}
   fi
-  figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Ctrl-c     Exits"
+  figlet -c -d "${FIG_FONTS}" -f "Small" -k -w ${columns} "Ctrl-c     Exits"
   if [ "${wait_for_input}" ]
   then
-    figlet -c -d "${FIG_FONTS}" -f "Small" -k -t "Enter  Continues"
+    figlet -c -d "${FIG_FONTS}" -f "Small" -k -w ${columns} "Enter  Continues"
     read -p "" answer
   else
     sleep ${delay}
@@ -1332,7 +1340,10 @@ else
       }
       [ $? -gt 1 ] || {
         [ "${wait_for_input}" ] || {
-          [ "${show_filename}" ] && figlet -c -k -t `basename ${art}`
+          [ "${show_filename}" ] && {
+            columns="$(tput cols)"
+            figlet -c -k -w ${columns} `basename ${art}`
+          }
           sleep ${delay}
         }
       }

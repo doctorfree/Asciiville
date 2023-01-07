@@ -3,5 +3,6 @@
 FIG_FONTS="/usr/local/share/figlet-fonts"
 FONT="Lean"
 
-figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -t "Asciiville" | tr ' _/' ' ()' | lolcat
-figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -t "Asciiville" | tr ' _/' ' ()' | cat
+columns="$(tput cols)"
+figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -w ${columns} "Asciiville" | tr ' _/' ' ()' | lolcat
+figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -w ${columns} "Asciiville" | tr ' _/' ' ()' | cat

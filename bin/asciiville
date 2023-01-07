@@ -1017,20 +1017,21 @@ play_slide_show() {
 }
 
 show_figlet() {
+  columns="$(tput cols)"
   if [ "${use_lolcat}" ]
   then
     if [ "${USE_FONT}" == "Lean" ]
     then
-      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} | tr ' _/' ' ()' | ${LOLCAT}
+      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -w ${columns} ${FIG_TEXT} | tr ' _/' ' ()' | ${LOLCAT}
     else
-      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} | ${LOLCAT}
+      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -w ${columns} ${FIG_TEXT} | ${LOLCAT}
     fi
   else
     if [ "${USE_FONT}" == "Lean" ]
     then
-      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} | tr ' _/' ' ()'
+      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -w ${columns} ${FIG_TEXT} | tr ' _/' ' ()'
     else
-      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT}
+      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -w ${columns} ${FIG_TEXT}
     fi
   fi
 }

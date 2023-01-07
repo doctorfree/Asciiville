@@ -3,7 +3,8 @@
 FIG_FONTS="/usr/local/share/figlet-fonts"
 FONT="Lean"
 
-figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -t "Asciiville" | tr ' _/' ' ()'
-figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -t "Asciiville" | tr ' _/' ' ()' | lolcat --animate --speed=40.0
-figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -t "Asciiville" | tr ' _/' ' //'
-figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -t "Asciiville" | tr ' _/' ' //' | lolcat --animate --speed=40.0
+columns="$(tput cols)"
+figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -w ${columns} "Asciiville" | tr ' _/' ' ()'
+figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -w ${columns} "Asciiville" | tr ' _/' ' ()' | lolcat --animate --speed=40.0
+figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -w ${columns} "Asciiville" | tr ' _/' ' //'
+figlet -c -d "${FIG_FONTS}" -f "${FONT}" -k -w ${columns} "Asciiville" | tr ' _/' ' //' | lolcat --animate --speed=40.0
