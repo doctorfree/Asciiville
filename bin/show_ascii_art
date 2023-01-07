@@ -785,10 +785,19 @@ goodbye() {
   }
 }
 
+# tput rmam
+# disables line wrapping.
+# tput smam
+# enables line wrapping.
 cleanup() {
   goodbye
   tput cnorm
-  [ "${have_setterm}" ] && setterm -linewrap on
+  if [ "${have_setterm}" ]
+  then
+    setterm -linewrap on
+  else
+    tput smam
+  fi
   [ "${fifo_name}" ] && send_done
   [ "${playing}" ] && fade_audio
   exit 0
@@ -936,7 +945,12 @@ play_slide_show() {
 }
 
 # We never want to wrap Ascii Art display
-[ "${have_setterm}" ] && setterm -linewrap off
+if [ "${have_setterm}" ]
+then
+  setterm -linewrap off
+else
+  tput rmam
+fi
 
 [ "${slideshow}" ] && {
   stty -echoctl # hide ^C
@@ -1083,7 +1097,12 @@ play_slide_show() {
   fi
   goodbye
   tput cnorm
-  [ "${have_setterm}" ] && setterm -linewrap on
+  if [ "${have_setterm}" ]
+  then
+    setterm -linewrap on
+  else
+    tput smam
+  fi
   [ "${fifo_name}" ] && send_done
   [ "${playing}" ] && fade_audio
   exit 0
@@ -1128,7 +1147,12 @@ play_slide_show() {
   fi
   goodbye
   tput cnorm
-  [ "${have_setterm}" ] && setterm -linewrap on
+  if [ "${have_setterm}" ]
+  then
+    setterm -linewrap on
+  else
+    tput smam
+  fi
   [ "${fifo_name}" ] && send_done
   [ "${playing}" ] && fade_audio
   exit 0
@@ -1375,7 +1399,12 @@ fi
 
 goodbye
 tput cnorm
-[ "${have_setterm}" ] && setterm -linewrap on
+if [ "${have_setterm}" ]
+then
+  setterm -linewrap on
+else
+  tput smam
+fi
 [ "${fifo_name}" ] && send_done
 [ "${playing}" ] && fade_audio
 exit 0
