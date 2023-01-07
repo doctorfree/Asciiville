@@ -3,7 +3,7 @@ include config.mk
 PROGNAME = tetris$(EXE)
 
 # Uncomment to change the default.  (Only used in Unix-like systems.)
-HISCORE_FILENAME = /usr/games/var/tetris-hiscores
+HISCORE_FILENAME = /usr/local/games/var/tetris-hiscores
 
 INSTALL = install
 
@@ -72,7 +72,7 @@ install: $(PROGNAME)
 
 install-hiscores:
 	@HS_FN=$(HISCORE_FILENAME); \
-	if [ -z "$$HS_FN" ]; then HS_FN=/usr/games/var/tetris-hiscores; fi; \
+	if [ -z "$$HS_FN" ]; then HS_FN=/usr/local/games/var/tetris-hiscores; fi; \
 	HS_FN="$(DESTDIR)$$HS_FN"; \
 	echo $(INSTALL) -d $${HS_FN%/*};  $(INSTALL) -d "$${HS_FN%/*}" && \
 	echo touch $$HS_FN &&             touch "$$HS_FN" && \

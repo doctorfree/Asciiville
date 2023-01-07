@@ -22,7 +22,7 @@
  
 /* Only used if UNIX */
 #ifndef HISCORE_FILENAME
-#define HISCORE_FILENAME "/usr/games/var/tetris-hiscores"
+#define HISCORE_FILENAME "/usr/local/games/var/tetris-hiscores"
 #endif
 
 #if __DJGPP__ || __TURBOC__

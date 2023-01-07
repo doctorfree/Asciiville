@@ -160,6 +160,7 @@ games/nethack/win/*/*.o
 games/tetris/gameserver
 games/tetris/tetris
 games/tetris/src/config.h
+games/tetris/src/src-conf.mk
 
 conf/cool-retro-term/*
 pics/*

@@ -5,7 +5,7 @@
 # 
 
 # You may comment out/uncomment any of these lines to change defaults.
-PREFIX=/usr/games
+PREFIX=/usr/local/games
 ENABLE_2P=y		# 2-player
 ENABLE_JS=y		# joystick
 ENABLE_NETWORK=y
