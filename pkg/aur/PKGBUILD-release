@@ -1,7 +1,7 @@
 # Maintainer: Ronald Record <ronaldrecord@gmail.com>
 
 pkgname=asciiville
-pkgver=v2.0.0r1
+pkgver=v2.0.0r2
 pkgrel=1
 pkgdesc="Create and display ASCII Art, animations. Utilities to perform common operations in a character-based environment. Asciiville includes nearly 1,000 works of ASCII Art"
 arch=('x86_64' 'armv7h')
@@ -82,7 +82,7 @@ package() {
   cd "${srcdir}/${pkgname}"
   destdir=usr/local
 
-  for dir in "${destdir}" "${destdir}/share" "${destdir}/share/man" \
+  for dir in "usr" "${destdir}" "${destdir}/share" "${destdir}/share/man" \
       "${destdir}/share/applications" "${destdir}/share/doc" \
       "${destdir}/share/doc/${pkgname}" "${destdir}/share/btop" \
       "${destdir}/share/${pkgname}" "${destdir}/games" "${destdir}/games/bin" \

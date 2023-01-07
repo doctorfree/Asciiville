@@ -14,7 +14,7 @@ else
     . ${SRC}/VERSION
   else
     VERSION=2.0.0
-    RELEASE=1
+    RELEASE=2
   fi
 fi
 
@@ -100,7 +100,7 @@ package() {
   cd "${srcdir}/${pkgname}"
   destdir=usr/local
 
-  for dir in "${destdir}" "${destdir}/share" "${destdir}/share/man" \
+  for dir in "usr" "${destdir}" "${destdir}/share" "${destdir}/share/man" \
       "${destdir}/share/applications" "${destdir}/share/doc" \
       "${destdir}/share/doc/${pkgname}" "${destdir}/share/btop" \
       "${destdir}/share/${pkgname}" "${destdir}/games" "${destdir}/games/bin" \
