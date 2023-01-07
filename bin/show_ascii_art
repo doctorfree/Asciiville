@@ -459,6 +459,7 @@ show_filename=
 wait_for_input=1
 have_convert=`type -p convert`
 have_jp2a=`type -p jp2a`
+have_setterm=`type -p setterm`
 while getopts "a:A:bBcCD:d:e:Egh:i:I:K:l:LF:f:n:N:oO:Pp:qrR:s:S:t:T:vw:WzZu" flag; do
   case $flag in
       a)
@@ -782,7 +783,7 @@ goodbye() {
 cleanup() {
   goodbye
   tput cnorm
-  setterm -linewrap on
+  [ "${have_setterm}" ] && setterm -linewrap on
   [ "${fifo_name}" ] && send_done
   [ "${playing}" ] && fade_audio
   exit 0
@@ -928,7 +929,7 @@ play_slide_show() {
 }
 
 # We never want to wrap Ascii Art display
-setterm -linewrap off
+[ "${have_setterm}" ] && setterm -linewrap off
 
 [ "${slideshow}" ] && {
   stty -echoctl # hide ^C
@@ -1075,7 +1076,7 @@ setterm -linewrap off
   fi
   goodbye
   tput cnorm
-  setterm -linewrap on
+  [ "${have_setterm}" ] && setterm -linewrap on
   [ "${fifo_name}" ] && send_done
   [ "${playing}" ] && fade_audio
   exit 0
@@ -1120,7 +1121,7 @@ setterm -linewrap off
   fi
   goodbye
   tput cnorm
-  setterm -linewrap on
+  [ "${have_setterm}" ] && setterm -linewrap on
   [ "${fifo_name}" ] && send_done
   [ "${playing}" ] && fade_audio
   exit 0
@@ -1363,7 +1364,7 @@ fi
 
 goodbye
 tput cnorm
-setterm -linewrap on
+[ "${have_setterm}" ] && setterm -linewrap on
 [ "${fifo_name}" ] && send_done
 [ "${playing}" ] && fade_audio
 exit 0
