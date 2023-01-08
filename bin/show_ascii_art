@@ -290,7 +290,7 @@ show_vintage() {
   echo ${baseart} | grep _ > /dev/null && slow=1
   if [ "${center}" ]
   then
-    columns="$(tput cols)"
+    columns="$(tput cols 2>/dev/null)"
     # Find longest line and calculate margin
     longest=0
     while IFS= read -r line; do
@@ -307,7 +307,7 @@ show_vintage() {
         if [ "${have_lolcat}" ]
         then
           printf "%s%s\n" "${padding}" "${line}" | ${LOLCAT}
-          tput civis -- invisible
+          tput civis -- invisible 2> /dev/null
         else
           printf "%s%s\n" "${padding}" "${line}"
         fi
@@ -316,7 +316,7 @@ show_vintage() {
       if [ "${have_lolcat}" ]
       then
         /bin/cat "${vintart}" | sed "s/^/${padding}/" | ${LOLCAT}
-        tput civis -- invisible
+        tput civis -- invisible 2> /dev/null
       else
         /bin/cat "${vintart}" | sed "s/^/${padding}/"
       fi
@@ -328,7 +328,7 @@ show_vintage() {
         if [ "${have_lolcat}" ]
         then
           printf "%s\n" "${line}" | ${LOLCAT}
-          tput civis -- invisible
+          tput civis -- invisible 2> /dev/null
         else
           printf "%s\n" "${line}"
         fi
@@ -337,7 +337,7 @@ show_vintage() {
       if [ "${have_lolcat}" ]
       then
         /bin/cat "${vintart}" | ${LOLCAT}
-        tput civis -- invisible
+        tput civis -- invisible 2> /dev/null
       else
         /bin/cat "${vintart}"
       fi
@@ -777,7 +777,7 @@ goodbye() {
       figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Viewing" 2> /dev/null | ${LOLCAT}
       printf "\n\n"
       figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Ascii Art !" 2> /dev/null | ${LOLCAT}
-      tput civis -- invisible
+      tput civis -- invisible 2> /dev/null
     else
       figlet -c -d "${FIG_FONTS}" -f "Bolger" -k -t "Thanks For" 2> /dev/null
       printf "\n\n"
@@ -791,18 +791,14 @@ goodbye() {
   }
 }
 
-# tput rmam
-# disables line wrapping.
-# tput smam
-# enables line wrapping.
 cleanup() {
   goodbye
-  tput cnorm
+  tput cnorm 2> /dev/null
   if [ "${have_setterm}" ]
   then
     setterm -linewrap on
   else
-    tput smam
+    tput smam 2> /dev/null
   fi
   [ "${fifo_name}" ] && send_done
   [ "${playing}" ] && fade_audio
@@ -810,7 +806,7 @@ cleanup() {
 }
 
 play_random_show() {
-  tput civis -- invisible
+  tput civis -- invisible 2> /dev/null
   numslide=0
   [ ${showlength} -eq 0 ] || ((numslide++))
   a=( ${ARTDIR}/* )
@@ -850,7 +846,7 @@ play_random_show() {
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} 2> /dev/null | ${LOLCAT}
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} 2> /dev/null | ${LOLCAT}
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art" 2> /dev/null | ${LOLCAT}
-          tput civis -- invisible
+          tput civis -- invisible 2> /dev/null
         else
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} 2> /dev/null
           figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} 2> /dev/null
@@ -875,7 +871,7 @@ play_random_show() {
 }
 
 play_slide_show() {
-  tput civis -- invisible
+  tput civis -- invisible 2> /dev/null
   have_asc=1
   have_agz=1
   for art in ${SLIDE_DIR}/*.asc ${SLIDE_DIR}/*.asc.gz
@@ -904,7 +900,7 @@ play_slide_show() {
       figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} 2> /dev/null | ${LOLCAT}
       figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} 2> /dev/null | ${LOLCAT}
       figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t "Ascii Art" 2> /dev/null | ${LOLCAT}
-      tput civis -- invisible
+      tput civis -- invisible 2> /dev/null
     else
       figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_WELCOME} 2> /dev/null
       figlet -c -d "${FIG_FONTS}" -f "${SLIDE_FONT}" -k -t ${FIG_ASCII} 2> /dev/null
@@ -953,7 +949,7 @@ if [ "${have_setterm}" ]
 then
   setterm -linewrap off
 else
-  tput rmam
+  tput rmam 2> /dev/null
 fi
 
 [ "${slideshow}" ] && {
@@ -1100,12 +1096,12 @@ fi
     play_slide_show
   fi
   goodbye
-  tput cnorm
+  tput cnorm 2> /dev/null
   if [ "${have_setterm}" ]
   then
     setterm -linewrap on
   else
-    tput smam
+    tput smam 2> /dev/null
   fi
   [ "${fifo_name}" ] && send_done
   [ "${playing}" ] && fade_audio
@@ -1150,12 +1146,12 @@ fi
     play_random_show
   fi
   goodbye
-  tput cnorm
+  tput cnorm 2> /dev/null
   if [ "${have_setterm}" ]
   then
     setterm -linewrap on
   else
-    tput smam
+    tput smam 2> /dev/null
   fi
   [ "${fifo_name}" ] && send_done
   [ "${playing}" ] && fade_audio
@@ -1212,7 +1208,7 @@ clear
     figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME} 2> /dev/null | ${LOLCAT}
     figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_TO} 2> /dev/null | ${LOLCAT}
     figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_ASCII} 2> /dev/null | ${LOLCAT}
-    tput civis -- invisible
+    tput civis -- invisible 2> /dev/null
   else
     figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_WELCOME} 2> /dev/null
     figlet -c -d "${FIG_FONTS}" -f "${LARGE_FONT}" -k -t ${FIG_TO} 2> /dev/null
@@ -1345,7 +1341,7 @@ else
   else
     stty -echoctl # hide ^C
     trap 'cleanup' SIGINT SIGTERM
-    tput civis -- invisible
+    tput civis -- invisible 2> /dev/null
     IFS=',' read -r -a artarray <<< "${artfiles}"
     for art in "${artarray[@]}"
     do
@@ -1403,12 +1399,12 @@ fi
 }
 
 goodbye
-tput cnorm
+tput cnorm 2> /dev/null
 if [ "${have_setterm}" ]
 then
   setterm -linewrap on
 else
-  tput smam
+  tput smam 2> /dev/null
 fi
 [ "${fifo_name}" ] && send_done
 [ "${playing}" ] && fade_audio

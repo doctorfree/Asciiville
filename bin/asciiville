@@ -24,8 +24,8 @@
 # April, 2022
 #
 
-BOLD=$(tput bold)
-NORM=$(tput sgr0)
+BOLD=$(tput bold 2>/dev/null)
+NORM=$(tput sgr0 2>/dev/null)
 PLEASE="Please enter your"
 COMMAND=btop
 FIG_FONTS="/usr/local/share/figlet-fonts"
@@ -4229,7 +4229,7 @@ done
   clear
   [ "${have_gum}" ] && [ -x ${TOOLSBIN}/asciifetch ] && {
     ${TOOLSBIN}/asciifetch -a -q
-    [ $? -eq 0 ] || tput cup 0 0
+    [ $? -eq 0 ] || tput cup 0 0 2> /dev/null
   }
   show_main_menu
 }

@@ -89,7 +89,7 @@ usage() {
   printf "\n\t\t[-q scale] [-r rate] [-b audio bitrate] [-z video bitrate] [-S strategy]"
   printf "\n\t\t[-s size] [-t threads] [-I] [-d] [-y] [-u] file1 [file2 ...]"
   printf "\n\nWhere:\n\t-d indicates tell me what you would do"
-  printf "\n\t-A indicates without audio"
+  printf "\n\t-A indicates without audio (on arm architecuture -A indicates with audio)"
   printf "\n\t-i input format specifies the 3 letter lower case input format"
   printf "\n\t-o output format specifies the 3 letter lower case output format"
   printf "\n\t-a audio codec specifies the output audio codec"
@@ -129,10 +129,12 @@ usage() {
 
 WITH_AUDIO="--with-audio"
 STRATEGY="ascii-color"
+with_flag=
 while getopts Aa:b:c:i:o:p:q:r:t:S:s:v:z:Iydu flag; do
     case $flag in
         A)
             WITH_AUDIO=
+            with_flag=1
             ;;
         a)
             ACODEC="-acodec $OPTARG"
@@ -280,6 +282,18 @@ function check_py_version
   ! [ "$(echo $python_version | head -c 1 )" -lt "3" ]
 }
 
+mach=`uname -m`
+case "${mach}" in
+  arm*)
+    VOPT=
+    WITH_AUDIO=
+    [ "${with_flag}" ] && WITH_AUDIO="--with-audio"
+    ;;
+  *)
+    VOPT='--install-option="--with-audio"'
+    ;;
+esac
+
 pathadd "${HOME}/.local/bin"
 have_v2a=`type -p video-to-ascii`
 [ "${have_v2a}" ] || {
@@ -321,14 +335,12 @@ have_v2a=`type -p video-to-ascii`
     pkg=video-to-ascii
     if pip list | grep ${pkg} > /dev/null
     then
-      ${PYTHON} -m pip install --upgrade ${pkg} \
-          --install-option="--with-audio" > /dev/null 2>&1
+      ${PYTHON} -m pip install --upgrade ${pkg} ${VOPT} > /dev/null 2>&1
     else
       [ "${quiet}" ] || {
         printf "\n\tInstalling ${pkg} ..."
       }
-      ${PYTHON} -m pip install ${pkg} \
-          --install-option="--with-audio" > /dev/null 2>&1
+      ${PYTHON} -m pip install ${pkg} ${VOPT} > /dev/null 2>&1
       [ "${quiet}" ] || {
         printf " done"
       }

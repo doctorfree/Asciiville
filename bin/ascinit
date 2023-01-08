@@ -372,6 +372,16 @@ fedora=
 mach=`uname -m`
 APT=
 DNF=
+
+case "${mach}" in
+  arm*)
+    VOPT=
+    ;;
+  *)
+    VOPT='--install-option="--with-audio"'
+    ;;
+esac
+
 if [ -f /etc/os-release ]
 then
   . /etc/os-release
@@ -1028,14 +1038,12 @@ have_tuir=`type -p tuir`
 pkg=video-to-ascii
 if pip list | grep ${pkg} > /dev/null
 then
-  ${PYTHON} -m pip install --upgrade ${pkg} \
-      --install-option="--with-audio" > /dev/null 2>&1
+  ${PYTHON} -m pip install --upgrade ${pkg} ${VOPT} > /dev/null 2>&1
 else
   [ "${quiet}" ] || {
     printf "\n\tInstalling ${pkg} ..."
   }
-  ${PYTHON} -m pip install ${pkg} \
-      --install-option="--with-audio" > /dev/null 2>&1
+  ${PYTHON} -m pip install ${pkg} ${VOPT} > /dev/null 2>&1
   [ "${quiet}" ] || {
     printf " done"
   }
