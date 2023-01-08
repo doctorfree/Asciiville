@@ -1284,7 +1284,9 @@ create_new_profile() {
 [ -d ${CONFDIR}/music ] && {
   [ -d ${HOME}/Music/Asciiville ] || {
     [ -d ${HOME}/Music ] || mkdir -p ${HOME}/Music
-    ln -s ${CONFDIR}/music ${HOME}/Music/Asciiville
+    [ -d ${HOME}/Music/Asciiville ] || {
+      ln -s ${CONFDIR}/music ${HOME}/Music/Asciiville
+    }
   }
 }
 
