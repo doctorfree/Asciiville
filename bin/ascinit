@@ -1282,11 +1282,10 @@ create_new_profile() {
 }
 
 [ -d ${CONFDIR}/music ] && {
+  [ -d ${HOME}/Music ] || mkdir -p ${HOME}/Music
+  [ -L ${HOME}/Music/Asciiville ] && rm -f ${HOME}/Music/Asciiville
   [ -d ${HOME}/Music/Asciiville ] || {
-    [ -d ${HOME}/Music ] || mkdir -p ${HOME}/Music
-    [ -d ${HOME}/Music/Asciiville ] || {
-      ln -s ${CONFDIR}/music ${HOME}/Music/Asciiville
-    }
+    ln -s ${CONFDIR}/music ${HOME}/Music/Asciiville
   }
 }
 
