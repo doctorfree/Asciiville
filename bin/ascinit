@@ -175,7 +175,16 @@ install_external_package() {
       then
         [ "${DNF}" ] && sudo ${DNF} install ${DL_URL} > /dev/null 2>&1
       else
-        [ "${arch}" ] && sudo pacman -U --noconfirm ${DL_URL} > /dev/null 2>&1
+        # Until we sign Arch packages we need to download and install locally
+        [ "${arch}" ] && {
+          [ "${have_wget}" ] && {
+            TEMP_ARCH="$(mktemp --suffix=.zst)"
+            wget --quiet -O "${TEMP_ARCH}" "${DL_URL}" > /dev/null 2>&1
+            chmod 644 "${TEMP_ARCH}"
+            sudo pacman -U --noconfirm "${TEMP_ARCH}" > /dev/null 2>&1
+            rm -f "${TEMP_ARCH}"
+          }
+        }
       fi
     fi
   }
