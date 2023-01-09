@@ -13,7 +13,9 @@
 
 ## Overview
 
-Asciiville version 2.0.0 release 2 adds support for Apple macOS installation, initialization, and use. Installation on macOS must be performed using the [manual installation](#manual-installation) described below.
+Asciiville version 2.0.1 release 1 adds support for Arch-like platforms (e.g. Manjaro Linux), and fixes remote Arch package installations in `ascinit`.
+
+Asciiville version 2.0.0 release 2 added support for Apple macOS installation, initialization, and use. Installation on macOS must be performed using the [manual installation](#manual-installation) described below.
 
 **[Note:]** Version 2.0.0 release 2 and later install all Asciiville components in `/usr/local/...` rather than `/usr/...`. It may be necessary to add `/usr/local/bin` to your shell's PATH environment variable (some effort has been made to do this automatically).
 
@@ -55,7 +57,7 @@ Download the [latest Arch, Debian, or RPM package format release](https://github
 Install the package on Arch Linux based systems by executing the command:
 
 ```shell
-sudo pacman -U ./Asciiville_2.0.0-2-x86_64.pkg.tar.zst
+sudo pacman -U ./Asciiville_2.0.1-1-x86_64.pkg.tar.zst
 ```
 
 ### Debian based installation
@@ -64,14 +66,14 @@ Install the package on Debian based systems by executing the commands:
 
 ```shell
 sudo apt update -y
-sudo apt install ./Asciiville_2.0.0-2.amd64.deb
+sudo apt install ./Asciiville_2.0.1-1.amd64.deb
 ```
 
 or, on a Raspberry Pi:
 
 ```shell
 sudo apt update -y
-sudo apt install ./Asciiville_2.0.0-2.armhf.deb
+sudo apt install ./Asciiville_2.0.1-1.armhf.deb
 ```
 
 ### RPM based installation
@@ -79,7 +81,7 @@ sudo apt install ./Asciiville_2.0.0-2.armhf.deb
 Install the package on RPM based systems by executing the command
 ```shell
 sudo dnf update -y
-sudo dnf localinstall ./Asciiville-2.0.0-2.x86_64.rpm
+sudo dnf localinstall ./Asciiville-2.0.1-1.x86_64.rpm
 ```
 
 ### Manual installation
@@ -88,16 +90,16 @@ On systems for which the Arch, Debian, or RPM packages will not suffice, install
 
 ```shell
 chmod 755 Install-bin.sh
-sudo ./Install-bin.sh /path/to/Asciiville_2.0.0-2.<arch>.tgz
+sudo ./Install-bin.sh /path/to/Asciiville_2.0.1-1.<arch>.tgz
 or
-sudo ./Install-bin.sh /path/to/Asciiville_2.0.0-2.<arch>.zip
+sudo ./Install-bin.sh /path/to/Asciiville_2.0.1-1.<arch>.zip
 ```
 
-For example, to install Asciiville version 2.0.0 release 2 on Apple macOS using the installation script and archive previously downloaded to `$HOME/Downloads/`:
+For example, to install Asciiville version 2.0.1 release 1 on Apple macOS using the installation script and archive previously downloaded to `$HOME/Downloads/`:
 
 ```shell
 chmod 755 ~/Downloads/Install-bin.sh
-sudo ~/Downloads/Install-bin.sh ~/Downloads/Asciiville_2.0.0-2.Darwin.tgz
+sudo ~/Downloads/Install-bin.sh ~/Downloads/Asciiville_2.0.1-1.Darwin.tgz
 ```
 
 ## Configuration
@@ -154,6 +156,11 @@ sudo ./Uninstall-bin.sh
 Note that manual removal of Asciiville using the `Uninstall-bin.sh` script will not remove any of the dependencies manually installed above. Manual installation and removal of Asciiville is not as robust as packaged installation and removal. Hopefully additional platform packaging will be available in the future. If you would like to assist with this effort, see the ['Contributing' section of the Asciiville README](https://github.com/doctorfree/Asciiville#contributing).
 
 ## Changelog
+
+Version 2.0.1 release 1 adds support for:
+
+* Arch-like platforms (e.g. Manjaro Linux)
+* Fixes remote Arch package installations in `ascinit`
 
 Version 2.0.0 release 2 adds support for:
 

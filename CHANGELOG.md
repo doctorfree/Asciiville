@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## Asciiville-2.0.1r1 (2023-01-10)
+
+* Add support for Arch-like platforms (e.g. Manjaro Linux)
+* Fix remote Arch package installs in `ascinit`
+
 ## Asciiville-2.0.0r2 (2023-01-07)
 
 * Move installation location from `/usr` to `/usr/local`
