@@ -93,9 +93,10 @@ then
     echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' > /etc/profile.d/asciiville.sh
   fi
 else
-  [ -f /etc/profile ] && {
+  if [ -f /etc/profile ]
+  then
     echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >> /etc/profile
-  }
+  fi
 fi
 if [ -d /etc/zsh ]
 then
@@ -106,9 +107,10 @@ then
  echo 'export PATH="$PATH:/usr/local/bin:/usr/bin:/bin:/usr/games:/usr/local/games"' > /etc/zsh/zshenv
   fi
 else
-  [ -f /etc/zshrc ] && {
+  if [ -f /etc/zshrc ]
+  then
     echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >> /etc/zshrc
-  }
+  fi
 fi
 
 %preun
