@@ -257,6 +257,7 @@ Asciiville adds the following commands to your system:
 * **show_moon** : display the phase of the Moon
 * **show_weather** : display a weather report
 * **tdraw** : ASCII drawing tool
+* **term-image** : Display and browse images in the terminal
 * **termprofset** : set/restore default profile or font settings for the Gnome, Xfce4, and Tilix terminals
 * **tetris** : classic video game
 

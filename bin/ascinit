@@ -972,7 +972,7 @@ have_pip=`type -p pip`
 }
 
 for pkg in setuptools asciimatics ddgr rainbowstream socli \
-           future xtermcolor ffmpeg-python pyaudio
+           future xtermcolor ffmpeg-python pyaudio term-image
 do
   if pip list | grep ${pkg} > /dev/null
   then
