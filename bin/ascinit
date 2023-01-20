@@ -46,25 +46,30 @@ usage() {
 install_package() {
   PKG="$1"
   [ "${quiet}" ] || echo "Installing ${PKG}"
-  if [ "${debian}" ]
+  if [ "${darwin}" ]
   then
-    if [ "${APT}" ]
-    then
-      sudo ${APT} install $1 > /dev/null 2>&1
-    else
-      [ "${quiet}" ] || echo "Cannot locate apt to install. Skipping."
-    fi
+    brew install -q $1
   else
-    if [ "${fedora}" ]
+    if [ "${debian}" ]
     then
-      if [ "${DNF}" ]
+      if [ "${APT}" ]
       then
-        sudo ${DNF} install $1 > /dev/null 2>&1
+        sudo ${APT} install $1 > /dev/null 2>&1
       else
-        [ "${quiet}" ] || echo "Cannot locate dnf to install. Skipping."
+        [ "${quiet}" ] || echo "Cannot locate apt to install. Skipping."
       fi
     else
-      [ "${arch}" ] && sudo pacman -U --noconfirm $1 > /dev/null 2>&1
+      if [ "${fedora}" ]
+      then
+        if [ "${DNF}" ]
+        then
+          sudo ${DNF} install $1 > /dev/null 2>&1
+        else
+          [ "${quiet}" ] || echo "Cannot locate dnf to install. Skipping."
+        fi
+      else
+        [ "${arch}" ] && sudo pacman -U --noconfirm $1 > /dev/null 2>&1
+      fi
     fi
   fi
 } 
@@ -121,38 +126,45 @@ install_external_package() {
   }
   DL_URL=
   [ "${have_curl}" ] && [ "${have_jq}" ] && {
-    if [ "${arch}" ]
+    if [ "${darwin}" ]
     then
       DL_URL=$(curl --silent "${API_URL}" | \
                jq --raw-output '.assets | .[]?.browser_download_url' | \
-               grep "\.pkg\.tar\.zst")
+               grep "\.Darwin\.tgz")
     else
-      if [ "${centos}" ]
+      if [ "${arch}" ]
       then
         DL_URL=$(curl --silent "${API_URL}" | \
-                 jq --raw-output '.assets | .[]?.browser_download_url' | \
-                 grep "\.el.*x86_64\.rpm")
+               jq --raw-output '.assets | .[]?.browser_download_url' | \
+               grep "\.pkg\.tar\.zst")
       else
-        if [ "${fedora}" ]
+        if [ "${centos}" ]
         then
           DL_URL=$(curl --silent "${API_URL}" | \
+                 jq --raw-output '.assets | .[]?.browser_download_url' | \
+                 grep "\.el.*x86_64\.rpm")
+        else
+          if [ "${fedora}" ]
+          then
+            DL_URL=$(curl --silent "${API_URL}" | \
                    jq --raw-output '.assets | .[]?.browser_download_url' | \
                    grep "\.fc.*x86_64\.rpm")
-        else
-          if [ "${debian}" ]
-          then
-            if [ "${mach}" == "x86_64" ]
+          else
+            if [ "${debian}" ]
             then
-              DL_URL=$(curl --silent "${API_URL}" | \
+              if [ "${mach}" == "x86_64" ]
+              then
+                DL_URL=$(curl --silent "${API_URL}" | \
                        jq --raw-output '.assets | .[]?.browser_download_url' | \
                        grep "\.amd64\.deb")
-            else
-              DL_URL=$(curl --silent "${API_URL}" | \
+              else
+                DL_URL=$(curl --silent "${API_URL}" | \
                        jq --raw-output '.assets | .[]?.browser_download_url' | \
                        grep "\.arm.*\.deb")
+              fi
+            else
+              printf "\n\tNo ${PROJECT} release asset found for this platform ..."
             fi
-          else
-            printf "\n\tNo ${PROJECT} release asset found for this platform ..."
           fi
         fi
       fi
@@ -176,7 +188,8 @@ install_external_package() {
         [ "${DNF}" ] && sudo ${DNF} install ${DL_URL} > /dev/null 2>&1
       else
         # Until we sign Arch packages we need to download and install locally
-        [ "${arch}" ] && {
+        if [ "${arch}" ]
+        then
           [ "${have_wget}" ] && {
             TEMP_ARCH="$(mktemp --suffix=.zst)"
             wget --quiet -O "${TEMP_ARCH}" "${DL_URL}" > /dev/null 2>&1
@@ -184,7 +197,17 @@ install_external_package() {
             sudo pacman -U --noconfirm "${TEMP_ARCH}" > /dev/null 2>&1
             rm -f "${TEMP_ARCH}"
           }
-        }
+        else
+          [ "${darwin}" ] && {
+            [ "${have_wget}" ] && {
+              TEMP_ARCH="$(mktemp --suffix=.tgz)"
+              wget --quiet -O "${TEMP_ARCH}" "${DL_URL}" > /dev/null 2>&1
+              chmod 644 "${TEMP_ARCH}"
+              tar xzf "${TEMP_ARCH}" -C /
+              rm -f "${TEMP_ARCH}"
+            }
+          }
+        fi
       fi
     fi
   }
@@ -376,9 +399,11 @@ have_dnf=`type -p dnf`
 have_yum=`type -p yum`
 
 arch=
+darwin=
 debian=
 fedora=
 mach=`uname -m`
+platform=`uname -s`
 APT=
 DNF=
 
@@ -391,44 +416,49 @@ case "${mach}" in
     ;;
 esac
 
-if [ -f /etc/os-release ]
+if [ "$platform" == "Darwin" ]
 then
-  . /etc/os-release
-  [ "${ID}" == "debian" ] || [ "${ID_LIKE}" == "debian" ] && debian=1
-  [ "${ID}" == "arch" ] || [ "${ID_LIKE}" == "arch" ] && arch=1
-  [ "${ID}" == "fedora" ] && fedora=1
+  darwin=1
 else
-  if [ -f /etc/arch-release ]
+  if [ -f /etc/os-release ]
   then
-    arch=1
+    . /etc/os-release
+    [ "${ID}" == "debian" ] || [ "${ID_LIKE}" == "debian" ] && debian=1
+    [ "${ID}" == "arch" ] || [ "${ID_LIKE}" == "arch" ] && arch=1
+    [ "${ID}" == "fedora" ] && fedora=1
   else
-    case "${mach}" in
-      arm*)
-        debian=1
-        ;;
-      x86*)
-        if [ "${have_apt}" ]
-        then
+    if [ -f /etc/arch-release ]
+    then
+      arch=1
+    else
+      case "${mach}" in
+        arm*)
           debian=1
-        else
-          if [ -f /etc/fedora-release ]
+          ;;
+        x86*)
+          if [ "${have_apt}" ]
           then
-            fedora=1
+            debian=1
           else
-            if [ "${have_dnf}" ] || [ "${have_yum}" ]
+            if [ -f /etc/fedora-release ]
             then
-              # Use Fedora RPM for all other rpm based systems
               fedora=1
             else
-              echo "Unknown operating system distribution"
+              if [ "${have_dnf}" ] || [ "${have_yum}" ]
+              then
+                # Use Fedora RPM for all other rpm based systems
+                fedora=1
+              else
+                echo "Unknown operating system distribution"
+              fi
             fi
           fi
-        fi
-        ;;
-      *)
-        echo "Unknown machine architecture"
-        ;;
-    esac
+          ;;
+        *)
+          echo "Unknown machine architecture"
+          ;;
+      esac
+    fi
   fi
 fi
 
@@ -944,13 +974,12 @@ status_dots=
   status_dots=
 }
 
-platform=`uname -s`
 have_pip=`type -p pip`
 [ "${have_pip}" ] || {
   [ "${quiet}" ] || {
     printf "\n\tInstalling pip ..."
   }
-  if [ "$platform" == "Darwin" ]
+  if [ "${darwin}" ]
   then
     ${PYTHON} -m ensurepip --upgrade
   else
@@ -1302,25 +1331,30 @@ create_new_profile() {
   [ "${quiet}" ] || {
     printf "\n\tInstalling go ..."
   }
-  if [ "${debian}" ]
+  if [ "${darwin}" ]
   then
-    if [ "${APT}" ]
-    then
-      sudo ${APT} install golang > /dev/null 2>&1
-    else
-      [ "${quiet}" ] || echo "Cannot locate apt to install. Skipping."
-    fi
+    brew install -q go
   else
-    if [ "${fedora}" ]
+    if [ "${debian}" ]
     then
-      if [ "${DNF}" ]
+      if [ "${APT}" ]
       then
-        sudo ${DNF} install golang-bin > /dev/null 2>&1
+        sudo ${APT} install golang > /dev/null 2>&1
       else
-        [ "${quiet}" ] || echo "Cannot locate dnf to install. Skipping."
+        [ "${quiet}" ] || echo "Cannot locate apt to install. Skipping."
       fi
     else
-      [ "${arch}" ] && sudo pacman -U --noconfirm go > /dev/null 2>&1
+      if [ "${fedora}" ]
+      then
+        if [ "${DNF}" ]
+        then
+          sudo ${DNF} install golang-bin > /dev/null 2>&1
+        else
+          [ "${quiet}" ] || echo "Cannot locate dnf to install. Skipping."
+        fi
+      else
+        [ "${arch}" ] && sudo pacman -U --noconfirm go > /dev/null 2>&1
+      fi
     fi
   fi
   [ "${quiet}" ] || {
