@@ -8,10 +8,13 @@ debian=
 fedora=
 [ -f /etc/os-release ] && . /etc/os-release
 [ "${ID_LIKE}" == "debian" ] && debian=1
-[ "${ID}" == "arch" ] && arch=1
+[ "${ID}" == "arch" ] || [ "${ID_LIKE}" == "arch" ] && arch=1
 [ "${ID}" == "centos" ] && centos=1
 [ "${ID}" == "fedora" ] && fedora=1
 [ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
+[ "${arch}" ] || [ "${debian}" ] || [ "${fedora}" ] || [ "${centos}" ] || {
+  echo "${ID_LIKE}" | grep debian > /dev/null && debian=1
+}
 
 if [ "${debian}" ]
 then
