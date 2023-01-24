@@ -45,18 +45,6 @@ else
   cd ..
 fi
 
-# Build endoh1
-if [ -x build ]
-then
-  ./build endo
-else
-  cd endoh1
-  make clobber
-  make everything
-  chmod +x endoh1 endoh1_color
-  cd ..
-fi
-
 # Build nethack
 if [ -x build ]
 then
@@ -112,10 +100,6 @@ done
 
 ${SUDO} cp -a bin ${OUT_DIR}/${DESTDIR}/bin
 ${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
-
-${SUDO} cp -a endoh1 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1
-${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1/endoh1
-${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1/endoh1_color
 
 # Revised NetHack install using UnNetHack mods
 cd games/nethack

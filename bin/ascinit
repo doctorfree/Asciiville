@@ -119,6 +119,7 @@ install_pipx() {
 }
 
 install_external_package() {
+  API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
   have_curl=`type -p curl`
   [ "${have_curl}" ] || {
     install_package curl
@@ -583,7 +584,6 @@ fi
   [ -x /usr/bin/aewan ] || {
     OWNER=doctorfree
     PROJECT=asciiville-aewan
-    API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
     install_external_package
   }
 }
@@ -592,7 +592,6 @@ fi
   [ -x /usr/bin/btop ] || {
     OWNER=doctorfree
     PROJECT=btop
-    API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
     install_external_package
   }
 }
@@ -601,7 +600,14 @@ fi
   [ -x /usr/bin/jp2a ] || {
     OWNER=doctorfree
     PROJECT=any2ascii
-    API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
+    install_external_package
+  }
+}
+# Install endoh1 if not already present
+[ -x /usr/local/bin/show_endo ] || {
+  [ -x /usr/bin/show_endo ] || {
+    OWNER=doctorfree
+    PROJECT=endoh1
     install_external_package
   }
 }
@@ -610,7 +616,6 @@ fi
   [ -x /usr/games/bin/ninvaders ] || {
     OWNER=doctorfree
     PROJECT=ninvaders
-    API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
     install_external_package
   }
 }

@@ -3,8 +3,6 @@
 sudo rm -rf dist releases asciiville pkg/dist/arch pkg/dist/fedora pkg/dist/rpi
 cd cbftp
 [ -f Makefile ] && make clean
-cd ../endoh1
-[ -f Makefile ] && make clobber
 cd ../games/nethack
 [ -f Makefile ] && make spotless
 rm -f config.log config.status configure doc/Guidebook.txt \

@@ -3399,7 +3399,7 @@ init_vars
 [ $# -eq 0 ] && INTERACTIVE=1
 have_aewan=`type -p aewan`
 have_btop=`type -p btop`
-if [ -x ${ASHARE}/endoh1/endoh1 ]
+if [ -x ${TOP}/share/endoh1/endoh1 ]
 then
   have_endo=1
 else

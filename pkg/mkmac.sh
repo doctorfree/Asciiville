@@ -38,9 +38,6 @@ export CPPFLAGS="-I/usr/local/opt/openssl@3/include"
 export STATIC_SSL_PATH="/usr/local/opt/openssl@3/lib"
 ./build cbftp
 
-# Build endoh1
-./build endo
-
 # Build tetris
 ./build tetris
 strip games/tetris/tetris
@@ -72,10 +69,6 @@ done
 
 ${SUDO} cp -a bin ${OUT_DIR}/${DESTDIR}/bin
 ${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
-
-${SUDO} cp -a endoh1 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1
-${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1/endoh1
-${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1/endoh1_color
 
 # Tetris
 ${SUDO} cp games/tetris/tetris ${OUT_DIR}/${DESTDIR}/games/bin

@@ -72,8 +72,6 @@ dist/*
 pkg/dist/arch/*
 pkg/dist/fedora/*
 pkg/dist/rpi/*
-endoh1/endoh1
-endoh1/endoh1_color
 games/asciisector
 games/lib/AsciiSector
 games/nethack/compile

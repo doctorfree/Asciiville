@@ -46,12 +46,6 @@ build() {
   chmod +x bin/*
   cd ..
 
-  cd endoh1
-  make clobber
-  make everything
-  chmod +x endoh1 endoh1_color
-  cd ..
-
   cd games/nethack
   cd sys/autoconf
   ./bootstrap.sh
@@ -97,10 +91,6 @@ package() {
 
   cp -a bin ${pkgdir}/${destdir}/bin
   cp cbftp/bin/* ${pkgdir}/${destdir}/bin
-
-  cp -a endoh1 ${pkgdir}/${destdir}/share/${pkgname}/endoh1
-  chmod 755 ${pkgdir}/${destdir}/share/${pkgname}/endoh1/endoh1
-  chmod 755 ${pkgdir}/${destdir}/share/${pkgname}/endoh1/endoh1_color
 
   # Revised NetHack install using UnNetHack mods
   cd games/nethack

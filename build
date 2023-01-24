@@ -35,22 +35,6 @@ build_cbftp() {
   }
 }
 
-build_endo() {
-  #
-  # Repo: https://github.com/doctorfree/Asciiville
-  #
-  # Fork of Repo: https://github.com/mame/winner
-  #
-  [ -f endoh1 ] && [ -f endoh1_color ] || make everything
-  chmod +x endoh1 endoh1_color
-
-  [ "${INSTALL}" ] && {
-    [ -d ${PREFIX} ] || sudo mkdir -p ${PREFIX}
-    [ -d ${PREFIX}/bin ] || sudo mkdir -p ${PREFIX}/bin
-    sudo cp endoh1 endoh1_color ${PREFIX}/bin
-  }
-}
-
 build_nethack() {
   #
   # Repo: https://github.com/doctorfree/Asciiville
@@ -138,14 +122,6 @@ do
       [ -d ${PROJ} ] && {
         cd ${PROJ}
         build_cbftp
-        cd ..
-      }
-      ;;
-    endo)
-      PROJ=endoh1
-      [ -d ${PROJ} ] && {
-        cd ${PROJ}
-        build_endo
         cd ..
       }
       ;;
