@@ -1,6 +1,11 @@
-FIG_FONTS = /usr/local/share/figlet-fonts
+ifeq ($(shell uname -s | grep Darwin >/dev/null 2>&1; echo $$?),0)
+	FIG_FONTS = /usr/local/share/figlet-fonts
+	PREFIX ?= /usr/local
+else
+	FIG_FONTS = /usr/share/figlet-fonts
+	PREFIX ?= /usr
+endif
 FONT = Lean
-PREFIX ?= /usr/local
 BINDIR ?= $(PREFIX)/bin
 MANDIR ?= $(PREFIX)/share/man/man1
 DOCDIR ?= $(PREFIX)/share/doc/asciiville

@@ -21,8 +21,10 @@ platform=`uname -s`
 if [ "${platform}" == "Darwin" ]
 then
   KITTY_QUIT_OPT="--override macos_quit_when_last_window_closed=yes"
+  TOP="/usr/local/share"
 else
   KITTY_QUIT_OPT=
+  TOP="/usr/share"
 fi
 
 usage() {
@@ -129,7 +131,7 @@ animate() {
 }
 
 zoom() {
-  tooldir="/usr/local/share/asciiville/tools/bin"
+  tooldir="${TOP}/asciiville/tools/bin"
   sock_name="/tmp/fetch_kitty$$"
   init_size=32
   interval="0.1"

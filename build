@@ -29,9 +29,9 @@ build_cbftp() {
   chmod +x bin/*
 
   [ "${INSTALL}" ] && {
-    [ -d ${PREFIX}/usr/local ] || sudo mkdir -p ${PREFIX}/usr/local
-    [ -d ${PREFIX}/usr/local/bin ] || sudo mkdir -p ${PREFIX}/usr/local/bin
-    sudo cp bin/* ${PREFIX}/usr/local/bin
+    [ -d ${PREFIX} ] || sudo mkdir -p ${PREFIX}
+    [ -d ${PREFIX}/bin ] || sudo mkdir -p ${PREFIX}/bin
+    sudo cp bin/* ${PREFIX}/bin
   }
 }
 
@@ -45,9 +45,9 @@ build_endo() {
   chmod +x endoh1 endoh1_color
 
   [ "${INSTALL}" ] && {
-    [ -d ${PREFIX}/usr/local ] || sudo mkdir -p ${PREFIX}/usr/local
-    [ -d ${PREFIX}/usr/local/bin ] || sudo mkdir -p ${PREFIX}/usr/local/bin
-    sudo cp endoh1 endoh1_color ${PREFIX}/usr/local/bin
+    [ -d ${PREFIX} ] || sudo mkdir -p ${PREFIX}
+    [ -d ${PREFIX}/bin ] || sudo mkdir -p ${PREFIX}/bin
+    sudo cp endoh1 endoh1_color ${PREFIX}/bin
   }
 }
 
@@ -76,7 +76,7 @@ build_nethack() {
     ./bootstrap.sh
     cd ../..
     chmod 755 configure
-    ./configure --prefix=/usr/local/games \
+    ./configure --prefix=${PREFIX}/games \
                 --with-owner=games \
                 --with-group=games \
                 --enable-wizmode=doctorwhen
@@ -87,7 +87,7 @@ build_nethack() {
 
 build_tetris() {
   [ -f tetris ] || {
-    ./configure.sh --prefix=/usr/local/games --enable-xlib=no --enable-curses=yes
+    ./configure.sh --prefix=${PREFIX}/games --enable-xlib=no --enable-curses=yes
     make
     make gameserver
   }
@@ -98,9 +98,9 @@ usage() {
     printf "\nUsage: ./build [-i] [-p prefix] [-u] project [project2 ...]"
     printf "\nWhere:"
     printf "\n\t-i indicates install"
-    printf "\n\t-p prefix specifies installation prefix (default /usr/local)"
+    printf "\n\t-p prefix specifies installation prefix (default ${PREFIX})"
     printf "\n\t-u displays this usage message and exits\n"
-    printf "\nNo arguments: build cpftp, configure with prefix=/usr/local, build\n"
+    printf "\nNo arguments: build cpftp, configure with prefix=${PREFIX}, build\n"
     printf "\n'project' can be one or more of 'cbftp',"
     printf "\n'nethack', and 'tetris'\n"
     exit 1
@@ -108,7 +108,13 @@ usage() {
 
 PROJ=cbftp
 INSTALL=
-PREFIX=/usr/local
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+  PREFIX=/usr/local
+else
+  PREFIX=/usr
+fi
 while getopts "ip:u" flag; do
     case $flag in
         i)

@@ -40,7 +40,7 @@ accompaniment, and specify the font used in the Cycle effect.
 **asciimpplus -c 10**
 : Plays the MusicPlayerPlus ASCIImatics animation 10 times then exits 
 
-**asciimpplus -a /usr/local/share/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav -c 5**
+**asciimpplus -a /usr/share/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav -c 5**
 : Plays the MusicPlayerPlus ASCIImatics animation 5 times accompanied by audio then exits 
 
 **asciimpplus -f big**

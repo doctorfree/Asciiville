@@ -36,8 +36,15 @@ while getopts "i:n:u" flag; do
 done
 shift $(( OPTIND - 1 ))
 
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+  TOP="/usr/local"
+else
+  TOP="/usr"
+fi
 have_curl=`type -p curl`
 [ "${have_curl}" ] && {
-  TOOLSBIN="/usr/local/share/asciiville/tools/bin"
+  TOOLSBIN="${TOP}/share/asciiville/tools/bin"
   [ -x ${TOOLSBIN}/pokefetch ] && ${TOOLSBIN}/pokefetch ${args}
 }

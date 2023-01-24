@@ -57,7 +57,7 @@ build() {
   ./bootstrap.sh
   cd ../..
   chmod 755 configure
-  ./configure --prefix=/usr/local/games \
+  ./configure --prefix=/usr/games \
               --with-owner=games \
               --with-group=games \
               --enable-wizmode=doctorwhen
@@ -66,7 +66,7 @@ build() {
 
   cd games/tetris
   [ -f tetris ] || {
-    ./configure.sh --prefix=/usr/local/games --enable-xlib=no --enable-curses=yes
+    ./configure.sh --prefix=/usr/games --enable-xlib=no --enable-curses=yes
     make
     make gameserver
   }
@@ -75,7 +75,7 @@ build() {
 
 package() {
   cd "${srcdir}/${pkgname}"
-  destdir=usr/local
+  destdir=usr
 
   for dir in "usr" "${destdir}" "${destdir}/share" "${destdir}/share/man" \
       "${destdir}/share/applications" "${destdir}/share/doc" \

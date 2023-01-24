@@ -2,7 +2,14 @@
 #
 # asciisplash - display Asciiville splash screens using ASCIImatics
 #
-MUSEDIR=/usr/local/share/asciiville/music
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+  TOP="/usr/local/share"
+else
+  TOP="/usr/share"
+fi
+MUSEDIR="${TOP}/asciiville/music"
 SONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 PLASMA_SONG="${MUSEDIR}/Chronos.mp3"
 NATURE_SONG="${MUSEDIR}/Moving-Ahead-RA.mp3"

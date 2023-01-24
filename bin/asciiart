@@ -24,7 +24,6 @@ import argparse
 
 def asciiville(screen):
     scenes = []
-    art = "/usr/local/share/asciiville/pics/"
     center = (screen.width // 2, screen.height // 2)
     text = Figlet(font="banner", width=200).renderText("Asciiville")
     width = max([len(x) for x in text.split("\n")])
@@ -379,6 +378,10 @@ if __name__ == "__main__":
         font = "small"
 
     play_song = None
+    if os.path.isdir('/usr/share/asciiville/pics'):
+        art = "/usr/share/asciiville/pics/"
+    else:
+        art = "/usr/local/share/asciiville/pics/"
     tmpdir = tempfile.mkdtemp()
     fifo = os.path.join(tmpdir, 'mplayer.fifo')
     signal.signal(signal.SIGINT, handler)

@@ -4,7 +4,7 @@ SRC_NAME="Asciiville"
 PKG_NAME="Asciiville"
 DEBFULLNAME="Ronald Record"
 DEBEMAIL="ronaldrecord@gmail.com"
-DESTDIR="usr/local"
+DESTDIR="usr"
 SRC=${HOME}/src
 ARCH=amd64
 SUDO=sudo
@@ -77,7 +77,7 @@ then
   ./build nethack
 else
   cd games/nethack
-  ./configure --prefix=/usr/local/games \
+  ./configure --prefix=/usr/games \
               --with-owner=games \
               --with-group=games \
               --enable-wizmode=doctorwhen
@@ -92,7 +92,7 @@ then
 else
   cd games/tetris
   [ -f tetris ] || {
-    ./configure.sh --prefix=/usr/local/games --enable-xlib=no --enable-curses=yes
+    ./configure.sh --prefix=/usr/games --enable-xlib=no --enable-curses=yes
     make
     make gameserver
   }
@@ -275,7 +275,7 @@ echo "Building ${PKG_NAME}_${PKG_VER} Debian package"
 ${SUDO} dpkg --build ${PKG_NAME}_${PKG_VER} ${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.deb
 cd ${PKG_NAME}_${PKG_VER}
 echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
-${SUDO} tar cf - usr/local/*/* | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.tgz
+${SUDO} tar cf - usr/*/* | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.tgz
 
 have_zip=`type -p zip`
 [ "${have_zip}" ] || {
@@ -283,7 +283,7 @@ have_zip=`type -p zip`
   ${SUDO} apt-get install zip -y
 }
 echo "Creating zip archive of ${PKG_NAME} ${PKG_VER} distribution"
-${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.zip usr/local/*/*
+${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.zip usr/*/*
 cd ..
 
 [ "${GCI}" ] || {

@@ -2,7 +2,14 @@
 #
 # browse_art - zoom ascii art from a folder in a Gnome Terminal window
 
-TOOLSHOW="/usr/local/share/asciiville/tools/bin/browseascii"
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+  TOP="/usr/local/share"
+else
+  TOP="/usr/share"
+fi
+TOOLSHOW="${TOP}/asciiville/tools/bin/browseascii"
 
 have_show=`type -p browseascii`
 

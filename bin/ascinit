@@ -3,7 +3,17 @@
 # ascinit - initialize Asciiville configuration files, install needed utilities
 #
 
-CONFDIR=/usr/local/share/asciiville
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+  TOP="/usr/local"
+else
+  TOP="/usr"
+fi
+ARTDIR="${TOP}/asciiville/art"
+FIG_FONTS="${TOP}/figlet-fonts"
+MUSEDIR="${TOP}/asciiville/music"
+CONFDIR=${TOP}/share/asciiville
 USERCONF="${HOME}/.config"
 BOLD=$(tput bold 2>/dev/null)
 NORMAL=$(tput sgr0 2>/dev/null)
@@ -1452,8 +1462,8 @@ CONF="${USERCONF}/asciiville/config"
     printf "\n\nAsciiville configuration in ${CONF} ..."
   }
   touch ${CONF}
-  echo "ARTDIR=/usr/local/share/asciiville/art" >> ${CONF}
-  echo "MUSEDIR=/usr/local/share/asciiville/music" >> ${CONF}
+  echo "ARTDIR=${TOP}/share/asciiville/art" >> ${CONF}
+  echo "MUSEDIR=${TOP}/share/asciiville/music" >> ${CONF}
   echo "SONG=\"${MUSEDIR}/Chronos.mp3\"" >> ${CONF}
   echo "ALTSONG=\"${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav\"" >> ${CONF}
   echo "" >> ${CONF}

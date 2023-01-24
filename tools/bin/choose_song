@@ -1,6 +1,13 @@
 #!/bin/bash
 
-DIR="/usr/local/share/doc/asciiville/music"
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+  TOP="/usr/local/share"
+else
+  TOP="/usr/share"
+fi
+DIR="${TOP}/asciiville/music"
 TMP="$(mktemp)"
 ranger --choosefile="${TMP}" ${DIR} 1>&2
 cat ${TMP}

@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 * Move `btop` to external package install
 * Add `term-image` command - display and browse images in the terminal
+* Move installation location back to `/usr` except macOS to `/usr/local`
 
 ## Asciiville-2.0.1r1 (2023-01-10)
 

@@ -1,6 +1,13 @@
 #!/bin/bash
 
-ENDO_DIR=/usr/local/share/asciiville/endoh1
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+  TOP="/usr/local/share"
+else
+  TOP="/usr/share"
+fi
+ENDO_DIR=${TOP}/asciiville/endoh1
 ENDO=${ENDO_DIR}/endoh1
 ESRC=${ENDO_DIR}/endoh1.c
 #ALL=("clock.txt" "column.txt" "column2.txt" "column3.txt" "corners.txt" "dripping-pan.txt" "evaporation.txt" "flat.txt" "fountain.txt" "funnel.txt" "funnel2.txt" "funnel3.txt" "glass-half-empty.txt" "leidenfrost.txt" "logo.txt" "pour-out.txt" "tanada.txt")
