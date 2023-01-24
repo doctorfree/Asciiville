@@ -756,6 +756,20 @@ fi
   chmod 755 ${HOME}/.config/newsboat/kitty-img-pager.sh
 }
 
+# Setup default btop configuration for this user unless one exists
+[ -f ${CONFDIR}/btop/btop.conf ] && {
+  if [ -d ${USERCONF}/btop ]
+  then
+    [ -f ${USERCONF}/btop/btop.conf ] || {
+      cp ${CONFDIR}/btop/btop.conf ${USERCONF}/btop/btop.conf
+      chmod 640 ${USERCONF}/btop/btop.conf
+    }
+  else
+    cp -a ${CONFDIR}/btop ${USERCONF}/btop
+    chmod 640 ${USERCONF}/btop/btop.conf
+  fi
+}
+
 # Setup default khard configuration for this user unless one exists
 [ -d ${CONFDIR}/khard ] && {
   [ -d ${USERCONF}/khard ] || {
