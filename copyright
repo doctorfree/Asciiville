@@ -7,10 +7,6 @@ Files: *
 Copyright: 2021-2023 Ronald Record <ronaldrecord@gmail.com>
 License: MIT
 
-Files: btop/*
-Copyright: 2021 Aristocratos (jakob@qvantnet.com)
-License: Apache-2
-
 Files: cbftp/*
 Copyright: 2011-present The cbftp development team
 License: MIT

@@ -47,18 +47,6 @@ OUT_DIR="${SRC}/${SRC_NAME}/dist/${PKG_NAME}_${PKG_VER}"
 
 cd "${SRC}/${SRC_NAME}"
 
-# Build btop
-if [ -x build ]
-then
-  ./build btop
-else
-  cd btop
-  make distclean
-  make STATIC=true STRIP=true
-  chmod +x bin/btop
-  cd ..
-fi
-
 # Build cbftp
 if [ -x build ]
 then
@@ -136,7 +124,7 @@ chmod 644 ${OUT_DIR}/DEBIAN/control
 
 for dir in "usr" "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
-           "${DESTDIR}/share/doc/${PKG}" "${DESTDIR}/share/btop" \
+           "${DESTDIR}/share/doc/${PKG}" \
            "${DESTDIR}/share/${PKG}" "${DESTDIR}/games" "${DESTDIR}/games/bin" \
            "${DESTDIR}/games/lib" \
            "${DESTDIR}/games/share" "${DESTDIR}/games/share/doc" \
@@ -154,7 +142,6 @@ do
 done
 
 ${SUDO} cp -a bin ${OUT_DIR}/${DESTDIR}/bin
-${SUDO} cp btop/bin/btop ${OUT_DIR}/${DESTDIR}/bin/btop
 ${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
 
 ${SUDO} cp -a endoh1 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1
@@ -221,20 +208,6 @@ ${SUDO} cp CHANGELOG.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} pandoc -f gfm README.md | ${SUDO} tee ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README.html > /dev/null
 ${SUDO} cp VERSION ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
-${SUDO} cp btop/README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-btop.md
-${SUDO} cp btop/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-btop
-${SUDO} cp btop/README.md ${OUT_DIR}/${DESTDIR}/share/btop/README.md
-${SUDO} cp btop/LICENSE ${OUT_DIR}/${DESTDIR}/share/btop/LICENSE
-${SUDO} cp -a btop/themes ${OUT_DIR}/${DESTDIR}/share/btop/themes
-${SUDO} cp btop/btop.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons/hicolor
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons/hicolor/48x48
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons/hicolor/48x48/apps
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons/hicolor/scalable
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons/hicolor/scalable/apps
-${SUDO} cp btop/Img/icon.png "${OUT_DIR}/${DESTDIR}/share/icons/hicolor/48x48/apps/btop.png"
-${SUDO} cp btop/Img/icon.svg "${OUT_DIR}/${DESTDIR}/share/icons/hicolor/scalable/apps/btop.svg"
 ${SUDO} cp cbftp/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-cbftp
 ${SUDO} cp cbftp/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-cbftp
 ${SUDO} cp games/tetris/licence.txt ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/license-tetris

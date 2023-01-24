@@ -48,16 +48,12 @@ stage/
 
 README.html
 
-btop/build
-btop/bin
-btop/btop
 cbftp/bin
 .*/
 
 GTAGS
 GRTAGS
 TAGS
-btop/Makefile
 aclocal.m4
 autom4te.cache/
 compile

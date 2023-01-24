@@ -138,33 +138,26 @@ install_external_package() {
                jq --raw-output '.assets | .[]?.browser_download_url' | \
                grep "\.pkg\.tar\.zst")
       else
-        if [ "${centos}" ]
+        if [ "${centos}" ] || [ "${fedora}" ]
         then
           DL_URL=$(curl --silent "${API_URL}" | \
                  jq --raw-output '.assets | .[]?.browser_download_url' | \
-                 grep "\.el.*x86_64\.rpm")
+                 grep "x86_64\.rpm")
         else
-          if [ "${fedora}" ]
+          if [ "${debian}" ]
           then
-            DL_URL=$(curl --silent "${API_URL}" | \
-                   jq --raw-output '.assets | .[]?.browser_download_url' | \
-                   grep "\.fc.*x86_64\.rpm")
-          else
-            if [ "${debian}" ]
+            if [ "${mach}" == "x86_64" ]
             then
-              if [ "${mach}" == "x86_64" ]
-              then
-                DL_URL=$(curl --silent "${API_URL}" | \
-                       jq --raw-output '.assets | .[]?.browser_download_url' | \
-                       grep "\.amd64\.deb")
-              else
-                DL_URL=$(curl --silent "${API_URL}" | \
-                       jq --raw-output '.assets | .[]?.browser_download_url' | \
-                       grep "\.arm.*\.deb")
-              fi
+              DL_URL=$(curl --silent "${API_URL}" | \
+                     jq --raw-output '.assets | .[]?.browser_download_url' | \
+                     grep "\.amd64\.deb")
             else
-              printf "\n\tNo ${PROJECT} release asset found for this platform ..."
+              DL_URL=$(curl --silent "${API_URL}" | \
+                     jq --raw-output '.assets | .[]?.browser_download_url' | \
+                     grep "\.arm.*\.deb")
             fi
+          else
+            printf "\n\tNo ${PROJECT} release asset found for this platform ..."
           fi
         fi
       fi
@@ -580,6 +573,15 @@ fi
   [ -x /usr/bin/aewan ] || {
     OWNER=doctorfree
     PROJECT=asciiville-aewan
+    API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
+    install_external_package
+  }
+}
+# Install btop if not already present
+[ -x /usr/local/bin/btop ] || {
+  [ -x /usr/bin/btop ] || {
+    OWNER=doctorfree
+    PROJECT=btop
     API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
     install_external_package
   }

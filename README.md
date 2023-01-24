@@ -133,7 +133,7 @@ of interactive menus that can be used to control its behavior.
 Integration is provided for:
 
 * [aewan](https://github.com/doctorfree/asciiville-aewan#readme), Ascii Art creation tool
-* [btop](btop/README.md), character based system monitor
+* [btop](https://github.com/doctorfree/btop#readme), character based system monitor
 * [cbftp](cbftp/README), character based FTP client
 * [ddgr](https://github.com/jarun/ddgr#readme), command line web search using DuckDuckGo
 * [googler](https://github.com/jarun/googler#readme), command line web search using Google
@@ -1050,10 +1050,10 @@ Run the `asciiville` command with no arguments or the `-i` argument to
 bring up the interactive menu interface.
 
 ### Aewan README
-- [aewan](https://github.com/doctorfree/asciiville-aewan#readme), Introduction to the Aewan ascii art creation tool
+- [**aewan**](https://github.com/doctorfree/asciiville-aewan#readme), Introduction to the Aewan ascii art creation tool
 
 ### Btop++ README
-- [**btop/README.md**](btop/README.md) - Introduction to the btop system monitor
+- [**btop**](https://github.com/doctorfree/btop#readme) - Introduction to the btop system monitor
 
 ### Cbftp README
 - [**cbftp/README**](cbftp/README) - Introduction to the cbftp FTP client
@@ -1075,7 +1075,6 @@ bring up the interactive menu interface.
 - [**asciisplash-tmux**](markdown/asciisplash-tmux.1.md) : Asciiville asciimatics animations in a tmux session
 - [**asciisplash**](markdown/asciisplash.1.md) : Asciiville asciimatics animations
 - [**ascinit**](markdown/ascinit.1.md) : Asciiville initialization
-- [**btop**](markdown/btop.1.md) : Asciiville system monitor
 - [**cbftp**](markdown/cbftp.1.md) : Asciiville FTP client
 - [**show_ascii_art**](markdown/show_ascii_art.1.md) : Display ascii art, convert images to ascii art
 - [**show_moon**](markdown/show_moon.1.md) : Display the phase of the Moon
@@ -1864,13 +1863,12 @@ bison, libncurses5-dev, autotools-dev, libjpeg-dev, libpng-dev,
 libcurl4-gnutls-dev, libncurses5-dev, autoconf-archive, pkg-config
 
 Not all are required to build a specific utility or game. Utilities and games
-built from source in Asciiville include btop++, cbftp, nethack, and tetris.
+built from source in Asciiville include cbftp, nethack, and tetris.
 
 The build script `build` in the top-level directory of the Asciiville repository
-can be used to compile btop, cbftp, nethack, and tetris.
+can be used to compile cbftp, nethack, and tetris.
 Invoke the `build` script with the game or utility you wish to compile as
-an argument. For example, to compile the btop++ system monitor from source,
-run the command `./build btop`.
+an argument.
 
 On Arch, Debian, and RPM based systems the Asciiville installation package can
 be created with the `mkpkg` script. This script invokes the `build` script

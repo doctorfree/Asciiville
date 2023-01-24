@@ -3,29 +3,6 @@
 # build - compile and optionally install Asciiville components
 #
 
-build_btop() {
-  # Repo: https://github.com/doctorfree/Asciiville
-  #
-  # Fork of Repo: https://github.com/aristocratos/btop
-  #
-  # Build Dependencies:
-  # On Ubuntu 20.04
-  #   sudo apt update -y
-  #   sudo apt upgrade -y
-  #   sudo apt install coreutils git make tar zstd
-  #   sudo apt install -y build-essential
-  #   sudo apt install -y gcc-10 g++-10 cpp-10
-  #   sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 \
-  #                            --slave /usr/bin/g++ g++ /usr/bin/g++-10 \
-  #                            --slave /usr/bin/gcov gcov /usr/bin/gcov-10
-  #
-
-  [ -f bin/btop ] || make STATIC=true STRIP=true
-  chmod +x bin/btop
-
-  [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
-}
-
 build_cbftp() {
   #
   # Repo: https://github.com/doctorfree/Asciiville
@@ -123,13 +100,13 @@ usage() {
     printf "\n\t-i indicates install"
     printf "\n\t-p prefix specifies installation prefix (default /usr/local)"
     printf "\n\t-u displays this usage message and exits\n"
-    printf "\nNo arguments: build btop, configure with prefix=/usr/local, build\n"
-    printf "\n'project' can be one or more of 'btop', 'cbftp',"
+    printf "\nNo arguments: build cpftp, configure with prefix=/usr/local, build\n"
+    printf "\n'project' can be one or more of 'cbftp',"
     printf "\n'nethack', and 'tetris'\n"
     exit 1
 }
 
-PROJ=btop
+PROJ=cbftp
 INSTALL=
 PREFIX=/usr/local
 while getopts "ip:u" flag; do
@@ -150,14 +127,6 @@ shift $(( OPTIND - 1 ))
 for project in $*
 do
   case "${project}" in
-    btop)
-      PROJ=btop
-      [ -d ${PROJ} ] && {
-        cd ${PROJ}
-        build_btop
-        cd ..
-      }
-      ;;
     cbftp)
       PROJ=cbftp
       [ -d ${PROJ} ] && {

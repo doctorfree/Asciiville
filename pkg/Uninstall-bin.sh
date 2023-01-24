@@ -5,7 +5,6 @@ AVILLE_DIRS="/usr/local/games/share/doc/nethack \
 /usr/local/games/share/nethack \
 /usr/local/games/var/nethack \
 /usr/local/share/asciiville \
-/usr/local/share/btop \
 /usr/local/share/doc/asciiville \
 /usr/local/share/figlet-fonts"
 
@@ -20,7 +19,6 @@ AVILLE_FILES="/usr/local/bin/asciiart \
 /usr/local/bin/asciisplash \
 /usr/local/bin/asciiville \
 /usr/local/bin/ascinit \
-/usr/local/bin/btop \
 /usr/local/bin/cbftp \
 /usr/local/bin/cbftp-debug \
 /usr/local/bin/datafilecat \
@@ -50,7 +48,6 @@ AVILLE_FILES="/usr/local/bin/asciiart \
 /usr/local/share/man/man1/asciisplash-tmux.1 \
 /usr/local/share/man/man1/asciiville.1 \
 /usr/local/share/man/man1/ascinit.1 \
-/usr/local/share/man/man1/btop.1 \
 /usr/local/share/man/man1/cbftp.1 \
 /usr/local/share/man/man1/show_ascii_art.1 \
 /usr/local/share/man/man1/show_moon.1 \

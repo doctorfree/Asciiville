@@ -1,9 +1,7 @@
 #!/bin/bash
 
 sudo rm -rf dist releases asciiville pkg/dist/arch pkg/dist/fedora pkg/dist/rpi
-cd btop
-[ -f Makefile ] && make distclean
-cd ../cbftp
+cd cbftp
 [ -f Makefile ] && make clean
 cd ../endoh1
 [ -f Makefile ] && make clobber

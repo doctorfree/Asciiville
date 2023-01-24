@@ -34,11 +34,6 @@ DOC
 
 build() {
   cd "${srcdir}/${pkgname}"
-  cd btop
-  make distclean
-  make STATIC=true STRIP=true
-  chmod +x bin/btop
-  cd ..
 
   cd cbftp
   NCW="src/ui/ncurseswrap.h"
@@ -84,7 +79,7 @@ package() {
 
   for dir in "usr" "${destdir}" "${destdir}/share" "${destdir}/share/man" \
       "${destdir}/share/applications" "${destdir}/share/doc" \
-      "${destdir}/share/doc/${pkgname}" "${destdir}/share/btop" \
+      "${destdir}/share/doc/${pkgname}" \
       "${destdir}/share/${pkgname}" "${destdir}/games" "${destdir}/games/bin" \
       "${destdir}/games/lib" \
       "${destdir}/games/share" "${destdir}/games/share/doc" \
@@ -101,7 +96,6 @@ package() {
   done
 
   cp -a bin ${pkgdir}/${destdir}/bin
-  cp btop/bin/btop ${pkgdir}/${destdir}/bin/btop
   cp cbftp/bin/* ${pkgdir}/${destdir}/bin
 
   cp -a endoh1 ${pkgdir}/${destdir}/share/${pkgname}/endoh1
@@ -150,22 +144,6 @@ package() {
   pandoc -f gfm README.md | \
     tee ${pkgdir}/${destdir}/share/doc/${pkgname}/README.html > /dev/null
   cp VERSION ${pkgdir}/${destdir}/share/doc/${pkgname}
-  cp btop/README.md ${pkgdir}/${destdir}/share/doc/${pkgname}/README-btop.md
-  cp btop/LICENSE ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSE-btop
-  cp btop/README.md ${pkgdir}/${destdir}/share/btop/README.md
-  cp btop/LICENSE ${pkgdir}/${destdir}/share/btop/LICENSE
-  cp -a btop/themes ${pkgdir}/${destdir}/share/btop/themes
-  cp btop/btop.desktop "${pkgdir}/${destdir}/share/applications"
-  mkdir -p ${pkgdir}/${destdir}/share/icons
-  mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor
-  mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor/48x48
-  mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor/48x48/apps
-  mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor/scalable
-  mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor/scalable/apps
-  cp btop/Img/icon.png \
-    "${pkgdir}/${destdir}/share/icons/hicolor/48x48/apps/btop.png"
-  cp btop/Img/icon.svg \
-    "${pkgdir}/${destdir}/share/icons/hicolor/scalable/apps/btop.svg"
   cp cbftp/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-cbftp
   cp cbftp/LICENSE ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSE-cbftp
   cp games/tetris/licence.txt \
