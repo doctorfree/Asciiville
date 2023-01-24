@@ -40,7 +40,7 @@ Guidebook.dvi:	Guidebook.tex
 	latex Guidebook.tex
 
 GAME    = nethack
-MANDIR	= /usr/local/share/man/man6
+MANDIR	= /usr/share/man/man6
 MANEXT	= 6
 
 # manual installation for most BSD-style systems
