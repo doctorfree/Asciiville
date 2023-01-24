@@ -102,6 +102,7 @@ ${SUDO} chgrp wheel ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
 ${SUDO} chmod 0664 ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
+${SUDO} cp -a conf/btop ${OUT_DIR}/${DESTDIR}/share/${PKG}/btop
 ${SUDO} cp -a conf/console ${OUT_DIR}/${DESTDIR}/share/${PKG}/console
 ${SUDO} cp -a conf/got ${OUT_DIR}/${DESTDIR}/share/${PKG}/got
 ${SUDO} cp -a conf/jrnl ${OUT_DIR}/${DESTDIR}/share/${PKG}/jrnl

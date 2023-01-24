@@ -122,6 +122,7 @@ package() {
   cd ..
 
   cp *.desktop "${pkgdir}/${destdir}/share/applications"
+  cp -a conf/btop ${pkgdir}/${destdir}/share/${pkgname}/btop
   cp -a conf/console ${pkgdir}/${destdir}/share/${pkgname}/console
   cp -a conf/got ${pkgdir}/${destdir}/share/${pkgname}/got
   cp -a conf/jrnl ${pkgdir}/${destdir}/share/${pkgname}/jrnl
