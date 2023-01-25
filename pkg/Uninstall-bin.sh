@@ -36,11 +36,6 @@ AVILLE_FILES="/usr/local/bin/asciiart \
 /usr/local/share/man/man1/show_pokemon.1 \
 /usr/local/share/man/man1/show_weather.1 \
 /usr/local/share/man/man1/termprofset.1 \
-/usr/local/share/man/man6/dgn_comp.6 \
-/usr/local/share/man/man6/dlb.6 \
-/usr/local/share/man/man6/lev_comp.6 \
-/usr/local/share/man/man6/nethack.6 \
-/usr/local/share/man/man6/recover.6 \
 /usr/local/share/menu/asciiville"
 
 user=`id -u -n`

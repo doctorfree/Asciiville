@@ -94,13 +94,6 @@ package() {
   gzip ${pkgdir}/${destdir}/share/${pkgname}/art/*/*.asc
 
   cp -a man/man1 ${pkgdir}/${destdir}/share/man/man1
-  [ -d ${pkgdir}/${destdir}/share/man/man5 ] || {
-    mkdir -p ${pkgdir}/${destdir}/share/man/man5
-  }
-
-  [ -d ${pkgdir}/${destdir}/share/man/man6 ] || {
-    mkdir -p ${pkgdir}/${destdir}/share/man/man6
-  }
 
   cp -a share/menu "${pkgdir}/${destdir}/share/menu"
   cp -a share/figlet-fonts "${pkgdir}/${destdir}/share/figlet-fonts"

@@ -89,13 +89,6 @@ ${SUDO} cp -a tools "${OUT_DIR}/${DESTDIR}/share/${PKG}/tools"
 ${SUDO} gzip ${OUT_DIR}/${DESTDIR}/share/${PKG}/art/*/*.asc
 
 ${SUDO} cp -a man/man1 ${OUT_DIR}/${DESTDIR}/share/man/man1
-[ -d ${OUT_DIR}/${DESTDIR}/share/man/man5 ] || {
-  ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/man/man5
-}
-
-[ -d ${OUT_DIR}/${DESTDIR}/share/man/man6 ] || {
-  ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/man/man6
-}
 
 ${SUDO} cp -a share/menu "${OUT_DIR}/${DESTDIR}/share/menu"
 ${SUDO} cp -a share/figlet-fonts "${OUT_DIR}/${DESTDIR}/share/figlet-fonts"

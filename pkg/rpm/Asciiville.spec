@@ -92,7 +92,6 @@ fi
 %files
 %defattr(-,root,root)
 %exclude %dir /usr/share/man/man1
-%exclude %dir /usr/share/man/man6
 %exclude %dir /usr/share/man
 %exclude %dir /usr/share/doc
 %exclude %dir /usr/share/menu
