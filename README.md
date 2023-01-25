@@ -24,6 +24,7 @@ Asciiville includes nearly 1,000 works of ASCII and ANSI Art!
 1. [Configuration](#configuration)
     1. [Asciiville configuration](#asciiville-configuration)
     1. [Asciiville utilities configuration](#asciiville-utilities-configuration)
+        1. [Kitty SSH terminfo configuration](#kitty-ssh-terminfo-configuration)
         1. [Newsboat RSS feed reader configuration](#newsboat-rss-feed-reader-configuration)
         1. [NeoMutt email configuration](#neomutt-email-configuration)
         1. [NeoMutt encrypted passwords](#neomutt-encrypted-passwords)
@@ -134,7 +135,7 @@ Integration is provided for:
 
 * [aewan](https://github.com/doctorfree/asciiville-aewan#readme), Ascii Art creation tool
 * [btop](https://github.com/doctorfree/btop#readme), character based system monitor
-* [cbftp](cbftp/README), character based FTP client
+* [cbftp](https://github.com/doctorfree/cbftp#readme), character based FTP client
 * [ddgr](https://github.com/jarun/ddgr#readme), command line web search using DuckDuckGo
 * [googler](https://github.com/jarun/googler#readme), command line web search using Google
 * [jrnl](https://jrnl.sh/en/stable/), a simple command line journal application
@@ -621,6 +622,19 @@ After installing Asciiville and running the `ascinit` command, initialize the
 the command line Twitter client by invoking the `rainbowstream` command and
 authorizing the app to access your Twitter account.
 
+
+#### Kitty SSH terminfo configuration
+
+When using the Kitty terminal emulator to `ssh` into systems you may see the
+error message "Unknown terminal type 'xterm-kitty'" or similar. To remedy this,
+either manually install the Kitty terminfo entry or use the Kitty `ssh kitten`:
+
+```shell
+kitty +kitten ssh <hostname>
+```
+
+The ssh kitten will automatically copy the Kitty terminfo entry to the remote system.
+
 #### Newsboat RSS feed reader configuration
 
 The [Newsboat](https://github.com/newsboat/newsboat) character based RSS feed
@@ -1056,7 +1070,7 @@ bring up the interactive menu interface.
 - [**btop**](https://github.com/doctorfree/btop#readme) - Introduction to the btop system monitor
 
 ### Cbftp README
-- [**cbftp/README**](cbftp/README) - Introduction to the cbftp FTP client
+- [**cbftp**](https://github.com/doctorfree/cbftp#readme) - Introduction to the cbftp FTP client
 - [**Video on Cbftp**](https://youtu.be/dOIwg9nMF10) - Video introduction to the cbftp FTP client
 
 ### Ddgr README
@@ -1861,14 +1875,6 @@ coreutils, sed, git, build-essential, gcc, g++, make,
 uuid-dev, libboost-graph-dev, cmake, python3, jdk, flex,
 bison, libncurses5-dev, autotools-dev, libjpeg-dev, libpng-dev,
 libcurl4-gnutls-dev, libncurses5-dev, autoconf-archive, pkg-config
-
-Not all are required to build a specific utility or game. Utilities and games
-built from source in Asciiville include cbftp, nethack, and tetris.
-
-The build script `build` in the top-level directory of the Asciiville repository
-can be used to compile cbftp, nethack, and tetris.
-Invoke the `build` script with the game or utility you wish to compile as
-an argument.
 
 On Arch, Debian, and RPM based systems the Asciiville installation package can
 be created with the `mkpkg` script. This script invokes the `build` script
