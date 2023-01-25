@@ -1,34 +1,4 @@
 post_install() {
-  # Add /usr/local/bin and /usr/local/games to PATH
-  if [ -d /etc/profile.d ]
-  then
-    if [ -f /etc/profile.d/asciiville.sh ]
-    then
-      echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >> /etc/profile.d/asciiville.sh
-    else
-      echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' > /etc/profile.d/asciiville.sh
-    fi
-  else
-    if [ -f /etc/profile ]
-    then
-      echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >> /etc/profile
-    fi
-  fi
-  if [ -d /etc/zsh ]
-  then
-    if [ -f /etc/zsh/zshenv ]
-    then
-      echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >> /etc/zsh/zshenv
-    else
-      echo 'export PATH="$PATH:/usr/local/bin:/usr/bin:/bin:/usr/games:/usr/local/games"' > /etc/zsh/zshenv
-    fi
-  else
-    if [ -f /etc/zshrc ]
-    then
-      echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >> /etc/zshrc
-    fi
-  fi
-
   npm_inst=`type -p npm`
   if [ "${npm_inst}" ]
   then
@@ -59,7 +29,7 @@ post_install() {
     fi
   fi
 
-  FIGLET_DIR="/usr/local/share/figlet-fonts"
+  FIGLET_DIR="/usr/share/figlet-fonts"
   FIGLET_ZIP="figlet-fonts.zip"
   zip_inst=`type -p zip`
   if [ "${zip_inst}" ]
@@ -87,27 +57,27 @@ post_install() {
   id games > /dev/null 2>&1 || {
     useradd -r -c "Games pseudo-user" -g games -d /opt/games -s /bin/false games
   }
-  chown games /usr/local/games/bin/nethack
-  chgrp games /usr/local/games/bin/nethack
-  chmod 04755 /usr/local/games/bin/nethack
-  rm -f /usr/local/games/nethack
-  ln -r -s /usr/local/games/bin/nethack /usr/local/games/nethack
+  chown games /usr/games/bin/nethack
+  chgrp games /usr/games/bin/nethack
+  chmod 04755 /usr/games/bin/nethack
+  rm -f /usr/games/nethack
+  ln -r -s /usr/games/bin/nethack /usr/games/nethack
 
-  chown games /usr/local/games/bin/tetris
-  chgrp games /usr/local/games/bin/tetris
-  chmod 04755 /usr/local/games/bin/tetris
-  rm -f /usr/local/games/tetris
-  ln -r -s /usr/local/games/bin/tetris /usr/local/games/tetris
-  chown games /usr/local/games/bin/gameserver
-  chgrp games /usr/local/games/bin/gameserver
-  chmod 04755 /usr/local/games/bin/gameserver
-  rm -f /usr/local/games/gameserver
-  ln -r -s /usr/local/games/bin/gameserver /usr/local/games/gameserver
+  chown games /usr/games/bin/tetris
+  chgrp games /usr/games/bin/tetris
+  chmod 04755 /usr/games/bin/tetris
+  rm -f /usr/games/tetris
+  ln -r -s /usr/games/bin/tetris /usr/games/tetris
+  chown games /usr/games/bin/gameserver
+  chgrp games /usr/games/bin/gameserver
+  chmod 04755 /usr/games/bin/gameserver
+  rm -f /usr/games/gameserver
+  ln -r -s /usr/games/bin/gameserver /usr/games/gameserver
 
-  touch /usr/local/games/var/tetris-hiscores
-  chown games /usr/local/games/var/tetris-hiscores
-  chgrp games /usr/local/games/var/tetris-hiscores
-  chmod 0664 /usr/local/games/var/tetris-hiscores
+  touch /usr/games/var/tetris-hiscores
+  chown games /usr/games/var/tetris-hiscores
+  chgrp games /usr/games/var/tetris-hiscores
+  chmod 0664 /usr/games/var/tetris-hiscores
   printf "%b\n" "${ascin}"
 }
 

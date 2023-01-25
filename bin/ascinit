@@ -3,7 +3,17 @@
 # ascinit - initialize Asciiville configuration files, install needed utilities
 #
 
-CONFDIR=/usr/local/share/asciiville
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+  TOP="/usr/local"
+else
+  TOP="/usr"
+fi
+ARTDIR="${TOP}/asciiville/art"
+FIG_FONTS="${TOP}/figlet-fonts"
+MUSEDIR="${TOP}/asciiville/music"
+CONFDIR=${TOP}/share/asciiville
 USERCONF="${HOME}/.config"
 BOLD=$(tput bold 2>/dev/null)
 NORMAL=$(tput sgr0 2>/dev/null)
@@ -109,6 +119,7 @@ install_pipx() {
 }
 
 install_external_package() {
+  API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
   have_curl=`type -p curl`
   [ "${have_curl}" ] || {
     install_package curl
@@ -138,33 +149,26 @@ install_external_package() {
                jq --raw-output '.assets | .[]?.browser_download_url' | \
                grep "\.pkg\.tar\.zst")
       else
-        if [ "${centos}" ]
+        if [ "${centos}" ] || [ "${fedora}" ]
         then
           DL_URL=$(curl --silent "${API_URL}" | \
                  jq --raw-output '.assets | .[]?.browser_download_url' | \
-                 grep "\.el.*x86_64\.rpm")
+                 grep "x86_64\.rpm")
         else
-          if [ "${fedora}" ]
+          if [ "${debian}" ]
           then
-            DL_URL=$(curl --silent "${API_URL}" | \
-                   jq --raw-output '.assets | .[]?.browser_download_url' | \
-                   grep "\.fc.*x86_64\.rpm")
-          else
-            if [ "${debian}" ]
+            if [ "${mach}" == "x86_64" ]
             then
-              if [ "${mach}" == "x86_64" ]
-              then
-                DL_URL=$(curl --silent "${API_URL}" | \
-                       jq --raw-output '.assets | .[]?.browser_download_url' | \
-                       grep "\.amd64\.deb")
-              else
-                DL_URL=$(curl --silent "${API_URL}" | \
-                       jq --raw-output '.assets | .[]?.browser_download_url' | \
-                       grep "\.arm.*\.deb")
-              fi
+              DL_URL=$(curl --silent "${API_URL}" | \
+                     jq --raw-output '.assets | .[]?.browser_download_url' | \
+                     grep "\.amd64\.deb")
             else
-              printf "\n\tNo ${PROJECT} release asset found for this platform ..."
+              DL_URL=$(curl --silent "${API_URL}" | \
+                     jq --raw-output '.assets | .[]?.browser_download_url' | \
+                     grep "\.arm.*\.deb")
             fi
+          else
+            printf "\n\tNo ${PROJECT} release asset found for this platform ..."
           fi
         fi
       fi
@@ -580,7 +584,22 @@ fi
   [ -x /usr/bin/aewan ] || {
     OWNER=doctorfree
     PROJECT=asciiville-aewan
-    API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
+    install_external_package
+  }
+}
+# Install btop if not already present
+[ -x /usr/local/bin/btop ] || {
+  [ -x /usr/bin/btop ] || {
+    OWNER=doctorfree
+    PROJECT=btop
+    install_external_package
+  }
+}
+# Install cbftp if not already present
+[ -x /usr/local/bin/cbftp ] || {
+  [ -x /usr/bin/cbftp ] || {
+    OWNER=doctorfree
+    PROJECT=cbftp
     install_external_package
   }
 }
@@ -589,7 +608,14 @@ fi
   [ -x /usr/bin/jp2a ] || {
     OWNER=doctorfree
     PROJECT=any2ascii
-    API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
+    install_external_package
+  }
+}
+# Install endoh1 if not already present
+[ -x /usr/local/bin/show_endo ] || {
+  [ -x /usr/bin/show_endo ] || {
+    OWNER=doctorfree
+    PROJECT=endoh1
     install_external_package
   }
 }
@@ -598,7 +624,6 @@ fi
   [ -x /usr/games/bin/ninvaders ] || {
     OWNER=doctorfree
     PROJECT=ninvaders
-    API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
     install_external_package
   }
 }
@@ -752,6 +777,20 @@ fi
 }
 [ -f ${HOME}/.config/newsboat/kitty-img-pager.sh ] && {
   chmod 755 ${HOME}/.config/newsboat/kitty-img-pager.sh
+}
+
+# Setup default btop configuration for this user unless one exists
+[ -f ${CONFDIR}/btop/btop.conf ] && {
+  if [ -d ${USERCONF}/btop ]
+  then
+    [ -f ${USERCONF}/btop/btop.conf ] || {
+      cp ${CONFDIR}/btop/btop.conf ${USERCONF}/btop/btop.conf
+      chmod 640 ${USERCONF}/btop/btop.conf
+    }
+  else
+    cp -a ${CONFDIR}/btop ${USERCONF}/btop
+    chmod 640 ${USERCONF}/btop/btop.conf
+  fi
 }
 
 # Setup default khard configuration for this user unless one exists
@@ -1436,8 +1475,8 @@ CONF="${USERCONF}/asciiville/config"
     printf "\n\nAsciiville configuration in ${CONF} ..."
   }
   touch ${CONF}
-  echo "ARTDIR=/usr/local/share/asciiville/art" >> ${CONF}
-  echo "MUSEDIR=/usr/local/share/asciiville/music" >> ${CONF}
+  echo "ARTDIR=${TOP}/share/asciiville/art" >> ${CONF}
+  echo "MUSEDIR=${TOP}/share/asciiville/music" >> ${CONF}
   echo "SONG=\"${MUSEDIR}/Chronos.mp3\"" >> ${CONF}
   echo "ALTSONG=\"${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav\"" >> ${CONF}
   echo "" >> ${CONF}

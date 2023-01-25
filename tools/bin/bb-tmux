@@ -2,8 +2,15 @@
 #
 # bb-tmux - display bb in a tmux session
 
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+  TOP="/usr/local/share"
+else
+  TOP="/usr/share"
+fi
+SONG="${TOP}/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav"
 SESSION=bb
-SONG="/usr/local/share/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav"
 
 set -m
 

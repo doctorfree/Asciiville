@@ -4,7 +4,7 @@ SRC_NAME="Asciiville"
 PKG_NAME="Asciiville"
 DEBFULLNAME="Ronald Record"
 DEBEMAIL="ronaldrecord@gmail.com"
-DESTDIR="usr/local"
+DESTDIR="usr"
 SRC=${HOME}/src
 ARCH=amd64
 SUDO=sudo
@@ -47,49 +47,13 @@ OUT_DIR="${SRC}/${SRC_NAME}/dist/${PKG_NAME}_${PKG_VER}"
 
 cd "${SRC}/${SRC_NAME}"
 
-# Build btop
-if [ -x build ]
-then
-  ./build btop
-else
-  cd btop
-  make distclean
-  make STATIC=true STRIP=true
-  chmod +x bin/btop
-  cd ..
-fi
-
-# Build cbftp
-if [ -x build ]
-then
-  ./build cbftp
-else
-  cd cbftp
-  make clean
-  make
-  chmod +x bin/*
-  cd ..
-fi
-
-# Build endoh1
-if [ -x build ]
-then
-  ./build endo
-else
-  cd endoh1
-  make clobber
-  make everything
-  chmod +x endoh1 endoh1_color
-  cd ..
-fi
-
 # Build nethack
 if [ -x build ]
 then
   ./build nethack
 else
   cd games/nethack
-  ./configure --prefix=/usr/local/games \
+  ./configure --prefix=/usr/games \
               --with-owner=games \
               --with-group=games \
               --enable-wizmode=doctorwhen
@@ -104,7 +68,7 @@ then
 else
   cd games/tetris
   [ -f tetris ] || {
-    ./configure.sh --prefix=/usr/local/games --enable-xlib=no --enable-curses=yes
+    ./configure.sh --prefix=/usr/games --enable-xlib=no --enable-curses=yes
     make
     make gameserver
   }
@@ -136,7 +100,7 @@ chmod 644 ${OUT_DIR}/DEBIAN/control
 
 for dir in "usr" "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
-           "${DESTDIR}/share/doc/${PKG}" "${DESTDIR}/share/btop" \
+           "${DESTDIR}/share/doc/${PKG}" \
            "${DESTDIR}/share/${PKG}" "${DESTDIR}/games" "${DESTDIR}/games/bin" \
            "${DESTDIR}/games/lib" \
            "${DESTDIR}/games/share" "${DESTDIR}/games/share/doc" \
@@ -154,12 +118,6 @@ do
 done
 
 ${SUDO} cp -a bin ${OUT_DIR}/${DESTDIR}/bin
-${SUDO} cp btop/bin/btop ${OUT_DIR}/${DESTDIR}/bin/btop
-${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
-
-${SUDO} cp -a endoh1 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1
-${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1/endoh1
-${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1/endoh1_color
 
 # Revised NetHack install using UnNetHack mods
 cd games/nethack
@@ -200,6 +158,7 @@ ${SUDO} chmod 0664 ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
 cd ..
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
+${SUDO} cp -a conf/btop ${OUT_DIR}/${DESTDIR}/share/${PKG}/btop
 ${SUDO} cp -a conf/console ${OUT_DIR}/${DESTDIR}/share/${PKG}/console
 ${SUDO} cp -a conf/got ${OUT_DIR}/${DESTDIR}/share/${PKG}/got
 ${SUDO} cp -a conf/jrnl ${OUT_DIR}/${DESTDIR}/share/${PKG}/jrnl
@@ -221,22 +180,6 @@ ${SUDO} cp CHANGELOG.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} pandoc -f gfm README.md | ${SUDO} tee ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README.html > /dev/null
 ${SUDO} cp VERSION ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
-${SUDO} cp btop/README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-btop.md
-${SUDO} cp btop/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-btop
-${SUDO} cp btop/README.md ${OUT_DIR}/${DESTDIR}/share/btop/README.md
-${SUDO} cp btop/LICENSE ${OUT_DIR}/${DESTDIR}/share/btop/LICENSE
-${SUDO} cp -a btop/themes ${OUT_DIR}/${DESTDIR}/share/btop/themes
-${SUDO} cp btop/btop.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons/hicolor
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons/hicolor/48x48
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons/hicolor/48x48/apps
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons/hicolor/scalable
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons/hicolor/scalable/apps
-${SUDO} cp btop/Img/icon.png "${OUT_DIR}/${DESTDIR}/share/icons/hicolor/48x48/apps/btop.png"
-${SUDO} cp btop/Img/icon.svg "${OUT_DIR}/${DESTDIR}/share/icons/hicolor/scalable/apps/btop.svg"
-${SUDO} cp cbftp/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-cbftp
-${SUDO} cp cbftp/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-cbftp
 ${SUDO} cp games/tetris/licence.txt ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/license-tetris
 ${SUDO} cp games/tetris/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-tetris
 ${SUDO} gzip -9 ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/CHANGELOG.md
@@ -301,7 +244,7 @@ echo "Building ${PKG_NAME}_${PKG_VER} Debian package"
 ${SUDO} dpkg --build ${PKG_NAME}_${PKG_VER} ${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.deb
 cd ${PKG_NAME}_${PKG_VER}
 echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
-${SUDO} tar cf - usr/local/*/* | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.tgz
+${SUDO} tar cf - usr/*/* | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.tgz
 
 have_zip=`type -p zip`
 [ "${have_zip}" ] || {
@@ -309,7 +252,7 @@ have_zip=`type -p zip`
   ${SUDO} apt-get install zip -y
 }
 echo "Creating zip archive of ${PKG_NAME} ${PKG_VER} distribution"
-${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.zip usr/local/*/*
+${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.zip usr/*/*
 cd ..
 
 [ "${GCI}" ] || {

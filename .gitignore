@@ -48,16 +48,11 @@ stage/
 
 README.html
 
-btop/build
-btop/bin
-btop/btop
-cbftp/bin
 .*/
 
 GTAGS
 GRTAGS
 TAGS
-btop/Makefile
 aclocal.m4
 autom4te.cache/
 compile
@@ -76,8 +71,6 @@ dist/*
 pkg/dist/arch/*
 pkg/dist/fedora/*
 pkg/dist/rpi/*
-endoh1/endoh1
-endoh1/endoh1_color
 games/asciisector
 games/lib/AsciiSector
 games/nethack/compile

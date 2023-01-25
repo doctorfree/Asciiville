@@ -1,14 +1,22 @@
 #!/bin/bash
 #
-ARTDIR="/usr/local/share/asciiville/art"
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+  TOP="/usr/local/share"
+else
+  TOP="/usr/share"
+fi
+ARTDIR="${TOP}/asciiville/art"
+FIG_FONTS="${TOP}/figlet-fonts"
+MUSEDIR="${TOP}/asciiville/music"
+
 FIG_WELCOME="Welcome"
 FIG_TO="To"
 FIG_ASCII="Asciiville"
 FIG_CONT="Press Enter To Continue"
-FIG_FONTS="/usr/local/share/figlet-fonts"
 LARGE_FONT="Bolger"
 SMALL_FONT="Small"
-MUSEDIR=/usr/local/share/asciiville/music
 SONG="${MUSEDIR}/Chronos.mp3"
 ALTSONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 LOLCAT_NORM="lolcat"

@@ -46,7 +46,7 @@ starting point for calculations, and which audio file to use as accompaniment.
 **asciijulia -c 10**
 : Plays the Julia Set ASCIImatics animation 10 times then exits 
 
-**asciijulia -a /usr/local/share/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav -c 5**
+**asciijulia -a /usr/share/asciiville/music/Epic_Dramatic-Yuriy_Bespalov.wav -c 5**
 : Plays the Julia Set ASCIImatics animation 5 times accompanied by audio then exits 
 
 **asciijulia -x 0.687 -y 0.312**

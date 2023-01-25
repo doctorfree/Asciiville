@@ -28,19 +28,6 @@ umask 0022
 # Subdirectory in which to create the distribution files
 OUT_DIR="${HERE}/dist/${PKG_NAME}_${PKG_VER}"
 
-# Build cbftp
-have_brew=`type -p brew`
-[ "${have_brew}" ] && {
-  brew install coreutils make gcc@12 openssl
-}
-export LDFLAGS="-L/usr/local/opt/openssl@3/lib"
-export CPPFLAGS="-I/usr/local/opt/openssl@3/include"
-export STATIC_SSL_PATH="/usr/local/opt/openssl@3/lib"
-./build cbftp
-
-# Build endoh1
-./build endo
-
 # Build tetris
 ./build tetris
 strip games/tetris/tetris
@@ -53,7 +40,7 @@ mkdir ${OUT_DIR}
 
 for dir in "usr" "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
-           "${DESTDIR}/share/doc/${PKG}" "${DESTDIR}/share/btop" \
+           "${DESTDIR}/share/doc/${PKG}" \
            "${DESTDIR}/share/${PKG}" "${DESTDIR}/games" "${DESTDIR}/games/bin" \
            "${DESTDIR}/games/lib" "${DESTDIR}/games/var" \
            "${DESTDIR}/games/share" "${DESTDIR}/games/share/doc" \
@@ -71,11 +58,6 @@ do
 done
 
 ${SUDO} cp -a bin ${OUT_DIR}/${DESTDIR}/bin
-${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
-
-${SUDO} cp -a endoh1 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1
-${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1/endoh1
-${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/endoh1/endoh1_color
 
 # Tetris
 ${SUDO} cp games/tetris/tetris ${OUT_DIR}/${DESTDIR}/games/bin
@@ -102,6 +84,7 @@ ${SUDO} chgrp wheel ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
 ${SUDO} chmod 0664 ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
+${SUDO} cp -a conf/btop ${OUT_DIR}/${DESTDIR}/share/${PKG}/btop
 ${SUDO} cp -a conf/console ${OUT_DIR}/${DESTDIR}/share/${PKG}/console
 ${SUDO} cp -a conf/got ${OUT_DIR}/${DESTDIR}/share/${PKG}/got
 ${SUDO} cp -a conf/jrnl ${OUT_DIR}/${DESTDIR}/share/${PKG}/jrnl
@@ -123,22 +106,6 @@ ${SUDO} cp CHANGELOG.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} pandoc -f gfm README.md | ${SUDO} tee ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README.html > /dev/null
 ${SUDO} cp VERSION ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
-${SUDO} cp btop/README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-btop.md
-${SUDO} cp btop/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-btop
-${SUDO} cp btop/README.md ${OUT_DIR}/${DESTDIR}/share/btop/README.md
-${SUDO} cp btop/LICENSE ${OUT_DIR}/${DESTDIR}/share/btop/LICENSE
-${SUDO} cp -a btop/themes ${OUT_DIR}/${DESTDIR}/share/btop/themes
-${SUDO} cp btop/btop.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons/hicolor
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons/hicolor/48x48
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons/hicolor/48x48/apps
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons/hicolor/scalable
-${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/icons/hicolor/scalable/apps
-${SUDO} cp btop/Img/icon.png "${OUT_DIR}/${DESTDIR}/share/icons/hicolor/48x48/apps/btop.png"
-${SUDO} cp btop/Img/icon.svg "${OUT_DIR}/${DESTDIR}/share/icons/hicolor/scalable/apps/btop.svg"
-${SUDO} cp cbftp/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-cbftp
-${SUDO} cp cbftp/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-cbftp
 ${SUDO} cp games/tetris/licence.txt ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/license-tetris
 ${SUDO} cp games/tetris/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-tetris
 ${SUDO} gzip -9 ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/CHANGELOG.md

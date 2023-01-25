@@ -34,7 +34,7 @@ See the **asciiville**(1) man page (`man asciiville`).
 
     'art' can be the relative path to a file in:
 
-        `/usr/local/share/asciiville/art/`
+        `/usr/share/asciiville/art/`
 
     or the path to a file, with or without file extension
 

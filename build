@@ -3,77 +3,6 @@
 # build - compile and optionally install Asciiville components
 #
 
-build_btop() {
-  # Repo: https://github.com/doctorfree/Asciiville
-  #
-  # Fork of Repo: https://github.com/aristocratos/btop
-  #
-  # Build Dependencies:
-  # On Ubuntu 20.04
-  #   sudo apt update -y
-  #   sudo apt upgrade -y
-  #   sudo apt install coreutils git make tar zstd
-  #   sudo apt install -y build-essential
-  #   sudo apt install -y gcc-10 g++-10 cpp-10
-  #   sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 \
-  #                            --slave /usr/bin/g++ g++ /usr/bin/g++-10 \
-  #                            --slave /usr/bin/gcov gcov /usr/bin/gcov-10
-  #
-
-  [ -f bin/btop ] || make STATIC=true STRIP=true
-  chmod +x bin/btop
-
-  [ "${INSTALL}" ] && sudo PREFIX=${PREFIX} make install
-}
-
-build_cbftp() {
-  #
-  # Repo: https://github.com/doctorfree/Asciiville
-  #
-  # Fork of Repo: https://github.com/cbftp/cbftp-2022
-  #
-  # Linux build dependencies: make g++ libssl-dev libncursesw5-dev
-  # On Ubuntu 20.04
-  #   sudo apt update -y
-  #   sudo apt upgrade -y
-  #   sudo apt install make g++ libssl-dev libncursesw5-dev
-  #
-  [ -f bin/cbftp ] || {
-    [ -f /etc/arch-release ] && {
-      NCW="src/ui/ncurseswrap.h"
-      cp ${NCW} /tmp/nc_save$$
-      cat ${NCW} | sed -e "s%ncursesw/curses.h%ncurses.h%" > /tmp/nc$$
-      cp /tmp/nc$$ ${NCW}
-      rm -f /tmp/nc$$
-    }
-    make
-    [ -f /tmp/nc_save$$ ] && cp /tmp/nc_save$$ ${NCW}
-  }
-  chmod +x bin/*
-
-  [ "${INSTALL}" ] && {
-    [ -d ${PREFIX}/usr/local ] || sudo mkdir -p ${PREFIX}/usr/local
-    [ -d ${PREFIX}/usr/local/bin ] || sudo mkdir -p ${PREFIX}/usr/local/bin
-    sudo cp bin/* ${PREFIX}/usr/local/bin
-  }
-}
-
-build_endo() {
-  #
-  # Repo: https://github.com/doctorfree/Asciiville
-  #
-  # Fork of Repo: https://github.com/mame/winner
-  #
-  [ -f endoh1 ] && [ -f endoh1_color ] || make everything
-  chmod +x endoh1 endoh1_color
-
-  [ "${INSTALL}" ] && {
-    [ -d ${PREFIX}/usr/local ] || sudo mkdir -p ${PREFIX}/usr/local
-    [ -d ${PREFIX}/usr/local/bin ] || sudo mkdir -p ${PREFIX}/usr/local/bin
-    sudo cp endoh1 endoh1_color ${PREFIX}/usr/local/bin
-  }
-}
-
 build_nethack() {
   #
   # Repo: https://github.com/doctorfree/Asciiville
@@ -99,7 +28,7 @@ build_nethack() {
     ./bootstrap.sh
     cd ../..
     chmod 755 configure
-    ./configure --prefix=/usr/local/games \
+    ./configure --prefix=${PREFIX}/games \
                 --with-owner=games \
                 --with-group=games \
                 --enable-wizmode=doctorwhen
@@ -110,7 +39,7 @@ build_nethack() {
 
 build_tetris() {
   [ -f tetris ] || {
-    ./configure.sh --prefix=/usr/local/games --enable-xlib=no --enable-curses=yes
+    ./configure.sh --prefix=${PREFIX}/games --enable-xlib=no --enable-curses=yes
     make
     make gameserver
   }
@@ -121,17 +50,21 @@ usage() {
     printf "\nUsage: ./build [-i] [-p prefix] [-u] project [project2 ...]"
     printf "\nWhere:"
     printf "\n\t-i indicates install"
-    printf "\n\t-p prefix specifies installation prefix (default /usr/local)"
+    printf "\n\t-p prefix specifies installation prefix (default ${PREFIX})"
     printf "\n\t-u displays this usage message and exits\n"
-    printf "\nNo arguments: build btop, configure with prefix=/usr/local, build\n"
-    printf "\n'project' can be one or more of 'btop', 'cbftp',"
-    printf "\n'nethack', and 'tetris'\n"
+    printf "\nNo arguments: build nethack, configure with prefix=${PREFIX}, build\n"
     exit 1
 }
 
-PROJ=btop
+PROJ=nethack
 INSTALL=
-PREFIX=/usr/local
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+  PREFIX=/usr/local
+else
+  PREFIX=/usr
+fi
 while getopts "ip:u" flag; do
     case $flag in
         i)
@@ -150,30 +83,6 @@ shift $(( OPTIND - 1 ))
 for project in $*
 do
   case "${project}" in
-    btop)
-      PROJ=btop
-      [ -d ${PROJ} ] && {
-        cd ${PROJ}
-        build_btop
-        cd ..
-      }
-      ;;
-    cbftp)
-      PROJ=cbftp
-      [ -d ${PROJ} ] && {
-        cd ${PROJ}
-        build_cbftp
-        cd ..
-      }
-      ;;
-    endo)
-      PROJ=endoh1
-      [ -d ${PROJ} ] && {
-        cd ${PROJ}
-        build_endo
-        cd ..
-      }
-      ;;
     nethack)
       PROJ=games/nethack
       [ -d ${PROJ} ] && {

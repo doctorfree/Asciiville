@@ -34,35 +34,13 @@ DOC
 
 build() {
   cd "${srcdir}/${pkgname}"
-  cd btop
-  make distclean
-  make STATIC=true STRIP=true
-  chmod +x bin/btop
-  cd ..
-
-  cd cbftp
-  NCW="src/ui/ncurseswrap.h"
-  cp ${NCW} /tmp/nc_save$$
-  cat ${NCW} | sed -e "s%ncursesw/curses.h%ncurses.h%" > /tmp/nc$$
-  cp /tmp/nc$$ ${NCW}
-  rm -f /tmp/nc$$
-  make clean
-  make
-  chmod +x bin/*
-  cd ..
-
-  cd endoh1
-  make clobber
-  make everything
-  chmod +x endoh1 endoh1_color
-  cd ..
 
   cd games/nethack
   cd sys/autoconf
   ./bootstrap.sh
   cd ../..
   chmod 755 configure
-  ./configure --prefix=/usr/local/games \
+  ./configure --prefix=/usr/games \
               --with-owner=games \
               --with-group=games \
               --enable-wizmode=doctorwhen
@@ -71,7 +49,7 @@ build() {
 
   cd games/tetris
   [ -f tetris ] || {
-    ./configure.sh --prefix=/usr/local/games --enable-xlib=no --enable-curses=yes
+    ./configure.sh --prefix=/usr/games --enable-xlib=no --enable-curses=yes
     make
     make gameserver
   }
@@ -80,11 +58,11 @@ build() {
 
 package() {
   cd "${srcdir}/${pkgname}"
-  destdir=usr/local
+  destdir=usr
 
   for dir in "usr" "${destdir}" "${destdir}/share" "${destdir}/share/man" \
       "${destdir}/share/applications" "${destdir}/share/doc" \
-      "${destdir}/share/doc/${pkgname}" "${destdir}/share/btop" \
+      "${destdir}/share/doc/${pkgname}" \
       "${destdir}/share/${pkgname}" "${destdir}/games" "${destdir}/games/bin" \
       "${destdir}/games/lib" \
       "${destdir}/games/share" "${destdir}/games/share/doc" \
@@ -101,12 +79,6 @@ package() {
   done
 
   cp -a bin ${pkgdir}/${destdir}/bin
-  cp btop/bin/btop ${pkgdir}/${destdir}/bin/btop
-  cp cbftp/bin/* ${pkgdir}/${destdir}/bin
-
-  cp -a endoh1 ${pkgdir}/${destdir}/share/${pkgname}/endoh1
-  chmod 755 ${pkgdir}/${destdir}/share/${pkgname}/endoh1/endoh1
-  chmod 755 ${pkgdir}/${destdir}/share/${pkgname}/endoh1/endoh1_color
 
   # Revised NetHack install using UnNetHack mods
   cd games/nethack
@@ -128,6 +100,7 @@ package() {
   cd ..
 
   cp *.desktop "${pkgdir}/${destdir}/share/applications"
+  cp -a conf/btop ${pkgdir}/${destdir}/share/${pkgname}/btop
   cp -a conf/console ${pkgdir}/${destdir}/share/${pkgname}/console
   cp -a conf/got ${pkgdir}/${destdir}/share/${pkgname}/got
   cp -a conf/jrnl ${pkgdir}/${destdir}/share/${pkgname}/jrnl
@@ -150,24 +123,6 @@ package() {
   pandoc -f gfm README.md | \
     tee ${pkgdir}/${destdir}/share/doc/${pkgname}/README.html > /dev/null
   cp VERSION ${pkgdir}/${destdir}/share/doc/${pkgname}
-  cp btop/README.md ${pkgdir}/${destdir}/share/doc/${pkgname}/README-btop.md
-  cp btop/LICENSE ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSE-btop
-  cp btop/README.md ${pkgdir}/${destdir}/share/btop/README.md
-  cp btop/LICENSE ${pkgdir}/${destdir}/share/btop/LICENSE
-  cp -a btop/themes ${pkgdir}/${destdir}/share/btop/themes
-  cp btop/btop.desktop "${pkgdir}/${destdir}/share/applications"
-  mkdir -p ${pkgdir}/${destdir}/share/icons
-  mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor
-  mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor/48x48
-  mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor/48x48/apps
-  mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor/scalable
-  mkdir -p ${pkgdir}/${destdir}/share/icons/hicolor/scalable/apps
-  cp btop/Img/icon.png \
-    "${pkgdir}/${destdir}/share/icons/hicolor/48x48/apps/btop.png"
-  cp btop/Img/icon.svg \
-    "${pkgdir}/${destdir}/share/icons/hicolor/scalable/apps/btop.svg"
-  cp cbftp/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-cbftp
-  cp cbftp/LICENSE ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSE-cbftp
   cp games/tetris/licence.txt \
     ${pkgdir}/${destdir}/share/doc/${pkgname}/license-tetris
   cp games/tetris/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-tetris
