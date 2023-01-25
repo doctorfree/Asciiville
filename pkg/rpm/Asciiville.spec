@@ -1,7 +1,7 @@
 Name: Asciiville
 Version:    %{_version}
 Release:    %{_release}
-BuildArch:  x86_64
+BuildArch:  noarch
 Requires: util-linux, python3, python3-pip, tmux, mplayer, w3m, ranger, curl, jq, wget, asciinema, speedtest-cli, ncurses, neofetch, newsboat, figlet, ImageMagick, dconf, libjpeg-turbo, libpng, cmatrix, gnupg, pandoc, urlscan, khard, git
 URL:        https://github.com/doctorfree/Asciiville
 Vendor:     Doctorwhen's Bodacious Laboratory
@@ -91,32 +91,13 @@ fi
 
 %files
 %defattr(-,root,root)
-%attr(4755, games, games) /usr/games/bin/*
-%attr(0664, games, games) /usr/games/var/tetris-hiscores
-%attr(0755, games, games) /usr/games/var/nethack/bones
-%attr(0755, games, games) /usr/games/var/nethack/level
-%attr(0755, games, games) /usr/games/var/nethack/saves
-%attr(0644, games, games) /usr/games/var/nethack/logfile
-%attr(0644, games, games) /usr/games/var/nethack/perm
-%attr(0644, games, games) /usr/games/var/nethack/record
-%attr(0644, games, games) /usr/games/var/nethack/xlogfile
 %exclude %dir /usr/share/man/man1
-%exclude %dir /usr/share/man/man6
 %exclude %dir /usr/share/man
 %exclude %dir /usr/share/doc
 %exclude %dir /usr/share/menu
 %exclude %dir /usr/share
 %exclude %dir /usr/bin
-%exclude %dir /usr/games
-%exclude %dir /usr/games/bin
-%exclude %dir /usr/games/lib
-%exclude %dir /usr/games/share
-%exclude %dir /usr/games/var
 /usr/bin/*
 /usr/share/*
-/usr/games/gameserver
-/usr/games/nethack
-/usr/games/tetris
-/usr/games/share/*
 
 %changelog

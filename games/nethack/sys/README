@@ -1,4 +1,0 @@
-Preferred way of compiling NetHack is by the configure script in the top
-directory.
-
-The old and unused build scripts have been moved to unsupported.

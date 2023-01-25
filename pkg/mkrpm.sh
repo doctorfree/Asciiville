@@ -33,34 +33,6 @@ OUT_DIR="${SRC}/${SRC_NAME}/dist/${PKG_NAME}_${PKG_VER}"
 
 cd "${SRC}/${SRC_NAME}"
 
-# Build nethack
-if [ -x build ]
-then
-  ./build nethack
-else
-  cd games/nethack
-  ./configure --prefix=/usr/games \
-              --with-owner=games \
-              --with-group=games \
-              --enable-wizmode=doctorwhen
-  make
-  cd ../..
-fi
-
-# Build tetris
-if [ -x build ]
-then
-  ./build tetris
-else
-  cd games/tetris
-  [ -f tetris ] || {
-    ./configure.sh --prefix=/usr/games --enable-xlib=no --enable-curses=yes
-    make
-    make gameserver
-  }
-  cd ../..
-fi
-
 ${SUDO} rm -rf dist
 mkdir dist
 
@@ -70,12 +42,7 @@ mkdir ${OUT_DIR}
 for dir in "usr" "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
            "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
            "${DESTDIR}/share/doc/${PKG}" \
-           "${DESTDIR}/share/${PKG}" "${DESTDIR}/games" "${DESTDIR}/games/bin" \
-           "${DESTDIR}/games/lib" \
-           "${DESTDIR}/games/share" "${DESTDIR}/games/share/doc" \
-           "${DESTDIR}/games/share/doc/tetris" \
-           "${DESTDIR}/games/share/pixmaps" \
-           "${DESTDIR}/games/share/applications"
+           "${DESTDIR}/share/${PKG}"
 do
     [ -d ${OUT_DIR}/${dir} ] || ${SUDO} mkdir ${OUT_DIR}/${dir}
     ${SUDO} chown root:root ${OUT_DIR}/${dir}
@@ -87,44 +54,6 @@ do
 done
 
 ${SUDO} cp -a bin ${OUT_DIR}/${DESTDIR}/bin
-
-# Revised NetHack install using UnNetHack mods
-cd games/nethack
-${SUDO} make DESTDIR=${OUT_DIR} install
-${SUDO} cp dat/license ${OUT_DIR}/${DESTDIR}/games/share/nethack/license
-cd doc
-${SUDO} make DESTDIR=${OUT_DIR} manpages
-${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/bin/nethack
-${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/bin/nethack
-${SUDO} chmod 04755 ${OUT_DIR}/${DESTDIR}/games/bin/nethack
-${SUDO} rm -f ${OUT_DIR}/${DESTDIR}/games/nethack
-${SUDO} ln -r -s ${OUT_DIR}/${DESTDIR}/games/bin/nethack ${OUT_DIR}/${DESTDIR}/games/nethack
-cd ../..
-
-# Tetris
-${SUDO} cp tetris/tetris ${OUT_DIR}/${DESTDIR}/games/bin
-${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/bin/tetris
-${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/bin/tetris
-${SUDO} chmod 04755 ${OUT_DIR}/${DESTDIR}/games/bin/tetris
-${SUDO} rm -f ${OUT_DIR}/${DESTDIR}/games/tetris
-${SUDO} ln -r -s ${OUT_DIR}/${DESTDIR}/games/bin/tetris ${OUT_DIR}/${DESTDIR}/games/tetris
-${SUDO} cp tetris/gameserver ${OUT_DIR}/${DESTDIR}/games/bin
-${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/bin/gameserver
-${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/bin/gameserver
-${SUDO} chmod 04755 ${OUT_DIR}/${DESTDIR}/games/bin/gameserver
-${SUDO} rm -f ${OUT_DIR}/${DESTDIR}/games/gameserver
-${SUDO} ln -r -s ${OUT_DIR}/${DESTDIR}/games/bin/gameserver ${OUT_DIR}/${DESTDIR}/games/gameserver
-
-${SUDO} cp tetris/licence.txt ${OUT_DIR}/${DESTDIR}/games/share/doc/tetris
-${SUDO} cp tetris/README ${OUT_DIR}/${DESTDIR}/games/share/doc/tetris
-${SUDO} cp tetris/INSTALL ${OUT_DIR}/${DESTDIR}/games/share/doc/tetris
-${SUDO} cp tetris/tetris.xpm ${OUT_DIR}/${DESTDIR}/games/share/pixmaps
-${SUDO} cp tetris/tetris.desktop ${OUT_DIR}/${DESTDIR}/games/share/applications
-${SUDO} touch ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
-${SUDO} chown games ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
-${SUDO} chgrp games ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
-${SUDO} chmod 0664 ${OUT_DIR}/${DESTDIR}/games/var/tetris-hiscores
-cd ..
 
 ${SUDO} cp *.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
 ${SUDO} cp -a conf/btop ${OUT_DIR}/${DESTDIR}/share/${PKG}/btop
@@ -149,8 +78,6 @@ ${SUDO} cp CHANGELOG.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} pandoc -f gfm README.md | ${SUDO} tee ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README.html > /dev/null
 ${SUDO} cp VERSION ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
-${SUDO} cp games/tetris/licence.txt ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/license-tetris
-${SUDO} cp games/tetris/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-tetris
 ${SUDO} gzip -9 ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/CHANGELOG.md
 
 ${SUDO} cp -a art "${OUT_DIR}/${DESTDIR}/share/${PKG}/art"
@@ -162,15 +89,6 @@ ${SUDO} cp -a tools "${OUT_DIR}/${DESTDIR}/share/${PKG}/tools"
 ${SUDO} gzip ${OUT_DIR}/${DESTDIR}/share/${PKG}/art/*/*.asc
 
 ${SUDO} cp -a man/man1 ${OUT_DIR}/${DESTDIR}/share/man/man1
-[ -d ${OUT_DIR}/${DESTDIR}/share/man/man5 ] || {
-  ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/man/man5
-}
-
-[ -d ${OUT_DIR}/${DESTDIR}/share/man/man6 ] || {
-  ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/man/man6
-}
-${SUDO} cp games/nethack/dat/license ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-nethack
-${SUDO} cp games/nethack/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-nethack
 
 ${SUDO} cp -a share/menu "${OUT_DIR}/${DESTDIR}/share/menu"
 ${SUDO} cp -a share/figlet-fonts "${OUT_DIR}/${DESTDIR}/share/figlet-fonts"
@@ -206,7 +124,6 @@ done
 ${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/tools/bin/*
 ${SUDO} chown -R root:root ${OUT_DIR}/${DESTDIR}/share
 ${SUDO} chown -R root:root ${OUT_DIR}/${DESTDIR}/bin
-${SUDO} chown -R games:games ${OUT_DIR}/${DESTDIR}/games/var
 
 echo "Building ${PKG_NAME}_${PKG_VER} rpm package"
 
