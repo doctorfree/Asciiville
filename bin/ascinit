@@ -619,14 +619,10 @@ fi
     install_external_package
   }
 }
-# Install ninvaders if not already present
-[ -x /usr/local/games/bin/ninvaders ] || {
-  [ -x /usr/games/bin/ninvaders ] || {
-    OWNER=doctorfree
-    PROJECT=ninvaders
-    install_external_package
-  }
-}
+# Install asciigames
+OWNER=doctorfree
+PROJECT=asciigames
+install_external_package
 
 # Mutt configuration user setup
 [ "${have_mutt}" ] && {

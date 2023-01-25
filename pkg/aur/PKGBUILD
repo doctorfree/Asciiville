@@ -34,44 +34,10 @@ sha256sums=('SKIP')
 
 prepare() {
   cd "${srcdir}/${pkgname}"
-  needgroup=
-  needuser=
-  grep ^games: /etc/group > /dev/null || needgroup=1
-  id games > /dev/null 2>&1 || needuser=1
-  if [ "${needgroup}" ] || [ "${needuser}" ]
-  then
-    cat << DOC
---> The Asciiville build requires user games:games to exist
---> You can use the following commands to create this user:
-# sudo groupadd games
-# sudo useradd -r -c "Games pseudo-user" -g games -d /opt/games -s /bin/false games
-DOC
-   exit 1
-  fi
 }
 
 build() {
   cd "${srcdir}/${pkgname}"
-
-  cd games/nethack
-  cd sys/autoconf
-  ./bootstrap.sh
-  cd ../..
-  chmod 755 configure
-  ./configure --prefix=/usr/games \
-              --with-owner=games \
-              --with-group=games \
-              --enable-wizmode=doctorwhen
-  make
-  cd ../..
-
-  cd games/tetris
-  [ -f tetris ] || {
-    ./configure.sh --prefix=/usr/games --enable-xlib=no --enable-curses=yes
-    make
-    make gameserver
-  }
-  cd ../..
 }
 
 package() {
@@ -81,12 +47,7 @@ package() {
   for dir in "usr" "${destdir}" "${destdir}/share" "${destdir}/share/man" \
       "${destdir}/share/applications" "${destdir}/share/doc" \
       "${destdir}/share/doc/${pkgname}" \
-      "${destdir}/share/${pkgname}" "${destdir}/games" "${destdir}/games/bin" \
-      "${destdir}/games/lib" \
-      "${destdir}/games/share" "${destdir}/games/share/doc" \
-      "${destdir}/games/share/doc/tetris" \
-      "${destdir}/games/share/pixmaps" \
-      "${destdir}/games/share/applications"
+      "${destdir}/share/${pkgname}"
   do
     [ -d ${pkgdir}/${dir} ] || mkdir ${pkgdir}/${dir}
   done
@@ -97,25 +58,6 @@ package() {
   done
 
   cp -a bin ${pkgdir}/${destdir}/bin
-
-  # Revised NetHack install using UnNetHack mods
-  cd games/nethack
-  make DESTDIR=${pkgdir} install
-  cp dat/license ${pkgdir}/${destdir}/games/share/nethack/license
-  cd doc
-  make DESTDIR=${pkgdir} manpages
-  cd ../..
-
-  # Tetris
-  cp tetris/tetris ${pkgdir}/${destdir}/games/bin
-  cp tetris/gameserver ${pkgdir}/${destdir}/games/bin
-
-  cp tetris/licence.txt ${pkgdir}/${destdir}/games/share/doc/tetris
-  cp tetris/README ${pkgdir}/${destdir}/games/share/doc/tetris
-  cp tetris/INSTALL ${pkgdir}/${destdir}/games/share/doc/tetris
-  cp tetris/tetris.xpm ${pkgdir}/${destdir}/games/share/pixmaps
-  cp tetris/tetris.desktop ${pkgdir}/${destdir}/games/share/applications
-  cd ..
 
   cp *.desktop "${pkgdir}/${destdir}/share/applications"
   cp -a conf/btop ${pkgdir}/${destdir}/share/${pkgname}/btop
@@ -141,9 +83,6 @@ package() {
   pandoc -f gfm README.md | \
     tee ${pkgdir}/${destdir}/share/doc/${pkgname}/README.html > /dev/null
   cp VERSION ${pkgdir}/${destdir}/share/doc/${pkgname}
-  cp games/tetris/licence.txt \
-    ${pkgdir}/${destdir}/share/doc/${pkgname}/license-tetris
-  cp games/tetris/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-tetris
   gzip -9 ${pkgdir}/${destdir}/share/doc/${pkgname}/CHANGELOG.md
 
   cp -a art "${pkgdir}/${destdir}/share/${pkgname}/art"
@@ -162,10 +101,6 @@ package() {
   [ -d ${pkgdir}/${destdir}/share/man/man6 ] || {
     mkdir -p ${pkgdir}/${destdir}/share/man/man6
   }
-  cp games/nethack/dat/license \
-    ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSE-nethack
-  cp games/nethack/README \
-    ${pkgdir}/${destdir}/share/doc/${pkgname}/README-nethack
 
   cp -a share/menu "${pkgdir}/${destdir}/share/menu"
   cp -a share/figlet-fonts "${pkgdir}/${destdir}/share/figlet-fonts"
