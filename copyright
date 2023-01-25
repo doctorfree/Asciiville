@@ -7,10 +7,6 @@ Files: *
 Copyright: 2021-2023 Ronald Record <ronaldrecord@gmail.com>
 License: MIT
 
-Files: cbftp/*
-Copyright: 2011-present The cbftp development team
-License: MIT
-
 Files: games/nethack/*
 Copyright: 1993-2002 NetHack Development Team
 License: Nethack General Public License

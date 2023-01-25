@@ -3,38 +3,6 @@
 # build - compile and optionally install Asciiville components
 #
 
-build_cbftp() {
-  #
-  # Repo: https://github.com/doctorfree/Asciiville
-  #
-  # Fork of Repo: https://github.com/cbftp/cbftp-2022
-  #
-  # Linux build dependencies: make g++ libssl-dev libncursesw5-dev
-  # On Ubuntu 20.04
-  #   sudo apt update -y
-  #   sudo apt upgrade -y
-  #   sudo apt install make g++ libssl-dev libncursesw5-dev
-  #
-  [ -f bin/cbftp ] || {
-    [ -f /etc/arch-release ] && {
-      NCW="src/ui/ncurseswrap.h"
-      cp ${NCW} /tmp/nc_save$$
-      cat ${NCW} | sed -e "s%ncursesw/curses.h%ncurses.h%" > /tmp/nc$$
-      cp /tmp/nc$$ ${NCW}
-      rm -f /tmp/nc$$
-    }
-    make
-    [ -f /tmp/nc_save$$ ] && cp /tmp/nc_save$$ ${NCW}
-  }
-  chmod +x bin/*
-
-  [ "${INSTALL}" ] && {
-    [ -d ${PREFIX} ] || sudo mkdir -p ${PREFIX}
-    [ -d ${PREFIX}/bin ] || sudo mkdir -p ${PREFIX}/bin
-    sudo cp bin/* ${PREFIX}/bin
-  }
-}
-
 build_nethack() {
   #
   # Repo: https://github.com/doctorfree/Asciiville
@@ -84,13 +52,11 @@ usage() {
     printf "\n\t-i indicates install"
     printf "\n\t-p prefix specifies installation prefix (default ${PREFIX})"
     printf "\n\t-u displays this usage message and exits\n"
-    printf "\nNo arguments: build cpftp, configure with prefix=${PREFIX}, build\n"
-    printf "\n'project' can be one or more of 'cbftp',"
-    printf "\n'nethack', and 'tetris'\n"
+    printf "\nNo arguments: build nethack, configure with prefix=${PREFIX}, build\n"
     exit 1
 }
 
-PROJ=cbftp
+PROJ=nethack
 INSTALL=
 platform=`uname -s`
 if [ "${platform}" == "Darwin" ]
@@ -117,14 +83,6 @@ shift $(( OPTIND - 1 ))
 for project in $*
 do
   case "${project}" in
-    cbftp)
-      PROJ=cbftp
-      [ -d ${PROJ} ] && {
-        cd ${PROJ}
-        build_cbftp
-        cd ..
-      }
-      ;;
     nethack)
       PROJ=games/nethack
       [ -d ${PROJ} ] && {

@@ -28,16 +28,6 @@ umask 0022
 # Subdirectory in which to create the distribution files
 OUT_DIR="${HERE}/dist/${PKG_NAME}_${PKG_VER}"
 
-# Build cbftp
-have_brew=`type -p brew`
-[ "${have_brew}" ] && {
-  brew install coreutils make gcc@12 openssl
-}
-export LDFLAGS="-L/usr/local/opt/openssl@3/lib"
-export CPPFLAGS="-I/usr/local/opt/openssl@3/include"
-export STATIC_SSL_PATH="/usr/local/opt/openssl@3/lib"
-./build cbftp
-
 # Build tetris
 ./build tetris
 strip games/tetris/tetris
@@ -68,7 +58,6 @@ do
 done
 
 ${SUDO} cp -a bin ${OUT_DIR}/${DESTDIR}/bin
-${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
 
 # Tetris
 ${SUDO} cp games/tetris/tetris ${OUT_DIR}/${DESTDIR}/games/bin
@@ -117,8 +106,6 @@ ${SUDO} cp CHANGELOG.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} pandoc -f gfm README.md | ${SUDO} tee ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README.html > /dev/null
 ${SUDO} cp VERSION ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
-${SUDO} cp cbftp/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-cbftp
-${SUDO} cp cbftp/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-cbftp
 ${SUDO} cp games/tetris/licence.txt ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/license-tetris
 ${SUDO} cp games/tetris/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-tetris
 ${SUDO} gzip -9 ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/CHANGELOG.md

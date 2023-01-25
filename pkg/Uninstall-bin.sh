@@ -19,10 +19,6 @@ AVILLE_FILES="/usr/local/bin/asciiart \
 /usr/local/bin/asciisplash \
 /usr/local/bin/asciiville \
 /usr/local/bin/ascinit \
-/usr/local/bin/cbftp \
-/usr/local/bin/cbftp-debug \
-/usr/local/bin/datafilecat \
-/usr/local/bin/datafilewrite \
 /usr/local/bin/make_ascii_art \
 /usr/local/bin/set_xfce_font \
 /usr/local/bin/set_xfce_trans \
@@ -48,7 +44,6 @@ AVILLE_FILES="/usr/local/bin/asciiart \
 /usr/local/share/man/man1/asciisplash-tmux.1 \
 /usr/local/share/man/man1/asciiville.1 \
 /usr/local/share/man/man1/ascinit.1 \
-/usr/local/share/man/man1/cbftp.1 \
 /usr/local/share/man/man1/show_ascii_art.1 \
 /usr/local/share/man/man1/show_moon.1 \
 /usr/local/share/man/man1/show_pokemon.1 \

@@ -33,18 +33,6 @@ OUT_DIR="${SRC}/${SRC_NAME}/dist/${PKG_NAME}_${PKG_VER}"
 
 cd "${SRC}/${SRC_NAME}"
 
-# Build cbftp
-if [ -x build ]
-then
-  ./build cbftp
-else
-  cd cbftp
-  make clean
-  make
-  chmod +x bin/*
-  cd ..
-fi
-
 # Build nethack
 if [ -x build ]
 then
@@ -99,7 +87,6 @@ do
 done
 
 ${SUDO} cp -a bin ${OUT_DIR}/${DESTDIR}/bin
-${SUDO} cp cbftp/bin/* ${OUT_DIR}/${DESTDIR}/bin
 
 # Revised NetHack install using UnNetHack mods
 cd games/nethack
@@ -162,8 +149,6 @@ ${SUDO} cp CHANGELOG.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} pandoc -f gfm README.md | ${SUDO} tee ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README.html > /dev/null
 ${SUDO} cp VERSION ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
-${SUDO} cp cbftp/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-cbftp
-${SUDO} cp cbftp/LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/LICENSE-cbftp
 ${SUDO} cp games/tetris/licence.txt ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/license-tetris
 ${SUDO} cp games/tetris/README ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/README-tetris
 ${SUDO} gzip -9 ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/CHANGELOG.md

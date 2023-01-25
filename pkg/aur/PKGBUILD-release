@@ -35,17 +35,6 @@ DOC
 build() {
   cd "${srcdir}/${pkgname}"
 
-  cd cbftp
-  NCW="src/ui/ncurseswrap.h"
-  cp ${NCW} /tmp/nc_save$$
-  cat ${NCW} | sed -e "s%ncursesw/curses.h%ncurses.h%" > /tmp/nc$$
-  cp /tmp/nc$$ ${NCW}
-  rm -f /tmp/nc$$
-  make clean
-  make
-  chmod +x bin/*
-  cd ..
-
   cd games/nethack
   cd sys/autoconf
   ./bootstrap.sh
@@ -90,7 +79,6 @@ package() {
   done
 
   cp -a bin ${pkgdir}/${destdir}/bin
-  cp cbftp/bin/* ${pkgdir}/${destdir}/bin
 
   # Revised NetHack install using UnNetHack mods
   cd games/nethack
@@ -135,8 +123,6 @@ package() {
   pandoc -f gfm README.md | \
     tee ${pkgdir}/${destdir}/share/doc/${pkgname}/README.html > /dev/null
   cp VERSION ${pkgdir}/${destdir}/share/doc/${pkgname}
-  cp cbftp/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-cbftp
-  cp cbftp/LICENSE ${pkgdir}/${destdir}/share/doc/${pkgname}/LICENSE-cbftp
   cp games/tetris/licence.txt \
     ${pkgdir}/${destdir}/share/doc/${pkgname}/license-tetris
   cp games/tetris/README ${pkgdir}/${destdir}/share/doc/${pkgname}/README-tetris

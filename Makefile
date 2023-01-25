@@ -14,7 +14,7 @@ BINS = bin/asciiart bin/asciijulia bin/asciimpplus bin/asciiplasma \
 	   bin/make_ascii_art bin/set_xfce_trans bin/show_ascii_art
 MANS = man/man1/asciiart.1 man/man1/asciijulia.1 man/man1/asciimpplus.1 \
 	   man/man1/asciiplasma.1 man/man1/asciisplash-tmux.1 \
-	   man/man1/asciisplash.1 man/man1/asciiville.1 man/man1/cbftp.1 \
+	   man/man1/asciisplash.1 man/man1/asciiville.1 \
 	   man/man1/show_ascii_art.1
 
 ifeq ($(shell command -v g++-11 >/dev/null; echo $$?),0)
@@ -71,18 +71,15 @@ else
 endif
 endif
 
-.PHONY: all info aur deb rpm cbftp nethack clean
+.PHONY: all info aur deb rpm nethack clean
 
-all: cbftp nethack aur deb rpm
+all: nethack aur deb rpm
 
 info:
 	@$(FIG_CMD)
 	@printf "\033[1;92mPLATFORM   \033[1;93m?| \033[0m$(PLATFORM)\n"
 	@printf "\033[1;96mARCH       \033[1;93m?| \033[0m$(ARCH)\n"
 	@printf "\033[1;93mCXX        \033[1;93m?| \033[0m$(CXX) \033[1;93m(\033[97m$(CXX_VERSION)\033[93m)\n"
-
-cbftp: info
-	@./build cbftp
 
 nethack: info
 	@./build nethack

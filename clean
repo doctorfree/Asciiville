@@ -1,9 +1,7 @@
 #!/bin/bash
 
-sudo rm -rf dist releases asciiville pkg/dist/arch pkg/dist/fedora pkg/dist/rpi
-cd cbftp
-[ -f Makefile ] && make clean
-cd ../games/nethack
+sudo rm -rf dist releases asciiville
+cd games/nethack
 [ -f Makefile ] && make spotless
 rm -f config.log config.status configure doc/Guidebook.txt \
       sys/share/Makefile.lib sys/autoconf/autoconf.hin \
