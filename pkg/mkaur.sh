@@ -4,7 +4,6 @@
 
 PKG="asciiville"
 PKG_NAME="Asciiville"
-ARCH=x86_64
 SUDO=sudo
 GCI=
 
@@ -15,9 +14,6 @@ have_makepkg=`type -p makepkg`
   echo "Exiting"
   exit 1
 }
-
-arch_arch=`uname -m`
-[ "${arch_arch}" == "${ARCH}" ] || ARCH=${arch_arch}
 
 if [ "${__ASC_SRC__}" ]
 then
