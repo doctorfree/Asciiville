@@ -595,6 +595,14 @@ fi
     install_external_package
   }
 }
+# Install cbftp if not already present
+[ -x /usr/local/bin/cbftp ] || {
+  [ -x /usr/bin/cbftp ] || {
+    OWNER=doctorfree
+    PROJECT=cbftp
+    install_external_package
+  }
+}
 # Install any2ascii if not already present
 [ -x /usr/local/bin/jp2a ] || {
   [ -x /usr/bin/jp2a ] || {
