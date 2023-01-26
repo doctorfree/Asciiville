@@ -2,13 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## Asciiville-2.0.1r2 (2023-01-24)
+## Asciiville-3.0.1r1 (2023-01-26)
 
+* Asciiville is now architecture independent
 * Move `btop` to external package install
 * Move `cbftp` to external package install
 * Move `endoh1` to external package install
 * Add `term-image` command - display and browse images in the terminal
 * Move installation location back to `/usr` except macOS to `/usr/local`
+* Several bug fixes
 
 ## Asciiville-2.0.1r1 (2023-01-10)
 
