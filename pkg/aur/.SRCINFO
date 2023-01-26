@@ -6,7 +6,6 @@ pkgbase = asciiville
 	install = asciiville.install
 	arch = any
 	license = MIT
-	makedepends = pandoc
 	makedepends = zip
 	depends = util-linux
 	depends = libcurl-compat

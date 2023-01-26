@@ -39,7 +39,7 @@ else
     then
       sudo pacman -Rs ${PKGS}
     else
-      sudo pacman -S --needed ${PKGS} pandoc zip
+      sudo pacman -S --needed ${PKGS} zip
     fi
   else
     have_dnf=`type -p dnf`

@@ -1618,7 +1618,7 @@ must be installed.
 On an Arch Linux based system:
 
 ```console
-sudo pacman -S --needed base-devel ncurses pandoc zip
+sudo pacman -S --needed base-devel zip
 ```
 
 On a Debian based system:
@@ -1626,11 +1626,7 @@ On a Debian based system:
 ```console
 sudo apt update -y
 sudo apt upgrade -y
-sudo apt install build-essential coreutils git make tar zstd make g++ \
-    libssl-dev libncursesw5-dev gcc-10 g++-10 cpp-10
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 \
-    --slave /usr/bin/g++ g++ /usr/bin/g++-10 \
-    --slave /usr/bin/gcov gcov /usr/bin/gcov-10
+sudo apt install build-essential coreutils git make tar zstd make
 ```
 
 On an RPM based system:

@@ -26,7 +26,7 @@ arch=('any')
 url="https://github.com/doctorfree/Asciiville"
 license=('MIT')
 depends=(util-linux libcurl-compat ncurses readline figlet tmux python python-pip mplayer dconf w3m ranger curl jq wget asciinema speedtest-cli neofetch neomutt newsboat imagemagick libjpeg-turbo libpng cmatrix gnupg urlscan khard git)
-makedepends=(pandoc zip)
+makedepends=(zip)
 optdepends=('cool-retro-term: cool retro terminal emulator')
 install=asciiville.install
 source=("${pkgname}::git+https://github.com/doctorfree/Asciiville.git")
@@ -80,8 +80,6 @@ package() {
   cp NOTICE ${pkgdir}/${destdir}/share/doc/${pkgname}
   cp CHANGELOG.md ${pkgdir}/${destdir}/share/doc/${pkgname}
   cp README.md ${pkgdir}/${destdir}/share/doc/${pkgname}
-  pandoc -f gfm README.md | \
-    tee ${pkgdir}/${destdir}/share/doc/${pkgname}/README.html > /dev/null
   cp VERSION ${pkgdir}/${destdir}/share/doc/${pkgname}
   gzip -9 ${pkgdir}/${destdir}/share/doc/${pkgname}/CHANGELOG.md
 
