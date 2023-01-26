@@ -1055,21 +1055,19 @@ do
   fi
 done
 
-have_mapscii=`type -p mapscii`
-[ "${have_mapscii}" ] || {
-  npm_inst=`type -p npm`
-  [ "${npm_inst}" ] && npm install mapscii > /dev/null 2>&1
-}
+have_npm=`type -p npm`
 
 # Use Brew on macOS to install some requirements
-have_brew=`type -p brew`
 [ "${platform}" == "Darwin" ] && {
+  have_brew=`type -p brew`
   [ "${have_brew}" ] || {
     # Install Brew
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     have_brew=`type -p brew`
   }
   [ "${have_brew}" ] && {
+    [ "${have_npm}" ] || brew install -q node
+    have_npm=`type -p npm`
     have_btop=`type -p btop`
     [ "${have_btop}" ] || {
       [ "${quiet}" ] || {
@@ -1092,6 +1090,11 @@ have_brew=`type -p brew`
       brew install -q mplayer
     }
   }
+}
+
+have_mapscii=`type -p mapscii`
+[ "${have_mapscii}" ] || {
+  [ "${have_npm}" ] && npm install mapscii > /dev/null 2>&1
 }
 
 have_tuir=`type -p tuir`

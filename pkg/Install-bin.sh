@@ -103,11 +103,6 @@ then
 else
   PYTHON="python"
 fi
-npm_inst=`type -p npm`
-if [ "${npm_inst}" ]
-then
-  npm install -g mapscii > /dev/null 2>&1
-fi
 
 lol_inst=`type -p lolcat`
 if [ ! "${lol_inst}" ]
