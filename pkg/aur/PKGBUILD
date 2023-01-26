@@ -13,7 +13,7 @@ else
   then
     . ${SRC}/VERSION
   else
-    VERSION=2.0.1
+    VERSION=3.0.1
     RELEASE=1
   fi
 fi
@@ -25,8 +25,8 @@ pkgdesc="Create and display ASCII Art, animations. Utilities to perform common o
 arch=('any')
 url="https://github.com/doctorfree/Asciiville"
 license=('MIT')
-depends=(util-linux libcurl-compat ncurses readline figlet tmux python python-pip mplayer dconf w3m ranger curl jq wget asciinema speedtest-cli neofetch neomutt newsboat imagemagick libjpeg-turbo libpng cmatrix gnupg pandoc urlscan khard git)
-makedepends=(cmake pandoc zip autoconf-archive pkgconf)
+depends=(util-linux libcurl-compat ncurses readline figlet tmux python python-pip mplayer dconf w3m ranger curl jq wget asciinema speedtest-cli neofetch neomutt newsboat imagemagick libjpeg-turbo libpng cmatrix gnupg urlscan khard git)
+makedepends=(pandoc zip)
 optdepends=('cool-retro-term: cool retro terminal emulator')
 install=asciiville.install
 source=("${pkgname}::git+https://github.com/doctorfree/Asciiville.git")

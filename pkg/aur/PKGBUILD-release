@@ -1,14 +1,14 @@
 # Maintainer: Ronald Record <ronaldrecord@gmail.com>
 
 pkgname=asciiville
-pkgver=v2.0.1r1
+pkgver=v3.0.1r1
 pkgrel=1
 pkgdesc="Create and display ASCII Art, animations. Utilities to perform common operations in a character-based environment. Asciiville includes nearly 1,000 works of ASCII Art"
 arch=('any')
 url="https://github.com/doctorfree/Asciiville"
 license=('MIT')
-depends=(util-linux libcurl-compat ncurses readline figlet tmux python python-pip mplayer dconf w3m ranger curl jq wget asciinema speedtest-cli neofetch neomutt newsboat imagemagick libjpeg-turbo libpng cmatrix gnupg pandoc urlscan khard git)
-makedepends=(cmake pandoc zip autoconf-archive pkgconf)
+depends=(util-linux libcurl-compat ncurses readline figlet tmux python python-pip mplayer dconf w3m ranger curl jq wget asciinema speedtest-cli neofetch neomutt newsboat imagemagick libjpeg-turbo libpng cmatrix gnupg urlscan khard git)
+makedepends=(pandoc zip)
 optdepends=('cool-retro-term: cool retro terminal emulator')
 install=asciiville.install
 source=("${pkgname}::git+https://github.com/doctorfree/Asciiville.git#tag=${pkgver}")
