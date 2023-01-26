@@ -137,10 +137,10 @@ FIGLET_ZIP="figlet-fonts.zip"
 zip_inst=`type -p zip`
 if [ "${zip_inst}" ]
 then
-  ${PYTHON} -m pip install setuptools
+  ${PYTHON} -m pip install setuptools 2> /dev/null
   pyfig_inst=`type -p pyfiglet`
   [ "${pyfig_inst}" ] || {
-    ${PYTHON} -m pip install pyfiglet
+    ${PYTHON} -m pip install pyfiglet 2> /dev/null
     pyfig_inst=`type -p pyfiglet`
   }
   if [ "${pyfig_inst}" ]
