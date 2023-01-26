@@ -96,6 +96,13 @@ else
 fi
 
 export PATH=${PATH}:/usr/local/bin:/snap/bin
+python3_inst=`type -p python3`
+if [ "${python3_inst}" ]
+then
+  PYTHON="python3"
+else
+  PYTHON="python"
+fi
 npm_inst=`type -p npm`
 if [ "${npm_inst}" ]
 then
@@ -130,7 +137,12 @@ FIGLET_ZIP="figlet-fonts.zip"
 zip_inst=`type -p zip`
 if [ "${zip_inst}" ]
 then
+  ${PYTHON} -m pip install setuptools
   pyfig_inst=`type -p pyfiglet`
+  [ "${pyfig_inst}" ] || {
+    ${PYTHON} -m pip install pyfiglet
+    pyfig_inst=`type -p pyfiglet`
+  }
   if [ "${pyfig_inst}" ]
   then
     if [ -d ${FIGLET_DIR} ]

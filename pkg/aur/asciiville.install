@@ -34,9 +34,9 @@ post_install() {
   zip_inst=`type -p zip`
   if [ "${zip_inst}" ]
   then
+    python -m pip install setuptools
     pyfig_inst=`type -p pyfiglet`
     [ "${pyfig_inst}" ] || {
-      python -m pip install setuptools
       python -m pip install pyfiglet
       pyfig_inst=`type -p pyfiglet`
     }
