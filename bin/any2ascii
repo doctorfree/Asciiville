@@ -316,6 +316,7 @@ have_v2a=`type -p video-to-ascii`
         exit
     fi
 
+    ${PYTHON} -m pip install --upgrade setuptools > /dev/null 2>&1
     for pkg in future xtermcolor ffmpeg-python pyaudio
     do
       if pip list | grep ${pkg} > /dev/null

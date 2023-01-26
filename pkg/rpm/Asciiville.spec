@@ -68,6 +68,7 @@ if [ "${zip_inst}" ]
 then
   pyfig_inst=`type -p pyfiglet`
   [ "${pyfig_inst}" ] || {
+    ${PYTHON} -m pip install setuptools
     ${PYTHON} -m pip install pyfiglet
     pyfig_inst=`type -p pyfiglet`
   }
