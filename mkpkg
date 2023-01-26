@@ -29,7 +29,7 @@ export __ASC_SRC__=`pwd`
 if [ "${arch}" ]
 then
   sudo pacman -Syy
-  scripts/mkaur.sh
+  pkg/mkaur.sh
   exit 0
 fi
 
