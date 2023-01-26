@@ -26,12 +26,17 @@ export __ASC_SRC__=`pwd`
   echo "${ID_LIKE}" | grep debian > /dev/null && debian=1
 }
 
-if [ "${arch}" ]
-then
+[ "${arch}" ] && {
   sudo pacman -Syy
   pkg/mkaur.sh
   exit 0
-fi
+}
+
+platform=`uname -s`
+[ "${platform}" == "Darwin" ] && {
+  pkg/mkmac.sh
+  exit 0
+}
 
 dpkg=`type -p dpkg-deb`
 [ "${dpkg}" ] || {
