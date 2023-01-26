@@ -1431,7 +1431,7 @@ show_select_menu() {
     }
     PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORM}"
     options=()
-    [ "${have_aewan}" ] && options+=("Aewan Art Creation     [${use_btop}]")
+    [ "${have_aewan}" ] && options+=("Aewan Art Creation     [${use_aewan}]")
     [ "${have_btop}" ] && options+=("Btop System Monitor    [${use_btop}]")
     [ "${have_gdu}" ] && options+=("Disk Usage Analyzer    [${use_gdu}]")
     [ "${have_lynx}" ] && options+=("Lynx Web Browser       [${use_lynx}]")
@@ -3309,31 +3309,43 @@ select_song() {
 }
 
 set_show_term() {
-  if [ "${KITTY}" ]
+  check_display
+  if [ $? -eq 0 ]
   then
-    show_term="Kitty"
-  else
-    if [ "${GNOME}" ]
+    if [ "${KITTY}" ]
     then
-      show_term="Gnome"
+      show_term="Kitty"
     else
-      if [ "${XFCE4}" ]
+      if [ "${GNOME}" ]
       then
-        show_term="XFCE4"
+        show_term="Gnome"
       else
-        if [ "${TILIX}" ]
+        if [ "${XFCE4}" ]
         then
-          show_term="Tilix"
+          show_term="XFCE4"
         else
-          if [ "${RETRO}" ]
+          if [ "${TILIX}" ]
           then
-            show_term="Retro"
+            show_term="Tilix"
           else
-            show_term="Current"
+            if [ "${RETRO}" ]
+            then
+              show_term="Retro"
+            else
+              show_term="Current"
+            fi
           fi
         fi
       fi
     fi
+  else
+    CURRENT=1
+    TILIX=
+    KITTY=
+    RETRO=
+    GNOME=
+    XFCE4=
+    show_term="Current"
   fi
 }
 
