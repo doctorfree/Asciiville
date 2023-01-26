@@ -1456,12 +1456,16 @@ show_select_menu() {
     [ "${have_newsboat}" ] && options+=("Newsboat RSS Feeds     [${use_newsboat}]")
     [ "${have_ranger}" ] && options+=("Ranger File Manager    [${use_ranger}]")
     [ "${have_tuir}" ] && options+=("Reddit UI              [${use_tuir}]")
-    [ "${have_xfce4}" ] && options+=("XFCE4 Terminal         [${use_xfce4}]")
-    [ "${have_gnome}" ] && options+=("Gnome Terminal         [${use_gnome}]")
-    [ "${have_kitty}" ] && options+=("Kitty Terminal         [${use_kitty}]")
-    [ "${have_retro}" ] && options+=("Retro Terminal         [${use_retro}]")
-    [ "${have_tilix}" ] && options+=("Tilix Terminal         [${use_tilix}]")
-    options+=("Current Terminal       [${use_current}]")
+    check_display
+    if [ $? -eq 0 ]
+    then
+      [ "${have_xfce4}" ] && options+=("XFCE4 Terminal         [${use_xfce4}]")
+      [ "${have_gnome}" ] && options+=("Gnome Terminal         [${use_gnome}]")
+      [ "${have_kitty}" ] && options+=("Kitty Terminal         [${use_kitty}]")
+      [ "${have_retro}" ] && options+=("Retro Terminal         [${use_retro}]")
+      [ "${have_tilix}" ] && options+=("Tilix Terminal         [${use_tilix}]")
+      options+=("Current Terminal       [${use_current}]")
+    fi
     options+=("${BOLD}Run ${show_comm} in ${show_term}${NORM}")
     [ "${have_jrnl}" ] && options+=("Journal Menu")
     [ "${have_showascii}" ] && options+=("Ascii Art Menu")
