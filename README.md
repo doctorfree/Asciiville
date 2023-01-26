@@ -376,13 +376,15 @@ Tools installed during post-installation configuration include:
 
 ## Installation
 
-Asciiville v1.4.1r2 and later can be installed on Linux systems using
-the Arch Linux packaging format, the Debian packaging format, or the
-Red Hat Package Manager (RPM). Currently tested platforms include Arch
-Linux 2022.07.01, Ubuntu Linux 20.04, Fedora Linux 35, and Raspbian Linux
-Bullseye. Installation packages are provided for the `amd64` and `armhf`
-architectures in Debian packaging format and the `x86_64` architecture
-in Red Hat package manager (RPM) format and Arch Linux packaging format.
+Asciiville 3.0.1 and later can be installed on any architecture.
+
+Asciiville can be installed on Linux systems using the Arch Linux
+packaging format, the Debian packaging format, or the Red Hat Package
+Manager (RPM). Currently tested platforms include Arch Linux 2022.07.01,
+Ubuntu Linux 20.04, Fedora Linux 35, and Raspbian Linux Bullseye.
+
+Installation packages are provided in Debian packaging format, Red Hat
+package manager (RPM) format, and Arch Linux packaging format.
 
 See the [Build](#build) section below to compile and build a package on
 an Linux platform other than those for which packages are provided.
@@ -404,7 +406,7 @@ package from the
 Install the Asciiville package by executing the command
 
 ```console
-sudo pacman -U ./Asciiville_<version>-<release>-x86_64.pkg.tar.zst
+sudo pacman -U ./Asciiville_<version>-<release>-any.pkg.tar.zst
 ```
 
 ### Debian package installation
@@ -423,21 +425,21 @@ package from the
 Install the Asciiville package by executing the command
 
 ```console
-sudo apt install ./Asciiville_<version>-<release>.amd64.deb
+sudo apt install ./Asciiville_<version>-<release>.deb
 ```
 or
 ```console
-sudo dpkg -i ./Asciiville_<version>-<release>.amd64.deb
+sudo dpkg -i ./Asciiville_<version>-<release>.deb
 ```
 
-or, on a Raspberry Pi:
+Similarly, on a Raspberry Pi:
 
 ```console
-sudo apt install ./Asciiville_<version>-<release>.armhf.deb
+sudo apt install ./Asciiville_<version>-<release>.deb
 ```
 or
 ```console
-sudo dpkg -i ./Asciiville_<version>-<release>.armhf.deb
+sudo dpkg -i ./Asciiville_<version>-<release>.deb
 ```
 
 ### RPM package installation
@@ -453,11 +455,11 @@ package from the
 Install the Asciiville package by executing the command
 
 ```console
-sudo dnf localinstall ./Asciiville_<version>-<release>.x86_64.rpm
+sudo dnf localinstall ./Asciiville_<version>-<release>.rpm
 ```
 or
 ```console
-sudo yum localinstall ./Asciiville_<version>-<release>.x86_64.rpm
+sudo yum localinstall ./Asciiville_<version>-<release>.rpm
 ```
 
 ### Manual installation
@@ -1653,12 +1655,6 @@ cd Asciiville
 
 Run the command `./mkpkg` to create an installation package in
 `./releases/<version>`.
-
-On Debian based systems `./mkpkg` runs the command `./pkg/mkdeb.sh`.
-
-On RPM based systems `./mkpkg` runs the command `./pkg/mkrpm.sh`.
-
-On Arch based systems `./mkpkg` runs the command `./pkg/mkaur.sh`.
 
 A successful compilation and packaging will produce distribution/installation
 files in `./releases/<version>/`.
