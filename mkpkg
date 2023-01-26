@@ -27,6 +27,7 @@ export __ASC_SRC__=`pwd`
 }
 
 [ "${arch}" ] && {
+  echo "Invoking pkg/mkaur.sh to create Arch Linux installation package"
   sudo pacman -Syy
   pkg/mkaur.sh
   exit 0
@@ -34,6 +35,7 @@ export __ASC_SRC__=`pwd`
 
 platform=`uname -s`
 [ "${platform}" == "Darwin" ] && {
+  echo "Invoking pkg/mkmac.sh to create macOS installation archive"
   pkg/mkmac.sh
   exit 0
 }
