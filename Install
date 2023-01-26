@@ -83,7 +83,7 @@ get_available_packages() {
         then
           pkgname=`basename ${pkg} | sed -e "s/-v${PKG_VER}r${PKG_REL}-${PACKAGE}-${ARCH}.${SUF}//"` 
         else
-          pkgname=`basename ${pkg} | sed -e "s/_${PKG_VER}-${PKG_REL}.${ARCH}.${SUF}//"` 
+          pkgname=`basename ${pkg} | sed -e "s/_${PKG_VER}-${PKG_REL}.${SUF}//"` 
         fi
         PKG_AVAILABLE="${PKG_AVAILABLE} ${pkgname}"
       done
@@ -142,7 +142,7 @@ else
   if [ "${arch}" ]
   then
     SUF=zst
-    ARCH=`uname -m`
+    ARCH="any"
   else
     SUF=rpm
     ARCH=${RPM_ARCH}
@@ -210,17 +210,29 @@ do
   then
     PKG="${SCRIPT_DIR}/releases/${PKG_VER}/${PKG_NAME}-v${PKG_VER}r${PKG_REL}-${PACKAGE}-${ARCH}.pkg.tar.${SUF}"
   else
-    PKG="${SCRIPT_DIR}/releases/${PKG_VER}/${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.${SUF}"
+    PKG="${SCRIPT_DIR}/releases/${PKG_VER}/${PKG_NAME}_${PKG_VER}-${PKG_REL}.${SUF}"
   fi
   [ -f "${PKG}" ] || {
-    echo "${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.${SUF} not found."
-    for pkgs in ${SCRIPT_DIR}/releases/*/${PKG_NAME}_*.${SUF}
-    do
-      [ "${pkgs}" == "${SCRIPT_DIR}/releases/*/${PKG_NAME}_*.${SUF}" ] || {
-        echo "Found existing packages:"
-        echo "${pkgs}"
-      }
-    done
+    if [ "${arch}" ]
+    then
+      echo "${PKG_NAME}-v${PKG_VER}r${PKG_REL}-${PACKAGE}-${ARCH}.pkg.tar.${SUF} not found."
+      for pkgs in ${SCRIPT_DIR}/releases/*/${PKG_NAME}-*.${SUF}
+      do
+        [ "${pkgs}" == "${SCRIPT_DIR}/releases/*/${PKG_NAME}-*.${SUF}" ] || {
+          echo "Found existing packages:"
+          echo "${pkgs}"
+        }
+      done
+    else
+      echo "${PKG_NAME}_${PKG_VER}-${PKG_REL}.${SUF} not found."
+      for pkgs in ${SCRIPT_DIR}/releases/*/${PKG_NAME}_*.${SUF}
+      do
+        [ "${pkgs}" == "${SCRIPT_DIR}/releases/*/${PKG_NAME}_*.${SUF}" ] || {
+          echo "Found existing packages:"
+          echo "${pkgs}"
+        }
+      done
+    fi
     echo ""
     continue
   }
