@@ -3,6 +3,7 @@
 ALL=
 [ "$1" == "all" ] && ALL=1
 
+export PATH=${PATH}:/usr/local/bin:/snap/bin
 plat=`uname -s`
 if [ "$plat" == "Darwin" ]
 then
@@ -12,12 +13,17 @@ then
       if [ "${have_brew}" ]
       then
         PKGS="neomutt btop cmatrix figlet lolcat mplayer neomutt newsboat ranger tmux w3m asciinema speedtest-cli neofetch imagemagick gnupg"
+        PYMS="asciimatics ddgr rainbowstream socli future xtermcolor ffmpeg-python pyaudio term-image"
         echo "The 'all' argument indicates uninstall all Asciiville components."
         echo "This will attempt to uninstall the following packages:"
         echo ""
         echo "${PKGS}"
         echo ""
-        echo "Do you wish to proceed with removal of these packages?"
+        echo "And the following Python modules:"
+        echo ""
+        echo "${PYMS}"
+        echo ""
+        echo "Do you wish to proceed with removal of these modules and packages?"
         while true
         do
           read -p "Uninstall Asciiville components ? (y/n) " yn
@@ -35,6 +41,17 @@ then
         for pkg in ${PKGS}
         do
           brew uninstall -q ${pkg}
+        done
+        python3_inst=`type -p python3`
+        if [ "${python3_inst}" ]
+        then
+          PYTHON="python3"
+        else
+          PYTHON="python"
+        fi
+        for mod in ${PYMS}
+        do
+          ${PYTHON} -m pip uninstall -q ${mod}
         done
       else
         echo "Brew not found. Asciiville components not removed."

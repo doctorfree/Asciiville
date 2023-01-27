@@ -57,7 +57,7 @@ usage() {
 
 install_package() {
   PKG="$1"
-  [ "${quiet}" ] || echo "Installing ${PKG}"
+  [ "${quiet}" ] || printf "\n\tInstalling ${PKG} ..."
   if [ "${darwin}" ]
   then
     brew install -q $1 > /dev/null 2>&1
@@ -70,7 +70,7 @@ install_package() {
       then
         sudo ${APT} install $1 > /dev/null 2>&1
       else
-        [ "${quiet}" ] || echo "Cannot locate apt to install. Skipping."
+        [ "${quiet}" ] || printf "\n\t\tCannot locate apt to install. Skipping ..."
       fi
     else
       if [ "${fedora}" ]
@@ -79,13 +79,14 @@ install_package() {
         then
           sudo ${DNF} install $1 > /dev/null 2>&1
         else
-          [ "${quiet}" ] || echo "Cannot locate dnf to install. Skipping."
+          [ "${quiet}" ] || printf "\n\t\tCannot locate dnf to install. Skipping ..."
         fi
       else
         [ "${arch}" ] && sudo pacman -U --noconfirm $1 > /dev/null 2>&1
       fi
     fi
   fi
+  [ "${quiet}" ] || printf " done"
 } 
 
 ask_install() {
@@ -1074,6 +1075,7 @@ do
     }
   fi
 done
+printf "\n"
 
 have_npm=`type -p npm`
 
@@ -1452,20 +1454,20 @@ create_new_profile() {
 }
 
 [ "${have_go}" ] || {
-  [ "${quiet}" ] || {
-    printf "\n\tInstalling go ..."
-  }
   if [ "${darwin}" ]
   then
     install_package go
   else
+    [ "${quiet}" ] || {
+      printf "\n\tInstalling go ..."
+    }
     if [ "${debian}" ]
     then
       if [ "${APT}" ]
       then
         sudo ${APT} install golang > /dev/null 2>&1
       else
-        [ "${quiet}" ] || echo "Cannot locate apt to install. Skipping."
+        [ "${quiet}" ] || printf "\n\t\tCannot locate apt to install. Skipping ..."
       fi
     else
       if [ "${fedora}" ]
@@ -1474,16 +1476,16 @@ create_new_profile() {
         then
           sudo ${DNF} install golang-bin > /dev/null 2>&1
         else
-          [ "${quiet}" ] || echo "Cannot locate dnf to install. Skipping."
+          [ "${quiet}" ] || printf "\n\t\tCannot locate dnf to install. Skipping ..."
         fi
       else
         [ "${arch}" ] && sudo pacman -U --noconfirm go > /dev/null 2>&1
       fi
     fi
+    [ "${quiet}" ] || {
+      printf " done"
+    }
   fi
-  [ "${quiet}" ] || {
-    printf " done"
-  }
   have_go=`type -p go`
 }
 [ "${have_go}" ] && {
