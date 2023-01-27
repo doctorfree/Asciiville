@@ -35,8 +35,8 @@ export __ASC_SRC__=`pwd`
 
 platform=`uname -s`
 [ "${platform}" == "Darwin" ] && {
-  echo "Invoking pkg/mkmac.sh to create macOS installation archive"
-  pkg/mkmac.sh
+  echo "Invoking pkg/mktgz.sh to create macOS installation archive"
+  pkg/mktgz.sh
   exit 0
 }
 
@@ -189,19 +189,12 @@ cd ${PKG_NAME}_${PKG_VER}
 echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
 ${SUDO} tar cf - usr/*/* | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.tgz
 
-have_zip=`type -p zip`
-[ "${have_zip}" ] || {
-  ${SUDO} apt-get update
-  ${SUDO} apt-get install zip -y
-}
-echo "Creating zip archive of ${PKG_NAME} ${PKG_VER} distribution"
-${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.zip usr/*/*
 cd ..
 
 [ "${GCI}" ] || {
   [ -d ../releases ] || mkdir ../releases
   [ -d ../releases/${PKG_VER} ] || mkdir ../releases/${PKG_VER}
-  ${SUDO} cp *.deb *.tgz *.zip ../releases/${PKG_VER}
+  ${SUDO} cp *.deb *.tgz ../releases/${PKG_VER}
 }
 
 cd "${SRC}/${SRC_NAME}"

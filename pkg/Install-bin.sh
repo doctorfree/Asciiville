@@ -3,9 +3,8 @@
 usage() {
   echo "Usage: sudo ./Install-bin.sh /path/to/Asciiville_<version>-<release>.<arch>.<suffix>"
   echo "Where:"
-  printf "\n\t<suffix> can be a gzip'd tar archive with filename suffix 'tgz'"
-  printf "\n\t\tor a zip archive with filename suffix 'zip'\n"
-  echo "Download the latest gzip'd or zip'd binary distribution archive at"
+  printf "\n\t<suffix> must be a gzip'd tar archive with filename suffix 'tgz'\n"
+  echo "Download the latest gzip'd distribution archive at"
   echo "https://github.com/doctorfree/Asciiville/releases"
   exit 1
 }
@@ -75,24 +74,13 @@ do
   esac
 done
 
-unzip_inst=`type -p unzip`
 if [ "${pkgsuf}" == "tgz" ]
 then
   tar -mxzf ${PATH_TO_ARCHIVE} -C /
 else
-  if [ "${pkgsuf}" == "zip" ]
-  then
-    [ "${unzip_inst}" ] || {
-      echo "The 'unzip' utility is not installed or not in the execution path"
-      echo "Install-bin.sh requires 'unzip' to install a 'zip' archive"
-      usage
-    }
-    unzip ${PATH_TO_ARCHIVE} –d /
-  else
-    echo "Unrecognized filename suffix '${pkgsuf}'"
-    echo "Install-bin.sh requires a filename suffix of 'tgz' or 'zip'"
-    usage
-  fi
+  echo "Unrecognized filename suffix '${pkgsuf}'"
+  echo "Install-bin.sh requires a filename suffix of 'tgz'"
+  usage
 fi
 
 export PATH=${PATH}:/usr/local/bin:/snap/bin

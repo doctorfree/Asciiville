@@ -579,10 +579,10 @@ fi
 
 [ -d ${USERCONF} ] || mkdir -p ${USERCONF}
 
+OWNER=doctorfree
 # Install aewan if not already present
 [ -x /usr/local/bin/aewan ] || {
   [ -x /usr/bin/aewan ] || {
-    OWNER=doctorfree
     PROJECT=asciiville-aewan
     install_external_package
   }
@@ -590,15 +590,15 @@ fi
 # Install btop if not already present
 [ -x /usr/local/bin/btop ] || {
   [ -x /usr/bin/btop ] || {
-    OWNER=doctorfree
-    PROJECT=btop
-    install_external_package
+    [ "${platform}" == "Darwin" ] || {
+      PROJECT=btop
+      install_external_package
+    }
   }
 }
 # Install cbftp if not already present
 [ -x /usr/local/bin/cbftp ] || {
   [ -x /usr/bin/cbftp ] || {
-    OWNER=doctorfree
     PROJECT=cbftp
     install_external_package
   }
@@ -606,7 +606,6 @@ fi
 # Install any2ascii if not already present
 [ -x /usr/local/bin/jp2a ] || {
   [ -x /usr/bin/jp2a ] || {
-    OWNER=doctorfree
     PROJECT=any2ascii
     install_external_package
   }
@@ -614,13 +613,11 @@ fi
 # Install endoh1 if not already present
 [ -x /usr/local/bin/show_endo ] || {
   [ -x /usr/bin/show_endo ] || {
-    OWNER=doctorfree
     PROJECT=endoh1
     install_external_package
   }
 }
 # Install asciigames
-OWNER=doctorfree
 PROJECT=asciigames
 install_external_package
 

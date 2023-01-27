@@ -122,10 +122,7 @@ cd ${OUT_DIR}
 echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
 ${SUDO} tar cf - ${DESTDIR}/*/* | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.tgz
 
-echo "Creating zip archive of ${PKG_NAME} ${PKG_VER} distribution"
-${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.zip ${DESTDIR}/*/*
-
 cd ..
 [ -d ../releases ] || mkdir ../releases
 [ -d ../releases/${PKG_VER} ] || mkdir ../releases/${PKG_VER}
-${SUDO} cp *.tgz *.zip ../releases/${PKG_VER}
+${SUDO} cp *.tgz ../releases/${PKG_VER}

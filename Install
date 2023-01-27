@@ -40,31 +40,26 @@ platform=`uname -s`
   then
     darwin_archive="releases/${PKG_VER}/Asciiville_${PKG_VER}-${PKG_REL}.Darwin.tgz"
   else
-    if [ -f releases/${PKG_VER}/Asciiville_${PKG_VER}-${PKG_REL}.Darwin.zip ]
-    then
-      darwin_archive="releases/${PKG_VER}/Asciiville_${PKG_VER}-${PKG_REL}.Darwin.zip"
-    else
-      # Look for other versions
-      for release in releases/*/Asciiville_*-*.Darwin.*
-      do
-        [ "${release}" == "releases/*/Asciiville_*-*.Darwin.*" ] && {
-          ./mkpkg
-          for build in releases/*/Asciiville_*-*.Darwin.*
-          do
-            [ "${build}" == "releases/*/Asciiville_*-*.Darwin.*" ] && {
-              echo "No Darwin release archives located in ./releases/..."
-              echo "Download the latest Asciiville release archive for macOS at"
-              echo "    https://github.com/doctorfree/Asciiville/releases/latest"
-              echo "Exiting"
-              exit 1
-            }
-          done
-          release="${build}"
-        }
-        echo "Located Asciiville release archive for macOS:"
-        echo "    ${release}"
-      done
-    fi
+    # Look for other versions
+    for release in releases/*/Asciiville_*-*.Darwin.*
+    do
+      [ "${release}" == "releases/*/Asciiville_*-*.Darwin.*" ] && {
+        ./mkpkg
+        for build in releases/*/Asciiville_*-*.Darwin.*
+        do
+          [ "${build}" == "releases/*/Asciiville_*-*.Darwin.*" ] && {
+            echo "No Darwin release archives located in ./releases/..."
+            echo "Download the latest Asciiville release archive for macOS at"
+            echo "    https://github.com/doctorfree/Asciiville/releases/latest"
+            echo "Exiting"
+            exit 1
+          }
+        done
+        release="${build}"
+      }
+      echo "Located Asciiville release archive for macOS:"
+      echo "    ${release}"
+    done
   fi
   if [ "${darwin_archive}" ]
   then

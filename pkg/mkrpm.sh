@@ -171,17 +171,11 @@ cd ${OUT_DIR}
 echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
 ${SUDO} tar cf - usr/*/* | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.tgz
 
-have_zip=`type -p zip`
-[ "${have_zip}" ] || {
-  ${SUDO} yum install zip -y
-}
-echo "Creating zip archive of ${PKG_NAME} ${PKG_VER} distribution"
-${SUDO} zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.${ARCH}.zip usr/*/*
 cd ../..
 
 [ "${GCI}" ] || {
   [ -d releases ] || mkdir releases
   [ -d releases/${PKG_VER} ] || mkdir releases/${PKG_VER}
   ${SUDO} cp ${OUT_DIR}/RPMS/*/*.rpm releases/${PKG_VER}
-  ${SUDO} cp dist/*.tgz dist/*.zip releases/${PKG_VER}
+  ${SUDO} cp dist/*.tgz releases/${PKG_VER}
 }

@@ -86,13 +86,11 @@ sudo dnf localinstall ./Asciiville-3.0.1-1.rpm
 
 ### Manual installation
 
-On systems for which the Arch, Debian, or RPM packages will not suffice, install manually by downloading the `Install-bin.sh` script and either the gzip'd distribution archive or the zip'd distribution archive.  After downloading the installation script and distribution archive, as a user with sudo privilege execute the commands:
+On systems for which the Arch, Debian, or RPM packages will not suffice, install manually by downloading the `Install-bin.sh` script and the gzip'd distribution archive.  After downloading the installation script and distribution archive, as a user with sudo privilege execute the commands:
 
 ```shell
 chmod 755 Install-bin.sh
 sudo ./Install-bin.sh /path/to/Asciiville_3.0.1-1.<arch>.tgz
-or
-sudo ./Install-bin.sh /path/to/Asciiville_3.0.1-1.<arch>.zip
 ```
 
 For example, to install Asciiville version 3.0.1 release 1 on Apple macOS using the installation script and archive previously downloaded to `$HOME/Downloads/`:

@@ -465,16 +465,14 @@ sudo yum localinstall ./Asciiville_<version>-<release>.rpm
 ### Manual installation
 
 On systems for which the Arch, Debian, or RPM packages will not suffice,
-install manually by downloading the `Install-bin.sh` script and either
-the gzip'd distribution archive or the zip'd distribution archive for
-your platform. After downloading the installation script and distribution
-archive, as a user with sudo privilege execute the commands:
+install manually by downloading the `Install-bin.sh` script and the
+gzip'd distribution archive for your platform. After downloading the
+installation script and distribution archive, as a user with sudo
+privilege execute the commands:
 
 ```bash
 chmod 755 Install-bin.sh
 sudo ./Install-bin.sh /path/to/Asciiville_<version>-<release>.<arch>.tgz
-or
-sudo ./Install-bin.sh /path/to/Asciiville_<version>-<release>.<arch>.zip
 ```
 
 ### BB AAlib Demo
@@ -1618,7 +1616,7 @@ must be installed.
 On an Arch Linux based system:
 
 ```console
-sudo pacman -S --needed base-devel zip
+sudo pacman -S --needed base-devel
 ```
 
 On a Debian based system:
