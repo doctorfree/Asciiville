@@ -1091,6 +1091,8 @@ have_npm=`type -p npm`
     have_brew=`type -p brew`
   }
   [ "${have_brew}" ] && {
+    export HOMEBREW_NO_INSTALL_CLEANUP=1
+    export HOMEBREW_NO_ENV_HINTS=1
     [ "${have_npm}" ] || brew install -q node
     have_npm=`type -p npm`
     have_btop=`type -p btop`
@@ -1205,6 +1207,7 @@ have_npm=`type -p npm`
       }
       brew install -q util-linux
     }
+    brew cleanup --prune=all --quiet
   }
 }
 
