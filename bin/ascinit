@@ -60,9 +60,9 @@ install_package() {
   [ "${quiet}" ] || echo "Installing ${PKG}"
   if [ "${darwin}" ]
   then
-    brew install -q $1
-    brew unlink -q $1
-    brew link -q $1
+    brew install -q $1 > /dev/null 2>&1
+    brew unlink -q $1 > /dev/null 2>&1
+    brew link --overwrite --quiet $1 > /dev/null 2>&1
   else
     if [ "${debian}" ]
     then
