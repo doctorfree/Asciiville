@@ -86,7 +86,17 @@ sudo dnf localinstall ./Asciiville-3.0.1-1.rpm
 
 ### Manual installation
 
-On systems for which the Arch, Debian, or RPM packages will not suffice, install manually by downloading the `Install-bin.sh` script and the gzip'd distribution archive.  After downloading the installation script and distribution archive, as a user with sudo privilege execute the commands:
+On systems for which the Arch, Debian, or RPM packages will not suffice, install manually either by cloning the repository or by downloading the `Install-bin.sh` script and the gzip'd distribution archive.
+
+Asciiville can be installed by cloning the repository and executing the `Install` script:
+
+```bash
+git clone https://github.com/doctorfree/Asciiville
+cd Asciiville
+./Install
+```
+
+Alternatively, after downloading the installation script and distribution archive, as a user with sudo privilege execute the commands:
 
 ```shell
 chmod 755 Install-bin.sh
@@ -100,14 +110,7 @@ chmod 755 ~/Downloads/Install-bin.sh
 sudo ~/Downloads/Install-bin.sh ~/Downloads/Asciiville_3.0.1-1.Darwin.tgz
 ```
 
-Alternately, Asciiville can be installed by cloning the repository and
-executing the `Install` script:
-
-```bash
-git clone https://github.com/doctorfree/Asciiville
-cd Asciiville
-./Install
-```
+After successfully installing Asciiville, as a normal user run the `ascinit` command to initialize Asciiville. **[Note:]** Run the `ascinit` command as the user who will be using `asciiville`. No `sudo` is needed, just `ascinit`.
 
 ## Configuration
 
