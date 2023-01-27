@@ -3,10 +3,12 @@
 # ascinit - initialize Asciiville configuration files, install needed utilities
 #
 
+darwin=
 platform=`uname -s`
 if [ "${platform}" == "Darwin" ]
 then
   TOP="/usr/local"
+  darwin=1
 else
   TOP="/usr"
 fi
@@ -59,6 +61,7 @@ install_package() {
   if [ "${darwin}" ]
   then
     brew install -q $1
+    brew link -q $1
   else
     if [ "${debian}" ]
     then
@@ -466,11 +469,9 @@ have_dnf=`type -p dnf`
 have_yum=`type -p yum`
 
 arch=
-darwin=
 debian=
 fedora=
 mach=`uname -m`
-platform=`uname -s`
 APT=
 DNF=
 
@@ -1093,121 +1094,43 @@ have_npm=`type -p npm`
   [ "${have_brew}" ] && {
     export HOMEBREW_NO_INSTALL_CLEANUP=1
     export HOMEBREW_NO_ENV_HINTS=1
-    [ "${have_npm}" ] || brew install -q node
+    [ "${have_npm}" ] || install_package node
     have_npm=`type -p npm`
     have_btop=`type -p btop`
-    [ "${have_btop}" ] || {
-      [ "${quiet}" ] || {
-        printf "\nInstalling btop with Brew\n"
-      }
-      brew install -q btop
-    }
+    [ "${have_btop}" ] || install_package btop
     have_cmatrix=`type -p cmatrix`
-    [ "${have_cmatrix}" ] || {
-      [ "${quiet}" ] || {
-        printf "\nInstalling cmatrix with Brew\n"
-      }
-      brew install -q cmatrix
-    }
+    [ "${have_cmatrix}" ] || install_package cmatrix
     have_figlet=`type -p figlet`
-    [ "${have_figlet}" ] || {
-      [ "${quiet}" ] || {
-        printf "\nInstalling figlet with Brew\n"
-      }
-      brew install -q figlet
-    }
+    [ "${have_figlet}" ] || install_package figlet
+    have_lolcat=`type -p lolcat`
+    [ "${have_lolcat}" ] || install_package lolcat
     have_mplayer=`type -p mplayer`
-    [ "${have_mplayer}" ] || {
-      [ "${quiet}" ] || {
-        printf "\nInstalling mplayer with Brew\n"
-      }
-      brew install -q mplayer
-    }
+    [ "${have_mplayer}" ] || install_package mplayer
     have_neomutt=`type -p neomutt`
-    [ "${have_neomutt}" ] || {
-      [ "${quiet}" ] || {
-        printf "\nInstalling neomutt with Brew\n"
-      }
-      brew install -q neomutt
-    }
+    [ "${have_neomutt}" ] || install_package neomutt
     have_newsboat=`type -p newsboat`
-    [ "${have_newsboat}" ] || {
-      [ "${quiet}" ] || {
-        printf "\nInstalling newsboat with Brew\n"
-      }
-      brew install -q newsboat
-    }
+    [ "${have_newsboat}" ] || install_package newsboat
     have_ranger=`type -p ranger`
-    [ "${have_ranger}" ] || {
-      [ "${quiet}" ] || {
-        printf "\nInstalling ranger with Brew\n"
-      }
-      brew install -q ranger
-    }
+    [ "${have_ranger}" ] || install_package ranger
     have_tmux=`type -p tmux`
-    [ "${have_tmux}" ] || {
-      [ "${quiet}" ] || {
-        printf "\nInstalling tmux with Brew\n"
-      }
-      brew install -q tmux
-    }
+    [ "${have_tmux}" ] || install_package tmux
     have_w3m=`type -p w3m`
-    [ "${have_w3m}" ] || {
-      [ "${quiet}" ] || {
-        printf "\nInstalling w3m with Brew\n"
-      }
-      brew install -q w3m
-    }
+    [ "${have_w3m}" ] || install_package w3m
     have_jq=`type -p jq`
-    [ "${have_jq}" ] || {
-      [ "${quiet}" ] || {
-        printf "\nInstalling jq with Brew\n"
-      }
-      brew install -q jq
-    }
+    [ "${have_jq}" ] || install_package jq
     have_asciinema=`type -p asciinema`
-    [ "${have_asciinema}" ] || {
-      [ "${quiet}" ] || {
-        printf "\nInstalling asciinema with Brew\n"
-      }
-      brew install -q asciinema
-    }
+    [ "${have_asciinema}" ] || install_package asciinema
     have_speedtest=`type -p speedtest-cli`
-    [ "${have_speedtest}" ] || {
-      [ "${quiet}" ] || {
-        printf "\nInstalling speedtest-cli with Brew\n"
-      }
-      brew install -q speedtest-cli
-    }
+    [ "${have_speedtest}" ] || install_package speedtest-cli
     have_neofetch=`type -p neofetch`
-    [ "${have_neofetch}" ] || {
-      [ "${quiet}" ] || {
-        printf "\nInstalling neofetch with Brew\n"
-      }
-      brew install -q neofetch
-    }
+    [ "${have_neofetch}" ] || install_package neofetch
     brew list -q imagemagick > /dev/null 2>&1
-    [ $? -eq 0 ] || {
-      [ "${quiet}" ] || {
-        printf "\nInstalling imagemagick with Brew\n"
-      }
-      brew install -q imagemagick
-    }
+    [ $? -eq 0 ] || install_package imagemagick
     have_gnupg=`type -p gpg`
-    [ "${have_gnupg}" ] || {
-      [ "${quiet}" ] || {
-        printf "\nInstalling gnupg with Brew\n"
-      }
-      brew install -q gnupg
-    }
+    [ "${have_gnupg}" ] || install_package gnupg
     brew list -q util-linux > /dev/null 2>&1
-    [ $? -eq 0 ] || {
-      [ "${quiet}" ] || {
-        printf "\nInstalling util-linux with Brew\n"
-      }
-      brew install -q util-linux
-    }
-    brew cleanup --prune=all --quiet
+    [ $? -eq 0 ] || install_package util-linux
+    brew cleanup --prune=all --quiet > /dev/null 2>&1
   }
 }
 
@@ -1535,7 +1458,7 @@ create_new_profile() {
   }
   if [ "${darwin}" ]
   then
-    brew install -q go
+    install_package go
   else
     if [ "${debian}" ]
     then
