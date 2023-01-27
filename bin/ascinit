@@ -300,15 +300,19 @@ install_kitty() {
       }
       # Place the kitty.desktop file somewhere it can be found by the OS
       [ -d ~/.local/share/applications ] || mkdir -p ~/.local/share/applications
-      [ -f ~/.local/share/applications/kitty.desktop ] || {
-        cp ~/${LOCAL}/share/applications/kitty.desktop \
-           ~/.local/share/applications/
+      [ -f "${HOME}/${LOCAL}/share/applications/kitty.desktop" ] && {
+        [ -f ~/.local/share/applications/kitty.desktop ] || {
+          cp ~/${LOCAL}/share/applications/kitty.desktop \
+             ~/.local/share/applications/
+        }
       }
       # If you want to open text files and images in kitty via your file manager
       # also add the kitty-open.desktop file
-      [ -f ~/.local/share/applications/kitty-open.desktop ] || {
-        cp ~/${LOCAL}/share/applications/kitty-open.desktop \
-           ~/.local/share/applications/
+      [ -f "${HOME}/${LOCAL}/share/applications/kitty-open.desktop" ] && {
+        [ -f ~/.local/share/applications/kitty-open.desktop ] || {
+          cp ~/${LOCAL}/share/applications/kitty-open.desktop \
+             ~/.local/share/applications/
+        }
       }
       # Update the paths to the kitty and its icon in the kitty.desktop file(s)
       for desktop in "${HOME}/.local/share/applications/kitty*.desktop"
@@ -637,48 +641,6 @@ then
 fi
 
 [ -d ${USERCONF} ] || mkdir -p ${USERCONF}
-
-OWNER=doctorfree
-# Install aewan if not already present
-[ -x /usr/local/bin/aewan ] || {
-  [ -x /usr/bin/aewan ] || {
-    PROJECT=asciiville-aewan
-    install_external_package
-  }
-}
-# Install btop if not already present
-[ -x /usr/local/bin/btop ] || {
-  [ -x /usr/bin/btop ] || {
-    [ "${platform}" == "Darwin" ] || {
-      PROJECT=btop
-      install_external_package
-    }
-  }
-}
-# Install cbftp if not already present
-[ -x /usr/local/bin/cbftp ] || {
-  [ -x /usr/bin/cbftp ] || {
-    PROJECT=cbftp
-    install_external_package
-  }
-}
-# Install any2ascii if not already present
-[ -x /usr/local/bin/jp2a ] || {
-  [ -x /usr/bin/jp2a ] || {
-    PROJECT=any2ascii
-    install_external_package
-  }
-}
-# Install endoh1 if not already present
-[ -x /usr/local/bin/show_endo ] || {
-  [ -x /usr/bin/show_endo ] || {
-    PROJECT=endoh1
-    install_external_package
-  }
-}
-# Install asciigames
-PROJECT=asciigames
-install_external_package
 
 # Mutt configuration user setup
 [ "${have_mutt}" ] && {
@@ -1118,7 +1080,14 @@ have_npm=`type -p npm`
   have_brew=`type -p brew`
   [ "${have_brew}" ] || {
     # Install Brew
-    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    BREW_URL="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+    curl -fsSL "${BREW_URL}" > /tmp/brew-$$.sh
+    [ $? -eq 0 ] || {
+      rm -f /tmp/brew-$$.sh
+      curl -kfsSL "${BREW_URL}" > /tmp/brew-$$.sh
+    }
+    NONINTERACTIVE=1 /bin/bash -c "/tmp/brew-$$.sh"
+    rm -f /tmp/brew-$$.sh
     have_brew=`type -p brew`
   }
   [ "${have_brew}" ] && {
@@ -1130,6 +1099,13 @@ have_npm=`type -p npm`
         printf "\nInstalling btop with Brew\n"
       }
       brew install -q btop
+    }
+    have_cmatrix=`type -p cmatrix`
+    [ "${have_cmatrix}" ] || {
+      [ "${quiet}" ] || {
+        printf "\nInstalling cmatrix with Brew\n"
+      }
+      brew install -q cmatrix
     }
     have_figlet=`type -p figlet`
     [ "${have_figlet}" ] || {
@@ -1145,8 +1121,141 @@ have_npm=`type -p npm`
       }
       brew install -q mplayer
     }
+    have_neomutt=`type -p neomutt`
+    [ "${have_neomutt}" ] || {
+      [ "${quiet}" ] || {
+        printf "\nInstalling neomutt with Brew\n"
+      }
+      brew install -q neomutt
+    }
+    have_newsboat=`type -p newsboat`
+    [ "${have_newsboat}" ] || {
+      [ "${quiet}" ] || {
+        printf "\nInstalling newsboat with Brew\n"
+      }
+      brew install -q newsboat
+    }
+    have_ranger=`type -p ranger`
+    [ "${have_ranger}" ] || {
+      [ "${quiet}" ] || {
+        printf "\nInstalling ranger with Brew\n"
+      }
+      brew install -q ranger
+    }
+    have_tmux=`type -p tmux`
+    [ "${have_tmux}" ] || {
+      [ "${quiet}" ] || {
+        printf "\nInstalling tmux with Brew\n"
+      }
+      brew install -q tmux
+    }
+    have_w3m=`type -p w3m`
+    [ "${have_w3m}" ] || {
+      [ "${quiet}" ] || {
+        printf "\nInstalling w3m with Brew\n"
+      }
+      brew install -q w3m
+    }
+    have_jq=`type -p jq`
+    [ "${have_jq}" ] || {
+      [ "${quiet}" ] || {
+        printf "\nInstalling jq with Brew\n"
+      }
+      brew install -q jq
+    }
+    have_asciinema=`type -p asciinema`
+    [ "${have_asciinema}" ] || {
+      [ "${quiet}" ] || {
+        printf "\nInstalling asciinema with Brew\n"
+      }
+      brew install -q asciinema
+    }
+    have_speedtest-cli=`type -p speedtest-cli`
+    [ "${have_speedtest-cli}" ] || {
+      [ "${quiet}" ] || {
+        printf "\nInstalling speedtest-cli with Brew\n"
+      }
+      brew install -q speedtest-cli
+    }
+    have_neofetch=`type -p neofetch`
+    [ "${have_neofetch}" ] || {
+      [ "${quiet}" ] || {
+        printf "\nInstalling neofetch with Brew\n"
+      }
+      brew install -q neofetch
+    }
+    brew list -q imagemagick > /dev/null 2>&1
+    [ $? -eq 0 ] || {
+      [ "${quiet}" ] || {
+        printf "\nInstalling imagemagick with Brew\n"
+      }
+      brew install -q imagemagick
+    }
+    have_gnupg=`type -p gpg`
+    [ "${have_gnupg}" ] || {
+      [ "${quiet}" ] || {
+        printf "\nInstalling gnupg with Brew\n"
+      }
+      brew install -q gnupg
+    }
+    have_pandoc=`type -p pandoc`
+    [ "${have_pandoc}" ] || {
+      [ "${quiet}" ] || {
+        printf "\nInstalling pandoc with Brew\n"
+      }
+      brew install -q pandoc
+    }
+    brew list -q util-linux > /dev/null 2>&1
+    [ $? -eq 0 ] || {
+      [ "${quiet}" ] || {
+        printf "\nInstalling util-linux with Brew\n"
+      }
+      brew install -q util-linux
+    }
   }
 }
+
+OWNER=doctorfree
+# Install aewan if not already present
+[ -x /usr/local/bin/aewan ] || {
+  [ -x /usr/bin/aewan ] || {
+    PROJECT=asciiville-aewan
+    install_external_package
+  }
+}
+# Install btop if not already present
+[ -x /usr/local/bin/btop ] || {
+  [ -x /usr/bin/btop ] || {
+    [ "${platform}" == "Darwin" ] || {
+      PROJECT=btop
+      install_external_package
+    }
+  }
+}
+# Install cbftp if not already present
+[ -x /usr/local/bin/cbftp ] || {
+  [ -x /usr/bin/cbftp ] || {
+    PROJECT=cbftp
+    install_external_package
+  }
+}
+# Install any2ascii if not already present
+[ -x /usr/local/bin/jp2a ] || {
+  [ -x /usr/bin/jp2a ] || {
+    PROJECT=any2ascii
+    install_external_package
+  }
+}
+# Install endoh1 if not already present
+[ -x /usr/local/bin/show_endo ] || {
+  [ -x /usr/bin/show_endo ] || {
+    PROJECT=endoh1
+    install_external_package
+  }
+}
+# Install asciigames
+PROJECT=asciigames
+install_external_package
 
 have_mapscii=`type -p mapscii`
 [ "${have_mapscii}" ] || {

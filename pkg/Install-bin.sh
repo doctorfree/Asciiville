@@ -54,7 +54,7 @@ echo "Preparing to install ${pkgname} Version ${pkgver} Release ${pkgrel}"
 echo "for architecture ${pkgarc}"
 echo ""
 echo "This installation method is recommended only if your system is not"
-echo "supported by one of the packaged installation formats (Debian/RPM)"
+echo "supported by one of the packaged installation formats (Arch/Debian/RPM)"
 echo "available at https://github.com/doctorfree/Asciiville/releases"
 echo ""
 while true
@@ -132,7 +132,7 @@ then
     then
       cd ${FIGLET_DIR}
       zip -q ${FIGLET_ZIP} *.flf
-      pyfiglet -L ${FIGLET_ZIP}
+      pyfiglet -L ${FIGLET_ZIP} > /dev/null 2>&1
       rm -f ${FIGLET_ZIP}
     fi
   fi
