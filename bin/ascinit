@@ -235,7 +235,9 @@ install_kitty() {
       rm -f /tmp/kitty-$$.sh
       curl --insecure --silent --location \
         https://sw.kovidgoyal.net/kitty/installer.sh > /tmp/kitty-$$.sh
-      sed -i "s/curl -/curl -k/" /tmp/kitty-$$.sh
+      cat /tmp/kitty-$$.sh | sed -e "s/curl -/curl -k/" > /tmp/k$$
+      cp /tmp/k$$ /tmp/kitty-$$.sh
+      rm -f /tmp/k$$
     }
     if [ -s /tmp/kitty-$$.sh ]
     then

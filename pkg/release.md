@@ -100,6 +100,15 @@ chmod 755 ~/Downloads/Install-bin.sh
 sudo ~/Downloads/Install-bin.sh ~/Downloads/Asciiville_3.0.1-1.Darwin.tgz
 ```
 
+Alternately, Asciiville can be installed by cloning the repository and
+executing the `Install` script:
+
+```bash
+git clone https://github.com/doctorfree/Asciiville
+cd Asciiville
+./Install
+```
+
 ## Configuration
 
 * REQUIRED: execute the `ascinit` command to initialize *mutt/neomutt*, *tmux*, *ranger*, *rainbowstream*, and install terminal emulators

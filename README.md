@@ -299,7 +299,7 @@ Additional detail and info can be found in the
 
 ## Quickstart
 
-* Install the latest Arch, Debian, or RPM format installation package from the [Asciiville Releases](https://github.com/doctorfree/Asciiville/releases) page
+* Install the latest Arch, Debian, macOS, or RPM format installation package from the [Asciiville Releases](https://github.com/doctorfree/Asciiville/releases) page
 * Run the `ascinit` command
     * Must be done as a normal user with `sudo` privilege
 	* Run `ascinit -c` to perform a console initialization (no graphical utilities)
@@ -473,6 +473,15 @@ privilege execute the commands:
 ```bash
 chmod 755 Install-bin.sh
 sudo ./Install-bin.sh /path/to/Asciiville_<version>-<release>.<arch>.tgz
+```
+
+Alternately, Asciiville can be installed by cloning the repository and
+executing the `Install` script:
+
+```bash
+git clone https://github.com/doctorfree/Asciiville
+cd Asciiville
+./Install
 ```
 
 ### BB AAlib Demo

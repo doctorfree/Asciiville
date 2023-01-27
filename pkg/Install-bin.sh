@@ -120,10 +120,10 @@ FIGLET_ZIP="figlet-fonts.zip"
 zip_inst=`type -p zip`
 if [ "${zip_inst}" ]
 then
-  ${PYTHON} -m pip install setuptools 2> /dev/null
+  ${PYTHON} -m pip install setuptools > /dev/null 2>&1
   pyfig_inst=`type -p pyfiglet`
   [ "${pyfig_inst}" ] || {
-    ${PYTHON} -m pip install pyfiglet 2> /dev/null
+    ${PYTHON} -m pip install pyfiglet > /dev/null 2>&1
     pyfig_inst=`type -p pyfiglet`
   }
   if [ "${pyfig_inst}" ]
@@ -169,20 +169,9 @@ fi
 echo "Installation of ${pkgname} Version ${pkgver} Release ${pkgrel}"
 echo "for architecture ${pkgarc} complete. Add '/usr/local/bin' to PATH."
 echo ""
-echo "The manual installation of ${pkgname} does not automatically"
-echo "install all dependencies. Package names vary from platform to platform."
-echo "It may be necessary to install one or more of the following:"
+echo "Initialize the Asciiville environment with 'ascinit':"
 echo ""
-echo "uuid-runtime, python3, python3-pip, python3-venv, tmux, mplayer, w3m,"
-echo "neomutt, newsboat, ranger, jq, asciinema, speedtest-cli, libaa-bin,"
-echo "libaa1, bb, neofetch, figlet, ImageMagick/imagemagick, dconf/dconf-cli,"
-echo "libncurses-dev/ncurses, libjpeg-dev/libjpeg-turbo, libpng/libpng-dev,"
-echo "cmatrix, gnupg, pandoc, util-linux"
-echo ""
-echo "After installing dependencies, initialize the Asciiville environment."
 echo "As a normal user with sudo privilege, execute the Asciiville"
-echo "initialization command '/usr/local/bin/ascinit' or"
-echo "'/usr/local/bin/ascinit -c' for headless systems"
-echo "(systems on which there is no X11 windowing system)"
+echo "initialization command '/usr/local/bin/ascinit'"
 
 exit 0
