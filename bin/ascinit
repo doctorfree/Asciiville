@@ -61,6 +61,7 @@ install_package() {
   if [ "${darwin}" ]
   then
     brew install -q $1
+    brew unlink -q $1
     brew link -q $1
   else
     if [ "${debian}" ]
@@ -1128,8 +1129,6 @@ have_npm=`type -p npm`
     [ $? -eq 0 ] || install_package imagemagick
     have_gnupg=`type -p gpg`
     [ "${have_gnupg}" ] || install_package gnupg
-    brew list -q util-linux > /dev/null 2>&1
-    [ $? -eq 0 ] || install_package util-linux
     brew cleanup --prune=all --quiet > /dev/null 2>&1
   }
 }

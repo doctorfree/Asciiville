@@ -1,9 +1,45 @@
 #!/bin/bash
 
+ALL=
+[ "$1" == "all" ] && ALL=1
+
 plat=`uname -s`
 if [ "$plat" == "Darwin" ]
 then
     sudo pkg/Uninstall-bin.sh
+    [ "${ALL}" ] && {
+      have_brew=`type -p brew`
+      if [ "${have_brew}" ]
+      then
+        PKGS="neomutt btop cmatrix figlet lolcat mplayer neomutt newsboat ranger tmux w3m asciinema speedtest-cli neofetch imagemagick gnupg"
+        echo "The 'all' argument indicates uninstall all Asciiville components."
+        echo "This will attempt to uninstall the following packages:"
+        echo ""
+        echo "${PKGS}"
+        echo ""
+        echo "Do you wish to proceed with removal of these packages?"
+        while true
+        do
+          read -p "Uninstall Asciiville components ? (y/n) " yn
+          case $yn in
+            [Yy]* )
+                break
+                ;;
+            [Nn]* )
+                exit 0
+                ;;
+              * ) echo "Please answer yes or no."
+                ;;
+          esac
+        done
+        for pkg in ${PKGS}
+        do
+          brew uninstall -q ${pkg}
+        done
+      else
+        echo "Brew not found. Asciiville components not removed."
+      fi
+    }
 else
   debian=
   have_apt=`type -p apt`
