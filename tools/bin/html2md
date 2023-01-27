@@ -1,5 +1,13 @@
 #!/bin/bash
 
+have_pandoc=`type -p pandoc`
+[ "${have_pandoc}" ] || {
+    echo "html2md requires pandoc"
+    echo "pandoc not found"
+    echo "exiting"
+    exit 1
+}
+
 echo "converting $1"
 [ -d markdown ] || mkdir markdown
 

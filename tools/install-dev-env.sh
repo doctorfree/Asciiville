@@ -26,7 +26,7 @@ then
   then
     sudo apt remove ${PKGS}
   else
-    sudo apt install ${PKGS} pandoc zip
+    sudo apt install ${PKGS} zip
     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 \
         --slave /usr/bin/g++ g++ /usr/bin/g++-10 \
         --slave /usr/bin/gcov gcov /usr/bin/gcov-10
@@ -62,7 +62,7 @@ else
       else
         sudo ${PINS} -y groupinstall "Development Tools" "Development Libraries"
         sudo ${PINS} -y install gcc-c++
-        sudo ${PINS} -y install ${PKGS} pandoc zip
+        sudo ${PINS} -y install ${PKGS} zip
       fi
     else
       if [ "${centos}" ]
@@ -78,7 +78,7 @@ else
         else
           sudo ${PINS} -y groupinstall "Development Tools"
           sudo ${PINS} -y install gcc-c++
-          sudo ${PINS} -y install ${PKGS} pandoc zip
+          sudo ${PINS} -y install ${PKGS} zip
         fi
       else
         echo "Unrecognized operating system"

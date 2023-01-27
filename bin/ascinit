@@ -1170,8 +1170,8 @@ have_npm=`type -p npm`
       }
       brew install -q asciinema
     }
-    have_speedtest-cli=`type -p speedtest-cli`
-    [ "${have_speedtest-cli}" ] || {
+    have_speedtest=`type -p speedtest-cli`
+    [ "${have_speedtest}" ] || {
       [ "${quiet}" ] || {
         printf "\nInstalling speedtest-cli with Brew\n"
       }
@@ -1197,13 +1197,6 @@ have_npm=`type -p npm`
         printf "\nInstalling gnupg with Brew\n"
       }
       brew install -q gnupg
-    }
-    have_pandoc=`type -p pandoc`
-    [ "${have_pandoc}" ] || {
-      [ "${quiet}" ] || {
-        printf "\nInstalling pandoc with Brew\n"
-      }
-      brew install -q pandoc
     }
     brew list -q util-linux > /dev/null 2>&1
     [ $? -eq 0 ] || {

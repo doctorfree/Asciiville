@@ -277,7 +277,6 @@ several commands may also be installed as dependencies. These include:
 * **neofetch** : system info
 * **neomutt** : sophisticated text-based EMail and NNTP client
 * **newsboat** : text-based RSS feed reader
-* **pandoc** : convert and manipulate multiple document formats
 * **ranger** : text-based file management
 * **speedtest-cli** : text-based command line network speed test
 * **tmux** : embed commands and terminal sessions in a terminal multiplexer
@@ -342,7 +341,6 @@ if needed when using the Arch, Debian, or RPM format package install.
 * jq
 * mplayer
 * neofetch
-* pandoc
 * python3
 * ranger
 * speedtest-cli
