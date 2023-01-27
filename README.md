@@ -463,24 +463,29 @@ sudo yum localinstall ./Asciiville_<version>-<release>.rpm
 ### Manual installation
 
 On systems for which the Arch, Debian, or RPM packages will not suffice,
-install manually by downloading the `Install-bin.sh` script and the
-gzip'd distribution archive for your platform. After downloading the
-installation script and distribution archive, as a user with sudo
-privilege execute the commands:
+install manually either by cloning the repository or by downloading the
+`Install-bin.sh` script and the gzip'd distribution archive for your platform.
 
-```bash
-chmod 755 Install-bin.sh
-sudo ./Install-bin.sh /path/to/Asciiville_<version>-<release>.<arch>.tgz
-```
-
-Alternately, Asciiville can be installed by cloning the repository and
-executing the `Install` script:
+Asciiville can be installed by cloning the repository and executing the
+`Install` script:
 
 ```bash
 git clone https://github.com/doctorfree/Asciiville
 cd Asciiville
 ./Install
 ```
+
+Alternatively, after downloading the installation script and distribution
+archive, as a user with sudo privilege execute the commands:
+
+```bash
+chmod 755 Install-bin.sh
+sudo ./Install-bin.sh /path/to/Asciiville_<version>-<release>.<arch>.tgz
+```
+
+After successfully installing Asciiville, as a normal user run the `ascinit`
+command to initialize Asciiville. **[Note:]** Run the `ascinit` command as the
+user who will be using `asciiville`. No `sudo` is needed, just `ascinit`.
 
 ### BB AAlib Demo
 
