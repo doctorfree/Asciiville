@@ -51,7 +51,7 @@ then
         fi
         for mod in ${PYMS}
         do
-          ${PYTHON} -m pip uninstall -q ${mod}
+          ${PYTHON} -m pip uninstall ${mod} -y
         done
       else
         echo "Brew not found. Asciiville components not removed."
