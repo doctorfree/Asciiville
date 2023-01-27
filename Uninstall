@@ -40,7 +40,8 @@ then
         done
         for pkg in ${PKGS}
         do
-          brew uninstall -q ${pkg}
+          brew list -q ${pkg} > /dev/null 2>&1
+          [ $? -eq 0 ] && brew uninstall -q ${pkg}
         done
         python3_inst=`type -p python3`
         if [ "${python3_inst}" ]
@@ -51,7 +52,9 @@ then
         fi
         for mod in ${PYMS}
         do
-          ${PYTHON} -m pip uninstall ${mod} -y
+          pip list | grep ${mod} > /dev/null && {
+            ${PYTHON} -m pip uninstall ${mod} -y
+          }
         done
       else
         echo "Brew not found. Asciiville components not removed."
