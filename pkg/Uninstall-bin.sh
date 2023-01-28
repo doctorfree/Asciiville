@@ -53,3 +53,34 @@ if [ -f /etc/profile.d/asciiville.sh ]
 then
   rm -f /etc/profile.d/asciiville.sh
 fi
+
+[ "$1" == "all" ] && {
+  ANY_FILES="usr/local/bin/any2a
+             usr/local/bin/jp2a
+             usr/local/share/man/man1/jp2a.1"
+  ANY_DIRS="usr/local/share/any2ascii
+            usr/local/share/doc/any2ascii"
+  AEWAN_FILES="usr/local/bin/aecat
+               usr/local/bin/aemakeflic
+               usr/local/bin/aewan
+               usr/local/share/man/man5/aewan.5
+               usr/local/share/man/man1/aecat.1
+               usr/local/share/man/man1/aemakeflic.1
+               usr/local/share/man/man1/aewan.1"
+  AEWAN_DIRS="usr/local/share/asciiville-aewan
+              usr/local/share/doc/asciiville-aewan"
+  CBTP_DIRS="/usr/local/share/cbftp"
+  CBTP_FILES="/usr/local/bin/cbftp \
+              /usr/local/bin/cbftp-debug \
+              /usr/local/bin/datafilecat \
+              /usr/local/bin/datafilewrite \
+              /usr/local/share/man/man1/cbftp.1"
+  ENDO_DIRS="/usr/local/share/endoh1"
+  ENDO_FILES="/usr/local/bin/show_endo"
+
+  PROJECTFILES="${ANY_FILES} ${AEWAN_FILES} ${CBTP_FILES} ${ENDO_FILES}"
+  PROJECTDIRS="${ANY_DIRS} ${AEWAN_DIRS} ${CBTP_DIRS} ${ENDO_DIRS}"
+
+  rm -f ${PROJECTFILES}
+  rm -rf ${PROJECTDIRS}
+}

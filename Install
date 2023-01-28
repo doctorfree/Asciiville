@@ -152,6 +152,8 @@ else
   fi
 fi
 
+[ -d releases/${PKG_VER} ] || ./mkpkg
+
 get_available_packages
 
 [ "$PKG_AVAILABLE}" ] || {

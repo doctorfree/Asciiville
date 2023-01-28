@@ -40,12 +40,14 @@ platform=`uname -s`
   exit 0
 }
 
-dpkg=`type -p dpkg-deb`
-[ "${dpkg}" ] || {
+[ "${debian}" ] && {
+  dpkg=`type -p dpkg-deb`
+  [ "${dpkg}" ] || {
     echo "Debian packaging tools do not appear to be installed on this system"
     echo "Are you on the appropriate Linux system with packaging requirements ?"
     echo "Exiting"
     exit 1
+  }
 }
 
 [ -f "${SRC}/${SRC_NAME}/VERSION" ] || {
@@ -183,8 +185,11 @@ ${SUDO} chown -R root:root ${OUT_DIR}/${DESTDIR}/share
 ${SUDO} chown -R root:root ${OUT_DIR}/${DESTDIR}/bin
 
 cd dist
-echo "Building ${PKG_NAME}_${PKG_VER} Debian package"
-${SUDO} dpkg --build ${PKG_NAME}_${PKG_VER} ${PKG_NAME}_${PKG_VER}-${PKG_REL}.deb
+
+[ "${debian}" ] && {
+  echo "Building ${PKG_NAME}_${PKG_VER} Debian package"
+  ${SUDO} dpkg --build ${PKG_NAME}_${PKG_VER} ${PKG_NAME}_${PKG_VER}-${PKG_REL}.deb
+}
 cd ${PKG_NAME}_${PKG_VER}
 echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
 ${SUDO} tar cf - usr/*/* | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.tgz
@@ -194,7 +199,12 @@ cd ..
 [ "${GCI}" ] || {
   [ -d ../releases ] || mkdir ../releases
   [ -d ../releases/${PKG_VER} ] || mkdir ../releases/${PKG_VER}
-  ${SUDO} cp *.deb *.tgz ../releases/${PKG_VER}
+  if [ "${debian}" ]
+  then
+    ${SUDO} cp *.deb *.tgz ../releases/${PKG_VER}
+  else
+    ${SUDO} cp *.tgz ../releases/${PKG_VER}
+  fi
 }
 
 cd "${SRC}/${SRC_NAME}"
