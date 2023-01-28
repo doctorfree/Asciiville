@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## Asciiville-3.0.1r1 (2023-01-26)
 
 * Asciiville is now architecture independent
+* Many installation improvements on Apple macOS
 * Move `btop` to external package install
 * Move `cbftp` to external package install
 * Move `endoh1` to external package install

@@ -13,7 +13,7 @@
 
 ## Overview
 
-Asciiville version 3.0.1 release 1 adds support for architecture independent installs and includes many bug fixes.
+Asciiville version 3.0.1 release 1 adds support for architecture independent installs and includes many bug fixes. Installation on Apple macOS is much improved.
 
 Asciiville version 2.0.1 release 1 added support for Arch-like platforms (e.g. Manjaro Linux), and fixes remote Arch package installations in `ascinit`.
 
