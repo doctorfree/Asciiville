@@ -1173,9 +1173,40 @@ OWNER=doctorfree
     install_external_package
   }
 }
-# Install asciigames
-PROJECT=asciigames
-install_external_package
+
+# Install Ascii Games
+echo ""
+while true
+do
+  read -p "Install ASCII games ? (y/n) " yn
+  case $yn in
+    [Yy]* )
+          PROJECT=asciigames
+          install_external_package
+          if [ "${darwin}" ]
+          then
+            install_package nbsdgames
+            install_package greed
+          else
+            if [ "${debian}" ]
+            then
+              install_package bsdgames
+              install_package greed
+            else
+              install_package bsd-games
+            fi
+          fi
+          install_package nudoku
+          break
+          ;;
+    [Nn]* )
+          printf "\nSkipping Ascii Games installation.\n"
+          break
+          ;;
+        * ) echo "Please answer yes or no."
+          ;;
+  esac
+done
 
 have_mapscii=`type -p mapscii`
 [ "${have_mapscii}" ] || {

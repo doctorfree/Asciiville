@@ -22,6 +22,7 @@ archive/*
 dist/*
 pkg/dist/arch/*
 pkg/dist/fedora/*
+pkg/dist/mac/*
 pkg/dist/rpi/*
 
 conf/cool-retro-term/*

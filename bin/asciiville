@@ -636,7 +636,10 @@ select_font() {
 
   case "$1" in
     AsciiAppTerm)
-      FIG_TEXT="Apps & Games"
+      FIG_TEXT="Applications"
+      ;;
+    AsciiGameTerm)
+      FIG_TEXT="Games"
       ;;
     AsciiArt)
       if [ "${goBig}" ]
@@ -1320,33 +1323,60 @@ show_help_menu() {
   printf "\n"
 }
 
+set_all_apps_no() {
+  use_aewan="NO"
+  use_btop="NO"
+  use_cmatrix="NO"
+  use_ftp="NO"
+  use_gdu="NO"
+  use_lynx="NO"
+  use_mpp="NO"
+  use_mutt="NO"
+  use_nethack="NO"
+  use_ninvaders="NO"
+  use_newsboat="NO"
+  use_tuir="NO"
+  use_ranger="NO"
+  use_tetris="NO"
+  use_w3m="NO"
+  use_battleship="NO"
+  use_checkers="NO"
+  use_darrt="NO"
+  use_fifteen="NO"
+  use_fisher="NO"
+  use_jewels="NO"
+  use_memoblocks="NO"
+  use_miketron="NO"
+  use_mines="NO"
+  use_muncher="NO"
+  use_nbsdgames="NO"
+  use_pipes="NO"
+  use_rabbithole="NO"
+  use_redsquare="NO"
+  use_reversi="NO"
+  use_snakeduel="NO"
+  use_sos="NO"
+  use_sudoku="NO"
+  use_tugow="NO"
+}
+
 show_select_menu() {
   main_menu=
+  menutype="apps"
+  [ "$1" == "games" ] && menutype="games"
+
   while true
   do
-    [ "${COMMAND}" ] || COMMAND=btop
-    use_aewan="NO"
-    use_btop="NO"
-    use_cmatrix="NO"
-    use_ftp="NO"
-    use_gdu="NO"
-    use_lynx="NO"
-    use_mpp="NO"
-    use_mutt="NO"
-    use_nethack="NO"
-    use_ninvaders="NO"
-    use_newsboat="NO"
-    use_tuir="NO"
-    use_ranger="NO"
-    use_tetris="NO"
-    use_w3m="NO"
+    [ "${COMMAND}" ] || {
+      if [ "${menutype}" == "apps" ]
+        COMMAND=btop
+      else
+        COMMAND=tetris
+      fi
+    }
+    set_all_apps_no
+    printf -v "use_${COMMAND}" %s "YES"
     case "${COMMAND}" in
-      aewan)
-        use_aewan="YES"
-        ;;
-      btop)
-        use_btop="YES"
-        ;;
       cbftp|ncftp)
         use_ftp="YES"
         ;;
@@ -1364,24 +1394,6 @@ show_select_menu() {
         ;;
       mutt|neomutt)
         use_mutt="YES"
-        ;;
-      nethack)
-        use_nethack="YES"
-        ;;
-      newsboat)
-        use_newsboat="YES"
-        ;;
-      ninvaders)
-        use_ninvaders="YES"
-        ;;
-      ranger)
-        use_ranger="YES"
-        ;;
-      tetris)
-        use_tetris="YES"
-        ;;
-      tuir)
-        use_tuir="YES"
         ;;
       w3m*)
         use_w3m="YES"
@@ -1426,36 +1438,45 @@ show_select_menu() {
     show_comm=`echo ${COMMAND} | awk ' { print $1 } '`
     set_show_term
     [ "${use_figlet}" ] && {
-      select_font AsciiAppTerm
+      if [ "${menutype}" == "apps" ]
+      then
+        select_font AsciiAppTerm
+      else
+        select_font AsciiGameTerm
+      fi
       show_figlet
     }
     PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORM}"
     options=()
-    [ "${have_aewan}" ] && options+=("Aewan Art Creation     [${use_aewan}]")
-    [ "${have_btop}" ] && options+=("Btop System Monitor    [${use_btop}]")
-    [ "${have_gdu}" ] && options+=("Disk Usage Analyzer    [${use_gdu}]")
-    [ "${have_lynx}" ] && options+=("Lynx Web Browser       [${use_lynx}]")
-    [ "${have_w3m}" ] && options+=("W3M Web Browser        [${use_w3m}]")
-    [ "${have_cmatrix}" ] && options+=("Matrix Screen          [${use_cmatrix}]")
-    [ "${have_mpcplus}" ] && options+=("Music Player Plus      [${use_mpp}]")
-    if [ "${have_cbftp}" ]
-    then
-      options+=("Cbftp FTP Client       [${use_ftp}]")
-    else
-      [ "${have_ncftp}" ] && options+=("Ncftp FTP Client       [${use_ftp}]")
-    fi
-    if [ "${have_neomutt}" ]
-    then
-      options+=("NeoMutt Mail Client    [${use_mutt}]")
-    else
-      [ "${have_mutt}" ] && options+=("Mutt Mail Client       [${use_mutt}]")
-    fi
-    [ "${have_nethack}" ] && options+=("NetHack Dungeon Game   [${use_nethack}]")
-    [ "${have_ninvaders}" ] && options+=("Ninvaders Video Game   [${use_ninvaders}]")
-    [ "${have_tetris}" ] && options+=("Tetris Video Game      [${use_tetris}]")
-    [ "${have_newsboat}" ] && options+=("Newsboat RSS Feeds     [${use_newsboat}]")
-    [ "${have_ranger}" ] && options+=("Ranger File Manager    [${use_ranger}]")
-    [ "${have_tuir}" ] && options+=("Reddit UI              [${use_tuir}]")
+    [ "${menutype}" == "apps" ] && {
+      [ "${have_aewan}" ] && options+=("Aewan Art Creation     [${use_aewan}]")
+      [ "${have_btop}" ] && options+=("Btop System Monitor    [${use_btop}]")
+      [ "${have_gdu}" ] && options+=("Disk Usage Analyzer    [${use_gdu}]")
+      [ "${have_lynx}" ] && options+=("Lynx Web Browser       [${use_lynx}]")
+      [ "${have_w3m}" ] && options+=("W3M Web Browser        [${use_w3m}]")
+      [ "${have_cmatrix}" ] && options+=("Matrix Screen          [${use_cmatrix}]")
+      [ "${have_mpcplus}" ] && options+=("Music Player Plus      [${use_mpp}]")
+      if [ "${have_cbftp}" ]
+      then
+        options+=("Cbftp FTP Client       [${use_ftp}]")
+      else
+        [ "${have_ncftp}" ] && options+=("Ncftp FTP Client       [${use_ftp}]")
+      fi
+      if [ "${have_neomutt}" ]
+      then
+        options+=("NeoMutt Mail Client    [${use_mutt}]")
+      else
+        [ "${have_mutt}" ] && options+=("Mutt Mail Client       [${use_mutt}]")
+      fi
+      [ "${have_newsboat}" ] && options+=("Newsboat RSS Feeds     [${use_newsboat}]")
+      [ "${have_ranger}" ] && options+=("Ranger File Manager    [${use_ranger}]")
+      [ "${have_tuir}" ] && options+=("Reddit UI              [${use_tuir}]")
+    }
+    [ "${menutype}" == "games" ] && {
+      [ "${have_nethack}" ] && options+=("NetHack Dungeon Game   [${use_nethack}]")
+      [ "${have_ninvaders}" ] && options+=("Ninvaders Video Game   [${use_ninvaders}]")
+      [ "${have_tetris}" ] && options+=("Tetris Video Game      [${use_tetris}]")
+    }
     check_display
     if [ $? -eq 0 ]
     then
@@ -1650,7 +1671,12 @@ show_select_menu() {
               printf "\nCould not match '${REPLY}' with a menu entry."
               printf "\nPlease try again with an exact match.\n"
               [ "${use_figlet}" ] && {
-                select_font AsciiAppTerm
+                if [ "${menutype}" == "apps" ]
+                then
+                  select_font AsciiAppTerm
+                else
+                  select_font AsciiGameTerm
+                fi
                 show_figlet
               }
               ;;
@@ -2715,7 +2741,8 @@ show_main_menu() {
   art_menu=
   animation_menu=
   journal_menu=
-  select_menu=
+  select_app_menu=
+  select_game_menu=
   while true
   do
     if [ "${AUDIO}" ]
@@ -2772,7 +2799,8 @@ show_main_menu() {
     options=()
     [ "${have_showascii}" ] && options+=("Ascii Art")
     [ "${have_splash}" ] && options+=("ASCII Animations")
-    options+=("Apps & Games")
+    options+=("Applications")
+    options+=("Games")
     [ "${have_bb}" ] && {
       check_display
       [ $? -eq 0 ] && options+=("AAlib Demo (X11 mode)")
@@ -3033,8 +3061,12 @@ show_main_menu() {
               journal_menu=1
               break 2
               ;;
-          "Apps"*,*|*,"Apps"*)
-              select_menu=1
+          "Applic"*,*|*,"Applic"*)
+              select_app_menu=1
+              break 2
+              ;;
+          "Game"*,*|*,"Game"*)
+              select_game_menu=1
               break 2
               ;;
           "Generate"*,*|*,"Generate"*)
@@ -3158,10 +3190,15 @@ show_main_menu() {
     printf "\n\n\n"
     show_journal_menu
   }
-  [ "${select_menu}" ] && {
+  [ "${select_app_menu}" ] && {
     clear
     printf "\n\n\n"
-    show_select_menu
+    show_select_menu apps
+  }
+  [ "${select_game_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_select_menu games
   }
 }
 
