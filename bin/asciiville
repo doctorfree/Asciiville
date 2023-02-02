@@ -701,6 +701,14 @@ select_font() {
         FIG_TEXT="Roon"
       fi
       ;;
+    Terminal)
+      if [ "${goBig}" ]
+      then
+        FIG_TEXT="Select Terminal"
+      else
+        FIG_TEXT="Terminal"
+      fi
+      ;;
     *)
       if [ "${goBig}" ]
       then
@@ -1063,6 +1071,248 @@ show_figlet() {
   fi
 }
 
+set_use_terminal() {
+  if [ "${KITTY}" ]
+  then
+    use_terminal="Kitty"
+  else
+    if [ "${GNOME}" ]
+    then
+      use_terminal="Gnome"
+    else
+      if [ "${XFCE4}" ]
+      then
+        use_terminal="XFCE4"
+      else
+        if [ "${TILIX}" ]
+        then
+          use_terminal="Tilix"
+        else
+          if [ "${RETRO}" ]
+          then
+            use_terminal="Retro"
+          else
+            use_terminal="Current"
+          fi
+        fi
+      fi
+    fi
+  fi
+}
+
+select_terminal() {
+  app_menu=
+  art_menu=
+  games_menu=
+  journal_menu=
+  main_menu=
+
+  while true
+  do
+    YES="YES"
+    NO=" NO"
+    if [ "${KITTY}" ]
+    then
+      use_kitty="${YES}"
+    else
+      use_kitty="${NO}"
+    fi
+    if [ "${GNOME}" ]
+    then
+      use_gnome="${YES}"
+    else
+      use_gnome="${NO}"
+    fi
+    if [ "${XFCE4}" ]
+    then
+      use_xfce4="${YES}"
+    else
+      use_xfce4="${NO}"
+    fi
+    if [ "${TILIX}" ]
+    then
+      use_tilix="${YES}"
+    else
+      use_tilix="${NO}"
+    fi
+    if [ "${RETRO}" ]
+    then
+      use_retro="${YES}"
+    else
+      use_retro="${NO}"
+    fi
+    if [ "${CURRENT}" ]
+    then
+      use_current="${YES}"
+    else
+      use_current="${NO}"
+    fi
+    clear
+    set_show_term
+    [ "${use_figlet}" ] && {
+      select_font Terminal
+      show_figlet
+    }
+    PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORM}"
+    options=()
+    check_display
+    if [ $? -eq 0 ]
+    then
+      [ "${have_xfce4}" ] && options+=("XFCE4 Terminal        [${use_xfce4}]")
+      [ "${have_gnome}" ] && options+=("Gnome Terminal        [${use_gnome}]")
+      [ "${have_kitty}" ] && options+=("Kitty Terminal        [${use_kitty}]")
+      [ "${have_retro}" ] && options+=("Retro Terminal        [${use_retro}]")
+      [ "${have_tilix}" ] && options+=("Tilix Terminal        [${use_tilix}]")
+      options+=("Current Terminal      [${use_current}]")
+    fi
+    [ "${have_showascii}" ] && options+=("Ascii Art Menu")
+    [ "${have_splash}" ] && options+=("Animations Menu")
+    options+=("Applications Menu")
+    options+=("Games Menu")
+    [ "${have_jrnl}" ] && options+=("Journal Menu")
+    options+=("Main Menu")
+    options+=("Back")
+    options+=("Quit")
+    select opt in "${options[@]}"
+    do
+      case "$opt,$REPLY" in
+          "h",*|*,"h"|"H",*|*,"H"|"help",*|*,"help"|"Help",*|*,"Help")
+              clear
+              printf "\n"
+              show_help_menu
+              break
+              ;;
+          "Back",*|*,"Back"*|"back"*,*|*,"back"*)
+              break 2
+              ;;
+          "Main"*,*|*,"Main"*|"main"*,*|*,"main"*)
+              main_menu=1
+              break 2
+              ;;
+          "Animations"*,*|*,"Animations"*)
+              animation_menu=1
+              break 2
+              ;;
+          "Journal"*,*|*,"Journal"*)
+              journal_menu=1
+              break 2
+              ;;
+          "Ascii Art"*,*|*,"Ascii Art"*)
+              art_menu=1
+              break 2
+              ;;
+          "Applications Menu",*|*,"Applications Menu")
+              app_menu=1
+              break 2
+              ;;
+          "Games Menu",*|*,"Games Menu")
+              games_menu=1
+              break 2
+              ;;
+          "XFCE"*,*|*,"XFCE"*|"xfce"*,*|*,"xfce"*)
+              XFCE4=1
+              TILIX=
+              KITTY=
+              GNOME=
+              RETRO=
+              CURRENT=
+              break
+              ;;
+          "Gnome"*,*|*,"Gnome"*|"gnome"*,*|*,"gnome"*)
+              GNOME=1
+              KITTY=
+              XFCE4=
+              TILIX=
+              RETRO=
+              CURRENT=
+              break
+              ;;
+          "Kitty"*,*|*,"Kitty"*|"kitty"*,*|*,"kitty"*)
+              KITTY=1
+              GNOME=
+              XFCE4=
+              TILIX=
+              RETRO=
+              CURRENT=
+              break
+              ;;
+          "Retro"*,*|*,"Retro"*|"retro"*,*|*,"retro"*)
+              RETRO=1
+              GNOME=
+              XFCE4=
+              TILIX=
+              KITTY=
+              CURRENT=
+              break
+              ;;
+          "Tilix"*,*|*,"Tilix"*|"tilix"*,*|*,"tilix"*)
+              TILIX=1
+              KITTY=
+              RETRO=
+              GNOME=
+              XFCE4=
+              CURRENT=
+              break
+              ;;
+          "Current"*,*|*,"Current"*|"current"*,*|*,"current"*)
+              CURRENT=1
+              TILIX=
+              KITTY=
+              RETRO=
+              GNOME=
+              XFCE4=
+              break
+              ;;
+          "Quit",*|*,"Quit"|"quit",*|*,"quit")
+              remove_fullscreen
+              printf "\nExiting Asciiville\n"
+              exit 0
+              ;;
+          *,*|*,*)
+              printf "\nCould not match '${REPLY}' with a menu entry."
+              printf "\nPlease try again with an exact match.\n"
+              [ "${use_figlet}" ] && {
+                select_font Terminal
+                show_figlet
+              }
+              ;;
+      esac
+      REPLY=
+    done
+  done
+  [ "${app_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_select_menu apps
+  }
+  [ "${art_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_art_menu
+  }
+  [ "${games_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_select_menu games
+  }
+  [ "${journal_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_journal_menu
+  }
+  [ "${animation_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_animation_menu
+  }
+  [ "${main_menu}" ] && {
+    clear
+    printf "\n"
+    init_vars
+    show_main_menu
+  }
+}
+
 show_help_menu() {
   MTITLE="Asciiville Help"
   while true
@@ -1329,19 +1579,12 @@ show_help_menu() {
 
 show_select_menu() {
   main_menu=
+  art_menu=
   menutype="apps"
   [ "$1" == "games" ] && menutype="games"
 
   while true
   do
-    if [ "${menutype}" == "apps" ]
-    then
-      YES="YES"
-      NO=" NO"
-    else
-      YES="Y"
-      NO="N"
-    fi
     [ "${COMMAND}" ] || {
       if [ "${menutype}" == "apps" ]
       then
@@ -1350,42 +1593,7 @@ show_select_menu() {
         COMMAND=tetris
       fi
     }
-    if [ "${KITTY}" ]
-    then
-      use_kitty="${YES}"
-    else
-      use_kitty="${NO}"
-    fi
-    if [ "${GNOME}" ]
-    then
-      use_gnome="${YES}"
-    else
-      use_gnome="${NO}"
-    fi
-    if [ "${XFCE4}" ]
-    then
-      use_xfce4="${YES}"
-    else
-      use_xfce4="${NO}"
-    fi
-    if [ "${TILIX}" ]
-    then
-      use_tilix="${YES}"
-    else
-      use_tilix="${NO}"
-    fi
-    if [ "${RETRO}" ]
-    then
-      use_retro="${YES}"
-    else
-      use_retro="${NO}"
-    fi
-    if [ "${CURRENT}" ]
-    then
-      use_current="${YES}"
-    else
-      use_current="${NO}"
-    fi
+    set_use_terminal
     show_comm=`echo ${COMMAND} | awk ' { print $1 } '`
     clear
     set_show_term
@@ -1478,36 +1686,15 @@ show_select_menu() {
       [ "${have_wump}" ] && options+=("Wump")
       [ "${have_nbsdgames}" ] && options+=("BSD Games Menu")
     }
+    options+=("Terminal [${use_terminal}]")
     if [ "${menutype}" == "apps" ]
     then
       options+=("Games Menu")
     else
       options+=("Applications Menu")
     fi
-    [ "${have_jrnl}" ] && options+=("Journal Menu")
     [ "${have_showascii}" ] && options+=("Ascii Art Menu")
-    [ "${have_splash}" ] && options+=("Animations Menu")
     options+=("Main Menu")
-    check_display
-    if [ $? -eq 0 ]
-    then
-      if [ "${menutype}" == "apps" ]
-      then
-        [ "${have_xfce4}" ] && options+=("XFCE4 Terminal        [${use_xfce4}]")
-        [ "${have_gnome}" ] && options+=("Gnome Terminal        [${use_gnome}]")
-        [ "${have_kitty}" ] && options+=("Kitty Terminal        [${use_kitty}]")
-        [ "${have_retro}" ] && options+=("Retro Terminal        [${use_retro}]")
-        [ "${have_tilix}" ] && options+=("Tilix Terminal        [${use_tilix}]")
-        options+=("Current Terminal      [${use_current}]")
-      else
-        [ "${have_xfce4}" ] && options+=("XFCE4 Terminal   [${use_xfce4}]")
-        [ "${have_gnome}" ] && options+=("Gnome Terminal   [${use_gnome}]")
-        [ "${have_kitty}" ] && options+=("Kitty Terminal   [${use_kitty}]")
-        [ "${have_retro}" ] && options+=("Retro Terminal   [${use_retro}]")
-        [ "${have_tilix}" ] && options+=("Tilix Terminal   [${use_tilix}]")
-        options+=("Current Terminal [${use_current}]")
-      fi
-    fi
     options+=("Quit")
     select opt in "${options[@]}"
     do
@@ -1518,17 +1705,15 @@ show_select_menu() {
               show_help_menu
               break
               ;;
-          "Back",*|*,"Back"|"back",*|*,"back"|"Main"*,*|*,"Main"*|"main",*|*,"main")
+          "Back"*,*|*,"Back"*|"back"*,*|*,"back"*|"Main"*,*|*,"Main"*|"main"*,*|*,"main"*)
               main_menu=1
               break 2
               ;;
-          "Animations"*,*|*,"Animations"*)
-              animation_menu=1
-              break 2
-              ;;
-          "Journal"*,*|*,"Journal"*)
-              journal_menu=1
-              break 2
+          "Terminal"*,*|*,"Terminal"*|"terminal"*,*|*,"terminal"*)
+              clear
+              printf "\n"
+              select_terminal
+              break
               ;;
           "Ascii Art"*,*|*,"Ascii Art"*)
               art_menu=1
@@ -2030,16 +2215,6 @@ show_select_menu() {
     printf "\n\n\n"
     show_art_menu
   }
-  [ "${journal_menu}" ] && {
-    clear
-    printf "\n\n\n"
-    show_journal_menu
-  }
-  [ "${animation_menu}" ] && {
-    clear
-    printf "\n\n\n"
-    show_animation_menu
-  }
   [ "${main_menu}" ] && {
     clear
     printf "\n"
@@ -2049,6 +2224,8 @@ show_select_menu() {
 }
 
 show_art_menu() {
+  animation_menu=
+  app_menu=
   main_menu=
   while true
   do
@@ -2078,42 +2255,7 @@ show_art_menu() {
     else
       recordstat=" NO"
     fi
-    if [ "${KITTY}" ]
-    then
-      use_kitty="YES"
-    else
-      use_kitty=" NO"
-    fi
-    if [ "${GNOME}" ]
-    then
-      use_gnome="YES"
-    else
-      use_gnome=" NO"
-    fi
-    if [ "${XFCE4}" ]
-    then
-      use_xfce4="YES"
-    else
-      use_xfce4=" NO"
-    fi
-    if [ "${TILIX}" ]
-    then
-      use_tilix="YES"
-    else
-      use_tilix=" NO"
-    fi
-    if [ "${RETRO}" ]
-    then
-      use_retro="YES"
-    else
-      use_retro=" NO"
-    fi
-    if [ "${CURRENT}" ]
-    then
-      use_current="YES"
-    else
-      use_current=" NO"
-    fi
+    set_use_terminal
     if [ "${TMUX}" ]
     then
       usetmux="YES"
@@ -2145,23 +2287,23 @@ show_art_menu() {
     options+=("Random Art Slideshow")
     options+=("Select ASCII Art")
     options+=("Generate ASCII Art")
-    options+=("Cycle Slideshow       [${cyclestat}]")
-    options+=("Shuffle Slideshow     [${randomize}]")
-    [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring   [${use_lol}]")
-    options+=("Use Audio             [${audiostat}]")
-    [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
-    [ "${have_xfce4}" ] && options+=("XFCE4 Terminal        [${use_xfce4}]")
-    [ "${have_gnome}" ] && options+=("Gnome Terminal        [${use_gnome}]")
-    [ "${have_kitty}" ] && options+=("Kitty Terminal        [${use_kitty}]")
-    [ "${have_retro}" ] && options+=("Retro Terminal        [${use_retro}]")
-    [ "${have_tilix}" ] && options+=("Tilix Terminal        [${use_tilix}]")
-    options+=("Current Terminal      [${use_current}]")
-    options+=("Use Tmux              [${usetmux}]")
-    [ "${have_asciinema}" ] && [ "${TMUX}" ] && options+=("Record Tmux Session   [${recordstat}]")
+    options+=("Cycle Slideshow     [${cyclestat}]")
+    options+=("Shuffle Slideshow   [${randomize}]")
+    [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring [${use_lol}]")
+    options+=("Use Audio           [${audiostat}]")
+    options+=("Use Tmux            [${usetmux}]")
+    [ "${have_asciinema}" ] && [ "${TMUX}" ] && options+=("Record Tmux Session [${recordstat}]")
     options+=("Slideshow Interval    [${show_interval}]")
     options+=("Art Font Size         [${art_font_size}]")
-    options+=("Text Font Size        [${txt_font_size}]")
-    options+=("Main Menu" "Quit")
+    options+=("Text Font Size       [${txt_font_size}]")
+    [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
+    if [ "${use_terminal}" == "Current" ]
+    then
+      options+=("Terminal        [${use_terminal}]")
+    else
+      options+=("Terminal          [${use_terminal}]")
+    fi
+    options+=("Animation Menu" "Applications Menu" "Main Menu" "Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
@@ -2171,9 +2313,23 @@ show_art_menu() {
               show_help_menu
               break
               ;;
-          "Main"*,*|*,"Main"*|"Back",*|*,"Back"|"back",*|*,"back")
+          "Main"*,*|*,"Main"*|"main"*,*|*,"main"*|"Back"*,*|*,"Back"*|"back"*,*|*,"back"*)
               main_menu=1
               break 2
+              ;;
+          "Animation"*,*|*,"Animation"*|"animation"*,*|*,"animation"*)
+              animation_menu=1
+              break 2
+              ;;
+          "Application"*,*|*,"Application"*|"application"*,*|*,"application"*)
+              app_menu=1
+              break 2
+              ;;
+          "Terminal"*,*|*,"Terminal"*|"terminal"*,*|*,"terminal"*)
+              clear
+              printf "\n"
+              select_terminal
+              break
               ;;
           "Doctorwhen"*,*|*,"Doctorwhen"*)
               play_slide_show Doctorwhen
@@ -2457,10 +2613,22 @@ show_art_menu() {
     init_vars
     show_main_menu
   }
+  [ "${animation_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_animation_menu
+  }
+  [ "${app_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_select_menu apps
+  }
 }
 
 show_animation_menu() {
+  app_menu=
   art_menu=
+  games_menu=
   journal_menu=
   main_menu=
   MTITLE="ASCII Animation"
@@ -2475,42 +2643,7 @@ show_animation_menu() {
       audiostat=" NO"
       audarg=
     fi
-    if [ "${KITTY}" ]
-    then
-      use_kitty="YES"
-    else
-      use_kitty=" NO"
-    fi
-    if [ "${GNOME}" ]
-    then
-      use_gnome="YES"
-    else
-      use_gnome=" NO"
-    fi
-    if [ "${XFCE4}" ]
-    then
-      use_xfce4="YES"
-    else
-      use_xfce4=" NO"
-    fi
-    if [ "${TILIX}" ]
-    then
-      use_tilix="YES"
-    else
-      use_tilix=" NO"
-    fi
-    if [ "${RETRO}" ]
-    then
-      use_retro="YES"
-    else
-      use_retro=" NO"
-    fi
-    if [ "${CURRENT}" ]
-    then
-      use_current="YES"
-    else
-      use_current=" NO"
-    fi
+    set_use_terminal
     if [ "${RECORD}" ]
     then
       recordstat="YES"
@@ -2545,23 +2678,24 @@ show_animation_menu() {
     [ "${have_asciiplasma}" ] && options+=("Plasma Animation")
     [ "${have_bb}" ] && options+=("AAlib BB Demo")
     [ "${have_endo}" ] && options+=("Fluid Simulator")
-    [ "${have_xfce4}" ] && options+=("XFCE4 Terminal    [${use_xfce4}]")
-    [ "${have_gnome}" ] && options+=("Gnome Terminal    [${use_gnome}]")
-    [ "${have_kitty}" ] && options+=("Kitty Terminal    [${use_kitty}]")
-    [ "${have_retro}" ] && options+=("Retro Terminal    [${use_retro}]")
-    [ "${have_tilix}" ] && options+=("Tilix Terminal    [${use_tilix}]")
-    options+=("Current Terminal  [${use_current}]")
-    options+=("Fullscreen Window [${fullstat}]")
-    [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring   [${use_lol}]")
-    options+=("Use Tmux              [${usetmux}]")
-    [ "${have_asciinema}" ] && [ "${TMUX}" ] && options+=("Record Tmux Session   [${recordstat}]")
-    options+=("Use Audio             [${audiostat}]")
+    [ "${have_cmatrix}" ] && options+=("Matrix Screen")
+    options+=("Fullscreen Window   [${fullstat}]")
+    [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring [${use_lol}]")
+    options+=("Use Tmux            [${usetmux}]")
+    [ "${have_asciinema}" ] && [ "${TMUX}" ] && options+=("Record Tmux Session [${recordstat}]")
+    options+=("Use Audio           [${audiostat}]")
     [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
+    if [ "${use_terminal}" == "Current" ]
+    then
+      options+=("Terminal        [${use_terminal}]")
+    else
+      options+=("Terminal          [${use_terminal}]")
+    fi
     [ "${have_jrnl}" ] && options+=("Journal Menu")
     [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
     [ "${have_roon}" ] && options+=("RoonCommandLine Menu")
     [ "${have_showascii}" ] && options+=("Ascii Art Menu")
-    options+=("Main Menu" "Quit")
+    options+=("Applications Menu" "Games Menu" "Main Menu" "Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
@@ -2572,9 +2706,16 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Main Menu",*|*,"Main Menu"|"Back",*|*,"Back"|"back",*|*,"back")
+          "Main"*,*|*,"Main"*|"main"*,*|*,"main"*|"Back"*,*|*,"Back"*|"back"*,*|*,"back"*)
               main_menu=1
               break 2
+              ;;
+          "Terminal"*,*|*,"Terminal"*|"terminal"*,*|*,"terminal"*)
+              clear
+              printf "\n"
+              select_terminal
+              skip_it_so=1
+              break
               ;;
           "Asciiville Anim"*,*|*,"Asciiville Anim"*)
               ASCSPLASH="${ASCSPLASH} -i"
@@ -2630,12 +2771,28 @@ show_animation_menu() {
               # reset_trap=1
               break
               ;;
+          "Matrix"*,*|*,"Matrix"*)
+              COMMAND="cmatrix -u 8"
+              COMMAND_TMUX="cmatrix -u 8"
+              MTITLE="Matrix Screen"
+              ASCSPLASH="${COMMAND}"
+              ASCSPLASH_TMUX="${COMMAND_TMUX}"
+              break
+              ;;
           "Journal"*,*|*,"Journal"*)
               journal_menu=1
               break 2
               ;;
           "Ascii Art"*,*|*,"Ascii Art"*)
               art_menu=1
+              break 2
+              ;;
+          "Application"*,*|*,"Application"*)
+              app_menu=1
+              break 2
+              ;;
+          "Games"*,*|*,"Games"*)
+              games_menu=1
               break 2
               ;;
           "XFCE"*,*|*,"XFCE"*|"xfce"*,*|*,"xfce"*)
@@ -2851,6 +3008,16 @@ show_animation_menu() {
     printf "\n\n\n"
     show_journal_menu
   }
+  [ "${app_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_select_menu apps
+  }
+  [ "${games_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_select_menu games
+  }
   [ "${main_menu}" ] && {
     clear
     printf "\n"
@@ -2860,7 +3027,9 @@ show_animation_menu() {
 }
 
 show_journal_menu() {
+  app_menu=
   art_menu=
+  games_menu=
   animation_menu=
   main_menu=
 
@@ -2880,6 +3049,12 @@ show_journal_menu() {
     options+=("This Month's Journal Entries")
     options+=("This Year's Journal Entries")
     options+=("Last 10 Journal Entries")
+    if [ "${encrypted}" ]
+    then
+      options+=("Decrypt Journal")
+    else
+      options+=("Encrypt Journal")
+    fi
     [ ${numjrnls} -gt 1 ] && {
       options+=("Switch Journal        [${journal}]")
     }
@@ -2898,14 +3073,10 @@ show_journal_menu() {
     else
       file ${jloc} | grep -i terminator > /dev/null && encrypted=1 
     fi
-    if [ "${encrypted}" ]
-    then
-      options+=("Decrypt Journal")
-    else
-      options+=("Encrypt Journal")
-    fi
     [ "${have_splash}" ] && options+=("Animations Menu")
     [ "${have_showascii}" ] && options+=("Ascii Art")
+    options+=("Applications Menu")
+    options+=("Games Menu")
     options+=("Main Menu" "Quit")
     select opt in "${options[@]}"
     do
@@ -3039,7 +3210,15 @@ show_journal_menu() {
               art_menu=1
               break 2
               ;;
-          "Main Menu",*|*,"Main Menu"|"Back",*|*,"Back"|"back",*|*,"back")
+          "Application"*,*|*,"Application"*)
+              app_menu=1
+              break 2
+              ;;
+          "Games"*,*|*,"Games"*)
+              games_menu=1
+              break 2
+              ;;
+          "Main"*,*|*,"Main"*|"main"*,*|*,"main"*|"Back"*,*|*,"Back"*|"back"*,*|*,"back"*)
               main_menu=1
               break 2
               ;;
@@ -3069,6 +3248,16 @@ show_journal_menu() {
     clear
     printf "\n\n\n"
     show_art_menu
+  }
+  [ "${app_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_select_menu apps
+  }
+  [ "${games_menu}" ] && {
+    clear
+    printf "\n\n\n"
+    show_select_menu games
   }
   [ "${main_menu}" ] && {
     clear
@@ -3130,6 +3319,8 @@ show_main_menu() {
     fi
     [ "${COMMAND}" ] || COMMAND=btop
     show_comm=`echo ${COMMAND} | awk ' { print $1 } '`
+    clear
+    set_use_terminal
     set_show_term
     skip_it_so=
     [ "${use_figlet}" ] && {
@@ -3158,16 +3349,22 @@ show_main_menu() {
     [ "${have_speed}" ] && options+=("Speed Test")
     [ "${have_rainbow}" ] && options+=("Twitter Client")
     [ "${have_curl}" ] && options+=("Weather Report")
-    options+=("Kill Tmux Sessions")
-    [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring        [${use_lol}]")
-    options+=("Use Tmux                   [${usetmux}]")
-    [ "${have_asciinema}" ] && [ "${TMUX}" ] && options+=("Record Tmux Session        [${recordstat}]")
-    options+=("Fullscreen Window          [${fullstat}]")
-    options+=("Default Web Browser        [${default_browser}]")
-    options+=("Use Audio                  [${audiostat}]")
     options+=("Generate ASCII Art")
+    options+=("Kill Tmux Sessions")
     [ "${have_neo}" ] && options+=("Show System Info")
     [ "${have_got}" ] && options+=("Text Translation Tool")
+    [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring [${use_lol}]")
+    options+=("Use Tmux            [${usetmux}]")
+    [ "${have_asciinema}" ] && [ "${TMUX}" ] && options+=("Record Tmux Session [${recordstat}]")
+    options+=("Fullscreen Window   [${fullstat}]")
+    options+=("Default Web Browser [${default_browser}]")
+    options+=("Use Audio           [${audiostat}]")
+    if [ "${use_terminal}" == "Current" ]
+    then
+      options+=("Terminal        [${use_terminal}]")
+    else
+      options+=("Terminal          [${use_terminal}]")
+    fi
     [ "${have_jrnl}" ] && options+=("Journal Menu")
     [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
     [ "${have_roon}" ] && options+=("RoonCommandLine Menu")
@@ -3179,6 +3376,13 @@ show_main_menu() {
               clear
               printf "\n"
               show_help_menu
+              skip_it_so=1
+              break
+              ;;
+          "Terminal"*,*|*,"Terminal"*|"terminal"*,*|*,"terminal"*)
+              clear
+              printf "\n"
+              select_terminal
               skip_it_so=1
               break
               ;;
@@ -3492,6 +3696,66 @@ show_main_menu() {
               else
                 remove_fullscreen
               fi
+              skip_it_so=1
+              break
+              ;;
+          "XFCE"*,*|*,"XFCE"*|"xfce"*,*|*,"xfce"*)
+              XFCE4=1
+              TILIX=
+              KITTY=
+              GNOME=
+              RETRO=
+              CURRENT=
+              skip_it_so=1
+              break
+              ;;
+          "Gnome"*,*|*,"Gnome"*|"gnome"*,*|*,"gnome"*)
+              GNOME=1
+              KITTY=
+              XFCE4=
+              TILIX=
+              RETRO=
+              CURRENT=
+              skip_it_so=1
+              break
+              ;;
+          "Kitty"*,*|*,"Kitty"*|"kitty"*,*|*,"kitty"*)
+              KITTY=1
+              GNOME=
+              XFCE4=
+              TILIX=
+              RETRO=
+              CURRENT=
+              skip_it_so=1
+              break
+              ;;
+          "Retro"*,*|*,"Retro"*|"retro"*,*|*,"retro"*)
+              RETRO=1
+              GNOME=
+              XFCE4=
+              TILIX=
+              KITTY=
+              CURRENT=
+              skip_it_so=1
+              break
+              ;;
+          "Tilix"*,*|*,"Tilix"*|"tilix"*,*|*,"tilix"*)
+              TILIX=1
+              KITTY=
+              RETRO=
+              GNOME=
+              XFCE4=
+              CURRENT=
+              skip_it_so=1
+              break
+              ;;
+          "Current"*,*|*,"Current"*|"current"*,*|*,"current"*)
+              CURRENT=1
+              TILIX=
+              KITTY=
+              RETRO=
+              GNOME=
+              XFCE4=
               skip_it_so=1
               break
               ;;
