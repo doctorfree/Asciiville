@@ -1427,56 +1427,56 @@ show_select_menu() {
       [ "${have_nethack}" ] && options+=("NetHack Dungeon Game")
       [ "${have_ninvaders}" ] && options+=("Ninvaders Video Game")
       [ "${have_tetris}" ] && options+=("Tetris Video Game")
-      [ "${have_cmatrix}" ] && options+=("Matrix Screen")
-      [ "${have_battleship}" ] && options+=("Battleship")
-      [ "${have_checkers}" ] && options+=("Checkers")
-      [ "${have_darrt}" ] && options+=("Darts")
-      [ "${have_fifteen}" ] && options+=("Fifteen")
-      [ "${have_fisher}" ] && options+=("Fisher")
-      [ "${have_jewels}" ] && options+=("Jewels")
-      [ "${have_memoblocks}" ] && options+=("Memory Blocks")
-      [ "${have_miketron}" ] && options+=("Mike Tron")
-      [ "${have_mines}" ] && options+=("Mines")
-      [ "${have_muncher}" ] && options+=("Muncher")
-      [ "${have_nbsdgames}" ] && options+=("BSD Games Menu")
-      [ "${have_pipes}" ] && options+=("Pipes")
-      [ "${have_rabbithole}" ] && options+=("Rabbit Hole")
-      [ "${have_redsquare}" ] && options+=("Red Square")
-      [ "${have_reversi}" ] && options+=("Reversi")
-      [ "${have_snakeduel}" ] && options+=("Snake Duel")
-      [ "${have_sos}" ] && options+=("SOS")
-      [ "${have_sudoku}" ] && options+=("Sudoku")
-      [ "${have_tugow}" ] && options+=("Tug of War")
       [ "${have_2048}" ] && options+=("2048")
       [ "${have_adventure}" ] && options+=("Adventure")
       [ "${have_arithmetic}" ] && options+=("Arithmetic")
       [ "${have_atc}" ] && options+=("Air Traffic Control")
       [ "${have_backgammon}" ] && options+=("Backgammon")
+      [ "${have_battleship}" ] && options+=("Battleship")
       [ "${have_battlestar}" ] && options+=("Battlestar")
       [ "${have_boggle}" ] && options+=("Boggle")
       [ "${have_bsdgames_adventure}" ] && options+=("BSD Adventure")
       [ "${have_canfield}" ] && options+=("Canfield")
+      [ "${have_checkers}" ] && options+=("Checkers")
       [ "${have_cribbage}" ] && options+=("Cribbage")
+      [ "${have_darrt}" ] && options+=("Darts")
+      [ "${have_fifteen}" ] && options+=("Fifteen")
+      [ "${have_fisher}" ] && options+=("Fisher")
       [ "${have_fortune}" ] && options+=("Fortune")
       [ "${have_gomoku}" ] && options+=("Gomoku")
       [ "${have_greed}" ] && options+=("Greed")
       [ "${have_hack}" ] && options+=("Hack")
       [ "${have_hangman}" ] && options+=("Hangman")
       [ "${have_hunt}" ] && options+=("Hunt")
+      [ "${have_jewels}" ] && options+=("Jewels")
+      [ "${have_cmatrix}" ] && options+=("Matrix Screen")
+      [ "${have_memoblocks}" ] && options+=("Memory Blocks")
+      [ "${have_miketron}" ] && options+=("Mike Tron")
       [ "${have_mille}" ] && options+=("Mille")
       [ "${have_monop}" ] || [ "${have_mpoly}" ] && options+=("Monopoly")
+      [ "${have_mines}" ] && options+=("Mines")
+      [ "${have_muncher}" ] && options+=("Muncher")
       [ "${have_number}" ] && options+=("Number")
       [ "${have_phantasia}" ] && options+=("Phantasia")
+      [ "${have_pipes}" ] && options+=("Pipes")
+      [ "${have_rabbithole}" ] && options+=("Rabbit Hole")
       [ "${have_rain}" ] && options+=("Rain")
+      [ "${have_redsquare}" ] && options+=("Red Square")
+      [ "${have_reversi}" ] && options+=("Reversi")
       [ "${have_robots}" ] && options+=("Robots")
       [ "${have_sail}" ] && options+=("Sail")
       [ "${have_snake}" ] && options+=("Snake")
+      [ "${have_snakeduel}" ] && options+=("Snake Duel")
+      [ "${have_sos}" ] && options+=("SOS")
+      [ "${have_nudoku}" ] || [ "${have_sudoku}" ] && options+=("Sudoku")
       [ "${have_tetris_bsd}" ] && options+=("BSD Tetris")
       [ "${have_trek}" ] && options+=("Trek")
+      [ "${have_tugow}" ] && options+=("Tug of War")
       [ "${have_wargames}" ] && options+=("War Games")
       [ "${have_worm}" ] && options+=("Worm")
       [ "${have_worms}" ] && options+=("Worms")
       [ "${have_wump}" ] && options+=("Wump")
+      [ "${have_nbsdgames}" ] && options+=("BSD Games Menu")
     }
     if [ "${menutype}" == "apps" ]
     then
@@ -1749,7 +1749,12 @@ show_select_menu() {
               break
               ;;
           "Sudoku"*,*|*,"Sudoku"*)
-              COMMAND=sudoku
+              if [ "${have_nudoku}" ]
+              then
+                COMMAND=nudoku
+              else
+                COMMAND=sudoku
+              fi
               MTITLE="Sudoku"
               make_it_so
               break
@@ -3858,6 +3863,7 @@ have_redsquare=`type -p redsquare`
 have_reversi=`type -p reversi`
 have_snakeduel=`type -p snakeduel`
 have_sos=`type -p sos`
+have_nudoku=`type -p nudoku`
 have_sudoku=`type -p sudoku`
 have_tugow=`type -p tugow`
 have_2048=`type -p 2048`
