@@ -94,6 +94,10 @@ if [ `echo $PATH | grep -c /usr/local/bin` -ne "1" ]
 then
   PATH="$PATH:/usr/local/bin"
 fi
+if [ `echo $PATH | grep -c /usr/games` -ne "1" ]
+then
+  PATH="$PATH:/usr/games"
+fi
 if [ `echo $PATH | grep -c /usr/local/games` -ne "1" ]
 then
   PATH="$PATH:/usr/local/games"
@@ -636,7 +640,7 @@ select_font() {
 
   case "$1" in
     AsciiAppTerm)
-      FIG_TEXT="Applications"
+      FIG_TEXT="Apps"
       ;;
     AsciiGameTerm)
       FIG_TEXT="Games"
@@ -1323,43 +1327,6 @@ show_help_menu() {
   printf "\n"
 }
 
-set_all_apps_no() {
-  use_aewan="NO"
-  use_btop="NO"
-  use_cmatrix="NO"
-  use_ftp="NO"
-  use_gdu="NO"
-  use_lynx="NO"
-  use_mpp="NO"
-  use_mutt="NO"
-  use_nethack="NO"
-  use_ninvaders="NO"
-  use_newsboat="NO"
-  use_tuir="NO"
-  use_ranger="NO"
-  use_tetris="NO"
-  use_w3m="NO"
-  use_battleship="NO"
-  use_checkers="NO"
-  use_darrt="NO"
-  use_fifteen="NO"
-  use_fisher="NO"
-  use_jewels="NO"
-  use_memoblocks="NO"
-  use_miketron="NO"
-  use_mines="NO"
-  use_muncher="NO"
-  use_nbsdgames="NO"
-  use_pipes="NO"
-  use_rabbithole="NO"
-  use_redsquare="NO"
-  use_reversi="NO"
-  use_snakeduel="NO"
-  use_sos="NO"
-  use_sudoku="NO"
-  use_tugow="NO"
-}
-
 show_select_menu() {
   main_menu=
   menutype="apps"
@@ -1367,75 +1334,60 @@ show_select_menu() {
 
   while true
   do
+    if [ "${menutype}" == "apps" ]
+    then
+      YES="YES"
+      NO=" NO"
+    else
+      YES="Y"
+      NO="N"
+    fi
     [ "${COMMAND}" ] || {
       if [ "${menutype}" == "apps" ]
+      then
         COMMAND=btop
       else
         COMMAND=tetris
       fi
     }
-    set_all_apps_no
-    printf -v "use_${COMMAND}" %s "YES"
-    case "${COMMAND}" in
-      cbftp|ncftp)
-        use_ftp="YES"
-        ;;
-      cmatrix*)
-        use_cmatrix="YES"
-        ;;
-      gdu*)
-        use_gdu="YES"
-        ;;
-      lynx*)
-        use_lynx="YES"
-        ;;
-      mpcplus)
-        use_mpp="YES"
-        ;;
-      mutt|neomutt)
-        use_mutt="YES"
-        ;;
-      w3m*)
-        use_w3m="YES"
-        ;;
-    esac
     if [ "${KITTY}" ]
     then
-      use_kitty="YES"
+      use_kitty="${YES}"
     else
-      use_kitty="NO"
+      use_kitty=" NO"
     fi
     if [ "${GNOME}" ]
     then
-      use_gnome="YES"
+      use_gnome="${YES}"
     else
-      use_gnome="NO"
+      use_gnome="${NO}"
     fi
     if [ "${XFCE4}" ]
     then
-      use_xfce4="YES"
+      use_xfce4="${YES}"
     else
-      use_xfce4="NO"
+      use_xfce4="${NO}"
     fi
     if [ "${TILIX}" ]
     then
-      use_tilix="YES"
+      use_tilix="${YES}"
     else
-      use_tilix="NO"
+      use_tilix="${NO}"
     fi
     if [ "${RETRO}" ]
     then
-      use_retro="YES"
+      use_retro="${YES}"
     else
-      use_retro="NO"
+      use_retro="${NO}"
     fi
     if [ "${CURRENT}" ]
     then
-      use_current="YES"
+      use_current="${YES}"
     else
-      use_current="NO"
+      use_current="${NO}"
     fi
     show_comm=`echo ${COMMAND} | awk ' { print $1 } '`
+    clear
     set_show_term
     [ "${use_figlet}" ] && {
       if [ "${menutype}" == "apps" ]
@@ -1449,49 +1401,114 @@ show_select_menu() {
     PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORM}"
     options=()
     [ "${menutype}" == "apps" ] && {
-      [ "${have_aewan}" ] && options+=("Aewan Art Creation     [${use_aewan}]")
-      [ "${have_btop}" ] && options+=("Btop System Monitor    [${use_btop}]")
-      [ "${have_gdu}" ] && options+=("Disk Usage Analyzer    [${use_gdu}]")
-      [ "${have_lynx}" ] && options+=("Lynx Web Browser       [${use_lynx}]")
-      [ "${have_w3m}" ] && options+=("W3M Web Browser        [${use_w3m}]")
-      [ "${have_cmatrix}" ] && options+=("Matrix Screen          [${use_cmatrix}]")
-      [ "${have_mpcplus}" ] && options+=("Music Player Plus      [${use_mpp}]")
+      [ "${have_aewan}" ] && options+=("Aewan Art Creation")
+      [ "${have_btop}" ] && options+=("Btop System Monitor")
+      [ "${have_gdu}" ] && options+=("Disk Usage Analyzer")
+      [ "${have_lynx}" ] && options+=("Lynx Web Browser")
+      [ "${have_w3m}" ] && options+=("W3M Web Browser")
+      [ "${have_mpcplus}" ] && options+=("Music Player Plus")
       if [ "${have_cbftp}" ]
       then
-        options+=("Cbftp FTP Client       [${use_ftp}]")
+        options+=("Cbftp FTP Client")
       else
-        [ "${have_ncftp}" ] && options+=("Ncftp FTP Client       [${use_ftp}]")
+        [ "${have_ncftp}" ] && options+=("Ncftp FTP Client")
       fi
       if [ "${have_neomutt}" ]
       then
-        options+=("NeoMutt Mail Client    [${use_mutt}]")
+        options+=("NeoMutt Mail Client")
       else
-        [ "${have_mutt}" ] && options+=("Mutt Mail Client       [${use_mutt}]")
+        [ "${have_mutt}" ] && options+=("Mutt Mail Client")
       fi
-      [ "${have_newsboat}" ] && options+=("Newsboat RSS Feeds     [${use_newsboat}]")
-      [ "${have_ranger}" ] && options+=("Ranger File Manager    [${use_ranger}]")
-      [ "${have_tuir}" ] && options+=("Reddit UI              [${use_tuir}]")
+      [ "${have_newsboat}" ] && options+=("Newsboat RSS Feeds")
+      [ "${have_ranger}" ] && options+=("Ranger File Manager")
+      [ "${have_tuir}" ] && options+=("Reddit UI")
     }
     [ "${menutype}" == "games" ] && {
-      [ "${have_nethack}" ] && options+=("NetHack Dungeon Game   [${use_nethack}]")
-      [ "${have_ninvaders}" ] && options+=("Ninvaders Video Game   [${use_ninvaders}]")
-      [ "${have_tetris}" ] && options+=("Tetris Video Game      [${use_tetris}]")
+      [ "${have_nethack}" ] && options+=("NetHack Dungeon Game")
+      [ "${have_ninvaders}" ] && options+=("Ninvaders Video Game")
+      [ "${have_tetris}" ] && options+=("Tetris Video Game")
+      [ "${have_cmatrix}" ] && options+=("Matrix Screen")
+      [ "${have_battleship}" ] && options+=("Battleship")
+      [ "${have_checkers}" ] && options+=("Checkers")
+      [ "${have_darrt}" ] && options+=("Darts")
+      [ "${have_fifteen}" ] && options+=("Fifteen")
+      [ "${have_fisher}" ] && options+=("Fisher")
+      [ "${have_jewels}" ] && options+=("Jewels")
+      [ "${have_memoblocks}" ] && options+=("Memory Blocks")
+      [ "${have_miketron}" ] && options+=("Mike Tron")
+      [ "${have_mines}" ] && options+=("Mines")
+      [ "${have_muncher}" ] && options+=("Muncher")
+      [ "${have_nbsdgames}" ] && options+=("BSD Games Menu")
+      [ "${have_pipes}" ] && options+=("Pipes")
+      [ "${have_rabbithole}" ] && options+=("Rabbit Hole")
+      [ "${have_redsquare}" ] && options+=("Red Square")
+      [ "${have_reversi}" ] && options+=("Reversi")
+      [ "${have_snakeduel}" ] && options+=("Snake Duel")
+      [ "${have_sos}" ] && options+=("SOS")
+      [ "${have_sudoku}" ] && options+=("Sudoku")
+      [ "${have_tugow}" ] && options+=("Tug of War")
+      [ "${have_2048}" ] && options+=("2048")
+      [ "${have_adventure}" ] && options+=("Adventure")
+      [ "${have_arithmetic}" ] && options+=("Arithmetic")
+      [ "${have_atc}" ] && options+=("Air Traffic Control")
+      [ "${have_backgammon}" ] && options+=("Backgammon")
+      [ "${have_battlestar}" ] && options+=("Battlestar")
+      [ "${have_boggle}" ] && options+=("Boggle")
+      [ "${have_bsdgames_adventure}" ] && options+=("BSD Adventure")
+      [ "${have_canfield}" ] && options+=("Canfield")
+      [ "${have_cribbage}" ] && options+=("Cribbage")
+      [ "${have_fortune}" ] && options+=("Fortune")
+      [ "${have_gomoku}" ] && options+=("Gomoku")
+      [ "${have_greed}" ] && options+=("Greed")
+      [ "${have_hack}" ] && options+=("Hack")
+      [ "${have_hangman}" ] && options+=("Hangman")
+      [ "${have_hunt}" ] && options+=("Hunt")
+      [ "${have_mille}" ] && options+=("Mille")
+      [ "${have_monop}" ] && options+=("Monopoly")
+      [ "${have_number}" ] && options+=("Number")
+      [ "${have_phantasia}" ] && options+=("Phantasia")
+      [ "${have_rain}" ] && options+=("Rain")
+      [ "${have_robots}" ] && options+=("Robots")
+      [ "${have_sail}" ] && options+=("Sail")
+      [ "${have_snake}" ] && options+=("Snake")
+      [ "${have_tetris_bsd}" ] && options+=("BSD Tetris")
+      [ "${have_trek}" ] && options+=("Trek")
+      [ "${have_wargames}" ] && options+=("War Games")
+      [ "${have_worm}" ] && options+=("Worm")
+      [ "${have_worms}" ] && options+=("Worms")
+      [ "${have_wump}" ] && options+=("Wump")
     }
-    check_display
-    if [ $? -eq 0 ]
+    if [ "${menutype}" == "apps" ]
     then
-      [ "${have_xfce4}" ] && options+=("XFCE4 Terminal         [${use_xfce4}]")
-      [ "${have_gnome}" ] && options+=("Gnome Terminal         [${use_gnome}]")
-      [ "${have_kitty}" ] && options+=("Kitty Terminal         [${use_kitty}]")
-      [ "${have_retro}" ] && options+=("Retro Terminal         [${use_retro}]")
-      [ "${have_tilix}" ] && options+=("Tilix Terminal         [${use_tilix}]")
-      options+=("Current Terminal       [${use_current}]")
+      options+=("Games Menu")
+    else
+      options+=("Applications Menu")
     fi
-    options+=("${BOLD}Run ${show_comm} in ${show_term}${NORM}")
     [ "${have_jrnl}" ] && options+=("Journal Menu")
     [ "${have_showascii}" ] && options+=("Ascii Art Menu")
     [ "${have_splash}" ] && options+=("Animations Menu")
-    options+=("Done / Main Menu" "Quit")
+    options+=("Main Menu")
+    check_display
+    if [ $? -eq 0 ]
+    then
+      if [ "${menutype}" == "apps" ]
+      then
+        [ "${have_xfce4}" ] && options+=("XFCE4 Terminal        [${use_xfce4}]")
+        [ "${have_gnome}" ] && options+=("Gnome Terminal        [${use_gnome}]")
+        [ "${have_kitty}" ] && options+=("Kitty Terminal        [${use_kitty}]")
+        [ "${have_retro}" ] && options+=("Retro Terminal        [${use_retro}]")
+        [ "${have_tilix}" ] && options+=("Tilix Terminal        [${use_tilix}]")
+        options+=("Current Terminal      [${use_current}]")
+      else
+        [ "${have_xfce4}" ] && options+=("XFCE4 Terminal   [${use_xfce4}]")
+        [ "${have_gnome}" ] && options+=("Gnome Terminal   [${use_gnome}]")
+        [ "${have_kitty}" ] && options+=("Kitty Terminal   [${use_kitty}]")
+        [ "${have_retro}" ] && options+=("Retro Terminal   [${use_retro}]")
+        [ "${have_tilix}" ] && options+=("Tilix Terminal   [${use_tilix}]")
+        options+=("Current Terminal [${use_current}]")
+      fi
+    fi
+    options+=("Quit")
     select opt in "${options[@]}"
     do
       case "$opt,$REPLY" in
@@ -1501,7 +1518,7 @@ show_select_menu() {
               show_help_menu
               break
               ;;
-          "Done"*,*|*,"Done"*|"Back",*|*,"Back"|"back",*|*,"back"|"Main"*,*|*,"Main"*|"main",*|*,"main")
+          "Back",*|*,"Back"|"back",*|*,"back"|"Main"*,*|*,"Main"*|"main",*|*,"main")
               main_menu=1
               break 2
               ;;
@@ -1517,91 +1534,409 @@ show_select_menu() {
               art_menu=1
               break 2
               ;;
+          "Applications Menu",*|*,"Applications Menu")
+              menutype="apps"
+              break
+              ;;
+          "Games Menu",*|*,"Games Menu")
+              menutype="games"
+              break
+              ;;
           "Aewan"*,*|*,"Aewan"*)
               COMMAND=aewan
               MTITLE="Aewan Art Creation"
+              make_it_so
               break
               ;;
           "Btop"*,*|*,"Btop"*)
               COMMAND=btop
               MTITLE="Btop++ System Monitor"
+              make_it_so
               break
               ;;
           "Disk"*,*|*,"Disk"*)
               COMMAND="gdu ${HOME}"
               MTITLE="Disk Usage Analyzer"
+              make_it_so
               break
               ;;
           "Lynx"*,*|*,"Lynx"*)
               COMMAND="lynx ${WEB_HOME}"
               MTITLE="Lynx Web Browser"
               export BROWSER=lynx
+              make_it_so
               break
               ;;
           "W3M"*,*|*,"W3M"*)
               COMMAND="w3m -v ${WEB_HOME}"
               MTITLE="W3M Web Browser"
               export BROWSER=w3m
+              make_it_so
               break
               ;;
           "Matrix"*,*|*,"Matrix"*)
               COMMAND="cmatrix -u 8"
               MTITLE="Matrix Screen"
+              make_it_so
               break
               ;;
           "Music"*,*|*,"Music"*)
               COMMAND=mpcplus
               MTITLE="Music Player Plus MPD Client"
+              make_it_so
               break
               ;;
           "Cbftp"*,*|*,"Cbftp"*)
               COMMAND=cbftp
               MTITLE="Cbftp FTP Client"
+              make_it_so
               break
               ;;
           "Ncftp"*,*|*,"Ncftp"*)
               COMMAND=ncftp
               MTITLE="Ncftp FTP Client"
+              make_it_so
               break
               ;;
           "Mutt"*,*|*,"Mutt"*)
               COMMAND=mutt
               MTITLE="Mutt Mail Client"
+              make_it_so
               break
               ;;
           "NeoMutt"*,*|*,"NeoMutt"*)
               COMMAND=neomutt
               MTITLE="NeoMutt Mail Client"
+              make_it_so
               break
               ;;
           "NetHack"*,*|*,"NetHack"*)
               COMMAND=nethack
               MTITLE="NetHack Dungeon Game"
+              make_it_so
               break
               ;;
           "News"*,*|*,"News"*)
               COMMAND=newsboat
               MTITLE="Newsboat RSS Feeds"
+              make_it_so
               break
               ;;
           "Ninvaders"*,*|*,"Ninvaders"*)
               COMMAND=ninvaders
               MTITLE="Ninvaders Video Game"
+              make_it_so
               break
               ;;
           "Ranger"*,*|*,"Ranger"*)
               COMMAND=ranger
               MTITLE="Ranger File Manager"
+              make_it_so
               break
               ;;
           "Reddit"*,*|*,"Reddit"*)
               COMMAND=tuir
               MTITLE="Terminal UI for Reddit"
+              make_it_so
               break
               ;;
           "Tetris"*,*|*,"Tetris"*)
               COMMAND=tetris
               MTITLE="Tetris Video Game"
+              make_it_so
+              break
+              ;;
+          "Battleship"*,*|*,"Battleship"*)
+              COMMAND=battleship
+              MTITLE="Battleship"
+              make_it_so
+              break
+              ;;
+          "Checkers"*,*|*,"Checkers"*)
+              COMMAND=checkers
+              MTITLE="Checkers"
+              make_it_so
+              break
+              ;;
+          "Darts"*,*|*,"Darts"*)
+              COMMAND=darrt
+              MTITLE="Darts"
+              make_it_so
+              break
+              ;;
+          "Fifteen"*,*|*,"Fifteen"*)
+              COMMAND=fifteen
+              MTITLE="Fifteen"
+              make_it_so
+              break
+              ;;
+          "Fisher"*,*|*,"Fisher"*)
+              COMMAND=fisher
+              MTITLE="Fisher"
+              make_it_so
+              break
+              ;;
+          "Jewels"*,*|*,"Jewels"*)
+              COMMAND=jewels
+              MTITLE="Jewels"
+              make_it_so
+              break
+              ;;
+          "Memory"*,*|*,"Memory"*)
+              COMMAND=memoblocks
+              MTITLE="Memory Blocks"
+              make_it_so
+              break
+              ;;
+          "Mike Tron"*,*|*,"Mike Tron"*)
+              COMMAND=miketron
+              MTITLE="Mike Tron"
+              make_it_so
+              break
+              ;;
+          "Mines"*,*|*,"Mines"*)
+              COMMAND=mines
+              MTITLE="Mines"
+              make_it_so
+              break
+              ;;
+          "Muncher"*,*|*,"Muncher"*)
+              COMMAND=muncher
+              MTITLE="Muncher"
+              make_it_so
+              break
+              ;;
+          "BSD Games"*,*|*,"BSD Games"*)
+              COMMAND=nbsdgames
+              MTITLE="BSD Games Menu"
+              make_it_so
+              break
+              ;;
+          "Pipes"*,*|*,"Pipes"*)
+              COMMAND=pipes
+              MTITLE="Pipes"
+              make_it_so
+              break
+              ;;
+          "Rabbit"*,*|*,"Rabbit"*)
+              COMMAND=rabbithole
+              MTITLE="Rabbit Hole"
+              make_it_so
+              break
+              ;;
+          "Red Square"*,*|*,"Red Square"*)
+              COMMAND=redsquare
+              MTITLE="Red Square"
+              make_it_so
+              break
+              ;;
+          "Reversi"*,*|*,"Reversi"*)
+              COMMAND=reversi
+              MTITLE="Reversi"
+              make_it_so
+              break
+              ;;
+          "Snake Duel"*,*|*,"Snake Duel"*)
+              COMMAND=snakeduel
+              MTITLE="Snake Duel"
+              make_it_so
+              break
+              ;;
+          "SOS"*,*|*,"SOS"*)
+              COMMAND=sos
+              MTITLE="SOS"
+              make_it_so
+              break
+              ;;
+          "Sudoku"*,*|*,"Sudoku"*)
+              COMMAND=sudoku
+              MTITLE="Sudoku"
+              make_it_so
+              break
+              ;;
+          "Tug of"*,*|*,"Tug of"*)
+              COMMAND=tugow
+              MTITLE="Tug of War"
+              make_it_so
+              break
+              ;;
+          "2048"*,*|*,"2048"*)
+              COMMAND=2048
+              MTITLE="2048"
+              make_it_so
+              break
+              ;;
+          "Adventure"*,*|*,"Adventure"*)
+              COMMAND=adventure
+              MTITLE="Adventure"
+              make_it_so
+              break
+              ;;
+          "Arithmetic"*,*|*,"Arithmetic"*)
+              COMMAND=arithmetic
+              MTITLE="Arithmetic"
+              make_it_so
+              break
+              ;;
+          "Air Traffic"*,*|*,"Air Traffic"*)
+              COMMAND=atc
+              MTITLE="Air Traffic Control"
+              make_it_so
+              break
+              ;;
+          "Backgammon"*,*|*,"Backgammon"*)
+              COMMAND=backgammon
+              MTITLE="Backgammon"
+              make_it_so
+              break
+              ;;
+          "Battlestar"*,*|*,"Battlestar"*)
+              COMMAND=battlestar
+              MTITLE="Battlestar"
+              make_it_so
+              break
+              ;;
+          "Boggle"*,*|*,"Boggle"*)
+              COMMAND=boggle
+              MTITLE="Boggle"
+              make_it_so
+              break
+              ;;
+          "BSD Adventure"*,*|*,"BSD Adventure"*)
+              COMMAND=bsdgames-adventure
+              MTITLE="BSD Adventure"
+              make_it_so
+              break
+              ;;
+          "Canfield"*,*|*,"Canfield"*)
+              COMMAND=canfield
+              MTITLE="Canfield"
+              make_it_so
+              break
+              ;;
+          "Cribbage"*,*|*,"Cribbage"*)
+              COMMAND=cribbage
+              MTITLE="Cribbage"
+              make_it_so
+              break
+              ;;
+          "Fortune"*,*|*,"Fortune"*)
+              fortune
+              read -p "Press Enter to continue" answer
+              break
+              ;;
+          "Gomoku"*,*|*,"Gomoku"*)
+              COMMAND=gomoku
+              MTITLE="Gomoku"
+              make_it_so
+              break
+              ;;
+          "Greed"*,*|*,"Greed"*)
+              COMMAND=greed
+              MTITLE="Greed"
+              make_it_so
+              break
+              ;;
+          "Hack"*,*|*,"Hack"*)
+              COMMAND=hack
+              MTITLE="Hack"
+              make_it_so
+              break
+              ;;
+          "Hangman"*,*|*,"Hangman"*)
+              COMMAND=hangman
+              MTITLE="Hangman"
+              make_it_so
+              break
+              ;;
+          "Hunt"*,*|*,"Hunt"*)
+              COMMAND=hunt
+              MTITLE="Hunt"
+              make_it_so
+              break
+              ;;
+          "Mille"*,*|*,"Mille"*)
+              COMMAND=mille
+              MTITLE="Mille"
+              make_it_so
+              break
+              ;;
+          "Monop"*,*|*,"Monop"*)
+              COMMAND=monop
+              MTITLE="Monopoly"
+              make_it_so
+              break
+              ;;
+          "Number"*,*|*,"Number"*)
+              COMMAND=number
+              MTITLE="Number"
+              make_it_so
+              break
+              ;;
+          "Phantasia"*,*|*,"Phantasia"*)
+              COMMAND=phantasia
+              MTITLE="Phantasia"
+              make_it_so
+              break
+              ;;
+          "Rain"*,*|*,"Rain"*)
+              COMMAND=rain
+              MTITLE="Rain"
+              make_it_so
+              break
+              ;;
+          "Robots"*,*|*,"Robots"*)
+              COMMAND=robots
+              MTITLE="Robots"
+              make_it_so
+              break
+              ;;
+          "Sail"*,*|*,"Sail"*)
+              COMMAND=sail
+              MTITLE="Sail"
+              make_it_so
+              break
+              ;;
+          "Snake"*,*|*,"Snake"*)
+              COMMAND=snake
+              MTITLE="Snake"
+              make_it_so
+              break
+              ;;
+          "BSD Tetris"*,*|*,"BSD Tetris"*)
+              COMMAND=tetris-bsd
+              MTITLE="BSD Tetris"
+              make_it_so
+              break
+              ;;
+          "Trek"*,*|*,"Trek"*)
+              COMMAND=trek
+              MTITLE="Trek"
+              make_it_so
+              break
+              ;;
+          "War Game"*,*|*,"War Game"*)
+              COMMAND=wargames
+              MTITLE="War Games"
+              make_it_so
+              break
+              ;;
+          "Worm",*|*,"Worm")
+              COMMAND=worm
+              MTITLE="Worm Game"
+              make_it_so
+              break
+              ;;
+          "Worms"*,*|*,"Worms"*)
+              COMMAND=worms
+              MTITLE="Worms"
+              make_it_so
+              break
+              ;;
+          "Wump"*,*|*,"Wump"*)
+              COMMAND=wump
+              MTITLE="Wump"
+              make_it_so
               break
               ;;
           "XFCE4"*,*|*,"XFCE4"*)
@@ -1658,10 +1993,6 @@ show_select_menu() {
               XFCE4=
               break
               ;;
-          *"Run ${show_comm} in ${show_term}"*,*|*,*"Run ${show_comm} in ${show_term}"*)
-              make_it_so
-              break
-              ;;
           "Quit",*|*,"Quit"|"quit",*|*,"quit")
               remove_fullscreen
               printf "\nExiting Asciiville\n"
@@ -1716,68 +2047,68 @@ show_art_menu() {
       audiostat="YES"
       audarg="-P -S ${SONG}"
     else
-      audiostat="NO"
+      audiostat=" NO"
       audarg=
     fi
     if [ "${cycle}" ]
     then
       cyclestat="YES"
     else
-      cyclestat="NO"
+      cyclestat=" NO"
     fi
     if [ "${shuffle}" ]
     then
       randomize="YES"
     else
-      randomize="NO"
+      randomize=" NO"
     fi
     if [ "${RECORD}" ]
     then
       recordstat="YES"
     else
-      recordstat="NO"
+      recordstat=" NO"
     fi
     if [ "${KITTY}" ]
     then
       use_kitty="YES"
     else
-      use_kitty="NO"
+      use_kitty=" NO"
     fi
     if [ "${GNOME}" ]
     then
       use_gnome="YES"
     else
-      use_gnome="NO"
+      use_gnome=" NO"
     fi
     if [ "${XFCE4}" ]
     then
       use_xfce4="YES"
     else
-      use_xfce4="NO"
+      use_xfce4=" NO"
     fi
     if [ "${TILIX}" ]
     then
       use_tilix="YES"
     else
-      use_tilix="NO"
+      use_tilix=" NO"
     fi
     if [ "${RETRO}" ]
     then
       use_retro="YES"
     else
-      use_retro="NO"
+      use_retro=" NO"
     fi
     if [ "${CURRENT}" ]
     then
       use_current="YES"
     else
-      use_current="NO"
+      use_current=" NO"
     fi
     if [ "${TMUX}" ]
     then
       usetmux="YES"
     else
-      usetmux="NO"
+      usetmux=" NO"
     fi
     if [ "${use_lolcat}" ]
     then
@@ -1993,7 +2324,7 @@ show_art_menu() {
               if [ "${use_lolcat}" == "2" ]
               then
                 use_lolcat=
-                use_lol="NO"
+                use_lol=" NO"
                 lolarg=
               else
                 if [ "${use_lolcat}" ]
@@ -2131,62 +2462,62 @@ show_animation_menu() {
       audiostat="YES"
       audarg="-P -S ${SONG}"
     else
-      audiostat="NO"
+      audiostat=" NO"
       audarg=
     fi
     if [ "${KITTY}" ]
     then
       use_kitty="YES"
     else
-      use_kitty="NO"
+      use_kitty=" NO"
     fi
     if [ "${GNOME}" ]
     then
       use_gnome="YES"
     else
-      use_gnome="NO"
+      use_gnome=" NO"
     fi
     if [ "${XFCE4}" ]
     then
       use_xfce4="YES"
     else
-      use_xfce4="NO"
+      use_xfce4=" NO"
     fi
     if [ "${TILIX}" ]
     then
       use_tilix="YES"
     else
-      use_tilix="NO"
+      use_tilix=" NO"
     fi
     if [ "${RETRO}" ]
     then
       use_retro="YES"
     else
-      use_retro="NO"
+      use_retro=" NO"
     fi
     if [ "${CURRENT}" ]
     then
       use_current="YES"
     else
-      use_current="NO"
+      use_current=" NO"
     fi
     if [ "${RECORD}" ]
     then
       recordstat="YES"
     else
-      recordstat="NO"
+      recordstat=" NO"
     fi
     if [ "${TMUX}" ]
     then
       usetmux="YES"
     else
-      usetmux="NO"
+      usetmux=" NO"
     fi
     if [ "${FULLSCREEN}" ]
     then
       fullstat="YES"
     else
-      fullstat="NO"
+      fullstat=" NO"
     fi
     skip_it_so=
     [ "${use_figlet}" ] && {
@@ -2361,7 +2692,7 @@ show_animation_menu() {
               if [ "${use_lolcat}" == "2" ]
               then
                 use_lolcat=
-                use_lol="NO"
+                use_lol=" NO"
                 lolarg=
               else
                 if [ "${use_lolcat}" ]
@@ -2750,26 +3081,26 @@ show_main_menu() {
       audiostat="YES"
       audarg="-P -S ${SONG}"
     else
-      audiostat="NO"
+      audiostat=" NO"
       audarg=
     fi
     if [ "${FULLSCREEN}" ]
     then
       fullstat="YES"
     else
-      fullstat="NO"
+      fullstat=" NO"
     fi
     if [ "${RECORD}" ]
     then
       recordstat="YES"
     else
-      recordstat="NO"
+      recordstat=" NO"
     fi
     if [ "${TMUX}" ]
     then
       usetmux="YES"
     else
-      usetmux="NO"
+      usetmux=" NO"
     fi
     if [ "${BROWSER}" == "w3m" ]
     then
@@ -2932,7 +3263,7 @@ show_main_menu() {
               if [ "${use_lolcat}" == "2" ]
               then
                 use_lolcat=
-                use_lol="NO"
+                use_lol=" NO"
               else
                 if [ "${use_lolcat}" ]
                 then
@@ -3491,7 +3822,7 @@ have_ncftp=`type -p ncftp`
 have_lolcat=`type -p lolcat`
 [ "${have_lolcat}" ] || {
   use_lolcat=
-  use_lol="NO"
+  use_lol=" NO"
 }
 have_rainbow=`type -p rainbowstream`
 have_rich=`type -p rich`
@@ -3505,13 +3836,63 @@ have_lynx=`type -p lynx`
 have_w3m=`type -p w3m`
 have_wmctrl=`type -p wmctrl`
 have_xprop=`type -p xprop`
+have_battleship=`type -p battleship`
+have_checkers=`type -p checkers`
+have_darrt=`type -p darrt`
+have_fifteen=`type -p fifteen`
+have_fisher=`type -p fisher`
+have_jewels=`type -p jewels`
+have_memoblocks=`type -p memoblocks`
+have_miketron=`type -p miketron`
+have_mines=`type -p mines`
+have_muncher=`type -p muncher`
+have_nbsdgames=`type -p nbsdgames`
+have_pipes=`type -p pipes`
+have_rabbithole=`type -p rabbithole`
+have_redsquare=`type -p redsquare`
+have_reversi=`type -p reversi`
+have_snakeduel=`type -p snakeduel`
+have_sos=`type -p sos`
+have_sudoku=`type -p sudoku`
+have_tugow=`type -p tugow`
+have_2048=`type -p 2048`
+have_adventure=`type -p adventure`
+have_arithmetic=`type -p arithmetic`
+have_atc=`type -p atc`
+have_backgammon=`type -p backgammon`
+have_battlestar=`type -p battlestar`
+have_boggle=`type -p boggle`
+have_bsdgames_adventure=`type -p bsdgames-adventure`
+have_canfield=`type -p canfield`
+have_cribbage=`type -p cribbage`
+have_fortune=`type -p fortune`
+have_gomoku=`type -p gomoku`
+have_greed=`type -p greed`
+have_hack=`type -p hack`
+have_hangman=`type -p hangman`
+have_hunt=`type -p hunt`
+have_mille=`type -p mille`
+have_monop=`type -p monop`
+have_number=`type -p number`
+have_phantasia=`type -p phantasia`
+have_rain=`type -p rain`
+have_robots=`type -p robots`
+have_sail=`type -p sail`
+have_snake=`type -p snake`
+have_tetris_bsd=`type -p tetris-bsd`
+have_trek=`type -p trek`
+have_wargames=`type -p wargames`
+have_worm=`type -p worm`
+have_worms=`type -p worms`
+have_wump=`type -p wump`
+
 isfull=
 image_dir=
 ascii_dir=
 custom_song=
 [ "${use_lol}" ] || {
   use_lolcat=
-  use_lol="NO"
+  use_lol=" NO"
 }
 if [ "${have_figlet}" ]
 then
@@ -3878,12 +4259,12 @@ while getopts "Aabc:CdD:E:fFgiIjJkKlL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
             LOLCAT="${LOLCAT_NORM}"
           else
             use_lolcat=
-            use_lol="NO"
+            use_lol=" NO"
           fi
         fi
       else
         use_lolcat=
-        use_lol="NO"
+        use_lol=" NO"
       fi
       if [ "${use_lolcat}" ]
       then
