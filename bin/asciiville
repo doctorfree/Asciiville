@@ -1354,7 +1354,7 @@ show_select_menu() {
     then
       use_kitty="${YES}"
     else
-      use_kitty=" NO"
+      use_kitty="${NO}"
     fi
     if [ "${GNOME}" ]
     then
@@ -1464,7 +1464,7 @@ show_select_menu() {
       [ "${have_hangman}" ] && options+=("Hangman")
       [ "${have_hunt}" ] && options+=("Hunt")
       [ "${have_mille}" ] && options+=("Mille")
-      [ "${have_monop}" ] && options+=("Monopoly")
+      [ "${have_monop}" ] || [ "${have_mpoly}" ] && options+=("Monopoly")
       [ "${have_number}" ] && options+=("Number")
       [ "${have_phantasia}" ] && options+=("Phantasia")
       [ "${have_rain}" ] && options+=("Rain")
@@ -1862,7 +1862,12 @@ show_select_menu() {
               break
               ;;
           "Monop"*,*|*,"Monop"*)
-              COMMAND=monop
+              if [ "${have_monop}" ]
+              then
+                COMMAND=monop
+              else
+                COMMAND=mpoly
+              fi
               MTITLE="Monopoly"
               make_it_so
               break
@@ -1939,7 +1944,7 @@ show_select_menu() {
               make_it_so
               break
               ;;
-          "XFCE4"*,*|*,"XFCE4"*)
+          "XFCE"*,*|*,"XFCE"*|"xfce"*,*|*,"xfce"*)
               XFCE4=1
               TILIX=
               KITTY=
@@ -1948,7 +1953,7 @@ show_select_menu() {
               CURRENT=
               break
               ;;
-          "Gnome"*,*|*,"Gnome"*)
+          "Gnome"*,*|*,"Gnome"*|"gnome"*,*|*,"gnome"*)
               GNOME=1
               KITTY=
               XFCE4=
@@ -1957,7 +1962,7 @@ show_select_menu() {
               CURRENT=
               break
               ;;
-          "Kitty"*,*|*,"Kitty"*)
+          "Kitty"*,*|*,"Kitty"*|"kitty"*,*|*,"kitty"*)
               KITTY=1
               GNOME=
               XFCE4=
@@ -1966,7 +1971,7 @@ show_select_menu() {
               CURRENT=
               break
               ;;
-          "Retro"*,*|*,"Retro"*)
+          "Retro"*,*|*,"Retro"*|"retro"*,*|*,"retro"*)
               RETRO=1
               GNOME=
               XFCE4=
@@ -1975,7 +1980,7 @@ show_select_menu() {
               CURRENT=
               break
               ;;
-          "Tilix"*,*|*,"Tilix"*)
+          "Tilix"*,*|*,"Tilix"*|"tilix"*,*|*,"tilix"*)
               TILIX=1
               KITTY=
               RETRO=
@@ -1984,7 +1989,7 @@ show_select_menu() {
               CURRENT=
               break
               ;;
-          "Current"*,*|*,"Current"*)
+          "Current"*,*|*,"Current"*|"current"*,*|*,"current"*)
               CURRENT=1
               TILIX=
               KITTY=
@@ -2223,7 +2228,7 @@ show_art_menu() {
               play_slide_show "${gallery_name}"
               break
               ;;
-          "XFCE4"*,*|*,"XFCE4"*)
+          "XFCE"*,*|*,"XFCE"*|"xfce"*,*|*,"xfce"*)
               XFCE4=1
               TILIX=
               KITTY=
@@ -2232,7 +2237,7 @@ show_art_menu() {
               CURRENT=
               break
               ;;
-          "Gnome"*,*|*,"Gnome"*)
+          "Gnome"*,*|*,"Gnome"*|"gnome"*,*|*,"gnome"*)
               GNOME=1
               KITTY=
               XFCE4=
@@ -2241,7 +2246,7 @@ show_art_menu() {
               CURRENT=
               break
               ;;
-          "Kitty"*,*|*,"Kitty"*)
+          "Kitty"*,*|*,"Kitty"*|"kitty"*,*|*,"kitty"*)
               KITTY=1
               GNOME=
               XFCE4=
@@ -2250,7 +2255,7 @@ show_art_menu() {
               CURRENT=
               break
               ;;
-          "Retro"*,*|*,"Retro"*)
+          "Retro"*,*|*,"Retro"*|"retro"*,*|*,"retro"*)
               RETRO=1
               GNOME=
               XFCE4=
@@ -2259,7 +2264,7 @@ show_art_menu() {
               CURRENT=
               break
               ;;
-          "Tilix"*,*|*,"Tilix"*)
+          "Tilix"*,*|*,"Tilix"*|"tilix"*,*|*,"tilix"*)
               TILIX=1
               KITTY=
               RETRO=
@@ -2268,7 +2273,7 @@ show_art_menu() {
               CURRENT=
               break
               ;;
-          "Current"*,*|*,"Current"*)
+          "Current"*,*|*,"Current"*|"current"*,*|*,"current"*)
               CURRENT=1
               TILIX=
               KITTY=
@@ -2628,7 +2633,7 @@ show_animation_menu() {
               art_menu=1
               break 2
               ;;
-          "XFCE4"*,*|*,"XFCE4"*)
+          "XFCE"*,*|*,"XFCE"*|"xfce"*,*|*,"xfce"*)
               XFCE4=1
               TILIX=
               KITTY=
@@ -2638,7 +2643,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Gnome"*,*|*,"Gnome"*)
+          "Gnome"*,*|*,"Gnome"*|"gnome"*,*|*,"gnome"*)
               GNOME=1
               XFCE4=
               KITTY=
@@ -2648,7 +2653,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Kitty"*,*|*,"Kitty"*)
+          "Kitty"*,*|*,"Kitty"*|"kitty"*,*|*,"kitty"*)
               KITTY=1
               GNOME=
               XFCE4=
@@ -2658,7 +2663,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Retro"*,*|*,"Retro"*)
+          "Retro"*,*|*,"Retro"*|"retro"*,*|*,"retro"*)
               RETRO=1
               GNOME=
               XFCE4=
@@ -2668,7 +2673,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Tilix"*,*|*,"Tilix"*)
+          "Tilix"*,*|*,"Tilix"*|"tilix"*,*|*,"tilix"*)
               TILIX=1
               RETRO=
               GNOME=
@@ -2678,7 +2683,7 @@ show_animation_menu() {
               skip_it_so=1
               break
               ;;
-          "Current"*,*|*,"Current"*)
+          "Current"*,*|*,"Current"*|"current"*,*|*,"current"*)
               CURRENT=1
               TILIX=
               KITTY=
@@ -3873,6 +3878,7 @@ have_hangman=`type -p hangman`
 have_hunt=`type -p hunt`
 have_mille=`type -p mille`
 have_monop=`type -p monop`
+have_mpoly=`type -p mpoly`
 have_number=`type -p number`
 have_phantasia=`type -p phantasia`
 have_rain=`type -p rain`
