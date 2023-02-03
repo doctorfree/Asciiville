@@ -119,6 +119,7 @@ The `asciiville` command can also be used to invoke commands in a variety of way
 * The AAlib BB demo running in a tmux session (Debian based systems only)
 * The ASCII text-based dungeon game `nethack` with Extended ASCII glyphs
 * The `cmatrix` command that displays the screen from "The Matrix"
+* Many text based applications and games
 * ASCII Art creation tool `aewan`
 * Display system info
 * Display a random Pokemon

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## Asciiville-3.0.1r2 (2023-02-03)
+
+* Automatic installation of many Ascii games
+* Improved interactive menu system
+
 ## Asciiville-3.0.1r1 (2023-01-26)
 
 * Asciiville is now architecture independent
