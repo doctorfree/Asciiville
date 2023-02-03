@@ -86,22 +86,16 @@ CONFIG="${HOME}/.config/asciiville/config"
 saved_art_size=${art_font_size}
 saved_txt_size=${txt_font_size}
 
-if [ `echo $PATH | grep -c /.local/bin` -ne "1" ]
-then
-  PATH="$PATH:$HOME/.local/bin"
-fi
-if [ `echo $PATH | grep -c /usr/local/bin` -ne "1" ]
-then
-  PATH="$PATH:/usr/local/bin"
-fi
-if [ `echo $PATH | grep -c /usr/games` -ne "1" ]
-then
-  PATH="$PATH:/usr/games"
-fi
-if [ `echo $PATH | grep -c /usr/local/games` -ne "1" ]
-then
-  PATH="$PATH:/usr/local/games"
-fi
+pathadd() {
+  if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+    PATH="$1${PATH:+":$PATH"}"
+  fi
+}
+
+pathadd "/usr/local/games"
+pathadd "/usr/games"
+pathadd "/usr/local/bin"
+pathadd "${HOME}/.local/bin"
 export PATH
 
 usage() {

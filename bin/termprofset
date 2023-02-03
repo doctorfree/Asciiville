@@ -32,10 +32,15 @@ TILIX_PROF="com.gexperts.Tilix.Profile"
 TILIX_PATH="/com/gexperts/Tilix/profiles/"
 TILIX_LIST="com.gexperts.Tilix.ProfilesList"
 
-if [ `echo $PATH | grep -c /.local/bin` -ne "1" ]
-then
-  export PATH="$PATH:$HOME/.local/bin"
-fi
+pathadd() {
+  if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+    PATH="$1${PATH:+":$PATH"}"
+  fi
+}
+
+pathadd "/usr/local/bin"
+pathadd "${HOME}/.local/bin"
+export PATH
 
 usage() {
   printf "\nUsage: termprofset [-f fontname] [-s fontsize] [-p profile]"

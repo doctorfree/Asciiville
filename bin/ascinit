@@ -396,6 +396,7 @@ pathadd() {
   fi
 }
 
+pathadd "/usr/local/bin"
 pathadd "${HOME}/.local/bin"
 
 # Clear the Bash cache so we know for sure if something is installed
@@ -1178,16 +1179,19 @@ OWNER=doctorfree
 echo ""
 while true
 do
-  read -p "Install ASCII games ? (y/n) " yn
+  read -p "Install ASCII Games ? (y/n) " yn
   case $yn in
     [Yy]* )
-          PROJECT=asciigames
-          install_external_package
           if [ "${darwin}" ]
           then
             install_package nbsdgames
+            install_package nethack
+            install_package ninvaders
+            install_package c2048
             install_package greed
           else
+            PROJECT=asciigames
+            install_external_package
             if [ "${debian}" ]
             then
               install_package bsdgames

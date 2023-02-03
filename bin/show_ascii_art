@@ -36,10 +36,15 @@ else
   KITTY_QUIT_OPT=
 fi
 
-if [ `echo $PATH | grep -c /.local/bin` -ne "1" ]
-then
-  export PATH="$PATH:$HOME/.local/bin"
-fi
+pathadd() {
+  if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+    PATH="$1${PATH:+":$PATH"}"
+  fi
+}
+
+pathadd "/usr/local/bin"
+pathadd "${HOME}/.local/bin"
+export PATH
 
 # Default palette used by jp2a
 # defchars="   ...',;:clodxkO0KXNWM"

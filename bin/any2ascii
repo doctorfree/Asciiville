@@ -294,7 +294,10 @@ case "${mach}" in
     ;;
 esac
 
+pathadd "/usr/local/bin"
 pathadd "${HOME}/.local/bin"
+export PATH
+
 have_v2a=`type -p video-to-ascii`
 [ "${have_v2a}" ] || {
     PYTHON=""
