@@ -248,10 +248,16 @@ custom_gallery() {
 
 browser() {
   bro_font_size=${art_font_size}
-  figlet -c -k -t "Zoom/Browser Mode" 2> /dev/null
-  figlet -c -k -t "Zoom  In: 'i' / 'j' / 'n'" 2> /dev/null
-  figlet -c -k -t "Zoom Out: 'o' / 'k' / 'm'" 2> /dev/null
-  figlet -c -k -t "Help: 'h'  Exit: 'q'" 2> /dev/null
+  printf "\n"
+  figlet -c -d "${FIG_FONTS}" -f "${SMALL_FONT}" \
+         -k -t "Zoom/Browser Mode" 2> /dev/null
+  figlet -c -d "${FIG_FONTS}" -f "${SMALL_FONT}" \
+         -k -t "Zoom  In: 'i' / 'j' / 'n'" 2> /dev/null
+  figlet -c -d "${FIG_FONTS}" -f "${SMALL_FONT}" \
+         -k -t "Zoom Out: 'o' / 'k' / 'm'" 2> /dev/null
+  figlet -c -d "${FIG_FONTS}" -f "${SMALL_FONT}" \
+         -k -t "Help: 'h'  Exit: 'q'" 2> /dev/null
+  exitzoom=
   while true
   do
     read -rsn1 input
@@ -280,8 +286,8 @@ browser() {
           bro_font_size=${art_font_size}
           ;;
       q|x)
-          clear
-          break
+          exitzoom=1
+          bro_font_size=${art_font_size}
           ;;
       *)  # Display simple help/usage for browser
           clear
@@ -302,9 +308,8 @@ browser() {
     }
     vert_center "$1"
     show_art "$1" "${prep}"
+    [ "${exitzoom}" ] && break
   done
-  bro_font_size=${art_font_size}
-  termprofset ${termarg} -s ${art_font_size}
 }
 
 show_vintage() {
