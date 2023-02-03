@@ -73,6 +73,16 @@ fi
 # Some configuration can be maintained here
 CONFIG="${HOME}/.config/asciiville/config"
 [ -f ${CONFIG} ] && . ${CONFIG}
+# Convert 0 settings to unset
+[ "${AUDIO}" == "0" ] && AUDIO=
+[ "${FULLSCREEN}" == "0" ] && FULLSCREEN=
+[ "${CURRENT}" == "0" ] && CURRENT=
+[ "${GNOME}" == "0" ] && GNOME=
+[ "${RETRO}" == "0" ] && RETRO=
+[ "${TILIX}" == "0" ] && TILIX=
+[ "${KITTY}" == "0" ] && KITTY=
+[ "${XFCE4}" == "0" ] && XFCE4=
+[ "${use_lolcat}" == "0" ] && use_lolcat=
 
 # Backwards compatibility with older Asciiville config
 [ -d "${ARTDIR}" ] || {
