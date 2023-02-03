@@ -285,8 +285,17 @@ browser() {
       r)  # Restore font size
           bro_font_size=${art_font_size}
           ;;
+      f)  # Toggle show filename
+          if [ "${show_filename}" ]
+          then
+            show_filename=
+          else
+            show_filename=1
+          fi
+          ;;
       q|x)
           exitzoom=1
+          show_filename=
           bro_font_size=${art_font_size}
           ;;
       *)  # Display simple help/usage for browser
@@ -294,6 +303,7 @@ browser() {
           termprofset ${termarg} -s ${txt_font_size}
           printf "\n\n\n\t'i' zoom in\n\t'j' zoom in more"
           printf "\n\t'o' zoom out\n\t'k' zoom out more"
+          printf "\n\t'f' or 'F' toggle show filename"
           printf "\n\t'r' restore to original\n\t'h' display this help"
           printf "\n\t'q' or 'x' to exit browse/zoom mode\n\n\t"
           read -p "Press Enter to continue" answer
@@ -308,6 +318,11 @@ browser() {
     }
     vert_center "$1"
     show_art "$1" "${prep}"
+    [ "${show_filename}" ] && {
+      printf "\n"
+      figlet -c -d "${FIG_FONTS}" -f "${SMALL_FONT}" \
+             -k -t `basename $1` 2> /dev/null
+    }
     [ "${exitzoom}" ] && break
   done
 }
@@ -441,6 +456,14 @@ show_ascii() {
         case "${answer}" in
           b|B|z|Z)
             browse=1
+            ;;
+          f|F)
+            if [ "${show_filename}" ]
+            then
+              show_filename=
+            else
+              show_filename=1
+            fi
             ;;
           s|S)
             wait_for_input=

@@ -53,12 +53,13 @@ navigate in zoom/browse mode:
 - 'o' zoom out
 - 'k' zoom out more
 - 'm' zoom out even more
+- 'f' or 'F' toggle show filename
 - 'r' restore to original
 - 'h' display a help message
 - 'q' or 'x' to exit zoom/browse mode
 
 In addition, in interactive mode the user can enter 's' or 'S' followed
-by 'Return' to enter info "slideshow" mode. In slideshow mode the ascii art
+by 'Return' to enter into "slideshow" mode. In slideshow mode the ascii art
 is displayed for a few seconds then the next file is displayed. No user
 interaction is possible during slideshow mode other than 'Ctrl-c' to exit.
 

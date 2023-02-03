@@ -37,6 +37,42 @@ Other command line options can be used to specify the width and heigh of
 the converted image, the fonts used to display accompanying text, and
 the text to display.
 .PP
+In interactive mode the display waits for the user to type
+\[aq]Enter\[aq] before displaying the next file.
+In this mode, if the user types \[aq]z\[aq] or \[aq]b\[aq] followed by
+\[aq]Enter\[aq] then \f[I]show_ascii_art\f[R] enters
+\[dq]zoom/browse\[dq] mode.
+In zoom/browse mode the user can zoom in and out of the ascii art.
+Use the following key presses to navigate in zoom/browse mode:
+.IP \[bu] 2
+\[aq]i\[aq] zoom in
+.IP \[bu] 2
+\[aq]j\[aq] zoom in more
+.IP \[bu] 2
+\[aq]n\[aq] zoom in even more
+.IP \[bu] 2
+\[aq]o\[aq] zoom out
+.IP \[bu] 2
+\[aq]k\[aq] zoom out more
+.IP \[bu] 2
+\[aq]m\[aq] zoom out even more
+.IP \[bu] 2
+\[aq]f\[aq] or \[aq]F\[aq] toggle show filename
+.IP \[bu] 2
+\[aq]r\[aq] restore to original
+.IP \[bu] 2
+\[aq]h\[aq] display a help message
+.IP \[bu] 2
+\[aq]q\[aq] or \[aq]x\[aq] to exit zoom/browse mode
+.PP
+In addition, in interactive mode the user can enter \[aq]s\[aq] or
+\[aq]S\[aq] followed by \[aq]Return\[aq] to enter into
+\[dq]slideshow\[dq] mode.
+In slideshow mode the ascii art is displayed for a few seconds then the
+next file is displayed.
+No user interaction is possible during slideshow mode other than
+\[aq]Ctrl-c\[aq] to exit.
+.PP
 The \f[I]show_ascii_art\f[R] command is not intended as the primary user
 interface for ascii art display.
 Rather, use the \f[I]asciiville\f[R] command which provides options for

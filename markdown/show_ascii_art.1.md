@@ -12,11 +12,33 @@ show_ascii_art - display ascii art
 **show_ascii_art** [-a art[,art2,...]] [-A art_dir] [-b] [-B] [-c] [-C] [-d font_dir] [-D seconds] [-e term] [-E] [-F large_font] [-f small_font] [-g] [-i image] [-I input_dir] [-O output_dir] [-K fifo_name] [-l level] [-L] [-n tabs] [-N depth] [-o] [-p palette] [-P] [-q] [-r] [-R len] [-s show] [-S song] [-t first_text] [-T second_text] [-h height] [-w width] [-W] [-v] [-z] [-Z] [-u]
 
 ## DESCRIPTION
-The *show_ascii_art* command displays one or more of the ascii art images included in
-Asciiville. Command line options can be used to tell *show_ascii_art* to create
+The *show_ascii_art* command displays one or more of the ascii art images included
+in Asciiville. Command line options can be used to tell *show_ascii_art* to create
 a new ascii art image from an image file in any format. Other command line
 options can be used to specify the width and heigh of the converted image,
 the fonts used to display accompanying text, and the text to display.
+
+In interactive mode the display waits for the user to type 'Enter' before
+displaying the next file. In this mode, if the user types 'z' or 'b' followed
+by 'Enter' then *show_ascii_art* enters "zoom/browse" mode. In zoom/browse mode
+the user can zoom in and out of the ascii art. Use the following key presses to
+navigate in zoom/browse mode:
+
+- 'i' zoom in
+- 'j' zoom in more
+- 'n' zoom in even more
+- 'o' zoom out
+- 'k' zoom out more
+- 'm' zoom out even more
+- 'f' or 'F' toggle show filename
+- 'r' restore to original
+- 'h' display a help message
+- 'q' or 'x' to exit zoom/browse mode
+
+In addition, in interactive mode the user can enter 's' or 'S' followed
+by 'Return' to enter into "slideshow" mode. In slideshow mode the ascii art
+is displayed for a few seconds then the next file is displayed. No user
+interaction is possible during slideshow mode other than 'Ctrl-c' to exit.
 
 The *show_ascii_art* command is not intended as the primary user interface for
 ascii art display. Rather, use the *asciiville* command which provides options
