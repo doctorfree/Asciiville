@@ -1060,8 +1060,8 @@ have_pip=`type -p pip`
   }
 }
 
-for pkg in setuptools asciimatics ddgr rainbowstream socli \
-           future xtermcolor ffmpeg-python pyaudio term-image
+for pkg in setuptools asciimatics ddgr rainbowstream socli future \
+           xtermcolor ffmpeg-python pyaudio term-image urlscan
 do
   if pip list | grep ${pkg} > /dev/null
   then

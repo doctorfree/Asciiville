@@ -2,7 +2,7 @@ Name: Asciiville
 Version:    %{_version}
 Release:    %{_release}
 BuildArch:  noarch
-Requires: util-linux, python3, python3-pip, tmux, mplayer, w3m, ranger, curl, jq, wget, asciinema, speedtest-cli, ncurses, neofetch, newsboat, figlet, ImageMagick, dconf, libjpeg-turbo, libpng, cmatrix, gnupg, urlscan, khard, git
+Requires: util-linux, python3, python3-pip, tmux, mplayer, w3m, ranger, curl, jq, wget, asciinema, speedtest-cli, ncurses, neofetch, newsboat, figlet, ImageMagick, dconf, libjpeg-turbo, libpng, cmatrix, gnupg, khard, git
 URL:        https://github.com/doctorfree/Asciiville
 Vendor:     Doctorwhen's Bodacious Laboratory
 Packager:   ronaldrecord@gmail.com

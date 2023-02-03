@@ -34,7 +34,6 @@ pkgbase = asciiville
 	depends = libpng
 	depends = cmatrix
 	depends = gnupg
-	depends = urlscan
 	depends = khard
 	depends = git
 	optdepends = cool-retro-term: cool retro terminal emulator
