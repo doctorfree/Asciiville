@@ -72,6 +72,7 @@ CONFIG="${HOME}/.config/asciiville/config"
 [ "${KITTY}" == "0" ] && KITTY=
 [ "${XFCE4}" == "0" ] && XFCE4=
 [ "${use_lolcat}" == "0" ] && use_lolcat=
+[ "${zoom_depth}" ] || zoom_depth=7
 
 saved_art_size=${art_font_size}
 saved_txt_size=${txt_font_size}
@@ -262,6 +263,14 @@ browser() {
   do
     read -rsn1 input
     case "${input}" in
+      a)  # Toggle auto zoom
+          if [ "${autozoom}" ]
+          then
+            autozoom=
+          else
+            autozoom=1
+          fi
+          ;;
       i)  # Zoom in
           ((bro_font_size++))
           ;;
@@ -296,6 +305,7 @@ browser() {
       q|x)
           exitzoom=1
           show_filename=
+          autozoom=
           bro_font_size=${art_font_size}
           ;;
       *)  # Display simple help/usage for browser
@@ -303,26 +313,54 @@ browser() {
           termprofset ${termarg} -s ${txt_font_size}
           printf "\n\n\n\t'i' zoom in\n\t'j' zoom in more"
           printf "\n\t'o' zoom out\n\t'k' zoom out more"
-          printf "\n\t'f' or 'F' toggle show filename"
+          printf "\n\t'a' toggle auto zoom\n\t 'f' toggle show filename"
           printf "\n\t'r' restore to original\n\t'h' display this help"
           printf "\n\t'q' or 'x' to exit browse/zoom mode\n\n\t"
           read -p "Press Enter to continue" answer
           ;;
     esac
-    clear
-    termprofset ${termarg} -s ${bro_font_size}
-    prep="\n$2"
-    numlines=0
-    [ "${center}" ] && [ "${set_font_size}" ] && [ "${uses_ansi_escape}" ] && {
-      set_prep "$1" "$2"
-    }
-    vert_center "$1"
-    show_art "$1" "${prep}"
-    [ "${show_filename}" ] && {
-      printf "\n"
-      figlet -c -d "${FIG_FONTS}" -f "${SMALL_FONT}" \
-             -k -t `basename $1` 2> /dev/null
-    }
+    if [ "${autozoom}" ]
+    then
+      bro_font_size=${art_font_size}
+      numzoom=1
+
+      while [ ${numzoom} -lt ${zoom_depth} ]
+      do
+        ((bro_font_size++))
+        ((numzoom++))
+        clear
+        termprofset ${termarg} -s ${bro_font_size}
+        prep_and_show "$1" "$2"
+        sleep 3
+      done
+      numzoom=1
+      while [ ${numzoom} -lt ${zoom_depth} ]
+      do
+        ((bro_font_size--))
+        ((numzoom++))
+        clear
+        termprofset ${termarg} -s ${bro_font_size}
+        prep_and_show "$1" "$2"
+        sleep 3
+      done
+      clear
+      termprofset ${termarg} -s ${art_font_size}
+      prep_and_show "$1" "$2"
+      [ "${show_filename}" ] && {
+        printf "\n"
+        figlet -c -d "${FIG_FONTS}" -f "${SMALL_FONT}" \
+               -k -t `basename $1` 2> /dev/null
+      }
+    else
+      clear
+      termprofset ${termarg} -s ${bro_font_size}
+      prep_and_show "$1" "$2"
+      [ "${show_filename}" ] && {
+        printf "\n"
+        figlet -c -d "${FIG_FONTS}" -f "${SMALL_FONT}" \
+               -k -t `basename $1` 2> /dev/null
+      }
+    fi
     [ "${exitzoom}" ] && break
   done
 }
@@ -409,6 +447,16 @@ show_art() {
   fi
 }
 
+prep_and_show() {
+  prep="\n$2"
+  numlines=0
+  [ "${center}" ] && [ "${set_font_size}" ] && [ "${uses_ansi_escape}" ] && {
+    set_prep "$1" "$2"
+  }
+  vert_center "$1"
+  show_art "$1" "${prep}"
+}
+
 prep="\n"
 # Display the ascii art
 #   first argument is the file
@@ -436,13 +484,7 @@ show_ascii() {
         ;;
   esac
 
-  prep="\n$2"
-  numlines=0
-  [ "${center}" ] && [ "${set_font_size}" ] && [ "${uses_ansi_escape}" ] && {
-    set_prep "${asciiart}" "$2"
-  }
-  vert_center "${asciiart}"
-  show_art "${asciiart}" "${prep}"
+  prep_and_show "${asciiart}" "$2"
 
   [ "${viewshow}" ] && {
     [ "${wait_for_input}" ] && {

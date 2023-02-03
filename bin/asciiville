@@ -54,6 +54,7 @@ ALTSONG="${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav"
 shuffle=
 length=0
 show_interval=5
+zoom_depth=7
 art_font_size=4
 txt_font_size=20
 re='^[0-9]+$'
@@ -434,6 +435,7 @@ save_config() {
     echo "journal=\"${journal}\"" >> ${CONFIG}
     echo "style=\"${style}\"" >> ${CONFIG}
     echo "show_interval=${show_interval}" >> ${CONFIG}
+    echo "zoom_depth=${zoom_depth}" >> ${CONFIG}
     echo "art_font_size=${art_font_size}" >> ${CONFIG}
     echo "txt_font_size=${txt_font_size}" >> ${CONFIG}
     echo "" >> ${CONFIG}
@@ -2298,6 +2300,7 @@ show_art_menu() {
     options+=("Use Tmux            [${usetmux}]")
     [ "${have_asciinema}" ] && [ "${TMUX}" ] && options+=("Record Tmux Session [${recordstat}]")
     options+=("Slideshow Interval    [${show_interval}]")
+    options+=("Auto Zoom Depth       [${zoom_depth}]")
     options+=("Art Font Size         [${art_font_size}]")
     options+=("Text Font Size       [${txt_font_size}]")
     [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
@@ -2560,6 +2563,20 @@ show_art_menu() {
                   break
                 else
                   echo "Requested interval '${interval}' is not a number"
+                fi
+              done
+              break
+              ;;
+          "Auto Zoom"*,*|*,"Auto Zoom"*)
+              while true
+              do
+                read -p "Enter auto zoom depth (current value = ${zoom_depth}) " depth
+                if [[ ${depth} =~ $re ]]
+                then
+                  zoom_depth=${depth}
+                  break
+                else
+                  echo "Requested zoom depth '${depth}' is not a number"
                 fi
               done
               break
