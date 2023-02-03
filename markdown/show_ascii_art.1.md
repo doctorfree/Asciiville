@@ -30,7 +30,8 @@ navigate in zoom/browse mode:
 - 'o' zoom out
 - 'k' zoom out more
 - 'm' zoom out even more
-- 'f' or 'F' toggle show filename
+- 'a' toggle auto zoom
+- 'f' toggle show filename
 - 'r' restore to original
 - 'h' display a help message
 - 'q' or 'x' to exit zoom/browse mode
