@@ -14,14 +14,14 @@
 . ftr VB CB
 . ftr VBI CBI
 .\}
-.TH "ASCINIT" "1" "May 04, 2022" "ascinit 1.0.1" "User Manual"
+.TH "ASCINIT" "1" "May 04, 2022" "ascinit 3.0.1" "User Manual"
 .hy
 .SS NAME
 .PP
 ascinit - Asciiville initialization script
 .SS SYNOPSIS
 .PP
-\f[B]ascinit\f[R] [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-t] [-u]
+\f[B]ascinit\f[R] [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-t] [-y] [-u]
 .SS DESCRIPTION
 .PP
 The \f[I]ascinit\f[R] command should be run as a normal user with
@@ -91,6 +91,10 @@ indicates quiet mode
 .TP
 \f[B]-t\f[R]
 indicates authorize the Rainbow Stream app at Twitter
+.TP
+\f[B]-y\f[R]
+indicates answer yes to all prompts except tmux configuration, skip
+animation
 .TP
 \f[B]-u\f[R]
 indicates display this usage message and exit

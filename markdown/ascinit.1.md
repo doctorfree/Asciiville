@@ -2,14 +2,14 @@
 title: ASCINIT
 section: 1
 header: User Manual
-footer: ascinit 1.0.1
+footer: ascinit 3.0.1
 date: May 04, 2022
 ---
 ## NAME
 ascinit - Asciiville initialization script
 
 ## SYNOPSIS
-**ascinit** [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-t] [-u]
+**ascinit** [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-t] [-y] [-u]
 
 ## DESCRIPTION
 The *ascinit* command should be run as a normal user with `sudo` privilege
@@ -66,6 +66,9 @@ command will not install the terminal emulators or create the terminal profiles.
 
 **-t**
 : indicates authorize the Rainbow Stream app at Twitter
+
+**-y**
+: indicates answer yes to all prompts except tmux configuration, skip animation
 
 **-u**
 : indicates display this usage message and exit

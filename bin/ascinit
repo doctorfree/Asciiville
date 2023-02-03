@@ -23,7 +23,7 @@ NORMAL=$(tput sgr0 2>/dev/null)
 usage() {
   if [ "${have_rich}" ]
   then
-    rich "[bold]Usage:[/] [bold italic green]ascinit[/] [cyan]\[-a] \[-c] \[-d] \[-m] \[-M] \[-n] \[-N] \[-q] \[-r] \[-t] \[-u][/]" --print
+    rich "[bold]Usage:[/] [bold italic green]ascinit[/] [cyan]\[-a] \[-c] \[-d] \[-m] \[-M] \[-n] \[-N] \[-q] \[-r] \[-t] \[-y] \[-u][/]" --print
     rich "[bold]Where:[/]" --print
     rich "    [cyan]-a[/] indicates [yellow]do not ask to play an animation when done[/]" --print
     rich "    [cyan]-c[/] indicates [yellow]console mode - no windowing system, headless config[/]" --print
@@ -35,10 +35,11 @@ usage() {
     rich "    [cyan]-q[/] indicates [yellow]quiet mode[/]" --print
     rich "    [cyan]-r[/] indicates [yellow]remove service/package[/]" --print
     rich "    [cyan]-t[/] indicates [yellow]authorize the Rainbow Stream app at Twitter[/]" --print
+    rich "    [cyan]-y[/] indicates [yellow]answer yes at all prompts[/]" --print
     rich "    [cyan]-u[/] indicates [yellow]display this usage message and exit[/]" --print
     printf "\n"
   else
-    printf "\nUsage: ascinit [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-r] [-t] [-u]"
+    printf "\nUsage: ascinit [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-r] [-t] [-y] [-u]"
     printf "\nWhere:"
     printf "\n\t-a indicates do not ask to play an animation when done"
     printf "\n\t-c indicates console mode - no windowing system, headless config"
@@ -50,6 +51,7 @@ usage() {
     printf "\n\t-q indicates quiet mode"
     printf "\n\t-r indicates remove service/package"
     printf "\n\t-t indicates authorize the Rainbow Stream app at Twitter"
+    printf "\n\t-y indicates answer yes at all prompts"
     printf "\n\t-u indicates display this usage message and exit\n"
   fi
   exit 1
@@ -92,23 +94,28 @@ install_package() {
 ask_install() {
   nam="$1"
   pkg="$2"
-  echo "Attempting to configure ${nam} but ${nam} is not installed"
-  echo "Would you like to install ${nam} at this time?"
-  while true
-  do
-    read -p "Install ${nam} ? (y/n) " yn
-    case $yn in
-      [Yy]* )
-          install_package ${pkg}
-          break
-          ;;
-      [Nn]* )
-          break
-          ;;
-        * ) echo "Please answer yes or no."
-          ;;
-    esac
-  done
+  if [ "${prompt}" ]
+  then
+    echo "Attempting to configure ${nam} but ${nam} is not installed"
+    echo "Would you like to install ${nam} at this time?"
+    while true
+    do
+      read -p "Install ${nam} ? (y/n) " yn
+      case $yn in
+        [Yy]* )
+            install_package ${pkg}
+            break
+            ;;
+        [Nn]* )
+            break
+            ;;
+          * ) echo "Please answer yes or no."
+            ;;
+      esac
+    done
+  else
+    install_package ${pkg}
+  fi
 }
 
 install_pipx() {
@@ -415,22 +422,25 @@ have_kitty=`type -p kitty`
 [ "$1" == "kitty" ] && {
   [ "${remove}" ] && {
     printf "\nRemoving kitty terminal emulator.\n\n"
-    while true
-    do
-      read -p "Do you wish to continue with kitty removal ? (y/n) " yn
-      case $yn in
-          [Yy]* )
+    if [ "${prompt}" ]
+    then
+      while true
+      do
+        read -p "Do you wish to continue with kitty removal ? (y/n) " yn
+        case $yn in
+            [Yy]* )
                 break
                 ;;
-          [Nn]* )
+            [Nn]* )
                 printf "\nKitty removal aborted."
                 printf "\nExiting.\n\n"
                 exit 0
                 ;;
               * ) echo "Please answer yes or no."
                 ;;
-      esac
-    done
+        esac
+      done
+    fi
     remove_kitty
     printf "\n${BOLD}Kitty removed${NORM}"
     printf "\nTo re-install kitty run ${BOLD}'ascinit kitty'${NORM}\n\n"
@@ -439,22 +449,25 @@ have_kitty=`type -p kitty`
   [ "${quiet}" ] || {
     printf "\nInstalling kitty terminal emulator\n"
   }
-  while true
-  do
-    read -p "Do you wish to continue with kitty installation ? (y/n) " yn
-    case $yn in
-      [Yy]* )
+  if [ "${prompt}" ]
+  then
+    while true
+    do
+      read -p "Do you wish to continue with kitty installation ? (y/n) " yn
+      case $yn in
+        [Yy]* )
             break
             ;;
-      [Nn]* )
+        [Nn]* )
             printf "\nKitty installation aborted."
             printf "\nExiting.\n\n"
             exit 0
             ;;
           * ) echo "Please answer yes or no."
             ;;
-    esac
-  done
+      esac
+    done
+  fi
   install_kitty
   exit 0
 }
@@ -571,8 +584,9 @@ init_twit=
 inst_terms=
 quiet=
 remove=
+prompt=1
 
-while getopts "acdmMNnqrtu" flag; do
+while getopts "acdmMNnqrtyu" flag; do
   case $flag in
     a)
         ask_anim=
@@ -604,6 +618,10 @@ while getopts "acdmMNnqrtu" flag; do
         ;;
     t)
         init_twit=1
+        ;;
+    y)
+        prompt=
+        ask_anim=
         ;;
     u)
         usage
@@ -1175,42 +1193,51 @@ OWNER=doctorfree
   }
 }
 
+install_games() {
+  if [ "${darwin}" ]
+  then
+    install_package nbsdgames
+    install_package nethack
+    install_package ninvaders
+    install_package c2048
+    install_package greed
+  else
+    PROJECT=asciigames
+    install_external_package
+    if [ "${debian}" ]
+    then
+      install_package bsdgames
+      install_package greed
+    else
+      install_package bsd-games
+    fi
+  fi
+  install_package nudoku
+}
+
 # Install Ascii Games
 echo ""
-while true
-do
-  read -p "Install ASCII Games ? (y/n) " yn
-  case $yn in
-    [Yy]* )
-          if [ "${darwin}" ]
-          then
-            install_package nbsdgames
-            install_package nethack
-            install_package ninvaders
-            install_package c2048
-            install_package greed
-          else
-            PROJECT=asciigames
-            install_external_package
-            if [ "${debian}" ]
-            then
-              install_package bsdgames
-              install_package greed
-            else
-              install_package bsd-games
-            fi
-          fi
-          install_package nudoku
+if [ "${prompt}" ]
+then
+  while true
+  do
+    read -p "Install ASCII Games ? (y/n) " yn
+    case $yn in
+      [Yy]* )
+          install_games
           break
           ;;
-    [Nn]* )
+      [Nn]* )
           printf "\nSkipping Ascii Games installation.\n"
           break
           ;;
         * ) echo "Please answer yes or no."
           ;;
-  esac
-done
+    esac
+  done
+else
+  install_games
+fi
 
 have_mapscii=`type -p mapscii`
 [ "${have_mapscii}" ] || {
