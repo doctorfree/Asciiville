@@ -19,6 +19,7 @@ pkgbase = asciiville
 	depends = python-pip
 	depends = mplayer
 	depends = dconf
+	depends = dialog
 	depends = w3m
 	depends = ranger
 	depends = jq
