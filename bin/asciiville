@@ -28,10 +28,12 @@ BOLD=$(tput bold 2>/dev/null)
 NORM=$(tput sgr0 2>/dev/null)
 PLEASE="Please enter your"
 COMMAND=btop
+darwin=
 platform=`uname -s`
 if [ "${platform}" == "Darwin" ]
 then
   TOP="/usr/local"
+  darwin=1
 else
   TOP="/usr"
 fi
@@ -64,8 +66,7 @@ fifo_name="/tmp/asciiville_$$"
 # Kitty socket
 sock_name="/tmp/asckitty_$$"
 
-platform=`uname -s`
-if [ "${platform}" == "Darwin" ]
+if [ "${darwin}" ]
 then
   KITTY_QUIT_OPT="--override macos_quit_when_last_window_closed=yes"
 else
@@ -299,6 +300,8 @@ usage() {
 }
 
 check_display() {
+  # on a Mac we assume this is not the console but a terminal window
+  [ "${darwin}" ] && return 0
   consolemode=0
   if [ "${DISPLAY}" ]
   then
