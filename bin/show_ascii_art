@@ -263,13 +263,8 @@ browser() {
   do
     read -rsn1 input
     case "${input}" in
-      a)  # Toggle auto zoom
-          if [ "${autozoom}" ]
-          then
-            autozoom=
-          else
-            autozoom=1
-          fi
+      a)  # Auto zoom
+          autozoom=1
           ;;
       i)  # Zoom in
           ((bro_font_size++))
@@ -313,7 +308,7 @@ browser() {
           termprofset ${termarg} -s ${txt_font_size}
           printf "\n\n\n\t'i' zoom in\n\t'j' zoom in more"
           printf "\n\t'o' zoom out\n\t'k' zoom out more"
-          printf "\n\t'a' toggle auto zoom\n\t 'f' toggle show filename"
+          printf "\n\t'a' auto zoom\n\t 'f' toggle show filename"
           printf "\n\t'r' restore to original\n\t'h' display this help"
           printf "\n\t'q' or 'x' to exit browse/zoom mode\n\n\t"
           read -p "Press Enter to continue" answer
@@ -323,6 +318,7 @@ browser() {
     then
       bro_font_size=${art_font_size}
       numzoom=1
+      autozoom=
 
       while [ ${numzoom} -lt ${zoom_depth} ]
       do
