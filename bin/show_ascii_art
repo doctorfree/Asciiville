@@ -260,12 +260,25 @@ browser() {
   figlet -c -d "${FIG_FONTS}" -f "${SMALL_FONT}" \
          -k -t "Help: 'h'  Exit: 'q'" 2> /dev/null
   exitzoom=
+  skipredraw=
   while true
   do
     read -rsn1 input
     case "${input}" in
       a)  # Auto zoom
           autozoom=1
+          ;;
+      d)  # Set default art font size
+          [ ${art_font_size} -eq ${bro_font_size} ] || {
+            art_font_size=${bro_font_size}
+            [ -f ${CONFIG} ] && {
+              cat "${CONFIG}" | \
+                sed -e "s/art_font_size=.*/art_font_size=${art_font_size}/" > /tmp/a$$
+              cp /tmp/a$$ ${CONFIG}
+              rm -f /tmp/a$$
+            }
+          }
+          skipredraw=1
           ;;
       i)  # Zoom in
           ((bro_font_size++))
@@ -307,9 +320,10 @@ browser() {
       *)  # Display simple help/usage for browser
           clear
           termprofset ${termarg} -s ${txt_font_size}
-          printf "\n\n\n\t'i' zoom in\n\t'j' zoom in more"
-          printf "\n\t'o' zoom out\n\t'k' zoom out more"
-          printf "\n\t'a' auto zoom\n\t 'f' toggle show filename"
+          printf "\n\n\n\t'i' zoom in\n\t'j' zoom in more\n\t'n' zoom in even more"
+          printf "\n\t'o' zoom out\n\t'k' zoom out more\n\t'm' zoom out even more"
+          printf "\n\t'a' auto zoom\n\t'd' use current font size as default"
+          printf "\n\t'f' toggle show filename"
           printf "\n\t'r' restore to original\n\t'h' display this help"
           printf "\n\t'q' or 'x' to exit browse/zoom mode\n\n\t"
           read -p "Press Enter to continue" answer
@@ -349,14 +363,19 @@ browser() {
                -k -t `basename $1` 2> /dev/null
       }
     else
-      clear
-      termprofset ${termarg} -s ${bro_font_size}
-      prep_and_show "$1" "$2"
-      [ "${show_filename}" ] && {
-        printf "\n"
-        figlet -c -d "${FIG_FONTS}" -f "${SMALL_FONT}" \
-               -k -t `basename $1` 2> /dev/null
-      }
+      if [ "${skipredraw}" ]
+      then
+        skipredraw=
+      else
+        clear
+        termprofset ${termarg} -s ${bro_font_size}
+        prep_and_show "$1" "$2"
+        [ "${show_filename}" ] && {
+          printf "\n"
+          figlet -c -d "${FIG_FONTS}" -f "${SMALL_FONT}" \
+                 -k -t `basename $1` 2> /dev/null
+        }
+      fi
     fi
     [ "${exitzoom}" ] && break
   done

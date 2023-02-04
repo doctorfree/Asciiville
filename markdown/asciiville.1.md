@@ -54,6 +54,7 @@ navigate in zoom/browse mode:
 - 'k' zoom out more
 - 'm' zoom out even more
 - 'a' auto zoom
+- 'd' use current font size as default
 - 'f' toggle show filename
 - 'r' restore to original
 - 'h' display a help message
