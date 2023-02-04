@@ -1,25 +1,7 @@
 # Maintainer: Ronald Record <ronaldrecord@gmail.com>
 
-# Get the version and release from the VERSION file
-# Move to use of pkgver() function with something like this:
-#   git describe --long | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
-#
-if [ -f VERSION ]
-then
-  . ./VERSION
-else
-  [ "${SRC}" ] || SRC="${HOME}/src/Asciiville"
-  if [ -f ${SRC}/VERSION ]
-  then
-    . ${SRC}/VERSION
-  else
-    VERSION=3.0.1
-    RELEASE=2
-  fi
-fi
-
 pkgname=asciiville
-pkgver=v${VERSION}r${RELEASE}
+pkgver=v3.0.1r2
 pkgrel=1
 pkgdesc="Create and display ASCII Art, animations. Utilities to perform common operations in a character-based environment. Asciiville includes nearly 1,000 works of ASCII Art"
 arch=('any')
@@ -29,7 +11,7 @@ depends=(util-linux libcurl-compat ncurses readline dialog figlet tmux python py
 makedepends=(zip)
 optdepends=('cool-retro-term: cool retro terminal emulator')
 install=asciiville.install
-source=("${pkgname}::git+https://github.com/doctorfree/Asciiville.git")
+source=("${pkgname}::git+https://github.com/doctorfree/Asciiville.git#tag=${pkgver}")
 sha256sums=('SKIP')
 
 prepare() {
