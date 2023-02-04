@@ -84,7 +84,7 @@ install_package() {
           [ "${quiet}" ] || printf "\n\t\tCannot locate dnf to install. Skipping ..."
         fi
       else
-        [ "${arch}" ] && sudo pacman -U --noconfirm $1 > /dev/null 2>&1
+        [ "${arch}" ] && sudo pacman -S --noconfirm $1 > /dev/null 2>&1
       fi
     fi
   fi
@@ -1067,7 +1067,7 @@ have_pip=`type -p pip`
     else
       if [ "${arch}" ]
       then
-        sudo pacman -U --noconfirm python-pip > /dev/null 2>&1
+        sudo pacman -S --noconfirm python-pip > /dev/null 2>&1
       else
         sudo ${DNF} install python3-pip > /dev/null 2>&1
       fi
@@ -1541,7 +1541,7 @@ create_new_profile() {
           [ "${quiet}" ] || printf "\n\t\tCannot locate dnf to install. Skipping ..."
         fi
       else
-        [ "${arch}" ] && sudo pacman -U --noconfirm go > /dev/null 2>&1
+        [ "${arch}" ] && sudo pacman -S --noconfirm go > /dev/null 2>&1
       fi
     fi
     [ "${quiet}" ] || {
