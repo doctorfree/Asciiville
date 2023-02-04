@@ -55,6 +55,7 @@ shuffle=
 length=0
 show_interval=5
 zoom_depth=7
+zoom_interval=4
 art_font_size=4
 txt_font_size=20
 re='^[0-9]+$'
@@ -436,6 +437,7 @@ save_config() {
     echo "style=\"${style}\"" >> ${CONFIG}
     echo "show_interval=${show_interval}" >> ${CONFIG}
     echo "zoom_depth=${zoom_depth}" >> ${CONFIG}
+    echo "zoom_interval=${zoom_interval}" >> ${CONFIG}
     echo "art_font_size=${art_font_size}" >> ${CONFIG}
     echo "txt_font_size=${txt_font_size}" >> ${CONFIG}
     echo "" >> ${CONFIG}
@@ -2301,6 +2303,7 @@ show_art_menu() {
     [ "${have_asciinema}" ] && [ "${TMUX}" ] && options+=("Record Tmux Session [${recordstat}]")
     options+=("Slideshow Interval    [${show_interval}]")
     options+=("Auto Zoom Depth       [${zoom_depth}]")
+    options+=("Auto Zoom Interval    [${zoom_interval}]")
     options+=("Art Font Size         [${art_font_size}]")
     options+=("Text Font Size       [${txt_font_size}]")
     [ "${audiostat}" == "YES" ] && options+=("Select Song [${songname}]")
@@ -2562,12 +2565,12 @@ show_art_menu() {
                   show_interval=${interval}
                   break
                 else
-                  echo "Requested interval '${interval}' is not a number"
+                  echo "Requested slideshow interval '${interval}' is not a number"
                 fi
               done
               break
               ;;
-          "Auto Zoom"*,*|*,"Auto Zoom"*)
+          "Auto Zoom Depth"*,*|*,"Auto Zoom Depth"*)
               while true
               do
                 read -p "Enter auto zoom depth (current value = ${zoom_depth}) " depth
@@ -2577,6 +2580,20 @@ show_art_menu() {
                   break
                 else
                   echo "Requested zoom depth '${depth}' is not a number"
+                fi
+              done
+              break
+              ;;
+          "Auto Zoom Interval"*,*|*,"Auto Zoom Interval"*)
+              while true
+              do
+                read -p "Enter auto zoom interval in seconds (current value = ${zoom_interval}) " interval
+                if [[ ${interval} =~ $re ]]
+                then
+                  zoom_interval=${interval}
+                  break
+                else
+                  echo "Requested zoom interval '${interval}' is not a number"
                 fi
               done
               break

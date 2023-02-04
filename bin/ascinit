@@ -1689,6 +1689,7 @@ CONF="${USERCONF}/asciiville/config"
   echo "style=\"pretty\"" >> ${CONF}
   echo "show_interval=5" >> ${CONF}
   echo "zoom_depth=7" >> ${CONF}
+  echo "zoom_interval=4" >> ${CONF}
   echo "art_font_size=4" >> ${CONF}
   echo "txt_font_size=20" >> ${CONF}
   echo "" >> ${CONF}

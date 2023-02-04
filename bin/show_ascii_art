@@ -73,6 +73,7 @@ CONFIG="${HOME}/.config/asciiville/config"
 [ "${XFCE4}" == "0" ] && XFCE4=
 [ "${use_lolcat}" == "0" ] && use_lolcat=
 [ "${zoom_depth}" ] || zoom_depth=7
+[ "${zoom_interval}" ] || zoom_interval=4
 
 saved_art_size=${art_font_size}
 saved_txt_size=${txt_font_size}
@@ -327,7 +328,7 @@ browser() {
         clear
         termprofset ${termarg} -s ${bro_font_size}
         prep_and_show "$1" "$2"
-        sleep 3
+        sleep ${zoom_interval}
       done
       numzoom=1
       while [ ${numzoom} -lt ${zoom_depth} ]
@@ -337,7 +338,7 @@ browser() {
         clear
         termprofset ${termarg} -s ${bro_font_size}
         prep_and_show "$1" "$2"
-        sleep 3
+        sleep ${zoom_interval}
       done
       clear
       termprofset ${termarg} -s ${art_font_size}
