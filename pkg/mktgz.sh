@@ -68,7 +68,6 @@ ${SUDO} cp conf/rifle.conf ${OUT_DIR}/${DESTDIR}/share/${PKG}
 ${SUDO} cp conf/rainbow_config.json ${OUT_DIR}/${DESTDIR}/share/${PKG}
 ${SUDO} cp copyright ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp LICENSE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
-${SUDO} cp NOTICE ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp CHANGELOG.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp README.md ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}
 ${SUDO} cp VERSION ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}

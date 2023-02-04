@@ -59,7 +59,6 @@ package() {
   cp conf/rainbow_config.json ${pkgdir}/${destdir}/share/${pkgname}
   cp copyright ${pkgdir}/${destdir}/share/doc/${pkgname}
   cp LICENSE ${pkgdir}/${destdir}/share/doc/${pkgname}
-  cp NOTICE ${pkgdir}/${destdir}/share/doc/${pkgname}
   cp CHANGELOG.md ${pkgdir}/${destdir}/share/doc/${pkgname}
   cp README.md ${pkgdir}/${destdir}/share/doc/${pkgname}
   cp VERSION ${pkgdir}/${destdir}/share/doc/${pkgname}
