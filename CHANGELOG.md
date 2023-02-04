@@ -2,10 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## Asciiville-3.0.1r2 (2023-02-03)
+## Asciiville-3.0.1r2 (2023-02-04)
 
 * Automatic installation of many Ascii games
 * Improved interactive menu system
+* Add `a` to interactive art view mode to auto zoom
+* Add `d` to interactive art view mode to set default art font size
+* Add `f` keyboard control for display of ascii art filename
+* Add `zoom_depth` and `zoom_interval` settings in config and ascii art menu
 
 ## Asciiville-3.0.1r1 (2023-01-26)
 

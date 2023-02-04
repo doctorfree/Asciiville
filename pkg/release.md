@@ -13,46 +13,15 @@
 
 ## Overview
 
-Asciiville version 3.0.1 release 2 adds support for installation of many additional Ascii games and improves the interactive menu system.
+Asciiville provides utilities, tools, applications, games, and scripts to create a rich text-based command line environment enabling the creation of Ascii Art, viewing the included Ascii Art galleries, creating your own custom Ascii Art galleries, and much more. See the [Asciiville README](https://github.com/doctorfree/Asciiville#readme) for an overview of supported features.
 
-Asciiville version 3.0.1 release 1 added support for architecture independent installs and includes many bug fixes. Installation on Apple macOS is much improved.
-
-Asciiville version 2.0.1 release 1 added support for Arch-like platforms (e.g. Manjaro Linux), and fixes remote Arch package installations in `ascinit`.
-
-Asciiville version 2.0.0 release 2 added support for Apple macOS installation, initialization, and use. Installation on macOS must be performed using the [manual installation](#manual-installation) described below.
-
-Supported features include:
-
-* Featureful ASCII Art display including slideshow and zoom capabilities
-* Character based ASCII Art and image to ascii conversion utility `jp2a`
-* The lightweight character based system monitor, `btop`
-* The lightweight character based web browser, `w3m`
-* The lightweight character based mail client, `neomutt`
-* The lightweight character based FTP client, `cbftp`
-* The lightweight character based music player, `mpcplus`
-* The lightweight character based file manager, `ranger`
-* The lightweight character based disk usage analyzer, `gdu`
-* The lightweight character based journal app, `jrnl`
-* One or more terminal emulators running a command
-* A tmux session
-* A command line web search
-* A zoomable map of the world
-* Command line character based Twitter client
-* A network download/upload speed test
-* The AAlib BB demo running in a tmux session (Debian based systems only)
-* The ASCII text-based dungeon game `nethack` with Extended ASCII glyphs
-* The `cmatrix` command that displays the screen from "The Matrix"
-* Display system info
-* Display the Phase of the Moon
-* Display a weather report
-* Display a Pokemon
-* Display the MusicPlayerPlus or RoonCommandLine interactive menus
-* Any character based client the user wishes to run
-* Several asciimatics animations optionally accompanied by audio
+Architecture independent native installation packages are provided for Arch Linux, Debian based Linux systems, and RPM based Linux systems. Compressed tar archives and an installation script are provided for all other platforms.
 
 ## Installation
 
 Download the [latest Arch, Debian, or RPM package format release](https://github.com/doctorfree/Asciiville/releases) for your platform. If your platform does not support Arch, Debian, or RPM format installs (e.g. Apple macOS) then download the compressed binary distribution archive for your platform and the `Install-bin.sh` script.
+
+Installation on macOS must be performed using the [manual installation](#manual-installation) described below.
 
 ### Arch Linux based installation
 
@@ -169,43 +138,23 @@ Note that manual removal of Asciiville using the `Uninstall-bin.sh` script will 
 
 ## Changelog
 
-Version 3.0.1 release 2 adds support for:
+Asciiville Version 3 adds support for:
 
-* Automatic installation of many more Ascii games
+* Automatic installation of many Ascii games
 * Improved interactive menu system
-
-Version 3.0.1 release 1 adds support for:
-
-* Architecture independent packaging and installation
-
-Version 2.0.1 release 1 adds support for:
-
-* Arch-like platforms (e.g. Manjaro Linux)
-* Fixes remote Arch package installations in `ascinit`
-
-Version 2.0.0 release 2 adds support for:
-
-* Installation location moved from `/usr` to `/usr/local`
-* Apple macOS manual installation
-* Update `btop` to version 1.2.13
-
-Version 2.0.0 release 1 adds support for:
-
-* Modularize Asciiville installation and initialization
-  * Remove aewan, jp2a, and ninvaders from source, build, and packaging
-  * use external build and packaging to install in `ascinit`
-* Update btop to 1.2.9
-* Install the kitty terminfo entry when installing kitty
-* Add any2ascii command and its dependencies
-* Add asciibrow command
-* Use rich to format usage messages if available
-* Add kitty session startup for zsh users
-* Add Jekyll theme for Github Pages
-* Update tmux configuration
-* Add VHS install in ascinit
-* Improve newsboat config, additional newsboat scripts
-* Use HOME/.config/newsboat for Newsboat config
-* Use kitty for image display in Newsboat
-* Center ascii art when displaying in Kitty
+* Add `a` to interactive art view mode to auto zoom
+* Add `d` to interactive art view mode to set default art font size
+* Add `f` keyboard control for display of ascii art filename
+* Add `zoom_depth` and `zoom_interval` settings in config and ascii art menu
+* Asciiville is now architecture independent
+* Many installation improvements on Apple macOS
+* Move `btop` to external package install
+* Move `cbftp` to external package install
+* Move `endoh1` to external package install
+* Add `term-image` command - display and browse images in the terminal
+* Move installation location back to `/usr` except macOS to `/usr/local`
+* Improved support for macOS manual installation
+* Moved several package/utility installs from `postinstall` to `ascinit`
+* Several bug fixes
 
 See [CHANGELOG.md](https://github.com/doctorfree/Asciiville/blob/master/CHANGELOG.md) for a full list of changes in every Asciiville release
