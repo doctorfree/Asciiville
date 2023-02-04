@@ -1081,7 +1081,7 @@ have_pip=`type -p pip`
 for pkg in setuptools asciimatics ddgr rainbowstream socli future \
            xtermcolor ffmpeg-python pyaudio term-image urlscan
 do
-  if pip list | grep ${pkg} > /dev/null
+  if pip list 2> /dev/null | grep ${pkg} > /dev/null
   then
     ${PYTHON} -m pip install --upgrade ${pkg} > /dev/null 2>&1
   else
@@ -1262,7 +1262,7 @@ have_tuir=`type -p tuir`
 }
 
 pkg=video-to-ascii
-if pip list | grep ${pkg} > /dev/null
+if pip list 2> /dev/null | grep ${pkg} > /dev/null
 then
   ${PYTHON} -m pip install --upgrade ${pkg} ${VOPT} > /dev/null 2>&1
 else
