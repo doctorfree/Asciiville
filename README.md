@@ -89,7 +89,7 @@ Filenames provided to `asciiville`, either on the command line or in
 a specified file, can be absolute paths to files; relative paths to files;
 or relative paths to files in the Asciiville Ascii Art galleries folder.
 Ascii Art filenames may be provided with or without the filename suffix
-(e.g. `Friends/tux.asc` or `Friends/tux.asc.gz` or Friends/tux`).
+(e.g. `Friends/tux.asc` or `Friends/tux.asc.gz` or `Friends/tux`).
 
 When viewing Ascii Art in display mode it is possible to enter 'browse/zoom'
 mode by entering 'b' or 'z' at the keyboard. In this mode the currently
@@ -769,10 +769,10 @@ to ease NeoMutt navigation. These are documented in
 The primary differences between the Asciiville NeoMutt key bindings
 and the default are as follows:
 
-- Vim keybinds. `k` and `j` to go up and down, and `l` and `h` to move forwards and back pages
-- Open the sidebar with `B`. `Ctrl+j` and `Ctrl+k` to navigate, `Ctrl+o` to open selection
-- `A` will attempt to create a new contact with khard
-- `F2`, `F3`, and `F4` are used to switch between three mailboxes
+- Vim keybinds. 'k' and 'j' to go up and down, and 'l' and 'h' to move forwards and back pages
+- Open the sidebar with 'B'. 'Ctrl+j' and 'Ctrl+k' to navigate, 'Ctrl+o' to open selection
+- 'A' will attempt to create a new contact with khard
+- 'F2', 'F3', and 'F4' are used to switch between three mailboxes
 
 The customized Asciiville NeoMutt key bindings are as follows:
 
