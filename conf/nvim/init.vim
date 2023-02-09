@@ -83,6 +83,7 @@ Plug 'junegunn/vim-easy-align' " A simple, easy-to-use Vim alignment plugin
 Plug 'scrooloose/nerdcommenter'
 Plug 'chrisbra/Colorizer'
 Plug 'KabbAmine/vCoolor.vim'
+Plug 'RRethy/vim-illuminate'
 Plug 'antoinemadec/FixCursorHold.nvim'
 Plug 'tpope/vim-git'            " Syntax, indent, and filetype for Git
 " Git integration - :Git (or just :G) calls any arbitrary Git command
@@ -425,9 +426,34 @@ let g:pydocstring_doq_path = '~/.config/nvim/env/bin/doq'
 " require('lualine-config')
 lua << EOF
 servers = {
-    'pyright',
-    --'tsserver', -- uncomment for typescript. See https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md for other language servers
+    "pyright",
+    -- LSP
+    "awk-language-server",
+    "bash-language-server",
+    "dockerfile-language-server",
+    "json-lsp",
+    -- "marksman",
+    "typescript-language-server",
+    -- "texlab",
+    -- "ltex-ls",
+    "lua-language-server",
+    "pyright",
+    "terraform-ls",
+    "yaml-language-server",
+    -- Formatter
+    "black",
+    "prettier",
+    "stylua",
+    "shfmt",
+    -- Linter
+    "eslint_d",
+    "shellcheck",
+    "tflint",
+    "yamllint",
+    -- DAP
+    -- "debugpy",
 }
+
 require('nvim-cmp-config')
 require('lspconfig-config')
 require('treesitter-config')

@@ -60,17 +60,19 @@ usage() {
 install_package() {
   PKG="$1"
   [ "${quiet}" ] || printf "\n\tInstalling ${PKG} ..."
-  if [ "${darwin}" ]
+  # Try Brew first
+  brew search -q /^${PKG}$/ > /dev/null 2>&1
+  if [ $? -eq 0 ]
   then
-    brew install -q $1 > /dev/null 2>&1
-    brew unlink -q $1 > /dev/null 2>&1
-    brew link --overwrite --quiet $1 > /dev/null 2>&1
+    brew install -q ${PKG} > /dev/null 2>&1
+    brew unlink -q ${PKG} > /dev/null 2>&1
+    brew link --overwrite --quiet ${PKG} > /dev/null 2>&1
   else
     if [ "${debian}" ]
     then
       if [ "${APT}" ]
       then
-        sudo ${APT} install $1 > /dev/null 2>&1
+        sudo ${APT} install ${PKG} > /dev/null 2>&1
       else
         [ "${quiet}" ] || printf "\n\t\tCannot locate apt to install. Skipping ..."
       fi
@@ -79,12 +81,12 @@ install_package() {
       then
         if [ "${DNF}" ]
         then
-          sudo ${DNF} install $1 > /dev/null 2>&1
+          sudo ${DNF} install ${PKG} > /dev/null 2>&1
         else
           [ "${quiet}" ] || printf "\n\t\tCannot locate dnf to install. Skipping ..."
         fi
       else
-        [ "${arch}" ] && sudo pacman -S --noconfirm $1 > /dev/null 2>&1
+        [ "${arch}" ] && sudo pacman -S --noconfirm ${PKG} > /dev/null 2>&1
       fi
     fi
   fi
@@ -416,6 +418,7 @@ have_go=`type -p go`
     have_go=`type -p go`
   }
 }
+have_nvim=`type -p nvim`
 have_pipx=`type -p pipx`
 have_kitty=`type -p kitty`
 
@@ -753,6 +756,32 @@ fi
       echo ""
       echo "A good starting point for the NeoMutt user is the NeoMutt Guide at:"
       echo "https://neomutt.org/guide/"
+      echo ""
+    }
+  }
+}
+
+[ -d ${CONFDIR}/nvim ] && {
+  newnvimconf=
+  if [ -d ${USERCONF}/nvim ]
+  then
+    [ "${have_nvim}" ] || {
+      mv ${USERCONF}/nvim ${USERCONF}/nvim-bak$$
+      cp -a ${CONFDIR}/nvim ${USERCONF}/nvim
+      newnvimconf=1
+    }
+  else
+    cp -a ${CONFDIR}/nvim ${USERCONF}/nvim
+    newnvimconf=1
+  fi
+  [ "${newnvimconf}" ] && {
+    [ "${quiet}" ] || {
+      echo ""
+      echo "A ${USERCONF}/nvim/ NeoVim text editor configuration"
+      echo "has been created for you in ~/.config/nvim/"
+      echo ""
+      echo "A good starting point for the NeoVim user is the NeoVim User Doc at:"
+      echo "https://neovim.io/doc/user/"
       echo ""
     }
   }
@@ -1096,63 +1125,65 @@ do
 done
 printf "\n"
 
-have_npm=`type -p npm`
-
-# Use Brew on macOS to install some requirements
-[ "${platform}" == "Darwin" ] && {
-  have_brew=`type -p brew`
-  [ "${have_brew}" ] || {
-    # Install Brew
-    BREW_URL="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
-    curl -fsSL "${BREW_URL}" > /tmp/brew-$$.sh
-    [ $? -eq 0 ] || {
-      rm -f /tmp/brew-$$.sh
-      curl -kfsSL "${BREW_URL}" > /tmp/brew-$$.sh
-    }
-    NONINTERACTIVE=1 /bin/bash -c "/tmp/brew-$$.sh"
+# Use Brew on all platforms to install some requirements
+have_brew=`type -p brew`
+[ "${have_brew}" ] || {
+  # Install Brew
+  BREW_URL="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+  curl -fsSL "${BREW_URL}" > /tmp/brew-$$.sh
+  [ $? -eq 0 ] || {
     rm -f /tmp/brew-$$.sh
-    have_brew=`type -p brew`
+    curl -kfsSL "${BREW_URL}" > /tmp/brew-$$.sh
   }
-  [ "${have_brew}" ] && {
-    export HOMEBREW_NO_INSTALL_CLEANUP=1
-    export HOMEBREW_NO_ENV_HINTS=1
-    [ "${have_npm}" ] || install_package node
-    have_npm=`type -p npm`
-    have_btop=`type -p btop`
-    [ "${have_btop}" ] || install_package btop
-    have_cmatrix=`type -p cmatrix`
-    [ "${have_cmatrix}" ] || install_package cmatrix
-    have_figlet=`type -p figlet`
-    [ "${have_figlet}" ] || install_package figlet
-    have_lolcat=`type -p lolcat`
-    [ "${have_lolcat}" ] || install_package lolcat
-    have_mplayer=`type -p mplayer`
-    [ "${have_mplayer}" ] || install_package mplayer
-    have_neomutt=`type -p neomutt`
-    [ "${have_neomutt}" ] || install_package neomutt
-    have_newsboat=`type -p newsboat`
-    [ "${have_newsboat}" ] || install_package newsboat
-    have_ranger=`type -p ranger`
-    [ "${have_ranger}" ] || install_package ranger
-    have_tmux=`type -p tmux`
-    [ "${have_tmux}" ] || install_package tmux
-    have_w3m=`type -p w3m`
-    [ "${have_w3m}" ] || install_package w3m
-    have_jq=`type -p jq`
-    [ "${have_jq}" ] || install_package jq
-    have_asciinema=`type -p asciinema`
-    [ "${have_asciinema}" ] || install_package asciinema
-    have_speedtest=`type -p speedtest-cli`
-    [ "${have_speedtest}" ] || install_package speedtest-cli
-    have_neofetch=`type -p neofetch`
-    [ "${have_neofetch}" ] || install_package neofetch
-    brew list -q imagemagick > /dev/null 2>&1
-    [ $? -eq 0 ] || install_package imagemagick
-    have_gnupg=`type -p gpg`
-    [ "${have_gnupg}" ] || install_package gnupg
-    brew cleanup --prune=all --quiet > /dev/null 2>&1
-  }
+  NONINTERACTIVE=1 /bin/bash -c "/tmp/brew-$$.sh"
+  rm -f /tmp/brew-$$.sh
+  have_brew=`type -p brew`
 }
+[ "${have_brew}" ] && {
+  export HOMEBREW_NO_INSTALL_CLEANUP=1
+  export HOMEBREW_NO_ENV_HINTS=1
+}
+have_jq=`type -p jq`
+[ "${have_jq}" ] || install_package jq
+have_npm=`type -p npm`
+[ "${have_npm}" ] || install_package node
+have_npm=`type -p npm`
+have_btop=`type -p btop`
+[ "${have_btop}" ] || install_package btop
+have_cmatrix=`type -p cmatrix`
+[ "${have_cmatrix}" ] || install_package cmatrix
+have_figlet=`type -p figlet`
+[ "${have_figlet}" ] || install_package figlet
+have_lolcat=`type -p lolcat`
+[ "${have_lolcat}" ] || install_package lolcat
+have_mplayer=`type -p mplayer`
+[ "${have_mplayer}" ] || install_package mplayer
+have_neomutt=`type -p neomutt`
+[ "${have_neomutt}" ] || install_package neomutt
+have_newsboat=`type -p newsboat`
+[ "${have_newsboat}" ] || install_package newsboat
+have_ranger=`type -p ranger`
+[ "${have_ranger}" ] || install_package ranger
+have_tmux=`type -p tmux`
+[ "${have_tmux}" ] || install_package tmux
+have_w3m=`type -p w3m`
+[ "${have_w3m}" ] || install_package w3m
+have_asciinema=`type -p asciinema`
+[ "${have_asciinema}" ] || install_package asciinema
+have_speedtest=`type -p speedtest-cli`
+[ "${have_speedtest}" ] || install_package speedtest-cli
+have_neofetch=`type -p neofetch`
+[ "${have_neofetch}" ] || install_package neofetch
+have_gnupg=`type -p gpg`
+[ "${have_gnupg}" ] || install_package gnupg
+if [ "${have_brew}" ]
+then
+  brew list -q imagemagick > /dev/null 2>&1
+  [ $? -eq 0 ] || install_package imagemagick
+  brew cleanup --prune=all --quiet > /dev/null 2>&1
+else
+  install_package imagemagick
+fi
 
 OWNER=doctorfree
 # Install aewan if not already present
@@ -1213,6 +1244,34 @@ install_games() {
     fi
   fi
   install_package nudoku
+}
+
+# Install NeoVim
+[ "${have_nvim}" ] || {
+  [ -x ${CONFDIR}/nvim/scripts/install.sh ] && {
+    echo ""
+    if [ "${prompt}" ]
+    then
+      while true
+      do
+        read -p "Install NeoVim text editor ? (y/n) " yn
+        case $yn in
+          [Yy]* )
+            ${CONFDIR}/nvim/scripts/install.sh
+            break
+            ;;
+          [Nn]* )
+            printf "\nSkipping NeoVim installation.\n"
+            break
+            ;;
+          * ) echo "Please answer yes or no."
+            ;;
+        esac
+      done
+    else
+      ${CONFDIR}/nvim/scripts/install.sh
+    fi
+  }
 }
 
 # Install Ascii Games

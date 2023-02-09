@@ -28,11 +28,15 @@ Hit 1 if you agree and want to continue otherwise 2
 
 OS=""
 LINUX_DISTRIBUTION=""
-
+BREW_EXE="brew"
 
 abort () {
   printf "ERROR: %s\n" "$@" >&2
   exit 1
+}
+
+warn () {
+  printf "WARNING: %s\n" "$@" >&2
 }
 
 log () {
@@ -136,26 +140,65 @@ get_linux_distribution () {
 install_brew () {
   if ! command -v brew >/dev/null 2>&1; then
     log "Install brew"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    BREW_URL="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+    have_curl=`type -p curl`
+    [ "${have_curl}" ] || abort "The curl command could not be located."
+    curl -fsSL "${BREW_URL}" > /tmp/brew-$$.sh
+    [ $? -eq 0 ] || {
+      rm -f /tmp/brew-$$.sh
+      curl -kfsSL "${BREW_URL}" > /tmp/brew-$$.sh
+    }
+    NONINTERACTIVE=1 /bin/bash -c "/tmp/brew-$$.sh"
+    rm -f /tmp/brew-$$.sh
+    export HOMEBREW_NO_INSTALL_CLEANUP=1
+    export HOMEBREW_NO_ENV_HINTS=1
+    if [ -f ${HOME}/.profile ]
+    then
+      BASHINIT="${HOME}/.profile"
+    else
+      if [ -f ${HOME}/.bashrc ]
+      then
+        BASHINIT="${HOME}/.bashrc"
+      else
+        BASHINIT="${HOME}/.profile"
+      fi
+    fi
     # shellcheck disable=SC2016
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> "$HOME/.profile"
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]
+    then
+      BREW_EXE="/home/linuxbrew/.linuxbrew/bin/brew"
+    else
+      if [ -x /usr/local/bin/brew ]
+      then
+        BREW_EXE="/usr/local/bin/brew"
+      else
+        if [ -x /opt/homebrew/bin/brew ]
+        then
+          BREW_EXE="/opt/homebrew/bin/brew"
+        else
+          abort "Homebrew brew executable could not be located"
+        fi
+      fi
+    fi
+    echo 'eval "$(${BREW_EXE} shellenv)"' >> "${BASHINIT}"
+    [ -f "${HOME}/.zshrc" ] && {
+      echo 'eval "$(${BREW_EXE} shellenv)"' >> "${HOME}/.zshrc"
+    }
+    eval "$(${BREW_EXE} shellenv)"
+    have_brew=`type -p brew`
+    [ "${have_brew}" ] && BREW_EXE="brew"
     log "Install gcc (recommended by brew)"
-    brew install gcc
+    ${BREW_EXE} install -q gcc > /dev/null 2>&1
   fi
 }
 
 install_neovim_dependencies () {
   log "Installing Neovim dependencies"
-  brew install \
-    fd \
-    ripgrep \
-    fzf \
-    tmux \
-    go \
-    node \
-    python \
-    warrensbox/tap/tfswitch
+  PKGS="fd ripgrep fzf tmux go node python warrensbox/tap/tfswitch"
+  for pkg in ${PKGS}
+  do
+    ${BREW_EXE} install -q ${pkg} > /dev/null 2>&1
+  done
   if ! command -v cargo >/dev/null 2>&1; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
   fi
@@ -164,7 +207,7 @@ install_neovim_dependencies () {
 install_neovim_head () {
   if ! command -v nvim >/dev/null 2>&1; then
     log "Installing Neovim HEAD"
-    brew install --HEAD neovim
+    ${BREW_EXE} install -q --HEAD neovim > /dev/null 2>&1
   elif [[ ! $(nvim --version) =~ "dev" ]]; then
     log "Neovim is installed but not HEAD version"
   else
@@ -174,19 +217,63 @@ install_neovim_head () {
 
 git_clone_neovim_config () {
   local neovim_config_path="$HOME/.config/nvim"
-  log "Cloning Neovim config to $neovim_config_path"
   if [[ -d "$neovim_config_path" ]]; then
-    abort "$neovim_config_path already exists"
+    warn "$neovim_config_path already exists"
+  else
+    log "Cloning Neovim config to $neovim_config_path"
+    git clone https://github.com/doctorfree/nvim.git "$neovim_config_path"
   fi
-  git clone https://github.com/Allaman/nvim.git "$neovim_config_path"
+}
+
+install_npm () {
+  # Install nvm, node, npm, language servers
+  NVM_VERSION="0.39.3"
+  NODE_VERSION="18.14.0"
+  log "[*] Installing nvm $NVM_VERSION ..."
+  # Installs Node Version Manager to ~/.nvm
+  # Also detects bash or zsh and appends source lines
+  # to ~/.bashrc or ~/.zshrc accordingly
+  curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/v$NVM_VERSION/install.sh" | bash
+  export NVM_DIR="$HOME/.nvm"
+  # To get the nvm command working without sourcing bash configs
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  log "[*] Installing node $NODE_VERSION ..."
+  # Installs specific version of Node
+  nvm install $NODE_VERSION
+  log "[*] Setting npm config to use ~/.local as prefix ..."
+  # npm install -g will now install to ~/.local/bin
+  npm config set prefix '~/.local/'
+
+  log "[*] Installing language servers ..."
+  # Could also install the language servers with brew:
+  #   brew install bash-language-server
+  # python language server
+  npm i -g pyright
+  npm i -g typescript typescript-language-server
+  npm i -g bash-language-server
+  npm i -g awk-language-server
+  npm i -g cssmodules-language-server
+  npm i -g vim-language-server
+  npm i -g dockerfile-language-server-nodejs
+  # For other language servers, see:
+  # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+
+  # Install virtualenv to containerize dependencies for vim-pydocstring (doq)
+  # and formatting feature (pynvim for black plugin)
+  log '[*] Installing Python dependencies in a virtual environment ...'
+  python3 -m venv ~/.config/nvim/env
+  source ~/.config/nvim/env/bin/activate
+  pip install wheel
+  pip install pynvim doq
+  deactivate
 }
 
 main () {
   check_prerequisites
+  local common_packages="git curl gip tar unzip"
   get_os
   if [[ $OS == "linux" ]]; then
     get_linux_distribution
-    local common_packages="git curl gip tar unzip"
     if [[ $LINUX_DISTRIBUTION == "debian" || $LINUX_DISTRIBUTION == "ubuntu" ]]; then
       log "Running on DEB based system"
       sudo apt-get update
@@ -217,9 +304,22 @@ main () {
       git_clone_neovim_config
     fi
   elif [[ $OS == "apple" ]];then
-    # TODO:
-    echo this is an apple
+    log "Running on macOS system"
+    # shellcheck disable=SC2086
+    have_xcode=`type -p xcode-select`
+    [ "${have_xcode}" ] || abort "Xcode must be installed. See the App store."
+    xcode-select -p > /dev/null 2>&1
+    [ $? -eq 0 ] || xcode-select --install
+    install_brew
+    for pkg in ${common_packages}
+    do
+      ${BREW_EXE} install -q ${pkg} > /dev/null 2>&1
+    done
+    install_neovim_dependencies
+    install_neovim_head
+    git_clone_neovim_config
   fi
+  install_npm
 }
 
 main
