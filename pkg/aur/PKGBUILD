@@ -50,6 +50,7 @@ package() {
   cp -a conf/kitty ${pkgdir}/${destdir}/share/${pkgname}/kitty
   cp -a conf/mutt ${pkgdir}/${destdir}/share/${pkgname}/mutt
   cp -a conf/mutt_multiple ${pkgdir}/${destdir}/share/${pkgname}/mutt_multiple
+  cp -a conf/nvim ${pkgdir}/${destdir}/share/${pkgname}/nvim
   cp -a conf/neomutt ${pkgdir}/${destdir}/share/${pkgname}/neomutt
   cp -a conf/newsboat ${pkgdir}/${destdir}/share/${pkgname}/newsboat
   cp -a conf/w3m ${pkgdir}/${destdir}/share/${pkgname}/w3m

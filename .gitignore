@@ -18,18 +18,20 @@ missing
 #**.m4
 **/.deps/
 stamp-h1
-archive/*
-dist/*
-pkg/dist/arch/*
-pkg/dist/fedora/*
-pkg/dist/mac/*
-pkg/dist/rpi/*
+archive
+dist
+pkg/dist/arch
+pkg/dist/fedora
+pkg/dist/mac
+pkg/dist/rpi
 
-conf/cool-retro-term/*
-pics/*
-releases/*
-tmp/*
-.obsidian/*
+conf/cool-retro-term
+conf/nvim-kickstart
+conf/nvim-lazy
+pics
+releases
+tmp
+.obsidian
 
 # vim files
 .*.sw[a-z]
