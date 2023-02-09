@@ -1,0 +1,20 @@
+--- .local/share/nvim/plugged/nvim-treesitter/lua/nvim-treesitter/shell_command_selectors.lua.00	2023-02-09 14:48:16.089942240 -0800
++++ .local/share/nvim/plugged/nvim-treesitter/lua/nvim-treesitter/shell_command_selectors.lua	2023-02-09 14:43:20.157828185 -0800
+@@ -29,7 +29,7 @@
+     return {
+       cmd = "mkdir",
+       opts = {
+-        args = { directory },
++        args = { "-p", directory },
+         cwd = cwd,
+       },
+       info = info_msg,
+@@ -52,7 +52,7 @@
+     return {
+       cmd = "rm",
+       opts = {
+-        args = { file },
++        args = { "-f", file },
+       },
+       info = info_msg,
+       err = "Could not delete " .. file,

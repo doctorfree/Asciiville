@@ -12,7 +12,8 @@ set -e
 
 LINUX_HELP_STRING="################################################################################
 - Requires sudo to install some basic packages via your package manager
-- Installs brew in /home/linuxbrew (requires sudo as well) see https://docs.brew.sh/Homebrew-on-Linux
+- Installs brew in /home/linuxbrew (requires sudo as well)
+  - See https://docs.brew.sh/Homebrew-on-Linux
 - Manages all packages required for Neovim via brew (no sudo required)
 - This could result in duplicated tool installations!
 - Modifies your ~/.zshrc, ~/.profile and ~/.bashrc to source paths
@@ -124,8 +125,7 @@ get_linux_distribution () {
           LINUX_DISTRIBUTION="fedora"
         else
           have_dnf=`type -p dnf`
-          have_yum=`type -p yum`
-          if [ "${have_dnf}" ] || [ "${have_yum}" ]
+          if [ "${have_dnf}" ]
           then
             LINUX_DISTRIBUTION="fedora"
           else
@@ -245,15 +245,22 @@ install_npm () {
   npm config set prefix '~/.local/'
 
   log "[*] Installing language servers ..."
-  # Could also install the language servers with brew:
+  # Could also install the language servers with brew, for example:
   #   brew install bash-language-server
+  #
   # python language server
   npm i -g pyright
+  # typescript language server
   npm i -g typescript typescript-language-server
+  # bash language server
   npm i -g bash-language-server
+  # awk language server
   npm i -g awk-language-server
+  # css language server
   npm i -g cssmodules-language-server
+  # vim language server
   npm i -g vim-language-server
+  # docker language server
   npm i -g dockerfile-language-server-nodejs
   # For other language servers, see:
   # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
@@ -276,28 +283,34 @@ main () {
     get_linux_distribution
     if [[ $LINUX_DISTRIBUTION == "debian" || $LINUX_DISTRIBUTION == "ubuntu" ]]; then
       log "Running on DEB based system"
-      sudo apt-get update
+      log "Updating package database"
+      sudo apt -q -y update > /dev/null 2>&1
       # shellcheck disable=SC2086
-      sudo apt-get install build-essential ${common_packages}
+      log "Installing common packages"
+      sudo apt -q -y install build-essential ${common_packages} > /dev/null 2>&1
       install_brew
       install_neovim_dependencies
       install_neovim_head
       git_clone_neovim_config
     elif [[ $LINUX_DISTRIBUTION == "arch" ]]; then
-      echo running on arch based system
-      sudo pacman -Sy
+      log "Running on Arch based system"
+      log "Updating package database"
+      sudo pacman -Sy --noconfirm > /dev/null 2>&1
       # shellcheck disable=SC2086
-      sudo pacman -S base-devel ${common_packages}
+      log "Installing common packages"
+      sudo pacman -S --noconfirm base-devel ${common_packages} > /dev/null 2>&1
       install_brew
       install_neovim_dependencies
       install_neovim_head
       git_clone_neovim_config
     elif [[ $LINUX_DISTRIBUTION == "fedora" ]]; then
       log "Running on RPM based system"
-      sudo dnf update
+      log "Updating package database"
+      sudo dnf --assumeyes --quiet update > /dev/null 2>&1
       # shellcheck disable=SC2086
-      sudo dnf groupinstall "Development Tools"
-      sudo dnf install ${common_packages}
+      log "Installing common packages"
+      sudo dnf --assumeyes --quiet groupinstall "Development Tools" > /dev/null 2>&1
+      sudo dnf --assumeyes --quiet install ${common_packages} > /dev/null 2>&1
       install_brew
       install_neovim_dependencies
       install_neovim_head
@@ -311,6 +324,7 @@ main () {
     xcode-select -p > /dev/null 2>&1
     [ $? -eq 0 ] || xcode-select --install
     install_brew
+    log "Installing common packages"
     for pkg in ${common_packages}
     do
       ${BREW_EXE} install -q ${pkg} > /dev/null 2>&1

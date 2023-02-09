@@ -1274,6 +1274,23 @@ install_games() {
   }
 }
 
+# Patch nvim-treesitter
+have_patch=`type -p patch`
+[ "${have_patch}" ] || install_package patch
+have_patch=`type -p patch`
+[ "${have_patch}" ] && {
+  patchfile="${CONFDIR}/nvim/scripts/nvim-treesitter.patch"
+  [ -f ${patchfile} ] && {
+    PLUGDIR=".local/share/nvim/plugged/nvim-treesitter/lua"
+    [ -f ${HOME}/${PLUGDIR}/nvim-treesitter/shell_command_selectors.lua ] && {
+      HERE=`pwd`
+      cd "${HOME}"
+      patch -b -p0 < ${patchfile}
+      cd "${HERE}"
+    }
+  }
+}
+
 # Install Ascii Games
 echo ""
 if [ "${prompt}" ]
