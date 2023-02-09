@@ -428,8 +428,8 @@ lua << EOF
 servers = {
     "pyright",
     -- LSP
-    "awk-language-server",
-    "bash-language-server",
+    "awk_ls",
+    "bashls",
     "dockerfile-language-server",
     "json-lsp",
     -- "marksman",
@@ -439,6 +439,7 @@ servers = {
     "lua-language-server",
     "pyright",
     "terraform-ls",
+    "vimls",
     "yaml-language-server",
     -- Formatter
     "black",

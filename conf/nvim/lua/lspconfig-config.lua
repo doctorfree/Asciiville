@@ -36,6 +36,10 @@ local lsp_flags = {
   -- This is the default in Nvim 0.7+
   debounce_text_changes = 150,
 }
+require('lspconfig')['awk_ls'].setup{
+    on_attach = on_attach,
+    flags = lsp_flags,
+}
 require('lspconfig')['bashls'].setup{
     on_attach = on_attach,
     flags = lsp_flags,
@@ -55,4 +59,8 @@ require('lspconfig')['rust_analyzer'].setup{
     settings = {
       ["rust-analyzer"] = {}
     }
+}
+require('lspconfig')['vimls'].setup{
+    on_attach = on_attach,
+    flags = lsp_flags,
 }
