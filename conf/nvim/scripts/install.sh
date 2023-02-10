@@ -13,6 +13,21 @@ set -e
 OS=""
 LINUX_DISTRIBUTION=""
 BREW_EXE="brew"
+INFO="################################################################################
+- Homebrew installed in /home/linuxbrew on Linux, /usr/local on macOS
+- See https://docs.brew.sh/Homebrew-on-Linux
+- Neovim, nvm, node, npm, and language servers installed
+- Manages all packages required for Neovim via brew (no sudo required)
+- This could result in duplicated tool installations!
+- Currently, only Bash and Zsh are supported
+- Modifies your ~/.profile, ~/.bashrc, and ~/.zshrc to source paths
+
+After this script is finished
+- Log out or open a new shell
+- Run the command: nvim -c 'PlugInstall' -c 'qa'
+  - Not necessary if invoked from ascinit
+- Open nvim and Enjoy!
+################################################################################"
 
 abort () {
   printf "ERROR: %s\n" "$@" >&2
@@ -336,6 +351,7 @@ main () {
     git_clone_neovim_config
   fi
   install_npm
+  echo "${INFO}"
 }
 
 main

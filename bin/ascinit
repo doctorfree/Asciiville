@@ -399,6 +399,36 @@ remove_kitty() {
   [ -d /Applications/kitty.app ] && sudo rm -rf /Applications/kitty.app
 }
 
+install_neovim() {
+  ${CONFDIR}/nvim/scripts/install.sh
+  have_nvim=`type -p nvim`
+  [ "${have_nvim}" ] && {
+    grep "^Plug " ${HOME}/.config/nvim/init.vim > /dev/null && {
+      nvim -c 'PlugInstall' -c 'qa'
+    }
+  }
+
+  # Patch nvim-treesitter
+  have_patch=`type -p patch`
+  [ "${have_patch}" ] || install_package patch
+  have_patch=`type -p patch`
+  [ "${have_patch}" ] && {
+    patchfile="${CONFDIR}/nvim/scripts/nvim-treesitter.patch"
+    [ -f ${patchfile} ] && {
+      PLUGDIR=".local/share/nvim/plugged/nvim-treesitter/lua/nvim-treesitter"
+      [ -f ${HOME}/${PLUGDIR}/shell_command_selectors.lua ] && {
+        popts="-d ${HOME} -f -p0 -s -r -"
+        if [ -f ${HOME}/${PLUGDIR}/shell_command_selectors.lua.orig ]
+        then
+          patch ${popts} -V numbered < ${patchfile} > /dev/null 2>&1
+        else
+          patch -b ${popts} < ${patchfile}
+        fi
+      }
+    }
+  }
+}
+
 pathadd() {
   if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
     PATH="$1${PATH:+":$PATH"}"
@@ -1262,7 +1292,7 @@ install_games() {
         read -p "Install Neovim text editor ? (y/n) " yn
         case $yn in
           [Yy]* )
-            ${CONFDIR}/nvim/scripts/install.sh
+            install_neovim
             break
             ;;
           [Nn]* )
@@ -1274,28 +1304,8 @@ install_games() {
         esac
       done
     else
-      ${CONFDIR}/nvim/scripts/install.sh
+      install_neovim
     fi
-  }
-}
-
-# Patch nvim-treesitter
-have_patch=`type -p patch`
-[ "${have_patch}" ] || install_package patch
-have_patch=`type -p patch`
-[ "${have_patch}" ] && {
-  patchfile="${CONFDIR}/nvim/scripts/nvim-treesitter.patch"
-  [ -f ${patchfile} ] && {
-    PLUGDIR=".local/share/nvim/plugged/nvim-treesitter/lua/nvim-treesitter"
-    [ -f ${HOME}/${PLUGDIR}/shell_command_selectors.lua ] && {
-      popts="-d ${HOME} -f -p0 -s -r -"
-      if [ -f ${HOME}/${PLUGDIR}/shell_command_selectors.lua.orig ]
-      then
-        patch ${popts} -V numbered < ${patchfile} > /dev/null 2>&1
-      else
-        patch -b ${popts} < ${patchfile}
-      fi
-    }
   }
 }
 
