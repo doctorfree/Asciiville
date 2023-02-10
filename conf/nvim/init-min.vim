@@ -171,7 +171,7 @@ let g:context_nvim_no_redraw = 1
 
 " Neovim :Terminal
 "
-" Exit NeoVim's terminal emulator (:term) by simply pressing escape
+" Exit Neovim's terminal emulator (:term) by simply pressing escape
 tmap <Esc> <C-\><C-n>
 tmap <C-w> <Esc><C-w>
 "tmap <C-d> <Esc>:q<CR>

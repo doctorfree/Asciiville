@@ -3,29 +3,12 @@
 # Copyright (C) 2022 Michael Peter <michaeljohannpeter@gmail.com>
 # Copyright (C) 2023 Ronald Record <ronaldrecord@gmail.com>
 #
-# Install NeoVim and all dependencies for the Neovim config at:
+# Install Neovim and all dependencies for the Neovim config at:
 #     https://github.com/doctorfree/Asciiville/conf/nvim/init.vim
 #
 # Adapted for Asciiville from https://github.com/Allaman/nvim.git
 
 set -e
-
-LINUX_HELP_STRING="################################################################################
-- Requires sudo to install some basic packages via your package manager
-- Installs brew in /home/linuxbrew (requires sudo as well)
-  - See https://docs.brew.sh/Homebrew-on-Linux
-- Manages all packages required for Neovim via brew (no sudo required)
-- This could result in duplicated tool installations!
-- Modifies your ~/.zshrc, ~/.profile and ~/.bashrc to source paths
-
-Just confirm / hit enter at every choice for the default settings (recommended)
-
-After this script is finished
--  Log out or open a new shell
--  Open nvim and Enjoy!
-
-Hit 1 if you agree and want to continue otherwise 2
-################################################################################"
 
 OS=""
 LINUX_DISTRIBUTION=""
@@ -63,23 +46,12 @@ check_prerequisites () {
   fi
 }
 
-ask_for_understanding () {
-  echo "$1"
-  select choice in "Yes" "No"; do
-    case $choice in
-      Yes ) echo "Going on"; break;;
-      No ) exit;;
-    esac
-  done
-}
-
 get_os () {
   if [[ "$OSTYPE" =~ "darwin"* ]]; then
     OS="apple"
   elif [[ "$OSTYPE" =~ "linux" ]]; then
     OS="linux"
     log "Running on Linux"
-    ask_for_understanding "$LINUX_HELP_STRING"
   fi
 }
 
@@ -139,7 +111,7 @@ get_linux_distribution () {
 
 install_brew () {
   if ! command -v brew >/dev/null 2>&1; then
-    log "Install brew"
+    log "Installing Homebrew, please be patient"
     BREW_URL="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
     have_curl=`type -p curl`
     [ "${have_curl}" ] || abort "The curl command could not be located."
@@ -150,7 +122,7 @@ install_brew () {
     }
     [ -f /tmp/brew-$$.sh ] || abort "Brew install script download failed"
     chmod 755 /tmp/brew-$$.sh
-    NONINTERACTIVE=1 /bin/bash -c "/tmp/brew-$$.sh"
+    NONINTERACTIVE=1 /bin/bash -c "/tmp/brew-$$.sh" > /dev/null 2>&1
     rm -f /tmp/brew-$$.sh
     export HOMEBREW_NO_INSTALL_CLEANUP=1
     export HOMEBREW_NO_ENV_HINTS=1
@@ -219,11 +191,11 @@ install_neovim_head () {
 
 git_clone_neovim_config () {
   local neovim_config_path="$HOME/.config/nvim"
-  if [[ -d "$neovim_config_path" ]]; then
-    warn "$neovim_config_path already exists"
+  if [[ -d "${neovim_config_path}" ]]; then
+    warn "${neovim_config_path} already exists"
   else
-    log "Cloning Neovim config to $neovim_config_path"
-    git clone https://github.com/doctorfree/nvim.git "$neovim_config_path"
+    log "Cloning Neovim config to ${neovim_config_path}"
+    git clone https://github.com/doctorfree/nvim.git "${neovim_config_path}"
   fi
 }
 

@@ -28,7 +28,7 @@ Installation on macOS must be performed using the [manual installation](#manual-
 Install the package on Arch Linux based systems by executing the command:
 
 ```shell
-sudo pacman -U ./Asciiville_3.0.1-2-any.pkg.tar.zst
+sudo pacman -U ./Asciiville_3.0.2-1-any.pkg.tar.zst
 ```
 
 ### Debian based installation
@@ -37,14 +37,14 @@ Install the package on Debian based systems by executing the commands:
 
 ```shell
 sudo apt update -y
-sudo apt install ./Asciiville_3.0.1-2.deb
+sudo apt install ./Asciiville_3.0.2-1.deb
 ```
 
 Similarly, on a Raspberry Pi:
 
 ```shell
 sudo apt update -y
-sudo apt install ./Asciiville_3.0.1-2.deb
+sudo apt install ./Asciiville_3.0.2-1.deb
 ```
 
 ### RPM based installation
@@ -52,7 +52,7 @@ sudo apt install ./Asciiville_3.0.1-2.deb
 Install the package on RPM based systems by executing the command
 ```shell
 sudo dnf update -y
-sudo dnf localinstall ./Asciiville-3.0.1-2.rpm
+sudo dnf localinstall ./Asciiville-3.0.2-1.rpm
 ```
 
 ### Manual installation
@@ -71,14 +71,14 @@ Alternatively, after downloading the installation script and distribution archiv
 
 ```shell
 chmod 755 Install-bin.sh
-sudo ./Install-bin.sh /path/to/Asciiville_3.0.1-2.<arch>.tgz
+sudo ./Install-bin.sh /path/to/Asciiville_3.0.2-1.<arch>.tgz
 ```
 
-For example, to install Asciiville version 3.0.1 release 2 on Apple macOS using the installation script and archive previously downloaded to `$HOME/Downloads/`:
+For example, to install Asciiville version 3.0.2 release 1 on Apple macOS using the installation script and archive previously downloaded to `$HOME/Downloads/`:
 
 ```shell
 chmod 755 ~/Downloads/Install-bin.sh
-sudo ~/Downloads/Install-bin.sh ~/Downloads/Asciiville_3.0.1-2.Darwin.tgz
+sudo ~/Downloads/Install-bin.sh ~/Downloads/Asciiville_3.0.2-1.Darwin.tgz
 ```
 
 After successfully installing Asciiville, as a normal user run the `ascinit` command to initialize Asciiville. **[Note:]** Run the `ascinit` command as the user who will be using `asciiville`. No `sudo` is needed, just `ascinit`.
@@ -140,6 +140,8 @@ Note that manual removal of Asciiville using the `Uninstall-bin.sh` script will 
 
 Asciiville Version 3 adds support for:
 
+* Automated Neovim installation and configuration
+* Install and use Brew on all platforms
 * Automatic installation of many Ascii games
 * Improved interactive menu system
 * Add `a` to interactive art view mode to auto zoom

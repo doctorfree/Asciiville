@@ -777,10 +777,10 @@ fi
   [ "${newnvimconf}" ] && {
     [ "${quiet}" ] || {
       echo ""
-      echo "A ${USERCONF}/nvim/ NeoVim text editor configuration"
+      echo "A ${USERCONF}/nvim/ Neovim text editor configuration"
       echo "has been created for you in ~/.config/nvim/"
       echo ""
-      echo "A good starting point for the NeoVim user is the NeoVim User Doc at:"
+      echo "A good starting point for the Neovim user is the Neovim User Doc at:"
       echo "https://neovim.io/doc/user/"
       echo ""
     }
@@ -1137,8 +1137,10 @@ have_brew=`type -p brew`
   }
   [ -f /tmp/brew-$$.sh ] && {
     chmod 755 /tmp/brew-$$.sh
-    NONINTERACTIVE=1 /bin/bash -c "/tmp/brew-$$.sh"
+    printf "Installing Homebrew, please be patient ... "
+    NONINTERACTIVE=1 /bin/bash -c "/tmp/brew-$$.sh" > /dev/null 2>&1
     rm -f /tmp/brew-$$.sh
+    printf "done\n"
   }
   have_brew=`type -p brew`
 }
@@ -1249,7 +1251,7 @@ install_games() {
   install_package nudoku
 }
 
-# Install NeoVim
+# Install Neovim
 [ "${have_nvim}" ] || {
   [ -x ${CONFDIR}/nvim/scripts/install.sh ] && {
     echo ""
@@ -1257,14 +1259,14 @@ install_games() {
     then
       while true
       do
-        read -p "Install NeoVim text editor ? (y/n) " yn
+        read -p "Install Neovim text editor ? (y/n) " yn
         case $yn in
           [Yy]* )
             ${CONFDIR}/nvim/scripts/install.sh
             break
             ;;
           [Nn]* )
-            printf "\nSkipping NeoVim installation.\n"
+            printf "\nSkipping Neovim installation.\n"
             break
             ;;
           * ) echo "Please answer yes or no."

@@ -1,9 +1,9 @@
-""" Use this NeoVim configuration to uninstall all plugins
+""" Use this Neovim configuration to uninstall all plugins
 "
-"   Open NeoVim with 'nvim -u ~/.config/nvim/init-uninstall-plugins.vim'
+"   Open Neovim with 'nvim -u ~/.config/nvim/init-uninstall-plugins.vim'
 "   Run ':PlugClean'
 "
-"   After plugins have been removed, reinstall the NeoVim plugins with:
+"   After plugins have been removed, reinstall the Neovim plugins with:
 "     nvim -c 'PlugInstall' -c 'qa'
 "
 " General "{{{
@@ -180,7 +180,7 @@ let g:context_nvim_no_redraw = 1
 
 " Neovim :Terminal
 "
-" Exit NeoVim's terminal emulator (:term) by simply pressing escape
+" Exit Neovim's terminal emulator (:term) by simply pressing escape
 tmap <Esc> <C-\><C-n>
 tmap <C-w> <Esc><C-w>
 "tmap <C-d> <Esc>:q<CR>
