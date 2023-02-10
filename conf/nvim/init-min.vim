@@ -1,47 +1,7 @@
-""" Minimal Neovim Init.vim for testing and PR submission
+""" Minimal Neovim plugin Init.vim for testing and PR submission
 "
 call plug#begin()
-
-Plug 'vim-airline/vim-airline' " Nifty status of your current file
-let g:airline#extensions#tabline#enabled = 1
-let g:bufferline_echo = 0
-let g:airline_powerline_fonts = 1
-" Remove the error and warning sections from Airline layout
-" let g:airline#extensions#default#layout = [
-"     \ [ 'a', 'b', 'c' ],
-"     \ [ 'x', 'y', 'z', 'error', 'warning' ]
-"     \ ]
-let g:airline#extensions#default#layout = [
-    \ [ 'a', 'b', 'c' ],
-    \ [ 'x', 'y', 'z']
-    \ ]
-Plug 'vim-airline/vim-airline-themes' " Airline status themes
-" Airline themes can be found in:
-" ~/.local/share/nvim/plugged/vim-airline-themes/autoload/airline/themes/
-"   simple, powerlineish, onedark, desertink distinguished, cool, cobalt2,
-"   hybrid, night_owl, luna, solarized_flood, google_dark, ravenpower, molokai
-let g:airline_theme='google_dark'
-Plug 'romgrk/fzy-lua-native' " Needed for lua_fzy_highlighter in wilder
-
-if has('nvim')
-  function! UpdateRemotePlugins(...)
-    " Needed to refresh runtime files
-    let &rtp=&rtp
-    UpdateRemotePlugins
-  endfunction
-
-  Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
-else
-  Plug 'gelguy/wilder.nvim'
-
-  " To use Python remote plugin features in Vim, can be skipped
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-
 Plug 'flazz/vim-colorschemes'  " One stop shop for vim colorschemes
-Plug 'gmarik/ingretu'
-
 call plug#end()
 
 set backspace=indent
@@ -93,17 +53,6 @@ let g:netrw_banner = 0         " Do not show Netrw help banner
 
 " complete longest common string, then list alternatives.
 set wildmode=longest,list
-" Use wilder, see https://github.com/gelguy/wilder.nvimrc
-" for extensive set of configuration examples
-call wilder#setup({'modes': [':', '/', '?']})
-call wilder#set_option('renderer', wilder#wildmenu_renderer(
-      \ wilder#wildmenu_airline_theme({
-      \   'highlighter': wilder#lua_fzy_highlighter(),
-      \   'separator': ' · ',
-      \ })))
-" call wilder#set_option('renderer', wilder#wildmenu_renderer({
-"       \ 'apply_incsearch_fix': 1,
-"       \ }))
 
 set fo+=o  " Insert the current comment leader after hitting 'o' or 'O' in Normal mode.
 set fo-=r  " Do not automatically insert a comment leader after an enter
