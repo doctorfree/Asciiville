@@ -157,14 +157,14 @@ install_brew () {
     if [ -f "${BASHINIT}" ]
     then
       grep "^eval \"\$(${BREW_EXE} shellenv)\"" "${BASHINIT}" > /dev/null || {
-        echo "eval \"$(${BREW_EXE} shellenv)\"" >> "${BASHINIT}"
+        echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${BASHINIT}"
       }
     else
-      echo "eval \"$(${BREW_EXE} shellenv)\"" > "${BASHINIT}"
+      echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" > "${BASHINIT}"
     fi
     [ -f "${HOME}/.zshrc" ] && {
       grep "^eval \"\$(${BREW_EXE} shellenv)\"" "${HOME}/.zshrc" > /dev/null || {
-        echo "eval \"$(${BREW_EXE} shellenv)\"" >> "${HOME}/.zshrc"
+        echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${HOME}/.zshrc"
       }
     }
     eval "$(${BREW_EXE} shellenv)"
@@ -301,6 +301,7 @@ install_npm () {
   check_python
   [ "${PYTHON}" ] || {
     # Could not find Python, install with Homebrew
+    log '[*] Installing Python with Homebrew ...'
     ${BREW_EXE} install -q python > /dev/null 2>&1
     check_python
   }
