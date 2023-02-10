@@ -148,6 +148,8 @@ install_brew () {
       rm -f /tmp/brew-$$.sh
       curl -kfsSL "${BREW_URL}" > /tmp/brew-$$.sh
     }
+    [ -f /tmp/brew-$$.sh ] || abort "Brew install script download failed"
+    chmod 755 /tmp/brew-$$.sh
     NONINTERACTIVE=1 /bin/bash -c "/tmp/brew-$$.sh"
     rm -f /tmp/brew-$$.sh
     export HOMEBREW_NO_INSTALL_CLEANUP=1
