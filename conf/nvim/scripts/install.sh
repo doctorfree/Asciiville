@@ -201,52 +201,80 @@ git_clone_neovim_config () {
 
 install_npm () {
   # Install nvm, node, npm, language servers
-  NVM_VERSION="0.39.3"
   NODE_VERSION="18.14.0"
+  NVM_VERSION="0.39.3"
+  NVM_INSTALL="https://raw.githubusercontent.com/nvm-sh/nvm/v$NVM_VERSION/install.sh"
   log "[*] Installing nvm $NVM_VERSION ..."
   # Installs Node Version Manager to ~/.nvm
   # Also detects bash or zsh and appends source lines
   # to ~/.bashrc or ~/.zshrc accordingly
-  curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/v$NVM_VERSION/install.sh" | bash
+  curl --silent --location "${NVM_INSTALL}" > /tmp/nvm-$$.sh
+  [ $? -eq 0 ] || {
+    rm -f /tmp/nvm-$$.sh
+    curl --insecure --silent --location "${NVM_INSTALL}" > /tmp/nvm-$$.sh
+    cat /tmp/nvm-$$.sh | sed -e "s/--fail/--insecure --fail/" > /tmp/n$$
+    cp /tmp/n$$ /tmp/nvm-$$.sh
+    rm -f /tmp/n$$
+  }
+  if [ -s /tmp/nvm-$$.sh ]
+  then
+    chmod 755 /tmp/nvm-$$.sh
+    /bin/bash -c "/tmp/nvm-$$.sh" > /dev/null 2>&1
+    rm -f /tmp/nvm-$$.sh
+  else
+    printf "\nERROR: Download of NVM installation script failed"
+    printf "\nSee https://github.com/nvm-sh/nvm#installing-and-updating"
+    printf "\nto manually install the node version manager\n"
+  fi
   export NVM_DIR="$HOME/.nvm"
   # To get the nvm command working without sourcing bash configs
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-  log "[*] Installing node $NODE_VERSION ..."
   # Installs specific version of Node
-  nvm install $NODE_VERSION
-  log "[*] Setting npm config to use ~/.local as prefix ..."
-  # npm install -g will now install to ~/.local/bin
-  npm config set prefix '~/.local/'
+  have_nvm=`type -p nvm`
+  [ "${have_nvm}" ] && {
+    log "[*] Installing node $NODE_VERSION ..."
+    nvm install $NODE_VERSION
+  }
+  have_npm=`type -p npm`
+  [ "${have_npm}" ] && {
+    log "[*] Setting npm config to use ~/.local as prefix ..."
+    # npm install -g will now install to ~/.local/bin
+    npm config set prefix '~/.local/'
 
-  log "[*] Installing language servers ..."
-  # Could also install the language servers with brew, for example:
-  #   brew install bash-language-server
-  #
-  # python language server
-  npm i -g pyright
-  # typescript language server
-  npm i -g typescript typescript-language-server
-  # bash language server
-  npm i -g bash-language-server
-  # awk language server
-  npm i -g awk-language-server
-  # css language server
-  npm i -g cssmodules-language-server
-  # vim language server
-  npm i -g vim-language-server
-  # docker language server
-  npm i -g dockerfile-language-server-nodejs
-  # For other language servers, see:
-  # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-
+    log "[*] Installing language servers ..."
+    # Could also install the language servers with brew, for example:
+    #   brew install bash-language-server
+    #
+    # python language server
+    npm i -g pyright
+    # typescript language server
+    npm i -g typescript typescript-language-server
+    # bash language server
+    npm i -g bash-language-server
+    # awk language server
+    npm i -g awk-language-server
+    # css language server
+    npm i -g cssmodules-language-server
+    # vim language server
+    npm i -g vim-language-server
+    # docker language server
+    npm i -g dockerfile-language-server-nodejs
+    # For other language servers, see:
+    # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+  }
   # Install virtualenv to containerize dependencies for vim-pydocstring (doq)
   # and formatting feature (pynvim for black plugin)
   log '[*] Installing Python dependencies in a virtual environment ...'
   python3 -m venv ~/.config/nvim/env
-  source ~/.config/nvim/env/bin/activate
-  pip install wheel
-  pip install pynvim doq
-  deactivate
+  [ -s ${HOME}/.config/nvim/env/bin/activate ] && {
+    \. ${HOME}/.config/nvim/env/bin/activate
+  }
+  have_pip=`type -p pip`
+  [ "${have_pip}" ] && {
+    pip install wheel
+    pip install pynvim doq
+  }
+  [ -s ${HOME}/.config/nvim/env/bin/activate ] && deactivate
 }
 
 main () {
