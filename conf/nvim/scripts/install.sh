@@ -11,6 +11,7 @@
 set -e
 
 OS=""
+PYTHON=
 LINUX_DISTRIBUTION=""
 LINUX_HOMEBREW="https://docs.brew.sh/Homebrew-on-Linux"
 DOC_HOMEBREW="https://docs.brew.sh"
