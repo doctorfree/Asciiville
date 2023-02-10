@@ -431,7 +431,7 @@ install_neovim() {
 
 pathadd() {
   if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
-    PATH="$1${PATH:+":$PATH"}"
+    export PATH="$1${PATH:+":$PATH"}"
   fi
 }
 
@@ -806,13 +806,10 @@ fi
   fi
   [ "${newnvimconf}" ] && {
     [ "${quiet}" ] || {
-      echo ""
-      echo "A ${USERCONF}/nvim/ Neovim text editor configuration"
-      echo "has been created for you in ~/.config/nvim/"
-      echo ""
-      echo "A good starting point for the Neovim user is the Neovim User Doc at:"
-      echo "https://neovim.io/doc/user/"
-      echo ""
+      printf "\n\tA Neovim text editor configuration has been created for you in"
+      printf "\n\t\t${HOME}/.config/nvim/"
+      printf "\n\tA good starting point for the Neovim user is the Neovim User Doc at:"
+      printf "\n\t\thttps://neovim.io/doc/user/\n"
     }
   }
 }
@@ -1156,6 +1153,7 @@ done
 printf "\n"
 
 # Use Brew on all platforms to install some requirements
+BREW_EXE="brew"
 have_brew=`type -p brew`
 [ "${have_brew}" ] || {
   # Install Brew
@@ -1167,17 +1165,61 @@ have_brew=`type -p brew`
   }
   [ -f /tmp/brew-$$.sh ] && {
     chmod 755 /tmp/brew-$$.sh
-    printf "Installing Homebrew, please be patient ... "
+    [ "${quiet}" ] || printf "\tInstalling brew, please be patient ... "
     NONINTERACTIVE=1 /bin/bash -c "/tmp/brew-$$.sh" > /dev/null 2>&1
     rm -f /tmp/brew-$$.sh
-    printf "done\n"
+    [ "${quiet}" ] || printf "done"
   }
-  have_brew=`type -p brew`
+  if [ -f ${HOME}/.profile ]
+  then
+    BASHINIT="${HOME}/.profile"
+  else
+    if [ -f ${HOME}/.bashrc ]
+    then
+      BASHINIT="${HOME}/.bashrc"
+    else
+      BASHINIT="${HOME}/.profile"
+    fi
+  fi
+  # shellcheck disable=SC2016
+  if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]
+  then
+    BREW_EXE="/home/linuxbrew/.linuxbrew/bin/brew"
+  else
+    if [ -x /usr/local/bin/brew ]
+    then
+      BREW_EXE="/usr/local/bin/brew"
+    else
+      if [ -x /opt/homebrew/bin/brew ]
+      then
+        BREW_EXE="/opt/homebrew/bin/brew"
+      else
+        echo "WARNING: Homebrew brew executable could not be located"
+      fi
+    fi
+  fi
+  echo 'eval "$(${BREW_EXE} shellenv)"' >> "${BASHINIT}"
+  [ -f "${HOME}/.zshrc" ] && {
+    echo 'eval "$(${BREW_EXE} shellenv)"' >> "${HOME}/.zshrc"
+  }
+  eval "$(${BREW_EXE} shellenv)"
 }
-[ "${have_brew}" ] && {
-  export HOMEBREW_NO_INSTALL_CLEANUP=1
-  export HOMEBREW_NO_ENV_HINTS=1
-}
+
+have_brew=`type -p brew`
+if [ "${have_brew}" ]
+then
+  BREW_EXE="brew"
+else
+  [ "${BREW_EXE}" == "brew" ] || {
+    BREWPATH=`dirname ${BREW_EXE}`
+    pathadd "${BREWPATH}"
+    have_brew=`type -p brew`
+  } 
+fi
+
+export HOMEBREW_NO_INSTALL_CLEANUP=1
+export HOMEBREW_NO_ENV_HINTS=1
+
 have_jq=`type -p jq`
 [ "${have_jq}" ] || install_package jq
 have_npm=`type -p npm`

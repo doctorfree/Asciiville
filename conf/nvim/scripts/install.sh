@@ -12,36 +12,18 @@ set -e
 
 OS=""
 LINUX_DISTRIBUTION=""
+LINUX_HOMEBREW="https://docs.brew.sh/Homebrew-on-Linux"
+DOC_HOMEBREW="https://docs.brew.sh"
 BREW_EXE="brew"
-INFO="################################################################################
-- Homebrew installed in /home/linuxbrew on Linux, /usr/local on macOS
-- See https://docs.brew.sh/Homebrew-on-Linux
-- Neovim, nvm, node, npm, and language servers installed
-- Manages all packages required for Neovim via brew (no sudo required)
-- This could result in duplicated tool installations!
-- Currently, only Bash and Zsh are supported
-- Modifies your ~/.profile, ~/.bashrc, and ~/.zshrc to source paths
-
-After this script is finished
-- Log out or open a new shell
-- Run the command: nvim -c 'PlugInstall' -c 'qa'
-  - Not necessary if invoked from ascinit
-- Open nvim and Enjoy!
-################################################################################"
 
 abort () {
   printf "ERROR: %s\n" "$@" >&2
   exit 1
 }
 
-warn () {
-  printf "WARNING: %s\n" "$@" >&2
-}
-
 log () {
   printf "################################################################################\n"
   printf "%s\n" "$@"
-  printf "################################################################################\n"
 }
 
 check_prerequisites () {
@@ -156,14 +138,18 @@ install_brew () {
     if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]
     then
       BREW_EXE="/home/linuxbrew/.linuxbrew/bin/brew"
+      HOMEBREW_HOME="/home/linuxbrew/"
     else
       if [ -x /usr/local/bin/brew ]
       then
         BREW_EXE="/usr/local/bin/brew"
+        HOMEBREW_HOME="/usr/local/"
       else
         if [ -x /opt/homebrew/bin/brew ]
         then
           BREW_EXE="/opt/homebrew/bin/brew"
+          HOMEBREW_HOME="/opt/homebrew/"
+      else
         else
           abort "Homebrew brew executable could not be located"
         fi
@@ -179,6 +165,15 @@ install_brew () {
     log "Install gcc (recommended by brew)"
     ${BREW_EXE} install -q gcc > /dev/null 2>&1
   fi
+  [ "${HOMEBREW_HOME}" ] || {
+    brewpath=$(command -v brew)
+    if [ $? -eq 0 ]
+    then
+      HOMEBREW_HOME=`dirname ${brewpath} | sed -e "s%/bin$%%"`
+    else
+      HOMEBREW_HOME="Unknown"
+    fi
+  }
 }
 
 install_neovim_dependencies () {
@@ -207,7 +202,7 @@ install_neovim_head () {
 git_clone_neovim_config () {
   local neovim_config_path="$HOME/.config/nvim"
   if [[ -d "${neovim_config_path}" ]]; then
-    warn "${neovim_config_path} already exists"
+    log "${neovim_config_path} already exists"
   else
     log "Cloning Neovim config to ${neovim_config_path}"
     git clone https://github.com/doctorfree/nvim.git "${neovim_config_path}"
@@ -261,33 +256,33 @@ install_npm () {
     #   brew install bash-language-server
     #
     # python language server
-    npm i -g pyright
+    npm i -g pyright > /dev/null 2>&1
     # typescript language server
-    npm i -g typescript typescript-language-server
+    npm i -g typescript typescript-language-server > /dev/null 2>&1
     # bash language server
-    npm i -g bash-language-server
+    npm i -g bash-language-server > /dev/null 2>&1
     # awk language server
-    npm i -g awk-language-server
+    npm i -g awk-language-server > /dev/null 2>&1
     # css language server
-    npm i -g cssmodules-language-server
+    npm i -g cssmodules-language-server > /dev/null 2>&1
     # vim language server
-    npm i -g vim-language-server
+    npm i -g vim-language-server > /dev/null 2>&1
     # docker language server
-    npm i -g dockerfile-language-server-nodejs
+    npm i -g dockerfile-language-server-nodejs > /dev/null 2>&1
     # For other language servers, see:
     # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
   }
   # Install virtualenv to containerize dependencies for vim-pydocstring (doq)
   # and formatting feature (pynvim for black plugin)
   log '[*] Installing Python dependencies in a virtual environment ...'
-  python3 -m venv ~/.config/nvim/env
+  python3 -m venv ~/.config/nvim/env > /dev/null 2>&1
   [ -s ${HOME}/.config/nvim/env/bin/activate ] && {
     \. ${HOME}/.config/nvim/env/bin/activate
   }
   have_pip=`type -p pip`
   [ "${have_pip}" ] && {
-    pip install wheel
-    pip install pynvim doq
+    pip install wheel > /dev/null 2>&1
+    pip install pynvim doq > /dev/null 2>&1
   }
   [ -s ${HOME}/.config/nvim/env/bin/activate ] && deactivate
 }
@@ -351,6 +346,19 @@ main () {
     git_clone_neovim_config
   fi
   install_npm
+  INFO="################################################################################
+- Homebrew installed in ${HOMEBREW_HOME}
+- See ${DOC_HOMEBREW}
+- Neovim, nvm, node, npm, and language servers installed
+- All packages required for Neovim managed by Homebrew
+- This could result in duplicate tool installations!
+- Your ~/.profile, ~/.bashrc, or ~/.zshrc modified to source paths
+
+After this script is finished
+- Log out or open a new shell
+- If not invoked from ascinit run the command: nvim -c 'PlugInstall' -c 'qa'
+- Open nvim and Enjoy!
+################################################################################"
   echo "${INFO}"
 }
 
