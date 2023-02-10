@@ -417,9 +417,9 @@ tmap <C-w> <Esc><C-w>
 autocmd BufWinEnter,WinEnter term://* startinsert
 autocmd BufLeave term://* stopinsert
 
-" Python
-let g:python3_host_prog = '~/.config/nvim/env/bin/python3'
-let g:pydocstring_doq_path = '~/.config/nvim/env/bin/doq'
+" If Python was installed in a virtual environment here
+" let g:python3_host_prog = '~/.config/nvim/env/bin/python3'
+" let g:pydocstring_doq_path = '~/.config/nvim/env/bin/doq'
 
 """ Core plugin configuration (lua)
 " Use airline rather than lualine

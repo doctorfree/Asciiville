@@ -154,9 +154,18 @@ install_brew () {
         fi
       fi
     fi
-    echo 'eval "$(${BREW_EXE} shellenv)"' >> "${BASHINIT}"
+    if [ -f "${BASHINIT}" ]
+    then
+      grep "^eval \"\$(${BREW_EXE} shellenv)\"" "${BASHINIT}" > /dev/null || {
+        echo "eval \"$(${BREW_EXE} shellenv)\"" >> "${BASHINIT}"
+      }
+    else
+      echo "eval \"$(${BREW_EXE} shellenv)\"" > "${BASHINIT}"
+    fi
     [ -f "${HOME}/.zshrc" ] && {
-      echo 'eval "$(${BREW_EXE} shellenv)"' >> "${HOME}/.zshrc"
+      grep "^eval \"\$(${BREW_EXE} shellenv)\"" "${HOME}/.zshrc" > /dev/null || {
+        echo "eval \"$(${BREW_EXE} shellenv)\"" >> "${HOME}/.zshrc"
+      }
     }
     eval "$(${BREW_EXE} shellenv)"
     have_brew=`type -p brew`
