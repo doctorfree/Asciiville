@@ -149,7 +149,6 @@ install_brew () {
         then
           BREW_EXE="/opt/homebrew/bin/brew"
           HOMEBREW_HOME="/opt/homebrew/"
-      else
         else
           abort "Homebrew brew executable could not be located"
         fi
@@ -178,7 +177,7 @@ install_brew () {
 
 install_neovim_dependencies () {
   log "Installing Neovim dependencies"
-  PKGS="fd ripgrep fzf tmux go node python warrensbox/tap/tfswitch"
+  PKGS="fd ripgrep fzf tmux go node warrensbox/tap/tfswitch"
   for pkg in ${PKGS}
   do
     ${BREW_EXE} install -q ${pkg} > /dev/null 2>&1
@@ -206,6 +205,22 @@ git_clone_neovim_config () {
   else
     log "Cloning Neovim config to ${neovim_config_path}"
     git clone https://github.com/doctorfree/nvim.git "${neovim_config_path}"
+  fi
+}
+
+check_python () {
+  have_python=`type -p python3`
+  if [ "${have_python}" ]
+  then
+    PYTHON="python3"
+  else
+    have_python=`type -p python`
+    if [ "${have_python}" ]
+    then
+      PYTHON="python"
+    else
+      PYTHON=
+    fi
   fi
 }
 
@@ -272,19 +287,18 @@ install_npm () {
     # For other language servers, see:
     # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
   }
-  # Install virtualenv to containerize dependencies for vim-pydocstring (doq)
-  # and formatting feature (pynvim for black plugin)
-  log '[*] Installing Python dependencies in a virtual environment ...'
-  python3 -m venv ~/.config/nvim/env > /dev/null 2>&1
-  [ -s ${HOME}/.config/nvim/env/bin/activate ] && {
-    \. ${HOME}/.config/nvim/env/bin/activate
+  # Python virtual env in Asciiville breaks backwards compatibility
+  log '[*] Installing Python dependencies ...'
+  check_python
+  [ "${PYTHON}" ] || {
+    # Could not find Python, install with Homebrew
+    ${BREW_EXE} install -q python > /dev/null 2>&1
+    check_python
   }
-  have_pip=`type -p pip`
-  [ "${have_pip}" ] && {
-    pip install wheel > /dev/null 2>&1
-    pip install pynvim doq > /dev/null 2>&1
+  [ "${PYTHON}" ] && {
+    ${PYTHON} -m pip install wheel > /dev/null 2>&1
+    ${PYTHON} -m pip install pynvim doq > /dev/null 2>&1
   }
-  [ -s ${HOME}/.config/nvim/env/bin/activate ] && deactivate
 }
 
 main () {
