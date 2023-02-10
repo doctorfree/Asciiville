@@ -1281,12 +1281,15 @@ have_patch=`type -p patch`
 [ "${have_patch}" ] && {
   patchfile="${CONFDIR}/nvim/scripts/nvim-treesitter.patch"
   [ -f ${patchfile} ] && {
-    PLUGDIR=".local/share/nvim/plugged/nvim-treesitter/lua"
-    [ -f ${HOME}/${PLUGDIR}/nvim-treesitter/shell_command_selectors.lua ] && {
-      HERE=`pwd`
-      cd "${HOME}"
-      patch -b -p0 < ${patchfile}
-      cd "${HERE}"
+    PLUGDIR=".local/share/nvim/plugged/nvim-treesitter/lua/nvim-treesitter"
+    [ -f ${HOME}/${PLUGDIR}/shell_command_selectors.lua ] && {
+      popts="-d ${HOME} -f -p0 -s -r -"
+      if [ -f ${HOME}/${PLUGDIR}/shell_command_selectors.lua.orig ]
+      then
+        patch ${popts} -V numbered < ${patchfile} > /dev/null 2>&1
+      else
+        patch -b ${popts} < ${patchfile}
+      fi
     }
   }
 }
