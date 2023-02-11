@@ -110,7 +110,7 @@ Plug 'vim-airline/vim-airline-themes' " Airline status themes
 " ~/.local/share/nvim/plugged/vim-airline-themes/autoload/airline/themes/
 "   simple, powerlineish, onedark, desertink distinguished, cool, cobalt2,
 "   hybrid, night_owl, luna, solarized_flood, google_dark, ravenpower, molokai
-let g:airline_theme='atomic'
+let g:airline_theme='asciiville'
 Plug 'fladson/vim-kitty' " Kitty config syntax highlighting for vim
 " Language support
 Plug 'fatih/vim-go'            " Go language support for Vim
@@ -170,7 +170,7 @@ let g:pymode_warnings = 1
 Plug 'zaki/zazen'
 Plug 'yuttie/hydrangea-vim'
 Plug 'flazz/vim-colorschemes'  " One stop shop for vim colorschemes
-Plug 'gmarik/ingretu'
+Plug 'doctorfree/vim-asciiville'
 " Uncomment to play with colorschemes
 " Plug 'felixhummel/setcolors.vim' " Easily switch colorschemes
 
@@ -557,13 +557,29 @@ if has("autocmd")
 else
   set autoindent    " always set autoindenting on
 endif " has("autocmd")
+
 if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 endif
-if has("gui_running")
-  colorscheme ingretu
-else
-  colorscheme darktango
+
+if has("termguicolors")
+	let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+	let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
 endif
+
+" let g:asciiville_italic = 0
+colorscheme asciiville
+" AsciivilleDarkBlueSoft
+" AsciivilleDarkCyanSoft
+" AsciivilleDarkCyanHard
+" AsciivilleNightOrangeSoft
+" AsciivilleNightOrangeHard
+" AsciivilleNightRedSoft
+" AsciivilleNightRedHard
+" AsciivilleLightSoft
+" AsciivilleLightHard
+AsciivilleDarkBlueHard
+
 set guifont=Inconsolata:h18
 let g:syntastic_html_checkers = []
