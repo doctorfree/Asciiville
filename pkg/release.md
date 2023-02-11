@@ -17,6 +17,8 @@ Asciiville provides utilities, tools, applications, games, and scripts to create
 
 Architecture independent native installation packages are provided for Arch Linux, Debian based Linux systems, and RPM based Linux systems. Compressed tar archives and an installation script are provided for all other platforms.
 
+Asciiville 3.0.2 and later utilize [Homebrew](https://brew.sh) to install packages during `ascinit` post installation initialization.
+
 ## Installation
 
 Download the [latest Arch, Debian, or RPM package format release](https://github.com/doctorfree/Asciiville/releases) for your platform. If your platform does not support Arch, Debian, or RPM format installs (e.g. Apple macOS) then download the compressed binary distribution archive for your platform and the `Install-bin.sh` script.

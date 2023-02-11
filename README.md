@@ -1,4 +1,11 @@
-## Asciiville
+<pre>
+      _                      _    _           _   __   __         
+     / \                    (_)  (_)         (_) [  | [  |        
+    / _ \     .--.   .---.  __   __  _   __  __   | |  | | .---.  
+   / ___ \   ( (`\] / /'`\][  | [  |[ \ [  ][  |  | |  | |/ /__\\ 
+ _/ /   \ \_  `'.'. | \__.  | |  | | \ \/ /  | |  | |  | || \__., 
+|____| |____|[\__) )'.___.'[___][___] \__/  [___][___][___]'.__.' 
+</pre>
 
 Asciiville is where you go for ASCII Art, animations, and utilities.
 The Asciiville project provides integration and extension of several
@@ -376,6 +383,8 @@ Tools installed during post-installation configuration include:
 ## Installation
 
 Asciiville 3.0.1 and later can be installed on any architecture.
+Asciiville 3.0.2 and later utilize [Homebrew](https://brew.sh) to install
+packages during `ascinit` post installation initialization.
 
 Asciiville can be installed on Linux systems using the Arch Linux
 packaging format, the Debian packaging format, or the Red Hat Package
