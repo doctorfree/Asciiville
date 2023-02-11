@@ -133,21 +133,6 @@ install_pipx() {
 
 install_external_package() {
   API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
-  have_curl=`type -p curl`
-  [ "${have_curl}" ] || {
-    install_package curl
-    have_curl=`type -p curl`
-  }
-  have_jq=`type -p jq`
-  [ "${have_jq}" ] || {
-    install_package jq
-    have_jq=`type -p jq`
-  }
-  have_wget=`type -p wget`
-  [ "${have_wget}" ] || {
-    install_package wget
-    have_wget=`type -p wget`
-  }
   DL_URL=
   [ "${have_curl}" ] && [ "${have_jq}" ] && {
     if [ "${darwin}" ]
@@ -670,6 +655,22 @@ argument=`echo "$1" | tr '[:upper:]' '[:lower:]'`
 
 [ -d ${USERCONF} ] || mkdir -p ${USERCONF}
 
+have_curl=`type -p curl`
+[ "${have_curl}" ] || {
+  install_package curl
+  have_curl=`type -p curl`
+}
+have_jq=`type -p jq`
+[ "${have_jq}" ] || {
+  install_package jq
+  have_jq=`type -p jq`
+}
+have_wget=`type -p wget`
+[ "${have_wget}" ] || {
+  install_package wget
+  have_wget=`type -p wget`
+}
+
 # Mutt configuration user setup
 [ "${have_mutt}" ] && {
   [ -f ${CONFDIR}/mutt/muttrc ] && {
@@ -765,6 +766,9 @@ argument=`echo "$1" | tr '[:upper:]' '[:lower:]'`
 }
 
 [ -d ${CONFDIR}/nvim ] && {
+  [ "${quiet}" ] || {
+    printf "\n\tInstalling Neovim configuration in ${USERCONF}/nvim ..."
+  }
   newnvimconf=
   if [ -d ${USERCONF}/nvim ]
   then
@@ -777,13 +781,8 @@ argument=`echo "$1" | tr '[:upper:]' '[:lower:]'`
     cp -a ${CONFDIR}/nvim ${USERCONF}/nvim
     newnvimconf=1
   fi
-  [ "${newnvimconf}" ] && {
-    [ "${quiet}" ] || {
-      printf "\n\tA Neovim text editor configuration has been created for you in"
-      printf "\n\t\t${HOME}/.config/nvim/"
-      printf "\n\tA good starting point for the Neovim user is the Neovim User Doc at:"
-      printf "\n\t\thttps://neovim.io/doc/user/\n"
-    }
+  [ "${quiet}" ] || {
+    printf " done"
   }
 }
 
@@ -1232,7 +1231,6 @@ do
     }
   fi
 done
-printf "\n"
 
 have_jq=`type -p jq`
 [ "${have_jq}" ] || install_package jq
@@ -1291,7 +1289,7 @@ then
     then
       cd ${FIGLET_DIR}
       sudo ${ZIP} -q ${FIGLET_ZIP} *.flf
-      sudo ${PYFIG} -L ${FIGLET_ZIP}
+      sudo ${PYFIG} -L ${FIGLET_ZIP} > /dev/null 2>&1
       sudo rm -f ${FIGLET_ZIP}
     fi
   fi
@@ -1882,6 +1880,15 @@ touch ${HOME}/.tetris
   brew cleanup --prune=all --quiet > /dev/null 2>&1
   [ "${quiet}" ] || {
     printf "done"
+  }
+}
+
+[ "${newnvimconf}" ] && {
+  [ "${quiet}" ] || {
+    printf "\n\tA Neovim text editor configuration has been created for you in"
+    printf "\n\t\t${HOME}/.config/nvim/"
+    printf "\n\tA good starting point for the Neovim user is the Neovim User Doc at:"
+    printf "\n\t\thttps://neovim.io/doc/user/\n"
   }
 }
 
