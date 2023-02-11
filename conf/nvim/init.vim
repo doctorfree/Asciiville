@@ -568,17 +568,23 @@ if has("termguicolors")
   set termguicolors
 endif
 
+" If your terminal doesn't handle italics, bold, underline, or undercurl
+" then they can be disabled in the asciiville colorscheme with:
 " let g:asciiville_italic = 0
+" let g:asciiville_bold = 0
+" let g:asciiville_underline = 0
+" let g:asciiville_undercurl = 0
 colorscheme asciiville
-" AsciivilleDarkBlueSoft
-" AsciivilleDarkCyanSoft
-" AsciivilleDarkCyanHard
-" AsciivilleNightOrangeSoft
-" AsciivilleNightOrangeHard
-" AsciivilleNightRedSoft
-" AsciivilleNightRedHard
-" AsciivilleLightSoft
-" AsciivilleLightHard
+" Asciiville colorscheme commands:
+" :AsciivilleDarkBlueSoft
+" :AsciivilleDarkCyanSoft
+" :AsciivilleDarkCyanHard
+" :AsciivilleNightOrangeSoft
+" :AsciivilleNightOrangeHard
+" :AsciivilleNightRedSoft
+" :AsciivilleNightRedHard
+" :AsciivilleLightSoft
+" :AsciivilleLightHard
 AsciivilleDarkBlueHard
 
 set guifont=Inconsolata:h18
