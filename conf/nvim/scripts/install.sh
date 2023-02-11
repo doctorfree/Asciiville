@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#
 # Copyright (C) 2022 Michael Peter <michaeljohannpeter@gmail.com>
 # Copyright (C) 2023 Ronald Record <ronaldrecord@gmail.com>
 #
@@ -7,6 +7,7 @@
 #     https://github.com/doctorfree/Asciiville/conf/nvim/init.vim
 #
 # Adapted for Asciiville from https://github.com/Allaman/nvim.git
+# See https://github.com/doctorfree/nvim
 
 set -e
 

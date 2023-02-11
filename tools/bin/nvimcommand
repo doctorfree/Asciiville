@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# nvimcommand - command line tool to perform Neovim commands
+#
+# Example usage:
+#
+# nvimcommand PlugClean    # Runs the :PlugClean command to remove unused plugins
+# nvimcommand PlugInstall  # Runs the :PlugInstall command to install plugins
+
+[ "$1" ] || {
+  echo "Argument required. Exiting."
+  exit 1
+}
+nvim -c "$*" -c 'qa'

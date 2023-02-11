@@ -1,6 +1,13 @@
-""" Modified Optixal's Neovim Init.vim by Doctorfree
-"   https://github.com/Optixal/neovim-init.vim (original)
-"   https://github.com/doctorfree/dotfiles-linux/blob/master/.config/nvim/init.vim
+"""
+"      _                      _    _           _   __   __         
+"     / \                    (_)  (_)         (_) [  | [  |        
+"    / _ \     .--.   .---.  __   __  _   __  __   | |  | | .---.  
+"   / ___ \   ( (`\] / /'`\][  | [  |[ \ [  ][  |  | |  | |/ /__\\ 
+" _/ /   \ \_  `'.'. | \__.  | |  | | \ \/ /  | |  | |  | || \__., 
+"|____| |____|[\__) )'.___.'[___][___] \__/  [___][___][___]'.__.' 
+"                                                                  
+" https://github.com/doctorfree/Asciiville
+" https://github.com/doctorfree/nvim
 "
 """ Vim-Plug managed plugins
 "
@@ -69,7 +76,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'mhinz/vim-signify'
-Plug 'jiangmiao/auto-pairs'
 Plug 'alvan/vim-closetag'
 Plug 'tpope/vim-abolish'
 Plug 'bogado/file-line'        " Enable opening a file in a given line
@@ -81,7 +87,6 @@ Plug 'junegunn/vim-easy-align' " A simple, easy-to-use Vim alignment plugin
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 "   nmap ga <Plug>(EasyAlign)
 Plug 'scrooloose/nerdcommenter'
-Plug 'chrisbra/Colorizer'
 Plug 'KabbAmine/vCoolor.vim'
 Plug 'RRethy/vim-illuminate'
 Plug 'antoinemadec/FixCursorHold.nvim'
@@ -189,9 +194,9 @@ Plug 'sudormrfbin/cheatsheet.nvim'  " :Cheatsheet
 " Plug 'dkarter/bullets.vim'
 "
 " Plug 'wellle/context.vim'
-" Plug 'tpope/vim-sleuth'        " Automatically adjust indentation
+Plug 'tpope/vim-sleuth'        " Automatically adjust indentation
 " Make your Vim/Neovim as smart as VSCode
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " let g:coc_disable_startup_warning = 1
 " Plug 'tomtom/tlib_vim'     " Some utility functions
 " Plug 'tomtom/tcomment_vim' " Easy to use, file-type sensible comments for Vim
@@ -529,9 +534,6 @@ nmap <leader>$v <C-w>v<C-w>l:terminal<CR>:set number<CR><S-a>
 autocmd Filetype python nmap <leader>d <Plug>(pydocstring)
 autocmd FileType python nmap <leader>p :Black<CR>
 
-" Solidity (requires: npm install --save-dev prettier prettier-plugin-solidity)
-autocmd Filetype solidity nmap <leader>p :0,$!npx prettier %<CR>
-
 " Telescope mappings
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
@@ -585,7 +587,9 @@ colorscheme asciiville
 " :AsciivilleNightRedHard
 " :AsciivilleLightSoft
 " :AsciivilleLightHard
-AsciivilleDarkBlueHard
+if exists(":AsciivilleDarkBlueHard")
+  AsciivilleDarkBlueHard
+endif
 
 set guifont=Inconsolata:h18
 let g:syntastic_html_checkers = []
