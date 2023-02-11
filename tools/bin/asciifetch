@@ -85,7 +85,7 @@ cleanup() {
 }
 
 animate() {
-  tput civis -- invisible
+  tput civis -- invisible 2> /dev/null
   interval="0.1"
   lastinterval="0.2"
   liftlines=$((terminal_height / 4))

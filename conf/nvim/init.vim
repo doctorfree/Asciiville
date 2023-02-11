@@ -190,8 +190,14 @@ Plug 'sudormrfbin/cheatsheet.nvim'  " :Cheatsheet
 " These plugins disabled for now
 "
 " These two seem to conflict with Airline/Wilder highlighting
-" Plug 'Yggdroot/indentLine'
 " Plug 'dkarter/bullets.vim'
+" Plug 'Yggdroot/indentLine'
+" let g:indentLine_char = '▏'
+" let g:indentLine_defaultGroup = 'NonText'
+" Disable indentLine from concealing json and markdown syntax (e.g. ```)
+" let g:vim_json_syntax_conceal = 0
+" let g:vim_markdown_conceal = 0
+" let g:vim_markdown_conceal_code_blocks = 0
 "
 " Plug 'wellle/context.vim'
 Plug 'tpope/vim-sleuth'        " Automatically adjust indentation
@@ -399,14 +405,6 @@ let g:signify_sign_delete = '│'
 let g:signify_sign_change = '│'
 hi DiffDelete guifg=#ff5555 guibg=none
 
-" indentLine
-let g:indentLine_char = '▏'
-let g:indentLine_defaultGroup = 'NonText'
-" Disable indentLine from concealing json and markdown syntax (e.g. ```)
-let g:vim_json_syntax_conceal = 0
-let g:vim_markdown_conceal = 0
-let g:vim_markdown_conceal_code_blocks = 0
-
 " FixCursorHold for better performance
 let g:cursorhold_updatetime = 100
 
@@ -565,8 +563,8 @@ if !exists(":DiffOrig")
 endif
 
 if has("termguicolors")
-	let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-	let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
 
