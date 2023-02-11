@@ -110,7 +110,7 @@ Plug 'vim-airline/vim-airline-themes' " Airline status themes
 " ~/.local/share/nvim/plugged/vim-airline-themes/autoload/airline/themes/
 "   simple, powerlineish, onedark, desertink distinguished, cool, cobalt2,
 "   hybrid, night_owl, luna, solarized_flood, google_dark, ravenpower, molokai
-let g:airline_theme='google_dark'
+let g:airline_theme='atomic'
 Plug 'fladson/vim-kitty' " Kitty config syntax highlighting for vim
 " Language support
 Plug 'fatih/vim-go'            " Go language support for Vim
@@ -563,7 +563,6 @@ endif
 if has("gui_running")
   colorscheme ingretu
 else
-" colorscheme darkspectrum
   colorscheme darktango
 endif
 set guifont=Inconsolata:h18

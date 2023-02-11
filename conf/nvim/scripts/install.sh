@@ -23,8 +23,10 @@ abort () {
 }
 
 log () {
-  printf "################################################################################\n"
-  printf "%s\n" "$@"
+  [ "${quiet}" ] || {
+    printf "################################################################\n"
+    printf "%s\n" "$@"
+  }
 }
 
 check_prerequisites () {
@@ -371,7 +373,7 @@ main () {
     git_clone_neovim_config
   fi
   install_npm
-  INFO="################################################################################
+  INFO="################################################################
 - Homebrew installed in ${HOMEBREW_HOME}
 - See ${DOC_HOMEBREW}
 - Neovim, nvm, node, npm, and language servers installed
@@ -383,8 +385,19 @@ After this script is finished
 - Log out or open a new shell
 - If not invoked from ascinit run the command: nvim -c 'PlugInstall' -c 'qa'
 - Open nvim and Enjoy!
-################################################################################"
-  echo "${INFO}"
+################################################################"
+
+  [ "${quiet}" ] || echo "${INFO}"
 }
+
+quiet=
+
+while getopts "q" flag; do
+  case $flag in
+    q)
+        quiet=1
+        ;;
+  esac
+done
 
 main

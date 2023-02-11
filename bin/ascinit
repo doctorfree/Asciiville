@@ -65,8 +65,8 @@ install_package() {
   if [ $? -eq 0 ]
   then
     brew install -q ${PKG} > /dev/null 2>&1
-    brew unlink -q ${PKG} > /dev/null 2>&1
-    brew link --overwrite --quiet ${PKG} > /dev/null 2>&1
+#   brew unlink -q ${PKG} > /dev/null 2>&1
+#   brew link --overwrite --quiet ${PKG} > /dev/null 2>&1
   else
     if [ "${debian}" ]
     then
@@ -399,7 +399,12 @@ remove_kitty() {
 }
 
 install_neovim() {
-  ${CONFDIR}/nvim/scripts/install.sh
+  if [ "${quiet}" ]
+  then
+    ${CONFDIR}/nvim/scripts/install.sh -q
+  else
+    ${CONFDIR}/nvim/scripts/install.sh
+  fi
   have_nvim=`type -p nvim`
   [ "${have_nvim}" ] && {
     grep "^Plug " ${HOME}/.config/nvim/init.vim > /dev/null && {
@@ -1089,7 +1094,7 @@ have_brew=`type -p brew`
   }
   [ -f /tmp/brew-$$.sh ] && {
     chmod 755 /tmp/brew-$$.sh
-    [ "${quiet}" ] || printf "\tInstalling brew, please be patient ... "
+    [ "${quiet}" ] || printf "\n\tInstalling brew, please be patient ... "
     NONINTERACTIVE=1 /bin/bash -c "/tmp/brew-$$.sh" > /dev/null 2>&1
     rm -f /tmp/brew-$$.sh
     [ "${quiet}" ] || printf "done"
@@ -1262,14 +1267,7 @@ have_neofetch=`type -p neofetch`
 [ "${have_neofetch}" ] || install_package neofetch
 have_gnupg=`type -p gpg`
 [ "${have_gnupg}" ] || install_package gnupg
-if [ "${have_brew}" ]
-then
-  brew list -q imagemagick > /dev/null 2>&1
-  [ $? -eq 0 ] || install_package imagemagick
-  brew cleanup --prune=all --quiet > /dev/null 2>&1
-else
-  install_package imagemagick
-fi
+install_package imagemagick
 
 OWNER=doctorfree
 # Install aewan if not already present
@@ -1848,8 +1846,18 @@ CONF="${USERCONF}/asciiville/config"
 }
 touch ${HOME}/.tetris
 
+[ "${have_brew}" ] && {
+  [ "${quiet}" ] || {
+    printf "\nCleaning up Homebrew ... "
+  }
+  brew cleanup --prune=all --quiet > /dev/null 2>&1
+  [ "${quiet}" ] || {
+    printf "done"
+  }
+}
+
 [ "${quiet}" ] || {
-  printf "\n${BOLD}Asciiville Initialization Complete${NORM}\n"
+  printf "\n\n${BOLD}Asciiville Initialization Complete${NORM}\n"
   [ "${init_twit}" ] || {
     printf "\nAuthorize the Rainbow Stream app at Twitter"
     printf "\nby running the ${BOLD}'rainbowstream'${NORM} command\n"
