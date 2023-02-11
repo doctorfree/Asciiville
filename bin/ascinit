@@ -126,7 +126,6 @@ install_pipx() {
   }
   ${PYTHON} -m pip install --user pipx > /dev/null 2>&1
   ${PYTHON} -m pipx ensurepath --force > /dev/null 2>&1
-  have_pipx=`type -p pipx`
   [ "${quiet}" ] || {
     printf " done"
   }
@@ -449,7 +448,6 @@ have_go=`type -p go`
   }
 }
 have_nvim=`type -p nvim`
-have_pipx=`type -p pipx`
 have_kitty=`type -p kitty`
 
 [ "$1" == "kitty" ] && {
@@ -1471,10 +1469,11 @@ have_googler=`type -p googler`
   chmod 600 ${HOME}/.local/share/jrnl/asciiville.txt
 }
 
+install_pipx
+
 # Install the 'jrnl' command if not already installed
 have_jrnl=`type -p jrnl`
 [ "${have_jrnl}" ] || {
-  [ "${have_pipx}" ] || install_pipx
   [ "${quiet}" ] || {
     printf "\n\tInstalling and configuring jrnl ..."
   }
@@ -1495,7 +1494,6 @@ have_jrnl=`type -p jrnl`
 
 # Install the 'rich' command if not already installed
 [ "${have_rich}" ] || {
-  [ "${have_pipx}" ] || install_pipx
   [ "${quiet}" ] || {
     printf "\n\tInstalling rich-cli ..."
   }
