@@ -1241,6 +1241,8 @@ have_npm=`type -p npm`
 have_npm=`type -p npm`
 have_btop=`type -p btop`
 [ "${have_btop}" ] || install_package btop
+have_dialog=`type -p dialog`
+[ "${have_dialog}" ] || install_package dialog
 have_cmatrix=`type -p cmatrix`
 [ "${have_cmatrix}" ] || install_package cmatrix
 have_figlet=`type -p figlet`
@@ -1267,7 +1269,33 @@ have_neofetch=`type -p neofetch`
 [ "${have_neofetch}" ] || install_package neofetch
 have_gnupg=`type -p gpg`
 [ "${have_gnupg}" ] || install_package gnupg
+have_zip=`type -p zip`
+[ "${have_zip}" ] || install_package zip
 install_package imagemagick
+
+FIGLET_DIR="/usr/share/figlet-fonts"
+FIGLET_ZIP="figlet-fonts.zip"
+zip_inst=`type -p zip`
+if [ "${zip_inst}" ]
+then
+  pyfig_inst=`type -p pyfiglet`
+  [ "${pyfig_inst}" ] || {
+    ${PYTHON} -m pip install pyfiglet > /dev/null 2>&1
+    pyfig_inst=`type -p pyfiglet`
+  }
+  if [ "${pyfig_inst}" ]
+  then
+    PYFIG=$(command -v pyfiglet)
+    ZIP=$(command -v zip)
+    if [ -d ${FIGLET_DIR} ]
+    then
+      cd ${FIGLET_DIR}
+      sudo ${ZIP} -q ${FIGLET_ZIP} *.flf
+      sudo ${PYFIG} -L ${FIGLET_ZIP}
+      sudo rm -f ${FIGLET_ZIP}
+    fi
+  fi
+fi
 
 OWNER=doctorfree
 # Install aewan if not already present
@@ -1389,6 +1417,7 @@ have_mapscii=`type -p mapscii`
 
 have_tuir=`type -p tuir`
 [ "${have_tuir}" ] || {
+  cd ${HOME}
   [ -d tuir ] && mv tuir tuir$$
   git clone https://gitlab.com/ajak/tuir.git > /dev/null 2>&1
   [ -d tuir ] && {

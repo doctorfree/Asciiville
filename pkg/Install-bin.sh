@@ -83,61 +83,6 @@ else
   usage
 fi
 
-export PATH=${PATH}:/usr/local/bin:/snap/bin
-python3_inst=`type -p python3`
-if [ "${python3_inst}" ]
-then
-  PYTHON="python3"
-else
-  PYTHON="python"
-fi
-
-lol_inst=`type -p lolcat`
-if [ ! "${lol_inst}" ]
-then
-  gem_inst=`type -p gem`
-  if [ "${gem_inst}" ]
-  then
-    wget_inst=`type -p wget`
-    if [ "${wget_inst}" ]
-    then
-      if [ "${unzip_inst}" ]
-      then
-        wget --quiet https://github.com/busyloop/lolcat/archive/master.zip
-        unzip -qq master.zip
-        cd lolcat-master/bin
-        gem install lolcat
-        cd ../..
-        rm -f master.zip
-        rm -rf lolcat-master
-      fi
-    fi
-  fi
-fi
-
-FIGLET_DIR="/usr/local/share/figlet-fonts"
-FIGLET_ZIP="figlet-fonts.zip"
-zip_inst=`type -p zip`
-if [ "${zip_inst}" ]
-then
-  ${PYTHON} -m pip install setuptools > /dev/null 2>&1
-  pyfig_inst=`type -p pyfiglet`
-  [ "${pyfig_inst}" ] || {
-    ${PYTHON} -m pip install pyfiglet > /dev/null 2>&1
-    pyfig_inst=`type -p pyfiglet`
-  }
-  if [ "${pyfig_inst}" ]
-  then
-    if [ -d ${FIGLET_DIR} ]
-    then
-      cd ${FIGLET_DIR}
-      zip -q ${FIGLET_ZIP} *.flf
-      pyfiglet -L ${FIGLET_ZIP} > /dev/null 2>&1
-      rm -f ${FIGLET_ZIP}
-    fi
-  fi
-fi
-
 # Add /usr/local/bin and /usr/local/games to PATH
 if [ -d /etc/profile.d ]
 then
