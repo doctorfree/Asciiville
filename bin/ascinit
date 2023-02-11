@@ -665,36 +665,6 @@ shift $(( OPTIND - 1 ))
 
 argument=`echo "$1" | tr '[:upper:]' '[:lower:]'`
 
-function check_py_version
-{
-  # Full version number e.g. 2.7.1
-  python_version="$(echo "$($1 -V 2>&1)" | sed -e "s/^.* \(.*\)$/\\1/g")"
-
-  # Return (the first letter -lt "3")
-  ! [ "$(echo $python_version | head -c 1 )" -lt "3" ]
-}
-
-PYTHON=""
-POTENTIAL_BINARIES=( "python" "python3" "python3.6" "python3.5" "python3.7" "python3.4" "python3.3" "python3.8" "python3.2" "python3.1" )
-PY3_SUPPORT=false
-
-for i in "${POTENTIAL_BINARIES[@]}"
-do
-    PYTHON="$i"
-
-    if  $(check_py_version ${PYTHON}) ;
-    then
-        PY3_SUPPORT=true
-        break
-    fi
-done
-
-if [ ! ${PY3_SUPPORT} ]
-then
-    echo "[ERROR] Could not find python3 binary, please add it to your \$PATH before continuing"
-    exit
-fi
-
 [ -d ${USERCONF} ] || mkdir -p ${USERCONF}
 
 # Mutt configuration user setup
@@ -1108,50 +1078,6 @@ status_dots=
   status_dots=
 }
 
-have_pip=`type -p pip`
-[ "${have_pip}" ] || {
-  [ "${quiet}" ] || {
-    printf "\n\tInstalling pip ..."
-  }
-  if [ "${darwin}" ]
-  then
-    ${PYTHON} -m ensurepip --upgrade
-  else
-    if [ "${debian}" ]
-    then
-      sudo ${APT} install python3-pip > /dev/null 2>&1
-    else
-      if [ "${arch}" ]
-      then
-        sudo pacman -S --noconfirm python-pip > /dev/null 2>&1
-      else
-        sudo ${DNF} install python3-pip > /dev/null 2>&1
-      fi
-    fi
-  fi
-  [ "${quiet}" ] || {
-    printf " done"
-  }
-}
-
-for pkg in setuptools asciimatics ddgr rainbowstream socli future \
-           xtermcolor ffmpeg-python pyaudio term-image urlscan
-do
-  if pip list 2> /dev/null | grep ${pkg} > /dev/null
-  then
-    ${PYTHON} -m pip install --upgrade ${pkg} > /dev/null 2>&1
-  else
-    [ "${quiet}" ] || {
-      printf "\n\tInstalling ${pkg} ..."
-    }
-    ${PYTHON} -m pip install ${pkg} > /dev/null 2>&1
-    [ "${quiet}" ] || {
-      printf " done"
-    }
-  fi
-done
-printf "\n"
-
 # Use Brew on all platforms to install some requirements
 BREW_EXE="brew"
 have_brew=`type -p brew`
@@ -1228,6 +1154,82 @@ fi
 
 export HOMEBREW_NO_INSTALL_CLEANUP=1
 export HOMEBREW_NO_ENV_HINTS=1
+
+install_package python
+
+function check_py_version
+{
+  # Full version number e.g. 2.7.1
+  python_version="$(echo "$($1 -V 2>&1)" | sed -e "s/^.* \(.*\)$/\\1/g")"
+
+  # Return (the first letter -lt "3")
+  ! [ "$(echo $python_version | head -c 1 )" -lt "3" ]
+}
+
+PYTHON=""
+POTENTIAL_BINARIES=( "python3" "python" )
+PY3_SUPPORT=false
+
+for i in "${POTENTIAL_BINARIES[@]}"
+do
+    PYTHON="$i"
+
+    if  $(check_py_version ${PYTHON}) ;
+    then
+        PY3_SUPPORT=true
+        break
+    fi
+done
+
+if [ ! ${PY3_SUPPORT} ]
+then
+    echo "[ERROR] Could not find python3 binary, please add it to your \$PATH before continuing"
+    exit
+fi
+
+have_pip=`type -p pip3`
+[ "${have_pip}" ] || {
+  [ "${quiet}" ] || {
+    printf "\n\tInstalling pip ..."
+  }
+  if [ "${darwin}" ]
+  then
+    ${PYTHON} -m ensurepip --upgrade
+  else
+    if [ "${debian}" ]
+    then
+      sudo ${APT} install python3-pip > /dev/null 2>&1
+    else
+      if [ "${arch}" ]
+      then
+        sudo pacman -S --noconfirm python-pip > /dev/null 2>&1
+      else
+        sudo ${DNF} install python3-pip > /dev/null 2>&1
+      fi
+    fi
+  fi
+  [ "${quiet}" ] || {
+    printf " done"
+  }
+}
+
+for pkg in setuptools asciimatics ddgr rainbowstream socli future \
+           xtermcolor ffmpeg-python pyaudio term-image urlscan
+do
+  if ${PYTHON} -m pip list 2> /dev/null | grep ${pkg} > /dev/null
+  then
+    ${PYTHON} -m pip install --upgrade ${pkg} > /dev/null 2>&1
+  else
+    [ "${quiet}" ] || {
+      printf "\n\tInstalling ${pkg} ..."
+    }
+    ${PYTHON} -m pip install ${pkg} > /dev/null 2>&1
+    [ "${quiet}" ] || {
+      printf " done"
+    }
+  fi
+done
+printf "\n"
 
 have_jq=`type -p jq`
 [ "${have_jq}" ] || install_package jq
@@ -1407,7 +1409,7 @@ have_tuir=`type -p tuir`
 }
 
 pkg=video-to-ascii
-if pip list 2> /dev/null | grep ${pkg} > /dev/null
+if ${PYTHON} -m pip list 2> /dev/null | grep ${pkg} > /dev/null
 then
   ${PYTHON} -m pip install --upgrade ${pkg} ${VOPT} > /dev/null 2>&1
 else

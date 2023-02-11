@@ -187,7 +187,7 @@ install_brew () {
 
 install_neovim_dependencies () {
   log "Installing Neovim dependencies"
-  PKGS="fd ripgrep fzf tmux go node warrensbox/tap/tfswitch"
+  PKGS="fd ripgrep fzf tmux go node python warrensbox/tap/tfswitch"
   for pkg in ${PKGS}
   do
     ${BREW_EXE} install -q ${pkg} > /dev/null 2>&1
