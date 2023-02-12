@@ -6,49 +6,18 @@
 " _/ /   \ \_  `'.'. | \__.  | |  | | \ \/ /  | |  | |  | || \__., 
 "|____| |____|[\__) )'.___.'[___][___] \__/  [___][___][___]'.__.' 
 "                                                                  
-" https://github.com/doctorfree/Asciiville
-" https://github.com/doctorfree/nvim
+"-----------------Neovim Initialization Vimscript----------------
+"
+"  Version : 1.0.0
+"  License : MIT
+"  Author  : Ronald Record
+"  URL     : https://github.com/doctorfree/nvim
+"  Project : https://github.com/doctorfree/Asciiville
+"----------------------------------------------------------------
 "
 """ Vim-Plug managed plugins
 "
-" Using plug.vim Plugin manager from https://github.com/junegunn/vim-plug
-" Commands
-" PlugInstall [name ...] [#threads]  Install plugins
-" PlugUpdate  [name ...] [#threads]  Install or update plugins
-" PlugClean[!]  Remove unlisted plugins (bang version will clean without prompt)
-" PlugUpgrade   Upgrade vim-plug itself
-" PlugStatus    Check the status of plugins
-" PlugDiff      Examine changes from the previous update and the pending changes
-" PlugSnapshot[!] [output path]  Generate script for restoring
-"                                the current snapshot of the plugins
-" The default plugin directory will be as follows:
-"   - Vim (Linux/macOS): '~/.vim/plugged'
-"   - Vim (Windows): '~/vimfiles/plugged'
-"   - Neovim (Linux/macOS/Windows): stdpath('data') . '/plugged'
-" You can specify a custom plugin directory by passing it as the argument
-"   - e.g. `call plug#begin('~/.vim/plugged')`
-"   - Avoid using standard Vim directory names like 'plugin'
-" Make sure you use single quotes
-
-" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
-" Plug 'junegunn/vim-easy-align'
-" Any valid git URL is allowed
-" Plug 'https://github.com/junegunn/vim-github-dashboard.git'
-" Multiple Plug commands can be written in a single line using | separators
-" Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-" On-demand loading
-" Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-" Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-" Using a non-default branch
-" Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
-" Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
-" Plug 'fatih/vim-go', { 'tag': '*' }
-" Plugin options
-" Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
-" Plugin outside ~/.vim/plugged with post-update hook
-" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-" Unmanaged plugin (manually installed and updated)
-" Plug '~/my-prototype-plugin'
+" Use ':help vim-plug' or ':help plug-options' for assistance with Vim-Plug 
 
 call plug#begin()
 
@@ -81,6 +50,10 @@ Plug 'tpope/vim-abolish'
 Plug 'bogado/file-line'        " Enable opening a file in a given line
                                " vim index.html:20
                                " vim app/models/user.rb:1337
+Plug 'tpope/vim-sleuth'        " Automatically adjust indentation
+" Make your Vim/Neovim as smart as VSCode
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+let g:coc_disable_startup_warning = 1
 Plug 'junegunn/vim-easy-align' " A simple, easy-to-use Vim alignment plugin
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 "   xmap ga <Plug>(EasyAlign)
@@ -146,6 +119,9 @@ Plug 'ctrlpvim/ctrlp.vim'  " Fuzzy file, buffer, mru, tag finder for Vim
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'    " Things you can do with fzf and Vim
 Plug 'romgrk/fzy-lua-native' " Needed for lua_fzy_highlighter in wilder
+Plug 'sheerun/vim-polyglot'  " Better syntax highlighting
+" Register vim-plug as a plugin to enable help  (e.g. :help plug-options)
+Plug 'junegunn/vim-plug'
 
 if has('nvim')
   function! UpdateRemotePlugins(...)
@@ -175,6 +151,7 @@ let g:pymode_warnings = 1
 Plug 'zaki/zazen'
 Plug 'yuttie/hydrangea-vim'
 Plug 'flazz/vim-colorschemes'  " One stop shop for vim colorschemes
+" Can be commented out if another colorscheme is used
 Plug 'doctorfree/vim-asciiville'
 " Uncomment to play with colorschemes
 " Plug 'felixhummel/setcolors.vim' " Easily switch colorschemes
@@ -187,25 +164,6 @@ Plug 'junegunn/vim-journal'
 " Cheat sheets
 Plug 'sudormrfbin/cheatsheet.nvim'  " :Cheatsheet
 
-" These plugins disabled for now
-"
-" These two seem to conflict with Airline/Wilder highlighting
-" Plug 'dkarter/bullets.vim'
-" Plug 'Yggdroot/indentLine'
-" let g:indentLine_char = '▏'
-" let g:indentLine_defaultGroup = 'NonText'
-" Disable indentLine from concealing json and markdown syntax (e.g. ```)
-" let g:vim_json_syntax_conceal = 0
-" let g:vim_markdown_conceal = 0
-" let g:vim_markdown_conceal_code_blocks = 0
-"
-" Plug 'wellle/context.vim'
-Plug 'tpope/vim-sleuth'        " Automatically adjust indentation
-" Make your Vim/Neovim as smart as VSCode
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" let g:coc_disable_startup_warning = 1
-" Plug 'tomtom/tlib_vim'     " Some utility functions
-" Plug 'tomtom/tcomment_vim' " Easy to use, file-type sensible comments for Vim
 call plug#end()
 
 " General "{{{
@@ -223,17 +181,15 @@ endif
 scriptencoding utf-8           " UTF-8 all the way
 set encoding=utf-8
 
-set timeoutlen=250             " Time to wait after ESC (default causes an annoying delay)
+set timeoutlen=250             " Time to wait after ESC (default causes delay)
 set clipboard+=unnamed         " Yanks go on clipboard instead.
-set pastetoggle=<F10>          " Toggle between paste and normal: for 'safer' pasting from keyboard
+set pastetoggle=<F10>          " Toggle between paste and normal: pasting from keyboard
 set shiftround                 " Round indent to multiple of 'shiftwidth'
 set tags=.git/tags;$HOME       " Consider the repo tags first, then
                                " Walk directory tree upto $HOME looking for tags
                                " Note `;` sets the stop folder. :h file-search
-
 set modeline
-set modelines=5                " Default numbers of lines to read for modeline instructions
-
+set modelines=5                " Default number of lines to read for modeline
 set autowrite                  " Writes on make/shell commands
 set autoread
 
@@ -251,7 +207,7 @@ set ignorecase                 " Be case insensitive when searching
 set smartcase                  " Be case sensitive when input has a capital letter
 set hlsearch                   " Highlight search
 
-let g:is_posix = 1             " Vim's default is archaic bourne shell, bring it up to the 90s
+let g:is_posix = 1             " Vim's default is Bourne shell, bring it up to the 90s
 let mapleader = ','
 let maplocalleader = '	'      " Tab as a local leader
 let g:netrw_banner = 0         " Do not show Netrw help banner
@@ -299,7 +255,7 @@ call wilder#set_option('renderer', wilder#wildmenu_renderer(
 " "}}}
 
 " Formatting "{{{
-set fo+=o  " Insert the current comment leader after hitting 'o' or 'O' in Normal mode.
+set fo+=o  " Insert the current comment leader after 'o' or 'O' in Normal mode.
 set fo-=r  " Do not automatically insert a comment leader after an enter
 set fo-=t  " Do no auto-wrap text using textwidth (does not apply to comments)
 
@@ -341,7 +297,7 @@ set stl+=%-14.(%l,%c%V%)\ %P
 
 set foldenable                " Turn on folding
 set foldmethod=marker         " Fold on the marker
-set foldlevel=100             " Don't autofold anything (but I can still fold manually)
+set foldlevel=100             " Don't autofold anything (but still fold manually)
 
 set foldopen=block,hor,tag    " What movements open folds
 set foldopen+=percent,mark
@@ -427,6 +383,7 @@ autocmd BufLeave term://* stopinsert
 """ Core plugin configuration (lua)
 " Use airline rather than lualine
 " require('lualine-config')
+" Add these:  cssmodules ansible haskell sql
 lua << EOF
 servers = {
     "pyright",
@@ -434,14 +391,8 @@ servers = {
     "awk_ls",
     "bashls",
     "dockerfile-language-server",
-    "json-lsp",
-    -- "marksman",
     "typescript-language-server",
-    -- "texlab",
-    -- "ltex-ls",
     "lua-language-server",
-    "pyright",
-    "terraform-ls",
     "vimls",
     "yaml-language-server",
     -- Formatter
@@ -454,8 +405,6 @@ servers = {
     "shellcheck",
     "tflint",
     "yamllint",
-    -- DAP
-    -- "debugpy",
 }
 
 require('nvim-cmp-config')
@@ -506,10 +455,8 @@ require("cheatsheet").setup({
 })
 EOF
 
-""" Custom Functions
-
-""" Custom Mappings (vim) (lua custom mappings are within individual lua config files)
-
+""" Custom Mappings (lua custom mappings are within individual lua config files)
+"
 " Core
 let mapleader=","
 nmap <leader>q :NvimTreeFindFileToggle<CR>

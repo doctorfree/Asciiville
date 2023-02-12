@@ -279,6 +279,11 @@ install_npm () {
     # npm install -g will now install to ~/.local/bin
     npm config set prefix '~/.local/'
 
+    log "[*] Installing tree-sitter ..."
+    npm i -g tree-sitter-cli > /dev/null 2>&1
+    have_tree=`type -p tree-sitter`
+    [ "${have_tree}" ] && tree-sitter init-config > /dev/null 2>&1
+
     log "[*] Installing language servers ..."
     # Could also install the language servers with brew, for example:
     #   brew install bash-language-server
@@ -297,6 +302,11 @@ install_npm () {
     npm i -g vim-language-server > /dev/null 2>&1
     # docker language server
     npm i -g dockerfile-language-server-nodejs > /dev/null 2>&1
+    # brew installed language servers
+    for server in ansible haskell sql lua yaml
+    do
+      ${BREW_EXE} install -q ${server} > /dev/null 2>&1
+    done
     # For other language servers, see:
     # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
   }
