@@ -15,6 +15,7 @@ pkgbase = asciiville
 	depends = libjpeg-turbo
 	depends = libpng
 	depends = khard
+	depends = mplayer
 	depends = git
 	optdepends = cool-retro-term: cool retro terminal emulator
 	source = asciiville::git+https://github.com/doctorfree/Asciiville.git#tag=v3.0.2r1

@@ -89,7 +89,7 @@ Version: ${PKG_VER}-${PKG_REL}
 Section: misc
 Priority: optional
 Architecture: all
-Depends: uuid-runtime, libaa-bin, libaa1, bb, dconf-cli, libncurses-dev, libjpeg-dev, libpng-dev, khard, git, libportaudio2, libportaudiocpp0, portaudio19-dev
+Depends: uuid-runtime, libaa-bin, libaa1, bb, dconf-cli, libncurses-dev, libjpeg-dev, libpng-dev, khard, git, mplayer, libportaudio2, libportaudiocpp0, portaudio19-dev
 Maintainer: ${DEBFULLNAME} <${DEBEMAIL}>
 Installed-Size: 192000
 Build-Depends: debhelper (>= 11)

@@ -2,7 +2,7 @@ Name: Asciiville
 Version:    %{_version}
 Release:    %{_release}
 BuildArch:  noarch
-Requires: util-linux, ncurses, dconf, libjpeg-turbo, libpng, khard, git
+Requires: util-linux, ncurses, dconf, libjpeg-turbo, libpng, khard, mplayer, git
 URL:        https://github.com/doctorfree/Asciiville
 Vendor:     Doctorwhen's Bodacious Laboratory
 Packager:   ronaldrecord@gmail.com
