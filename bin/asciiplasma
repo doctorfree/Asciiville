@@ -6,6 +6,8 @@ from asciimatics.scene import Scene
 from asciimatics.screen import Screen
 from asciimatics.effects import Print
 from asciimatics.exceptions import ResizeScreenError
+from asciimatics.event import KeyboardEvent
+from asciimatics.exceptions import StopApplication
 import os, tempfile
 import signal
 import subprocess
@@ -13,9 +15,8 @@ import sys
 import time
 import argparse
 
-
 class MusicPlayerPlusScene(Scene):
- 
+
     def __init__(self, screen):
         self._screen = screen
         effects = [
@@ -54,14 +55,27 @@ class MusicPlayerPlusScene(Scene):
         self._effects = [self._effects[0]]
         self._add_mpcplus_comment()
 
+# Event handler for global keys
+def global_shortcuts(event):
+    if isinstance(event, KeyboardEvent):
+        c = event.key_code
+        # Stop on ctrl+q or ctrl+x
+        # if c in (17, 24):
+        # Stop on q or Q
+        if c in (113, 81):
+            raise StopApplication("User terminated app")
+
 def mpplus(screen, cycle=None):
     screen.clear()
     if cycle is None:
-        screen.play([MusicPlayerPlusScene(screen)], stop_on_resize=True)
+        screen.play([MusicPlayerPlusScene(screen)],
+                    stop_on_resize=True, unhandled_input=global_shortcuts)
     else:
         numplays=0
         while numplays < cycle:
-            screen.play([MusicPlayerPlusScene(screen)], stop_on_resize=True, repeat=False)
+            screen.play([MusicPlayerPlusScene(screen)],
+                        stop_on_resize=True, repeat=False,
+                        unhandled_input=global_shortcuts)
             numplays += 1
 
 

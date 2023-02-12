@@ -22,6 +22,8 @@ from asciimatics.effects import Julia, Print, Stars
 from asciimatics.renderers import FigletText, Rainbow
 from asciimatics.scene import Scene
 from asciimatics.screen import Screen
+from asciimatics.event import KeyboardEvent
+from asciimatics.exceptions import StopApplication
 from asciimatics.exceptions import ResizeScreenError
 import os
 import signal, tempfile
@@ -29,6 +31,16 @@ import subprocess
 import sys
 import time
 import argparse
+
+# Event handler for global keys
+def global_shortcuts(event):
+    if isinstance(event, KeyboardEvent):
+        c = event.key_code
+        # Stop on ctrl+q or ctrl+x
+        # if c in (17, 24):
+        # Stop on q or Q
+        if c in (113, 81):
+            raise StopApplication("User terminated app")
 
 def asciijulia(screen, c):
     scenes = []
@@ -70,9 +82,11 @@ def asciijulia(screen, c):
 
     screen.clear()
     if cycle is None:
-        screen.play(scenes, stop_on_resize=True)
+        screen.play(scenes, unhandled_input=global_shortcuts,
+                            stop_on_resize=True)
     else:
-        screen.play(scenes, stop_on_resize=True, repeat=False)
+        screen.play(scenes, unhandled_input=global_shortcuts,
+                            stop_on_resize=True, repeat=False)
 
 
 if __name__ == "__main__":
