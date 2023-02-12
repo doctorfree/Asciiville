@@ -2787,8 +2787,8 @@ show_animation_menu() {
               break
               ;;
           "Plasma"*,*|*,"Plasma"*)
-              ASCSPLASH="${ASCSPLASH} -p"
-              ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -l plasma"
+              ASCSPLASH="${ASCSPLASH} -p -c 2"
+              ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -c 2 -l plasma"
               break
               ;;
           "AAlib"*,*|*,"AAlib"*)
@@ -4047,6 +4047,10 @@ init_vars() {
   COMMAND_TMUX="bash ${TOOLSBIN}/btop-tmux"
   ASCSPLASH="asciisplash"
   ASCSPLASH_TMUX="bash ${TOOLSBIN}/asciisplash-tmux"
+  [ "${AUDIO}" ] && [ "${have_mplayer}" ] && {
+    ASCSPLASH="${ASCSPLASH} -a"
+    ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
+  }
 
   INTERACTIVE=
   RECORD=
