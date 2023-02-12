@@ -507,29 +507,30 @@ install_neovim() {
   have_nvim=`type -p nvim`
   [ "${have_nvim}" ] && {
     grep "^Plug " ${HOME}/.config/nvim/init.vim > /dev/null && {
-      nvim -c 'PlugInstall' -c 'qa'
+      nvim -i NONE -c 'PlugClean' -c 'qa'
+      nvim -i NONE -c 'PlugInstall' -c 'qa'
     }
   }
 
-  # Patch nvim-treesitter
-  have_patch=`type -p patch`
-  [ "${have_patch}" ] || install_package patch
-  have_patch=`type -p patch`
-  [ "${have_patch}" ] && {
-    patchfile="${CONFDIR}/nvim/scripts/nvim-treesitter.patch"
-    [ -f ${patchfile} ] && {
-      PLUGDIR=".local/share/nvim/plugged/nvim-treesitter/lua/nvim-treesitter"
-      [ -f ${HOME}/${PLUGDIR}/shell_command_selectors.lua ] && {
-        popts="-d ${HOME} -f -p0 -s -r -"
-        if [ -f ${HOME}/${PLUGDIR}/shell_command_selectors.lua.orig ]
-        then
-          patch ${popts} -V numbered < ${patchfile} > /dev/null 2>&1
-        else
-          patch -b ${popts} < ${patchfile}
-        fi
-      }
-    }
-  }
+# Patch nvim-treesitter
+# have_patch=`type -p patch`
+# [ "${have_patch}" ] || install_package patch
+# have_patch=`type -p patch`
+# [ "${have_patch}" ] && {
+#   patchfile="${CONFDIR}/nvim/scripts/nvim-treesitter.patch"
+#   [ -f ${patchfile} ] && {
+#     PLUGDIR=".local/share/nvim/plugged/nvim-treesitter/lua/nvim-treesitter"
+#     [ -f ${HOME}/${PLUGDIR}/shell_command_selectors.lua ] && {
+#       popts="-d ${HOME} -f -p0 -s -r -"
+#       if [ -f ${HOME}/${PLUGDIR}/shell_command_selectors.lua.orig ]
+#       then
+#         patch ${popts} -V numbered < ${patchfile} > /dev/null 2>&1
+#       else
+#         patch -b ${popts} < ${patchfile}
+#       fi
+#     }
+#   }
+# }
 }
 
 pathadd() {
@@ -552,7 +553,6 @@ have_go=`type -p go`
   }
 }
 
-have_nvim=`type -p nvim`
 have_mutt=`type -p mutt`
 have_neomutt=`type -p neomutt`
 have_gnome=`type -p gnome-terminal`
@@ -776,7 +776,6 @@ have_kitty=`type -p kitty`
   exit 0
 }
 
-have_nvim=`type -p nvim`
 [ "${argument}" == "neovim" ] && {
   [ "${remove}" ] && {
     printf "\nRemoving Neovim text editor.\n\n"
@@ -802,10 +801,6 @@ have_nvim=`type -p nvim`
     remove_neovim
     printf "\n${BOLD}Neovim removed${NORM}"
     printf "\nTo re-install Neovim run ${BOLD}'ascinit neovim'${NORM}\n\n"
-    exit 0
-  }
-  [ "${have_nvim}" ] && {
-    printf "\nNeovim is already installed\n"
     exit 0
   }
   [ -x ${CONFDIR}/nvim/scripts/install.sh ] && install_neovim
@@ -845,7 +840,7 @@ have_nvim=`type -p nvim`
 
 # Prompt for Neovim install
 neovim_install=
-[ "${minimal}" ] || [ "${have_nvim}" ] || {
+[ "${minimal}" ] || {
   [ -x ${CONFDIR}/nvim/scripts/install.sh ] && {
     neovim_install=1
     printf "\n\n"
@@ -1017,11 +1012,10 @@ neovim_install=
   newnvimconf=
   if [ -d ${USERCONF}/nvim ]
   then
-    [ "${have_nvim}" ] || {
-      mv ${USERCONF}/nvim ${USERCONF}/nvim-bak$$
-      cp -a ${CONFDIR}/nvim ${USERCONF}/nvim
-      newnvimconf=1
-    }
+    printf "\n\nBacking up existing Neovim configuration to ~/.config/nvim-bak$$\n"
+    mv ${USERCONF}/nvim ${USERCONF}/nvim-bak$$
+    cp -a ${CONFDIR}/nvim ${USERCONF}/nvim
+    newnvimconf=1
   else
     cp -a ${CONFDIR}/nvim ${USERCONF}/nvim
     newnvimconf=1

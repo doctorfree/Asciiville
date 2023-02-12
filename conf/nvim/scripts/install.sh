@@ -279,7 +279,7 @@ install_npm () {
     # npm install -g will now install to ~/.local/bin
     npm config set prefix '~/.local/'
 
-    log "[*] Installing tree-sitter ..."
+    log "[*] Installing tree-sitter command line interface ..."
     npm i -g tree-sitter-cli > /dev/null 2>&1
     have_tree=`type -p tree-sitter`
     [ "${have_tree}" ] && tree-sitter init-config > /dev/null 2>&1
@@ -326,6 +326,7 @@ install_npm () {
 }
 
 main () {
+  printf "\n"
   check_prerequisites
   local common_packages="git curl gip tar unzip"
   get_os
