@@ -40,6 +40,14 @@ without graphical capabilities then execute the command `ascinit -c`
 rather than `ascinit`. When invoked with the `-c` option the `ascinit`
 command will not install the terminal emulators or create the terminal profiles.
 
+A minimal initialization can be performed with the command:
+```shell
+ascinit minimal
+```
+The "minimal" Asciiville initialization does not install optional components
+like `NeoMutt`, `Neovim`, Ascii games, `cbftp`, and `aewan`. These components
+can be installed subsequently by rerunning `ascinit` without arguments.
+
 In addition to initialization of Asciiville components, `ascinit` can be used
 to individually install and remove the ASCII games, Kitty terminal emulator,
 and Neovim text editor. To install one of these components, issue the command:
@@ -76,7 +84,7 @@ ascinit -r <component>
 : indicates prompt for installation of additional terminal emulators
 
 **-q**
-: indicates quiet mode
+: indicates quiet mode, messages are suppressed. In quiet mode initialization all Asciiville components are installed.
 
 **-t**
 : indicates authorize the Rainbow Stream app at Twitter

@@ -38,8 +38,9 @@ usage() {
     rich "    [cyan]-t[/] indicates [yellow]authorize the Rainbow Stream app at Twitter[/]" --print
     rich "    [cyan]-y[/] indicates [yellow]answer yes at all prompts[/]" --print
     rich "    [cyan]-u[/] indicates [yellow]display this usage message and exit[/]" --print
-    rich "    [cyan]arg[/] can be one of [yellow]games, kitty, or neovim[/]" --print
-    rich "        indicating installation of removal of [cyan]arg[/]" --print
+    rich "    If [cyan]arg[/] is [cyan]minimal[/] [yellow]a minimal initialization is performed[/]" --print
+    rich "    [cyan]arg[/] can also be one of [cyan]games[/], [cyan]kitty[/], or [cyan]neovim[/]" --print
+    rich "        indicating [yellow]installation or removal[/] of [cyan]arg[/]" --print
     printf "\n"
   else
     printf "\nUsage: ascinit [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-r] [-t] [-y] [-u] [arg]"
@@ -56,7 +57,8 @@ usage() {
     printf "\n\t-t indicates authorize the Rainbow Stream app at Twitter"
     printf "\n\t-y indicates answer yes at all prompts"
     printf "\n\t-u indicates display this usage message and exit"
-    printf "\n\targ can be one of games, kitty, or neovim"
+    printf "\n\tif 'arg' is 'minimal' a minimal initialization is performed"
+    printf "\n\targ can also be one of games, kitty, or neovim"
     printf "\n\t\tindicating installation of removal of arg\n"
   fi
   exit 1
@@ -716,6 +718,15 @@ argument=`echo "$1" | tr '[:upper:]' '[:lower:]'`
 have_curl=`type -p curl`
 have_jq=`type -p jq`
 have_wget=`type -p wget`
+
+minimal=
+[ "${argument}" == "minimal" ] && {
+  minimal=1
+  neovim_install=
+  games_install=
+  quiet=1
+}
+
 have_kitty=`type -p kitty`
 [ "${argument}" == "kitty" ] && {
   [ "${remove}" ] && {
@@ -839,7 +850,7 @@ have_nvim=`type -p nvim`
 
 # Prompt for Neovim install
 neovim_install=
-[ "${have_nvim}" ] || {
+[ "${minimal}" ] || [ "${have_nvim}" ] || {
   [ -x ${CONFDIR}/nvim/scripts/install.sh ] && {
     neovim_install=1
     printf "\n\n"
@@ -870,31 +881,33 @@ neovim_install=
 }
 
 # Prompt for Ascii Games install
-echo ""
-games_install=1
-if [ "${prompt}" ]
-then
-  while true
-  do
-    read -p "Install ASCII Games ? (y/n) " yn
-    case $yn in
-      [Yy]* )
-          games_install=1
-          break
-          ;;
-      [Nn]* )
-          games_install=
-          printf "\nSkipping Ascii Games installation.\n"
-          printf "\nGames can be installed later with the command 'ascinit games'.\n"
-          break
-          ;;
-        * ) echo "Please answer yes or no."
-          ;;
-    esac
-  done
-else
+[ "${minimal}" ] || {
+  echo ""
   games_install=1
-fi
+  if [ "${prompt}" ]
+  then
+    while true
+    do
+      read -p "Install ASCII Games ? (y/n) " yn
+      case $yn in
+        [Yy]* )
+            games_install=1
+            break
+            ;;
+        [Nn]* )
+            games_install=
+            printf "\nSkipping Ascii Games installation.\n"
+            printf "\nGames can be installed later with the command 'ascinit games'.\n"
+            break
+            ;;
+          * ) echo "Please answer yes or no."
+            ;;
+      esac
+    done
+  else
+    games_install=1
+  fi
+}
 
 [ "${have_curl}" ] || {
   install_package curl
@@ -910,7 +923,7 @@ fi
 }
 
 # Mutt configuration user setup
-[ "${have_mutt}" ] && {
+[ "${minimal}" ] || {
   [ -f ${CONFDIR}/mutt/muttrc ] && {
     [ -d ${HOME}/.mutt ] || {
       mkdir ${HOME}/.mutt
@@ -971,11 +984,10 @@ fi
 }
 
 # NeoMutt configuration user setup
-[ "${have_neomutt}" ] || {
+[ "${minimal}" ] || {
   [ "${fedora}" ] && {
     sudo dnf install dnf-plugins-core -y 2> /dev/null
     sudo dnf copr enable flatcap/neomutt -y 2> /dev/null
-    install_package neomutt
   }
 }
 [ -d ${CONFDIR}/neomutt ] && {
@@ -1479,18 +1491,12 @@ have_btop=`type -p btop`
 [ "${have_btop}" ] || install_package btop
 have_dialog=`type -p dialog`
 [ "${have_dialog}" ] || install_package dialog
-have_cmatrix=`type -p cmatrix`
-[ "${have_cmatrix}" ] || install_package cmatrix
 have_figlet=`type -p figlet`
 [ "${have_figlet}" ] || install_package figlet
 have_lolcat=`type -p lolcat`
 [ "${have_lolcat}" ] || install_package lolcat
 have_mplayer=`type -p mplayer`
 [ "${have_mplayer}" ] || install_package mplayer
-have_neomutt=`type -p neomutt`
-[ "${have_neomutt}" ] || install_package neomutt
-have_newsboat=`type -p newsboat`
-[ "${have_newsboat}" ] || install_package newsboat
 have_ranger=`type -p ranger`
 [ "${have_ranger}" ] || install_package ranger
 have_tmux=`type -p tmux`
@@ -1499,15 +1505,23 @@ have_w3m=`type -p w3m`
 [ "${have_w3m}" ] || install_package w3m
 have_asciinema=`type -p asciinema`
 [ "${have_asciinema}" ] || install_package asciinema
-have_speedtest=`type -p speedtest-cli`
-[ "${have_speedtest}" ] || install_package speedtest-cli
-have_neofetch=`type -p neofetch`
-[ "${have_neofetch}" ] || install_package neofetch
 have_gnupg=`type -p gpg`
 [ "${have_gnupg}" ] || install_package gnupg
 have_zip=`type -p zip`
 [ "${have_zip}" ] || install_package zip
 install_package imagemagick
+[ "${minimal}" ] || {
+  have_cmatrix=`type -p cmatrix`
+  [ "${have_cmatrix}" ] || install_package cmatrix
+  have_neomutt=`type -p neomutt`
+  [ "${have_neomutt}" ] || install_package neomutt
+  have_newsboat=`type -p newsboat`
+  [ "${have_newsboat}" ] || install_package newsboat
+  have_speedtest=`type -p speedtest-cli`
+  [ "${have_speedtest}" ] || install_package speedtest-cli
+  have_neofetch=`type -p neofetch`
+  [ "${have_neofetch}" ] || install_package neofetch
+}
 
 FIGLET_DIR="/usr/share/figlet-fonts"
 FIGLET_ZIP="figlet-fonts.zip"
@@ -1533,13 +1547,6 @@ then
   fi
 fi
 
-# Install aewan if not already present
-[ -x /usr/local/bin/aewan ] || {
-  [ -x /usr/bin/aewan ] || {
-    PROJECT=asciiville-aewan
-    install_external_package
-  }
-}
 # Install btop if not already present
 [ -x /usr/local/bin/btop ] || {
   [ -x /usr/bin/btop ] || {
@@ -1547,13 +1554,6 @@ fi
       PROJECT=btop
       install_external_package
     }
-  }
-}
-# Install cbftp if not already present
-[ -x /usr/local/bin/cbftp ] || {
-  [ -x /usr/bin/cbftp ] || {
-    PROJECT=cbftp
-    install_external_package
   }
 }
 # Install any2ascii if not already present
@@ -1570,12 +1570,28 @@ fi
     install_external_package
   }
 }
+[ "${minimal}" ] || {
+  # Install aewan if not already present
+  [ -x /usr/local/bin/aewan ] || {
+    [ -x /usr/bin/aewan ] || {
+      PROJECT=asciiville-aewan
+      install_external_package
+    }
+  }
+  # Install cbftp if not already present
+  [ -x /usr/local/bin/cbftp ] || {
+    [ -x /usr/bin/cbftp ] || {
+      PROJECT=cbftp
+      install_external_package
+    }
+  }
 
-# Install Neovim
-[ "${neovim_install}" ] && install_neovim
+  # Install Neovim
+  [ "${neovim_install}" ] && install_neovim
 
-# Install Ascii Games
-[ "${games_install}" ] && install_games
+  # Install Ascii Games
+  [ "${games_install}" ] && install_games
+}
 
 have_mapscii=`type -p mapscii`
 [ "${have_mapscii}" ] || {

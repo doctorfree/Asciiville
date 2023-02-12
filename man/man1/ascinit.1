@@ -65,6 +65,20 @@ without graphical capabilities then execute the command
 When invoked with the \f[V]-c\f[R] option the \f[V]ascinit\f[R] command
 will not install the terminal emulators or create the terminal profiles.
 .PP
+A minimal initialization can be performed with the command:
+.IP
+.nf
+\f[C]
+ascinit minimal
+\f[R]
+.fi
+.PP
+The \[dq]minimal\[dq] Asciiville initialization does not install
+optional components like \f[V]NeoMutt\f[R], \f[V]Neovim\f[R], Ascii
+games, \f[V]cbftp\f[R], and \f[V]aewan\f[R].
+These components can be installed subsequently by rerunning
+\f[V]ascinit\f[R] without arguments.
+.PP
 In addition to initialization of Asciiville components,
 \f[V]ascinit\f[R] can be used to individually install and remove the
 ASCII games, Kitty terminal emulator, and Neovim text editor.
@@ -111,7 +125,8 @@ indicates setup user NeoMutt configuration
 indicates prompt for installation of additional terminal emulators
 .TP
 \f[B]-q\f[R]
-indicates quiet mode
+indicates quiet mode, messages are suppressed.
+In quiet mode initialization all Asciiville components are installed.
 .TP
 \f[B]-t\f[R]
 indicates authorize the Rainbow Stream app at Twitter
