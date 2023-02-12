@@ -2049,13 +2049,14 @@ touch ${HOME}/.tetris
 
 [ "${have_brew}" ] && {
   [ "${quiet}" ] || {
-    printf "\nCleaning up Homebrew ... "
+    printf "\n\tCleaning up Homebrew ... "
   }
   brew cleanup --prune=all --quiet > /dev/null 2>&1
   [ "${quiet}" ] || {
     printf "done"
   }
 }
+printf "\n"
 
 [ "${newnvimconf}" ] && {
   [ "${quiet}" ] || {
