@@ -17,13 +17,14 @@ FIG_FONTS="${TOP}/figlet-fonts"
 MUSEDIR="${TOP}/asciiville/music"
 CONFDIR=${TOP}/share/asciiville
 USERCONF="${HOME}/.config"
+OWNER=doctorfree
 BOLD=$(tput bold 2>/dev/null)
 NORMAL=$(tput sgr0 2>/dev/null)
 
 usage() {
   if [ "${have_rich}" ]
   then
-    rich "[bold]Usage:[/] [bold italic green]ascinit[/] [cyan]\[-a] \[-c] \[-d] \[-m] \[-M] \[-n] \[-N] \[-q] \[-r] \[-t] \[-y] \[-u][/]" --print
+    rich "[bold]Usage:[/] [bold italic green]ascinit[/] [cyan]\[-a] \[-c] \[-d] \[-m] \[-M] \[-n] \[-N] \[-q] \[-r] \[-t] \[-y] \[-u] \[arg][/]" --print
     rich "[bold]Where:[/]" --print
     rich "    [cyan]-a[/] indicates [yellow]do not ask to play an animation when done[/]" --print
     rich "    [cyan]-c[/] indicates [yellow]console mode - no windowing system, headless config[/]" --print
@@ -37,9 +38,11 @@ usage() {
     rich "    [cyan]-t[/] indicates [yellow]authorize the Rainbow Stream app at Twitter[/]" --print
     rich "    [cyan]-y[/] indicates [yellow]answer yes at all prompts[/]" --print
     rich "    [cyan]-u[/] indicates [yellow]display this usage message and exit[/]" --print
+    rich "    [cyan]arg[/] can be one of [yellow]games, kitty, or neovim[/]" --print
+    rich "        indicating installation of removal of [cyan]arg[/]" --print
     printf "\n"
   else
-    printf "\nUsage: ascinit [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-r] [-t] [-y] [-u]"
+    printf "\nUsage: ascinit [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-r] [-t] [-y] [-u] [arg]"
     printf "\nWhere:"
     printf "\n\t-a indicates do not ask to play an animation when done"
     printf "\n\t-c indicates console mode - no windowing system, headless config"
@@ -52,9 +55,44 @@ usage() {
     printf "\n\t-r indicates remove service/package"
     printf "\n\t-t indicates authorize the Rainbow Stream app at Twitter"
     printf "\n\t-y indicates answer yes at all prompts"
-    printf "\n\t-u indicates display this usage message and exit\n"
+    printf "\n\t-u indicates display this usage message and exit"
+    printf "\n\targ can be one of games, kitty, or neovim"
+    printf "\n\t\tindicating installation of removal of arg\n"
   fi
   exit 1
+}
+
+remove_package() {
+  PKG="$1"
+  [ "${quiet}" ] || printf "\n\tRemoving ${PKG} ..."
+  # Try Brew first
+  if [ $? -eq 0 ]
+  then
+    brew uninstall -q ${PKG} > /dev/null 2>&1
+  else
+    if [ "${debian}" ]
+    then
+      if [ "${APT}" ]
+      then
+        sudo ${APT} remove ${PKG} > /dev/null 2>&1
+      else
+        [ "${quiet}" ] || printf "\n\t\tCannot locate apt to remove. Skipping ..."
+      fi
+    else
+      if [ "${fedora}" ]
+      then
+        if [ "${DNF}" ]
+        then
+          sudo ${DNF} remove ${PKG} > /dev/null 2>&1
+        else
+          [ "${quiet}" ] || printf "\n\t\tCannot locate dnf to remove. Skipping ..."
+        fi
+      else
+        [ "${arch}" ] && sudo pacman -R --noconfirm ${PKG} > /dev/null 2>&1
+      fi
+    fi
+  fi
+  [ "${quiet}" ] || printf " done"
 }
 
 install_package() {
@@ -91,7 +129,7 @@ install_package() {
     fi
   fi
   [ "${quiet}" ] || printf " done"
-} 
+}
 
 ask_install() {
   nam="$1"
@@ -174,7 +212,9 @@ install_external_package() {
   }
 
   [ "${DL_URL}" ] && {
-    printf "\n\tInstalling ${PROJECT} ..."
+    [ "${quiet}" ] || {
+      printf "\n\tInstalling ${PROJECT} ..."
+    }
     if [ "${debian}" ]
     then
       [ "${have_wget}" ] && {
@@ -212,7 +252,69 @@ install_external_package() {
         fi
       fi
     fi
+    [ "${quiet}" ] || {
+      printf " done"
+    }
   }
+}
+
+install_games() {
+  if [ "${darwin}" ]
+  then
+    install_package nbsdgames
+    install_package nethack
+    install_package ninvaders
+    install_package c2048
+    install_package greed
+  else
+    PROJECT=asciigames
+    install_external_package
+    if [ "${debian}" ]
+    then
+      install_package bsdgames
+      install_package greed
+    else
+      install_package bsd-games
+    fi
+  fi
+  install_package nudoku
+  printf "\n"
+}
+
+remove_games() {
+  if [ "${darwin}" ]
+  then
+    remove_package nbsdgames
+    remove_package nethack
+    remove_package ninvaders
+    remove_package c2048
+    remove_package greed
+  else
+    if [ "${debian}" ]
+    then
+      remove_package bsdgames
+      remove_package greed
+    else
+      remove_package bsd-games
+    fi
+    printf "\n\tRemoving asciigames package ..."
+    if [ "${debian}" ]
+    then
+        [ "${APT}" ] && sudo ${APT} remove asciigames > /dev/null 2>&1
+    else
+      if [ "${centos}" ] || [ "${fedora}" ]
+      then
+        [ "${DNF}" ] && sudo ${DNF} remove asciigames > /dev/null 2>&1
+      else
+        if [ "${arch}" ]
+        then
+            sudo pacman -R --noconfirm asciigames > /dev/null 2>&1
+        fi
+      fi
+    fi
+  fi
+  remove_package nudoku
+  printf "\n"
 }
 
 install_kitty() {
@@ -383,6 +485,16 @@ remove_kitty() {
   [ -d /Applications/kitty.app ] && sudo rm -rf /Applications/kitty.app
 }
 
+remove_neovim() {
+  have_brew=`type -p brew`
+  if [ "${have_brew}" ]
+  then
+    brew uninstall -q neovim > /dev/null 2>&1
+  else
+    printf "\nCannot locate brew. Skipping Neovim removal."
+  fi
+}
+
 install_neovim() {
   if [ "${quiet}" ]
   then
@@ -437,62 +549,8 @@ have_go=`type -p go`
     have_go=`type -p go`
   }
 }
+
 have_nvim=`type -p nvim`
-have_kitty=`type -p kitty`
-
-[ "$1" == "kitty" ] && {
-  [ "${remove}" ] && {
-    printf "\nRemoving kitty terminal emulator.\n\n"
-    if [ "${prompt}" ]
-    then
-      while true
-      do
-        read -p "Do you wish to continue with kitty removal ? (y/n) " yn
-        case $yn in
-            [Yy]* )
-                break
-                ;;
-            [Nn]* )
-                printf "\nKitty removal aborted."
-                printf "\nExiting.\n\n"
-                exit 0
-                ;;
-              * ) echo "Please answer yes or no."
-                ;;
-        esac
-      done
-    fi
-    remove_kitty
-    printf "\n${BOLD}Kitty removed${NORM}"
-    printf "\nTo re-install kitty run ${BOLD}'ascinit kitty'${NORM}\n\n"
-    exit 0
-  }
-  [ "${quiet}" ] || {
-    printf "\nInstalling kitty terminal emulator\n"
-  }
-  if [ "${prompt}" ]
-  then
-    while true
-    do
-      read -p "Do you wish to continue with kitty installation ? (y/n) " yn
-      case $yn in
-        [Yy]* )
-            break
-            ;;
-        [Nn]* )
-            printf "\nKitty installation aborted."
-            printf "\nExiting.\n\n"
-            exit 0
-            ;;
-          * ) echo "Please answer yes or no."
-            ;;
-      esac
-    done
-  fi
-  install_kitty
-  exit 0
-}
-
 have_mutt=`type -p mutt`
 have_neomutt=`type -p neomutt`
 have_gnome=`type -p gnome-terminal`
@@ -656,16 +714,196 @@ argument=`echo "$1" | tr '[:upper:]' '[:lower:]'`
 [ -d ${USERCONF} ] || mkdir -p ${USERCONF}
 
 have_curl=`type -p curl`
+have_jq=`type -p jq`
+have_wget=`type -p wget`
+have_kitty=`type -p kitty`
+[ "${argument}" == "kitty" ] && {
+  [ "${remove}" ] && {
+    printf "\nRemoving kitty terminal emulator.\n\n"
+    if [ "${prompt}" ]
+    then
+      while true
+      do
+        read -p "Do you wish to continue with kitty removal ? (y/n) " yn
+        case $yn in
+            [Yy]* )
+                break
+                ;;
+            [Nn]* )
+                printf "\nKitty removal aborted."
+                printf "\nExiting.\n\n"
+                exit 0
+                ;;
+              * ) echo "Please answer yes or no."
+                ;;
+        esac
+      done
+    fi
+    remove_kitty
+    printf "\n${BOLD}Kitty removed${NORM}"
+    printf "\nTo re-install kitty run ${BOLD}'ascinit kitty'${NORM}\n\n"
+    exit 0
+  }
+  [ "${quiet}" ] || {
+    printf "\nInstalling kitty terminal emulator\n"
+  }
+  if [ "${prompt}" ]
+  then
+    while true
+    do
+      read -p "Do you wish to continue with kitty installation ? (y/n) " yn
+      case $yn in
+        [Yy]* )
+            break
+            ;;
+        [Nn]* )
+            printf "\nKitty installation aborted."
+            printf "\nExiting.\n\n"
+            exit 0
+            ;;
+          * ) echo "Please answer yes or no."
+            ;;
+      esac
+    done
+  fi
+  install_kitty
+  exit 0
+}
+
+have_nvim=`type -p nvim`
+[ "${argument}" == "neovim" ] && {
+  [ "${remove}" ] && {
+    printf "\nRemoving Neovim text editor.\n\n"
+    if [ "${prompt}" ]
+    then
+      while true
+      do
+        read -p "Do you wish to continue with Neovim removal ? (y/n) " yn
+        case $yn in
+            [Yy]* )
+                break
+                ;;
+            [Nn]* )
+                printf "\nNeovim removal aborted."
+                printf "\nExiting.\n\n"
+                exit 0
+                ;;
+              * ) echo "Please answer yes or no."
+                ;;
+        esac
+      done
+    fi
+    remove_neovim
+    printf "\n${BOLD}Neovim removed${NORM}"
+    printf "\nTo re-install Neovim run ${BOLD}'ascinit neovim'${NORM}\n\n"
+    exit 0
+  }
+  [ "${have_nvim}" ] && {
+    printf "\nNeovim is already installed\n"
+    exit 0
+  }
+  [ -x ${CONFDIR}/nvim/scripts/install.sh ] && install_neovim
+  exit 0
+}
+
+[ "${argument}" == "games" ] && {
+  [ "${remove}" ] && {
+    printf "\nRemoving ASCII games.\n\n"
+    if [ "${prompt}" ]
+    then
+      while true
+      do
+        read -p "Do you wish to continue with Ascii games removal ? (y/n) " yn
+        case $yn in
+            [Yy]* )
+                break
+                ;;
+            [Nn]* )
+                printf "\nAscii games removal aborted."
+                printf "\nExiting.\n\n"
+                exit 0
+                ;;
+              * ) echo "Please answer yes or no."
+                ;;
+        esac
+      done
+    fi
+    remove_games
+    printf "\n${BOLD}Ascii games removed${NORM}"
+    printf "\nTo re-install Ascii games run ${BOLD}'ascinit games'${NORM}\n\n"
+    exit 0
+  }
+  install_games
+  exit 0
+}
+
+# Prompt for Neovim install
+neovim_install=
+[ "${have_nvim}" ] || {
+  [ -x ${CONFDIR}/nvim/scripts/install.sh ] && {
+    neovim_install=1
+    printf "\n\n"
+    if [ "${prompt}" ]
+    then
+      while true
+      do
+        read -p "Install Neovim text editor (optional but recommended) ? (y/n) " yn
+        case $yn in
+          [Yy]* )
+            neovim_install=1
+            break
+            ;;
+          [Nn]* )
+            printf "\nSkipping Neovim installation."
+            printf "\nNeovim can be installed later with the command 'ascinit neovim'.\n"
+            neovim_install=
+            break
+            ;;
+          * ) echo "Please answer yes or no."
+            ;;
+        esac
+      done
+    else
+      neovim_install=1
+    fi
+  }
+}
+
+# Prompt for Ascii Games install
+echo ""
+games_install=1
+if [ "${prompt}" ]
+then
+  while true
+  do
+    read -p "Install ASCII Games ? (y/n) " yn
+    case $yn in
+      [Yy]* )
+          games_install=1
+          break
+          ;;
+      [Nn]* )
+          games_install=
+          printf "\nSkipping Ascii Games installation.\n"
+          printf "\nGames can be installed later with the command 'ascinit games'.\n"
+          break
+          ;;
+        * ) echo "Please answer yes or no."
+          ;;
+    esac
+  done
+else
+  games_install=1
+fi
+
 [ "${have_curl}" ] || {
   install_package curl
   have_curl=`type -p curl`
 }
-have_jq=`type -p jq`
 [ "${have_jq}" ] || {
   install_package jq
   have_jq=`type -p jq`
 }
-have_wget=`type -p wget`
 [ "${have_wget}" ] || {
   install_package wget
   have_wget=`type -p wget`
@@ -1295,7 +1533,6 @@ then
   fi
 fi
 
-OWNER=doctorfree
 # Install aewan if not already present
 [ -x /usr/local/bin/aewan ] || {
   [ -x /usr/bin/aewan ] || {
@@ -1334,79 +1571,11 @@ OWNER=doctorfree
   }
 }
 
-install_games() {
-  if [ "${darwin}" ]
-  then
-    install_package nbsdgames
-    install_package nethack
-    install_package ninvaders
-    install_package c2048
-    install_package greed
-  else
-    PROJECT=asciigames
-    install_external_package
-    if [ "${debian}" ]
-    then
-      install_package bsdgames
-      install_package greed
-    else
-      install_package bsd-games
-    fi
-  fi
-  install_package nudoku
-}
-
 # Install Neovim
-[ "${have_nvim}" ] || {
-  [ -x ${CONFDIR}/nvim/scripts/install.sh ] && {
-    printf "\n\n"
-    if [ "${prompt}" ]
-    then
-      while true
-      do
-        read -p "Install Neovim text editor ? (y/n) " yn
-        case $yn in
-          [Yy]* )
-            install_neovim
-            break
-            ;;
-          [Nn]* )
-            printf "\nSkipping Neovim installation.\n"
-            break
-            ;;
-          * ) echo "Please answer yes or no."
-            ;;
-        esac
-      done
-    else
-      install_neovim
-    fi
-  }
-}
+[ "${neovim_install}" ] && install_neovim
 
 # Install Ascii Games
-echo ""
-if [ "${prompt}" ]
-then
-  while true
-  do
-    read -p "Install ASCII Games ? (y/n) " yn
-    case $yn in
-      [Yy]* )
-          install_games
-          break
-          ;;
-      [Nn]* )
-          printf "\nSkipping Ascii Games installation.\n"
-          break
-          ;;
-        * ) echo "Please answer yes or no."
-          ;;
-    esac
-  done
-else
-  install_games
-fi
+[ "${games_install}" ] && install_games
 
 have_mapscii=`type -p mapscii`
 [ "${have_mapscii}" ] || {

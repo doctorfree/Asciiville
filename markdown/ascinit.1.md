@@ -2,14 +2,14 @@
 title: ASCINIT
 section: 1
 header: User Manual
-footer: ascinit 3.0.1
+footer: ascinit 3.0.2
 date: May 04, 2022
 ---
 ## NAME
 ascinit - Asciiville initialization script
 
 ## SYNOPSIS
-**ascinit** [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-t] [-y] [-u]
+**ascinit** [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-t] [-y] [-u] [arg]
 
 ## DESCRIPTION
 The *ascinit* command should be run as a normal user with `sudo` privilege
@@ -17,6 +17,7 @@ after installing Asciiville. It performs several configuration initializations
 for the user. These include:
 
 * The Kitty terminal emulator is installed and configured
+* The Neovim text editor is installed and configured
 * Mutt and/or NeoMutt startup files are customized
 * Tmux configuration is created
 * default Ranger and Rifle configuration files are created
@@ -30,13 +31,26 @@ Although command line options are provided to control the action(s) of the
 with no options. This default invocation performs a NeoMutt configuration,
 does not configure Mutt, configures Tmux and Ranger and Rifle, installs
 Asciimatics and Rainbowstream if not already installed, does not authorize
-Rainbow Stream with Twitter, installs the Kitty terminal emulator, and creates
-an Asciiville profile in gnome-terminal and tilix if installed.
+Rainbow Stream with Twitter, installs the Kitty terminal emulator, installs
+the Neovim text editor, installs ASCII games, and creates an Asciiville profile
+in gnome-terminal and tilix if installed.
 
 If initialization is being performed on a headless system or a system
 without graphical capabilities then execute the command `ascinit -c`
 rather than `ascinit`. When invoked with the `-c` option the `ascinit`
 command will not install the terminal emulators or create the terminal profiles.
+
+In addition to initialization of Asciiville components, `ascinit` can be used
+to individually install and remove the ASCII games, Kitty terminal emulator,
+and Neovim text editor. To install one of these components, issue the command:
+```shell
+ascinit <component>
+```
+where *component* is one of *games*, *kitty*, or *neovim*.
+To remove one of these componenents, run:
+```shell
+ascinit -r <component>
+```
 
 ## COMMAND LINE OPTIONS
 

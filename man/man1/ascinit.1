@@ -14,7 +14,7 @@
 . ftr VB CB
 . ftr VBI CBI
 .\}
-.TH "ASCINIT" "1" "May 04, 2022" "ascinit 3.0.1" "User Manual"
+.TH "ASCINIT" "1" "May 04, 2022" "ascinit 3.0.2" "User Manual"
 .hy
 .SS NAME
 .PP
@@ -22,6 +22,7 @@ ascinit - Asciiville initialization script
 .SS SYNOPSIS
 .PP
 \f[B]ascinit\f[R] [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-t] [-y] [-u]
+[arg]
 .SS DESCRIPTION
 .PP
 The \f[I]ascinit\f[R] command should be run as a normal user with
@@ -30,6 +31,8 @@ It performs several configuration initializations for the user.
 These include:
 .IP \[bu] 2
 The Kitty terminal emulator is installed and configured
+.IP \[bu] 2
+The Neovim text editor is installed and configured
 .IP \[bu] 2
 Mutt and/or NeoMutt startup files are customized
 .IP \[bu] 2
@@ -53,14 +56,35 @@ This default invocation performs a NeoMutt configuration, does not
 configure Mutt, configures Tmux and Ranger and Rifle, installs
 Asciimatics and Rainbowstream if not already installed, does not
 authorize Rainbow Stream with Twitter, installs the Kitty terminal
-emulator, and creates an Asciiville profile in gnome-terminal and tilix
-if installed.
+emulator, installs the Neovim text editor, installs ASCII games, and
+creates an Asciiville profile in gnome-terminal and tilix if installed.
 .PP
 If initialization is being performed on a headless system or a system
 without graphical capabilities then execute the command
 \f[V]ascinit -c\f[R] rather than \f[V]ascinit\f[R].
 When invoked with the \f[V]-c\f[R] option the \f[V]ascinit\f[R] command
 will not install the terminal emulators or create the terminal profiles.
+.PP
+In addition to initialization of Asciiville components,
+\f[V]ascinit\f[R] can be used to individually install and remove the
+ASCII games, Kitty terminal emulator, and Neovim text editor.
+To install one of these components, issue the command:
+.IP
+.nf
+\f[C]
+ascinit <component>
+\f[R]
+.fi
+.PP
+where \f[I]component\f[R] is one of \f[I]games\f[R], \f[I]kitty\f[R], or
+\f[I]neovim\f[R].
+To remove one of these componenents, run:
+.IP
+.nf
+\f[C]
+ascinit -r <component>
+\f[R]
+.fi
 .SS COMMAND LINE OPTIONS
 .TP
 \f[B]-a\f[R]
