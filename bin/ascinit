@@ -720,12 +720,7 @@ have_jq=`type -p jq`
 have_wget=`type -p wget`
 
 minimal=
-[ "${argument}" == "minimal" ] && {
-  minimal=1
-  neovim_install=
-  games_install=
-  quiet=1
-}
+[ "${argument}" == "minimal" ] && minimal=1
 
 have_kitty=`type -p kitty`
 [ "${argument}" == "kitty" ] && {
