@@ -88,6 +88,9 @@ Plug 'vim-airline/vim-airline-themes' " Airline status themes
 " ~/.local/share/nvim/plugged/vim-airline-themes/autoload/airline/themes/
 "   simple, powerlineish, onedark, desertink distinguished, cool, cobalt2,
 "   hybrid, night_owl, luna, solarized_flood, google_dark, ravenpower, molokai
+" Uncomment your preferred Airline theme, everforest, google_dark, or asciiville
+" let g:airline_theme='everforest'
+" let g:airline_theme='google_dark'
 let g:airline_theme='asciiville'
 Plug 'fladson/vim-kitty' " Kitty config syntax highlighting for vim
 " Language support
@@ -154,7 +157,7 @@ Plug 'flazz/vim-colorschemes'  " One stop shop for vim colorschemes
 " Can be commented out if another colorscheme is used
 Plug 'doctorfree/vim-asciiville'
 " Uncomment to use the Everforest colorscheme
-" Plug 'sainnhe/everforest'
+Plug 'sainnhe/everforest'
 " Uncomment to play with colorschemes
 " Plug 'felixhummel/setcolors.vim' " Easily switch colorschemes
 
@@ -238,23 +241,12 @@ call wilder#setup({'modes': [':', '/', '?']})
 
 " Airline and Lightline users:
 " wilder#wildmenu_airline_theme() and wilder#wildmenu_lightline_theme() can be used.
-"     \   'highlighter': wilder#basic_highlighter(),
-"     \   'highlights': {'default': 'Statusline'},
-"     \   'highlights': {},
-"     \   'separator': ' · ',
-"     \   'separator': '  ',
+"
 call wilder#set_option('renderer', wilder#wildmenu_renderer(
       \ wilder#wildmenu_airline_theme({
       \   'highlighter': wilder#lua_fzy_highlighter(),
       \   'separator': ' · ',
       \ })))
-"     \ 'apply_incsearch_fix': 1,
-"     \ }))
-" call wilder#set_option('renderer', wilder#wildmenu_renderer({
-"       \ 'apply_incsearch_fix': 1,
-"       \ }))
-
-" "}}}
 
 " Formatting "{{{
 set fo+=o  " Insert the current comment leader after 'o' or 'O' in Normal mode.
@@ -522,6 +514,7 @@ endif
 " let g:asciiville_bold = 0
 " let g:asciiville_underline = 0
 " let g:asciiville_undercurl = 0
+" Comment out to use everforest below
 colorscheme asciiville
 " Asciiville colorscheme commands:
 " :AsciivilleDarkBlueSoft
@@ -536,6 +529,23 @@ colorscheme asciiville
 if exists(":AsciivilleDarkBlueHard")
   AsciivilleDarkBlueHard
 endif
+
+" For dark version.
+set background=dark
+" For light version.
+" set background=light
+
+" Set contrast.
+" This configuration option should be placed before `colorscheme everforest`.
+" Available values: 'hard', 'medium'(default), 'soft'
+let g:everforest_background = 'hard'
+
+" For better performance
+let g:everforest_better_performance = 1
+" For a transparent background, set to 2 for status line transparency as well
+let g:everforest_transparent_background = 1
+" Dim inactive windows
+let g:everforest_dim_inactive_windows = 1
 
 " Uncomment to use the Everforest colorscheme
 " colorscheme everforest
