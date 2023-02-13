@@ -1398,6 +1398,20 @@ export HOMEBREW_NO_ENV_HINTS=1
 
 install_package python
 
+# Brew doesn't create a python symlink so we do so here
+python3_path=$(command -v python3)
+[ "${python3_path}" ] && {
+  python_dir=`dirname ${python3_path}`
+  if [ -w ${python_dir} ]
+  then
+    rm -f ${python_dir}/python
+    ln -s ${python_dir}/python3 ${python_dir}/python
+  else
+    sudo rm -f ${python_dir}/python
+    sudo ln -s ${python_dir}/python3 ${python_dir}/python
+  fi
+}
+
 function check_py_version
 {
   # Full version number e.g. 2.7.1
@@ -1424,8 +1438,9 @@ done
 
 if [ ! ${PY3_SUPPORT} ]
 then
-    echo "[ERROR] Could not find python3 binary, please add it to your \$PATH before continuing"
-    exit
+    echo "[ERROR] Could not find python3 binary."
+    echo "Please add it to your \$PATH and rerun ascinit."
+    exit 1
 fi
 
 have_pip=`type -p pip3`
@@ -1576,7 +1591,20 @@ fi
   }
 
   # Install Neovim
-  [ "${neovim_install}" ] && install_neovim
+  if [ "${neovim_install}" ]
+  then
+    install_neovim
+  else
+    # Perform a minimal installation of required tools
+    [ -x ${CONFDIR}/nvim/scripts/install.sh ] && {
+      if [ "${quiet}" ]
+      then
+        ${CONFDIR}/nvim/scripts/install.sh -m -q
+      else
+        ${CONFDIR}/nvim/scripts/install.sh -m
+      fi
+    }
+  fi
 
   # Install Ascii Games
   [ "${games_install}" ] && install_games

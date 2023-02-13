@@ -189,7 +189,7 @@ install_brew () {
 }
 
 install_neovim_dependencies () {
-  log "Installing Neovim dependencies"
+  log "Installing dependencies"
   PKGS="fd ripgrep fzf tmux go node python warrensbox/tap/tfswitch"
   for pkg in ${PKGS}
   do
@@ -201,14 +201,16 @@ install_neovim_dependencies () {
 }
 
 install_neovim_head () {
-  if ! command -v nvim >/dev/null 2>&1; then
-    log "Installing Neovim HEAD"
-    ${BREW_EXE} install -q --HEAD neovim > /dev/null 2>&1
-  elif [[ ! $(nvim --version) =~ "dev" ]]; then
-    log "Neovim is installed but not HEAD version"
-  else
-    log "Skipping Neovim installation"
-  fi
+  [ "${minimal}" ] || {
+    if ! command -v nvim >/dev/null 2>&1; then
+      log "Installing Neovim HEAD"
+      ${BREW_EXE} install -q --HEAD neovim > /dev/null 2>&1
+    elif [[ ! $(nvim --version) =~ "dev" ]]; then
+      log "Neovim is installed but not HEAD version"
+    else
+      log "Skipping Neovim installation"
+    fi
+  }
 }
 
 git_clone_neovim_config () {
@@ -279,49 +281,51 @@ install_npm () {
     # npm install -g will now install to ~/.local/bin
     npm config set prefix '~/.local/'
 
-    log "[*] Installing tree-sitter command line interface ..."
-    npm i -g tree-sitter-cli > /dev/null 2>&1
-    have_tree=`type -p tree-sitter`
-    [ "${have_tree}" ] && tree-sitter init-config > /dev/null 2>&1
+    [ "${minimal}" ] || {
+      log "[*] Installing tree-sitter command line interface ..."
+      npm i -g tree-sitter-cli > /dev/null 2>&1
+      have_tree=`type -p tree-sitter`
+      [ "${have_tree}" ] && tree-sitter init-config > /dev/null 2>&1
 
-    log "[*] Installing language servers ..."
-    # Could also install the language servers with brew, for example:
-    #   brew install bash-language-server
-    #
-    # python language server
-    npm i -g pyright > /dev/null 2>&1
-    # typescript language server
-    npm i -g typescript typescript-language-server > /dev/null 2>&1
-    # bash language server
-    npm i -g bash-language-server > /dev/null 2>&1
-    # awk language server
-    npm i -g awk-language-server > /dev/null 2>&1
-    # css language server
-    npm i -g cssmodules-language-server > /dev/null 2>&1
-    # vim language server
-    npm i -g vim-language-server > /dev/null 2>&1
-    # docker language server
-    npm i -g dockerfile-language-server-nodejs > /dev/null 2>&1
-    # brew installed language servers
-    for server in ansible haskell sql lua yaml
-    do
-      ${BREW_EXE} install -q ${server} > /dev/null 2>&1
-    done
-    # For other language servers, see:
-    # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-  }
-  # Python virtual env in Asciiville breaks backwards compatibility
-  log '[*] Installing Python dependencies ...'
-  check_python
-  [ "${PYTHON}" ] || {
-    # Could not find Python, install with Homebrew
-    log '[*] Installing Python with Homebrew ...'
-    ${BREW_EXE} install -q python > /dev/null 2>&1
+      log "[*] Installing language servers ..."
+      # Could also install the language servers with brew, for example:
+      #   brew install bash-language-server
+      #
+      # python language server
+      npm i -g pyright > /dev/null 2>&1
+      # typescript language server
+      npm i -g typescript typescript-language-server > /dev/null 2>&1
+      # bash language server
+      npm i -g bash-language-server > /dev/null 2>&1
+      # awk language server
+      npm i -g awk-language-server > /dev/null 2>&1
+      # css language server
+      npm i -g cssmodules-language-server > /dev/null 2>&1
+      # vim language server
+      npm i -g vim-language-server > /dev/null 2>&1
+      # docker language server
+      npm i -g dockerfile-language-server-nodejs > /dev/null 2>&1
+      # brew installed language servers
+      for server in ansible haskell sql lua yaml
+      do
+        ${BREW_EXE} install -q ${server} > /dev/null 2>&1
+      done
+      # For other language servers, see:
+      # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+    }
+    # Python virtual env in Asciiville breaks backwards compatibility
+    log '[*] Installing Python dependencies ...'
     check_python
-  }
-  [ "${PYTHON}" ] && {
-    ${PYTHON} -m pip install wheel > /dev/null 2>&1
-    ${PYTHON} -m pip install pynvim doq > /dev/null 2>&1
+    [ "${PYTHON}" ] || {
+      # Could not find Python, install with Homebrew
+      log '[*] Installing Python with Homebrew ...'
+      ${BREW_EXE} install -q python > /dev/null 2>&1
+      check_python
+    }
+    [ "${PYTHON}" ] && {
+      ${PYTHON} -m pip install wheel > /dev/null 2>&1
+      ${PYTHON} -m pip install pynvim doq > /dev/null 2>&1
+    }
   }
 }
 
@@ -385,7 +389,17 @@ main () {
     git_clone_neovim_config
   fi
   install_npm
-  INFO="################################################################
+  if [ "${minimal}" ]
+  then
+    INFO="################################################################
+- Homebrew installed in ${HOMEBREW_HOME}
+- See ${DOC_HOMEBREW}
+- Some packages managed by Homebrew
+- This could result in duplicate tool installations!
+- Your ~/.profile, ~/.bashrc, or ~/.zshrc modified to source paths
+################################################################"
+  else
+    INFO="################################################################
 - Homebrew installed in ${HOMEBREW_HOME}
 - See ${DOC_HOMEBREW}
 - Neovim, nvm, node, npm, and language servers installed
@@ -398,14 +412,19 @@ After this script is finished
 - If not invoked from ascinit run the command: nvim -c 'PlugInstall' -c 'qa'
 - Open nvim and Enjoy!
 ################################################################"
+  fi
 
   [ "${quiet}" ] || echo "${INFO}"
 }
 
 quiet=
+minimal=
 
-while getopts "q" flag; do
+while getopts "mq" flag; do
   case $flag in
+    m)
+        minimal=1
+        ;;
     q)
         quiet=1
         ;;
