@@ -110,6 +110,22 @@ get_linux_distribution () {
   fi
 }
 
+# Brew doesn't create a python symlink so we do so here
+link_python () {
+  python3_path=$(command -v python3)
+  [ "${python3_path}" ] && {
+    python_dir=`dirname ${python3_path}`
+    if [ -w ${python_dir} ]
+    then
+      rm -f ${python_dir}/python
+      ln -s ${python_dir}/python3 ${python_dir}/python
+    else
+      sudo rm -f ${python_dir}/python
+      sudo ln -s ${python_dir}/python3 ${python_dir}/python
+    fi
+  }
+}
+
 install_brew () {
   if ! command -v brew >/dev/null 2>&1; then
     log "Installing Homebrew, please be patient"
@@ -195,6 +211,7 @@ install_neovim_dependencies () {
   do
     ${BREW_EXE} install -q ${pkg} > /dev/null 2>&1
   done
+  link_python
   if ! command -v cargo >/dev/null 2>&1; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
   fi
@@ -224,18 +241,13 @@ git_clone_neovim_config () {
 }
 
 check_python () {
-  have_python=`type -p python3`
-  if [ "${have_python}" ]
+  brew_path=$(command -v brew)
+  brew_dir=$(dirname ${brew_path})
+  if [ -x ${brew_dir}/python3 ] 
   then
-    PYTHON="python3"
+    PYTHON="${brew_dir}/python3"
   else
-    have_python=`type -p python`
-    if [ "${have_python}" ]
-    then
-      PYTHON="python"
-    else
-      PYTHON=
-    fi
+    PYTHON=
   fi
 }
 
@@ -275,6 +287,20 @@ install_npm () {
     log "[*] Installing node $NODE_VERSION ..."
     nvm install $NODE_VERSION
   }
+  # Python virtual env in Asciiville breaks backwards compatibility
+  log '[*] Installing Python dependencies ...'
+  check_python
+  [ "${PYTHON}" ] || {
+    # Could not find Python, install with Homebrew
+    log '[*] Installing Python with Homebrew ...'
+    ${BREW_EXE} install -q python > /dev/null 2>&1
+    link_python
+    check_python
+  }
+  [ "${PYTHON}" ] && {
+    ${PYTHON} -m pip install wheel > /dev/null 2>&1
+    ${PYTHON} -m pip install pynvim doq > /dev/null 2>&1
+  }
   have_npm=`type -p npm`
   [ "${have_npm}" ] && {
     log "[*] Setting npm config to use ~/.local as prefix ..."
@@ -310,21 +336,11 @@ install_npm () {
       do
         ${BREW_EXE} install -q ${server} > /dev/null 2>&1
       done
+      [ "${PYTHON}" ] && {
+        ${PYTHON} -m pip install cmake-language-server > /dev/null 2>&1
+      }
       # For other language servers, see:
       # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-    }
-    # Python virtual env in Asciiville breaks backwards compatibility
-    log '[*] Installing Python dependencies ...'
-    check_python
-    [ "${PYTHON}" ] || {
-      # Could not find Python, install with Homebrew
-      log '[*] Installing Python with Homebrew ...'
-      ${BREW_EXE} install -q python > /dev/null 2>&1
-      check_python
-    }
-    [ "${PYTHON}" ] && {
-      ${PYTHON} -m pip install wheel > /dev/null 2>&1
-      ${PYTHON} -m pip install pynvim doq > /dev/null 2>&1
     }
   }
 }

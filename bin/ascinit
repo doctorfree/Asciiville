@@ -329,7 +329,7 @@ install_kitty() {
   fi
   [ "${have_kitty}" ] || {
     [ "${quiet}" ] || {
-      printf "\n\tInstalling kitty terminal emulator ..."
+      printf "\n\tInstalling Kitty terminal emulator ..."
     }
     curl --silent --location \
       https://sw.kovidgoyal.net/kitty/installer.sh > /tmp/kitty-$$.sh
@@ -747,11 +747,11 @@ have_kitty=`type -p kitty`
     fi
     remove_kitty
     printf "\n${BOLD}Kitty removed${NORM}"
-    printf "\nTo re-install kitty run ${BOLD}'ascinit kitty'${NORM}\n\n"
+    printf "\nTo re-install Kitty run ${BOLD}'ascinit kitty'${NORM}\n\n"
     exit 0
   }
   [ "${quiet}" ] || {
-    printf "\nInstalling kitty terminal emulator\n"
+    printf "\nInstalling Kitty terminal emulator\n"
   }
   if [ "${prompt}" ]
   then
@@ -1132,7 +1132,7 @@ KITTYCONFDIR="${USERCONF}/kitty"
 KITTYCONF="${KITTYCONFDIR}/asciiville.conf"
 # Setup default kitty configuration for this user unless one exists
 [ "${quiet}" ] || {
-  printf "\n\tInstalling kitty configuration in ${KITTYCONFDIR} ..."
+  printf "\n\tInstalling Kitty configuration in ${KITTYCONFDIR} ..."
 }
 # If there is no user kitty config folder then copy the
 # MusicPlayerPlus kitty config folder into the user's home
@@ -1193,7 +1193,7 @@ fi
 # Setup default tuir configuration for this user unless one exists
 [ -d ${CONFDIR}/tuir ] && {
   [ "${quiet}" ] || {
-    printf "\n\tInstalling tuir configuration in ${USERCONF}/tuir ..."
+    printf "\n\tInstalling Tuir configuration in ${USERCONF}/tuir ..."
   }
   if [ -d ${USERCONF}/tuir ]
   then
@@ -1288,7 +1288,7 @@ fi
     }
   else
     [ "${quiet}" ] || {
-      printf "\n\tInstalling tmux configuration in ${HOME}/.tmux.conf ..."
+      printf "\n\tInstalling Tmux configuration in ${HOME}/.tmux.conf ..."
     }
     cp ${CONFDIR}/tmux.conf ${HOME}/.tmux.conf
     [ "${quiet}" ] || {
@@ -1304,7 +1304,7 @@ status_dots=
   have_git=`type -p git`
   [ "${have_git}" ] && {
     [ "${quiet}" ] || {
-      printf "\n\tInstalling tmux plugins ..."
+      printf "\n\tInstalling Tmux plugins ..."
       status_dots=1
     }
     git clone https://github.com/tmux-plugins/tpm ${TPM} > /dev/null 2>&1
@@ -1332,7 +1332,7 @@ have_brew=`type -p brew`
   }
   [ -f /tmp/brew-$$.sh ] && {
     chmod 755 /tmp/brew-$$.sh
-    [ "${quiet}" ] || printf "\n\tInstalling brew, please be patient ... "
+    [ "${quiet}" ] || printf "\n\tInstalling Homebrew, please be patient ... "
     NONINTERACTIVE=1 /bin/bash -c "/tmp/brew-$$.sh" > /dev/null 2>&1
     rm -f /tmp/brew-$$.sh
     [ "${quiet}" ] || printf "done"

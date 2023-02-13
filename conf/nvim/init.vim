@@ -153,6 +153,8 @@ Plug 'yuttie/hydrangea-vim'
 Plug 'flazz/vim-colorschemes'  " One stop shop for vim colorschemes
 " Can be commented out if another colorscheme is used
 Plug 'doctorfree/vim-asciiville'
+" Uncomment to use the Everforest colorscheme
+" Plug 'sainnhe/everforest'
 " Uncomment to play with colorschemes
 " Plug 'felixhummel/setcolors.vim' " Easily switch colorschemes
 
@@ -534,6 +536,9 @@ colorscheme asciiville
 if exists(":AsciivilleDarkBlueHard")
   AsciivilleDarkBlueHard
 endif
+
+" Uncomment to use the Everforest colorscheme
+" colorscheme everforest
 
 set guifont=Inconsolata:h18
 let g:syntastic_html_checkers = []
