@@ -1486,13 +1486,9 @@ do
   fi
 done
 
-have_jq=`type -p jq`
-[ "${have_jq}" ] || install_package jq
 have_npm=`type -p npm`
 [ "${have_npm}" ] || install_package node
 have_npm=`type -p npm`
-have_btop=`type -p btop`
-[ "${have_btop}" ] || install_package btop
 have_dialog=`type -p dialog`
 [ "${have_dialog}" ] || install_package dialog
 have_figlet=`type -p figlet`
@@ -1525,6 +1521,8 @@ install_package imagemagick
   [ "${have_speedtest}" ] || install_package speedtest-cli
   have_neofetch=`type -p neofetch`
   [ "${have_neofetch}" ] || install_package neofetch
+  have_xclip=`type -p xclip`
+  [ "${have_xclip}" ] || install_package xclip
 }
 
 FIGLET_DIR="/usr/share/figlet-fonts"
@@ -1552,20 +1550,21 @@ then
 fi
 
 # Install btop if not already present
-[ -x /usr/local/bin/btop ] || {
-  [ -x /usr/bin/btop ] || {
-    [ "${platform}" == "Darwin" ] || {
-      PROJECT=btop
-      install_external_package
-    }
-  }
+have_btop=`type -p btop`
+[ "${have_btop}" ] || {
+  if [ "${platform}" == "Darwin" ]
+  then
+    install_package btop
+  else
+    PROJECT=btop
+    install_external_package
+  fi
 }
 # Install any2ascii if not already present
-[ -x /usr/local/bin/jp2a ] || {
-  [ -x /usr/bin/jp2a ] || {
-    PROJECT=any2ascii
-    install_external_package
-  }
+have_jp2a=`type -p jp2a`
+[ "${have_jp2a}" ] || {
+  PROJECT=any2ascii
+  install_external_package
 }
 # Install endoh1 if not already present
 [ -x /usr/local/bin/show_endo ] || {

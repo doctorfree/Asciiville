@@ -308,6 +308,8 @@ install_npm () {
     npm config set prefix '~/.local/'
 
     [ "${minimal}" ] || {
+      log "[*] Installing Neovim npm package ..."
+      npm i -g neovim > /dev/null 2>&1
       log "[*] Installing tree-sitter command line interface ..."
       npm i -g tree-sitter-cli > /dev/null 2>&1
       have_tree=`type -p tree-sitter`
