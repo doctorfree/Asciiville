@@ -370,8 +370,8 @@ tmap <C-w> <Esc><C-w>
 autocmd BufWinEnter,WinEnter term://* startinsert
 autocmd BufLeave term://* stopinsert
 
-" let g:python3_host_prog = '/path/to/python3'
-" let g:pydocstring_doq_path = '/path/to/doq'
+let g:python3_host_prog = '/path/to/python3'
+let g:pydocstring_doq_path = '/path/to/doq'
 
 """ Core plugin configuration (lua)
 " Use airline rather than lualine

@@ -17,6 +17,7 @@ FIG_FONTS="${TOP}/figlet-fonts"
 MUSEDIR="${TOP}/asciiville/music"
 CONFDIR=${TOP}/share/asciiville
 USERCONF="${HOME}/.config"
+NVIMCONF="${USERCONF}/nvim/init.vim"
 OWNER=doctorfree
 BOLD=$(tput bold 2>/dev/null)
 NORMAL=$(tput sgr0 2>/dev/null)
@@ -506,9 +507,10 @@ install_neovim() {
   fi
   have_nvim=`type -p nvim`
   [ "${have_nvim}" ] && {
-    grep "^Plug " ${HOME}/.config/nvim/init.vim > /dev/null && {
+    grep "^Plug " ${NVIMCONF} > /dev/null && {
       nvim -i NONE -c 'PlugClean' -c 'qa'
       nvim -i NONE -c 'PlugInstall' -c 'qa'
+      nvim -i NONE -c 'CocInstall coc-clangd' -c 'qa'
     }
   }
 
@@ -2086,6 +2088,20 @@ touch ${HOME}/.tetris
 printf "\n"
 
 [ "${newnvimconf}" ] && {
+  [ -f ${NVIMCONF} ] && {
+    python3_path=$(command -v python3)
+    grep /path/to/python3 ${NVIMCONF} > /dev/null && {
+      cat ${NVIMCONF} | sed -e "s%/path/to/python3%${python3_path}%" > /tmp/nvim$$
+      cp /tmp/nvim$$ ${NVIMCONF}
+      rm -f /tmp/nvim$$
+    }
+    doq_path=$(command -v doq)
+    grep /path/to/doq ${NVIMCONF} > /dev/null && {
+      cat ${NVIMCONF} | sed -e "s%/path/to/doq%${doq_path}%" > /tmp/nvim$$
+      cp /tmp/nvim$$ ${NVIMCONF}
+      rm -f /tmp/nvim$$
+    }
+  }
   [ "${quiet}" ] || {
     printf "\n\tA Neovim text editor configuration has been created for you in"
     printf "\n\t\t${HOME}/.config/nvim/"
