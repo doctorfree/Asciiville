@@ -19,14 +19,13 @@ DOC_HOMEBREW="https://docs.brew.sh"
 BREW_EXE="brew"
 
 abort () {
-  printf "ERROR: %s\n" "$@" >&2
+  printf "\nERROR: %s\n" "$@" >&2
   exit 1
 }
 
 log () {
   [ "${quiet}" ] || {
-    printf "################################################################\n"
-    printf "%s\n" "$@"
+    printf "\n\t%s" "$@"
   }
 }
 
@@ -52,7 +51,6 @@ get_os () {
     OS="apple"
   elif [[ "$OSTYPE" =~ "linux" ]]; then
     OS="linux"
-    log "Running on Linux"
   fi
 }
 
@@ -128,7 +126,7 @@ link_python () {
 
 install_brew () {
   if ! command -v brew >/dev/null 2>&1; then
-    log "Installing Homebrew, please be patient"
+    log "Installing Homebrew, please be patient ..."
     BREW_URL="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
     have_curl=`type -p curl`
     [ "${have_curl}" ] || abort "The curl command could not be located."
@@ -143,6 +141,7 @@ install_brew () {
     rm -f /tmp/brew-$$.sh
     export HOMEBREW_NO_INSTALL_CLEANUP=1
     export HOMEBREW_NO_ENV_HINTS=1
+    printf " done"
     if [ -f ${HOME}/.profile ]
     then
       BASHINIT="${HOME}/.profile"
@@ -190,9 +189,10 @@ install_brew () {
     eval "$(${BREW_EXE} shellenv)"
     have_brew=`type -p brew`
     [ "${have_brew}" ] && BREW_EXE="brew"
-    log "Install gcc (recommended by brew)"
+    log "Install gcc (recommended by brew) ..."
     ${BREW_EXE} install -q gcc > /dev/null 2>&1
     [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet gcc > /dev/null 2>&1
+    printf " done"
   fi
   [ "${HOMEBREW_HOME}" ] || {
     brewpath=$(command -v brew)
@@ -206,7 +206,7 @@ install_brew () {
 }
 
 install_neovim_dependencies () {
-  log "Installing dependencies"
+  log "Installing dependencies ..."
   PKGS="fd ripgrep fzf tmux go node python warrensbox/tap/tfswitch"
   for pkg in ${PKGS}
   do
@@ -217,14 +217,16 @@ install_neovim_dependencies () {
   if ! command -v cargo >/dev/null 2>&1; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
   fi
+  printf " done"
 }
 
 install_neovim_head () {
   [ "${minimal}" ] || {
     if ! command -v nvim >/dev/null 2>&1; then
-      log "Installing Neovim HEAD"
+      log "Installing Neovim HEAD ..."
       ${BREW_EXE} install -q --HEAD neovim > /dev/null 2>&1
       [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet neovim > /dev/null 2>&1
+      printf " done"
     elif [[ ! $(nvim --version) =~ "dev" ]]; then
       log "Neovim is installed but not HEAD version"
     else
@@ -238,8 +240,9 @@ git_clone_neovim_config () {
   if [[ -d "${neovim_config_path}" ]]; then
     log "${neovim_config_path} already exists"
   else
-    log "Cloning Neovim config to ${neovim_config_path}"
+    log "Cloning Neovim config to ${neovim_config_path} ..."
     git clone https://github.com/doctorfree/nvim.git "${neovim_config_path}"
+    printf " done"
   fi
 }
 
@@ -276,6 +279,7 @@ install_npm () {
     chmod 755 /tmp/nvm-$$.sh
     /bin/bash -c "/tmp/nvm-$$.sh" > /dev/null 2>&1
     rm -f /tmp/nvm-$$.sh
+    printf " done"
   else
     printf "\nERROR: Download of NVM installation script failed"
     printf "\nSee https://github.com/nvm-sh/nvm#installing-and-updating"
@@ -289,9 +293,9 @@ install_npm () {
   [ "${have_nvm}" ] && {
     log "[*] Installing node $NODE_VERSION ..."
     nvm install $NODE_VERSION
+    printf " done"
   }
   # Python virtual env in Asciiville breaks backwards compatibility
-  log '[*] Installing Python dependencies ...'
   check_python
   [ "${PYTHON}" ] || {
     # Could not find Python, install with Homebrew
@@ -300,24 +304,30 @@ install_npm () {
     [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet python > /dev/null 2>&1
     link_python
     check_python
+    printf " done"
   }
   [ "${PYTHON}" ] && {
+    log '[*] Installing Python dependencies ...'
     ${PYTHON} -m pip install wheel > /dev/null 2>&1
     ${PYTHON} -m pip install pynvim doq > /dev/null 2>&1
+    printf " done"
   }
   have_npm=`type -p npm`
   [ "${have_npm}" ] && {
     log "[*] Setting npm config to use ~/.local as prefix ..."
     # npm install -g will now install to ~/.local/bin
     npm config set prefix '~/.local/'
+    printf " done"
 
     [ "${minimal}" ] || {
       log "[*] Installing Neovim npm package ..."
       npm i -g neovim > /dev/null 2>&1
+      printf " done"
       log "[*] Installing tree-sitter command line interface ..."
       npm i -g tree-sitter-cli > /dev/null 2>&1
       have_tree=`type -p tree-sitter`
       [ "${have_tree}" ] && tree-sitter init-config > /dev/null 2>&1
+      printf " done"
 
       log "[*] Installing language servers ..."
       # Could also install the language servers with brew, for example:
@@ -346,6 +356,7 @@ install_npm () {
       [ "${PYTHON}" ] && {
         ${PYTHON} -m pip install cmake-language-server > /dev/null 2>&1
       }
+      printf " done"
       # For other language servers, see:
       # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
     }
@@ -353,61 +364,63 @@ install_npm () {
 }
 
 main () {
-  printf "\n"
   check_prerequisites
   local common_packages="git curl gip tar unzip"
   get_os
   if [[ $OS == "linux" ]]; then
     get_linux_distribution
     if [[ $LINUX_DISTRIBUTION == "debian" || $LINUX_DISTRIBUTION == "ubuntu" ]]; then
-      log "Running on DEB based system"
-      log "Updating package database"
+      log "Updating package database ..."
       sudo apt -q -y update > /dev/null 2>&1
+      printf " done"
       # shellcheck disable=SC2086
-      log "Installing common packages"
+      log "Installing common packages ..."
       sudo apt -q -y install build-essential ${common_packages} > /dev/null 2>&1
+      printf " done"
       install_brew
       install_neovim_dependencies
       install_neovim_head
       git_clone_neovim_config
     elif [[ $LINUX_DISTRIBUTION == "arch" ]]; then
-      log "Running on Arch based system"
-      log "Updating package database"
+      log "Updating package database ..."
       sudo pacman -Sy --noconfirm > /dev/null 2>&1
+      printf " done"
       # shellcheck disable=SC2086
-      log "Installing common packages"
+      log "Installing common packages ..."
       sudo pacman -S --noconfirm base-devel ${common_packages} > /dev/null 2>&1
+      printf " done"
       install_brew
       install_neovim_dependencies
       install_neovim_head
       git_clone_neovim_config
     elif [[ $LINUX_DISTRIBUTION == "fedora" ]]; then
-      log "Running on RPM based system"
-      log "Updating package database"
+      log "Updating package database ..."
       sudo dnf --assumeyes --quiet update > /dev/null 2>&1
+      printf " done"
       # shellcheck disable=SC2086
-      log "Installing common packages"
+      log "Installing common packages ..."
       sudo dnf --assumeyes --quiet groupinstall "Development Tools" > /dev/null 2>&1
       sudo dnf --assumeyes --quiet install ${common_packages} > /dev/null 2>&1
+      printf " done"
       install_brew
       install_neovim_dependencies
       install_neovim_head
       git_clone_neovim_config
     fi
   elif [[ $OS == "apple" ]];then
-    log "Running on macOS system"
     # shellcheck disable=SC2086
     have_xcode=`type -p xcode-select`
     [ "${have_xcode}" ] || abort "Xcode must be installed. See the App store."
     xcode-select -p > /dev/null 2>&1
     [ $? -eq 0 ] || xcode-select --install
     install_brew
-    log "Installing common packages"
+    log "Installing common packages ..."
     for pkg in ${common_packages}
     do
       ${BREW_EXE} install -q ${pkg} > /dev/null 2>&1
       [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet ${pkg} > /dev/null 2>&1
     done
+    printf " done"
     install_neovim_dependencies
     install_neovim_head
     git_clone_neovim_config
@@ -438,7 +451,7 @@ After this script is finished
 ################################################################"
   fi
 
-  [ "${quiet}" ] || echo "${INFO}"
+  [ "${quiet}" ] || printf "\n${INFO}\n"
 }
 
 quiet=

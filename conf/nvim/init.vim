@@ -127,12 +127,10 @@ Plug 'sheerun/vim-polyglot'  " Better syntax highlighting
 Plug 'folke/which-key.nvim'  " Easily find key map bindings
 " See https://github.com/akinsho/toggleterm.nvim for toggleterm setup options
 Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
-lua require('toggleterm').setup()
 " Uncomment and set OPENAI_API_KEY env var to enable :ChatGPT and :ChatGPTActAs
 " See https://github.com/jackMort/ChatGPT.nvim for setup options and usage
 " Plug 'MunifTanjim/nui.nvim'
 " Plug 'jackMort/ChatGPT.nvim'
-" lua require('chatgpt').setup()
 
 " Register vim-plug as a plugin to enable help  (e.g. :help plug-options)
 Plug 'junegunn/vim-plug'
@@ -465,6 +463,9 @@ require('cheatsheet').setup({
     }
 })
 EOF
+
+lua require('toggleterm').setup()
+" lua require('chatgpt').setup()
 
 """ Custom Mappings (lua custom mappings are within individual lua config files)
 "
