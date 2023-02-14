@@ -1006,7 +1006,7 @@ neovim_install=
   newnvimconf=
   if [ -d ${USERCONF}/nvim ]
   then
-    printf "\n\nBacking up existing Neovim configuration to ~/.config/nvim-bak$$\n"
+    printf "\n\tBacking up existing Neovim configuration to ~/.config/nvim-bak$$"
     mv ${USERCONF}/nvim ${USERCONF}/nvim-bak$$
     cp -a ${CONFDIR}/nvim ${USERCONF}/nvim
     newnvimconf=1
