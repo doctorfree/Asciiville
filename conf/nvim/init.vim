@@ -187,6 +187,13 @@ Plug 'sudormrfbin/cheatsheet.nvim'  " :Cheatsheet
 
 call plug#end()
 
+function! PlugLoaded(name)
+    return (
+        \ has_key(g:plugs, a:name) &&
+        \ isdirectory(g:plugs[a:name].dir) &&
+        \ stridx(&rtp, g:plugs[a:name].dir) >= 0)
+endfunction
+
 " General "{{{
 set backspace=indent
 set backspace+=eol
@@ -237,7 +244,6 @@ let g:netrw_banner = 0         " Do not show Netrw help banner
 set wildmode=longest,list
 " Use wilder, see https://github.com/gelguy/wilder.nvimrc
 " for extensive set of configuration examples
-call wilder#setup({'modes': [':', '/', '?']})
 " When in : cmdline mode, wildmenu suggestions will be automatically provided.
 " When searching using /, suggestions from the current buffer will be provided.
 " Substring matching is used by default.
@@ -258,11 +264,14 @@ call wilder#setup({'modes': [':', '/', '?']})
 " Airline and Lightline users:
 " wilder#wildmenu_airline_theme() and wilder#wildmenu_lightline_theme() can be used.
 "
-call wilder#set_option('renderer', wilder#wildmenu_renderer(
+if PlugLoaded('wilder')
+  call wilder#setup({'modes': [':', '/', '?']})
+  call wilder#set_option('renderer', wilder#wildmenu_renderer(
       \ wilder#wildmenu_airline_theme({
       \   'highlighter': wilder#lua_fzy_highlighter(),
       \   'separator': ' · ',
       \ })))
+endif
 
 " Formatting "{{{
 set fo+=o  " Insert the current comment leader after 'o' or 'O' in Normal mode.
@@ -393,7 +402,8 @@ let g:pydocstring_doq_path = '/path/to/doq'
 " Use airline rather than lualine
 " require('lualine-config')
 " Add these:  cssmodules ansible haskell sql
-lua << EOF
+if PlugLoaded('treesitter')
+  lua << EOF
 servers = {
     "pyright",
     -- LSP
@@ -423,6 +433,7 @@ require('telescope-config')
 require('nvim-tree-config')
 require('diagnostics')
 EOF
+endif
 
 " Use the :Cheatsheet command which automatically uses Telescope
 " if installed or falls back to showing all the cheatsheet files
@@ -431,7 +442,8 @@ EOF
 " By default the <leader> key is \.
 "
 " Default cheatsheet configuration:
-lua << EOF
+if PlugLoaded('cheatsheet')
+  lua << EOF
 require('cheatsheet').setup({
     -- Whether to show bundled cheatsheets
 
@@ -463,9 +475,14 @@ require('cheatsheet').setup({
     }
 })
 EOF
+endif
 
-lua require('toggleterm').setup()
-" lua require('chatgpt').setup()
+if PlugLoaded('toggleterm')
+  lua require('toggleterm').setup()
+endif
+if PlugLoaded('chatgpt')
+  " lua require('chatgpt').setup()
+endif
 
 """ Custom Mappings (lua custom mappings are within individual lua config files)
 "
