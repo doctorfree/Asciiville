@@ -249,9 +249,7 @@ install_neovim_head () {
 
 git_clone_neovim_config () {
   local neovim_config_path="$HOME/.config/nvim"
-  if [[ -d "${neovim_config_path}" ]]; then
-    log "${neovim_config_path} already exists"
-  else
+  if [[ ! -d "${neovim_config_path}" ]]; then
     log "Cloning Neovim config to ${neovim_config_path} ..."
     git clone https://github.com/doctorfree/nvim.git "${neovim_config_path}"
     printf " done"
