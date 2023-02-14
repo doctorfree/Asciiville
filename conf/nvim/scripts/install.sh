@@ -232,6 +232,18 @@ install_neovim_head () {
     else
       log "Skipping Neovim installation"
     fi
+    log "Installing vim-plug Neovim plugin manager ..."
+    curl -fsLo \
+         "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim \
+         --create-dirs \
+         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    [ $? -eq 0 ] || {
+      curl -kfsLo \
+           "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim \
+           --create-dirs \
+           https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    }
+    printf " done"
   }
 }
 
