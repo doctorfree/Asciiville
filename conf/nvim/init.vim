@@ -125,6 +125,15 @@ Plug 'junegunn/fzf.vim'    " Things you can do with fzf and Vim
 Plug 'romgrk/fzy-lua-native' " Needed for lua_fzy_highlighter in wilder
 Plug 'sheerun/vim-polyglot'  " Better syntax highlighting
 Plug 'folke/which-key.nvim'  " Easily find key map bindings
+" See https://github.com/akinsho/toggleterm.nvim for toggleterm setup options
+Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
+lua require('toggleterm').setup()
+" Uncomment and set OPENAI_API_KEY env var to enable :ChatGPT and :ChatGPTActAs
+" See https://github.com/jackMort/ChatGPT.nvim for setup options and usage
+" Plug 'MunifTanjim/nui.nvim'
+" Plug 'jackMort/ChatGPT.nvim'
+" lua require('chatgpt').setup()
+
 " Register vim-plug as a plugin to enable help  (e.g. :help plug-options)
 Plug 'junegunn/vim-plug'
 
@@ -425,7 +434,7 @@ EOF
 "
 " Default cheatsheet configuration:
 lua << EOF
-require("cheatsheet").setup({
+require('cheatsheet').setup({
     -- Whether to show bundled cheatsheets
 
     -- For generic cheatsheets like default, unicode, nerd-fonts, etc

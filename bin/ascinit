@@ -106,8 +106,7 @@ install_package() {
   if [ $? -eq 0 ]
   then
     brew install -q ${PKG} > /dev/null 2>&1
-#   brew unlink -q ${PKG} > /dev/null 2>&1
-#   brew link --overwrite --quiet ${PKG} > /dev/null 2>&1
+    [ $? -eq 0 ] || brew link --overwrite --quiet ${PKG} > /dev/null 2>&1
   else
     if [ "${debian}" ]
     then
@@ -506,13 +505,6 @@ install_neovim() {
     ${CONFDIR}/nvim/scripts/install.sh
   fi
   have_nvim=`type -p nvim`
-  [ "${have_nvim}" ] && {
-    grep "^Plug " ${NVIMCONF} > /dev/null && {
-      nvim -i NONE -c 'PlugClean' -c 'qa'
-      nvim -i NONE -c 'PlugInstall' -c 'qa'
-      nvim -i NONE -c 'CocInstall coc-clangd' -c 'qa'
-    }
-  }
 
 # Patch nvim-treesitter
 # have_patch=`type -p patch`
@@ -2101,12 +2093,38 @@ printf "\n"
       cp /tmp/nvim$$ ${NVIMCONF}
       rm -f /tmp/nvim$$
     }
+    [ "${OPENAI_API_KEY}" ] && {
+      grep "\" Plug 'MunifTanjim/nui.nvim'" ${NVIMCONF} > /dev/null && {
+        cat ${NVIMCONF} | sed -e "s%\" Plug 'MunifTanjim/nui.nvim'%Plug 'MunifTanjim/nui.nvim'%" > /tmp/nvim$$
+        cp /tmp/nvim$$ ${NVIMCONF}
+        rm -f /tmp/nvim$$
+      }
+      grep "\" Plug 'jackMort/ChatGPT.nvim'" ${NVIMCONF} > /dev/null && {
+        cat ${NVIMCONF} | sed -e "s%\" Plug 'jackMort/ChatGPT.nvim'%Plug 'jackMort/ChatGPT.nvim'%" > /tmp/nvim$$
+        cp /tmp/nvim$$ ${NVIMCONF}
+        rm -f /tmp/nvim$$
+      }
+      grep "\" lua require('chatgpt').setup()" ${NVIMCONF} > /dev/null && {
+        cat ${NVIMCONF} | sed -e "s%\" lua require('chatgpt').setup()%lua require('chatgpt').setup()%" > /tmp/nvim$$
+        cp /tmp/nvim$$ ${NVIMCONF}
+        rm -f /tmp/nvim$$
+      }
+    }
+    [ "${have_nvim}" ] && {
+      grep "^Plug " ${NVIMCONF} > /dev/null && {
+        nvim -i NONE -c 'PlugClean' -c 'qa'
+        nvim -i NONE -c 'PlugInstall' -c 'qa'
+        nvim -i NONE -c 'CocInstall coc-clangd' -c 'qa'
+      }
+    }
   }
   [ "${quiet}" ] || {
     printf "\n\tA Neovim text editor configuration has been created for you in"
     printf "\n\t\t${HOME}/.config/nvim/"
     printf "\n\tA good starting point for the Neovim user is the Neovim User Doc at:"
-    printf "\n\t\thttps://neovim.io/doc/user/\n"
+    printf "\n\t\thttps://neovim.io/doc/user/"
+    printf "\n\tTry Neovim out by viewing your Neovim configuration:"
+    printf "\n\t\tnvim ~/.config/nvim/init.vim\n"
   }
 }
 

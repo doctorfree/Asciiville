@@ -192,6 +192,7 @@ install_brew () {
     [ "${have_brew}" ] && BREW_EXE="brew"
     log "Install gcc (recommended by brew)"
     ${BREW_EXE} install -q gcc > /dev/null 2>&1
+    [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet gcc > /dev/null 2>&1
   fi
   [ "${HOMEBREW_HOME}" ] || {
     brewpath=$(command -v brew)
@@ -210,6 +211,7 @@ install_neovim_dependencies () {
   for pkg in ${PKGS}
   do
     ${BREW_EXE} install -q ${pkg} > /dev/null 2>&1
+    [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet ${pkg} > /dev/null 2>&1
   done
   link_python
   if ! command -v cargo >/dev/null 2>&1; then
@@ -222,6 +224,7 @@ install_neovim_head () {
     if ! command -v nvim >/dev/null 2>&1; then
       log "Installing Neovim HEAD"
       ${BREW_EXE} install -q --HEAD neovim > /dev/null 2>&1
+      [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet neovim > /dev/null 2>&1
     elif [[ ! $(nvim --version) =~ "dev" ]]; then
       log "Neovim is installed but not HEAD version"
     else
@@ -294,6 +297,7 @@ install_npm () {
     # Could not find Python, install with Homebrew
     log '[*] Installing Python with Homebrew ...'
     ${BREW_EXE} install -q python > /dev/null 2>&1
+    [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet python > /dev/null 2>&1
     link_python
     check_python
   }
@@ -334,14 +338,14 @@ install_npm () {
       # docker language server
       npm i -g dockerfile-language-server-nodejs > /dev/null 2>&1
       # brew installed language servers
-      for server in ansible haskell sql lua yaml
+      for server in ansible haskell sql lua yaml ccls
       do
         ${BREW_EXE} install -q ${server} > /dev/null 2>&1
+        [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet ${server} > /dev/null 2>&1
       done
       [ "${PYTHON}" ] && {
         ${PYTHON} -m pip install cmake-language-server > /dev/null 2>&1
       }
-      ${BREW_EXE} install -q ccls > /dev/null 2>&1
       # For other language servers, see:
       # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
     }
@@ -402,6 +406,7 @@ main () {
     for pkg in ${common_packages}
     do
       ${BREW_EXE} install -q ${pkg} > /dev/null 2>&1
+      [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet ${pkg} > /dev/null 2>&1
     done
     install_neovim_dependencies
     install_neovim_head
