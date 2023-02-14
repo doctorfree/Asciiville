@@ -334,13 +334,14 @@ install_npm () {
       # docker language server
       npm i -g dockerfile-language-server-nodejs > /dev/null 2>&1
       # brew installed language servers
-      for server in ansible ccls haskell sql lua yaml
+      for server in ansible haskell sql lua yaml
       do
         ${BREW_EXE} install -q ${server} > /dev/null 2>&1
       done
       [ "${PYTHON}" ] && {
         ${PYTHON} -m pip install cmake-language-server > /dev/null 2>&1
       }
+      ${BREW_EXE} install -q ccls > /dev/null 2>&1
       # For other language servers, see:
       # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
     }
