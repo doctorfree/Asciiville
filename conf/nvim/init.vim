@@ -123,6 +123,7 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'    " Things you can do with fzf and Vim
 Plug 'romgrk/fzy-lua-native' " Needed for lua_fzy_highlighter in wilder
 Plug 'sheerun/vim-polyglot'  " Better syntax highlighting
+Plug 'folke/which-key.nvim'  " Easily find key map bindings
 " Register vim-plug as a plugin to enable help  (e.g. :help plug-options)
 Plug 'junegunn/vim-plug'
 
@@ -159,7 +160,14 @@ Plug 'doctorfree/vim-asciiville'
 " Uncomment to use the Everforest colorscheme
 Plug 'sainnhe/everforest'
 " Uncomment to play with colorschemes
-" Plug 'felixhummel/setcolors.vim' " Easily switch colorschemes
+Plug 'doctorfree/setcolors.vim' " Easily switch colorschemes
+" Colorschemes must have a matching Airline theme with same name
+" Currently available colorschemes with matching Airline theme:
+" alduin angr apprentice badwolf behelit biogoo bubblegum cobalt2 cool cyberpunk
+" desertink deus distinguished fairyfloss hybrid jellybeans kalisi kolor laederon
+" lucius luna minimalist molokai monochrome onedark peaksea seagull seoul256
+" sierra soda solarized sol transparent ubaryd understated wombat zenburn
+let g:mycolorschemes = ['asciiville', 'everforest', 'cool', 'desertink', 'distinguished', 'hybrid', 'luna', 'molokai', 'solarized', 'zenburn']
 
 " Aesthetics - Others
 Plug 'junegunn/rainbow_parentheses.vim'
