@@ -2112,7 +2112,7 @@ printf "\n"
     }
     [ "${have_nvim}" ] && {
       grep "^Plug " ${NVIMCONF} > /dev/null && {
-        nvim -i NONE -c 'PlugClean' -c 'qa'
+        nvim -i NONE -c 'PlugClean!' -c 'qa'
         nvim -i NONE -c 'PlugInstall' -c 'qa'
         nvim -i NONE -c 'CocInstall coc-clangd' -c 'qa'
       }
