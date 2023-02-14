@@ -360,11 +360,14 @@ install_npm () {
       # docker language server
       npm i -g dockerfile-language-server-nodejs > /dev/null 2>&1
       # brew installed language servers
-      for server in ansible haskell sql lua yaml ccls
+      for server in ansible haskell sql lua yaml
       do
-        ${BREW_EXE} install -q ${server} > /dev/null 2>&1
-        [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet ${server} > /dev/null 2>&1
+        ${BREW_EXE} install -q ${server}-language-server > /dev/null 2>&1
+        [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet \
+                                    ${server}-language-server > /dev/null 2>&1
       done
+      ${BREW_EXE} install -q ccls > /dev/null 2>&1
+      ${BREW_EXE} link --overwrite --quiet ccls > /dev/null 2>&1
       [ "${PYTHON}" ] && {
         ${PYTHON} -m pip install cmake-language-server > /dev/null 2>&1
       }
