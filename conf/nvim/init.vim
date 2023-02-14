@@ -54,6 +54,7 @@ Plug 'tpope/vim-sleuth'        " Automatically adjust indentation
 " Make your Vim/Neovim as smart as VSCode
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 let g:coc_disable_startup_warning = 1
+Plug 'jackguo380/vim-lsp-cxx-highlight' " C/C++/Cuda/ObjC semantic highlighting
 Plug 'junegunn/vim-easy-align' " A simple, easy-to-use Vim alignment plugin
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 "   xmap ga <Plug>(EasyAlign)
