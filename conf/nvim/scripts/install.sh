@@ -204,8 +204,8 @@ install_brew () {
       HOMEBREW_HOME="Unknown"
     fi
   }
-  log "\tHomebrew installed in ${HOMEBREW_HOME}"
-  log "\tSee ${DOC_HOMEBREW}"
+  log "    Homebrew installed in ${HOMEBREW_HOME}"
+  log "    See ${DOC_HOMEBREW}"
 }
 
 install_neovim_dependencies () {
@@ -265,11 +265,59 @@ install_neovim_head () {
   }
 }
 
+fixup_init_vim () {
+  NVIMCONF="${HOME}/.config/nvim/init.vim"
+  [ -f ${NVIMCONF} ] && {
+    python3_path=$(command -v python3)
+    grep /path/to/python3 ${NVIMCONF} > /dev/null && {
+      cat ${NVIMCONF} | sed -e "s%/path/to/python3%${python3_path}%" > /tmp/nvim$$
+      cp /tmp/nvim$$ ${NVIMCONF}
+      rm -f /tmp/nvim$$
+    }
+    doq_path=$(command -v doq)
+    grep /path/to/doq ${NVIMCONF} > /dev/null && {
+      cat ${NVIMCONF} | sed -e "s%/path/to/doq%${doq_path}%" > /tmp/nvim$$
+      cp /tmp/nvim$$ ${NVIMCONF}
+      rm -f /tmp/nvim$$
+    }
+    grep '" Replace these with actual paths'  ${NVIMCONF} > /dev/null && {
+      cat ${NVIMCONF} | sed -e "s/\" Replace these with actual paths.*//" > /tmp/nvim$$
+      cp /tmp/nvim$$ ${NVIMCONF}
+      rm -f /tmp/nvim$$
+    }
+    [ "${OPENAI_API_KEY}" ] && {
+      grep "\" Plug 'MunifTanjim/nui.nvim'" ${NVIMCONF} > /dev/null && {
+        cat ${NVIMCONF} | sed -e "s%\" Plug 'MunifTanjim/nui.nvim'%Plug 'MunifTanjim/nui.nvim'%" > /tmp/nvim$$
+        cp /tmp/nvim$$ ${NVIMCONF}
+        rm -f /tmp/nvim$$
+      }
+      grep "\" Plug 'jackMort/ChatGPT.nvim'" ${NVIMCONF} > /dev/null && {
+        cat ${NVIMCONF} | sed -e "s%\" Plug 'jackMort/ChatGPT.nvim'%Plug 'jackMort/ChatGPT.nvim'%" > /tmp/nvim$$
+        cp /tmp/nvim$$ ${NVIMCONF}
+        rm -f /tmp/nvim$$
+      }
+      grep "\" lua require('chatgpt').setup()" ${NVIMCONF} > /dev/null && {
+        cat ${NVIMCONF} | sed -e "s%\" lua require('chatgpt').setup()%lua require('chatgpt').setup()%" > /tmp/nvim$$
+        cp /tmp/nvim$$ ${NVIMCONF}
+        rm -f /tmp/nvim$$
+      }
+    }
+    have_nvim=`type -p nvim`
+    [ "${have_nvim}" ] && {
+      grep "^Plug " ${NVIMCONF} > /dev/null && {
+        nvim -i NONE -c 'PlugInstall' -c 'qa'
+        nvim -i NONE -c 'CocInstall coc-clangd' -c 'qa'
+      }
+    }
+  }
+}
+
 git_clone_neovim_config () {
   local neovim_config_path="$HOME/.config/nvim"
   if [[ ! -d "${neovim_config_path}" ]]; then
     log "Cloning Neovim config to ${neovim_config_path} ..."
     git clone https://github.com/doctorfree/nvim.git "${neovim_config_path}"
+    fixup_init_vim
     printf " done"
   fi
 }

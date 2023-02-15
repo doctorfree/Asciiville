@@ -257,12 +257,14 @@ set wildmode=longest,list
 " wilder#wildmenu_airline_theme() and wilder#wildmenu_lightline_theme() can be used.
 "
 if exists('g:plugs["wilder.nvim"]')
-  call wilder#setup({'modes': [':', '/', '?']})
-  call wilder#set_option('renderer', wilder#wildmenu_renderer(
-      \ wilder#wildmenu_airline_theme({
-      \   'highlighter': wilder#lua_fzy_highlighter(),
-      \   'separator': ' · ',
-      \ })))
+  if !empty(glob(g:plugs['wilder.nvim'].dir.'/autoload/wilder.vim'))
+    call wilder#setup({'modes': [':', '/', '?']})
+    call wilder#set_option('renderer', wilder#wildmenu_renderer(
+        \ wilder#wildmenu_airline_theme({
+        \   'highlighter': wilder#lua_fzy_highlighter(),
+        \   'separator': ' · ',
+        \ })))
+  endif
 endif
 
 " Formatting "{{{
@@ -399,7 +401,8 @@ endif
 " require('lualine-config')
 " Add these:  cssmodules ansible haskell sql
 if exists('g:plugs["nvim-treesitter"]')
-  lua << EOF
+  if !empty(glob(g:plugs['nvim-treesitter'].dir.'/autoload/nvim-treesitter.vim'))
+    lua << EOF
 servers = {
     "pyright",
     -- LSP
@@ -429,17 +432,22 @@ require('telescope-config')
 require('nvim-tree-config')
 require('diagnostics')
 EOF
+  endif
 endif
 
 if exists('g:plugs["coc.nvim"]')
-  lua require('coc-config')
-  if exists('g:plugs["vim-airline"]')
-    let g:airline#extensions#coc#enabled = 1
-    let airline#extensions#coc#error_symbol = 'E:'
-    let airline#extensions#coc#warning_symbol = 'W:'
-    let g:airline#extensions#coc#show_coc_status = 1
-    let airline#extensions#coc#stl_format_err = '%C(L%L)'
-    let airline#extensions#coc#stl_format_warn = '%C(L%L)'
+  if !empty(glob(g:plugs['coc.nvim'].dir.'/autoload/coc.vim'))
+    lua require('coc-config')
+    if exists('g:plugs["vim-airline"]')
+      if !empty(glob(g:plugs['vim-airline'].dir.'/autoload/airline.vim'))
+        let g:airline#extensions#coc#enabled = 1
+        let airline#extensions#coc#error_symbol = 'E:'
+        let airline#extensions#coc#warning_symbol = 'W:'
+        let g:airline#extensions#coc#show_coc_status = 1
+        let airline#extensions#coc#stl_format_err = '%C(L%L)'
+        let airline#extensions#coc#stl_format_warn = '%C(L%L)'
+      endif
+    endif
   endif
 endif
 
@@ -451,7 +459,8 @@ endif
 "
 " Default cheatsheet configuration:
 if exists('g:plugs["cheatsheet.nvim"]')
-  lua << EOF
+  if !empty(glob(g:plugs['cheatsheet.nvim'].dir.'/plugin/cheatsheet.vim'))
+    lua << EOF
 require('cheatsheet').setup({
     -- Whether to show bundled cheatsheets
 
@@ -483,13 +492,18 @@ require('cheatsheet').setup({
     }
 })
 EOF
+  endif
 endif
 
 if exists('g:plugs["toggleterm.nvim"]')
-  lua require('toggleterm').setup()
+  if !empty(glob(g:plugs['toggleterm.nvim'].dir.'/lua/toggleterm.lua'))
+    lua require('toggleterm').setup()
+  endif
 endif
 if exists('g:plugs["ChatGPT.nvim"]')
-  lua require('chatgpt').setup()
+  if !empty(glob(g:plugs['ChatGPT.nvim'].dir.'/plugin/chatgpt.lua'))
+    lua require('chatgpt').setup()
+  endif
 endif
 
 """ Custom Mappings (lua custom mappings are within individual lua config files)

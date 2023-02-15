@@ -20,7 +20,7 @@ USERCONF="${HOME}/.config"
 NVIMCONF="${USERCONF}/nvim/init.vim"
 OWNER=doctorfree
 BOLD=$(tput bold 2>/dev/null)
-NORMAL=$(tput sgr0 2>/dev/null)
+NORM=$(tput sgr0 2>/dev/null)
 
 usage() {
   if [ "${have_rich}" ]
@@ -2118,7 +2118,6 @@ printf "\n"
       grep "^Plug " ${NVIMCONF} > /dev/null && {
         nvim -i NONE -c 'PlugInstall' -c 'qa'
         nvim -i NONE -c 'CocInstall coc-clangd' -c 'qa'
-#       nvim -i NONE -c 'PlugClean!' -c 'qa'
       }
     }
   }
