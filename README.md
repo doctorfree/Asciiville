@@ -32,6 +32,7 @@ Asciiville includes nearly 1,000 works of ASCII and ANSI Art!
     1. [Asciiville configuration](#asciiville-configuration)
     1. [Asciiville utilities configuration](#asciiville-utilities-configuration)
         1. [Kitty SSH terminfo configuration](#kitty-ssh-terminfo-configuration)
+        1. [Neovim text editor configuration](#neovim-text-editor-configuration)
         1. [Newsboat RSS feed reader configuration](#newsboat-rss-feed-reader-configuration)
         1. [NeoMutt email configuration](#neomutt-email-configuration)
         1. [NeoMutt encrypted passwords](#neomutt-encrypted-passwords)
@@ -152,6 +153,7 @@ Integration is provided for:
 * [lynx](https://lynx.invisible-island.net/), character based web browser
 * [mutt](http://www.mutt.org/), character based email client
 * [neomutt](http://neomutt.org/), character based email client
+* [neovim](https://neovim.io/), advanced open source screen-based text editor
 * [newsboat](https://github.com/newsboat/newsboat), character based RSS feed reader
 * [ranger](https://ranger.github.io/), character based file manager
 * [tuir](https://gitlab.com/ajak/tuir/), terminal UI for Reddit
@@ -284,6 +286,7 @@ several commands may also be installed as dependencies. These include:
 * **mplayer** : media player
 * **neofetch** : system info
 * **neomutt** : sophisticated text-based EMail and NNTP client
+* **nvim** : neovim, an extensible screen-based text editor
 * **newsboat** : text-based RSS feed reader
 * **ranger** : text-based file management
 * **speedtest-cli** : text-based command line network speed test
@@ -376,6 +379,7 @@ Tools installed during post-installation configuration include:
 * jrnl
 * mutt
 * neomutt
+* neovim
 * pipx
 * rainbowstream
 * tdraw
@@ -620,8 +624,9 @@ Generated configuration files include:
 
 * `$HOME/.config/btop/btop.conf` : Btop++ system monitor
 * `$HOME/.config/got/config.yml` : Got text translation tool
-* `$HOME/.config/neomutt/` : NeoMutt email client startup files
 * `$HOME/.config/neofetch/config.conf` : NeoFetch system info script
+* `$HOME/.config/neomutt/` : NeoMutt email client startup files
+* `$HOME/.config/nvim/` : Neovim text editor configuration and startup files
 * `$HOME/.config/jrnl/` : Journal command `jrnl` configuration file
 * `$HOME/.config/khard/khard.conf` : Address book `khard` configuration file
 * `$HOME/.config/ranger/rifle.conf` : Rifle, Ranger's file opener
@@ -656,6 +661,29 @@ kitty +kitten ssh <hostname>
 ```
 
 The ssh kitten will automatically copy the Kitty terminfo entry to the remote system.
+
+#### Neovim text editor configuration
+
+The `ascinit` Asciiville initialization installs a current version of
+[Neovim](https://neovim.io) and extensively configures and extends the
+`nvim` text editor with plugins, configuration files, keyboard mappings,
+color schemes, syntax highlighting, and settings.
+
+We here in Asciiville are pretty proud of our Neovim setup and we wanted
+to share it with you. The installation and configuration of Neovim is
+entirely automated. If you have a previous `$HOME/.config/nvim/` this is
+backed up and replaced with the Asciiville Neovim configuration.
+
+Neovim is not required for most of the use cases Asciiville supports but
+it can prove to be quite useful in a text-based world. However, installation
+of Neovim is optional and the `ascinit` command will prompt to see if you
+wish to install it. We recommend installing Neovim and trying it out. If
+later you decide you do not need Neovim then it can be removed with the
+command `ascinit -r neovim`.
+
+The Asciiville configuration of Neovim is quite extensive and fairly complex.
+See the [Asciiville Neovim README](conf/nvim/README.md) for an introductory
+tour of the configuration, plugins, settings, and usage of Neovim.
 
 #### Newsboat RSS feed reader configuration
 
