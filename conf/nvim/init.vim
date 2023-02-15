@@ -165,7 +165,6 @@ Plug 'yuttie/hydrangea-vim'
 Plug 'flazz/vim-colorschemes'  " One stop shop for vim colorschemes
 " Can be commented out if another colorscheme is used
 Plug 'doctorfree/vim-asciiville'
-" Uncomment to use the Everforest colorscheme
 Plug 'sainnhe/everforest'
 " Uncomment to play with colorschemes
 Plug 'doctorfree/setcolors.vim' " Easily switch colorschemes
@@ -186,13 +185,6 @@ Plug 'junegunn/vim-journal'
 Plug 'sudormrfbin/cheatsheet.nvim'  " :Cheatsheet
 
 call plug#end()
-
-function! PlugLoaded(name)
-    return (
-        \ has_key(g:plugs, a:name) &&
-        \ isdirectory(g:plugs[a:name].dir) &&
-        \ stridx(&rtp, g:plugs[a:name].dir) >= 0)
-endfunction
 
 " General "{{{
 set backspace=indent
@@ -264,7 +256,7 @@ set wildmode=longest,list
 " Airline and Lightline users:
 " wilder#wildmenu_airline_theme() and wilder#wildmenu_lightline_theme() can be used.
 "
-if PlugLoaded('wilder')
+if exists('g:plugs["wilder.nvim"]')
   call wilder#setup({'modes': [':', '/', '?']})
   call wilder#set_option('renderer', wilder#wildmenu_renderer(
       \ wilder#wildmenu_airline_theme({
@@ -402,7 +394,7 @@ let g:pydocstring_doq_path = '/path/to/doq'
 " Use airline rather than lualine
 " require('lualine-config')
 " Add these:  cssmodules ansible haskell sql
-if PlugLoaded('treesitter')
+if exists('g:plugs["nvim-treesitter"]')
   lua << EOF
 servers = {
     "pyright",
@@ -442,7 +434,7 @@ endif
 " By default the <leader> key is \.
 "
 " Default cheatsheet configuration:
-if PlugLoaded('cheatsheet')
+if exists('g:plugs["cheatsheet.nvim"]')
   lua << EOF
 require('cheatsheet').setup({
     -- Whether to show bundled cheatsheets
@@ -477,11 +469,11 @@ require('cheatsheet').setup({
 EOF
 endif
 
-if PlugLoaded('toggleterm')
+if exists('g:plugs["toggleterm.nvim"]')
   lua require('toggleterm').setup()
 endif
-if PlugLoaded('chatgpt')
-  " lua require('chatgpt').setup()
+if exists('g:plugs["ChatGPT.nvim"]')
+  lua require('chatgpt').setup()
 endif
 
 """ Custom Mappings (lua custom mappings are within individual lua config files)
