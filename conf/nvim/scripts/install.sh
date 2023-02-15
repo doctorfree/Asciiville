@@ -189,10 +189,13 @@ install_brew () {
     eval "$(${BREW_EXE} shellenv)"
     have_brew=`type -p brew`
     [ "${have_brew}" ] && BREW_EXE="brew"
-    log "Install gcc (recommended by brew) ..."
-    ${BREW_EXE} install -q gcc > /dev/null 2>&1
-    [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet gcc > /dev/null 2>&1
-    printf " done"
+    have_gcc=`type -p gcc`
+    [ "${have_gcc}" ] || {
+      log "Install gcc (recommended by brew) ..."
+      ${BREW_EXE} install --quiet --force-bottle gcc > /dev/null 2>&1
+      [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet gcc > /dev/null 2>&1
+      printf " done"
+    }
   fi
   [ "${HOMEBREW_HOME}" ] || {
     brewpath=$(command -v brew)
@@ -210,7 +213,7 @@ install_neovim_dependencies () {
   PKGS="fd ripgrep fzf tmux go node python warrensbox/tap/tfswitch"
   for pkg in ${PKGS}
   do
-    ${BREW_EXE} install -q ${pkg} > /dev/null 2>&1
+    ${BREW_EXE} install --quiet --force-bottle ${pkg} > /dev/null 2>&1
     [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet ${pkg} > /dev/null 2>&1
   done
   link_python
@@ -223,7 +226,7 @@ install_neovim_dependencies () {
 install_neovim_head () {
   [ "${minimal}" ] || {
     if ! command -v nvim >/dev/null 2>&1; then
-      log "Installing Neovim HEAD ..."
+      log "Installing Neovim HEAD, please be patient ..."
       ${BREW_EXE} install -q --HEAD neovim > /dev/null 2>&1
       [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet neovim > /dev/null 2>&1
       printf " done"
@@ -310,7 +313,7 @@ install_npm () {
   [ "${PYTHON}" ] || {
     # Could not find Python, install with Homebrew
     log 'Installing Python with Homebrew ...'
-    ${BREW_EXE} install -q python > /dev/null 2>&1
+    ${BREW_EXE} install --quiet --force-bottle python > /dev/null 2>&1
     [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet python > /dev/null 2>&1
     link_python
     check_python
@@ -434,7 +437,7 @@ main () {
     log "Installing common packages ..."
     for pkg in ${common_packages}
     do
-      ${BREW_EXE} install -q ${pkg} > /dev/null 2>&1
+      ${BREW_EXE} install --quiet --force-bottle ${pkg} > /dev/null 2>&1
       [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet ${pkg} > /dev/null 2>&1
     done
     printf " done"
