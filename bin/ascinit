@@ -2129,6 +2129,8 @@ printf "\n"
 
 [ "${quiet}" ] || {
   printf "\n\n${BOLD}Asciiville Initialization Complete${NORM}\n"
+  printf "\n${BOLD}Logout, open a new shell, or reinitialize your current shell${NORM}"
+  printf "\n${BOLD}in order to set your execution PATH appropriately${NORM}\n"
   [ "${init_twit}" ] || {
     printf "\nAuthorize the Rainbow Stream app at Twitter"
     printf "\nby running the ${BOLD}'rainbowstream'${NORM} command\n"

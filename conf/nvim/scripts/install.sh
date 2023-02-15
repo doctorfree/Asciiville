@@ -204,6 +204,8 @@ install_brew () {
       HOMEBREW_HOME="Unknown"
     fi
   }
+  log "\tHomebrew installed in ${HOMEBREW_HOME}"
+  log "\tSee ${DOC_HOMEBREW}"
 }
 
 install_neovim_dependencies () {
@@ -230,7 +232,7 @@ install_neovim_dependencies () {
         rm -f /tmp/ins$$
       }
     }
-    [ -f /tmp/rust-$$.sh ] && sh /tmp/rust-$$.sh
+    [ -f /tmp/rust-$$.sh ] && sh /tmp/rust-$$.sh -y > /dev/null 2>&1
     rm -f /tmp/rust-$$.sh
     printf " done"
   fi
@@ -459,32 +461,6 @@ main () {
     git_clone_neovim_config
   fi
   install_npm
-  if [ "${minimal}" ]
-  then
-    INFO="################################################################
-- Homebrew installed in ${HOMEBREW_HOME}
-- See ${DOC_HOMEBREW}
-- Some packages managed by Homebrew
-- This could result in duplicate tool installations!
-- Your ~/.profile, ~/.bashrc, or ~/.zshrc modified to source paths
-################################################################"
-  else
-    INFO="################################################################
-- Homebrew installed in ${HOMEBREW_HOME}
-- See ${DOC_HOMEBREW}
-- Neovim, nvm, node, npm, and language servers installed
-- All packages required for Neovim managed by Homebrew
-- This could result in duplicate tool installations!
-- Your ~/.profile, ~/.bashrc, or ~/.zshrc modified to source paths
-
-After this script is finished
-- Log out or open a new shell
-- If not invoked from ascinit run the command: nvim -c 'PlugInstall' -c 'qa'
-- Open nvim and Enjoy!
-################################################################"
-  fi
-
-  [ "${quiet}" ] || printf "\n${INFO}\n"
 }
 
 quiet=
