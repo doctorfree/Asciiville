@@ -9,8 +9,6 @@
 # Adapted for Asciiville from https://github.com/Allaman/nvim.git
 # See https://github.com/doctorfree/nvim
 
-set -e
-
 OS=""
 PYTHON=
 LINUX_DISTRIBUTION=""
@@ -192,7 +190,7 @@ install_brew () {
     have_gcc=`type -p gcc`
     [ "${have_gcc}" ] || {
       log "Install gcc (recommended by brew) ..."
-      ${BREW_EXE} install --quiet --force-bottle gcc > /dev/null 2>&1
+      ${BREW_EXE} install --quiet gcc > /dev/null 2>&1
       [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet gcc > /dev/null 2>&1
       printf " done"
     }
@@ -213,14 +211,29 @@ install_neovim_dependencies () {
   PKGS="fd ripgrep fzf tmux go node python warrensbox/tap/tfswitch"
   for pkg in ${PKGS}
   do
-    ${BREW_EXE} install --quiet --force-bottle ${pkg} > /dev/null 2>&1
+    ${BREW_EXE} install --quiet ${pkg} > /dev/null 2>&1
     [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet ${pkg} > /dev/null 2>&1
   done
+  printf " done"
   link_python
   if ! command -v cargo >/dev/null 2>&1; then
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+#   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    log "Installing cargo ..."
+    RUST_URL="https://sh.rustup.rs"
+    curl -fsSL "${RUST_URL}" > /tmp/rust-$$.sh
+    [ $? -eq 0 ] || {
+      rm -f /tmp/rust-$$.sh
+      curl -kfsSL "${RUST_URL}" > /tmp/rust-$$.sh
+      [ -f /tmp/rust-$$.sh ] && {
+        cat /tmp/rust-$$.sh | sed -e "s/--show-error/--insecure --show-error/" > /tmp/ins$$
+        cp /tmp/ins$$ /tmp/rust-$$.sh
+        rm -f /tmp/ins$$
+      }
+    }
+    [ -f /tmp/rust-$$.sh ] && sh /tmp/rust-$$.sh
+    rm -f /tmp/rust-$$.sh
+    printf " done"
   fi
-  printf " done"
 }
 
 install_neovim_head () {
@@ -313,7 +326,7 @@ install_npm () {
   [ "${PYTHON}" ] || {
     # Could not find Python, install with Homebrew
     log 'Installing Python with Homebrew ...'
-    ${BREW_EXE} install --quiet --force-bottle python > /dev/null 2>&1
+    ${BREW_EXE} install --quiet python > /dev/null 2>&1
     [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet python > /dev/null 2>&1
     link_python
     check_python
@@ -437,7 +450,7 @@ main () {
     log "Installing common packages ..."
     for pkg in ${common_packages}
     do
-      ${BREW_EXE} install --quiet --force-bottle ${pkg} > /dev/null 2>&1
+      ${BREW_EXE} install --quiet ${pkg} > /dev/null 2>&1
       [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet ${pkg} > /dev/null 2>&1
     done
     printf " done"
