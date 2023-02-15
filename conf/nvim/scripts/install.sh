@@ -272,7 +272,7 @@ install_npm () {
   NODE_VERSION="18.14.0"
   NVM_VERSION="0.39.3"
   NVM_INSTALL="https://raw.githubusercontent.com/nvm-sh/nvm/v$NVM_VERSION/install.sh"
-  log "[*] Installing nvm $NVM_VERSION ..."
+  log "Installing nvm $NVM_VERSION ..."
   # Installs Node Version Manager to ~/.nvm
   # Also detects bash or zsh and appends source lines
   # to ~/.bashrc or ~/.zshrc accordingly
@@ -301,7 +301,7 @@ install_npm () {
   # Installs specific version of Node
   have_nvm=`type -p nvm`
   [ "${have_nvm}" ] && {
-    log "[*] Installing node $NODE_VERSION ..."
+    log "Installing node $NODE_VERSION ..."
     nvm install $NODE_VERSION
     printf " done"
   }
@@ -309,7 +309,7 @@ install_npm () {
   check_python
   [ "${PYTHON}" ] || {
     # Could not find Python, install with Homebrew
-    log '[*] Installing Python with Homebrew ...'
+    log 'Installing Python with Homebrew ...'
     ${BREW_EXE} install -q python > /dev/null 2>&1
     [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet python > /dev/null 2>&1
     link_python
@@ -317,29 +317,24 @@ install_npm () {
     printf " done"
   }
   [ "${PYTHON}" ] && {
-    log '[*] Installing Python dependencies ...'
+    log 'Installing Python dependencies ...'
     ${PYTHON} -m pip install wheel > /dev/null 2>&1
     ${PYTHON} -m pip install pynvim doq > /dev/null 2>&1
     printf " done"
   }
   have_npm=`type -p npm`
   [ "${have_npm}" ] && {
-    log "[*] Setting npm config to use ~/.local as prefix ..."
+    log "Setting npm config to use ~/.local as prefix ..."
     # npm install -g will now install to ~/.local/bin
     npm config set prefix '~/.local/'
     printf " done"
 
     [ "${minimal}" ] || {
-      log "[*] Installing Neovim npm package ..."
+      log "Installing Neovim npm package ..."
       npm i -g neovim > /dev/null 2>&1
       printf " done"
-      log "[*] Installing tree-sitter command line interface ..."
-      npm i -g tree-sitter-cli > /dev/null 2>&1
-      have_tree=`type -p tree-sitter`
-      [ "${have_tree}" ] && tree-sitter init-config > /dev/null 2>&1
-      printf " done"
 
-      log "[*] Installing language servers ..."
+      log "Installing language servers ..."
       # Could also install the language servers with brew, for example:
       #   brew install bash-language-server
       #
@@ -372,6 +367,15 @@ install_npm () {
       printf " done"
       # For other language servers, see:
       # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+      have_tree=`type -p tree-sitter`
+      [ "${have_tree}" ] || {
+        log "Installing tree-sitter command line interface ..."
+#       npm i -g tree-sitter-cli > /dev/null 2>&1
+        ${BREW_EXE} install -q tree-sitter > /dev/null 2>&1
+        printf " done"
+      }
+      have_tree=`type -p tree-sitter`
+      [ "${have_tree}" ] && tree-sitter init-config > /dev/null 2>&1
     }
   }
 }
