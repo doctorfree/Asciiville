@@ -2124,11 +2124,13 @@ printf "\n"
   }
   [ "${quiet}" ] || {
     printf "\n\tA Neovim text editor configuration has been created for you in"
-    printf "\n\t\t${HOME}/.config/nvim/"
+    printf "\n\t\t${BOLD}${HOME}/.config/nvim/${NORM}"
     printf "\n\tA good starting point for the Neovim user is the Neovim User Doc at:"
-    printf "\n\t\thttps://neovim.io/doc/user/"
+    printf "\n\t\t${BOLD}https://neovim.io/doc/user/${NORM}"
     printf "\n\tTry Neovim out by viewing your Neovim configuration:"
-    printf "\n\t\tnvim ~/.config/nvim/init.vim\n"
+    printf "\n\t\t${BOLD}nvim ~/.config/nvim/init.vim${NORM}"
+    printf "\n\tCheck your configuration with the Neovim command:"
+    printf "\n\t\t${BOLD}:checkhealth${NORM}\n"
   }
 }
 
