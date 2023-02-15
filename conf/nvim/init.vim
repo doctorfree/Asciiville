@@ -386,9 +386,13 @@ tmap <C-w> <Esc><C-w>
 "tmap <C-d> <Esc>:q<CR>
 autocmd BufWinEnter,WinEnter term://* startinsert
 autocmd BufLeave term://* stopinsert
-
-let g:python3_host_prog = '/path/to/python3'
-let g:pydocstring_doq_path = '/path/to/doq'
+" Replace these with actual paths
+if !empty(glob('/path/to/python3'))
+  let g:python3_host_prog = '/path/to/python3'
+endif
+if !empty(glob('/path/to/doq'))
+  let g:pydocstring_doq_path = '/path/to/doq'
+endif
 
 """ Core plugin configuration (lua)
 " Use airline rather than lualine
@@ -425,6 +429,18 @@ require('telescope-config')
 require('nvim-tree-config')
 require('diagnostics')
 EOF
+endif
+
+if exists('g:plugs["coc.nvim"]')
+  lua require('coc-config')
+  if exists('g:plugs["vim-airline"]')
+    let g:airline#extensions#coc#enabled = 1
+    let airline#extensions#coc#error_symbol = 'E:'
+    let airline#extensions#coc#warning_symbol = 'W:'
+    let g:airline#extensions#coc#show_coc_status = 1
+    let airline#extensions#coc#stl_format_err = '%C(L%L)'
+    let airline#extensions#coc#stl_format_warn = '%C(L%L)'
+  endif
 endif
 
 " Use the :Cheatsheet command which automatically uses Telescope

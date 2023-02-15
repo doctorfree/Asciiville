@@ -2092,6 +2092,11 @@ printf "\n"
       cp /tmp/nvim$$ ${NVIMCONF}
       rm -f /tmp/nvim$$
     }
+    grep '" Replace these with actual paths'  ${NVIMCONF} > /dev/null && {
+      cat ${NVIMCONF} | sed -e "s/\" Replace these with actual paths.*//" > /tmp/nvim$$
+      cp /tmp/nvim$$ ${NVIMCONF}
+      rm -f /tmp/nvim$$
+    }
     [ "${OPENAI_API_KEY}" ] && {
       grep "\" Plug 'MunifTanjim/nui.nvim'" ${NVIMCONF} > /dev/null && {
         cat ${NVIMCONF} | sed -e "s%\" Plug 'MunifTanjim/nui.nvim'%Plug 'MunifTanjim/nui.nvim'%" > /tmp/nvim$$
