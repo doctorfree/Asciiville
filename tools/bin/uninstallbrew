@@ -19,7 +19,13 @@ done
 
 brew remove --force $(brew list --formula)
 
-brew remove --cask --force $(brew list)
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+  brew remove --cask --force $(brew list)
+else
+  brew remove --force $(brew list)
+fi
 
 NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
 
