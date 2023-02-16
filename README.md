@@ -37,6 +37,7 @@ Asciiville includes nearly 1,000 works of ASCII and ANSI Art!
         1. [NeoMutt email configuration](#neomutt-email-configuration)
         1. [Mutt email configuration](#mutt-email-configuration)
         1. [Tuir Reddit client configuration](#tuir-reddit-client-configuration)
+    1. [Homebrew administration](#homebrew-administration)
 1. [Documentation](#documentation)
     1. [Aewan README](#aewan-readme)
     1. [Btop++ README](#btop++-readme)
@@ -830,9 +831,74 @@ your default browser and take you to Reddit where you can give your new app
 authorization, leave the browser, and go back to `tuir` where you should now
 be logged in.
 
+### Homebrew administration
+
+Beginning with Asciiville version 3.0.2 the `ascinit` initialization process
+installs Homebrew and uses the `brew` package manager to install Asciiville
+components and their dependencies. Using Homebrew allows the installation of
+more recent versions of packages than is supported by some native package
+managers (especially on Ubuntu Linux) and Homebrew is cross-platform allowing
+the same installation process on all Linux distributions and Apple macOS.
+
+The use of an alternate package manager can and probably will result in
+some duplicate package installs, one previously installed with the native
+package manager and another installed during Asciiville initialization by `brew`.
+Homebrew is nicely isolated from the system packages and the duplicate packages
+typically will not create a conflict or issue. The shell execution `PATH`
+environment variable will determine which package is used.
+
+However, it may be desirable to remove package duplicates both for disk space
+and to avoid any possible conflict. Asciiville provides a convenience script
+to locate duplicate packages installed on the system. To list identified
+duplicate packages, execute the command:
+
+```shell
+/usr/share/asciiville/tools/bin/brewdups
+```
+
+To remove all identified duplicate packages:
+
+```shell
+/usr/share/asciiville/tools/bin/brewdups -r
+```
+
+Removal of duplicate packages poses some risk. For example, there may be
+duplicate packages used by other users on the system who do not have Homebrew
+in their execution PATH. If duplicate system packages are removed it is a
+good idea to add the following to all users' shell startup files
+(e.g. `.profile`, `.bashrc`, `.zshrc`):
+
+```shell
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+```
+
+or, on Apple macOS:
+
+```shell
+eval "$(/usr/local/bin/brew shellenv)"
+```
+
+**[Note:]** Asciiville testing has not revealed any issue with duplicate packages other than needlessly consumed disk space. It might be argued that the risk of removing duplicate system packages outweighs the benefit of recovering some disk space.
+
+In addition to the regular system administration task of updating installed
+packages with the native package manager (e.g. `sudo apt update` followed by
+`sudo apt upgrade` or `sudo dnf update`), it is recommended to also update
+Homebrew regularly. Note that with Homebrew it is not necessary to use `sudo`:
+
+```shell
+# Update all package definitions (formulae) and Homebrew itself
+brew update
+# List which of your installed packages (kegs) are outdated
+brew outdated
+# Upgrade everything
+brew upgrade
+# Upgrade a specific formula
+brew upgrade <formula>
+```
+
 ## Documentation
 
-**[NEW:]** Asciiville documentation is now available on [Read the Docs](https://asciiville.readthedocs.io/en/latest/index.html)
+Asciiville documentation is now available on [Read the Docs](https://asciiville.readthedocs.io/en/latest/index.html)
 
 All Asciiville commands have manual pages. Execute `man <command-name>`
 to view the manual page for a command. The `asciiville` frontend is the primary

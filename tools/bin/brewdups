@@ -1,0 +1,31 @@
+#!/bin/bash
+#
+# brewdups - list and/or remove duplicate packages resulting from installs
+#            with the native package management system and Homebrew
+#
+# TODO:
+#   - Add support for RPM and Arch (e.g. use ' rpm -qa --last')
+#   - Deal with slightly differeing package names (e.g. node vs nodejs)
+
+BREWLIST="/tmp/brewList$$"
+DPKGLIST="/tmp/dpkgList$$"
+INTRLIST="/tmp/intrList$$"
+REMOVE=
+SAVE=
+
+[ "$1" == "-r" ] && REMOVE=1
+[ "$1" == "-s" ] && SAVE=1
+
+brew list > ${BREWLIST}
+dpkg-query -f '${Package}\n' -W > ${DPKGLIST}
+grep -Fx -f ${BREWLIST} ${DPKGLIST} > ${INTRLIST}
+if [ "${REMOVE}" ]
+then
+  sudo apt remove $(cat ${INTRLIST})
+else
+  echo "The following packages identified as duplicates:"
+  echo ""
+  cat ${INTRLIST}
+fi
+
+[ "${SAVE}" ] || rm -f ${BREWLIST} ${DPKGLIST} ${INTRLIST}
