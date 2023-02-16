@@ -8,7 +8,7 @@
 #   - Deal with slightly differeing package names (e.g. node vs nodejs)
 
 BREWLIST="/tmp/brewList$$"
-DPKGLIST="/tmp/dpkgList$$"
+SYSTLIST="/tmp/systList$$"
 INTRLIST="/tmp/intrList$$"
 REMOVE=
 SAVE=
@@ -16,16 +16,134 @@ SAVE=
 [ "$1" == "-r" ] && REMOVE=1
 [ "$1" == "-s" ] && SAVE=1
 
+arch=
+fedora=
+debian=
+have_apt=`type -p apt`
+have_dnf=`type -p dnf`
+have_yum=`type -p yum`
+mach=`uname -m`
+platform=`uname -s`
+if [ "$platform" == "Darwin" ]
+then
+  echo "Listing or removing duplicate packages is not supported on macOS"
+  echo "Exiting"
+  exit 1
+else
+  if [ -f /etc/os-release ]
+  then
+    . /etc/os-release
+    [ "${ID}" == "debian" ] || [ "${ID_LIKE}" == "debian" ] && debian=1
+    [ "${ID}" == "arch" ] || [ "${ID_LIKE}" == "arch" ] && arch=1
+    [ "${ID}" == "fedora" ] && fedora=1
+    [ "${arch}" ] || [ "${debian}" ] || [ "${fedora}" ] || {
+      echo "${ID_LIKE}" | grep debian > /dev/null && debian=1
+    }
+  else
+    if [ -f /etc/arch-release ]
+    then
+      arch=1
+    else
+      case "${mach}" in
+        arm*)
+          debian=1
+          ;;
+        x86*)
+          if [ "${have_apt}" ]
+          then
+            debian=1
+          else
+            if [ -f /etc/fedora-release ]
+            then
+              fedora=1
+            else
+              if [ "${have_dnf}" ] || [ "${have_yum}" ]
+              then
+                fedora=1
+              else
+                echo "Unknown operating system distribution"
+              fi
+            fi
+          fi
+          ;;
+        *)
+          echo "Unknown machine architecture"
+          ;;
+      esac
+    fi
+  fi
+fi
+
+if [ "${debian}" ]
+then
+  have_dpkg=`type -p dpkg-query`
+  [ "${have_dpkg}" ] || {
+    echo "Cannot locate dpkg-query command. Exiting."
+    exit 1
+  }
+  dpkg-query -f '${Package}\n' -W > ${SYSTLIST}
+else
+  if [ "${fedora}" ]
+  then
+    RPMCOM="dnf"
+    have_dnf=`type -p dnf`
+    [ "${have_dnf}" ] || {
+      have_yum=`type -p yum`
+      [ "${have_yum}" ] || {
+        echo "Cannot locate dnf or yum command. Exiting."
+        exit 1
+      }
+      RPMCOM="yum"
+    }
+    ${RPMCOM} list installed | awk ' { print $1 } ' | \
+                               awk -F '.' ' { print $1 } ' > ${SYSTLIST}
+  else
+    if [ "${arch}" ]
+    then
+      have_pac=`type -p pacman`
+      [ "${have_pac}" ] || {
+        echo "Cannot locate pacman command. Exiting."
+        exit 1
+      }
+      LC_ALL=C pacman -Qi | \
+        awk '/^Name/{name=$3} /^Installed Size/{print name}' > ${SYSTLIST}
+    else
+      echo "Unknown operating system platform. Exiting."
+      exit 1
+    fi
+  fi
+fi
+
+have_brew=`type -p brew`
+[ "${have_brew}" ] || {
+  echo "Cannot locate brew command. Exiting."
+  exit 1
+}
 brew list > ${BREWLIST}
-dpkg-query -f '${Package}\n' -W > ${DPKGLIST}
-grep -Fx -f ${BREWLIST} ${DPKGLIST} > ${INTRLIST}
+grep -Fx -f ${BREWLIST} ${SYSTLIST} > ${INTRLIST}
 if [ "${REMOVE}" ]
 then
-  sudo apt remove $(cat ${INTRLIST})
+  if [ "${debian}" ]
+  then
+    sudo apt remove $(cat ${INTRLIST})
+  else
+    if [ "${fedora}" ]
+    then
+      sudo ${RPMCOM} remove $(cat ${INTRLIST})
+    else
+      if [ "${arch}" ]
+      then
+        sudo pacman -R $(cat ${INTRLIST})
+      else
+        echo "Unknown operating system platform. Exiting."
+        exit 1
+      fi
+    fi
+  fi
 else
   echo "The following packages identified as duplicates:"
   echo ""
   cat ${INTRLIST}
 fi
 
-[ "${SAVE}" ] || rm -f ${BREWLIST} ${DPKGLIST} ${INTRLIST}
+[ "${SAVE}" ] || rm -f ${BREWLIST} ${SYSTLIST} ${INTRLIST}

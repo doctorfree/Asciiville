@@ -401,7 +401,7 @@ endif
 " require('lualine-config')
 " Add these:  cssmodules ansible haskell sql
 if exists('g:plugs["nvim-treesitter"]')
-  if !empty(glob(g:plugs['nvim-treesitter'].dir.'/autoload/nvim-treesitter.vim'))
+  if !empty(glob(g:plugs['nvim-treesitter'].dir.'/autoload/nvim_treesitter.vim'))
     lua << EOF
 servers = {
     "pyright",
