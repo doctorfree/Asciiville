@@ -29,9 +29,15 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
-Plug 'hrsh7th/nvim-cmp'    " A completion engine plugin for neovim
-Plug 'hrsh7th/cmp-vsnip'
-Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/nvim-cmp'    " A completion engine plugin for Neovim
+Plug 'tamago324/cmp-zsh'   " Zsh completion for cmp
+Plug 'Shougo/deol.nvim'    " Recommended to use together
+" Snippets
+Plug 'L3MON4D3/LuaSnip', {'tag': 'v<CurrentMajor>.*', 'do': 'make install_jsregexp'}
+Plug 'saadparwaiz1/cmp_luasnip'
+Plug 'rafamadriz/friendly-snippets'
+" Plug 'hrsh7th/cmp-vsnip'
+" Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
@@ -51,9 +57,27 @@ Plug 'bogado/file-line'        " Enable opening a file in a given line
                                " vim index.html:20
                                " vim app/models/user.rb:1337
 Plug 'tpope/vim-sleuth'        " Automatically adjust indentation
-" Make your Vim/Neovim as smart as VSCode
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-let g:coc_disable_startup_warning = 1
+
+" CoC Nodejs extension host
+" Load extensions like VSCode and host language servers
+" Commented out for now, using lspconfig and installed language servers
+" See CoC wiki at https://github.com/neoclide/coc.nvim/wiki
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" or
+" Plug 'neoclide/coc.nvim', {'branch': 'release', 'build': ':CocUpdate'}
+" Install CoC extensions or configure language servers
+" Plug 'rafcamlet/coc-nvim-lua'
+" Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+" Plug 'coc-java'
+" Plug 'neoclide/coc-rust-analyzer'
+" Plug 'neoclide/coc-css'
+" Plug 'neoclide/coc-vimlsp'
+" Plug 'neoclide/coc-snippets'
+" Plug 'neoclide/coc-emmet'
+" Plug 'neoclide/coc-json'
+" Plug 'neoclide/coc-texlab'
+" let g:coc_disable_startup_warning = 1
+
 Plug 'jackguo380/vim-lsp-cxx-highlight' " C/C++/Cuda/ObjC semantic highlighting
 Plug 'junegunn/vim-easy-align' " A simple, easy-to-use Vim alignment plugin
 " Start interactive EasyAlign in visual mode (e.g. vipga)
@@ -127,6 +151,7 @@ Plug 'sheerun/vim-polyglot'  " Better syntax highlighting
 Plug 'folke/which-key.nvim'  " Easily find key map bindings
 " See https://github.com/akinsho/toggleterm.nvim for toggleterm setup options
 Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
+
 " Uncomment and set OPENAI_API_KEY env var to enable :ChatGPT and :ChatGPTActAs
 " See https://github.com/jackMort/ChatGPT.nvim for setup options and usage
 " Plug 'MunifTanjim/nui.nvim'
@@ -435,21 +460,22 @@ EOF
   endif
 endif
 
-if exists('g:plugs["coc.nvim"]')
-  if !empty(glob(g:plugs['coc.nvim'].dir.'/autoload/coc.vim'))
-    lua require('coc-config')
-    if exists('g:plugs["vim-airline"]')
-      if !empty(glob(g:plugs['vim-airline'].dir.'/autoload/airline.vim'))
-        let g:airline#extensions#coc#enabled = 1
-        let airline#extensions#coc#error_symbol = 'E:'
-        let airline#extensions#coc#warning_symbol = 'W:'
-        let g:airline#extensions#coc#show_coc_status = 1
-        let airline#extensions#coc#stl_format_err = '%C(L%L)'
-        let airline#extensions#coc#stl_format_warn = '%C(L%L)'
-      endif
-    endif
-  endif
-endif
+" Uncomment if CoC is enabled above and Airline integration desired
+" if exists('g:plugs["coc.nvim"]')
+"   if !empty(glob(g:plugs['coc.nvim'].dir.'/autoload/coc.vim'))
+"     lua require('coc-config')
+"     if exists('g:plugs["vim-airline"]')
+"       if !empty(glob(g:plugs['vim-airline'].dir.'/autoload/airline.vim'))
+"         let g:airline#extensions#coc#enabled = 1
+"         let airline#extensions#coc#error_symbol = 'E:'
+"         let airline#extensions#coc#warning_symbol = 'W:'
+"         let g:airline#extensions#coc#show_coc_status = 1
+"         let airline#extensions#coc#stl_format_err = '%C(L%L)'
+"         let airline#extensions#coc#stl_format_warn = '%C(L%L)'
+"       endif
+"     endif
+"   endif
+" endif
 
 " Use the :Cheatsheet command which automatically uses Telescope
 " if installed or falls back to showing all the cheatsheet files

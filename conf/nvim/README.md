@@ -9,6 +9,7 @@
 1. [Introduction](#introduction)
 1. [Installation](#installation)
 1. [Configuration](#configuration)
+    1. [Language servers](#language-servers)
     1. [Key mappings](#key-mappings)
 1. [Plugins](#plugins)
 1. [Usage](#usage)
@@ -109,6 +110,41 @@ environment during Asciiville initialization (the environment variable
 `OPENAI_API_KEY`) the initialization will detect that and enable the
 Neovim [ChatGPT plugin](https://github.com/jackMort/ChatGPT.nvim). This allows
 you to query [ChatGPT](https://openai.com/blog/chatgpt) from within Neovim.
+
+### Language servers
+
+The following language servers and associated Neovim plugins are installed
+and configured by Asciiville initialization:
+
+- [ansiblels](https://github.com/ansible/ansible-language-server) : Ansible configuration management language server
+- [awk_ls](https://github.com/Beaglefoot/awk-language-server) : AWK language server
+- [bashls](https://github.com/mads-hartmann/bash-language-server) : Bash language server
+- [ccls](https://github.com/MaskRay/ccls) : C, C++, and Objective-C language server
+- [cmake](https://github.com/regen100/cmake-language-server) : CMake language server
+- [cssmodules_ls](https://github.com/antonk52/cssmodules-language-server) : CSS module autocompletion and go-to-definition
+- [dockerls](https://github.com/rcjsuen/dockerfile-language-server-nodejs) : Docker language server
+- [hls](https://github.com/haskell/haskell-language-server) : Haskell language server
+- [lua_ls](https://github.com/luals/lua-language-server) : Lua language server
+- [pyright](https://github.com/microsoft/pyright) : Python language server and static type checker
+- [rust_analyzer](https://github.com/rust-analyzer/rust-analyzer) : Rust language server
+- [sqlls](https://github.com/joe-re/sql-language-server) : SQL language server
+- [tsserver](https://github.com/typescript-language-server/typescript-language-server) : TypeScript language server
+- [vimls](https://github.com/iamcco/vim-language-server) : VimScript language server
+- [yamlls](https://github.com/redhat-developer/yaml-language-server) : YAML language server
+
+For other language servers, see [LSP server configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
+
+The language servers are utilized by the `nvim-lspconfig` and `nvim-cmp` Neovim
+plugins to provide diagnostics, syntax highlighting, formatting, and more
+for a variety of programming and text formatting languages. For example, when
+editing a file these facilities will provide you with a list of suggested
+completions as you are typing. When editing a supported language (e.g. Lua,
+YAML, Python, C++) the language servers are used to denote errors, warnings,
+hints, and info. Help is often available for the word or line on which the
+cursor is positioned by typing `Shift-K` and `Ctrl-K`.
+
+The configuration for language servers and facilities used by `nvim-lspconfig`
+and `nvim-cmp` can be found in `~/.config/nvim/lua/`.
 
 ### Key mappings
 
