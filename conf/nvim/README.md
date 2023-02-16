@@ -219,7 +219,3 @@ nvim path/to/file
 ```shell
 <Esc>:q!<Enter>
 ```
-
-## See also
-
-- [Vim](vim.md)
