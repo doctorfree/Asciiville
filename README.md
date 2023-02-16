@@ -15,7 +15,7 @@ utilities to perform common operations in a text-only environment.
 
 Asciiville includes nearly 1,000 works of ASCII and ANSI Art!
 
-## Table of contents
+## Table of Contents
 
 1. [Overview](#overview)
 1. [Asciiville Ascii Art Galleries](#asciiville-ascii-art-galleries)
@@ -664,7 +664,7 @@ The ssh kitten will automatically copy the Kitty terminfo entry to the remote sy
 The `ascinit` Asciiville initialization installs a current version of
 [Neovim](https://neovim.io) and extensively configures and extends the
 `nvim` text editor with plugins, configuration files, keyboard mappings,
-color schemes, syntax highlighting, and settings.
+color schemes, syntax highlighting, language servers, and settings.
 
 We here in Asciiville are pretty proud of our Neovim setup and we wanted
 to share it with you. The installation and configuration of Neovim is
@@ -672,15 +672,28 @@ entirely automated. If you have a previous `$HOME/.config/nvim/` this is
 backed up and replaced with the Asciiville Neovim configuration.
 
 Neovim is not required for most of the use cases Asciiville supports but
-it can prove to be quite useful in a text-based world. However, installation
-of Neovim is optional and the `ascinit` command will prompt to see if you
-wish to install it. We recommend installing Neovim and trying it out. If
-later you decide you do not need Neovim then it can be removed with the
-command `ascinit -r neovim`.
+it can prove to be quite useful in a text-based environment. However,
+installation of Neovim is optional and the `ascinit` command will prompt
+to see if you wish to install it. We recommend installing Neovim and trying
+it out. If later you decide you do not need Neovim then it can be removed
+with the command `ascinit -r neovim`.
 
 The Asciiville configuration of Neovim is quite extensive and fairly complex.
 See the [Asciiville Neovim README](conf/nvim/README.md) for an introductory
 tour of the configuration, plugins, settings, and usage of Neovim.
+
+After installing and initializing Asciiville with `ascinit`, try out
+Neovim by running the command:
+
+```shell
+nvim ~/.config/nvim/README.md
+```
+
+While running `nvim` perform a Neovim health check by issuing the Neovim command:
+
+```vim
+:checkhealth
+```
 
 #### Newsboat RSS feed reader configuration
 
