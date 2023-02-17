@@ -9,7 +9,7 @@ date: May 04, 2022
 ascinit - Asciiville initialization script
 
 ## SYNOPSIS
-**ascinit** [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-t] [-y] [-u] [arg]
+**ascinit** [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-r] [-t] [-y] [-u] [arg]
 
 ## DESCRIPTION
 The *ascinit* command should be run as a normal user with `sudo` privilege
@@ -63,7 +63,7 @@ ascinit -r <component>
 ## COMMAND LINE OPTIONS
 
 **-a**
-: indicates do not ask to play an animation when done
+: indicates ask to play an animation when done
 
 **-c**
 : indicates console-only mode, no terminal emulators are installed or configured and several mailcap configurations specifically tailored for console use are installed
@@ -86,11 +86,14 @@ ascinit -r <component>
 **-q**
 : indicates quiet mode, messages are suppressed. In quiet mode initialization all Asciiville components are installed.
 
+**-r**
+: indicates remove service/package
+
 **-t**
 : indicates authorize the Rainbow Stream app at Twitter
 
 **-y**
-: indicates answer yes to all prompts except tmux configuration, skip animation
+: indicates answer yes to all prompts except tmux configuration
 
 **-u**
 : indicates display this usage message and exit

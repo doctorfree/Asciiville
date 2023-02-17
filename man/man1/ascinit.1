@@ -21,8 +21,8 @@
 ascinit - Asciiville initialization script
 .SS SYNOPSIS
 .PP
-\f[B]ascinit\f[R] [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-t] [-y] [-u]
-[arg]
+\f[B]ascinit\f[R] [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-r] [-t] [-y]
+[-u] [arg]
 .SS DESCRIPTION
 .PP
 The \f[I]ascinit\f[R] command should be run as a normal user with
@@ -102,7 +102,7 @@ ascinit -r <component>
 .SS COMMAND LINE OPTIONS
 .TP
 \f[B]-a\f[R]
-indicates do not ask to play an animation when done
+indicates ask to play an animation when done
 .TP
 \f[B]-c\f[R]
 indicates console-only mode, no terminal emulators are installed or
@@ -128,12 +128,14 @@ indicates prompt for installation of additional terminal emulators
 indicates quiet mode, messages are suppressed.
 In quiet mode initialization all Asciiville components are installed.
 .TP
+\f[B]-r\f[R]
+indicates remove service/package
+.TP
 \f[B]-t\f[R]
 indicates authorize the Rainbow Stream app at Twitter
 .TP
 \f[B]-y\f[R]
-indicates answer yes to all prompts except tmux configuration, skip
-animation
+indicates answer yes to all prompts except tmux configuration
 .TP
 \f[B]-u\f[R]
 indicates display this usage message and exit

@@ -28,7 +28,7 @@ usage() {
   then
     rich "[bold]Usage:[/] [bold italic green]ascinit[/] [cyan]\[-a] \[-c] \[-d] \[-m] \[-M] \[-n] \[-N] \[-q] \[-r] \[-t] \[-y] \[-u] \[arg][/]" --print
     rich "[bold]Where:[/]" --print
-    rich "    [cyan]-a[/] indicates [yellow]do not ask to play an animation when done[/]" --print
+    rich "    [cyan]-a[/] indicates [yellow] ask to play an animation when done[/]" --print
     rich "    [cyan]-c[/] indicates [yellow]console mode - no windowing system, headless config[/]" --print
     rich "    [cyan]-d[/] indicates [yellow]debug mode[/]" --print
     rich "    [cyan]-m[/] indicates [yellow]setup user Mutt configuration[/]" --print
@@ -47,7 +47,7 @@ usage() {
   else
     printf "\nUsage: ascinit [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-r] [-t] [-y] [-u] [arg]"
     printf "\nWhere:"
-    printf "\n\t-a indicates do not ask to play an animation when done"
+    printf "\n\t-a indicates ask to play an animation when done"
     printf "\n\t-c indicates console mode - no windowing system, headless config"
     printf "\n\t-d indicates debug mode"
     printf "\n\t-m indicates setup user Mutt configuration"
@@ -652,7 +652,7 @@ fi
   fi
 }
 
-ask_anim=1
+ask_anim=
 console=
 debug=
 init_twit=
@@ -664,7 +664,7 @@ prompt=1
 while getopts "acdmMNnqrtyu" flag; do
   case $flag in
     a)
-        ask_anim=
+        ask_anim=1
         ;;
     c)
         console=1
@@ -696,7 +696,6 @@ while getopts "acdmMNnqrtyu" flag; do
         ;;
     y)
         prompt=
-        ask_anim=
         ;;
     u)
         usage
@@ -2172,27 +2171,29 @@ curl -fsSL "${JETB_URL}" > /tmp/jetb-$$.sh
 
 [ "$ask_anim" ] && {
   type -p asciisplash > /dev/null && {
-    while true
-    do
-      read -p "View an ASCII animation ? (y/n) " yn
-      case $yn in
-        [Yy]* )
-              have_mplayer=`type -p mplayer`
-              if [ "${have_mplayer}" ]
-              then
-                asciisplash -c 1 -a -i
-              else
-                asciisplash -c 1 -i
-              fi
+    [ "${prompt}" ] && {
+      while true
+      do
+        read -p "View an ASCII animation ? (y/n) " yn
+        case $yn in
+          [Yy]* )
               break
               ;;
-        [Nn]* )
+          [Nn]* )
               printf "\nExiting.\n"
               exit 0
               ;;
             * ) echo "Please answer yes or no."
               ;;
-      esac
-    done
+        esac
+      done
+    }
+    have_mplayer=`type -p mplayer`
+    if [ "${have_mplayer}" ]
+    then
+      asciisplash -c 1 -a -i
+    else
+      asciisplash -c 1 -i
+    fi
   }
 }
