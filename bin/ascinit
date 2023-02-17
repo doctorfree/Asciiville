@@ -18,6 +18,7 @@ MUSEDIR="${TOP}/asciiville/music"
 CONFDIR=${TOP}/share/asciiville
 USERCONF="${HOME}/.config"
 NVIMCONF="${USERCONF}/nvim/init.vim"
+GHUC="https://raw.githubusercontent.com"
 OWNER=doctorfree
 BOLD=$(tput bold 2>/dev/null)
 NORM=$(tput sgr0 2>/dev/null)
@@ -711,6 +712,11 @@ argument=`echo "$1" | tr '[:upper:]' '[:lower:]'`
 have_curl=`type -p curl`
 have_jq=`type -p jq`
 have_wget=`type -p wget`
+have_awk=`type -p awk`
+have_fc=`type -p fc-cache`
+have_mktemp=`type -p mktemp`
+have_unlink=`type -p unlink`
+have_unzip=`type -p unzip`
 
 minimal=
 [ "${argument}" == "minimal" ] && minimal=1
@@ -904,6 +910,10 @@ neovim_install=
   install_package wget
   have_wget=`type -p wget`
 }
+[ "${have_awk}" ] || install_package awk
+[ "${have_fc}" ] || install_package fontconfig
+[ "${have_mktemp}" ] && [ "${have_unlink}" ] || install_package coreutils
+[ "${have_unzip}" ] || install_package unzip
 
 # Mutt configuration user setup
 [ "${minimal}" ] || {
@@ -1317,7 +1327,7 @@ BREW_EXE="brew"
 have_brew=`type -p brew`
 [ "${have_brew}" ] || {
   # Install Brew
-  BREW_URL="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+  BREW_URL="${GHUC}/Homebrew/install/HEAD/install.sh"
   curl -fsSL "${BREW_URL}" > /tmp/brew-$$.sh
   [ $? -eq 0 ] || {
     rm -f /tmp/brew-$$.sh
@@ -1330,49 +1340,50 @@ have_brew=`type -p brew`
     rm -f /tmp/brew-$$.sh
     [ "${quiet}" ] || printf "done"
   }
-  if [ -f ${HOME}/.profile ]
-  then
-    BASHINIT="${HOME}/.profile"
-  else
-    if [ -f ${HOME}/.bashrc ]
-    then
-      BASHINIT="${HOME}/.bashrc"
-    else
-      BASHINIT="${HOME}/.profile"
-    fi
-  fi
-  # shellcheck disable=SC2016
-  if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]
-  then
-    BREW_EXE="/home/linuxbrew/.linuxbrew/bin/brew"
-  else
-    if [ -x /usr/local/bin/brew ]
-    then
-      BREW_EXE="/usr/local/bin/brew"
-    else
-      if [ -x /opt/homebrew/bin/brew ]
-      then
-        BREW_EXE="/opt/homebrew/bin/brew"
-      else
-        echo "WARNING: Homebrew brew executable could not be located"
-      fi
-    fi
-  fi
-  if [ -f "${BASHINIT}" ]
-  then
-    grep "^eval \"\$(${BREW_EXE} shellenv)\"" "${BASHINIT}" > /dev/null || {
-      echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${BASHINIT}"
-    }
-  else
-    echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" > "${BASHINIT}"
-  fi
-  [ -f "${HOME}/.zshrc" ] && {
-    grep "^eval \"\$(${BREW_EXE} shellenv)\"" "${HOME}/.zshrc" > /dev/null || {
-      echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${HOME}/.zshrc"
-    }
-  }
-  eval "$(${BREW_EXE} shellenv)"
 }
+
+if [ -f ${HOME}/.profile ]
+then
+  BASHINIT="${HOME}/.profile"
+else
+  if [ -f ${HOME}/.bashrc ]
+  then
+    BASHINIT="${HOME}/.bashrc"
+  else
+    BASHINIT="${HOME}/.profile"
+  fi
+fi
+# shellcheck disable=SC2016
+if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]
+then
+  BREW_EXE="/home/linuxbrew/.linuxbrew/bin/brew"
+else
+  if [ -x /usr/local/bin/brew ]
+  then
+    BREW_EXE="/usr/local/bin/brew"
+  else
+    if [ -x /opt/homebrew/bin/brew ]
+    then
+      BREW_EXE="/opt/homebrew/bin/brew"
+    else
+      echo "WARNING: Homebrew brew executable could not be located"
+    fi
+  fi
+fi
+if [ -f "${BASHINIT}" ]
+then
+  grep "^eval \"\$(${BREW_EXE} shellenv)\"" "${BASHINIT}" > /dev/null || {
+    echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${BASHINIT}"
+  }
+else
+  echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" > "${BASHINIT}"
+fi
+[ -f "${HOME}/.zshrc" ] && {
+  grep "^eval \"\$(${BREW_EXE} shellenv)\"" "${HOME}/.zshrc" > /dev/null || {
+    echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${HOME}/.zshrc"
+  }
+}
+eval "$(${BREW_EXE} shellenv)"
 
 have_brew=`type -p brew`
 if [ "${have_brew}" ]
@@ -1644,7 +1655,7 @@ have_googler=`type -p googler`
   [ -f ${HOME}/.local/bin/googler ] || {
     [ -d ${HOME}/.local ] || mkdir -p ${HOME}/.local
     [ -d ${HOME}/.local/bin ] || mkdir -p ${HOME}/.local/bin
-    GGDL_URL="https://raw.githubusercontent.com/jarun/googler"
+    GGDL_URL="${GHUC}/jarun/googler"
     GGDL_VER="v4.3.2"
     [ "${quiet}" ] || {
       printf "\n\tInstalling googler ..."
@@ -2078,6 +2089,20 @@ touch ${HOME}/.tetris
 }
 printf "\n"
 
+JETB_URL="${GHUC}/JetBrains/JetBrainsMono/master/install_manual.sh"
+curl -fsSL "${JETB_URL}" > /tmp/jetb-$$.sh
+[ $? -eq 0 ] || {
+  rm -f /tmp/jetb-$$.sh
+  curl -kfsSL "${JETB_URL}" > /tmp/jetb-$$.sh
+}
+[ -f /tmp/jetb-$$.sh ] && {
+  chmod 755 /tmp/jetb-$$.sh
+  [ "${quiet}" ] || printf "\n\tInstalling JetBrains Mono font ... "
+  /bin/bash -c "/tmp/jetb-$$.sh" > /dev/null 2>&1
+  rm -f /tmp/jetb-$$.sh
+  [ "${quiet}" ] || printf "done"
+}
+
 [ "${newnvimconf}" ] && {
   [ -f ${NVIMCONF} ] && {
     python3_path=$(command -v python3)
@@ -2122,7 +2147,7 @@ printf "\n"
     }
   }
   [ "${quiet}" ] || {
-    printf "\n\tA Neovim text editor configuration has been created for you in"
+    printf "\n\n\tA Neovim text editor configuration has been created for you in"
     printf "\n\t\t${BOLD}${HOME}/.config/nvim/${NORM}"
     printf "\n\tA good starting point for the Neovim user is the Neovim User Doc at:"
     printf "\n\t\t${BOLD}https://neovim.io/doc/user/${NORM}"

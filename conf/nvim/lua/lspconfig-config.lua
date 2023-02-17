@@ -1,17 +1,11 @@
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
--- local opts = { noremap=true, silent=true }
--- vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
--- vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
--- vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
--- vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 
 -- Style floating windows
 vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
   vim.lsp.handlers.hover,
   {border = 'rounded'}
 )
-
 vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
   vim.lsp.handlers.signature_help,
   {border = 'rounded'}
@@ -90,11 +84,6 @@ require('lspconfig')['dockerls'].setup{}
 require('lspconfig')['marksman'].setup{}
 require('lspconfig')['sqlls'].setup{}
 
--- Note: that these settings will meaningfully increase the time until
---       lua-language-server can service initial requests (completion, location)
---       upon starting as well as time to first diagnostics. Completion results
---       will include a workspace indexing progress message until the server has
---       finished indexing.
 require('lspconfig')['lua_ls'].setup{
   settings = {
     Lua = {

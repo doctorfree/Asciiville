@@ -36,6 +36,8 @@ Plug 'Shougo/deol.nvim'    " Recommended to use together
 Plug 'L3MON4D3/LuaSnip', {'tag': 'v<CurrentMajor>.*', 'do': 'make install_jsregexp'}
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'rafamadriz/friendly-snippets'
+Plug 'gmarik/snipmate.vim'      " TextMate's snippets features in Vim
+Plug 'gmarik/snipmate.snippets' " gmarik's custom snippet collection
 " Plug 'hrsh7th/cmp-vsnip'
 " Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
@@ -125,8 +127,6 @@ Plug 'leafgarland/typescript-vim' " Typescript syntax
 " To disable built-in Typescript indentation:
 " let g:typescript_indent_disable = 1
 Plug 'maxmellon/vim-jsx-pretty' " The React syntax highlighting and indenting
-Plug 'gmarik/snipmate.vim'      " TextMate's snippets features in Vim
-Plug 'gmarik/snipmate.snippets' " gmarik's custom snippet collection
 Plug 'gmarik/vim-markdown'      " Markdown syntax support for Vim
 Plug 'tpope/vim-repeat'     " Remaps '.' to repeat the last plugin map as a whole
 Plug 'tpope/vim-surround'   " Delete/change/add parentheses/quotes/XML-tags/more
@@ -633,6 +633,9 @@ let g:everforest_dim_inactive_windows = 1
 
 " Uncomment to use the Everforest colorscheme
 " colorscheme everforest
-
-set guifont=Inconsolata:h18
+"
 let g:syntastic_html_checkers = []
+
+if exists(':GuiFont')
+  GuiFont! JetBrains Mono:h22
+endif
