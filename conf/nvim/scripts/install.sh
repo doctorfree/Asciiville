@@ -187,13 +187,11 @@ install_brew () {
     eval "$(${BREW_EXE} shellenv)"
     have_brew=`type -p brew`
     [ "${have_brew}" ] && BREW_EXE="brew"
-    have_gcc=`type -p gcc`
-    [ "${have_gcc}" ] || {
-      log "Install gcc (recommended by brew) ..."
-      ${BREW_EXE} install --quiet gcc > /dev/null 2>&1
-      [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet gcc > /dev/null 2>&1
+    log "Install gcc (recommended by brew) ..."
+    ${BREW_EXE} install --quiet gcc > /dev/null 2>&1
+#   [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet gcc > /dev/null 2>&1
       printf " done"
-    }
+#   }
   fi
   [ "${HOMEBREW_HOME}" ] || {
     brewpath=$(command -v brew)
