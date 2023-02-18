@@ -145,7 +145,31 @@ hints, and info. Help is often available for the word or line on which the
 cursor is positioned by typing `Shift-K` and `Ctrl-K`.
 
 The configuration for language servers and facilities used by `nvim-lspconfig`
-and `nvim-cmp` can be found in `~/.config/nvim/lua/`.
+and `nvim-cmp` can be found in `~/.config/nvim/lua/`. Current support:
+
+```
+Parser/Features         H L F I J
+  - css                 ✓ . ✓ ✓ ✓
+  - javascript          ✓ ✓ ✓ ✓ ✓
+  - python              ✓ ✓ ✓ ✓ ✓
+  - go                  ✓ ✓ ✓ ✓ ✓
+  - json                ✓ ✓ ✓ ✓ .
+  - vim                 ✓ ✓ ✓ . ✓
+  - lua                 ✓ ✓ ✓ ✓ ✓
+  - c                   ✓ ✓ ✓ ✓ ✓
+  - help                ✓ . . . ✓
+  - query               ✓ ✓ ✓ ✓ ✓
+  - yaml                ✓ ✓ ✓ ✓ ✓
+  - comment             ✓ . . . .
+  - toml                ✓ ✓ ✓ ✓ ✓
+  - html                ✓ ✓ ✓ ✓ ✓
+  - bash                ✓ ✓ ✓ . ✓
+  - cmake               ✓ . ✓ . .
+  - regex               ✓ . . . .
+  - java                ✓ ✓ . ✓ ✓
+
+  Legend: H[ighlight], L[ocals], F[olds], I[ndents], In[j]ections
+```
 
 ### Key mappings
 
