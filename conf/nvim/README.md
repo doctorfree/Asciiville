@@ -2,7 +2,7 @@
 
 [Neovim](https://neovim.io) is a fork of the [Vim](vim.md) text editor that strives to improve the extensibility and maintainability of Vim. Some features of the fork include built-in Language Server Protocol support, support for asynchronous I/O, and support for scripting using Lua.
 
-![](neovim.png)
+![](screenshots/neovim.png)
 
 ## Table of Contents
 
@@ -12,6 +12,7 @@
     1. [Language servers](#language-servers)
     1. [Key mappings](#key-mappings)
 1. [Plugins](#plugins)
+1. [Screenshots](#screenshots)
 1. [Usage](#usage)
 
 ## Introduction
@@ -180,7 +181,7 @@ The `setcolors.vim` plugin creates the following key mappings:
 - `<F8>` Next colorscheme and airline theme
 - `<F9>` Random colorscheme and airline theme
 
-For example, when `<F8>` is pressed the next colorscheme in the list is used. 
+For example, when `<F8>` is pressed the next colorscheme in the list is used.
 Note that both the Neovim colorscheme and the Airline theme are set. These
 two color schemes need to be coordinated to provide proper contrast and
 readability. The default colorschemes above take care of this. If you change
@@ -192,8 +193,20 @@ compatible [Airline themes](https://github.com/vim-airline/vim-airline-themes).
 See a list of
 [Neovim plugins installed, configured, and enabled in Asciiville](Plugins-urls.md).
 Each of the plugins used in the Asciiville Neovim configuration is listed
-and linked to its GitHub repository where configuration and user documentation 
+and linked to its GitHub repository where configuration and user documentation
 can be found.
+
+## Screenshots
+
+Neovim editing sessions illustrating `:vsplit <filename>`, Python script on left
+and Bash script on right. The first screenshot is using the `asciiville`
+colorscheme and the second uses the `everforest` colorscheme. The colorschemes
+and `vim-airline` themes are included with Asciiville and can be switched
+between using `<F8>` (along with several other compatible colorschemes).
+
+![](screenshots/neovim-split1.png)
+
+![](screenshots/neovim-split2.png)
 
 ## Usage
 

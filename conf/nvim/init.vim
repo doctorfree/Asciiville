@@ -1,11 +1,11 @@
 """
-"      _                      _    _           _   __   __         
-"     / \                    (_)  (_)         (_) [  | [  |        
-"    / _ \     .--.   .---.  __   __  _   __  __   | |  | | .---.  
-"   / ___ \   ( (`\] / /'`\][  | [  |[ \ [  ][  |  | |  | |/ /__\\ 
-" _/ /   \ \_  `'.'. | \__.  | |  | | \ \/ /  | |  | |  | || \__., 
-"|____| |____|[\__) )'.___.'[___][___] \__/  [___][___][___]'.__.' 
-"                                                                  
+"      _                      _    _           _   __   __
+"     / \                    (_)  (_)         (_) [  | [  |
+"    / _ \     .--.   .---.  __   __  _   __  __   | |  | | .---.
+"   / ___ \   ( (`\] / /'`\][  | [  |[ \ [  ][  |  | |  | |/ /__\\
+" _/ /   \ \_  `'.'. | \__.  | |  | | \ \/ /  | |  | |  | || \__.,
+"|____| |____|[\__) )'.___.'[___][___] \__/  [___][___][___]'.__.'
+"
 "-----------------Neovim Initialization Vimscript----------------
 "
 "  Version : 1.0.0
@@ -17,7 +17,7 @@
 "
 """ Vim-Plug managed plugins
 "
-" Use ':help vim-plug' or ':help plug-options' for assistance with Vim-Plug 
+" Use ':help vim-plug' or ':help plug-options' for assistance with Vim-Plug
 
 call plug#begin()
 
@@ -264,11 +264,11 @@ set wildmode=longest,list
 " When in : cmdline mode, wildmenu suggestions will be automatically provided.
 " When searching using /, suggestions from the current buffer will be provided.
 " Substring matching is used by default.
-" 
+"
 " Use <Tab> to cycle through the list forwards, and <S-Tab> to move backwards.
-" 
+"
 " The keybinds can be changed:
-" 
+"
 " Default keys
 " call wilder#setup({
 "       \ 'modes': [':', '/', '?'],
