@@ -323,7 +323,7 @@ git_clone_neovim_config () {
 check_python () {
   brew_path=$(command -v brew)
   brew_dir=$(dirname ${brew_path})
-  if [ -x ${brew_dir}/python3 ] 
+  if [ -x ${brew_dir}/python3 ]
   then
     PYTHON="${brew_dir}/python3"
   else
@@ -399,15 +399,10 @@ install_npm () {
       printf " done"
 
       log "Installing language servers ..."
-      # Could also install the language servers with brew, for example:
-      #   brew install bash-language-server
-      #
       # python language server
       npm i -g pyright > /dev/null 2>&1
       # typescript language server
       npm i -g typescript typescript-language-server > /dev/null 2>&1
-      # bash language server
-      npm i -g bash-language-server > /dev/null 2>&1
       # awk language server
       npm i -g awk-language-server > /dev/null 2>&1
       # css language server
@@ -417,7 +412,7 @@ install_npm () {
       # docker language server
       npm i -g dockerfile-language-server-nodejs > /dev/null 2>&1
       # brew installed language servers
-      for server in ansible haskell sql lua yaml
+      for server in ansible bash haskell sql lua yaml
       do
         ${BREW_EXE} install -q ${server}-language-server > /dev/null 2>&1
         [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet \
