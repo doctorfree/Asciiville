@@ -200,13 +200,28 @@ can be found.
 
 Neovim editing sessions illustrating `:vsplit <filename>`, Python script on left
 and Bash script on right. The first screenshot is using the `asciiville`
-colorscheme and the second uses the `everforest` colorscheme. The colorschemes
+colorscheme, the second uses the `everforest` colorscheme, and the third
+screenshot is using the `solarized` colorscheme. The colorschemes
 and `vim-airline` themes are included with Asciiville and can be switched
 between using `<F8>` (along with several other compatible colorschemes).
 
-![](screenshots/neovim-split1.png)
+Here we can see an example of the search bar enabled by the Wilder plugin with
+completions and suggestions matching the search. These suggestions can be
+rapidly accessed with `<Tab>`.
 
-![](screenshots/neovim-split2.png)
+![](screenshots/neovim-wilder.png)
+
+In this screenshot we see the `vim-airline` plugin status bar. The status bar
+displays different information depending on what mode you are in. Color themes
+for airline are coordinated with the selected Neovim colorscheme.
+
+![](screenshots/neovim-airline.png)
+
+This screenshot illustrates the autocompletion and suggestions provided by
+the `nvim-cmp` plugin. Custom icons are used to denote type, rounded borders
+and styling provide an easy on the eyes look and feel.
+
+![](screenshots/nvim-cmp.png)
 
 ## Usage
 
