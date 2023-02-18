@@ -121,7 +121,7 @@ Plug 'vim-airline/vim-airline-themes' " Airline status themes
 let g:airline_theme='asciiville'
 Plug 'fladson/vim-kitty' " Kitty config syntax highlighting for vim
 " Language support
-Plug 'fatih/vim-go'            " Go language support for Vim
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } " Go language support for Vim
 Plug 'yuezk/vim-js'            " Syntax highlighting for JavaScript and Flow.js
 Plug 'leafgarland/typescript-vim' " Typescript syntax
 " To disable built-in Typescript indentation:

@@ -154,32 +154,60 @@ install_brew () {
     # shellcheck disable=SC2016
     if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]
     then
-      BREW_EXE="/home/linuxbrew/.linuxbrew/bin/brew"
-      HOMEBREW_HOME="/home/linuxbrew/"
+      HOMEBREW_HOME="/home/linuxbrew/.linuxbrew"
+      BREW_EXE="${HOMEBREW_HOME}/bin/brew"
     else
       if [ -x /usr/local/bin/brew ]
       then
-        BREW_EXE="/usr/local/bin/brew"
-        HOMEBREW_HOME="/usr/local/"
+        HOMEBREW_HOME="/usr/local"
+        BREW_EXE="${HOMEBREW_HOME}/bin/brew"
       else
         if [ -x /opt/homebrew/bin/brew ]
         then
-          BREW_EXE="/opt/homebrew/bin/brew"
-          HOMEBREW_HOME="/opt/homebrew/"
+          HOMEBREW_HOME="/opt/homebrew"
+          BREW_EXE="${HOMEBREW_HOME}/bin/brew"
         else
           abort "Homebrew brew executable could not be located"
         fi
       fi
     fi
+    GOTEXT='# Go paths
+[ -d ~/go ] && export GOPATH=$HOME/go
+[ "$GOPATH" ] && [ -d "$GOPATH/bin" ] && PATH="$PATH:$GOPATH/bin"
+
+if [ -d __YYY__/opt/go ]
+then
+  export GOROOT=__YYY__/opt/go
+else
+  [ -d /usr/local/go ] && export GOROOT=/usr/local/go
+fi
+[ -d ${GOROOT}/bin ] && {
+  if [ `echo $PATH | grep -c ${GOROOT}/bin` -ne "1" ]; then
+    PATH="$PATH:${GOROOT}/bin"
+  fi
+}
+[ -d $HOME/go/bin ] && {
+  if [ `echo $PATH | grep -c $HOME/go/bin` -ne "1" ]; then
+    PATH="$PATH:$HOME/go/bin"
+  fi
+}'
+
     if [ -f "${BASHINIT}" ]
     then
+      grep "export GOROOT" "${BASHINIT}" > /dev/null || {
+        echo "${GOTEXT}" | sed -e "s%__YYY__%${HOMEBREW_HOME}%" >> "${BASHINIT}"
+      }
       grep "^eval \"\$(${BREW_EXE} shellenv)\"" "${BASHINIT}" > /dev/null || {
         echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${BASHINIT}"
       }
     else
-      echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" > "${BASHINIT}"
+      echo "${GOTEXT}" | sed -e "s%__YYY__%${HOMEBREW_HOME}%" > "${BASHINIT}"
+      echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${BASHINIT}"
     fi
     [ -f "${HOME}/.zshrc" ] && {
+      grep "export GOROOT" "${HOME}/.zshrc" > /dev/null || {
+        echo "${GOTEXT}" | sed -e "s%__YYY__%${HOMEBREW_HOME}%" >> "${HOME}/.zshrc"
+      }
       grep "^eval \"\$(${BREW_EXE} shellenv)\"" "${HOME}/.zshrc" > /dev/null || {
         echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${HOME}/.zshrc"
       }
@@ -189,9 +217,7 @@ install_brew () {
     [ "${have_brew}" ] && BREW_EXE="brew"
     log "Install gcc (recommended by brew) ..."
     ${BREW_EXE} install --quiet gcc > /dev/null 2>&1
-#   [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet gcc > /dev/null 2>&1
-      printf " done"
-#   }
+    printf " done"
   fi
   [ "${HOMEBREW_HOME}" ] || {
     brewpath=$(command -v brew)
