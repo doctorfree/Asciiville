@@ -147,6 +147,7 @@ cursor is positioned by typing `Shift-K` and `Ctrl-K`.
 The configuration for language servers and facilities used by `nvim-lspconfig`
 and `nvim-cmp` can be found in `~/.config/nvim/lua/`. Current support:
 
+```
 Parser/Features         H L F I J
   - css                 ✓ . ✓ ✓ ✓
   - javascript          ✓ ✓ ✓ ✓ ✓
@@ -168,6 +169,7 @@ Parser/Features         H L F I J
   - java                ✓ ✓ . ✓ ✓
 
   Legend: H[ighlight], L[ocals], F[olds], I[ndents], In[j]ections
+```
 
 ### Key mappings
 
