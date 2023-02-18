@@ -2159,8 +2159,8 @@ curl -fsSL "${JETB_URL}" > /tmp/jetb-$$.sh
 
 [ "${quiet}" ] || {
   printf "\n\n${BOLD}Asciiville Initialization Complete${NORM}\n"
-  printf "\n${BOLD}Logout, open a new shell, or reinitialize your current shell${NORM}"
-  printf "\n${BOLD}in order to set your execution PATH appropriately${NORM}\n"
+  printf "\nLogout, open a new shell, or reinitialize your current shell"
+  printf "\nin order to set your execution PATH appropriately\n"
   [ "${init_twit}" ] || {
     printf "\nAuthorize the Rainbow Stream app at Twitter"
     printf "\nby running the ${BOLD}'rainbowstream'${NORM} command\n"
@@ -2169,7 +2169,8 @@ curl -fsSL "${JETB_URL}" > /tmp/jetb-$$.sh
   printf "\n\t${BOLD}https://github.com/doctorfree/Asciiville/wiki${NORM}\n"
 }
 
-[ "$ask_anim" ] && {
+if [ "$ask_anim" ]
+then
   type -p asciisplash > /dev/null && {
     [ "${prompt}" ] && {
       while true
@@ -2188,12 +2189,11 @@ curl -fsSL "${JETB_URL}" > /tmp/jetb-$$.sh
         esac
       done
     }
-    have_mplayer=`type -p mplayer`
-    if [ "${have_mplayer}" ]
-    then
-      asciisplash -c 1 -a -i
-    else
-      asciisplash -c 1 -i
-    fi
+    asciisplash -c 1 -a -i
   }
-}
+else
+  [ "${quiet}" ] || {
+    printf "View an Asciiville animation with:"
+    printf "\n\t${BOLD}asciisplash -c 1 -a -i${NORM}\n"
+  }
+fi

@@ -79,15 +79,15 @@ while getopts "AabCc:dijJmps:u" flag; do
       A)
         all=1
         ;;
+      a)
+        audio=1
+        ;;
       b)
         audio=1
         custom_audio=1
         TMPSONG=${SONG}
         SONG=${ALTSONG}
         ALTSONG=${TMPSONG}
-        ;;
-      a)
-        audio=1
         ;;
       C)
         switch_comments=1
@@ -155,6 +155,11 @@ while getopts "AabCc:dijJmps:u" flag; do
 done
 shift $(( OPTIND - 1 ))
 
+have_mplayer=`type -p mplayer`
+[ "${have_mplayer}" ] || {
+  audio=
+  custom_audio=
+}
 [ "${all}" ] && script_args=
 [ "${switch_comments}" ] && script_args=
 [ "${script}" == "plasma" ] || [ "${longjulia}" ] || script_args=
