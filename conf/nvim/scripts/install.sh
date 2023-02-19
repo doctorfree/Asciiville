@@ -332,8 +332,8 @@ fixup_init_vim () {
     have_nvim=`type -p nvim`
     [ "${have_nvim}" ] && {
       grep "^Plug " ${NVIMCONF} > /dev/null && {
-        nvim -i NONE -c 'PlugInstall' -c 'qa'
-        nvim -i NONE -c 'UpdateRemotePlugins' -c 'qa'
+        nvim -es -i NONE -c 'set nomore' -c "PlugInstall" -c 'qa'
+        nvim -es -i NONE -c 'set nomore' -c "UpdateRemotePlugins" -c 'qa'
 		[ "${BREW_EXE}" ] || BREW_EXE=brew
         BREW_ROOT="$(${BREW_EXE} --prefix)"
 		[ "${BREW_ROOT}" ] && {
@@ -350,8 +350,11 @@ fixup_init_vim () {
           fi
 		}
         [ "${GOPATH}" ] || export GOPATH="${HOME}/go"
-        mkdir -p ${GOPATH} ${GOPATH}/src ${GOPATH}/pkg ${GOPATH}/bin
-        nvim -i NONE -c 'GoInstallBinaries' -c 'qa'
+        for gop in ${GOPATH} ${GOPATH}/src ${GOPATH}/pkg ${GOPATH}/bin
+        do
+          [ -d "${gop}" ] || mkdir -p "${gop}"
+        done
+        nvim -es -i NONE -c 'set nomore' -c "GoInstallBinaries" -c 'qa'
       }
     }
   }

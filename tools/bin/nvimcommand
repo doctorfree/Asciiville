@@ -6,9 +6,20 @@
 #
 # nvimcommand PlugClean    # Runs the :PlugClean command to remove unused plugins
 # nvimcommand PlugInstall  # Runs the :PlugInstall command to install plugins
+#
+# Summary of the Neovim arguments:
+#
+# -i NONE           Ignore the |viminfo| file (to avoid disturbing the
+#                   user's settings).
+# -es               Ex mode + silent batch mode -s-ex
+#                   Attention: Must be given in that order!
+# -c 'set nomore'   Suppress the more-prompt when the screen is filled
+#                   with messages or output to avoid blocking.
+# -c 'qa'           "Quit all" windows after commands complete
+
 
 [ "$1" ] || {
   echo "Argument required. Exiting."
   exit 1
 }
-nvim -c "$*" -c 'qa'
+nvim -es -i NONE -c 'set nomore' -c "$*" -c 'qa'
