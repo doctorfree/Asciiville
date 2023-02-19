@@ -332,8 +332,8 @@ fixup_init_vim () {
     have_nvim=`type -p nvim`
     [ "${have_nvim}" ] && {
       grep "^Plug " ${NVIMCONF} > /dev/null && {
-        nvim -es -i NONE -c 'set nomore' -c "PlugInstall" -c 'qa'
-        nvim -es -i NONE -c 'set nomore' -c "UpdateRemotePlugins" -c 'qa'
+        nvim -es -i NONE -c "PlugInstall" -c 'qa'
+        nvim -es -i NONE -c "UpdateRemotePlugins" -c 'qa'
 		[ "${BREW_EXE}" ] || BREW_EXE=brew
         BREW_ROOT="$(${BREW_EXE} --prefix)"
 		[ "${BREW_ROOT}" ] && {
@@ -354,7 +354,7 @@ fixup_init_vim () {
         do
           [ -d "${gop}" ] || mkdir -p "${gop}"
         done
-        nvim -es -i NONE -c 'set nomore' -c "GoInstallBinaries" -c 'qa'
+        nvim -es -i NONE -c "GoInstallBinaries" -c 'qa'
       }
     }
   }
