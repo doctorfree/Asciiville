@@ -355,6 +355,7 @@ fixup_init_vim () {
         nvim -i NONE -c "PlugInstall" -c 'qa'
         nvim -i NONE -c "UpdateRemotePlugins" -c 'qa'
         nvim -i NONE -c "GoInstallBinaries" -c 'qa'
+        nvim -i NONE -c "GoUpdateBinaries" -c 'qa'
       }
     }
   }
@@ -476,6 +477,7 @@ install_npm () {
       done
       ${BREW_EXE} install -q ccls > /dev/null 2>&1
       ${BREW_EXE} link --overwrite --quiet ccls > /dev/null 2>&1
+      ${BREW_EXE} install -q gopls > /dev/null 2>&1
       ${BREW_EXE} install -q marksman > /dev/null 2>&1
       ${BREW_EXE} install -q rust-analyzer > /dev/null 2>&1
       [ "${PYTHON}" ] && {

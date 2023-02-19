@@ -50,6 +50,7 @@ Plug 'kyazdani42/nvim-tree.lua'
 " Debug adapter
 Plug 'mfussenegger/nvim-dap'
 Plug 'rcarriga/nvim-dap-ui'
+Plug 'theHamsta/nvim-dap-virtual-text'
 
 " Functionalities
 Plug 'tpope/vim-fugitive'
@@ -548,6 +549,11 @@ endif
 if exists('g:plugs["nvim-dap"]')
   if !empty(glob(g:plugs['nvim-dap'].dir.'/lua/nvim-dap/plugin/dap.lua'))
     lua require('dap-config')
+  endif
+endif
+if exists('g:plugs["nvim-dap-virtual-text"]')
+  if !empty(glob(g:plugs['nvim-dap-virtual-text'].dir.'/lua/nvim-dap-virtual-text.lua'))
+    lua require('dap-virtual-text-config')
   endif
 endif
 if exists('g:plugs["fidget.nvim"]')
