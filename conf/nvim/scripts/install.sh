@@ -329,32 +329,32 @@ fixup_init_vim () {
         rm -f /tmp/nvim$$
       }
     }
+		[ "${BREW_EXE}" ] || BREW_EXE=brew
+    BREW_ROOT="$(${BREW_EXE} --prefix)"
+		[ "${BREW_ROOT}" ] && {
+      if [ -d ${BREW_ROOT}/opt/go/libexec ]
+      then
+        export GOROOT="${BREW_ROOT}/opt/go/libexec"
+      else
+        if [ -d ${BREW_ROOT}/opt/go ]
+        then
+          export GOROOT="${BREW_ROOT}/opt/go"
+        else
+          [ -d ${BREW_ROOT}/go ] && export GOROOT="${BREW_ROOT}/go"
+        fi
+      fi
+		}
+    [ "${GOPATH}" ] || export GOPATH="${HOME}/go"
+    for gop in ${GOPATH} ${GOPATH}/src ${GOPATH}/pkg ${GOPATH}/bin
+    do
+      [ -d "${gop}" ] || mkdir -p "${gop}"
+    done
     have_nvim=`type -p nvim`
     [ "${have_nvim}" ] && {
       grep "^Plug " ${NVIMCONF} > /dev/null && {
-        nvim -es -i NONE -c "PlugInstall" -c 'qa'
-        nvim -es -i NONE -c "UpdateRemotePlugins" -c 'qa'
-		[ "${BREW_EXE}" ] || BREW_EXE=brew
-        BREW_ROOT="$(${BREW_EXE} --prefix)"
-		[ "${BREW_ROOT}" ] && {
-          if [ -d ${BREW_ROOT}/opt/go/libexec ]
-          then
-            export GOROOT="${BREW_ROOT}/opt/go/libexec"
-          else
-            if [ -d ${BREW_ROOT}/opt/go ]
-            then
-              export GOROOT="${BREW_ROOT}/opt/go"
-            else
-              [ -d ${BREW_ROOT}/go ] && export GOROOT="${BREW_ROOT}/go"
-            fi
-          fi
-		}
-        [ "${GOPATH}" ] || export GOPATH="${HOME}/go"
-        for gop in ${GOPATH} ${GOPATH}/src ${GOPATH}/pkg ${GOPATH}/bin
-        do
-          [ -d "${gop}" ] || mkdir -p "${gop}"
-        done
-        nvim -es -i NONE -c "GoInstallBinaries" -c 'qa'
+        nvim -i NONE -c "PlugInstall" -c 'qa'
+        nvim -i NONE -c "UpdateRemotePlugins" -c 'qa'
+        nvim -i NONE -c "GoInstallBinaries" -c 'qa'
       }
     }
   }
