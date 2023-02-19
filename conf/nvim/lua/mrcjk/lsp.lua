@@ -173,7 +173,7 @@ function lsp.start_or_attach_haskell_tools()
         icon = '',
       },
       definition = {
-        hoogle_signature_fallback = true,
+        -- hoogle_signature_fallback = true,
       },
     },
     hls = {
@@ -181,7 +181,7 @@ function lsp.start_or_attach_haskell_tools()
         lsp.on_attach(client, bufnr)
         lsp.on_dap_attach(bufnr)
         local opts = vim.tbl_extend('keep', keymap_opts, { buffer = bufnr })
-        vim.keymap.set('n', 'gh', ht.hoogle.hoogle_signature, opts)
+        -- vim.keymap.set('n', 'gh', ht.hoogle.hoogle_signature, opts)
         vim.keymap.set('n', '<space>tg', telescope.extensions.ht.package_grep, opts)
         vim.keymap.set('n', '<space>th', telescope.extensions.ht.package_hsgrep, opts)
         vim.keymap.set('n', '<space>tf', telescope.extensions.ht.package_files, opts)

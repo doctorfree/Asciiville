@@ -29,9 +29,15 @@ vim.cmd([[
   command! -nargs=0 DapSidebar :lua require('dap-setup').sidebar.toggle()
 ]])
 
+-- dap.defaults.fallback.external_terminal = {
+--   command = '/usr/bin/alacritty',
+--   args = { '-e' },
+-- }
 dap.defaults.fallback.external_terminal = {
-  command = '/usr/bin/alacritty',
-  args = { '-e' },
+  command = 'kitty',
+  args = {
+    '--hold',
+  },
 }
 
 -- Haskell
@@ -87,7 +93,8 @@ dap.adapters.nlua = function(callback, config)
   }
   local handle
   local pid_or_err
-  handle, pid_or_err = vim.loop.spawn('alacritty', options, function(code)
+  -- handle, pid_or_err = vim.loop.spawn('alacritty', options, function(code)
+  handle, pid_or_err = vim.loop.spawn('kitty', options, function(code)
     handle:close()
     if code ~= 0 then
       print('nvim exited', code)

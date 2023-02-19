@@ -44,12 +44,12 @@ Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
 
 " Debug adapter
 Plug 'mfussenegger/nvim-dap'
+Plug 'rcarriga/nvim-dap-ui'
 
 " Functionalities
 Plug 'tpope/vim-fugitive'
@@ -71,6 +71,9 @@ Plug 'simrat39/inlay-hints.nvim'
 Plug 'camilledejoye/nvim-lsp-selection-range'
 Plug 'simrat39/rust-tools.nvim'
 Plug 'mrcjkb/haskell-tools.nvim', { 'branch': '1.x.x' }
+
+" Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
 
 " CoC Nodejs extension host
 " Load extensions like VSCode and host language servers
@@ -171,22 +174,6 @@ Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
 " Register vim-plug as a plugin to enable help  (e.g. :help plug-options)
 Plug 'junegunn/vim-plug'
 
-if has('nvim')
-  function! UpdateRemotePlugins(...)
-    " Needed to refresh runtime files
-    let &rtp=&rtp
-    UpdateRemotePlugins
-  endfunction
-
-  Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
-else
-  Plug 'gelguy/wilder.nvim'
-
-  " To use Python remote plugin features in Vim, can be skipped
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-
 " Functionalities - Python
 Plug 'psf/black', { 'branch': 'stable' }
 Plug 'heavenshell/vim-pydocstring'
@@ -213,6 +200,22 @@ Plug 'doctorfree/setcolors.vim' " Easily switch colorschemes
 let g:mycolorschemes = ['asciiville', 'everforest', 'cool', 'desertink', 'distinguished', 'hybrid', 'luna', 'molokai', 'solarized', 'zenburn']
 
 " Aesthetics - Others
+if has('nvim')
+  function! UpdateRemotePlugins(...)
+    " Needed to refresh runtime files
+    let &rtp=&rtp
+    UpdateRemotePlugins
+  endfunction
+
+  Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
+else
+  Plug 'gelguy/wilder.nvim'
+
+  " To use Python remote plugin features in Vim, can be skipped
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/vim-journal'

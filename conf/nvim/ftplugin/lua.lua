@@ -1,6 +1,7 @@
 local lsp = require('mrcjk.lsp')
 
 require('neodev').setup {
+  library = { plugins = { "nvim-dap-ui" }, types = true },
   override = function(root_dir, library)
     local util = require('neodev.util')
     if util.has_file(root_dir, '/etc/nixos') or util.has_file(root_dir, 'nvim-config') then
