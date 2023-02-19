@@ -132,7 +132,8 @@ Plug 'vim-airline/vim-airline-themes' " Airline status themes
 let g:airline_theme='asciiville'
 Plug 'fladson/vim-kitty' " Kitty config syntax highlighting for vim
 " Language support
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } " Go language support for Vim
+Plug 'ray-x/go.nvim'           " Go language support for Neovim
+Plug 'ray-x/guihua.lua'        " Floating window support
 Plug 'yuezk/vim-js'            " Syntax highlighting for JavaScript and Flow.js
 Plug 'leafgarland/typescript-vim' " Typescript syntax
 " To disable built-in Typescript indentation:
@@ -552,6 +553,11 @@ endif
 if exists('g:plugs["fidget.nvim"]')
   if !empty(glob(g:plugs['fidget.nvim'].dir.'/lua/fidget.lua'))
     lua require"fidget".setup{}
+  endif
+endif
+if exists('g:plugs["go.nvim"]')
+  if !empty(glob(g:plugs['go.nvim'].dir.'/lua/go.lua'))
+    lua require('go-config')
   endif
 endif
 if exists('g:plugs["inlay-hints.nvim"]')

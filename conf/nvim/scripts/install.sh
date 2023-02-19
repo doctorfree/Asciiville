@@ -336,7 +336,7 @@ fixup_init_vim () {
         nvim -i NONE -c 'UpdateRemotePlugins' -c 'qa'
 		[ "${BREW_EXE}" ] || BREW_EXE=brew
         export GOROOT="$(${BREW_EXE} --prefix)/opt/go"
-        nvim -i NONE -c 'GoUpdateBinaries' -c 'qa'
+        nvim -i NONE -c 'GoInstallBinaries' -c 'qa'
       }
     }
   }
