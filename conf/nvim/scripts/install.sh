@@ -352,10 +352,10 @@ fixup_init_vim () {
     have_nvim=`type -p nvim`
     [ "${have_nvim}" ] && {
       grep "^Plug " ${NVIMCONF} > /dev/null && {
-        nvim -i NONE -c "PlugInstall" -c 'qa'
-        nvim -i NONE -c "UpdateRemotePlugins" -c 'qa'
-        nvim -i NONE -c "GoInstallBinaries" -c 'qa'
-        nvim -i NONE -c "GoUpdateBinaries" -c 'qa'
+        nvim -i NONE -c 'set nomore' -c 'PlugInstall' -c 'qa'
+        nvim -i NONE -c 'set nomore' -c 'UpdateRemotePlugins' -c 'qa'
+        nvim -i NONE -c 'set nomore' -c 'GoInstallBinaries' -c 'qa'
+#       nvim -i NONE -c 'GoUpdateBinaries' -c 'qa'
       }
     }
   }
