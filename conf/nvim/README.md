@@ -1,6 +1,6 @@
 # Asciiville Neovim text editor
 
-[Neovim](https://neovim.io) is a fork of the [Vim](vim.md) text editor that strives to improve the extensibility and maintainability of Vim. Some features of the fork include built-in Language Server Protocol support, support for asynchronous I/O, and support for scripting using Lua.
+[Neovim](https://neovim.io) is a fork of the [Vim](https://en.wikipedia.org/wiki/Vim_(text_editor)) text editor that strives to improve the extensibility and maintainability of Vim. Some features of the fork include built-in Language Server Protocol support, support for asynchronous I/O, and support for scripting using Lua.
 
 ![](screenshots/neovim.png)
 
@@ -132,6 +132,11 @@ and configured by Asciiville initialization:
 - [tsserver](https://github.com/typescript-language-server/typescript-language-server) : TypeScript language server
 - [vimls](https://github.com/iamcco/vim-language-server) : VimScript language server
 - [yamlls](https://github.com/redhat-developer/yaml-language-server) : YAML language server
+
+The Asciiville Neovim installation uses the
+[go.nvim Neovim plugin](https://github.com/ray-x/go.nvim) to provide a modern
+Go development environment inside Neovim. The go.nvim plugin is based on gopls,
+treesitter AST, Dap and a variety of Go tools.
 
 For other language servers, see [LSP server configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
 

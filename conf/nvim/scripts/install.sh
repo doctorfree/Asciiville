@@ -335,7 +335,22 @@ fixup_init_vim () {
         nvim -i NONE -c 'PlugInstall' -c 'qa'
         nvim -i NONE -c 'UpdateRemotePlugins' -c 'qa'
 		[ "${BREW_EXE}" ] || BREW_EXE=brew
-        export GOROOT="$(${BREW_EXE} --prefix)/opt/go"
+        BREW_ROOT="$(${BREW_EXE} --prefix)"
+		[ "${BREW_ROOT}" ] && {
+          if [ -d ${BREW_ROOT}/opt/go/libexec ]
+          then
+            export GOROOT="${BREW_ROOT}/opt/go/libexec"
+          else
+            if [ -d ${BREW_ROOT}/opt/go ]
+            then
+              export GOROOT="${BREW_ROOT}/opt/go"
+            else
+              [ -d ${BREW_ROOT}/go ] && export GOROOT="${BREW_ROOT}/go"
+            fi
+          fi
+		}
+        [ "${GOPATH}" ] || export GOPATH="${HOME}/go"
+        mkdir -p ${GOPATH} ${GOPATH}/src ${GOPATH}/pkg ${GOPATH}/bin
         nvim -i NONE -c 'GoInstallBinaries' -c 'qa'
       }
     }
