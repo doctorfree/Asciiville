@@ -2172,6 +2172,7 @@ curl -fsSL "${JETB_URL}" > /tmp/jetb-$$.sh
       grep "^Plug " ${NVIMCONF} > /dev/null && {
         nvim -i NONE -c 'PlugInstall' -c 'qa'
         nvim -i NONE -c 'UpdateRemotePlugins' -c 'qa'
+        nvim -i NONE -c 'GoUpdateBinaries' -c 'qa'
       }
     }
   }

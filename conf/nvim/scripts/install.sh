@@ -226,7 +226,7 @@ fi
   }
   log "    Homebrew installed in ${HOMEBREW_HOME}"
   log "    See ${DOC_HOMEBREW}"
-  log "Install gcc (recommended by brew) ..."
+  log "Installing Homebrew gcc, cmake, and make ..."
   ${BREW_EXE} install --quiet gcc > /dev/null 2>&1
   ${BREW_EXE} install --quiet cmake > /dev/null 2>&1
   ${BREW_EXE} install --quiet make > /dev/null 2>&1
@@ -332,6 +332,7 @@ fixup_init_vim () {
       grep "^Plug " ${NVIMCONF} > /dev/null && {
         nvim -i NONE -c 'PlugInstall' -c 'qa'
         nvim -i NONE -c 'UpdateRemotePlugins' -c 'qa'
+        nvim -i NONE -c 'GoUpdateBinaries' -c 'qa'
       }
     }
   }
@@ -425,6 +426,10 @@ install_npm () {
     [ "${minimal}" ] || {
       log "Installing Neovim npm package ..."
       npm i -g neovim > /dev/null 2>&1
+      printf " done"
+
+      log "Installing the icon font for Visual Studio Code ..."
+      npm i -g @vscode/codicons
       printf " done"
 
       log "Installing language servers ..."

@@ -72,9 +72,6 @@ Plug 'camilledejoye/nvim-lsp-selection-range'
 Plug 'simrat39/rust-tools.nvim'
 Plug 'mrcjkb/haskell-tools.nvim', { 'branch': '1.x.x' }
 
-" Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
-
 " CoC Nodejs extension host
 " Load extensions like VSCode and host language servers
 " Commented out for now, using lspconfig and installed language servers
@@ -157,9 +154,10 @@ Plug 'lambdalisue/suda.vim' " Alternative sudo for vim
 " :SudaWrite
 " Write contents to /etc/profile
 " :SudaWrite /etc/profile
-Plug 'ctrlpvim/ctrlp.vim'  " Fuzzy file, buffer, mru, tag finder for Vim
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'    " Things you can do with fzf and Vim
+" Plug 'ctrlpvim/ctrlp.vim'  " Fuzzy file, buffer, mru, tag finder for Vim
+" Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+" Plug 'junegunn/fzf.vim'    " Things you can do with fzf and Vim
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'romgrk/fzy-lua-native' " Needed for lua_fzy_highlighter in wilder
 Plug 'sheerun/vim-polyglot'  " Better syntax highlighting
 Plug 'folke/which-key.nvim'  " Easily find key map bindings
