@@ -33,7 +33,7 @@ Plug 'hrsh7th/nvim-cmp'    " A completion engine plugin for Neovim
 Plug 'tamago324/cmp-zsh'   " Zsh completion for cmp
 Plug 'Shougo/deol.nvim'    " Recommended to use together
 " Snippets
-Plug 'L3MON4D3/LuaSnip', {'tag': 'v<CurrentMajor>.*', 'do': 'make install_jsregexp'}
+Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*', 'do': 'make install_jsregexp'}
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'rafamadriz/friendly-snippets'
 Plug 'gmarik/snipmate.vim'      " TextMate's snippets features in Vim
@@ -48,6 +48,9 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
 
+" Debug adapter
+Plug 'mfussenegger/nvim-dap'
+
 " Functionalities
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sensible'
@@ -59,6 +62,15 @@ Plug 'bogado/file-line'        " Enable opening a file in a given line
                                " vim index.html:20
                                " vim app/models/user.rb:1337
 Plug 'tpope/vim-sleuth'        " Automatically adjust indentation
+
+Plug 'kosayoda/nvim-lightbulb'
+
+Plug 'folke/neodev.nvim'
+Plug 'j-hui/fidget.nvim'
+Plug 'simrat39/inlay-hints.nvim'
+Plug 'camilledejoye/nvim-lsp-selection-range'
+Plug 'simrat39/rust-tools.nvim'
+Plug 'mrcjkb/haskell-tools.nvim', { 'branch': '1.x.x' }
 
 " CoC Nodejs extension host
 " Load extensions like VSCode and host language servers
@@ -89,7 +101,6 @@ Plug 'junegunn/vim-easy-align' " A simple, easy-to-use Vim alignment plugin
 Plug 'scrooloose/nerdcommenter'
 Plug 'KabbAmine/vCoolor.vim'
 Plug 'RRethy/vim-illuminate'
-Plug 'antoinemadec/FixCursorHold.nvim'
 Plug 'tpope/vim-git'            " Syntax, indent, and filetype for Git
 " Git integration - :Git (or just :G) calls any arbitrary Git command
 Plug 'junegunn/gv.vim'      " A git commit browser (requires vim-fugitive)
@@ -205,6 +216,17 @@ let g:mycolorschemes = ['asciiville', 'everforest', 'cool', 'desertink', 'distin
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/vim-journal'
+
+" Cellular automata animations based on the content of neovim buffer
+" https://github.com/Eandrju/cellular-automaton.nvim
+" Trigger it using the command:
+"   :CellularAutomaton make_it_rain
+" or
+"   :CellularAutomaton game_of_life
+" or create a mapping:
+"   vim.keymap.set("n", "<leader>fml", "<cmd>CellularAutomaton make_it_rain<CR>")
+" Close animation window with one of: q/<Esc>/<CR>
+Plug 'eandrju/cellular-automaton.nvim'
 
 " Cheat sheets
 Plug 'sudormrfbin/cheatsheet.nvim'  " :Cheatsheet
@@ -400,7 +422,7 @@ let g:signify_sign_change = '│'
 hi DiffDelete guifg=#ff5555 guibg=none
 
 " FixCursorHold for better performance
-let g:cursorhold_updatetime = 100
+let g:updatetime = 300
 
 " context.vim
 let g:context_nvim_no_redraw = 1
@@ -521,6 +543,31 @@ EOF
   endif
 endif
 
+if exists('g:plugs["nvim-dap"]')
+  if !empty(glob(g:plugs['nvim-dap'].dir.'/lua/nvim-dap/plugin/dap.lua'))
+    lua require('dap-config')
+  endif
+endif
+if exists('g:plugs["fidget.nvim"]')
+  if !empty(glob(g:plugs['fidget.nvim'].dir.'/lua/fidget.lua'))
+    lua require"fidget".setup{}
+  endif
+endif
+if exists('g:plugs["inlay-hints.nvim"]')
+  if !empty(glob(g:plugs['inlay-hints.nvim'].dir.'/lua/inlay-hints/init.lua'))
+    lua require("inlay-hints").setup()
+  endif
+endif
+if exists('g:plugs["nvim-lightbulb"]')
+  if !empty(glob(g:plugs['nvim-lightbulb'].dir.'/lua/nvim-lightbulb/init.lua'))
+    lua require('lightbulb-config')
+  endif
+endif
+if exists('g:plugs["rust-tools.nvim"]')
+  if !empty(glob(g:plugs['rust-tools.nvim'].dir.'/lua/rust-tools/init.lua'))
+    lua require('rust-tools')
+  endif
+endif
 if exists('g:plugs["toggleterm.nvim"]')
   if !empty(glob(g:plugs['toggleterm.nvim'].dir.'/lua/toggleterm.lua'))
     lua require('toggleterm').setup()

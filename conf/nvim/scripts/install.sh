@@ -191,7 +191,6 @@ fi
     PATH="$PATH:$HOME/go/bin"
   fi
 }'
-
     if [ -f "${BASHINIT}" ]
     then
       grep "export GOROOT" "${BASHINIT}" > /dev/null || {
@@ -215,9 +214,6 @@ fi
     eval "$(${BREW_EXE} shellenv)"
     have_brew=`type -p brew`
     [ "${have_brew}" ] && BREW_EXE="brew"
-    log "Install gcc (recommended by brew) ..."
-    ${BREW_EXE} install --quiet gcc > /dev/null 2>&1
-    printf " done"
   fi
   [ "${HOMEBREW_HOME}" ] || {
     brewpath=$(command -v brew)
@@ -230,6 +226,11 @@ fi
   }
   log "    Homebrew installed in ${HOMEBREW_HOME}"
   log "    See ${DOC_HOMEBREW}"
+  log "Install gcc (recommended by brew) ..."
+  ${BREW_EXE} install --quiet gcc > /dev/null 2>&1
+  ${BREW_EXE} install --quiet cmake > /dev/null 2>&1
+  ${BREW_EXE} install --quiet make > /dev/null 2>&1
+  printf " done"
 }
 
 install_neovim_dependencies () {
@@ -330,7 +331,7 @@ fixup_init_vim () {
     [ "${have_nvim}" ] && {
       grep "^Plug " ${NVIMCONF} > /dev/null && {
         nvim -i NONE -c 'PlugInstall' -c 'qa'
-        nvim -i NONE -c 'CocInstall coc-clangd' -c 'qa'
+#       nvim -i NONE -c 'CocInstall coc-clangd' -c 'qa'
       }
     }
   }
@@ -408,6 +409,8 @@ install_npm () {
   }
   [ "${PYTHON}" ] && {
     log 'Installing Python dependencies ...'
+    ${PYTHON} -m pip install --upgrade pip > /dev/null 2>&1
+    ${PYTHON} -m pip install --upgrade setuptools > /dev/null 2>&1
     ${PYTHON} -m pip install wheel > /dev/null 2>&1
     ${PYTHON} -m pip install pynvim doq > /dev/null 2>&1
     printf " done"
@@ -450,6 +453,7 @@ install_npm () {
       ${BREW_EXE} install -q rust-analyzer > /dev/null 2>&1
       [ "${PYTHON}" ] && {
         ${PYTHON} -m pip install cmake-language-server > /dev/null 2>&1
+        ${PYTHON} -m pip install python-lsp-server > /dev/null 2>&1
       }
       printf " done"
       # For other language servers, see:
