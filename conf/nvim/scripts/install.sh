@@ -331,7 +331,7 @@ fixup_init_vim () {
     [ "${have_nvim}" ] && {
       grep "^Plug " ${NVIMCONF} > /dev/null && {
         nvim -i NONE -c 'PlugInstall' -c 'qa'
-#       nvim -i NONE -c 'CocInstall coc-clangd' -c 'qa'
+        nvim -i NONE -c 'UpdateRemotePlugins' -c 'qa'
       }
     }
   }
