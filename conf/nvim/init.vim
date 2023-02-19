@@ -219,6 +219,7 @@ endif
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/vim-journal'
+Plug 'goolord/alpha-nvim'
 
 " Cellular automata animations based on the content of neovim buffer
 " https://github.com/Eandrju/cellular-automaton.nvim
@@ -579,6 +580,11 @@ endif
 if exists('g:plugs["rust-tools.nvim"]')
   if !empty(glob(g:plugs['rust-tools.nvim'].dir.'/lua/rust-tools/init.lua'))
     lua require('rust-tools')
+  endif
+endif
+if exists('g:plugs["alpha-nvim"]')
+  if !empty(glob(g:plugs['alpha-nvim'].dir.'/lua/alpha.lua'))
+    lua require('startup-config')
   endif
 endif
 if exists('g:plugs["toggleterm.nvim"]')
