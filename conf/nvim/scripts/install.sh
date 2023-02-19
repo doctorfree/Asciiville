@@ -190,7 +190,9 @@ fi
   if [ `echo $PATH | grep -c $HOME/go/bin` -ne "1" ]; then
     PATH="$PATH:$HOME/go/bin"
   fi
-}'
+}
+export PATH'
+
     if [ -f "${BASHINIT}" ]
     then
       grep "export GOROOT" "${BASHINIT}" > /dev/null || {
@@ -332,6 +334,8 @@ fixup_init_vim () {
       grep "^Plug " ${NVIMCONF} > /dev/null && {
         nvim -i NONE -c 'PlugInstall' -c 'qa'
         nvim -i NONE -c 'UpdateRemotePlugins' -c 'qa'
+		[ "${BREW_EXE}" ] || BREW_EXE=brew
+        export GOROOT="$(${BREW_EXE} --prefix)/opt/go"
         nvim -i NONE -c 'GoUpdateBinaries' -c 'qa'
       }
     }
@@ -429,7 +433,7 @@ install_npm () {
       printf " done"
 
       log "Installing the icon font for Visual Studio Code ..."
-      npm i -g @vscode/codicons
+      npm i -g @vscode/codicons > /dev/null 2>&1
       printf " done"
 
       log "Installing language servers ..."

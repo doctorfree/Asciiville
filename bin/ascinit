@@ -1391,7 +1391,9 @@ fi
   if [ `echo $PATH | grep -c $HOME/go/bin` -ne "1" ]; then
     PATH="$PATH:$HOME/go/bin"
   fi
-}'
+}
+export PATH'
+
 if [ -f "${BASHINIT}" ]
 then
   grep "export GOROOT" "${BASHINIT}" > /dev/null || {
@@ -2172,6 +2174,8 @@ curl -fsSL "${JETB_URL}" > /tmp/jetb-$$.sh
       grep "^Plug " ${NVIMCONF} > /dev/null && {
         nvim -i NONE -c 'PlugInstall' -c 'qa'
         nvim -i NONE -c 'UpdateRemotePlugins' -c 'qa'
+		[ "${BREW_EXE}" ] || BREW_EXE=brew
+        export GOROOT="$(${BREW_EXE} --prefix)/opt/go"
         nvim -i NONE -c 'GoUpdateBinaries' -c 'qa'
       }
     }
