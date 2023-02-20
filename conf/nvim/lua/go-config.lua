@@ -3,7 +3,7 @@ require('go').setup({
   gofmt = 'gofumpt', --gofmt cmd,
   max_line_len = 120, -- max line length in goline format
   tag_transform = false, -- tag_transfer  check gomodifytags for details
-  verbose = true,  -- output loginf in messages
+  verbose = false,  -- output loginf in messages
   log_path = vim.fn.expand("$HOME") .. "/tmp/gonvim.log",
   lsp_cfg = true, -- true: apply go.nvim non-default gopls setup
   lsp_gofumpt = false, -- true: set default gofmt in gopls format to gofumpt

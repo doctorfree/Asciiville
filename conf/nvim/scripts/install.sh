@@ -477,13 +477,14 @@ install_npm () {
       done
       ${BREW_EXE} install -q ccls > /dev/null 2>&1
       ${BREW_EXE} link --overwrite --quiet ccls > /dev/null 2>&1
-      ${BREW_EXE} install -q gopls > /dev/null 2>&1
       ${BREW_EXE} install -q marksman > /dev/null 2>&1
       ${BREW_EXE} install -q rust-analyzer > /dev/null 2>&1
       [ "${PYTHON}" ] && {
         ${PYTHON} -m pip install cmake-language-server > /dev/null 2>&1
         ${PYTHON} -m pip install python-lsp-server > /dev/null 2>&1
       }
+	  have_go=`type -p go`
+	  [ "${have_go}" ] && go install golang.org/x/tools/gopls@latest > /dev/null 2>&1
       printf " done"
       # For other language servers, see:
       # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
