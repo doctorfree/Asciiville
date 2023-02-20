@@ -2,36 +2,57 @@
 ---
 --- Configuration similar to 'mhinz/vim-startify':
 --- >
+--- local starter = require('mini.starter')
+--- starter.setup({
+---   evaluate_single = true,
+---   header = "Welcome to Asciiville Neovim",
+---   items = {
+---     starter.sections.builtin_actions(),
+---     starter.sections.recent_files(10, false),
+---     starter.sections.recent_files(10, true),
+---     -- Use this if you set up 'mini.sessions'
+---     starter.sections.sessions(5, true)
+---   },
+---   content_hooks = {
+---     starter.gen_hook.adding_bullet(),
+---     starter.gen_hook.indexing('all', { 'Builtin actions' }),
+---     starter.gen_hook.padding(3, 2),
+---   },
+--- })
+--- <
+--- Configuration similar to 'glepnir/dashboard-nvim':
+--- >
 local starter = require('mini.starter')
 starter.setup({
-  evaluate_single = true,
-  header = "Welcome to Asciiville Neovim",
+
+  header = function()
+    local hour = tonumber(vim.fn.strftime('%H'))
+    -- [04:00, 12:00) - morning, [12:00, 20:00) - day, [20:00, 04:00) - evening
+    local part_id = math.floor((hour + 4) / 8) + 1
+    local day_part = ({ 'evening', 'morning', 'afternoon', 'evening' })[part_id]
+    local username = vim.loop.os_get_passwd()['username'] or 'USERNAME'
+
+    return ('Good %s, %s\nWelcome to Asciiville Neovim'):format(day_part, username)
+  end,
   items = {
-    starter.sections.builtin_actions(),
+    function()
+      return {
+        {action = 'Telescope find_files',  name = 'Files',     section = 'Telescope'},
+        {action = 'Telescope live_grep',   name = 'Live grep', section = 'Telescope'},
+        {action = 'Telescope oldfiles',    name = 'Old files', section = 'Telescope'},
+      }
+    end,
     starter.sections.recent_files(10, false),
     starter.sections.recent_files(10, true),
-    -- Use this if you set up 'mini.sessions'
-    starter.sections.sessions(5, true)
+    starter.sections.builtin_actions(),
   },
   content_hooks = {
     starter.gen_hook.adding_bullet(),
+    starter.gen_hook.aligning('center', 'center'),
     starter.gen_hook.indexing('all', { 'Builtin actions' }),
     starter.gen_hook.padding(3, 2),
   },
 })
---- <
---- Configuration similar to 'glepnir/dashboard-nvim':
---- >
----   local starter = require('mini.starter')
----   starter.setup({
----     items = {
----       starter.sections.telescope(),
----     },
----     content_hooks = {
----       starter.gen_hook.adding_bullet(),
----       starter.gen_hook.aligning('center', 'center'),
----     },
----   })
 --- <
 --- Elaborated configuration showing capabilities of custom items,
 --- header/footer, and content hooks:
