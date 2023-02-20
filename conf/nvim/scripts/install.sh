@@ -237,7 +237,7 @@ export PATH'
 
 install_neovim_dependencies () {
   log "Installing dependencies ..."
-  PKGS="fd ripgrep fzf tmux go node python warrensbox/tap/tfswitch"
+  PKGS="git fd ripgrep fzf tmux go node python warrensbox/tap/tfswitch"
   for pkg in ${PKGS}
   do
     ${BREW_EXE} install --quiet ${pkg} > /dev/null 2>&1
