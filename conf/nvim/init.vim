@@ -70,8 +70,6 @@ Plug 'bogado/file-line'        " Enable opening a file in a given line
                                " vim app/models/user.rb:1337
 Plug 'tpope/vim-sleuth'        " Automatically adjust indentation
 
-Plug 'kosayoda/nvim-lightbulb'
-
 Plug 'folke/neodev.nvim'
 Plug 'j-hui/fidget.nvim'
 Plug 'simrat39/inlay-hints.nvim'
@@ -197,7 +195,7 @@ Plug 'flazz/vim-colorschemes'  " One stop shop for vim colorschemes
 Plug 'doctorfree/vim-asciiville'
 Plug 'sainnhe/everforest'
 " Uncomment to play with colorschemes
-Plug 'doctorfree/setcolors.vim' " Easily switch colorschemes
+Plug 'doctorfree/SetColorSchemes.vim' " Easily switch colorschemes
 " Colorschemes must have a matching Airline theme with same name
 " Currently available colorschemes with matching Airline theme:
 " alduin angr apprentice badwolf behelit biogoo bubblegum cobalt2 cool cyberpunk
@@ -564,11 +562,6 @@ if exists('g:plugs["inlay-hints.nvim"]')
     lua require("inlay-hints").setup()
   endif
 endif
-if exists('g:plugs["nvim-lightbulb"]')
-  if !empty(glob(g:plugs['nvim-lightbulb'].dir.'/lua/nvim-lightbulb/init.lua'))
-    lua require('lightbulb-config')
-  endif
-endif
 if exists('g:plugs["rust-tools.nvim"]')
   if !empty(glob(g:plugs['rust-tools.nvim'].dir.'/lua/rust-tools/init.lua'))
     lua require('rust-tools')
@@ -581,7 +574,7 @@ if exists('g:plugs["mini.starter"]')
 endif
 if exists('g:plugs["mini.sessions"]')
   if !empty(glob(g:plugs['mini.sessions'].dir.'/lua/mini/sessions.lua'))
-    lua require('sessions-config')
+    lua require('mini.sessions').setup({ directory = '~/.config/nvim/sessions' })
   endif
 endif
 if exists('g:plugs["toggleterm.nvim"]')

@@ -4,10 +4,10 @@ local home = os.getenv('HOME')
 -- Virtual text
 vim.g.dap_virtual_text = true
 -- request variable values for all frames (experimental)
-vim.g.dap_virtual_text = 'all frames'
+-- vim.g.dap_virtual_text = 'all frames'
 
 -- dap-ui
--- require("dapui").setup()
+require("dapui").setup()
 
 -- dap
 
@@ -119,7 +119,7 @@ dap.adapters.go = {
   args = { home .. '/dev/golang/vscode-go/dist/debugAdapter.js' },
   enrich_config = function(conf, on_config)
     if not conf.dlvToolPath then
-      conf.dlvToolPath = '/usr/bin/dlv'
+      conf.dlvToolPath = 'dlv'
     end
     on_config(conf)
   end,

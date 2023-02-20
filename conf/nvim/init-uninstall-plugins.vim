@@ -335,11 +335,6 @@ if exists('g:plugs["inlay-hints.nvim"]')
     lua require("inlay-hints").setup()
   endif
 endif
-if exists('g:plugs["nvim-lightbulb"]')
-  if !empty(glob(g:plugs['nvim-lightbulb'].dir.'/lua/nvim-lightbulb/init.lua'))
-    lua require('lightbulb-config')
-  endif
-endif
 if exists('g:plugs["rust-tools.nvim"]')
   if !empty(glob(g:plugs['rust-tools.nvim'].dir.'/lua/rust-tools/init.lua'))
     lua require('rust-tools')

@@ -15,14 +15,6 @@ illuminate.configure {
   delay = 200,
 }
 
-vim.fn.sign_define('LightBulbSign', { text = '', texthl = 'LspDiagnosticsDefaultInformation' })
-require('nvim-lightbulb').setup {
-  autocmd = {
-    enabled = true,
-    events = { 'CursorHold', 'CursorHoldI', 'CursorMoved', 'TextChanged' },
-  },
-}
-
 require('fidget').setup()
 
 local default_on_codelens = vim.lsp.codelens.on_codelens

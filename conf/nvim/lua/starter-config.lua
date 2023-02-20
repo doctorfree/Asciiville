@@ -4,15 +4,24 @@
 local starter = require('mini.starter')
 starter.setup({
 
-  header = function()
-    local hour = tonumber(vim.fn.strftime('%H'))
-    -- [04:00, 12:00) - morning, [12:00, 20:00) - day, [20:00, 04:00) - evening
-    local part_id = math.floor((hour + 4) / 8) + 1
-    local day_part = ({ 'evening', 'morning', 'afternoon', 'evening' })[part_id]
-    local username = vim.loop.os_get_passwd()['username'] or 'USERNAME'
-
-    return ('Good %s, %s\nWelcome to Asciiville Neovim'):format(day_part, username)
-  end,
+  evaluate_single = true,
+  footer = os.date(),
+  header = table.concat({
+      [[  /\ \¬\___  ___/\   /(•)_ __ ___  ]],
+      [[ /  \/ / _ \/ _ \ \ / / | '_ ` _ \ ]],
+      [[/ /\  /  __/ (_) \ V /| | | | | | |]],
+      [[\_\ \/ \___|\___/ \_/ |_|_| |_| |_|]],
+      [[___________________________________]],
+  }, "\n"),
+--  header = function()
+--    local hour = tonumber(vim.fn.strftime('%H'))
+--    -- [04:00, 12:00) - morning, [12:00, 20:00) - day, [20:00, 04:00) - evening
+--    local part_id = math.floor((hour + 4) / 8) + 1
+--    local day_part = ({ 'evening', 'morning', 'afternoon', 'evening' })[part_id]
+--    local username = vim.loop.os_get_passwd()['username'] or 'USERNAME'
+--
+--    return ('Good %s, %s\nWelcome to Asciiville Neovim'):format(day_part, username)
+--  end,
   items = {
     starter.sections.sessions(5, true),
     function()
@@ -22,9 +31,11 @@ starter.setup({
         {action = 'Telescope oldfiles',    name = 'Old files', section = 'Telescope'},
       }
     end,
-    starter.sections.recent_files(10, false),
---- starter.sections.recent_files(10, true),
+    { action = "tab G", name = "G: Fugitive", section = "Git" },
+    { action = "PlugUpdate", name = "U: Update Plugins", section = "Plugins" },
     starter.sections.builtin_actions(),
+    starter.sections.recent_files(10, true),
+    starter.sections.recent_files(10, false),
   },
   content_hooks = {
     starter.gen_hook.adding_bullet(),

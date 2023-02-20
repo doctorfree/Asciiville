@@ -194,7 +194,7 @@ This key map appends the current date and time after the cursor
 (in `<> notation <>`) when the `<F2>` function key is pressed.
 
 Another example key mapping can be seen in the
-[setcolors.vim](https://github.com/doctorfree/setcolors.vim) plugin.
+[SetColorSchemes.vim](https://github.com/doctorfree/SetColorSchemes.vim) plugin.
 This plugin provides an easy way to configure which color schemes to use
 and how to switch or cycle between them. The list of color schemes
 can be specified by setting the `mycolorschemes` global variable.
@@ -204,7 +204,7 @@ The default setting for this is:
 let g:mycolorschemes = ['asciiville', 'everforest', 'cool', 'desertink', 'distinguished', 'hybrid', 'luna', 'molokai', 'solarized', 'zenburn']
 ```
 
-The `setcolors.vim` plugin creates the following key mappings:
+The `SetColorSchemes.vim` plugin creates the following key mappings:
 
 - `<F7>` Previous colorscheme and airline theme
 - `<F8>` Next colorscheme and airline theme

@@ -12,14 +12,22 @@ sign({name = 'DiagnosticSignHint', text = "•"})
 sign({name = 'DiagnosticSignInfo', text = ""})
 
 vim.diagnostic.config({
-  update_in_insert = true,
+  virtual_text = false,
+  update_in_insert = false,
+  signs = true,
   float = {
     focusable = false,
     style = "minimal",
-    border = "rounded",
-    source = "always",
     header = "",
     prefix = "",
+    border = "rounded",
+    format = function(diagnostic)
+      return string.format(
+        "%s (%s)",
+        diagnostic.message,
+        diagnostic.source
+      )
+    end,
   },
 })
 

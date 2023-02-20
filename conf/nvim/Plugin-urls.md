@@ -36,7 +36,7 @@
 - [popup.nvim](https://github.com/nvim-lua/popup.nvim)
 - [python-mode](https://github.com/klen/python-mode)
 - [rainbow_parentheses.vim](https://github.com/junegunn/rainbow_parentheses.vim)
-- [setcolors.vim](https://github.com/doctorfree/setcolors.vim)
+- [SetColorSchemes.vim](https://github.com/doctorfree/SetColorSchemes.vim)
 - [snipmate.snippets](https://github.com/gmarik/snipmate.snippets)
 - [snipmate.vim](https://github.com/gmarik/snipmate.vim)
 - [splitjoin.vim](https://github.com/AndrewRadev/splitjoin.vim)
