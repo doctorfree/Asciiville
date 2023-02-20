@@ -1,4 +1,4 @@
-local lsp = require('mrcjk.lsp')
+local lsp = require('doctorfree.lsp')
 
 require('neodev').setup {
   library = { plugins = { "nvim-dap-ui" }, types = true },

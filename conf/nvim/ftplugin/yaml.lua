@@ -1,4 +1,4 @@
-local lsp = require('mrcjk.lsp')
+local lsp = require('doctorfree.lsp')
 
 vim.lsp.start {
   name = 'yaml-ls',

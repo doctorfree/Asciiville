@@ -1,4 +1,4 @@
-local lsp = require('mrcjk.lsp')
+local lsp = require('doctorfree.lsp')
 local jdtls = require('jdtls')
 
 local on_jdtls_attach = function(client, bufnr)

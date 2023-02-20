@@ -28,7 +28,7 @@ local kind_icons = {
 
 vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
 
-require('luasnip.loaders.from_vscode').lazy_load()
+-- require('luasnip.loaders.from_vscode').lazy_load()
 
 -- Set up nvim-cmp.
 local cmp = require('cmp')

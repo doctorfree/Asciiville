@@ -14,6 +14,11 @@
 "  URL     : https://github.com/doctorfree/nvim
 "  Project : https://github.com/doctorfree/Asciiville
 "----------------------------------------------------------------
+" Set <space> as the leader key
+" See `:help mapleader`
+" NOTE: Must happen before plugins
+let mapleader = ' '
+let maplocalleader = ' '
 "
 """ Vim-Plug managed plugins
 "
@@ -33,7 +38,8 @@ Plug 'hrsh7th/nvim-cmp'    " A completion engine plugin for Neovim
 Plug 'tamago324/cmp-zsh'   " Zsh completion for cmp
 Plug 'Shougo/deol.nvim'    " Recommended to use together
 " Snippets
-Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*', 'do': 'make install_jsregexp'}
+" Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*', 'do': 'make install_jsregexp'}
+Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*'}
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'rafamadriz/friendly-snippets'
 Plug 'gmarik/snipmate.vim'      " TextMate's snippets features in Vim
@@ -221,7 +227,8 @@ Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/vim-journal'
 Plug 'echasnovski/mini.starter', { 'branch': 'stable' }
-" Or, to use the main development branch:
+Plug 'echasnovski/mini.sessions', { 'branch': 'stable' }
+" Or, to use the main development branch, e.g:
 " Plug 'echasnovski/mini.starter'
 
 " Cellular automata animations based on the content of neovim buffer
@@ -282,8 +289,6 @@ set smartcase                  " Be case sensitive when input has a capital lett
 set hlsearch                   " Highlight search
 
 let g:is_posix = 1             " Vim's default is Bourne shell, bring it up to the 90s
-let mapleader = ','
-let maplocalleader = '	'      " Tab as a local leader
 let g:netrw_banner = 0         " Do not show Netrw help banner
 
 " complete longest common string, then list alternatives.
@@ -572,6 +577,11 @@ endif
 if exists('g:plugs["mini.starter"]')
   if !empty(glob(g:plugs['mini.starter'].dir.'/lua/mini/starter.lua'))
     lua require('starter-config')
+  endif
+endif
+if exists('g:plugs["mini.sessions"]')
+  if !empty(glob(g:plugs['mini.sessions'].dir.'/lua/mini/sessions.lua'))
+    lua require('sessions-config')
   endif
 endif
 if exists('g:plugs["toggleterm.nvim"]')

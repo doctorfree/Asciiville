@@ -12,29 +12,26 @@ sign({name = 'DiagnosticSignHint', text = "•"})
 sign({name = 'DiagnosticSignInfo', text = ""})
 
 vim.diagnostic.config({
---  virtual_text = false,
-  virtual_text = {
-    prefix = '●', -- Could be '●', '▎', 'x'
-  },
-  severity_sort = true,
+  update_in_insert = true,
   float = {
-    border = 'rounded',
-    source = 'always',
+    focusable = false,
+    style = "minimal",
+    border = "rounded",
+    source = "always",
+    header = "",
+    prefix = "",
   },
 })
 
--- Alternately
+-- Show line diagnostics automatically in hover window
+vim.cmd([[
+  autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, { focus = false })
+]])
 
--- local signs = { Error = "✘", Warn = "", Hint = "•", Info = "" }
-
--- for type, icon in pairs(signs) do
---     local hl = "DiagnosticSign" .. type
---     vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
--- end
-
--- vim.diagnostic.config({
---     virtual_text = {
---         prefix = '●', -- Could be '●', '▎', 'x'
---     }
--- })
-
+-- Mappings.
+-- See `:help vim.diagnostic.*` for documentation on any of the below functions
+local opts = { noremap=true, silent=true }
+vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
