@@ -296,28 +296,12 @@ set wildmode=longest,list
 "
 " Use <Tab> to cycle through the list forwards, and <S-Tab> to move backwards.
 "
-" The keybinds can be changed:
-"
-" Default keys
-" call wilder#setup({
-"       \ 'modes': [':', '/', '?'],
-"       \ 'next_key': '<Tab>',
-"       \ 'previous_key': '<S-Tab>',
-"       \ 'accept_key': '<Down>',
-"       \ 'reject_key': '<Up>',
-"       \ })
-
 " Airline and Lightline users:
 " wilder#wildmenu_airline_theme() and wilder#wildmenu_lightline_theme() can be used.
 "
 if exists('g:plugs["wilder.nvim"]')
   if !empty(glob(g:plugs['wilder.nvim'].dir.'/autoload/wilder.vim'))
-    call wilder#setup({'modes': [':', '/', '?']})
-    call wilder#set_option('renderer', wilder#wildmenu_renderer(
-        \ wilder#wildmenu_airline_theme({
-        \   'highlighter': wilder#lua_fzy_highlighter(),
-        \   'separator': ' · ',
-        \ })))
+    lua require('wilder-config')
   endif
 endif
 
