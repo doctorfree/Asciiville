@@ -416,7 +416,7 @@ let g:signify_sign_change = '│'
 hi DiffDelete guifg=#ff5555 guibg=none
 
 " FixCursorHold for better performance
-let g:updatetime = 300
+let g:updatetime = 250
 
 " context.vim
 let g:context_nvim_no_redraw = 1
