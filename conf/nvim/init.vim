@@ -76,6 +76,7 @@ Plug 'simrat39/inlay-hints.nvim'
 Plug 'camilledejoye/nvim-lsp-selection-range'
 Plug 'simrat39/rust-tools.nvim'
 Plug 'mrcjkb/haskell-tools.nvim', { 'branch': '1.x.x' }
+Plug 'mfussenegger/nvim-jdtls'
 
 " CoC Nodejs extension host
 " Load extensions like VSCode and host language servers
@@ -429,6 +430,26 @@ tmap <C-w> <Esc><C-w>
 "tmap <C-d> <Esc>:q<CR>
 autocmd BufWinEnter,WinEnter term://* startinsert
 autocmd BufLeave term://* stopinsert
+
+" The Homebrew installation location
+if empty($HOMEBREW_PREFIX)
+  if isdirectory("/home/linuxbrew/.linuxbrew")
+    let g:homebrew_install_dir = "/home/linuxbrew/.linuxbrew"
+  else
+    if isdirectory("/opt/homebrew")
+      let g:homebrew_install_dir = "/opt/homebrew"
+    else
+      if isdirectory("/usr/local")
+        let g:homebrew_install_dir = "/usr/local"
+      else
+        let g:homebrew_install_dir = ""
+      endif
+    endif
+  endif
+else
+  let g:homebrew_install_dir = $HOMEBREW_PREFIX
+endif
+
 " Replace these with actual paths
 if !empty(glob('/path/to/python3'))
   let g:python3_host_prog = '/path/to/python3'
@@ -497,7 +518,6 @@ endif
 " if installed or falls back to showing all the cheatsheet files
 " concatenated in a floating window. A default mapping <leader>?
 " is provided for :Cheatsheet (not bound if already in use).
-" By default the <leader> key is \.
 "
 " Default cheatsheet configuration:
 if exists('g:plugs["cheatsheet.nvim"]')
@@ -591,7 +611,6 @@ endif
 """ Custom Mappings (lua custom mappings are within individual lua config files)
 "
 " Core
-let mapleader=","
 nmap <leader>q :NvimTreeFindFileToggle<CR>
 nmap \ <leader>q
 nmap <leader>r :so ~/.config/nvim/init.vim<CR>

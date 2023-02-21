@@ -477,6 +477,7 @@ install_npm () {
       done
       ${BREW_EXE} install -q ccls > /dev/null 2>&1
       ${BREW_EXE} link --overwrite --quiet ccls > /dev/null 2>&1
+      ${BREW_EXE} install -q jdtls > /dev/null 2>&1
       ${BREW_EXE} install -q marksman > /dev/null 2>&1
       ${BREW_EXE} install -q rust-analyzer > /dev/null 2>&1
       [ "${PYTHON}" ] && {
