@@ -1490,7 +1490,7 @@ have_pip=`type -p pip3`
 }
 
 for pkg in setuptools asciimatics ddgr rainbowstream socli future \
-           xtermcolor ffmpeg-python pyaudio term-image urlscan
+           xtermcolor ffmpeg-python pyaudio term-image urlscan openai
 do
   if ${PYTHON} -m pip list 2> /dev/null | grep ${pkg} > /dev/null
   then

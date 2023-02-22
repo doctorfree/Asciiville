@@ -14,11 +14,11 @@
 "  URL     : https://github.com/doctorfree/nvim
 "  Project : https://github.com/doctorfree/Asciiville
 "----------------------------------------------------------------
-" Set <space> as the leader key
+" Set ',' as the leader key
 " See `:help mapleader`
 " NOTE: Must happen before plugins
-let mapleader = ' '
-let maplocalleader = ' '
+let mapleader = ','
+let maplocalleader = ','
 "
 """ Vim-Plug managed plugins
 "
@@ -50,8 +50,12 @@ Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
-Plug 'kyazdani42/nvim-web-devicons'
-Plug 'kyazdani42/nvim-tree.lua'
+Plug 'nvim-tree/nvim-web-devicons'
+Plug 'nvim-tree/nvim-tree.lua'
+
+" A pretty list for showing diagnostics, references, telescope results, quickfix
+" and location lists to help you solve all the trouble your code is causing
+Plug 'folke/trouble.nvim'
 
 " Debug adapter
 Plug 'mfussenegger/nvim-dap'
@@ -204,6 +208,7 @@ Plug 'doctorfree/SetColorSchemes.vim' " Easily switch colorschemes
 " lucius luna minimalist molokai monochrome onedark peaksea seagull seoul256
 " sierra soda solarized sol transparent ubaryd understated wombat zenburn
 let g:mycolorschemes = ['asciiville', 'everforest', 'cool', 'desertink', 'distinguished', 'hybrid', 'luna', 'molokai', 'solarized', 'zenburn']
+let g:setairlinetheme = 1
 
 " Aesthetics - Others
 if has('nvim')
@@ -600,6 +605,11 @@ endif
 if exists('g:plugs["toggleterm.nvim"]')
   if !empty(glob(g:plugs['toggleterm.nvim'].dir.'/lua/toggleterm.lua'))
     lua require('toggleterm').setup()
+  endif
+endif
+if exists('g:plugs["trouble.nvim"]')
+  if !empty(glob(g:plugs['trouble.nvim'].dir.'/lua/trouble/init.lua'))
+    lua require('trouble-config')
   endif
 endif
 if exists('g:plugs["ChatGPT.nvim"]')

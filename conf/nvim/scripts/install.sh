@@ -237,7 +237,7 @@ export PATH'
 
 install_neovim_dependencies () {
   log "Installing dependencies ..."
-  PKGS="git fd ripgrep fzf tmux go node python warrensbox/tap/tfswitch"
+  PKGS="git lazygit fd ripgrep fzf tmux go node python warrensbox/tap/tfswitch"
   for pkg in ${PKGS}
   do
     ${BREW_EXE} install --quiet ${pkg} > /dev/null 2>&1
@@ -329,9 +329,9 @@ fixup_init_vim () {
         rm -f /tmp/nvim$$
       }
     }
-		[ "${BREW_EXE}" ] || BREW_EXE=brew
+    [ "${BREW_EXE}" ] || BREW_EXE=brew
     BREW_ROOT="$(${BREW_EXE} --prefix)"
-		[ "${BREW_ROOT}" ] && {
+    [ "${BREW_ROOT}" ] && {
       if [ -d ${BREW_ROOT}/opt/go/libexec ]
       then
         export GOROOT="${BREW_ROOT}/opt/go/libexec"
@@ -343,7 +343,7 @@ fixup_init_vim () {
           [ -d ${BREW_ROOT}/go ] && export GOROOT="${BREW_ROOT}/go"
         fi
       fi
-		}
+    }
     [ "${GOPATH}" ] || export GOPATH="${HOME}/go"
     for gop in ${GOPATH} ${GOPATH}/src ${GOPATH}/pkg ${GOPATH}/bin
     do
@@ -468,6 +468,12 @@ install_npm () {
       npm i -g vim-language-server > /dev/null 2>&1
       # docker language server
       npm i -g dockerfile-language-server-nodejs > /dev/null 2>&1
+      # vscode-langservers bin collection, includes:
+      # vscode-html-language-server
+      # vscode-css-language-server
+      # vscode-json-language-server
+      # vscode-eslint-language-server
+      npm i -g vscode-langservers-extracted > /dev/null 2>&1
       # brew installed language servers
       for server in ansible bash haskell sql lua yaml
       do
@@ -477,15 +483,18 @@ install_npm () {
       done
       ${BREW_EXE} install -q ccls > /dev/null 2>&1
       ${BREW_EXE} link --overwrite --quiet ccls > /dev/null 2>&1
+      ${BREW_EXE} install -q golangci-lint > /dev/null 2>&1
       ${BREW_EXE} install -q jdtls > /dev/null 2>&1
       ${BREW_EXE} install -q marksman > /dev/null 2>&1
       ${BREW_EXE} install -q rust-analyzer > /dev/null 2>&1
+      ${BREW_EXE} install -q shellcheck > /dev/null 2>&1
+      ${BREW_EXE} install -q taplo > /dev/null 2>&1
       [ "${PYTHON}" ] && {
         ${PYTHON} -m pip install cmake-language-server > /dev/null 2>&1
         ${PYTHON} -m pip install python-lsp-server > /dev/null 2>&1
       }
-	  have_go=`type -p go`
-	  [ "${have_go}" ] && go install golang.org/x/tools/gopls@latest > /dev/null 2>&1
+    have_go=`type -p go`
+    [ "${have_go}" ] && go install golang.org/x/tools/gopls@latest > /dev/null 2>&1
       printf " done"
       # For other language servers, see:
       # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md

@@ -5,7 +5,7 @@ local keymap = vim.keymap
 local dap = require('dap')
 local dap_widgets = require('dap.ui.widgets')
 local dap_utils = require('dap.utils')
--- local dapui = require('dapui')
+local dapui = require('dapui')
 
 local inlayhints = require('inlay-hints')
 inlayhints.setup()
@@ -132,9 +132,9 @@ function lsp.on_dap_attach(bufnr)
   keymap.set('v', '<leader>dH', function()
     dap_widgets.hover(dap_utils.get_visual_selection_text)
   end, opts)
-  -- keymap.set('v', '<M-e>', dapui.eval, opts)
-  -- keymap.set('v', '<M-k>', dapui.float_element, opts)
-  -- keymap.set('n', '<leader>du', dapui.toggle, opts)
+  keymap.set('v', '<M-e>', dapui.eval, opts)
+  keymap.set('v', '<M-k>', dapui.float_element, opts)
+  keymap.set('n', '<leader>du', dapui.toggle, opts)
 end
 
 -- Set up lspconfig.
