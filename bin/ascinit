@@ -41,6 +41,7 @@ usage() {
     rich "    [cyan]-y[/] indicates [yellow]answer yes at all prompts[/]" --print
     rich "    [cyan]-u[/] indicates [yellow]display this usage message and exit[/]" --print
     rich "    If [cyan]arg[/] is [cyan]minimal[/] [yellow]a minimal initialization is performed[/]" --print
+    rich "    If [cyan]arg[/] is [cyan]nobrew[/] [yellow]Homebrew is not installed or used[/]" --print
     rich "    [cyan]arg[/] can also be one of [cyan]games[/], [cyan]kitty[/], or [cyan]neovim[/]" --print
     rich "        indicating [yellow]installation or removal[/] of [cyan]arg[/]" --print
     printf "\n"
@@ -60,6 +61,7 @@ usage() {
     printf "\n\t-y indicates answer yes at all prompts"
     printf "\n\t-u indicates display this usage message and exit"
     printf "\n\tif 'arg' is 'minimal' a minimal initialization is performed"
+    printf "\n\tif 'arg' is 'nobrew' Homebrew is not installed or used"
     printf "\n\targ can also be one of games, kitty, or neovim"
     printf "\n\t\tindicating installation of removal of arg\n"
   fi
@@ -70,7 +72,9 @@ remove_package() {
   PKG="$1"
   [ "${quiet}" ] || printf "\n\tRemoving ${PKG} ..."
   # Try Brew first
-  if [ $? -eq 0 ]
+  have_brew=$(type -p brew)
+  [ "${have_brew}" ] || usebrew=
+  if [ "${usebrew}" ]
   then
     brew uninstall -q ${PKG} > /dev/null 2>&1
   else
@@ -103,12 +107,16 @@ install_package() {
   PKG="$1"
   [ "${quiet}" ] || printf "\n\tInstalling ${PKG} ..."
   # Try Brew first
-  brew search -q /^${PKG}$/ > /dev/null 2>&1
-  if [ $? -eq 0 ]
-  then
-    brew install --quiet ${PKG} > /dev/null 2>&1
-    [ $? -eq 0 ] || brew link --overwrite --quiet ${PKG} > /dev/null 2>&1
-  else
+  brewed=
+  [ "${usebrew}" ] && {
+    brew search -q /^${PKG}$/ > /dev/null 2>&1
+    [ $? -eq 0 ] && {
+      brew install --quiet ${PKG} > /dev/null 2>&1
+      [ $? -eq 0 ] || brew link --overwrite --quiet ${PKG} > /dev/null 2>&1
+      brewed=1
+    }
+  }
+  [ "${brewed}" ] || {
     if [ "${debian}" ]
     then
       if [ "${APT}" ]
@@ -130,7 +138,7 @@ install_package() {
         [ "${arch}" ] && sudo pacman -S --noconfirm ${PKG} > /dev/null 2>&1
       fi
     fi
-  fi
+  }
   [ "${quiet}" ] || printf " done"
 }
 
@@ -697,8 +705,13 @@ have_mktemp=`type -p mktemp`
 have_unlink=`type -p unlink`
 have_unzip=`type -p unzip`
 
+usebrew=1
 minimal=
 [ "${argument}" == "minimal" ] && minimal=1
+[ "${argument}" == "nobrew" ] && {
+  usebrew=
+  minimal=1
+}
 
 have_kitty=`type -p kitty`
 [ "${argument}" == "kitty" ] && {
@@ -1302,25 +1315,27 @@ status_dots=
 }
 
 # Use Brew on all platforms to install some requirements
+# unless invoked with the 'nobrew' argument
 BREW_EXE="brew"
-have_brew=`type -p brew`
-[ "${have_brew}" ] || {
-  # Install Brew
-  BREW_URL="${GHUC}/Homebrew/install/HEAD/install.sh"
-  curl -fsSL "${BREW_URL}" > /tmp/brew-$$.sh
-  [ $? -eq 0 ] || {
-    rm -f /tmp/brew-$$.sh
-    curl -kfsSL "${BREW_URL}" > /tmp/brew-$$.sh
-  }
-  [ -f /tmp/brew-$$.sh ] && {
-    chmod 755 /tmp/brew-$$.sh
-    [ "${quiet}" ] || printf "\n\tInstalling Homebrew, please be patient ... "
-    NONINTERACTIVE=1 /bin/bash -c "/tmp/brew-$$.sh" > /dev/null 2>&1
-    rm -f /tmp/brew-$$.sh
-    [ "${quiet}" ] || printf "done"
+have_brew=$(type -p brew)
+[ "${usebrew}" ] && {
+  [ "${have_brew}" ] || {
+    # Install Brew
+    BREW_URL="${GHUC}/Homebrew/install/HEAD/install.sh"
+    curl -fsSL "${BREW_URL}" > /tmp/brew-$$.sh
+    [ $? -eq 0 ] || {
+      rm -f /tmp/brew-$$.sh
+      curl -kfsSL "${BREW_URL}" > /tmp/brew-$$.sh
+    }
+    [ -f /tmp/brew-$$.sh ] && {
+      chmod 755 /tmp/brew-$$.sh
+      [ "${quiet}" ] || printf "\n\tInstalling Homebrew, please be patient ... "
+      NONINTERACTIVE=1 /bin/bash -c "/tmp/brew-$$.sh" > /dev/null 2>&1
+      rm -f /tmp/brew-$$.sh
+      [ "${quiet}" ] || printf "done"
+    }
   }
 }
-
 if [ -f ${HOME}/.profile ]
 then
   BASHINIT="${HOME}/.profile"
@@ -1348,7 +1363,9 @@ else
       HOMEBREW_HOME="/opt/homebrew"
       BREW_EXE="${HOMEBREW_HOME}/bin/brew"
     else
-      echo "WARNING: Homebrew brew executable could not be located"
+      [ "${usebrew}" ] && {
+        echo "WARNING: Homebrew brew executable could not be located"
+      }
     fi
   fi
 fi
@@ -1384,52 +1401,61 @@ then
   grep "export GOROOT" "${BASHINIT}" > /dev/null || {
     echo "${GOTEXT}" | sed -e "s%__YYY__%${HOMEBREW_HOME}%" >> "${BASHINIT}"
   }
-  grep "^eval \"\$(${BREW_EXE} shellenv)\"" "${BASHINIT}" > /dev/null || {
-    echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${BASHINIT}"
+  [ "${usebrew}" ] && {
+    grep "^eval \"\$(${BREW_EXE} shellenv)\"" "${BASHINIT}" > /dev/null || {
+      echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${BASHINIT}"
+    }
   }
 else
   echo "${GOTEXT}" | sed -e "s%__YYY__%${HOMEBREW_HOME}%" > "${BASHINIT}"
-  echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" > "${BASHINIT}"
+  [ "${usebrew}" ] && {
+    echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" > "${BASHINIT}"
+  }
 fi
 [ -f "${HOME}/.zshrc" ] && {
   grep "export GOROOT" "${HOME}/.zshrc" > /dev/null || {
     echo "${GOTEXT}" | sed -e "s%__YYY__%${HOMEBREW_HOME}%" >> "${HOME}/.zshrc"
   }
-  grep "^eval \"\$(${BREW_EXE} shellenv)\"" "${HOME}/.zshrc" > /dev/null || {
-    echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${HOME}/.zshrc"
+  [ "${usebrew}" ] && {
+    grep "^eval \"\$(${BREW_EXE} shellenv)\"" "${HOME}/.zshrc" > /dev/null || {
+      echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${HOME}/.zshrc"
+    }
   }
 }
-eval "$(${BREW_EXE} shellenv)"
+[ "${usebrew}" ] && eval "$(${BREW_EXE} shellenv)"
 
-have_brew=`type -p brew`
-if [ "${have_brew}" ]
-then
-  BREW_EXE="brew"
-else
-  [ "${BREW_EXE}" == "brew" ] || {
-    BREWPATH=`dirname ${BREW_EXE}`
-    pathadd "${BREWPATH}"
-    have_brew=`type -p brew`
-  }
-fi
+[ "${usebrew}" ] && {
+  have_brew=`type -p brew`
+  if [ "${have_brew}" ]
+  then
+    BREW_EXE="brew"
+  else
+    [ "${BREW_EXE}" == "brew" ] || {
+      BREWPATH=`dirname ${BREW_EXE}`
+      pathadd "${BREWPATH}"
+      have_brew=`type -p brew`
+    }
+  fi
 
-export HOMEBREW_NO_INSTALL_CLEANUP=1
-export HOMEBREW_NO_ENV_HINTS=1
-
-install_package python
+  export HOMEBREW_NO_INSTALL_CLEANUP=1
+  export HOMEBREW_NO_ENV_HINTS=1
+}
 
 # Brew doesn't create a python symlink so we do so here
-python3_path=$(command -v python3)
-[ "${python3_path}" ] && {
-  python_dir=`dirname ${python3_path}`
-  if [ -w ${python_dir} ]
-  then
-    rm -f ${python_dir}/python
-    ln -s ${python_dir}/python3 ${python_dir}/python
-  else
-    sudo rm -f ${python_dir}/python
-    sudo ln -s ${python_dir}/python3 ${python_dir}/python
-  fi
+[ "${usebrew}" ] && {
+  install_package python
+  python3_path=$(command -v python3)
+  [ "${python3_path}" ] && {
+    python_dir=`dirname ${python3_path}`
+    if [ -w ${python_dir} ]
+    then
+      rm -f ${python_dir}/python
+      ln -s ${python_dir}/python3 ${python_dir}/python
+    else
+      sudo rm -f ${python_dir}/python
+      sudo ln -s ${python_dir}/python3 ${python_dir}/python
+    fi
+  }
 }
 
 function check_py_version
@@ -2094,13 +2120,15 @@ CONF="${USERCONF}/asciiville/config"
 }
 touch ${HOME}/.tetris
 
-[ "${have_brew}" ] && {
-  [ "${quiet}" ] || {
-    printf "\n\tCleaning up Homebrew ... "
-  }
-  brew cleanup --prune=all --quiet > /dev/null 2>&1
-  [ "${quiet}" ] || {
-    printf "done"
+[ "${usebrew}" ] && {
+  [ "${have_brew}" ] && {
+    [ "${quiet}" ] || {
+      printf "\n\tCleaning up Homebrew ... "
+    }
+    brew cleanup --prune=all --quiet > /dev/null 2>&1
+    [ "${quiet}" ] || {
+      printf "done"
+    }
   }
 }
 printf "\n"
@@ -2155,9 +2183,11 @@ curl -fsSL "${JETB_URL}" > /tmp/jetb-$$.sh
         rm -f /tmp/nvim$$
       }
     }
-		[ "${BREW_EXE}" ] || BREW_EXE=brew
-    BREW_ROOT="$(${BREW_EXE} --prefix)"
-		[ "${BREW_ROOT}" ] && {
+    [ "${usebrew}" ] && {
+      [ "${BREW_EXE}" ] || BREW_EXE=brew
+      BREW_ROOT="$(${BREW_EXE} --prefix)"
+    }
+    [ "${BREW_ROOT}" ] && {
       if [ -d ${BREW_ROOT}/opt/go/libexec ]
       then
         export GOROOT="${BREW_ROOT}/opt/go/libexec"

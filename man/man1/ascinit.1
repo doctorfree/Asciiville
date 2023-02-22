@@ -79,6 +79,21 @@ games, \f[V]cbftp\f[R], and \f[V]aewan\f[R].
 These components can be installed subsequently by rerunning
 \f[V]ascinit\f[R] without arguments.
 .PP
+Asciiville initialization installs Homebrew and uses Homebrew to install
+many of its dependencies.
+An initialization can be performed without installing or using Homebrew
+with the command:
+.IP
+.nf
+\f[C]
+ascinit nobrew
+\f[R]
+.fi
+.PP
+The \[dq]nobrew\[dq] Asciiville initialization does not install optional
+components, performs a \[dq]minimal\[aq] initialization, and several
+features are not supported.
+.PP
 In addition to initialization of Asciiville components,
 \f[V]ascinit\f[R] can be used to individually install and remove the
 ASCII games, Kitty terminal emulator, and Neovim text editor.

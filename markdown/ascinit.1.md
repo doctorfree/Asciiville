@@ -48,6 +48,15 @@ The "minimal" Asciiville initialization does not install optional components
 like `NeoMutt`, `Neovim`, Ascii games, `cbftp`, and `aewan`. These components
 can be installed subsequently by rerunning `ascinit` without arguments.
 
+Asciiville initialization installs Homebrew and uses Homebrew to install
+many of its dependencies. An initialization can be performed without installing
+or using Homebrew with the command:
+```shell
+ascinit nobrew
+```
+The "nobrew" Asciiville initialization does not install optional components,
+performs a "minimal' initialization, and several features are not supported.
+
 In addition to initialization of Asciiville components, `ascinit` can be used
 to individually install and remove the ASCII games, Kitty terminal emulator,
 and Neovim text editor. To install one of these components, issue the command:
