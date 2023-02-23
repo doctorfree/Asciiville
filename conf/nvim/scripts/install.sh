@@ -238,6 +238,9 @@ export PATH'
   ${BREW_EXE} install --quiet gcc > /dev/null 2>&1
   ${BREW_EXE} install --quiet cmake > /dev/null 2>&1
   ${BREW_EXE} install --quiet make > /dev/null 2>&1
+  ${BREW_EXE} uninstall --ignore-dependencies llvm > /dev/null 2>&1
+  ${BREW_EXE} install --quiet llvm@14 > /dev/null 2>&1
+  ${BREW_EXE} link llvm@14 > /dev/null 2>&1
   printf " done"
 }
 
@@ -252,7 +255,6 @@ install_neovim_dependencies () {
   printf " done"
   link_python
   if ! command -v cargo >/dev/null 2>&1; then
-#   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     log "Installing cargo ..."
     RUST_URL="https://sh.rustup.rs"
     curl -fsSL "${RUST_URL}" > /tmp/rust-$$.sh
@@ -388,6 +390,81 @@ check_python () {
   fi
 }
 
+install_tools () {
+  [ "${minimal}" ] || {
+    log "Installing Neovim npm package ..."
+    npm i -g neovim > /dev/null 2>&1
+    printf " done"
+
+    log "Installing the icon font for Visual Studio Code ..."
+    npm i -g @vscode/codicons > /dev/null 2>&1
+    printf " done"
+
+    log "Installing language servers ..."
+    # python language server
+    npm i -g pyright > /dev/null 2>&1
+    # typescript language server
+    npm i -g typescript typescript-language-server > /dev/null 2>&1
+    # awk language server
+    npm i -g awk-language-server > /dev/null 2>&1
+    # css language server
+    npm i -g cssmodules-language-server > /dev/null 2>&1
+    # vim language server
+    npm i -g vim-language-server > /dev/null 2>&1
+    # docker language server
+    npm i -g dockerfile-language-server-nodejs > /dev/null 2>&1
+    # vscode-langservers bin collection, includes:
+    # vscode-html-language-server
+    # vscode-css-language-server
+    # vscode-json-language-server
+    # vscode-eslint-language-server
+    npm i -g vscode-langservers-extracted > /dev/null 2>&1
+    # brew installed language servers
+    for server in ansible bash haskell sql lua yaml
+    do
+      ${BREW_EXE} install -q ${server}-language-server > /dev/null 2>&1
+      [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet \
+                                  ${server}-language-server > /dev/null 2>&1
+    done
+    ${BREW_EXE} install -q ccls > /dev/null 2>&1
+    ${BREW_EXE} link --overwrite --quiet ccls > /dev/null 2>&1
+    ${BREW_EXE} install -q golangci-lint > /dev/null 2>&1
+    ${BREW_EXE} install -q jdtls > /dev/null 2>&1
+    ${BREW_EXE} install -q marksman > /dev/null 2>&1
+    ${BREW_EXE} install -q rust-analyzer > /dev/null 2>&1
+    ${BREW_EXE} install -q shellcheck > /dev/null 2>&1
+    ${BREW_EXE} install -q taplo > /dev/null 2>&1
+    ${BREW_EXE} install -q texlab > /dev/null 2>&1
+    [ "${PYTHON}" ] && {
+      ${PYTHON} -m pip install cmake-language-server > /dev/null 2>&1
+      ${PYTHON} -m pip install python-lsp-server > /dev/null 2>&1
+    }
+    if command -v go >/dev/null 2>&1; then
+      go install golang.org/x/tools/gopls@latest > /dev/null 2>&1
+    fi
+    printf " done"
+    # For other language servers, see:
+    # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+    if ! command -v tree-sitter >/dev/null 2>&1; then
+      log "Installing tree-sitter command line interface ..."
+      ${BREW_EXE} install -q tree-sitter > /dev/null 2>&1
+      printf " done"
+    fi
+    if command -v tree-sitter >/dev/null 2>&1; then
+      tree-sitter init-config > /dev/null 2>&1
+    fi
+    if command -v cargo >/dev/null 2>&1; then
+      cargo install rnix-lsp > /dev/null 2>&1
+    fi
+  }
+  log "Installing ffmpeg, please be patient ..."
+  ${BREW_EXE} uninstall --force --ignore-dependencies ffmpeg > /dev/null 2>&1
+  ${BREW_EXE} install --quiet chromaprint > /dev/null 2>&1
+  ${BREW_EXE} tap homebrew-ffmpeg/ffmpeg > /dev/null 2>&1
+  ${BREW_EXE} install --quiet homebrew-ffmpeg/ffmpeg/ffmpeg $(brew options homebrew-ffmpeg/ffmpeg/ffmpeg | grep -vE '\s' | grep -- '--with-' | grep -vi chromaprint | grep -vi libzvbi | grep -vi decklink | tr '\n' ' ') > /dev/null 2>&1
+  printf " done"
+}
+
 install_npm () {
   # Install nvm, node, npm, language servers
   NODE_VERSION="18.14.0"
@@ -445,76 +522,11 @@ install_npm () {
     ${PYTHON} -m pip install pynvim doq > /dev/null 2>&1
     printf " done"
   }
-  have_npm=`type -p npm`
-  [ "${have_npm}" ] && {
-    log "Setting npm config to use ~/.local as prefix ..."
-    # npm install -g will now install to ~/.local/bin
-    npm config set prefix '~/.local/'
-    printf " done"
 
-    [ "${minimal}" ] || {
-      log "Installing Neovim npm package ..."
-      npm i -g neovim > /dev/null 2>&1
-      printf " done"
-
-      log "Installing the icon font for Visual Studio Code ..."
-      npm i -g @vscode/codicons > /dev/null 2>&1
-      printf " done"
-
-      log "Installing language servers ..."
-      # python language server
-      npm i -g pyright > /dev/null 2>&1
-      # typescript language server
-      npm i -g typescript typescript-language-server > /dev/null 2>&1
-      # awk language server
-      npm i -g awk-language-server > /dev/null 2>&1
-      # css language server
-      npm i -g cssmodules-language-server > /dev/null 2>&1
-      # vim language server
-      npm i -g vim-language-server > /dev/null 2>&1
-      # docker language server
-      npm i -g dockerfile-language-server-nodejs > /dev/null 2>&1
-      # vscode-langservers bin collection, includes:
-      # vscode-html-language-server
-      # vscode-css-language-server
-      # vscode-json-language-server
-      # vscode-eslint-language-server
-      npm i -g vscode-langservers-extracted > /dev/null 2>&1
-      # brew installed language servers
-      for server in ansible bash haskell sql lua yaml
-      do
-        ${BREW_EXE} install -q ${server}-language-server > /dev/null 2>&1
-        [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet \
-                                    ${server}-language-server > /dev/null 2>&1
-      done
-      ${BREW_EXE} install -q ccls > /dev/null 2>&1
-      ${BREW_EXE} link --overwrite --quiet ccls > /dev/null 2>&1
-      ${BREW_EXE} install -q golangci-lint > /dev/null 2>&1
-      ${BREW_EXE} install -q jdtls > /dev/null 2>&1
-      ${BREW_EXE} install -q marksman > /dev/null 2>&1
-      ${BREW_EXE} install -q rust-analyzer > /dev/null 2>&1
-      ${BREW_EXE} install -q shellcheck > /dev/null 2>&1
-      ${BREW_EXE} install -q taplo > /dev/null 2>&1
-      [ "${PYTHON}" ] && {
-        ${PYTHON} -m pip install cmake-language-server > /dev/null 2>&1
-        ${PYTHON} -m pip install python-lsp-server > /dev/null 2>&1
-      }
-    have_go=`type -p go`
-    [ "${have_go}" ] && go install golang.org/x/tools/gopls@latest > /dev/null 2>&1
-      printf " done"
-      # For other language servers, see:
-      # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-      have_tree=`type -p tree-sitter`
-      [ "${have_tree}" ] || {
-        log "Installing tree-sitter command line interface ..."
-#       npm i -g tree-sitter-cli > /dev/null 2>&1
-        ${BREW_EXE} install -q tree-sitter > /dev/null 2>&1
-        printf " done"
-      }
-      have_tree=`type -p tree-sitter`
-      [ "${have_tree}" ] && tree-sitter init-config > /dev/null 2>&1
-    }
-  }
+  log "Setting npm config to use ~/.local as prefix ..."
+  # npm install -g will now install to ~/.local/bin
+  npm config set prefix "${HOME}/.local/"
+  printf " done"
 }
 
 main () {
@@ -580,6 +592,7 @@ main () {
     git_clone_neovim_config
   fi
   install_npm
+  install_tools
 }
 
 quiet=

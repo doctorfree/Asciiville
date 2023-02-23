@@ -1,4 +1,4 @@
-local lsp = require('doctorfree.lsp')
+local lsp = require('lsp')
 local ht = require('haskell-tools')
 
 lsp.start_or_attach_haskell_tools()

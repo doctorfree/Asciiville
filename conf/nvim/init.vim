@@ -477,9 +477,11 @@ servers = {
     "bashls",
     "dockerfile-language-server",
     "typescript-language-server",
-    "lua-language-server",
+    "lua_ls",
     "vimls",
-    "yaml-language-server",
+    "texlab",
+    "jsonls",
+    "yamlls",
     -- Formatter
     "black",
     "prettier",

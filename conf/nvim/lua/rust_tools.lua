@@ -1,6 +1,6 @@
 local rt = require('rust-tools')
 
-local lsp = require('doctorfree.lsp')
+local lsp = require('lsp')
 local rust_analyzer_on_attach = function(client, bufnr)
   lsp.on_attach(client, bufnr)
   -- Hover actions
