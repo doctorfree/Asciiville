@@ -1,4 +1,5 @@
 # Maintainer: Ronald Record <ronaldrecord@gmail.com>
+# shellcheck shell=bash disable=SC2034,SC2154
 
 pkgname=asciiville
 pkgver=v3.0.2r1
