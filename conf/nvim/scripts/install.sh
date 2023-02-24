@@ -84,7 +84,7 @@ get_linux_distribution () {
     then
       LINUX_DISTRIBUTION="arch"
     else
-      have_apt=`type -p apt`
+      have_apt=$(type -p apt)
       if [ "${have_apt}" ]
       then
         LINUX_DISTRIBUTION="debian"
@@ -93,7 +93,7 @@ get_linux_distribution () {
         then
           LINUX_DISTRIBUTION="fedora"
         else
-          have_dnf=`type -p dnf`
+          have_dnf=$(type -p dnf)
           if [ "${have_dnf}" ]
           then
             LINUX_DISTRIBUTION="fedora"
@@ -126,7 +126,7 @@ install_brew () {
   if ! command -v brew >/dev/null 2>&1; then
     log "Installing Homebrew, please be patient ..."
     BREW_URL="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
-    have_curl=`type -p curl`
+    have_curl=$(type -p curl)
     [ "${have_curl}" ] || abort "The curl command could not be located."
     curl -fsSL "${BREW_URL}" > /tmp/brew-$$.sh
     [ $? -eq 0 ] || {
@@ -203,10 +203,18 @@ export PATH'
         echo '  eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${BASHINIT}"
         echo 'fi' >> "${BASHINIT}"
       }
+      grep "^eval \"\$(zoxide init" "${BASHINIT}" > /dev/null || {
+        echo 'if command -v zoxide > /dev/null; then' >> "${BASHINIT}"
+        echo '  eval "$(zoxide init bash)"' >> "${BASHINIT}"
+        echo 'fi' >> "${BASHINIT}"
+      }
     else
       echo "${GOTEXT}" | sed -e "s%__YYY__%${HOMEBREW_HOME}%" > "${BASHINIT}"
       echo 'if [ -x XXX ]; then' | sed -e "s%XXX%${BREW_EXE}%" >> "${BASHINIT}"
       echo '  eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${BASHINIT}"
+      echo 'fi' >> "${BASHINIT}"
+      echo 'if command -v zoxide > /dev/null; then' >> "${BASHINIT}"
+      echo '  eval "$(zoxide init bash)"' >> "${BASHINIT}"
       echo 'fi' >> "${BASHINIT}"
     fi
     [ -f "${HOME}/.zshrc" ] && {
@@ -216,6 +224,11 @@ export PATH'
       grep "^eval \"\$(${BREW_EXE} shellenv)\"" "${HOME}/.zshrc" > /dev/null || {
         echo 'if [ -x XXX ]; then' | sed -e "s%XXX%${BREW_EXE}%" >> "${HOME}/.zshrc"
         echo '  eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${HOME}/.zshrc"
+        echo 'fi' >> "${HOME}/.zshrc"
+      }
+      grep "^eval \"\$(zoxide init" "${HOME}/.zshrc" > /dev/null || {
+        echo 'if command -v zoxide > /dev/null; then' >> "${HOME}/.zshrc"
+        echo '  eval "$(zoxide init bash)"' >> "${HOME}/.zshrc"
         echo 'fi' >> "${HOME}/.zshrc"
       }
     }

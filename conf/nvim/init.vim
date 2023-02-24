@@ -49,9 +49,24 @@ Plug 'gmarik/snipmate.snippets' " gmarik's custom snippet collection
 Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
+" Telescope and extensions
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'crispgm/telescope-heading.nvim'
+Plug 'nvim-telescope/telescope-symbols.nvim'
+Plug 'nvim-telescope/telescope-file-browser.nvim'
+Plug 'nvim-telescope/telescope-ui-select.nvim'
+Plug 'ptethng/telescope-makefile'
+
+Plug 'anuvyklack/hydra.nvim'
+Plug 'anuvyklack/keymap-layer.nvim'
+Plug 'ahmedkhalf/project.nvim'
+
 Plug 'nvim-tree/nvim-web-devicons'
 Plug 'nvim-tree/nvim-tree.lua'
+Plug 'SmiteshP/nvim-navic'
+Plug 'jvgrootveld/telescope-zoxide'
+Plug 'folke/noice.nvim'
+Plug 'rcarriga/nvim-notify'
 
 " A pretty list for showing diagnostics, references, telescope results, quickfix
 " and location lists to help you solve all the trouble your code is causing
@@ -175,6 +190,7 @@ Plug 'sheerun/vim-polyglot'  " Better syntax highlighting
 Plug 'folke/which-key.nvim'  " Easily find key map bindings
 " See https://github.com/akinsho/toggleterm.nvim for toggleterm setup options
 Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
+Plug 'folke/zen-mode.nvim'
 
 " Uncomment and set OPENAI_API_KEY env var to enable :ChatGPT and :ChatGPTActAs
 " See https://github.com/jackMort/ChatGPT.nvim for setup options and usage
@@ -199,6 +215,10 @@ Plug 'flazz/vim-colorschemes'  " One stop shop for vim colorschemes
 " Can be commented out if another colorscheme is used
 Plug 'doctorfree/vim-asciiville'
 Plug 'sainnhe/everforest'
+Plug 'catppuccin/nvim'
+Plug 'EdenEast/nightfox.nvim'
+Plug 'folke/tokyonight.nvim'
+Plug 'sam4llis/nvim-tundra'
 " Uncomment to play with colorschemes
 Plug 'doctorfree/SetColorSchemes.vim' " Easily switch colorschemes
 " Colorschemes must have a matching Airline theme with same name
@@ -230,10 +250,8 @@ endif
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/vim-journal'
-Plug 'echasnovski/mini.starter', { 'branch': 'stable' }
-Plug 'echasnovski/mini.sessions', { 'branch': 'stable' }
-" Or, to use the main development branch, e.g:
-" Plug 'echasnovski/mini.starter'
+" Plug 'goolord/alpha-nvim'
+Plug 'glepnir/dashboard-nvim'
 
 " Cellular automata animations based on the content of neovim buffer
 " https://github.com/Eandrju/cellular-automaton.nvim
@@ -594,19 +612,29 @@ if exists('g:plugs["rust-tools.nvim"]')
     lua require('rust-tools')
   endif
 endif
-if exists('g:plugs["mini.starter"]')
-  if !empty(glob(g:plugs['mini.starter'].dir.'/lua/mini/starter.lua'))
-    lua require('starter-config')
+if exists('g:plugs["project.nvim"]')
+  if !empty(glob(g:plugs['project.nvim'].dir.'/lua/project_nvim/init.lua'))
+    lua require('project-config')
   endif
 endif
-if exists('g:plugs["mini.sessions"]')
-  if !empty(glob(g:plugs['mini.sessions'].dir.'/lua/mini/sessions.lua'))
-    lua require('mini.sessions').setup({ directory = '~/.config/nvim/sessions' })
+" if exists('g:plugs["alpha-nvim"]')
+"   if !empty(glob(g:plugs['alpha-nvim'].dir.'/lua/alpha.lua'))
+"     lua require('alpha-config')
+"   endif
+" endif
+if exists('g:plugs["dashboard-nvim"]')
+  if !empty(glob(g:plugs['dashboard-nvim'].dir.'/lua/dashboard/init.lua'))
+    lua require('dashboard-config')
   endif
 endif
 if exists('g:plugs["toggleterm.nvim"]')
   if !empty(glob(g:plugs['toggleterm.nvim'].dir.'/lua/toggleterm.lua'))
     lua require('toggleterm').setup()
+  endif
+endif
+if exists('g:plugs["noice.nvim"]')
+  if !empty(glob(g:plugs['noice.nvim'].dir.'/lua/noice/init.lua'))
+    lua require('noice-config')
   endif
 endif
 if exists('g:plugs["trouble.nvim"]')
@@ -617,6 +645,11 @@ endif
 if exists('g:plugs["ChatGPT.nvim"]')
   if !empty(glob(g:plugs['ChatGPT.nvim'].dir.'/plugin/chatgpt.lua'))
     lua require('chatgpt').setup()
+  endif
+endif
+if exists('g:plugs["zen-mode.nvim"]')
+  if !empty(glob(g:plugs['zen-mode.nvim'].dir.'/plugin/zen-mode.vim'))
+    lua require('zen-mode-config')
   endif
 endif
 
