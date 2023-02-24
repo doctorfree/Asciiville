@@ -111,11 +111,6 @@ require('lspconfig').jsonls.setup {
   capabilities = capabilities,
 }
 
--- Use haskell-tools instead
--- require('lspconfig')['hls'].setup{
---   filetypes = { 'haskell', 'lhaskell', 'cabal' },
--- }
-
 require('lspconfig')['ccls'].setup{
   init_options = {
     cache = {
