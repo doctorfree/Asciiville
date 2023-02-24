@@ -150,14 +150,14 @@ local buttons = {
   val = {
     { type = "text", val = "Quick links", opts = { hl = "SpecialComment", position = "center" } },
     dashboard.button("f", "  Find File", ":" .. require("utils.functions").telescope_find_files() .. "<CR>"),
-    dashboard.button("b", "  File Browser", ":Telescope file_browser grouped=true <CR>"),
-    dashboard.button("t", "  Find Text", ":Telescope live_grep <CR>"),
+    dashboard.button("b", "  File Browser", ":Telescope file_browser grouped=true<CR>"),
+    dashboard.button("t", "  Find Text", ":Telescope live_grep<CR>"),
     dashboard.button("p", "  Search Projects", ":Telescope projects<CR>"),
     dashboard.button("z", "  Search Zoxide", ":Telescope zoxide list<CR>"),
-    dashboard.button("r", "  Recent Files", ":Telescope oldfiles <CR>"),
-    dashboard.button("e", "  New File", ":ene <BAR> startinsert <CR>"),
-    dashboard.button("g", "  NeoGit", ":Neogit <CR>"),
-    dashboard.button("l", "  Health", ":checkhealth<CR>"),
+    dashboard.button("r", "  Recent Files", ":Telescope oldfiles<CR>"),
+    dashboard.button("e", "  New File", ":ene <BAR> startinsert<CR>"),
+    dashboard.button("c", "  Commit History", ":GV<CR>"),
+    dashboard.button("h", "  Health", ":checkhealth<CR>"),
     dashboard.button("q", "  Quit", ":qa<CR>"),
   },
   position = "center",
@@ -173,12 +173,27 @@ local header = {
   },
 }
 
+local timeShift = 8 * 60 * 60  -- 8 hours
+local datetime = os.date('  %Y-%b-%d   %H:%M:%S', os.time() - timeShift)
+local version = vim.version()
+local nvim_version_info = "   v" .. version.major .. "." .. version.minor .. "." .. version.patch
+local footer = {
+  type = "text",
+  val = datetime .. "    " .. nvim_version_info,
+  opts = {
+    position = "center",
+    hl = "AlphaFooter",
+  },
+}
+
 local layout = {}
 layout[0] = header
-layout[1] = { type = "padding", val = 2 }
+layout[1] = { type = "padding", val = 1 }
 layout[2] = section_mru
-layout[3] = { type = "padding", val = 2 }
+layout[3] = { type = "padding", val = 1 }
 layout[4] = buttons
+layout[5] = { type = "padding", val = 1 }
+layout[6] = footer
 
 if settings.dashboard_recent_files == 0 then
   layout[1] = nil
@@ -194,11 +209,38 @@ if settings.disable_dashboard_quick_links == true then
   layout[4] = nil
 end
 
+local colors = require('tokyonight.colors').setup()
 local opts = {
   layout = layout,
   opts = {
-    margin = 5,
+    margin = 4,
+    setup = function()
+--    require("nvim-web-devicons").setup{
+--      enabled = true,
+--      highlight = true,
+--    }
+      vim.api.nvim_set_hl(0, "AlphaHeader", { fg = colors.blue })
+      vim.api.nvim_set_hl(0, "AlphaHeaderLabel", { fg = colors.orange })
+      vim.api.nvim_set_hl(0, "AlphaButtons", { fg = colors.cyan })
+      vim.api.nvim_set_hl(0, "AlphaShortcut", { fg = colors.orange })
+      vim.api.nvim_set_hl(0, "AlphaFooter", { fg = colors.yellow, italic = true })
+      vim.api.nvim_set_hl(0, "SpecialComment", { fg = colors.yellow, italic = true })
+      vim.api.nvim_set_hl(0, "Comment", { fg = colors.yellow })
+      vim.api.nvim_set_hl(0, "DashboardHeader", { fg = colors.blue })
+      vim.api.nvim_set_hl(0, "DashboardHeaderLabel", { fg = colors.orange })
+      vim.api.nvim_set_hl(0, "DashboardButtons", { fg = colors.cyan })
+      vim.api.nvim_set_hl(0, "DashboardShortcut", { fg = colors.orange })
+      vim.api.nvim_set_hl(0, "DashboardFooter", { fg = colors.yellow, italic = true })
+    end
   },
 }
 
 alpha.setup(opts)
+
+-- Disable folding on alpha buffer
+-- vim.cmd([[
+--     autocmd FileType alpha setlocal nofoldenable
+-- ]])
+vim.cmd([[
+  autocmd User AlphaReady set showtabline=0 | autocmd BufUnload <buffer> set showtabline=2
+]])

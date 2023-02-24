@@ -165,7 +165,6 @@ Plug 'leafgarland/typescript-vim' " Typescript syntax
 " To disable built-in Typescript indentation:
 " let g:typescript_indent_disable = 1
 Plug 'maxmellon/vim-jsx-pretty' " The React syntax highlighting and indenting
-Plug 'gmarik/vim-markdown'      " Markdown syntax support for Vim
 Plug 'tpope/vim-repeat'     " Remaps '.' to repeat the last plugin map as a whole
 Plug 'tpope/vim-surround'   " Delete/change/add parentheses/quotes/XML-tags/more
 Plug 'tpope/vim-unimpaired' " Pairs of handy bracket mappings
@@ -209,11 +208,11 @@ let g:pymode = 1
 let g:pymode_warnings = 1
 
 " Aesthetics - Colorschemes
+Plug 'norcalli/nvim-colorizer.lua'
 Plug 'zaki/zazen'
 Plug 'yuttie/hydrangea-vim'
 Plug 'flazz/vim-colorschemes'  " One stop shop for vim colorschemes
-" Can be commented out if another colorscheme is used
-Plug 'doctorfree/vim-asciiville'
+Plug 'doctorfree/asciiville.nvim'
 Plug 'sainnhe/everforest'
 Plug 'catppuccin/nvim'
 Plug 'EdenEast/nightfox.nvim'
@@ -250,8 +249,8 @@ endif
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/vim-journal'
-" Plug 'goolord/alpha-nvim'
-Plug 'glepnir/dashboard-nvim'
+Plug 'goolord/alpha-nvim'
+" Plug 'mhinz/vim-startify'
 
 " Cellular automata animations based on the content of neovim buffer
 " https://github.com/Eandrju/cellular-automaton.nvim
@@ -284,7 +283,7 @@ endif
 scriptencoding utf-8           " UTF-8 all the way
 set encoding=utf-8
 
-set timeoutlen=250             " Time to wait after ESC (default causes delay)
+set timeoutlen=300             " Time to wait after ESC (default causes delay)
 set clipboard+=unnamed         " Yanks go on clipboard instead.
 set pastetoggle=<F10>          " Toggle between paste and normal: pasting from keyboard
 set shiftround                 " Round indent to multiple of 'shiftwidth'
@@ -440,7 +439,7 @@ let g:signify_sign_change = '│'
 hi DiffDelete guifg=#ff5555 guibg=none
 
 " FixCursorHold for better performance
-let g:updatetime = 250
+let g:updatetime = 200
 
 " context.vim
 let g:context_nvim_no_redraw = 1
@@ -582,6 +581,16 @@ EOF
   endif
 endif
 
+if has("termguicolors")
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+  if exists('g:plugs["nvim-colorizer.lua"]')
+    if !empty(glob(g:plugs['nvim-colorizer.lua'].dir.'/lua/colorizer.lua'))
+      lua require('colorizer').setup()
+    endif
+  endif
+endif
 if exists('g:plugs["nvim-dap"]')
   if !empty(glob(g:plugs['nvim-dap'].dir.'/lua/nvim-dap/plugin/dap.lua'))
     lua require('dap-config')
@@ -592,9 +601,14 @@ if exists('g:plugs["nvim-dap-virtual-text"]')
     lua require('dap-virtual-text-config')
   endif
 endif
+if exists('g:plugs["nvim-web-devicons"]')
+  if !empty(glob(g:plugs['nvim-web-devicons'].dir.'/lua/nvim-web-devicons.lua'))
+    lua require('nvim-web-devicons').setup{}
+  endif
+endif
 if exists('g:plugs["fidget.nvim"]')
   if !empty(glob(g:plugs['fidget.nvim'].dir.'/lua/fidget.lua'))
-    lua require"fidget".setup{}
+    lua require('fidget').setup{}
   endif
 endif
 if exists('g:plugs["go.nvim"]')
@@ -604,7 +618,7 @@ if exists('g:plugs["go.nvim"]')
 endif
 if exists('g:plugs["inlay-hints.nvim"]')
   if !empty(glob(g:plugs['inlay-hints.nvim'].dir.'/lua/inlay-hints/init.lua'))
-    lua require("inlay-hints").setup()
+    lua require('inlay-hints').setup()
   endif
 endif
 if exists('g:plugs["rust-tools.nvim"]')
@@ -617,16 +631,16 @@ if exists('g:plugs["project.nvim"]')
     lua require('project-config')
   endif
 endif
-" if exists('g:plugs["alpha-nvim"]')
-"   if !empty(glob(g:plugs['alpha-nvim'].dir.'/lua/alpha.lua'))
-"     lua require('alpha-config')
-"   endif
-" endif
-if exists('g:plugs["dashboard-nvim"]')
-  if !empty(glob(g:plugs['dashboard-nvim'].dir.'/lua/dashboard/init.lua'))
-    lua require('dashboard-config')
+if exists('g:plugs["alpha-nvim"]')
+  if !empty(glob(g:plugs['alpha-nvim'].dir.'/lua/alpha.lua'))
+    lua require('alpha-config')
   endif
 endif
+"
+" To use the Startify dashboard rather than Alpha, uncomment this line,
+" comment the Alpha entries, and uncomment the startify Plug entry above
+" source $HOME/.config/nvim/startify.vim
+"
 if exists('g:plugs["toggleterm.nvim"]')
   if !empty(glob(g:plugs['toggleterm.nvim'].dir.'/lua/toggleterm.lua'))
     lua require('toggleterm').setup()
@@ -706,20 +720,15 @@ if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 endif
 
-if has("termguicolors")
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
-endif
-
 " If your terminal doesn't handle italics, bold, underline, or undercurl
 " then they can be disabled in the asciiville colorscheme with:
 " let g:asciiville_italic = 0
 " let g:asciiville_bold = 0
 " let g:asciiville_underline = 0
 " let g:asciiville_undercurl = 0
-" Comment out to use everforest below
+" Comment out to use everforest or tokyonight below
 colorscheme asciiville
+let g:asciiville_style = "deep ocean"
 " Asciiville colorscheme commands:
 " :AsciivilleDarkBlueSoft
 " :AsciivilleDarkCyanSoft
@@ -753,6 +762,9 @@ let g:everforest_dim_inactive_windows = 1
 
 " Uncomment to use the Everforest colorscheme
 " colorscheme everforest
+"
+" Uncomment to use the Tokyonight colorscheme
+" colorscheme tokyonight-night
 "
 let g:syntastic_html_checkers = []
 
