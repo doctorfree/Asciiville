@@ -173,13 +173,30 @@ local header = {
   },
 }
 
-local timeShift = 8 * 60 * 60  -- 8 hours
-local datetime = os.date('  %Y-%b-%d   %H:%M:%S', os.time() - timeShift)
+-- Lua implementation of PHP scandir function
+local function scandir(directory)
+    local i, popen = 0, io.popen
+    local pfile = popen('ls "'..directory..'"')
+    for filename in pfile:lines() do
+        i = i + 1
+    end
+    pfile:close()
+    return i
+end
+
+local plugdir = os.getenv("HOME") .. "/.local/share/nvim/plugged"
+local numplugs = scandir(plugdir)
+
+-- If TZ is not set or for some reason os.date() is returning UTC
+-- you can add the timezone offset manually like:
+-- local timeShift = 8 * 60 * 60  -- 8 hours
+-- local datetime = os.date('  %Y-%b-%d   %H:%M:%S', os.time() - timeShift)
+local datetime = os.date('  %Y-%b-%d   %H:%M:%S', os.time())
 local version = vim.version()
 local nvim_version_info = "   v" .. version.major .. "." .. version.minor .. "." .. version.patch
 local footer = {
   type = "text",
-  val = datetime .. "    " .. nvim_version_info,
+  val = datetime .. "    " .. numplugs .. " plugins" .. nvim_version_info,
   opts = {
     position = "center",
     hl = "AlphaFooter",

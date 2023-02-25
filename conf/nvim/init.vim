@@ -656,6 +656,11 @@ if exists('g:plugs["toggleterm.nvim"]')
     lua require('toggleterm').setup()
   endif
 endif
+if exists('g:plugs["nvim-navic"]')
+  if !empty(glob(g:plugs['nvim-navic'].dir.'/lua/nvim-navic/init.lua'))
+    lua require('navic-config')
+  endif
+endif
 if exists('g:plugs["noice.nvim"]')
   if !empty(glob(g:plugs['noice.nvim'].dir.'/lua/noice/init.lua'))
     lua require('noice-config')
