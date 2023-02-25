@@ -13,7 +13,7 @@ function os.capture(cmd, raw)
     return s
 end
 
-local sumneko_binary = os.capture("which lua-language-server")
+local lua_binary = os.capture("which lua-language-server")
 
 local runtime_path = vim.split(package.path, ";")
 table.insert(runtime_path, "lua/?.lua")
@@ -29,7 +29,7 @@ return {
 
     all_format = { efm = "Stylua" },
     default_format = "efm",
-    lsp_server = "sumneko_lua",
+    lsp_server = "lua_ls",
 
     lsp = {
         capabilities = lsp.capabilities,
@@ -39,7 +39,7 @@ return {
             require("nvim-navic").attach(client, bufnr)
         end,
 
-        cmd = { sumneko_binary, "-E" },
+        cmd = { lua_binary, "-E" },
 
         settings = {
             Lua = {

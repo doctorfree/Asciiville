@@ -37,6 +37,7 @@ Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'    " A completion engine plugin for Neovim
 Plug 'tamago324/cmp-zsh'   " Zsh completion for cmp
 Plug 'Shougo/deol.nvim'    " Recommended to use together
+Plug 'jose-elias-alvarez/null-ls.nvim' " inject LSP diagnostics and more via Lua
 " Snippets
 " Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*', 'do': 'make install_jsregexp'}
 Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*'}
@@ -152,7 +153,7 @@ Plug 'nvim-lualine/lualine.nvim'
 " let g:airline_theme='asciiville'
 Plug 'fladson/vim-kitty' " Kitty config syntax highlighting for vim
 " Language support
-Plug '~/github/ray-x/lsp_signature.nvim'
+Plug 'ray-x/lsp_signature.nvim'
 Plug 'ray-x/guihua.lua'        " Floating window support
 Plug 'ray-x/go.nvim'           " Go language support for Neovim
 Plug 'yuezk/vim-js'            " Syntax highlighting for JavaScript and Flow.js
@@ -666,6 +667,16 @@ if exists('g:plugs["noice.nvim"]')
     lua require('noice-config')
   endif
 endif
+if exists('g:plugs["lsp_signature.nvim"]')
+  if !empty(glob(g:plugs['lsp_signature.nvim'].dir.'/lua/lsp_signature/init.lua'))
+    lua require('signature-config')
+  endif
+endif
+if exists('g:plugs["null-ls.nvim"]')
+  if !empty(glob(g:plugs['null-ls.nvim'].dir.'/lua/null-ls/init.lua'))
+    lua require('null-ls-config')
+  endif
+endif
 if exists('g:plugs["trouble.nvim"]')
   if !empty(glob(g:plugs['trouble.nvim'].dir.'/lua/trouble/init.lua'))
     lua require('trouble-config')
@@ -692,7 +703,7 @@ xmap <leader>a gaip*
 nmap <leader>a gaip*
 nmap <leader>h :RainbowParentheses!!<CR>
 nmap <leader>j :set filetype=journal<CR>
-nmap <leader>k :ColorToggle<CR>
+" nmap <leader>k :ColorToggle<CR>
 nmap <leader>l :Limelight!!<CR>
 xmap <leader>l :Limelight!!<CR>
 nmap <silent> <leader><leader> :noh<CR>

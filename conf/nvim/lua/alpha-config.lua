@@ -57,8 +57,8 @@ end
 local default_mru_ignore = { "gitcommit" }
 
 local mru_opts = {
-  ignore = function(path, ext)
-    return (string.find(path, "COMMIT_EDITMSG")) or (vim.tbl_contains(default_mru_ignore, ext))
+  ignore = function(mrupath, ext)
+    return (string.find(mrupath, "COMMIT_EDITMSG")) or (vim.tbl_contains(default_mru_ignore, ext))
   end,
 }
 
@@ -86,7 +86,7 @@ local function mru(start, cwd, items_number, opts)
     end
   end
 
-  local special_shortcuts = { "a", "s", "d" }
+  local special_shortcuts = { "a" }
   local target_width = 35
 
   local tbl = {}
@@ -156,9 +156,15 @@ local buttons = {
     dashboard.button("z", "  Search Zoxide", ":Telescope zoxide list<CR>"),
     dashboard.button("r", "  Recent Files", ":Telescope oldfiles<CR>"),
     dashboard.button("e", "  New File", ":ene <BAR> startinsert<CR>"),
-    dashboard.button("c", "  Commit History", ":GV<CR>"),
-    dashboard.button("h", "  Health", ":checkhealth<CR>"),
+    dashboard.button("h", "  Commit History", ":GV<CR>"),
     dashboard.button("q", "  Quit", ":qa<CR>"),
+    { type = "padding", val = 1 },
+    { type = "text", val = "Plugin Management", opts = { hl = "SpecialComment", position = "center" } },
+    dashboard.button("h", "  Health", ":checkhealth<CR>"),
+    dashboard.button("s", "  Plugin Status", ":PlugStatus<CR>"),
+    dashboard.button("c", "  Clean Plugins", ":PlugClean<CR>"),
+    dashboard.button("i", "  Install Plugins", ":PlugInstall<CR>"),
+    dashboard.button("u", "  Update Plugins", ":PlugUpdate<CR>"),
   },
   position = "center",
 }

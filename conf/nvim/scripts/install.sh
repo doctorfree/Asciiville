@@ -12,7 +12,7 @@
 OS=""
 PYTHON=
 LINUX_DISTRIBUTION=""
-LINUX_HOMEBREW="https://docs.brew.sh/Homebrew-on-Linux"
+# LINUX_HOMEBREW="https://docs.brew.sh/Homebrew-on-Linux"
 DOC_HOMEBREW="https://docs.brew.sh"
 BREW_EXE="brew"
 

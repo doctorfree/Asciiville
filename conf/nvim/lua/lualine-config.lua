@@ -15,6 +15,12 @@ local fmt_stat = function()
     return stat
 end
 
+local current_signature = function(width)
+  if not pcall(require, 'lsp_signature') then return end
+  local sig = require("lsp_signature").status_line(width)
+  return sig.label .. "🐼" .. sig.hint
+end
+
 if navic_ok then
     winbar_cfg = {
         lualine_a = {},
@@ -23,7 +29,7 @@ if navic_ok then
             { 'filename', path = 3, file_status = true, newfile_status = true },
             { navic.get_location, cond = navic.is_available },
         },
-        lualine_x = {},
+        lualine_x = { current_signature(30) },
         lualine_y = { 'progress' },
         lualine_z = { 'location' }
     }

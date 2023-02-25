@@ -82,7 +82,7 @@ telescope.setup({
         ["<PageDown>"] = actions.results_scrolling_down,
         ["<C-u>"] = actions.preview_scrolling_up,
         ["<C-d>"] = actions.preview_scrolling_down,
-        ["<C-k>"] = actions.move_selection_previous,
+        -- ["<C-k>"] = actions.move_selection_previous,
         ["<C-q>"] = actions.send_selected_to_qflist,
         ["<C-l>"] = actions.send_to_qflist,
         ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
