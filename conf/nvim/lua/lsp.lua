@@ -33,6 +33,10 @@ end
 function lsp.on_attach(client, bufnr)
   api.nvim_command('setlocal signcolumn=yes')
 
+  if client.server_capabilities.documentSymbolProvider then
+    require("nvim-navic").attach(client, bufnr)
+  end
+
   local function buf_set_option(...)
     api.nvim_buf_set_option(bufnr, ...)
   end

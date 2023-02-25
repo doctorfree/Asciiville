@@ -96,6 +96,11 @@ Plug 'camilledejoye/nvim-lsp-selection-range'
 Plug 'simrat39/rust-tools.nvim'
 Plug 'mrcjkb/haskell-tools.nvim', { 'branch': '1.x.x' }
 Plug 'mfussenegger/nvim-jdtls'
+Plug 'antoinemadec/FixCursorHold.nvim'
+Plug 'nvim-neotest/neotest'
+Plug 'nvim-neotest/neotest-python'
+Plug 'nvim-neotest/neotest-plenary'
+Plug 'nvim-neotest/neotest-vim-test'
 
 " CoC Nodejs extension host
 " Load extensions like VSCode and host language servers
@@ -133,28 +138,18 @@ Plug 'junegunn/gv.vim'      " A git commit browser (requires vim-fugitive)
 "     You can pass git log options to the command, e.g. :GV -S foobar -- plugins
 " :GV! will only list commits that affected the current file
 " :GV? fills the location list with the revisions of the current file
-Plug 'vim-airline/vim-airline' " Nifty status of your current file
-let g:airline#extensions#tabline#enabled = 1
-let g:bufferline_echo = 0
-let g:airline_powerline_fonts = 1
-" Remove the error and warning sections from Airline layout
+Plug 'nvim-lualine/lualine.nvim'
+" Plug 'vim-airline/vim-airline' " Nifty status of your current file
+" let g:airline#extensions#tabline#enabled = 1
+" let g:bufferline_echo = 0
+" let g:airline_powerline_fonts = 1
+"
 " let g:airline#extensions#default#layout = [
 "     \ [ 'a', 'b', 'c' ],
-"     \ [ 'x', 'y', 'z', 'error', 'warning' ]
+"     \ [ 'x', 'y', 'z']
 "     \ ]
-let g:airline#extensions#default#layout = [
-    \ [ 'a', 'b', 'c' ],
-    \ [ 'x', 'y', 'z']
-    \ ]
-Plug 'vim-airline/vim-airline-themes' " Airline status themes
-" Airline themes can be found in:
-" ~/.local/share/nvim/plugged/vim-airline-themes/autoload/airline/themes/
-"   simple, powerlineish, onedark, desertink distinguished, cool, cobalt2,
-"   hybrid, night_owl, luna, solarized_flood, google_dark, ravenpower, molokai
-" Uncomment your preferred Airline theme, everforest, google_dark, or asciiville
-" let g:airline_theme='everforest'
-" let g:airline_theme='google_dark'
-let g:airline_theme='asciiville'
+" Plug 'vim-airline/vim-airline-themes' " Airline status themes
+" let g:airline_theme='asciiville'
 Plug 'fladson/vim-kitty' " Kitty config syntax highlighting for vim
 " Language support
 Plug '~/github/ray-x/lsp_signature.nvim'
@@ -220,14 +215,15 @@ Plug 'folke/tokyonight.nvim'
 Plug 'sam4llis/nvim-tundra'
 " Uncomment to play with colorschemes
 Plug 'doctorfree/SetColorSchemes.vim' " Easily switch colorschemes
-" Colorschemes must have a matching Airline theme with same name
-" Currently available colorschemes with matching Airline theme:
+" If using Airline, colorschemes must have a matching Airline theme with
+" the same name. Currently available colorschemes with matching Airline theme:
 " alduin angr apprentice badwolf behelit biogoo bubblegum cobalt2 cool cyberpunk
 " desertink deus distinguished fairyfloss hybrid jellybeans kalisi kolor laederon
 " lucius luna minimalist molokai monochrome onedark peaksea seagull seoul256
 " sierra soda solarized sol transparent ubaryd understated wombat zenburn
 let g:mycolorschemes = ['asciiville', 'everforest', 'cool', 'desertink', 'distinguished', 'hybrid', 'luna', 'molokai', 'solarized', 'zenburn']
-let g:setairlinetheme = 1
+" Set this to 1 if using Airline, 0 with Lualine
+let g:setairlinetheme = 0
 
 " Aesthetics - Others
 if has('nvim')
@@ -480,9 +476,13 @@ if !empty(glob('/path/to/doq'))
   let g:pydocstring_doq_path = '/path/to/doq'
 endif
 
+" Need to convifure Neodev prior to LSP
+if exists('g:plugs["neodev.nvim"]')
+  if !empty(glob(g:plugs['neodev.nvim'].dir.'/lua/neodev/init.lua'))
+    lua require('neodev-config')
+  endif
+endif
 """ Core plugin configuration (lua)
-" Use airline rather than lualine
-" require('lualine-config')
 " Add these:  cssmodules ansible haskell sql
 if exists('g:plugs["nvim-treesitter"]')
   if !empty(glob(g:plugs['nvim-treesitter'].dir.'/autoload/nvim_treesitter.vim'))
@@ -603,12 +603,17 @@ if exists('g:plugs["nvim-dap-virtual-text"]')
 endif
 if exists('g:plugs["nvim-web-devicons"]')
   if !empty(glob(g:plugs['nvim-web-devicons'].dir.'/lua/nvim-web-devicons.lua'))
-    lua require('nvim-web-devicons').setup{}
+    lua require('devicons-config')
   endif
 endif
 if exists('g:plugs["fidget.nvim"]')
   if !empty(glob(g:plugs['fidget.nvim'].dir.'/lua/fidget.lua'))
     lua require('fidget').setup{}
+  endif
+endif
+if exists('g:plugs["neotest"]')
+  if !empty(glob(g:plugs['neotest'].dir.'/lua/neotest/init.lua'))
+    lua require('neotest-config')
   endif
 endif
 if exists('g:plugs["go.nvim"]')
@@ -624,6 +629,11 @@ endif
 if exists('g:plugs["rust-tools.nvim"]')
   if !empty(glob(g:plugs['rust-tools.nvim'].dir.'/lua/rust-tools/init.lua'))
     lua require('rust-tools')
+  endif
+endif
+if exists('g:plugs["lualine.nvim"]')
+  if !empty(glob(g:plugs['lualine.nvim'].dir.'/lua/lualine.lua'))
+    lua require('lualine-config')
   endif
 endif
 if exists('g:plugs["project.nvim"]')

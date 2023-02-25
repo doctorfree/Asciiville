@@ -458,6 +458,11 @@ install_tools () {
     printf " done"
     # For other language servers, see:
     # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+    if ! command -v zoxide >/dev/null 2>&1; then
+      log "Installing zoxide smarter cd ..."
+      ${BREW_EXE} install -q zoxide > /dev/null 2>&1
+      printf " done"
+    fi
     if ! command -v tree-sitter >/dev/null 2>&1; then
       log "Installing tree-sitter command line interface ..."
       ${BREW_EXE} install -q tree-sitter > /dev/null 2>&1
