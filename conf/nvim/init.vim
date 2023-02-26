@@ -81,7 +81,6 @@ Plug 'theHamsta/nvim-dap-virtual-text'
 " Functionalities
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-surround'
 Plug 'mhinz/vim-signify'
 Plug 'alvan/vim-closetag'
 Plug 'tpope/vim-abolish'
@@ -132,6 +131,7 @@ Plug 'junegunn/vim-easy-align' " A simple, easy-to-use Vim alignment plugin
 Plug 'scrooloose/nerdcommenter'
 Plug 'KabbAmine/vCoolor.vim'
 Plug 'RRethy/vim-illuminate'
+Plug 'lewis6991/gitsigns.nvim'
 Plug 'tpope/vim-git'            " Syntax, indent, and filetype for Git
 " Git integration - :Git (or just :G) calls any arbitrary Git command
 Plug 'junegunn/gv.vim'      " A git commit browser (requires vim-fugitive)
@@ -162,8 +162,6 @@ Plug 'leafgarland/typescript-vim' " Typescript syntax
 " let g:typescript_indent_disable = 1
 Plug 'maxmellon/vim-jsx-pretty' " The React syntax highlighting and indenting
 Plug 'tpope/vim-repeat'     " Remaps '.' to repeat the last plugin map as a whole
-Plug 'tpope/vim-surround'   " Delete/change/add parentheses/quotes/XML-tags/more
-Plug 'tpope/vim-unimpaired' " Pairs of handy bracket mappings
 Plug 'AndrewRadev/splitjoin.vim' " Switch between single-line and multiline
 Plug 'gmarik/github-search.vim'  " Search Github and clone repos with Vim
 Plug 'gmarik/ide-popup.vim' " Make Vim completion popup menu work like in an IDE
@@ -620,6 +618,11 @@ endif
 if exists('g:plugs["go.nvim"]')
   if !empty(glob(g:plugs['go.nvim'].dir.'/lua/go.lua'))
     lua require('go-config')
+  endif
+endif
+if exists('g:plugs["gitsigns.nvim"]')
+  if !empty(glob(g:plugs['gitsigns.nvim'].dir.'/lua/gitsigns.lua'))
+    lua require('gitsigns').setup()
   endif
 endif
 if exists('g:plugs["inlay-hints.nvim"]')

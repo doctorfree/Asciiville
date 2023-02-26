@@ -448,6 +448,12 @@ install_tools () {
     ${BREW_EXE} install -q shellcheck > /dev/null 2>&1
     ${BREW_EXE} install -q taplo > /dev/null 2>&1
     ${BREW_EXE} install -q texlab > /dev/null 2>&1
+    ${BREW_EXE} install -q stylua > /dev/null 2>&1
+    ${BREW_EXE} install -q eslint > /dev/null 2>&1
+    ${BREW_EXE} install -q prettier > /dev/null 2>&1
+    ${BREW_EXE} install -q terraform > /dev/null 2>&1
+    ${BREW_EXE} install -q black > /dev/null 2>&1
+    ${BREW_EXE} install -q shfmt > /dev/null 2>&1
     [ "${PYTHON}" ] && {
       ${PYTHON} -m pip install cmake-language-server > /dev/null 2>&1
       ${PYTHON} -m pip install python-lsp-server > /dev/null 2>&1
