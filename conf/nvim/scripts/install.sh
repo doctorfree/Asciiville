@@ -141,6 +141,7 @@ install_brew () {
     rm -f /tmp/brew-$$.sh
     export HOMEBREW_NO_INSTALL_CLEANUP=1
     export HOMEBREW_NO_ENV_HINTS=1
+    export HOMEBREW_NO_AUTO_UPDATE=1
     printf " done"
     if [ -f ${HOME}/.profile ]
     then

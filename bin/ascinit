@@ -1436,6 +1436,7 @@ fi
 
   export HOMEBREW_NO_INSTALL_CLEANUP=1
   export HOMEBREW_NO_ENV_HINTS=1
+  export HOMEBREW_NO_AUTO_UPDATE=1
 }
 
 # Brew doesn't create a python symlink so we do so here
