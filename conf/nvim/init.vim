@@ -66,7 +66,7 @@ Plug 'nvim-tree/nvim-web-devicons'
 Plug 'nvim-neo-tree/neo-tree.nvim', { 'branch': 'v2.x' }
 Plug 'SmiteshP/nvim-navic'
 Plug 'jvgrootveld/telescope-zoxide'
-Plug 'folke/noice.nvim'
+" Plug 'folke/noice.nvim'
 Plug 'rcarriga/nvim-notify'
 
 " A pretty list for showing diagnostics, references, telescope results, quickfix
@@ -185,10 +185,10 @@ Plug 'folke/which-key.nvim'  " Easily find key map bindings
 " See https://github.com/akinsho/toggleterm.nvim for toggleterm setup options
 Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
 Plug 'folke/zen-mode.nvim'
+Plug 'MunifTanjim/nui.nvim'
 
 " Uncomment and set OPENAI_API_KEY env var to enable :ChatGPT and :ChatGPTActAs
 " See https://github.com/jackMort/ChatGPT.nvim for setup options and usage
-" Plug 'MunifTanjim/nui.nvim'
 " Plug 'jackMort/ChatGPT.nvim'
 
 " Register vim-plug as a plugin to enable help  (e.g. :help plug-options)
@@ -322,7 +322,7 @@ set wildmode=longest,list
 " wilder#wildmenu_airline_theme() and wilder#wildmenu_lightline_theme() can be used.
 "
 if exists('g:plugs["wilder.nvim"]')
-  if !empty(glob(g:plugs['wilder.nvim'].dir.'/autoload/wilder.vim'))
+  if !empty(glob(g:plugs['wilder.nvim'].dir.'/lua/wilder.lua'))
     lua require('wilder-config')
   endif
 endif
@@ -681,11 +681,11 @@ if exists('g:plugs["nvim-navic"]')
     lua require('navic-config')
   endif
 endif
-if exists('g:plugs["noice.nvim"]')
-  if !empty(glob(g:plugs['noice.nvim'].dir.'/lua/noice/init.lua'))
-    lua require('noice-config')
-  endif
-endif
+" if exists('g:plugs["noice.nvim"]')
+"   if !empty(glob(g:plugs['noice.nvim'].dir.'/lua/noice/init.lua'))
+"     lua require('noice-config')
+"   endif
+" endif
 if exists('g:plugs["lsp_signature.nvim"]')
   if !empty(glob(g:plugs['lsp_signature.nvim'].dir.'/lua/lsp_signature/init.lua'))
     lua require('signature-config')

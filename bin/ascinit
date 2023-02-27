@@ -2,6 +2,7 @@
 #
 # ascinit - initialize Asciiville configuration files, install needed utilities
 #
+# shellcheck disable=SC2001,SC2016,SC2006,SC2086,SC2181,SC2129
 
 darwin=
 platform=`uname -s`
@@ -12,8 +13,6 @@ then
 else
   TOP="/usr"
 fi
-ARTDIR="${TOP}/asciiville/art"
-FIG_FONTS="${TOP}/figlet-fonts"
 MUSEDIR="${TOP}/asciiville/music"
 CONFDIR=${TOP}/share/asciiville
 USERCONF="${HOME}/.config"
@@ -506,12 +505,10 @@ remove_neovim() {
 }
 
 install_neovim() {
-  if [ "${quiet}" ]
-  then
-    ${CONFDIR}/nvim/scripts/install.sh -q
-  else
-    ${CONFDIR}/nvim/scripts/install.sh
-  fi
+  install_args=
+  [ "${quiet}" ] && install_args="${install_args} -q"
+  [ "${debug}" ] && install_args="${install_args} -d"
+  ${CONFDIR}/nvim/scripts/install.sh ${install_args}
   have_nvim=`type -p nvim`
 }
 
@@ -1641,13 +1638,11 @@ have_jp2a=`type -p jp2a`
     install_neovim
   else
     # Perform a minimal installation of required tools
+    install_args="-m"
+    [ "${quiet}" ] && install_args="${install_args} -q"
+    [ "${debug}" ] && install_args="${install_args} -d"
     [ -x ${CONFDIR}/nvim/scripts/install.sh ] && {
-      if [ "${quiet}" ]
-      then
-        ${CONFDIR}/nvim/scripts/install.sh -m -q
-      else
-        ${CONFDIR}/nvim/scripts/install.sh -m
-      fi
+      ${CONFDIR}/nvim/scripts/install.sh ${install_args}
     }
   fi
 
