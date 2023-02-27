@@ -1,4 +1,3 @@
-local settings = require("settings")
 local status_ok, alpha = pcall(require, "alpha")
 if not status_ok then
   return
@@ -8,6 +7,15 @@ local path_ok, path = pcall(require, "plenary.path")
 if not path_ok then
   return
 end
+
+-- Number of recent files shown in dashboard
+-- 0 disables showing recent files
+local dashboard_recent_files = 5
+-- disable the header of the dashboard
+local disable_dashboard_header = false
+-- disable quick links of the dashboard
+local disable_dashboard_quick_links = false
+
 
 local dashboard = require("alpha.themes.dashboard")
 local nvim_web_devicons = require("nvim-web-devicons")
@@ -138,7 +146,7 @@ local section_mru = {
     {
       type = "group",
       val = function()
-        return { mru(1, cdir, settings.dashboard_recent_files) }
+        return { mru(1, cdir, dashboard_recent_files) }
       end,
       opts = { shrink_margin = false },
     },
@@ -218,16 +226,16 @@ layout[4] = buttons
 layout[5] = { type = "padding", val = 1 }
 layout[6] = footer
 
-if settings.dashboard_recent_files == 0 then
+if dashboard_recent_files == 0 then
   layout[1] = nil
   layout[2] = nil
 end
 
-if settings.disable_dashboard_header == true then
+if disable_dashboard_header == true then
   layout[0] = nil
 end
 
-if settings.disable_dashboard_quick_links == true then
+if disable_dashboard_quick_links == true then
   layout[3] = nil
   layout[4] = nil
 end
@@ -261,9 +269,9 @@ local opts = {
 alpha.setup(opts)
 
 -- Disable folding on alpha buffer
--- vim.cmd([[
---     autocmd FileType alpha setlocal nofoldenable
--- ]])
+vim.cmd([[
+    autocmd FileType alpha setlocal nofoldenable
+]])
 vim.cmd([[
   autocmd User AlphaReady set showtabline=0 | autocmd BufUnload <buffer> set showtabline=2
 ]])

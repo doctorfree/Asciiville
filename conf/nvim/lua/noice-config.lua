@@ -1,6 +1,3 @@
-local settings = require("settings")
-local enabled = settings.enable_noice
-
 require("noice").setup({
     cmdline = {
       enabled = true, -- enables the Noice cmdline UI

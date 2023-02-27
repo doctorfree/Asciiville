@@ -26,7 +26,7 @@ let maplocalleader = ','
 
 call plug#begin()
 
-" Core (treesitter, nvim-lspconfig, nvim-cmp, nvim-telescope, nvim-tree, etc)
+" Core (treesitter, nvim-lspconfig, nvim-cmp, nvim-telescope, etc)
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/playground'
 Plug 'neovim/nvim-lspconfig'
@@ -63,7 +63,7 @@ Plug 'anuvyklack/keymap-layer.nvim'
 Plug 'ahmedkhalf/project.nvim'
 
 Plug 'nvim-tree/nvim-web-devicons'
-Plug 'nvim-tree/nvim-tree.lua'
+Plug 'nvim-neo-tree/neo-tree.nvim', { 'branch': 'v2.x' }
 Plug 'SmiteshP/nvim-navic'
 Plug 'jvgrootveld/telescope-zoxide'
 Plug 'folke/noice.nvim'
@@ -140,6 +140,7 @@ Plug 'junegunn/gv.vim'      " A git commit browser (requires vim-fugitive)
 " :GV! will only list commits that affected the current file
 " :GV? fills the location list with the revisions of the current file
 Plug 'nvim-lualine/lualine.nvim'
+Plug 'kdheepak/tabline.nvim'
 " Plug 'vim-airline/vim-airline' " Nifty status of your current file
 " let g:airline#extensions#tabline#enabled = 1
 " let g:bufferline_echo = 0
@@ -514,7 +515,6 @@ require('nvim-cmp-config')
 require('lspconfig-config')
 require('treesitter-config')
 require('telescope-config')
-require('nvim-tree-config')
 require('diagnostics')
 EOF
   endif
@@ -640,6 +640,17 @@ if exists('g:plugs["lualine.nvim"]')
     lua require('lualine-config')
   endif
 endif
+if exists('g:plugs["tabline.nvim"]')
+  if !empty(glob(g:plugs['tabline.nvim'].dir.'/lua/tabline.lua'))
+    lua require('tabline-config')
+  endif
+endif
+if exists('g:plugs["neo-tree.nvim"]')
+  if !empty(glob(g:plugs['neo-tree.nvim'].dir.'/lua/neo-tree.lua'))
+    let g:neo_tree_remove_legacy_commands = 1
+    lua require('neo-tree-config')
+  endif
+endif
 if exists('g:plugs["project.nvim"]')
   if !empty(glob(g:plugs['project.nvim'].dir.'/lua/project_nvim/init.lua'))
     lua require('project-config')
@@ -658,6 +669,11 @@ endif
 if exists('g:plugs["toggleterm.nvim"]')
   if !empty(glob(g:plugs['toggleterm.nvim'].dir.'/lua/toggleterm.lua'))
     lua require('toggleterm').setup()
+  endif
+endif
+if exists('g:plugs["which-key.nvim"]')
+  if !empty(glob(g:plugs['which-key.nvim'].dir.'/lua/which-key/init.lua'))
+    lua require('which-key-config')
   endif
 endif
 if exists('g:plugs["nvim-navic"]')

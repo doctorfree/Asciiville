@@ -432,6 +432,8 @@ install_tools () {
     # vscode-json-language-server
     # vscode-eslint-language-server
     npm i -g vscode-langservers-extracted > /dev/null 2>&1
+	# Improve eslint performance
+	npm i -g eslint_d > /dev/null 2>&1
     # brew installed language servers
     for server in ansible bash haskell sql lua yaml
     do

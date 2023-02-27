@@ -5,9 +5,7 @@
 local ok, lualine = pcall(require, 'lualine')
 if not ok then return end
 
-local navic_ok, navic = pcall(require, 'nvim-navic')
-local winbar_cfg = {}
-local inactive_winbar_cfg = {}
+local navic = require('nvim-navic')
 
 local fmt_stat = function()
     local stat = ''
@@ -15,109 +13,78 @@ local fmt_stat = function()
     return stat
 end
 
-local current_signature = function(width)
-  if not pcall(require, 'lsp_signature') then return end
-  local sig = require("lsp_signature").status_line(width)
-  return sig.label .. "🐼" .. sig.hint
-end
-
-if navic_ok then
-    winbar_cfg = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = {
-            { 'filename', path = 3, file_status = true, newfile_status = true },
-            { navic.get_location, cond = navic.is_available },
-        },
-        lualine_x = { current_signature(30) },
-        lualine_y = { 'progress' },
-        lualine_z = { 'location' }
-    }
-    inactive_winbar_cfg = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = {
-            { 'filename', path = 3, file_status = true, newfile_status = true },
-        },
-        lualine_x = {},
-        lualine_y = {},
-        lualine_z = {}
-    }
-end
-
-lualine.setup({
-    options = {
-        icons_enabled = true,
-        -- theme = 'auto',
-        theme = 'tokyonight',
-        --component_separators = { left = '', right = ''},
-        component_separators = { left = '', right = '' },
-        --section_separators = { left = '', right = ''},
-        section_separators = { left = '', right = '' },
-        disabled_filetypes = {
-            statusline = {},
-            winbar = {
-                'NvimTree',
-                'Outline',
-                'toggleterm',
-                'alpha',
-                'dap-repl',
-                'packer',
-                'Trouble',
-                'dapui_scopes',
-                'dapui_breakpoints',
-                'dapui_stacks',
-                'dapui_watches',
-                'dap-terminal',
-                'dapui_console',
-                'dashboard',
-                'help',
-                'lazy',
-                'lir',
-                'neogitstatus',
-                'oil',
-                'spectre_panel',
-                'startify',
-            },
-        },
-        always_divide_middle = true,
-        globalstatus = true,
+lualine.setup {
+  options = {
+    globalstatus = true,
+    icons_enabled = true,
+    -- theme = 'auto',
+    theme = 'tokyonight',
+    --component_separators = { left = '', right = '' },
+    component_separators = { left = '', right = '' },
+    --section_separators = { left = '', right = '' },
+    section_separators = { left = '', right = '' },
+    disabled_filetypes = {
+      'neo-tree', 'NvimTree', 'Outline', 'toggleterm', 'dap-repl',
+      'packer', 'Trouble', 'dapui_scopes', 'dapui_breakpoints', 'dapui_stacks',
+      'dapui_watches', 'dap-terminal', 'dapui_console', 'dashboard', 'help',
+      'lazy', 'lir', 'neogitstatus', 'oil', 'spectre_panel', 'startify'
     },
-    sections = {
-        lualine_a = { 'mode' },
-        lualine_b = { 'branch', 'diff', 'diagnostics' },
-        lualine_c = { { 'filename', path = 1, } },
-        lualine_x = { fmt_stat, 'encoding', 'fileformat', 'filetype' },
-        lualine_y = {},
-        lualine_z = {},
+    always_divide_middle = true
+  },
+  sections = {
+    lualine_a = { 'mode' },
+    lualine_b = { 'branch', 'diff', 'diagnostics' },
+    lualine_c = {
+      { 'filename',
+        path = 3,
+        filetype_names = {
+          TelescopePrompt = 'Telescope',
+          dashboard = 'Dashboard',
+          packer = 'Packer',
+          fzf = 'FZF',
+          alpha = 'Alpha',
+        }
+      },
+      { navic.get_location, cond = navic.is_available },
     },
-    inactive_sections = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = { 'filename' },
-        lualine_x = { 'location' },
-        lualine_y = {},
-        lualine_z = {}
-    },
-    tabline = {},
-    winbar = winbar_cfg,
-    inactive_winbar = inactive_winbar_cfg,
+    lualine_x = { fmt_stat, 'encoding', 'fileformat', 'filetype' },
+    lualine_y = { 'progress' },
+    lualine_z = { 'location' }
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = { 'filename' },
+    lualine_x = { 'location' },
+    lualine_y = {},
+    lualine_z = {}
+  },
 
-    -- Available extensions:
-    --   aerial
-    --  chadtree
-    --   fern
-    --   fugitive
-    --   fzf
-    --   man
-    --   mundo
-    --   neo-tree
-    --   nerdtree
-    --   nvim-dap-ui
-    --   nvim-tree
-    --   quickfix
-    --   symbols-outline
-    --   toggleterm
-    -- extenstions = { 'fugitive', 'fzf', 'toggleterm', 'nvim-dap-ui' }
-    extensions = { 'nvim-tree', 'quickfix', 'fugitive', 'symbols-outline', 'toggleterm', 'nvim-dap-ui' }
-})
+  tabline = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = { require'tabline'.tabline_buffers },
+    lualine_x = { require'tabline'.tabline_tabs },
+    lualine_y = {},
+    lualine_z = {},
+  },
+  winbar = {},
+  inactive_winbar = {},
+
+  -- Available extensions:
+  --   aerial
+  --   chadtree
+  --   fern
+  --   fugitive
+  --   fzf
+  --   man
+  --   mundo
+  --   neo-tree
+  --   nerdtree
+  --   nvim-dap-ui
+  --   nvim-tree
+  --   quickfix
+  --   symbols-outline
+  --   toggleterm
+  extensions = { 'neo-tree', 'fugitive', 'fzf', 'toggleterm', 'nvim-dap-ui', 'quickfix' }
+}
