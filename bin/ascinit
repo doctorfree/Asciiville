@@ -2,6 +2,7 @@
 #
 # ascinit - initialize Asciiville configuration files, install needed utilities
 #
+# shellcheck disable=SC2001,SC2016,SC2006,SC2086,SC2181,SC2129
 
 darwin=
 platform=`uname -s`
@@ -12,8 +13,6 @@ then
 else
   TOP="/usr"
 fi
-ARTDIR="${TOP}/asciiville/art"
-FIG_FONTS="${TOP}/figlet-fonts"
 MUSEDIR="${TOP}/asciiville/music"
 CONFDIR=${TOP}/share/asciiville
 USERCONF="${HOME}/.config"
@@ -506,12 +505,10 @@ remove_neovim() {
 }
 
 install_neovim() {
-  if [ "${quiet}" ]
-  then
-    ${CONFDIR}/nvim/scripts/install.sh -q
-  else
-    ${CONFDIR}/nvim/scripts/install.sh
-  fi
+  install_args=
+  [ "${quiet}" ] && install_args="${install_args} -q"
+  [ "${debug}" ] && install_args="${install_args} -d"
+  ${CONFDIR}/nvim/scripts/install.sh ${install_args}
   have_nvim=`type -p nvim`
 }
 
@@ -1439,6 +1436,7 @@ fi
 
   export HOMEBREW_NO_INSTALL_CLEANUP=1
   export HOMEBREW_NO_ENV_HINTS=1
+  export HOMEBREW_NO_AUTO_UPDATE=1
 }
 
 # Brew doesn't create a python symlink so we do so here
@@ -1549,6 +1547,25 @@ have_tmux=`type -p tmux`
 [ "${have_tmux}" ] || install_package tmux
 have_w3m=`type -p w3m`
 [ "${have_w3m}" ] || install_package w3m
+have_aic=`type -p ascii-image-converter`
+[ "${have_aic}" ] || {
+  [ "${quiet}" ] || printf "\n\tInstalling ascii-image-converter ..."
+  # Try Brew first
+  brewed=
+  [ "${usebrew}" ] && {
+    brew install --quiet \
+      TheZoraiz/ascii-image-converter/ascii-image-converter > /dev/null 2>&1
+    have_aic=`type -p ascii-image-converter`
+    [ "${have_aic}" ] && brewed=1
+  }
+  [ "${brewed}" ] || {
+    have_go=`type -p go`
+    [ "${have_go}" ] && {
+      go install github.com/TheZoraiz/ascii-image-converter@latest > /dev/null 2>&1
+    }
+  }
+  [ "${quiet}" ] || printf " done"
+}
 have_asciinema=`type -p asciinema`
 [ "${have_asciinema}" ] || install_package asciinema
 have_gnupg=`type -p gpg`
@@ -1641,13 +1658,11 @@ have_jp2a=`type -p jp2a`
     install_neovim
   else
     # Perform a minimal installation of required tools
+    install_args="-m"
+    [ "${quiet}" ] && install_args="${install_args} -q"
+    [ "${debug}" ] && install_args="${install_args} -d"
     [ -x ${CONFDIR}/nvim/scripts/install.sh ] && {
-      if [ "${quiet}" ]
-      then
-        ${CONFDIR}/nvim/scripts/install.sh -m -q
-      else
-        ${CONFDIR}/nvim/scripts/install.sh -m
-      fi
+      ${CONFDIR}/nvim/scripts/install.sh ${install_args}
     }
   fi
 

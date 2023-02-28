@@ -8,11 +8,12 @@
 #
 # Adapted for Asciiville from https://github.com/Allaman/nvim.git
 # See https://github.com/doctorfree/nvim
+# shellcheck disable=SC2001,SC2016,SC2006,SC2086,SC2181,SC2129
 
 OS=""
 PYTHON=
 LINUX_DISTRIBUTION=""
-LINUX_HOMEBREW="https://docs.brew.sh/Homebrew-on-Linux"
+# LINUX_HOMEBREW="https://docs.brew.sh/Homebrew-on-Linux"
 DOC_HOMEBREW="https://docs.brew.sh"
 BREW_EXE="brew"
 
@@ -84,7 +85,7 @@ get_linux_distribution () {
     then
       LINUX_DISTRIBUTION="arch"
     else
-      have_apt=`type -p apt`
+      have_apt=$(type -p apt)
       if [ "${have_apt}" ]
       then
         LINUX_DISTRIBUTION="debian"
@@ -93,7 +94,7 @@ get_linux_distribution () {
         then
           LINUX_DISTRIBUTION="fedora"
         else
-          have_dnf=`type -p dnf`
+          have_dnf=$(type -p dnf)
           if [ "${have_dnf}" ]
           then
             LINUX_DISTRIBUTION="fedora"
@@ -124,9 +125,10 @@ link_python () {
 
 install_brew () {
   if ! command -v brew >/dev/null 2>&1; then
+    [ "${debug}" ] && START_SECONDS=$(date +%s)
     log "Installing Homebrew, please be patient ..."
     BREW_URL="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
-    have_curl=`type -p curl`
+    have_curl=$(type -p curl)
     [ "${have_curl}" ] || abort "The curl command could not be located."
     curl -fsSL "${BREW_URL}" > /tmp/brew-$$.sh
     [ $? -eq 0 ] || {
@@ -139,6 +141,7 @@ install_brew () {
     rm -f /tmp/brew-$$.sh
     export HOMEBREW_NO_INSTALL_CLEANUP=1
     export HOMEBREW_NO_ENV_HINTS=1
+    export HOMEBREW_NO_AUTO_UPDATE=1
     printf " done"
     if [ -f ${HOME}/.profile ]
     then
@@ -151,7 +154,6 @@ install_brew () {
         BASHINIT="${HOME}/.profile"
       fi
     fi
-    # shellcheck disable=SC2016
     if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]
     then
       HOMEBREW_HOME="/home/linuxbrew/.linuxbrew"
@@ -203,10 +205,18 @@ export PATH'
         echo '  eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${BASHINIT}"
         echo 'fi' >> "${BASHINIT}"
       }
+      grep "^eval \"\$(zoxide init" "${BASHINIT}" > /dev/null || {
+        echo 'if command -v zoxide > /dev/null; then' >> "${BASHINIT}"
+        echo '  eval "$(zoxide init bash)"' >> "${BASHINIT}"
+        echo 'fi' >> "${BASHINIT}"
+      }
     else
       echo "${GOTEXT}" | sed -e "s%__YYY__%${HOMEBREW_HOME}%" > "${BASHINIT}"
       echo 'if [ -x XXX ]; then' | sed -e "s%XXX%${BREW_EXE}%" >> "${BASHINIT}"
       echo '  eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${BASHINIT}"
+      echo 'fi' >> "${BASHINIT}"
+      echo 'if command -v zoxide > /dev/null; then' >> "${BASHINIT}"
+      echo '  eval "$(zoxide init bash)"' >> "${BASHINIT}"
       echo 'fi' >> "${BASHINIT}"
     fi
     [ -f "${HOME}/.zshrc" ] && {
@@ -218,10 +228,21 @@ export PATH'
         echo '  eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >> "${HOME}/.zshrc"
         echo 'fi' >> "${HOME}/.zshrc"
       }
+      grep "^eval \"\$(zoxide init" "${HOME}/.zshrc" > /dev/null || {
+        echo 'if command -v zoxide > /dev/null; then' >> "${HOME}/.zshrc"
+        echo '  eval "$(zoxide init bash)"' >> "${HOME}/.zshrc"
+        echo 'fi' >> "${HOME}/.zshrc"
+      }
     }
     eval "$(${BREW_EXE} shellenv)"
     have_brew=`type -p brew`
     [ "${have_brew}" ] && BREW_EXE="brew"
+    [ "${debug}" ] && {
+      FINISH_SECONDS=$(date +%s)
+      ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+      ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+      printf "\nHomebrew install elapsed time = ${ELAPSED}\n"
+    }
   fi
   [ "${HOMEBREW_HOME}" ] || {
     brewpath=$(command -v brew)
@@ -235,12 +256,42 @@ export PATH'
   log "    Homebrew installed in ${HOMEBREW_HOME}"
   log "    See ${DOC_HOMEBREW}"
   log "Installing Homebrew gcc, cmake, and make ..."
-  ${BREW_EXE} install --quiet gcc > /dev/null 2>&1
-  ${BREW_EXE} install --quiet cmake > /dev/null 2>&1
-  ${BREW_EXE} install --quiet make > /dev/null 2>&1
-  ${BREW_EXE} uninstall --ignore-dependencies llvm > /dev/null 2>&1
-  ${BREW_EXE} install --quiet llvm@14 > /dev/null 2>&1
-  ${BREW_EXE} link llvm@14 > /dev/null 2>&1
+  if [ "${debug}" ]
+  then
+    START_SECONDS=$(date +%s)
+    ${BREW_EXE} install gcc
+    FINISH_SECONDS=$(date +%s)
+    ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+    ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+    printf "\nInstall gcc elapsed time = %s${ELAPSED}\n"
+    START_SECONDS=$(date +%s)
+    ${BREW_EXE} install cmake
+    FINISH_SECONDS=$(date +%s)
+    ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+    ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+    printf "\nInstall cmake elapsed time = %s${ELAPSED}\n"
+    START_SECONDS=$(date +%s)
+    ${BREW_EXE} install make
+    FINISH_SECONDS=$(date +%s)
+    ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+    ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+    printf "\nInstall make elapsed time = %s${ELAPSED}\n"
+    START_SECONDS=$(date +%s)
+    ${BREW_EXE} uninstall --ignore-dependencies llvm
+    ${BREW_EXE} install llvm@14
+    ${BREW_EXE} link llvm@14
+    FINISH_SECONDS=$(date +%s)
+    ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+    ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+    printf "\nInstall llvm elapsed time = %s${ELAPSED}\n"
+  else
+    ${BREW_EXE} install --quiet gcc > /dev/null 2>&1
+    ${BREW_EXE} install --quiet cmake > /dev/null 2>&1
+    ${BREW_EXE} install --quiet make > /dev/null 2>&1
+    ${BREW_EXE} uninstall --ignore-dependencies llvm > /dev/null 2>&1
+    ${BREW_EXE} install --quiet llvm@14 > /dev/null 2>&1
+    ${BREW_EXE} link llvm@14 > /dev/null 2>&1
+  fi
   printf " done"
 }
 
@@ -249,13 +300,24 @@ install_neovim_dependencies () {
   PKGS="git lazygit fd ripgrep fzf tmux go node python warrensbox/tap/tfswitch"
   for pkg in ${PKGS}
   do
-    ${BREW_EXE} install --quiet ${pkg} > /dev/null 2>&1
-    [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet ${pkg} > /dev/null 2>&1
+    if [ "${debug}" ]
+    then
+      START_SECONDS=$(date +%s)
+      ${BREW_EXE} install ${pkg}
+      FINISH_SECONDS=$(date +%s)
+      ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+      ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+      printf "\nInstall ${pkg} elapsed time = %s${ELAPSED}\n"
+    else
+      ${BREW_EXE} install --quiet ${pkg} > /dev/null 2>&1
+    fi
+#   [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet ${pkg} > /dev/null 2>&1
   done
   printf " done"
   link_python
   if ! command -v cargo >/dev/null 2>&1; then
     log "Installing cargo ..."
+    [ "${debug}" ] && START_SECONDS=$(date +%s)
     RUST_URL="https://sh.rustup.rs"
     curl -fsSL "${RUST_URL}" > /tmp/rust-$$.sh
     [ $? -eq 0 ] || {
@@ -270,6 +332,12 @@ install_neovim_dependencies () {
     [ -f /tmp/rust-$$.sh ] && sh /tmp/rust-$$.sh -y > /dev/null 2>&1
     rm -f /tmp/rust-$$.sh
     printf " done"
+    [ "${debug}" ] && {
+      FINISH_SECONDS=$(date +%s)
+      ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+      ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+      printf "\nCargo install elapsed time = %s${ELAPSED}\n"
+    }
   fi
 }
 
@@ -277,8 +345,18 @@ install_neovim_head () {
   [ "${minimal}" ] || {
     if ! command -v nvim >/dev/null 2>&1; then
       log "Installing Neovim HEAD, please be patient ..."
-      ${BREW_EXE} install -q --HEAD neovim > /dev/null 2>&1
-      [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet neovim > /dev/null 2>&1
+      if [ "${debug}" ]
+      then
+        START_SECONDS=$(date +%s)
+        ${BREW_EXE} install --HEAD neovim
+        FINISH_SECONDS=$(date +%s)
+        ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+        ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+        printf "\nInstall Neovim elapsed time = %s${ELAPSED}\n"
+      else
+        ${BREW_EXE} install -q --HEAD neovim > /dev/null 2>&1
+      fi
+#     [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet neovim > /dev/null 2>&1
       printf " done"
     elif [[ ! $(nvim --version) =~ "dev" ]]; then
       log "Neovim is installed but not HEAD version"
@@ -321,11 +399,6 @@ fixup_init_vim () {
       rm -f /tmp/nvim$$
     }
     [ "${OPENAI_API_KEY}" ] && {
-      grep "\" Plug 'MunifTanjim/nui.nvim'" ${NVIMCONF} > /dev/null && {
-        cat ${NVIMCONF} | sed -e "s%\" Plug 'MunifTanjim/nui.nvim'%Plug 'MunifTanjim/nui.nvim'%" > /tmp/nvim$$
-        cp /tmp/nvim$$ ${NVIMCONF}
-        rm -f /tmp/nvim$$
-      }
       grep "\" Plug 'jackMort/ChatGPT.nvim'" ${NVIMCONF} > /dev/null && {
         cat ${NVIMCONF} | sed -e "s%\" Plug 'jackMort/ChatGPT.nvim'%Plug 'jackMort/ChatGPT.nvim'%" > /tmp/nvim$$
         cp /tmp/nvim$$ ${NVIMCONF}
@@ -392,6 +465,7 @@ check_python () {
 
 install_tools () {
   [ "${minimal}" ] || {
+    [ "${debug}" ] && START_SECONDS=$(date +%s)
     log "Installing Neovim npm package ..."
     npm i -g neovim > /dev/null 2>&1
     printf " done"
@@ -419,22 +493,70 @@ install_tools () {
     # vscode-json-language-server
     # vscode-eslint-language-server
     npm i -g vscode-langservers-extracted > /dev/null 2>&1
+    # Improve eslint performance
+    npm i -g eslint_d > /dev/null 2>&1
+    [ "${debug}" ] && {
+      FINISH_SECONDS=$(date +%s)
+      ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+      ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+      printf "\nNpm tools install elapsed time = %s${ELAPSED}\n"
+    }
     # brew installed language servers
     for server in ansible bash haskell sql lua yaml
     do
-      ${BREW_EXE} install -q ${server}-language-server > /dev/null 2>&1
-      [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet \
-                                  ${server}-language-server > /dev/null 2>&1
+      if [ "${debug}" ]
+      then
+        START_SECONDS=$(date +%s)
+        ${BREW_EXE} install ${server}-language-server
+        FINISH_SECONDS=$(date +%s)
+        ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+        ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+        printf "\nInstall ${server}-language-server elapsed time = %s${ELAPSED}\n"
+      else
+        ${BREW_EXE} install -q ${server}-language-server > /dev/null 2>&1
+      fi
+#     [ $? -eq 0 ] || ${BREW_EXE} link --overwrite --quiet \
+#                                 ${server}-language-server > /dev/null 2>&1
     done
-    ${BREW_EXE} install -q ccls > /dev/null 2>&1
-    ${BREW_EXE} link --overwrite --quiet ccls > /dev/null 2>&1
-    ${BREW_EXE} install -q golangci-lint > /dev/null 2>&1
-    ${BREW_EXE} install -q jdtls > /dev/null 2>&1
-    ${BREW_EXE} install -q marksman > /dev/null 2>&1
-    ${BREW_EXE} install -q rust-analyzer > /dev/null 2>&1
-    ${BREW_EXE} install -q shellcheck > /dev/null 2>&1
-    ${BREW_EXE} install -q taplo > /dev/null 2>&1
-    ${BREW_EXE} install -q texlab > /dev/null 2>&1
+    if [ "${debug}" ]
+    then
+      START_SECONDS=$(date +%s)
+      ${BREW_EXE} install ccls
+      ${BREW_EXE} link --overwrite ccls
+      FINISH_SECONDS=$(date +%s)
+      ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+      ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+      printf "\nInstall ccls elapsed time = %s${ELAPSED}\n"
+    else
+      ${BREW_EXE} install -q ccls > /dev/null 2>&1
+      ${BREW_EXE} link --overwrite --quiet ccls > /dev/null 2>&1
+    fi
+    if [ "${debug}" ]
+    then
+      for pkg in golangci-lint jdtls marksman rust-analyzer shellcheck taplo texlab stylua eslint prettier terraform black shfmt
+      do
+        START_SECONDS=$(date +%s)
+        ${BREW_EXE} install ${pkg}
+        FINISH_SECONDS=$(date +%s)
+        ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+        ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+        printf "\nInstall ${pkg} elapsed time = %s${ELAPSED}\n"
+      done
+    else
+      ${BREW_EXE} install -q golangci-lint > /dev/null 2>&1
+      ${BREW_EXE} install -q jdtls > /dev/null 2>&1
+      ${BREW_EXE} install -q marksman > /dev/null 2>&1
+      ${BREW_EXE} install -q rust-analyzer > /dev/null 2>&1
+      ${BREW_EXE} install -q shellcheck > /dev/null 2>&1
+      ${BREW_EXE} install -q taplo > /dev/null 2>&1
+      ${BREW_EXE} install -q texlab > /dev/null 2>&1
+      ${BREW_EXE} install -q stylua > /dev/null 2>&1
+      ${BREW_EXE} install -q eslint > /dev/null 2>&1
+      ${BREW_EXE} install -q prettier > /dev/null 2>&1
+      ${BREW_EXE} install -q terraform > /dev/null 2>&1
+      ${BREW_EXE} install -q black > /dev/null 2>&1
+      ${BREW_EXE} install -q shfmt > /dev/null 2>&1
+    fi
     [ "${PYTHON}" ] && {
       ${PYTHON} -m pip install cmake-language-server > /dev/null 2>&1
       ${PYTHON} -m pip install python-lsp-server > /dev/null 2>&1
@@ -445,9 +567,34 @@ install_tools () {
     printf " done"
     # For other language servers, see:
     # https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+    if ! command -v zoxide >/dev/null 2>&1; then
+      log "Installing zoxide smarter cd ..."
+      if [ "${debug}" ]
+      then
+        START_SECONDS=$(date +%s)
+        ${BREW_EXE} install zoxide
+        FINISH_SECONDS=$(date +%s)
+        ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+        ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+        printf "\nInstall zoxide elapsed time = %s${ELAPSED}\n"
+      else
+        ${BREW_EXE} install -q zoxide > /dev/null 2>&1
+      fi
+      printf " done"
+    fi
     if ! command -v tree-sitter >/dev/null 2>&1; then
       log "Installing tree-sitter command line interface ..."
-      ${BREW_EXE} install -q tree-sitter > /dev/null 2>&1
+      if [ "${debug}" ]
+      then
+        START_SECONDS=$(date +%s)
+        ${BREW_EXE} install tree-sitter
+        FINISH_SECONDS=$(date +%s)
+        ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+        ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+        printf "\nInstall tree-sitter elapsed time = %s${ELAPSED}\n"
+      else
+        ${BREW_EXE} install -q tree-sitter > /dev/null 2>&1
+      fi
       printf " done"
     fi
     if command -v tree-sitter >/dev/null 2>&1; then
@@ -458,14 +605,28 @@ install_tools () {
     fi
   }
   log "Installing ffmpeg, please be patient ..."
-  ${BREW_EXE} uninstall --force --ignore-dependencies ffmpeg > /dev/null 2>&1
-  ${BREW_EXE} install --quiet chromaprint > /dev/null 2>&1
-  ${BREW_EXE} tap homebrew-ffmpeg/ffmpeg > /dev/null 2>&1
-  ${BREW_EXE} install --quiet homebrew-ffmpeg/ffmpeg/ffmpeg $(brew options homebrew-ffmpeg/ffmpeg/ffmpeg | grep -vE '\s' | grep -- '--with-' | grep -vi chromaprint | grep -vi libzvbi | grep -vi decklink | tr '\n' ' ') > /dev/null 2>&1
+  if [ "${debug}" ]
+  then
+    START_SECONDS=$(date +%s)
+    ${BREW_EXE} uninstall --force --ignore-dependencies ffmpeg
+    ${BREW_EXE} install chromaprint
+    ${BREW_EXE} tap homebrew-ffmpeg/ffmpeg
+    ${BREW_EXE} install homebrew-ffmpeg/ffmpeg/ffmpeg $(brew options homebrew-ffmpeg/ffmpeg/ffmpeg | grep -vE '\s' | grep -- '--with-' | grep -vi chromaprint | grep -vi libzvbi | grep -vi decklink | tr '\n' ' ')
+    FINISH_SECONDS=$(date +%s)
+    ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+    ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+    printf "\nInstall ffmpeg elapsed time = %s${ELAPSED}\n"
+  else
+    ${BREW_EXE} uninstall --force --ignore-dependencies ffmpeg > /dev/null 2>&1
+    ${BREW_EXE} install --quiet chromaprint > /dev/null 2>&1
+    ${BREW_EXE} tap homebrew-ffmpeg/ffmpeg > /dev/null 2>&1
+    ${BREW_EXE} install --quiet homebrew-ffmpeg/ffmpeg/ffmpeg $(brew options homebrew-ffmpeg/ffmpeg/ffmpeg | grep -vE '\s' | grep -- '--with-' | grep -vi chromaprint | grep -vi libzvbi | grep -vi decklink | tr '\n' ' ') > /dev/null 2>&1
+  fi
   printf " done"
 }
 
 install_npm () {
+  [ "${debug}" ] && START_SECONDS=$(date +%s)
   # Install nvm, node, npm, language servers
   NODE_VERSION="18.14.0"
   NVM_VERSION="0.39.3"
@@ -527,6 +688,12 @@ install_npm () {
   # npm install -g will now install to ~/.local/bin
   npm config set prefix "${HOME}/.local/"
   printf " done"
+  [ "${debug}" ] && {
+    FINISH_SECONDS=$(date +%s)
+    ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+    ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+    printf "\nNpm install elapsed time = %s${ELAPSED}\n"
+  }
 }
 
 main () {
@@ -539,7 +706,6 @@ main () {
       log "Updating package database ..."
       sudo apt -q -y update > /dev/null 2>&1
       printf " done"
-      # shellcheck disable=SC2086
       log "Installing common packages ..."
       sudo apt -q -y install build-essential ${common_packages} > /dev/null 2>&1
       printf " done"
@@ -551,7 +717,6 @@ main () {
       log "Updating package database ..."
       sudo pacman -Sy --noconfirm > /dev/null 2>&1
       printf " done"
-      # shellcheck disable=SC2086
       log "Installing common packages ..."
       sudo pacman -S --noconfirm base-devel ${common_packages} > /dev/null 2>&1
       printf " done"
@@ -563,7 +728,6 @@ main () {
       log "Updating package database ..."
       sudo dnf --assumeyes --quiet update > /dev/null 2>&1
       printf " done"
-      # shellcheck disable=SC2086
       log "Installing common packages ..."
       sudo dnf --assumeyes --quiet groupinstall "Development Tools" > /dev/null 2>&1
       sudo dnf --assumeyes --quiet install ${common_packages} > /dev/null 2>&1
@@ -574,7 +738,6 @@ main () {
       git_clone_neovim_config
     fi
   elif [[ $OS == "apple" ]];then
-    # shellcheck disable=SC2086
     have_xcode=`type -p xcode-select`
     [ "${have_xcode}" ] || abort "Xcode must be installed. See the App store."
     xcode-select -p > /dev/null 2>&1
@@ -597,16 +760,42 @@ main () {
 
 quiet=
 minimal=
+debug=
 
-while getopts "mq" flag; do
+while getopts "dmq" flag; do
   case $flag in
+    d)
+        debug=1
+        ;;
     m)
         minimal=1
         ;;
     q)
         quiet=1
         ;;
+    *)
+        ;;
   esac
 done
 
+currlimit=$(ulimit -n)
+hardlimit=$(ulimit -Hn)
+if [ ${hardlimit} -gt 4096 ]
+then
+  ulimit -n 4096
+else
+  ulimit -n ${hardlimit}
+fi
+
+[ "${debug}" ] && MAIN_START_SECONDS=$(date +%s)
+
 main
+
+[ "${debug}" ] && {
+  MAIN_FINISH_SECONDS=$(date +%s)
+  MAIN_ELAPSECS=$(( MAIN_FINISH_SECONDS - MAIN_START_SECONDS ))
+  MAIN_ELAPSED=`eval "echo $(date -ud "@$MAIN_ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+  printf "\nTotal elapsed time = %s${MAIN_ELAPSED}\n"
+}
+
+ulimit -n ${currlimit}

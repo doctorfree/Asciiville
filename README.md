@@ -1,10 +1,10 @@
 <pre>
-      _                      _    _           _   __   __         
-     / \                    (_)  (_)         (_) [  | [  |        
-    / _ \     .--.   .---.  __   __  _   __  __   | |  | | .---.  
-   / ___ \   ( (`\] / /'`\][  | [  |[ \ [  ][  |  | |  | |/ /__\\ 
- _/ /   \ \_  `'.'. | \__.  | |  | | \ \/ /  | |  | |  | || \__., 
-|____| |____|[\__) )'.___.'[___][___] \__/  [___][___][___]'.__.' 
+      _                      _    _           _   __   __
+     / \                    (_)  (_)         (_) [  | [  |
+    / _ \     .--.   .---.  __   __  _   __  __   | |  | | .---.
+   / ___ \   ( (`\] / /'`\][  | [  |[ \ [  ][  |  | |  | |/ /__\\
+ _/ /   \ \_  `'.'. | \__.  | |  | | \ \/ /  | |  | |  | || \__.,
+|____| |____|[\__) )'.___.'[___][___] \__/  [___][___][___]'.__.'
 </pre>
 
 Asciiville is where you go for ASCII Art, animations, and utilities.
@@ -695,6 +695,17 @@ While running `nvim` perform a Neovim health check by issuing the Neovim command
 ```vim
 :checkhealth
 ```
+The Asciiville Neovim configuration provides one of the best development
+environments available. It is hoped that we here in Asciiville will soon
+be able to leverage this incredible text editing facility to augment our
+creation of Ascii Art. Here are a couple of screenshots of Neovim using
+the Asciiville setup:
+
+<p float="left">
+<br/>
+  <img src="screenshots/neovim-asciiville.png" style="width:800px;height:600px;">
+  <img src="screenshots/neovim-search.png" style="width:800px;height:600px;">
+</p>
 
 #### Newsboat RSS feed reader configuration
 
@@ -1685,7 +1696,7 @@ to a wider variety of Linux platforms and potentially Mac OS X.
 If you have the means and you would like to sponsor Asciiville development,
 testing, platform support, and continued improvement then your monetary
 support could play a very critical role. A little bit goes a long way
-in Asciiville. For example, a bootable USB SSD device could serve as a 
+in Asciiville. For example, a bootable USB SSD device could serve as a
 means of porting and testing support for additional platforms. Or, a
 decent cup of coffee could be the difference between a bug filled
 release and a glorious artistic adventure.

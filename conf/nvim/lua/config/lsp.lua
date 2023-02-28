@@ -33,6 +33,18 @@ end
 function lsp.on_attach(client, bufnr)
   api.nvim_command('setlocal signcolumn=yes')
 
+  if client.server_capabilities.documentSymbolProvider then
+    require("nvim-navic").attach(client, bufnr)
+  end
+
+  -- Autocomplete signature hints
+  require "lsp_signature".on_attach({
+    bind = true, -- This is mandatory, otherwise border config won't get registered.
+    handler_opts = {
+      border = "rounded"
+    }
+  })
+
   local function buf_set_option(...)
     api.nvim_buf_set_option(bufnr, ...)
   end
@@ -52,7 +64,7 @@ function lsp.on_attach(client, bufnr)
   keymap.set('n', '<space>gt', vim.lsp.buf.type_definition, opts)
   -- keymap.set('n', 'K', vim.lsp.buf.hover, opts) -- overriden by nvim-ufo
   keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-  keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+  -- keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
   keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
   keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
   keymap.set('n', '<space>wl', function()
@@ -81,8 +93,6 @@ function lsp.on_attach(client, bufnr)
     illuminate.goto_prev_reference(true)
   end, opts)
 
-  -- Autocomplete signature hints
-  require('lsp_signature').on_attach()
   inlayhints.on_attach(client, bufnr)
 
   local function get_active_clients(buf)

@@ -26,7 +26,7 @@ let maplocalleader = ','
 
 call plug#begin()
 
-" Core (treesitter, nvim-lspconfig, nvim-cmp, nvim-telescope, nvim-tree, etc)
+" Core (treesitter, nvim-lspconfig, nvim-cmp, nvim-telescope, etc)
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/playground'
 Plug 'neovim/nvim-lspconfig'
@@ -37,6 +37,7 @@ Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'    " A completion engine plugin for Neovim
 Plug 'tamago324/cmp-zsh'   " Zsh completion for cmp
 Plug 'Shougo/deol.nvim'    " Recommended to use together
+Plug 'jose-elias-alvarez/null-ls.nvim' " inject LSP diagnostics and more via Lua
 " Snippets
 " Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*', 'do': 'make install_jsregexp'}
 Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*'}
@@ -49,9 +50,24 @@ Plug 'gmarik/snipmate.snippets' " gmarik's custom snippet collection
 Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
+" Telescope and extensions
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'crispgm/telescope-heading.nvim'
+Plug 'nvim-telescope/telescope-symbols.nvim'
+Plug 'nvim-telescope/telescope-file-browser.nvim'
+Plug 'nvim-telescope/telescope-ui-select.nvim'
+Plug 'ptethng/telescope-makefile'
+
+Plug 'anuvyklack/hydra.nvim'
+Plug 'anuvyklack/keymap-layer.nvim'
+Plug 'ahmedkhalf/project.nvim'
+
 Plug 'nvim-tree/nvim-web-devicons'
-Plug 'nvim-tree/nvim-tree.lua'
+Plug 'nvim-neo-tree/neo-tree.nvim', { 'branch': 'v2.x' }
+Plug 'SmiteshP/nvim-navic'
+Plug 'jvgrootveld/telescope-zoxide'
+" Plug 'folke/noice.nvim'
+Plug 'rcarriga/nvim-notify'
 
 " A pretty list for showing diagnostics, references, telescope results, quickfix
 " and location lists to help you solve all the trouble your code is causing
@@ -65,7 +81,6 @@ Plug 'theHamsta/nvim-dap-virtual-text'
 " Functionalities
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-surround'
 Plug 'mhinz/vim-signify'
 Plug 'alvan/vim-closetag'
 Plug 'tpope/vim-abolish'
@@ -81,6 +96,11 @@ Plug 'camilledejoye/nvim-lsp-selection-range'
 Plug 'simrat39/rust-tools.nvim'
 Plug 'mrcjkb/haskell-tools.nvim', { 'branch': '1.x.x' }
 Plug 'mfussenegger/nvim-jdtls'
+Plug 'antoinemadec/FixCursorHold.nvim'
+Plug 'nvim-neotest/neotest'
+Plug 'nvim-neotest/neotest-python'
+Plug 'nvim-neotest/neotest-plenary'
+Plug 'nvim-neotest/neotest-vim-test'
 
 " CoC Nodejs extension host
 " Load extensions like VSCode and host language servers
@@ -111,6 +131,7 @@ Plug 'junegunn/vim-easy-align' " A simple, easy-to-use Vim alignment plugin
 Plug 'scrooloose/nerdcommenter'
 Plug 'KabbAmine/vCoolor.vim'
 Plug 'RRethy/vim-illuminate'
+Plug 'lewis6991/gitsigns.nvim'
 Plug 'tpope/vim-git'            " Syntax, indent, and filetype for Git
 " Git integration - :Git (or just :G) calls any arbitrary Git command
 Plug 'junegunn/gv.vim'      " A git commit browser (requires vim-fugitive)
@@ -118,31 +139,22 @@ Plug 'junegunn/gv.vim'      " A git commit browser (requires vim-fugitive)
 "     You can pass git log options to the command, e.g. :GV -S foobar -- plugins
 " :GV! will only list commits that affected the current file
 " :GV? fills the location list with the revisions of the current file
-Plug 'vim-airline/vim-airline' " Nifty status of your current file
-let g:airline#extensions#tabline#enabled = 1
-let g:bufferline_echo = 0
-let g:airline_powerline_fonts = 1
-" Remove the error and warning sections from Airline layout
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'kdheepak/tabline.nvim'
+" Plug 'vim-airline/vim-airline' " Nifty status of your current file
+" let g:airline#extensions#tabline#enabled = 1
+" let g:bufferline_echo = 0
+" let g:airline_powerline_fonts = 1
+"
 " let g:airline#extensions#default#layout = [
 "     \ [ 'a', 'b', 'c' ],
-"     \ [ 'x', 'y', 'z', 'error', 'warning' ]
+"     \ [ 'x', 'y', 'z']
 "     \ ]
-let g:airline#extensions#default#layout = [
-    \ [ 'a', 'b', 'c' ],
-    \ [ 'x', 'y', 'z']
-    \ ]
-Plug 'vim-airline/vim-airline-themes' " Airline status themes
-" Airline themes can be found in:
-" ~/.local/share/nvim/plugged/vim-airline-themes/autoload/airline/themes/
-"   simple, powerlineish, onedark, desertink distinguished, cool, cobalt2,
-"   hybrid, night_owl, luna, solarized_flood, google_dark, ravenpower, molokai
-" Uncomment your preferred Airline theme, everforest, google_dark, or asciiville
-" let g:airline_theme='everforest'
-" let g:airline_theme='google_dark'
-let g:airline_theme='asciiville'
+" Plug 'vim-airline/vim-airline-themes' " Airline status themes
+" let g:airline_theme='asciiville'
 Plug 'fladson/vim-kitty' " Kitty config syntax highlighting for vim
 " Language support
-Plug '~/github/ray-x/lsp_signature.nvim'
+Plug 'ray-x/lsp_signature.nvim'
 Plug 'ray-x/guihua.lua'        " Floating window support
 Plug 'ray-x/go.nvim'           " Go language support for Neovim
 Plug 'yuezk/vim-js'            " Syntax highlighting for JavaScript and Flow.js
@@ -150,10 +162,7 @@ Plug 'leafgarland/typescript-vim' " Typescript syntax
 " To disable built-in Typescript indentation:
 " let g:typescript_indent_disable = 1
 Plug 'maxmellon/vim-jsx-pretty' " The React syntax highlighting and indenting
-Plug 'gmarik/vim-markdown'      " Markdown syntax support for Vim
 Plug 'tpope/vim-repeat'     " Remaps '.' to repeat the last plugin map as a whole
-Plug 'tpope/vim-surround'   " Delete/change/add parentheses/quotes/XML-tags/more
-Plug 'tpope/vim-unimpaired' " Pairs of handy bracket mappings
 Plug 'AndrewRadev/splitjoin.vim' " Switch between single-line and multiline
 Plug 'gmarik/github-search.vim'  " Search Github and clone repos with Vim
 Plug 'gmarik/ide-popup.vim' " Make Vim completion popup menu work like in an IDE
@@ -175,10 +184,11 @@ Plug 'sheerun/vim-polyglot'  " Better syntax highlighting
 Plug 'folke/which-key.nvim'  " Easily find key map bindings
 " See https://github.com/akinsho/toggleterm.nvim for toggleterm setup options
 Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
+Plug 'folke/zen-mode.nvim'
+Plug 'MunifTanjim/nui.nvim'
 
 " Uncomment and set OPENAI_API_KEY env var to enable :ChatGPT and :ChatGPTActAs
 " See https://github.com/jackMort/ChatGPT.nvim for setup options and usage
-" Plug 'MunifTanjim/nui.nvim'
 " Plug 'jackMort/ChatGPT.nvim'
 
 " Register vim-plug as a plugin to enable help  (e.g. :help plug-options)
@@ -193,22 +203,29 @@ let g:pymode = 1
 let g:pymode_warnings = 1
 
 " Aesthetics - Colorschemes
+Plug 'norcalli/nvim-colorizer.lua'
 Plug 'zaki/zazen'
 Plug 'yuttie/hydrangea-vim'
 Plug 'flazz/vim-colorschemes'  " One stop shop for vim colorschemes
-" Can be commented out if another colorscheme is used
-Plug 'doctorfree/vim-asciiville'
+Plug 'doctorfree/asciiville.nvim'
+Plug 'doctorfree/asciiart.nvim'
+Plug 'm00qek/baleia.nvim', { 'tag': 'v1.2.0' }
 Plug 'sainnhe/everforest'
+Plug 'catppuccin/nvim'
+Plug 'EdenEast/nightfox.nvim'
+Plug 'folke/tokyonight.nvim'
+Plug 'sam4llis/nvim-tundra'
 " Uncomment to play with colorschemes
 Plug 'doctorfree/SetColorSchemes.vim' " Easily switch colorschemes
-" Colorschemes must have a matching Airline theme with same name
-" Currently available colorschemes with matching Airline theme:
+" If using Airline, colorschemes must have a matching Airline theme with
+" the same name. Currently available colorschemes with matching Airline theme:
 " alduin angr apprentice badwolf behelit biogoo bubblegum cobalt2 cool cyberpunk
 " desertink deus distinguished fairyfloss hybrid jellybeans kalisi kolor laederon
 " lucius luna minimalist molokai monochrome onedark peaksea seagull seoul256
 " sierra soda solarized sol transparent ubaryd understated wombat zenburn
 let g:mycolorschemes = ['asciiville', 'everforest', 'cool', 'desertink', 'distinguished', 'hybrid', 'luna', 'molokai', 'solarized', 'zenburn']
-let g:setairlinetheme = 1
+" Set this to 1 if using Airline, 0 with Lualine
+let g:setairlinetheme = 0
 
 " Aesthetics - Others
 if has('nvim')
@@ -230,10 +247,8 @@ endif
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/vim-journal'
-Plug 'echasnovski/mini.starter', { 'branch': 'stable' }
-Plug 'echasnovski/mini.sessions', { 'branch': 'stable' }
-" Or, to use the main development branch, e.g:
-" Plug 'echasnovski/mini.starter'
+Plug 'goolord/alpha-nvim'
+" Plug 'mhinz/vim-startify'
 
 " Cellular automata animations based on the content of neovim buffer
 " https://github.com/Eandrju/cellular-automaton.nvim
@@ -266,7 +281,7 @@ endif
 scriptencoding utf-8           " UTF-8 all the way
 set encoding=utf-8
 
-set timeoutlen=250             " Time to wait after ESC (default causes delay)
+set timeoutlen=300             " Time to wait after ESC (default causes delay)
 set clipboard+=unnamed         " Yanks go on clipboard instead.
 set pastetoggle=<F10>          " Toggle between paste and normal: pasting from keyboard
 set shiftround                 " Round indent to multiple of 'shiftwidth'
@@ -309,8 +324,8 @@ set wildmode=longest,list
 " wilder#wildmenu_airline_theme() and wilder#wildmenu_lightline_theme() can be used.
 "
 if exists('g:plugs["wilder.nvim"]')
-  if !empty(glob(g:plugs['wilder.nvim'].dir.'/autoload/wilder.vim'))
-    lua require('wilder-config')
+  if !empty(glob(g:plugs['wilder.nvim'].dir.'/lua/wilder.lua'))
+    lua require('config.wilder')
   endif
 endif
 
@@ -422,7 +437,7 @@ let g:signify_sign_change = '│'
 hi DiffDelete guifg=#ff5555 guibg=none
 
 " FixCursorHold for better performance
-let g:updatetime = 250
+let g:updatetime = 200
 
 " context.vim
 let g:context_nvim_no_redraw = 1
@@ -463,9 +478,13 @@ if !empty(glob('/path/to/doq'))
   let g:pydocstring_doq_path = '/path/to/doq'
 endif
 
+" Need to convifure Neodev prior to LSP
+if exists('g:plugs["neodev.nvim"]')
+  if !empty(glob(g:plugs['neodev.nvim'].dir.'/lua/neodev/init.lua'))
+    lua require('config.neodev')
+  endif
+endif
 """ Core plugin configuration (lua)
-" Use airline rather than lualine
-" require('lualine-config')
 " Add these:  cssmodules ansible haskell sql
 if exists('g:plugs["nvim-treesitter"]')
   if !empty(glob(g:plugs['nvim-treesitter'].dir.'/autoload/nvim_treesitter.vim'))
@@ -494,12 +513,11 @@ servers = {
     "yamllint",
 }
 
-require('nvim-cmp-config')
-require('lspconfig-config')
-require('treesitter-config')
-require('telescope-config')
-require('nvim-tree-config')
-require('diagnostics')
+require('config.nvim-cmp')
+require('config.lspconfig')
+require('config.treesitter')
+require('config.telescope')
+require('config.diagnostics')
 EOF
   endif
 endif
@@ -507,7 +525,7 @@ endif
 " Uncomment if CoC is enabled above and Airline integration desired
 " if exists('g:plugs["coc.nvim"]')
 "   if !empty(glob(g:plugs['coc.nvim'].dir.'/autoload/coc.vim'))
-"     lua require('coc-config')
+"     lua require('config.coc')
 "     if exists('g:plugs["vim-airline"]')
 "       if !empty(glob(g:plugs['vim-airline'].dir.'/autoload/airline.vim'))
 "         let g:airline#extensions#coc#enabled = 1
@@ -564,59 +582,140 @@ EOF
   endif
 endif
 
+if has("termguicolors")
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+  if exists('g:plugs["nvim-colorizer.lua"]')
+    if !empty(glob(g:plugs['nvim-colorizer.lua'].dir.'/lua/colorizer.lua'))
+      lua require('colorizer').setup()
+    endif
+  endif
+endif
 if exists('g:plugs["nvim-dap"]')
   if !empty(glob(g:plugs['nvim-dap'].dir.'/lua/nvim-dap/plugin/dap.lua'))
-    lua require('dap-config')
+    lua require('config.dap')
   endif
 endif
 if exists('g:plugs["nvim-dap-virtual-text"]')
   if !empty(glob(g:plugs['nvim-dap-virtual-text'].dir.'/lua/nvim-dap-virtual-text.lua'))
-    lua require('dap-virtual-text-config')
+    lua require('config.dap-virtual-text')
+  endif
+endif
+if exists('g:plugs["nvim-web-devicons"]')
+  if !empty(glob(g:plugs['nvim-web-devicons'].dir.'/lua/nvim-web-devicons.lua'))
+    lua require('config.devicons')
   endif
 endif
 if exists('g:plugs["fidget.nvim"]')
   if !empty(glob(g:plugs['fidget.nvim'].dir.'/lua/fidget.lua'))
-    lua require"fidget".setup{}
+    lua require('fidget').setup{}
+  endif
+endif
+if exists('g:plugs["neotest"]')
+  if !empty(glob(g:plugs['neotest'].dir.'/lua/neotest/init.lua'))
+    lua require('config.neotest')
   endif
 endif
 if exists('g:plugs["go.nvim"]')
   if !empty(glob(g:plugs['go.nvim'].dir.'/lua/go.lua'))
-    lua require('go-config')
+    lua require('config.go')
+  endif
+endif
+if exists('g:plugs["gitsigns.nvim"]')
+  if !empty(glob(g:plugs['gitsigns.nvim'].dir.'/lua/gitsigns.lua'))
+    lua require('gitsigns').setup()
   endif
 endif
 if exists('g:plugs["inlay-hints.nvim"]')
   if !empty(glob(g:plugs['inlay-hints.nvim'].dir.'/lua/inlay-hints/init.lua'))
-    lua require("inlay-hints").setup()
+    lua require('inlay-hints').setup()
   endif
 endif
 if exists('g:plugs["rust-tools.nvim"]')
   if !empty(glob(g:plugs['rust-tools.nvim'].dir.'/lua/rust-tools/init.lua'))
-    lua require('rust-tools')
+    lua require('config.rust-tools')
   endif
 endif
-if exists('g:plugs["mini.starter"]')
-  if !empty(glob(g:plugs['mini.starter'].dir.'/lua/mini/starter.lua'))
-    lua require('starter-config')
+if exists('g:plugs["lualine.nvim"]')
+  if !empty(glob(g:plugs['lualine.nvim'].dir.'/lua/lualine.lua'))
+    lua require('config.lualine')
   endif
 endif
-if exists('g:plugs["mini.sessions"]')
-  if !empty(glob(g:plugs['mini.sessions'].dir.'/lua/mini/sessions.lua'))
-    lua require('mini.sessions').setup({ directory = '~/.config/nvim/sessions' })
+if exists('g:plugs["tabline.nvim"]')
+  if !empty(glob(g:plugs['tabline.nvim'].dir.'/lua/tabline.lua'))
+    lua require('config.tabline')
   endif
 endif
+if exists('g:plugs["neo-tree.nvim"]')
+  if !empty(glob(g:plugs['neo-tree.nvim'].dir.'/lua/neo-tree.lua'))
+    let g:neo_tree_remove_legacy_commands = 1
+    lua require('config.neo-tree')
+  endif
+endif
+if exists('g:plugs["project.nvim"]')
+  if !empty(glob(g:plugs['project.nvim'].dir.'/lua/project_nvim/init.lua'))
+    lua require('config.project')
+  endif
+endif
+if exists('g:plugs["alpha-nvim"]')
+  if !empty(glob(g:plugs['alpha-nvim'].dir.'/lua/alpha.lua'))
+    lua require('config.alpha')
+  endif
+endif
+if exists('g:plugs["asciiart.nvim"]')
+  if !empty(glob(g:plugs['asciiart.nvim'].dir.'/lua/asciiart/init.lua'))
+    lua require('config.asciiart')
+  endif
+endif
+"
+" To use the Startify dashboard rather than Alpha, uncomment this line,
+" comment the Alpha entries, and uncomment the startify Plug entry above
+" source $HOME/.config/nvim/startify.vim
+"
 if exists('g:plugs["toggleterm.nvim"]')
   if !empty(glob(g:plugs['toggleterm.nvim'].dir.'/lua/toggleterm.lua'))
     lua require('toggleterm').setup()
   endif
 endif
+if exists('g:plugs["which-key.nvim"]')
+  if !empty(glob(g:plugs['which-key.nvim'].dir.'/lua/which-key/init.lua'))
+    lua require('config.which-key')
+  endif
+endif
+if exists('g:plugs["nvim-navic"]')
+  if !empty(glob(g:plugs['nvim-navic'].dir.'/lua/nvim-navic/init.lua'))
+    lua require('config.navic')
+  endif
+endif
+" if exists('g:plugs["noice.nvim"]')
+"   if !empty(glob(g:plugs['noice.nvim'].dir.'/lua/noice/init.lua'))
+"     lua require('config.noice')
+"   endif
+" endif
+if exists('g:plugs["lsp_signature.nvim"]')
+  if !empty(glob(g:plugs['lsp_signature.nvim'].dir.'/lua/lsp_signature/init.lua'))
+    lua require('config.signature')
+  endif
+endif
+if exists('g:plugs["null-ls.nvim"]')
+  if !empty(glob(g:plugs['null-ls.nvim'].dir.'/lua/null-ls/init.lua'))
+    lua require('config.null-ls')
+  endif
+endif
 if exists('g:plugs["trouble.nvim"]')
   if !empty(glob(g:plugs['trouble.nvim'].dir.'/lua/trouble/init.lua'))
-    lua require('trouble-config')
+    lua require('config.trouble')
   endif
 endif
 if exists('g:plugs["ChatGPT.nvim"]')
   if !empty(glob(g:plugs['ChatGPT.nvim'].dir.'/plugin/chatgpt.lua'))
     lua require('chatgpt').setup()
+  endif
+endif
+if exists('g:plugs["zen-mode.nvim"]')
+  if !empty(glob(g:plugs['zen-mode.nvim'].dir.'/plugin/zen-mode.vim'))
+    lua require('config.zen-mode')
   endif
 endif
 
@@ -630,7 +729,7 @@ xmap <leader>a gaip*
 nmap <leader>a gaip*
 nmap <leader>h :RainbowParentheses!!<CR>
 nmap <leader>j :set filetype=journal<CR>
-nmap <leader>k :ColorToggle<CR>
+" nmap <leader>k :ColorToggle<CR>
 nmap <leader>l :Limelight!!<CR>
 xmap <leader>l :Limelight!!<CR>
 nmap <silent> <leader><leader> :noh<CR>
@@ -673,20 +772,15 @@ if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 endif
 
-if has("termguicolors")
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
-endif
-
 " If your terminal doesn't handle italics, bold, underline, or undercurl
 " then they can be disabled in the asciiville colorscheme with:
 " let g:asciiville_italic = 0
 " let g:asciiville_bold = 0
 " let g:asciiville_underline = 0
 " let g:asciiville_undercurl = 0
-" Comment out to use everforest below
+" Comment out to use everforest or tokyonight below
 colorscheme asciiville
+let g:asciiville_style = "deep ocean"
 " Asciiville colorscheme commands:
 " :AsciivilleDarkBlueSoft
 " :AsciivilleDarkCyanSoft
@@ -720,6 +814,9 @@ let g:everforest_dim_inactive_windows = 1
 
 " Uncomment to use the Everforest colorscheme
 " colorscheme everforest
+"
+" Uncomment to use the Tokyonight colorscheme
+" colorscheme tokyonight-night
 "
 let g:syntastic_html_checkers = []
 
