@@ -241,7 +241,7 @@ export PATH'
       FINISH_SECONDS=$(date +%s)
       ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
       ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-      printf "\nHomebrew install elapsed time = %s\n" ${ELAPSED}
+      printf "\nHomebrew install elapsed time = ${ELAPSED}\n"
     }
   fi
   [ "${HOMEBREW_HOME}" ] || {
@@ -263,19 +263,19 @@ export PATH'
     FINISH_SECONDS=$(date +%s)
     ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
     ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-    printf "\nInstall gcc elapsed time = %s\n" ${ELAPSED}
+    printf "\nInstall gcc elapsed time = %s${ELAPSED}\n"
     START_SECONDS=$(date +%s)
     ${BREW_EXE} install cmake
     FINISH_SECONDS=$(date +%s)
     ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
     ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-    printf "\nInstall cmake elapsed time = %s\n" ${ELAPSED}
+    printf "\nInstall cmake elapsed time = %s${ELAPSED}\n"
     START_SECONDS=$(date +%s)
     ${BREW_EXE} install make
     FINISH_SECONDS=$(date +%s)
     ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
     ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-    printf "\nInstall make elapsed time = %s\n" ${ELAPSED}
+    printf "\nInstall make elapsed time = %s${ELAPSED}\n"
     START_SECONDS=$(date +%s)
     ${BREW_EXE} uninstall --ignore-dependencies llvm
     ${BREW_EXE} install llvm@14
@@ -283,7 +283,7 @@ export PATH'
     FINISH_SECONDS=$(date +%s)
     ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
     ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-    printf "\nInstall llvm elapsed time = %s\n" ${ELAPSED}
+    printf "\nInstall llvm elapsed time = %s${ELAPSED}\n"
   else
     ${BREW_EXE} install --quiet gcc > /dev/null 2>&1
     ${BREW_EXE} install --quiet cmake > /dev/null 2>&1
@@ -307,7 +307,7 @@ install_neovim_dependencies () {
       FINISH_SECONDS=$(date +%s)
       ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
       ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-      printf "\nInstall ${pkg} elapsed time = %s\n" ${ELAPSED}
+      printf "\nInstall ${pkg} elapsed time = %s${ELAPSED}\n"
     else
       ${BREW_EXE} install --quiet ${pkg} > /dev/null 2>&1
     fi
@@ -336,7 +336,7 @@ install_neovim_dependencies () {
       FINISH_SECONDS=$(date +%s)
       ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
       ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-      printf "\nCargo install elapsed time = %s\n" ${ELAPSED}
+      printf "\nCargo install elapsed time = %s${ELAPSED}\n"
     }
   fi
 }
@@ -352,7 +352,7 @@ install_neovim_head () {
         FINISH_SECONDS=$(date +%s)
         ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
         ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-        printf "\nInstall Neovim elapsed time = %s\n" ${ELAPSED}
+        printf "\nInstall Neovim elapsed time = %s${ELAPSED}\n"
       else
         ${BREW_EXE} install -q --HEAD neovim > /dev/null 2>&1
       fi
@@ -499,7 +499,7 @@ install_tools () {
       FINISH_SECONDS=$(date +%s)
       ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
       ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-      printf "\nNpm tools install elapsed time = %s\n" ${ELAPSED}
+      printf "\nNpm tools install elapsed time = %s${ELAPSED}\n"
     }
     # brew installed language servers
     for server in ansible bash haskell sql lua yaml
@@ -511,7 +511,7 @@ install_tools () {
         FINISH_SECONDS=$(date +%s)
         ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
         ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-        printf "\nInstall ${server}-language-server elapsed time = %s\n" ${ELAPSED}
+        printf "\nInstall ${server}-language-server elapsed time = %s${ELAPSED}\n"
       else
         ${BREW_EXE} install -q ${server}-language-server > /dev/null 2>&1
       fi
@@ -526,7 +526,7 @@ install_tools () {
       FINISH_SECONDS=$(date +%s)
       ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
       ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-      printf "\nInstall ccls elapsed time = %s\n" ${ELAPSED}
+      printf "\nInstall ccls elapsed time = %s${ELAPSED}\n"
     else
       ${BREW_EXE} install -q ccls > /dev/null 2>&1
       ${BREW_EXE} link --overwrite --quiet ccls > /dev/null 2>&1
@@ -540,7 +540,7 @@ install_tools () {
         FINISH_SECONDS=$(date +%s)
         ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
         ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-        printf "\nInstall ${pkg} elapsed time = %s\n" ${ELAPSED}
+        printf "\nInstall ${pkg} elapsed time = %s${ELAPSED}\n"
       done
     else
       ${BREW_EXE} install -q golangci-lint > /dev/null 2>&1
@@ -576,7 +576,7 @@ install_tools () {
         FINISH_SECONDS=$(date +%s)
         ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
         ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-        printf "\nInstall zoxide elapsed time = %s\n" ${ELAPSED}
+        printf "\nInstall zoxide elapsed time = %s${ELAPSED}\n"
       else
         ${BREW_EXE} install -q zoxide > /dev/null 2>&1
       fi
@@ -591,7 +591,7 @@ install_tools () {
         FINISH_SECONDS=$(date +%s)
         ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
         ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-        printf "\nInstall tree-sitter elapsed time = %s\n" ${ELAPSED}
+        printf "\nInstall tree-sitter elapsed time = %s${ELAPSED}\n"
       else
         ${BREW_EXE} install -q tree-sitter > /dev/null 2>&1
       fi
@@ -615,7 +615,7 @@ install_tools () {
     FINISH_SECONDS=$(date +%s)
     ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
     ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-    printf "\nInstall ffmpeg elapsed time = %s\n" ${ELAPSED}
+    printf "\nInstall ffmpeg elapsed time = %s${ELAPSED}\n"
   else
     ${BREW_EXE} uninstall --force --ignore-dependencies ffmpeg > /dev/null 2>&1
     ${BREW_EXE} install --quiet chromaprint > /dev/null 2>&1
@@ -692,7 +692,7 @@ install_npm () {
     FINISH_SECONDS=$(date +%s)
     ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
     ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-    printf "\nNpm install elapsed time = %s\n" ${ELAPSED}
+    printf "\nNpm install elapsed time = %s${ELAPSED}\n"
   }
 }
 
@@ -795,7 +795,7 @@ main
   MAIN_FINISH_SECONDS=$(date +%s)
   MAIN_ELAPSECS=$(( MAIN_FINISH_SECONDS - MAIN_START_SECONDS ))
   MAIN_ELAPSED=`eval "echo $(date -ud "@$MAIN_ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-  printf "\nTotal elapsed time = %s\n" ${MAIN_ELAPSED}
+  printf "\nTotal elapsed time = %s${MAIN_ELAPSED}\n"
 }
 
 ulimit -n ${currlimit}
