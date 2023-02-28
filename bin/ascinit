@@ -1547,6 +1547,25 @@ have_tmux=`type -p tmux`
 [ "${have_tmux}" ] || install_package tmux
 have_w3m=`type -p w3m`
 [ "${have_w3m}" ] || install_package w3m
+have_aic=`type -p ascii-image-converter`
+[ "${have_aic}" ] || {
+  [ "${quiet}" ] || printf "\n\tInstalling ascii-image-converter ..."
+  # Try Brew first
+  brewed=
+  [ "${usebrew}" ] && {
+    brew install --quiet \
+      TheZoraiz/ascii-image-converter/ascii-image-converter > /dev/null 2>&1
+    have_aic=`type -p ascii-image-converter`
+    [ "${have_aic}" ] && brewed=1
+  }
+  [ "${brewed}" ] || {
+    have_go=`type -p go`
+    [ "${have_go}" ] && {
+      go install github.com/TheZoraiz/ascii-image-converter@latest > /dev/null 2>&1
+    }
+  }
+  [ "${quiet}" ] || printf " done"
+}
 have_asciinema=`type -p asciinema`
 [ "${have_asciinema}" ] || install_package asciinema
 have_gnupg=`type -p gpg`
