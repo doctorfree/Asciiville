@@ -264,6 +264,9 @@ Plug 'eandrju/cellular-automaton.nvim'
 " Cheat sheets
 Plug 'sudormrfbin/cheatsheet.nvim'  " :Cheatsheet
 
+" Media preview in Telescope using ueberzug/jp2a/etc
+Plug 'dharmx/telescope-media.nvim'
+
 call plug#end()
 
 " General "{{{
@@ -325,7 +328,7 @@ set wildmode=longest,list
 "
 if exists('g:plugs["wilder.nvim"]')
   if !empty(glob(g:plugs['wilder.nvim'].dir.'/lua/wilder.lua'))
-    lua require('config.wilder')
+    lua require('plugins.wilder')
   endif
 endif
 
@@ -481,7 +484,7 @@ endif
 " Need to convifure Neodev prior to LSP
 if exists('g:plugs["neodev.nvim"]')
   if !empty(glob(g:plugs['neodev.nvim'].dir.'/lua/neodev/init.lua'))
-    lua require('config.neodev')
+    lua require('plugins.neodev')
   endif
 endif
 """ Core plugin configuration (lua)
@@ -513,11 +516,11 @@ servers = {
     "yamllint",
 }
 
-require('config.nvim-cmp')
-require('config.lspconfig')
-require('config.treesitter')
-require('config.telescope')
-require('config.diagnostics')
+require('plugins.nvim-cmp')
+require('plugins.lspconfig')
+require('plugins.treesitter')
+require('plugins.telescope')
+require('plugins.diagnostics')
 EOF
   endif
 endif
@@ -525,7 +528,7 @@ endif
 " Uncomment if CoC is enabled above and Airline integration desired
 " if exists('g:plugs["coc.nvim"]')
 "   if !empty(glob(g:plugs['coc.nvim'].dir.'/autoload/coc.vim'))
-"     lua require('config.coc')
+"     lua require('plugins.coc')
 "     if exists('g:plugs["vim-airline"]')
 "       if !empty(glob(g:plugs['vim-airline'].dir.'/autoload/airline.vim'))
 "         let g:airline#extensions#coc#enabled = 1
@@ -594,17 +597,17 @@ if has("termguicolors")
 endif
 if exists('g:plugs["nvim-dap"]')
   if !empty(glob(g:plugs['nvim-dap'].dir.'/lua/nvim-dap/plugin/dap.lua'))
-    lua require('config.dap')
+    lua require('plugins.dap')
   endif
 endif
 if exists('g:plugs["nvim-dap-virtual-text"]')
   if !empty(glob(g:plugs['nvim-dap-virtual-text'].dir.'/lua/nvim-dap-virtual-text.lua'))
-    lua require('config.dap-virtual-text')
+    lua require('plugins.dap-virtual-text')
   endif
 endif
 if exists('g:plugs["nvim-web-devicons"]')
   if !empty(glob(g:plugs['nvim-web-devicons'].dir.'/lua/nvim-web-devicons.lua'))
-    lua require('config.devicons')
+    lua require('plugins.devicons')
   endif
 endif
 if exists('g:plugs["fidget.nvim"]')
@@ -614,12 +617,12 @@ if exists('g:plugs["fidget.nvim"]')
 endif
 if exists('g:plugs["neotest"]')
   if !empty(glob(g:plugs['neotest'].dir.'/lua/neotest/init.lua'))
-    lua require('config.neotest')
+    lua require('plugins.neotest')
   endif
 endif
 if exists('g:plugs["go.nvim"]')
   if !empty(glob(g:plugs['go.nvim'].dir.'/lua/go.lua'))
-    lua require('config.go')
+    lua require('plugins.go')
   endif
 endif
 if exists('g:plugs["gitsigns.nvim"]')
@@ -634,38 +637,38 @@ if exists('g:plugs["inlay-hints.nvim"]')
 endif
 if exists('g:plugs["rust-tools.nvim"]')
   if !empty(glob(g:plugs['rust-tools.nvim'].dir.'/lua/rust-tools/init.lua'))
-    lua require('config.rust-tools')
+    lua require('plugins.rust-tools')
   endif
 endif
 if exists('g:plugs["lualine.nvim"]')
   if !empty(glob(g:plugs['lualine.nvim'].dir.'/lua/lualine.lua'))
-    lua require('config.lualine')
+    lua require('plugins.lualine')
   endif
 endif
 if exists('g:plugs["tabline.nvim"]')
   if !empty(glob(g:plugs['tabline.nvim'].dir.'/lua/tabline.lua'))
-    lua require('config.tabline')
+    lua require('plugins.tabline')
   endif
 endif
 if exists('g:plugs["neo-tree.nvim"]')
   if !empty(glob(g:plugs['neo-tree.nvim'].dir.'/lua/neo-tree.lua'))
     let g:neo_tree_remove_legacy_commands = 1
-    lua require('config.neo-tree')
+    lua require('plugins.neo-tree')
   endif
 endif
 if exists('g:plugs["project.nvim"]')
   if !empty(glob(g:plugs['project.nvim'].dir.'/lua/project_nvim/init.lua'))
-    lua require('config.project')
+    lua require('plugins.project')
   endif
 endif
 if exists('g:plugs["alpha-nvim"]')
   if !empty(glob(g:plugs['alpha-nvim'].dir.'/lua/alpha.lua'))
-    lua require('config.alpha')
+    lua require('plugins.alpha.alpha')
   endif
 endif
 if exists('g:plugs["asciiart.nvim"]')
   if !empty(glob(g:plugs['asciiart.nvim'].dir.'/lua/asciiart/init.lua'))
-    lua require('config.asciiart')
+    lua require('plugins.asciiart')
   endif
 endif
 "
@@ -680,32 +683,32 @@ if exists('g:plugs["toggleterm.nvim"]')
 endif
 if exists('g:plugs["which-key.nvim"]')
   if !empty(glob(g:plugs['which-key.nvim'].dir.'/lua/which-key/init.lua'))
-    lua require('config.which-key')
+    lua require('plugins.which-key')
   endif
 endif
 if exists('g:plugs["nvim-navic"]')
   if !empty(glob(g:plugs['nvim-navic'].dir.'/lua/nvim-navic/init.lua'))
-    lua require('config.navic')
+    lua require('plugins.navic')
   endif
 endif
 " if exists('g:plugs["noice.nvim"]')
 "   if !empty(glob(g:plugs['noice.nvim'].dir.'/lua/noice/init.lua'))
-"     lua require('config.noice')
+"     lua require('plugins.noice')
 "   endif
 " endif
 if exists('g:plugs["lsp_signature.nvim"]')
   if !empty(glob(g:plugs['lsp_signature.nvim'].dir.'/lua/lsp_signature/init.lua'))
-    lua require('config.signature')
+    lua require('plugins.signature')
   endif
 endif
 if exists('g:plugs["null-ls.nvim"]')
   if !empty(glob(g:plugs['null-ls.nvim'].dir.'/lua/null-ls/init.lua'))
-    lua require('config.null-ls')
+    lua require('plugins.null-ls')
   endif
 endif
 if exists('g:plugs["trouble.nvim"]')
   if !empty(glob(g:plugs['trouble.nvim'].dir.'/lua/trouble/init.lua'))
-    lua require('config.trouble')
+    lua require('plugins.trouble')
   endif
 endif
 if exists('g:plugs["ChatGPT.nvim"]')
@@ -715,7 +718,7 @@ if exists('g:plugs["ChatGPT.nvim"]')
 endif
 if exists('g:plugs["zen-mode.nvim"]')
   if !empty(glob(g:plugs['zen-mode.nvim'].dir.'/plugin/zen-mode.vim'))
-    lua require('config.zen-mode')
+    lua require('plugins.zen-mode')
   endif
 endif
 

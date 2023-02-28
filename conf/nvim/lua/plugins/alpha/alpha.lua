@@ -10,12 +10,12 @@ end
 
 -- Number of recent files shown in dashboard
 -- 0 disables showing recent files
-local dashboard_recent_files = 5
+-- local dashboard_recent_files = 5
 -- disable the header of the dashboard
-local disable_dashboard_header = false
+-- local disable_dashboard_header = false
 -- disable quick links of the dashboard
-local disable_dashboard_quick_links = false
-
+-- local disable_dashboard_quick_links = false
+local settings = require('settings')
 
 local dashboard = require("alpha.themes.dashboard")
 local nvim_web_devicons = require("nvim-web-devicons")
@@ -146,7 +146,7 @@ local section_mru = {
     {
       type = "group",
       val = function()
-        return { mru(1, cdir, dashboard_recent_files) }
+        return { mru(1, cdir, settings.dashboard_recent_files) }
       end,
       opts = { shrink_margin = false },
     },
@@ -157,7 +157,7 @@ local buttons = {
   type = "group",
   val = {
     { type = "text", val = "Quick links", opts = { hl = "SpecialComment", position = "center" } },
-    dashboard.button("f", "  Find File", ":" .. require("utils.functions").telescope_find_files() .. "<CR>"),
+    dashboard.button("f", "  Find File", ":" .. require("utils.functions").project_files() .. "<CR>"),
     dashboard.button("b", "  File Browser", ":Telescope file_browser grouped=true<CR>"),
     dashboard.button("t", "  Find Text", ":Telescope live_grep<CR>"),
     dashboard.button("p", "  Search Projects", ":Telescope projects<CR>"),
@@ -180,7 +180,7 @@ local buttons = {
 local header = {
   type = "text",
   -- From https://gist.github.com/sRavioli/d6fb0a813b6affc171976b7dd09764d3
-  val = require('config.headers')['random'],
+  val = require('plugins.alpha.headers')['random'],
   opts = {
     position = "center",
     hl = "AlphaHeader",
@@ -226,16 +226,16 @@ layout[4] = buttons
 layout[5] = { type = "padding", val = 1 }
 layout[6] = footer
 
-if dashboard_recent_files == 0 then
+if settings.dashboard_recent_files == 0 then
   layout[1] = nil
   layout[2] = nil
 end
 
-if disable_dashboard_header == true then
+if settings.disable_dashboard_header == true then
   layout[0] = nil
 end
 
-if disable_dashboard_quick_links == true then
+if settings.disable_dashboard_quick_links == true then
   layout[3] = nil
   layout[4] = nil
 end
