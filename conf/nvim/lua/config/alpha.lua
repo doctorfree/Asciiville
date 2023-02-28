@@ -180,7 +180,7 @@ local buttons = {
 local header = {
   type = "text",
   -- From https://gist.github.com/sRavioli/d6fb0a813b6affc171976b7dd09764d3
-  val = require("headers")["random"],
+  val = require('config.headers')['random'],
   opts = {
     position = "center",
     hl = "AlphaHeader",

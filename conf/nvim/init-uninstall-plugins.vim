@@ -222,7 +222,7 @@ endif
 
 """ Core plugin configuration (lua)
 " Use airline rather than lualine
-" require('lualine-config')
+" require('config.lualine')
 " Add these:  cssmodules ansible haskell sql
 if exists('g:plugs["nvim-treesitter"]')
   if !empty(glob(g:plugs['nvim-treesitter'].dir.'/autoload/nvim_treesitter.vim'))
@@ -249,12 +249,11 @@ servers = {
     "yamllint",
 }
 
-require('nvim-cmp-config')
-require('lspconfig-config')
-require('treesitter-config')
-require('telescope-config')
-require('nvim-tree-config')
-require('diagnostics')
+require('config.nvim-cmp')
+require('config.lspconfig')
+require('config.treesitter')
+require('config.telescope')
+require('config.diagnostics')
 EOF
   endif
 endif
@@ -262,7 +261,7 @@ endif
 " Uncomment if CoC is enabled above and Airline integration desired
 " if exists('g:plugs["coc.nvim"]')
 "   if !empty(glob(g:plugs['coc.nvim'].dir.'/autoload/coc.vim'))
-"     lua require('coc-config')
+"     lua require('config.coc')
 "     if exists('g:plugs["vim-airline"]')
 "       if !empty(glob(g:plugs['vim-airline'].dir.'/autoload/airline.vim'))
 "         let g:airline#extensions#coc#enabled = 1
@@ -322,7 +321,7 @@ endif
 
 if exists('g:plugs["nvim-dap"]')
   if !empty(glob(g:plugs['nvim-dap'].dir.'/lua/nvim-dap/plugin/dap.lua'))
-    lua require('dap-config')
+    lua require('config.dap')
   endif
 endif
 if exists('g:plugs["fidget.nvim"]')
@@ -337,7 +336,7 @@ if exists('g:plugs["inlay-hints.nvim"]')
 endif
 if exists('g:plugs["rust-tools.nvim"]')
   if !empty(glob(g:plugs['rust-tools.nvim'].dir.'/lua/rust-tools/init.lua'))
-    lua require('rust-tools')
+    lua require('config.rust-tools')
   endif
 endif
 if exists('g:plugs["toggleterm.nvim"]')
