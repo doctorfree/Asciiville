@@ -1,4 +1,5 @@
 local catppuccin = require("catppuccin")
+local settings = require("settings")
 
 catppuccin.setup({
   dim_inactive = {
@@ -6,7 +7,7 @@ catppuccin.setup({
     shade = "dark",
     percentage = 0.15,
   },
-  transparent_background = false,
+  transparent_background = settings.enable_transparent,
   term_colors = true,
   compile = {
     enabled = true,
@@ -54,7 +55,7 @@ catppuccin.setup({
     nvimtree = {
       enabled = false,
       show_root = true,
-      transparent_panel = false,
+      transparent_panel = settings.enable_transparent,
     },
     dap = {
       enabled = true,
@@ -63,7 +64,7 @@ catppuccin.setup({
     neotree = {
       enabled = true,
       show_root = true,
-      transparent_panel = false,
+      transparent_panel = settings.enable_transparent,
     },
     which_key = true,
     indent_blankline = {

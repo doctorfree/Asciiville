@@ -6,6 +6,7 @@ local ok, lualine = pcall(require, 'lualine')
 if not ok then return end
 
 local navic = require('nvim-navic')
+local settings = require("settings")
 
 local fmt_stat = function()
     local stat = ''
@@ -18,7 +19,9 @@ lualine.setup {
     globalstatus = true,
     icons_enabled = true,
     -- theme = 'auto',
-    theme = 'tokyonight',
+    -- theme = 'tokyonight',
+    -- theme = 'everforest',
+    theme = settings.theme,
     --component_separators = { left = '', right = '' },
     component_separators = { left = '', right = '' },
     --section_separators = { left = '', right = '' },

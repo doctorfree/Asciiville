@@ -1,14 +1,15 @@
 #!/bin/bash
 #
-# Copyright (C) 2022 Michael Peter <michaeljohannpeter@gmail.com>
 # Copyright (C) 2023 Ronald Record <ronaldrecord@gmail.com>
+# Copyright (C) 2022 Michael Peter <michaeljohannpeter@gmail.com>
 #
 # Install Neovim and all dependencies for the Neovim config at:
 #     https://github.com/doctorfree/Asciiville/conf/nvim/init.vim
 #
 # Adapted for Asciiville from https://github.com/Allaman/nvim.git
 # See https://github.com/doctorfree/nvim
-# shellcheck disable=SC2001,SC2016,SC2006,SC2086,SC2181,SC2129
+#
+# shellcheck disable=SC2001,SC2016,SC2006,SC2086,SC2181,SC2129,SC2059
 
 OS=""
 PYTHON=
@@ -258,24 +259,15 @@ export PATH'
   log "Installing Homebrew gcc, cmake, and make ..."
   if [ "${debug}" ]
   then
-    START_SECONDS=$(date +%s)
-    ${BREW_EXE} install gcc
-    FINISH_SECONDS=$(date +%s)
-    ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
-    ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-    printf "\nInstall gcc elapsed time = %s${ELAPSED}\n"
-    START_SECONDS=$(date +%s)
-    ${BREW_EXE} install cmake
-    FINISH_SECONDS=$(date +%s)
-    ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
-    ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-    printf "\nInstall cmake elapsed time = %s${ELAPSED}\n"
-    START_SECONDS=$(date +%s)
-    ${BREW_EXE} install make
-    FINISH_SECONDS=$(date +%s)
-    ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
-    ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-    printf "\nInstall make elapsed time = %s${ELAPSED}\n"
+	for tool in gcc cmake make
+	do
+      START_SECONDS=$(date +%s)
+      ${BREW_EXE} install ${tool}
+      FINISH_SECONDS=$(date +%s)
+      ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+      ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+      printf "\nInstall ${tool} elapsed time = %s${ELAPSED}\n"
+	done
     START_SECONDS=$(date +%s)
     ${BREW_EXE} uninstall --ignore-dependencies llvm
     ${BREW_EXE} install llvm@14
@@ -533,7 +525,7 @@ install_tools () {
     fi
     if [ "${debug}" ]
     then
-      for pkg in golangci-lint jdtls marksman rust-analyzer shellcheck taplo texlab stylua eslint prettier terraform black shfmt
+      for pkg in golangci-lint jdtls marksman rust-analyzer shellcheck taplo texlab stylua eslint prettier terraform black shfmt yarn
       do
         START_SECONDS=$(date +%s)
         ${BREW_EXE} install ${pkg}
@@ -556,6 +548,7 @@ install_tools () {
       ${BREW_EXE} install -q terraform > /dev/null 2>&1
       ${BREW_EXE} install -q black > /dev/null 2>&1
       ${BREW_EXE} install -q shfmt > /dev/null 2>&1
+      ${BREW_EXE} install -q yarn > /dev/null 2>&1
     fi
     [ "${PYTHON}" ] && {
       ${PYTHON} -m pip install cmake-language-server > /dev/null 2>&1

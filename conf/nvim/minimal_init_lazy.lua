@@ -24,11 +24,13 @@ vim.opt.runtimepath:prepend(lazypath)
 -- install plugins
 local plugins = {
   "folke/tokyonight.nvim",
+  "sainnhe/everforest",
   -- add any other plugins here
 }
 require("lazy").setup(plugins, {
   root = root .. "/plugins",
 })
 
-vim.cmd.colorscheme("tokyonight")
+-- vim.cmd.colorscheme("tokyonight")
+vim.cmd.colorscheme("everforest")
 -- add anything else here

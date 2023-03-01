@@ -7,6 +7,13 @@ if settings.theme == "nightfox" then
       require("plugins.themes.nightfox")
     end,
   }
+elseif settings.theme == "everforest" then
+  return {
+    "sainnhe/everforest",
+    config = function()
+      require("lua.plugins.themes.everforest")
+    end,
+  }
 elseif settings.theme == "tundra" then
   return {
     "sam4llis/nvim-tundra",

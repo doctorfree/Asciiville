@@ -223,7 +223,7 @@ Plug 'doctorfree/SetColorSchemes.vim' " Easily switch colorschemes
 " desertink deus distinguished fairyfloss hybrid jellybeans kalisi kolor laederon
 " lucius luna minimalist molokai monochrome onedark peaksea seagull seoul256
 " sierra soda solarized sol transparent ubaryd understated wombat zenburn
-let g:mycolorschemes = ['asciiville', 'everforest', 'cool', 'desertink', 'distinguished', 'hybrid', 'luna', 'molokai', 'solarized', 'zenburn']
+let g:mycolorschemes = ['kanagawa', 'tokyonight', 'everforest', 'molokai', 'nightfox', 'tundra', 'catppuccin']
 " Set this to 1 if using Airline, 0 with Lualine
 let g:setairlinetheme = 0
 
@@ -782,7 +782,7 @@ endif
 " let g:asciiville_underline = 0
 " let g:asciiville_undercurl = 0
 " Comment out to use everforest or tokyonight below
-colorscheme asciiville
+" colorscheme asciiville
 let g:asciiville_style = "deep ocean"
 " Asciiville colorscheme commands:
 " :AsciivilleDarkBlueSoft
@@ -816,11 +816,12 @@ let g:everforest_transparent_background = 1
 let g:everforest_dim_inactive_windows = 1
 
 " Uncomment to use the Everforest colorscheme
-" colorscheme everforest
+colorscheme everforest
 "
 " Uncomment to use the Tokyonight colorscheme
 " colorscheme tokyonight-night
-"
+let g:tokyonight_style = "deep ocean"
+
 let g:syntastic_html_checkers = []
 
 if exists(':GuiFont')
