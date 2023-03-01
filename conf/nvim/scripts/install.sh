@@ -372,27 +372,25 @@ install_neovim_head () {
 
 fixup_init_vim () {
   NVIMCONF="${HOME}/.config/nvim/init.vim"
-  [ -f ${NVIMCONF} ] && {
+  NVIMGLOB="${HOME}/.config/nvim/lua/globals.lua"
+  [ -f ${NVIMGLOB} ] && {
     python3_path=$(command -v python3)
-    grep /path/to/python3 ${NVIMCONF} > /dev/null && {
-      cat ${NVIMCONF} | sed -e "s%/path/to/python3%${python3_path}%" > /tmp/nvim$$
-      cp /tmp/nvim$$ ${NVIMCONF}
+    grep /usr/bin/python3 ${NVIMGLOB} > /dev/null && {
+      cat ${NVIMGLOB} | sed -e "s%/usr/bin/python3%${python3_path}%" > /tmp/nvim$$
+      cp /tmp/nvim$$ ${NVIMGLOB}
       rm -f /tmp/nvim$$
     }
     doq_path=$(command -v doq)
-    grep /path/to/doq ${NVIMCONF} > /dev/null && {
-      cat ${NVIMCONF} | sed -e "s%/path/to/doq%${doq_path}%" > /tmp/nvim$$
-      cp /tmp/nvim$$ ${NVIMCONF}
+    grep /usr/bin/doq ${NVIMGLOB} > /dev/null && {
+      cat ${NVIMGLOB} | sed -e "s%/usr/bin/doq%${doq_path}%" > /tmp/nvim$$
+      cp /tmp/nvim$$ ${NVIMGLOB}
       rm -f /tmp/nvim$$
     }
-    grep '" Replace these with actual paths'  ${NVIMCONF} > /dev/null && {
-      cat ${NVIMCONF} | sed -e "s/\" Replace these with actual paths.*//" > /tmp/nvim$$
-      cp /tmp/nvim$$ ${NVIMCONF}
-      rm -f /tmp/nvim$$
-    }
-    [ "${OPENAI_API_KEY}" ] && {
-      grep "\" Plug 'jackMort/ChatGPT.nvim'" ${NVIMCONF} > /dev/null && {
-        cat ${NVIMCONF} | sed -e "s%\" Plug 'jackMort/ChatGPT.nvim'%Plug 'jackMort/ChatGPT.nvim'%" > /tmp/nvim$$
+  }
+  [ -f ${NVIMCONF} ] && {
+    [ "${OPENAI_API_KEY}" ] || {
+      grep "^Plug 'jackMort/ChatGPT.nvim'" ${NVIMCONF} > /dev/null && {
+        cat ${NVIMCONF} | sed -e "s%Plug 'jackMort/ChatGPT.nvim'%\" Plug 'jackMort/ChatGPT.nvim'%" > /tmp/nvim$$
         cp /tmp/nvim$$ ${NVIMCONF}
         rm -f /tmp/nvim$$
       }

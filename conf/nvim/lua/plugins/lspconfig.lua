@@ -122,6 +122,18 @@ require('lspconfig')['ccls'].setup{
   },
 }
 
+local settings = require('settings')
+local workspace_cfg = {
+  -- Make the server aware of Neovim runtime files
+  library = vim.api.nvim_get_runtime_file("", false),
+  checkThirdParty = false
+}
+if not settings.workspace_diagnostic then
+  workspace_cfg = {
+    checkThirdParty = false
+  }
+end
+
 require('lspconfig')['lua_ls'].setup{
   require('neodev').setup {
     library = { plugins = { "nvim-dap-ui" }, types = true },
@@ -161,11 +173,7 @@ require('lspconfig')['lua_ls'].setup{
           "use",
         },
       },
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file("", true),
-        checkThirdParty = false,
-      },
+      workspace = workspace_cfg,
       -- adjust these two values if your performance is not optimal
       -- maxPreload = 2000,
       -- preloadFileSize = 1000,

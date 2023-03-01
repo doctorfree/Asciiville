@@ -116,3 +116,32 @@ api.nvim_create_autocmd(
     end,
   }
 )
+
+-- Filetype-Specific Configurations
+
+-- CSS, HTML, LUA, JS, TS, XML, Jinja, YAML
+api.nvim_create_autocmd("FileType", { pattern = { "lua" }, command = [[setlocal shiftwidth=2 tabstop=2 softtabstop=2]] })
+api.nvim_create_autocmd("FileType", { pattern = { "html" }, command = [[setlocal shiftwidth=2 tabstop=2 softtabstop=2]] })
+api.nvim_create_autocmd("FileType", { pattern = { "javascript" }, command = [[setlocal shiftwidth=2 tabstop=2 softtabstop=2]] })
+api.nvim_create_autocmd("FileType", { pattern = { "typescript" }, command = [[setlocal shiftwidth=2 tabstop=2 softtabstop=2]] })
+api.nvim_create_autocmd("FileType", { pattern = { "css" }, command = [[setlocal shiftwidth=2 tabstop=2 softtabstop=2]] })
+api.nvim_create_autocmd("FileType", { pattern = { "scss" }, command = [[setlocal shiftwidth=2 tabstop=2 softtabstop=2]] })
+api.nvim_create_autocmd("FileType", { pattern = { "xml" }, command = [[setlocal shiftwidth=2 tabstop=2 softtabstop=2]] })
+api.nvim_create_autocmd("FileType", { pattern = { "xhtml" }, command = [[setlocal shiftwidth=2 tabstop=2 softtabstop=2]] })
+api.nvim_create_autocmd("FileType", { pattern = { "yaml" }, command = [[setlocal shiftwidth=2 tabstop=2 softtabstop=2]] })
+api.nvim_create_autocmd("FileType", { pattern = { "htmldjango" }, command = [[setlocal shiftwidth=2 tabstop=2 softtabstop=2]] })
+api.nvim_create_autocmd("FileType", { pattern = { "htmldjango" }, command = [[inoremap {{ {{  }}<left><left><left>]] })
+api.nvim_create_autocmd("FileType", { pattern = { "htmldjango" }, command = [[inoremap {% {%  %}<left><left><left>]] })
+api.nvim_create_autocmd("FileType", { pattern = { "htmldjango" }, command = [[inoremap {# {#  #}<left><left><left>]] })
+
+-- Markdown and Journal
+api.nvim_create_autocmd("FileType", { pattern = { "markdown" }, command = [[setlocal shiftwidth=2 tabstop=2 softtabstop=2]] })
+api.nvim_create_autocmd("FileType", { pattern = { "journal" }, command = [[setlocal shiftwidth=2 tabstop=2 softtabstop=2]] })
+
+-- Neovim :Terminal
+-- api.nvim_create_autocmd("BufWinEnter,WinEnter", { command = [[term://* startinsert]] })
+-- api.nvim_create_autocmd("BufLeave", { command = [[term://* stopinsert]] })
+
+-- Python
+api.nvim_create_autocmd("FileType", { pattern = { "python" }, command = [[nmap <leader>d <Plug>(pydocstring)]] })
+api.nvim_create_autocmd("FileType", { pattern = { "python" }, command = [[nmap <leader>p :Black<CR>]] })

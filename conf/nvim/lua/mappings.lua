@@ -25,10 +25,10 @@ map("i", "<C-l>", function()
 end)
 
 -- search like you are used to
-map("n", "<C-f>", "/", { desc = "Search buffer" })
+-- map("n", "<C-f>", "/", { desc = "Search buffer" })
 
 -- save like your are used to
-map({ "i", "v", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
+-- map({ "i", "v", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
 
 -- toggles
 map("n", "<leader>th", function()
@@ -63,6 +63,46 @@ map(
 )
 map("n", "<leader>ts", "<cmd>SymbolsOutline<cr>", { desc = "Toggle SymbolsOutline" })
 
+-- Neovim :Terminal
+--
+map("t", "<Esc>", [[<C-\><C-n>]], { desc = "Exit terminal emulator with escape" })
+map("t", "<C-w>", "<Esc><C-w>")
+--tmap <C-d> <Esc>:q<CR>
+
+-- Custom Mappings (lua custom mappings are within individual lua config files)
+--
+-- Core
+-- map("n", "<leader>q", ":NvimTreeFindFileToggle<CR>")
+map("n", [[\]], "<leader>q")
+map("n", "<leader>r", ":so ~/.config/nvim/init.vim<CR>")
+map("x", "<leader>a", "gaip*")
+map("n", "<leader>a", "gaip*")
+map("n", "<leader>h", ":RainbowParentheses!!<CR>")
+map("n", "<leader>j", ":set filetype=journal<CR>")
+-- nmap <leader>k :ColorToggle<CR>
+map("n", "<leader>l", ":Limelight!!<CR>")
+map("x", "<leader>l", ":Limelight!!<CR>")
+map("n", "<silent>", "<leader><leader> :noh<CR>")
+map("n", "<silent>", "<F12> :set invlist<CR>")
+map("n", "<Tab>", ":bnext<CR>")
+map("n", "<S-Tab>", ":bprevious<CR>")
+map("n", "<leader>$s", "<C-w>s<C-w>j:terminal<CR>:set nonumber<CR><S-a>")
+map("n", "<leader>$v", "<C-w>v<C-w>l:terminal<CR>:set number<CR><S-a>")
+
+-- Telescope mappings
+-- nnoremap <leader>ff <cmd>Telescope find_files<cr>
+-- nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+-- nnoremap <leader>fb <cmd>Telescope buffers<cr>
+-- nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+-- nnoremap <leader>fc <cmd>Telescope colorscheme<cr>
+-- nnoremap <leader>f/ <cmd>Telescope current_buffer_fuzzy_find<cr>
+map("n", "<leader>ff", "<cmd>Telescope find_files<cr>")
+map("n", "<leader>fg", "<cmd>Telescope live_grep<cr>")
+-- map("n", "<leader>fb", "<cmd>Telescope buffers<cr>")
+map("n", "<leader>fh", "<cmd>Telescope help_tags<cr>")
+map("n", "<leader>fc", "<cmd>Telescope colorscheme<cr>")
+map("n", "<leader>f/", "<cmd>Telescope current_buffer_fuzzy_find<cr>")
+
 local wk = require("which-key")
 
 -- register non leader based mappings
@@ -96,8 +136,9 @@ wk.register({
   f = {
     name = "Files",
     b = { "<cmd>Telescope file_browser grouped=true<cr>", "File browser" },
+    e = { "<cmd>Neotree<cr>", "Open Neotree" },
     f = { "<cmd>" .. require("utils.functions").project_files() .. "<cr>", "Find File" },
-    p = { "<cmd>Neotree reveal toggle<cr>", "Toggle Filetree" },
+    p = { "<cmd>Neotree reveal toggle<cr>", "Toggle Neotree" },
     r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
     s = { "<cmd>w<cr>", "Save Buffer" },
     z = { "<cmd>Telescope zoxide list<CR>", "Zoxide" },

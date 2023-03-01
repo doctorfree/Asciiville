@@ -187,9 +187,9 @@ Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
 Plug 'folke/zen-mode.nvim'
 Plug 'MunifTanjim/nui.nvim'
 
-" Uncomment and set OPENAI_API_KEY env var to enable :ChatGPT and :ChatGPTActAs
+" Set OPENAI_API_KEY environment var to enable :ChatGPT and :ChatGPTActAs
 " See https://github.com/jackMort/ChatGPT.nvim for setup options and usage
-" Plug 'jackMort/ChatGPT.nvim'
+Plug 'jackMort/ChatGPT.nvim'
 
 " Register vim-plug as a plugin to enable help  (e.g. :help plug-options)
 Plug 'junegunn/vim-plug'
@@ -199,8 +199,6 @@ Plug 'psf/black', { 'branch': 'stable' }
 Plug 'heavenshell/vim-pydocstring'
 Plug 'davidhalter/jedi-vim'    " Python autocompletion
 Plug 'klen/python-mode'        " Python IDE
-let g:pymode = 1
-let g:pymode_warnings = 1
 
 " Aesthetics - Colorschemes
 Plug 'norcalli/nvim-colorizer.lua'
@@ -217,15 +215,6 @@ Plug 'folke/tokyonight.nvim'
 Plug 'sam4llis/nvim-tundra'
 " Uncomment to play with colorschemes
 Plug 'doctorfree/SetColorSchemes.vim' " Easily switch colorschemes
-" If using Airline, colorschemes must have a matching Airline theme with
-" the same name. Currently available colorschemes with matching Airline theme:
-" alduin angr apprentice badwolf behelit biogoo bubblegum cobalt2 cool cyberpunk
-" desertink deus distinguished fairyfloss hybrid jellybeans kalisi kolor laederon
-" lucius luna minimalist molokai monochrome onedark peaksea seagull seoul256
-" sierra soda solarized sol transparent ubaryd understated wombat zenburn
-let g:mycolorschemes = ['kanagawa', 'tokyonight', 'everforest', 'molokai', 'nightfox', 'tundra', 'catppuccin']
-" Set this to 1 if using Airline, 0 with Lualine
-let g:setairlinetheme = 0
 
 " Aesthetics - Others
 if has('nvim')
@@ -269,219 +258,23 @@ Plug 'dharmx/telescope-media.nvim'
 
 call plug#end()
 
-" General "{{{
-set backspace=indent
-set backspace+=eol
-set backspace+=start
-set history=256 " Number of things to remember in history
-set ruler       " Show the cursor position all the time
-set showcmd     " Display an incomplete command in statusline
-if has('mouse')
-  set mouse=a   " Enable mouse in GUI mode
-  set mousehide " Hide mouse after chars typed
-endif
-
 scriptencoding utf-8           " UTF-8 all the way
-set encoding=utf-8
-
-set timeoutlen=300             " Time to wait after ESC (default causes delay)
-set clipboard+=unnamed         " Yanks go on clipboard instead.
-set pastetoggle=<F10>          " Toggle between paste and normal: pasting from keyboard
-set shiftround                 " Round indent to multiple of 'shiftwidth'
-set tags=.git/tags;$HOME       " Consider the repo tags first, then
-                               " Walk directory tree upto $HOME looking for tags
-                               " Note `;` sets the stop folder. :h file-search
-set modeline
-set modelines=5                " Default number of lines to read for modeline
-set autowrite                  " Writes on make/shell commands
-set autoread
-
-set nobackup
-set nowritebackup
-set directory=/tmp//           " Prepend(^=) $HOME/.tmp/ to default path
-                               " Use full path as backup filename(//)
-set noswapfile                 "
-
-set hidden                     " Current buffer to background without writing to disk
-
 syntax on                      " Enable syntax
-set incsearch                  " Show matches while typing
-set ignorecase                 " Be case insensitive when searching
-set smartcase                  " Be case sensitive when input has a capital letter
-set hlsearch                   " Highlight search
 
-let g:is_posix = 1             " Vim's default is Bourne shell, bring it up to the 90s
-let g:netrw_banner = 0         " Do not show Netrw help banner
-
-" complete longest common string, then list alternatives.
-set wildmode=longest,list
-" Use wilder, see https://github.com/gelguy/wilder.nvimrc
-" for extensive set of configuration examples
-" When in : cmdline mode, wildmenu suggestions will be automatically provided.
-" When searching using /, suggestions from the current buffer will be provided.
-" Substring matching is used by default.
-"
-" Use <Tab> to cycle through the list forwards, and <S-Tab> to move backwards.
-"
-" Airline and Lightline users:
-" wilder#wildmenu_airline_theme() and wilder#wildmenu_lightline_theme() can be used.
-"
 if exists('g:plugs["wilder.nvim"]')
   if !empty(glob(g:plugs['wilder.nvim'].dir.'/lua/wilder.lua'))
     lua require('plugins.wilder')
   endif
 endif
 
-" Formatting "{{{
-set fo+=o  " Insert the current comment leader after 'o' or 'O' in Normal mode.
-set fo-=r  " Do not automatically insert a comment leader after an enter
-set fo-=t  " Do no auto-wrap text using textwidth (does not apply to comments)
-
-" set nowrap
-" set textwidth=0              " Don't wrap lines by default
-
-set tabstop=2                  " Tab size eql 2 spaces
-set softtabstop=2
-set shiftwidth=2               " Default shift width for indents
-set expandtab                  " Replace tabs with ${tabstop} spaces
-set smarttab                   "
-
-set cindent
-set indentkeys-=0#             " Do not break indent on #
-set cinkeys-=0#
-set cinoptions=:s,ps,ts,cs
-set cinwords=if,else,while,do
-set cinwords+=for,switch,case
-" "}}}
-
-" Visual "{{{
-set synmaxcol=250             " limit syntax highlighting to 250 columns
-
-set nonumber                  " line numbers Off
-set showmatch                 " Show matching brackets.
-set matchtime=2               " Bracket blinking.
-
-set novisualbell              " No blinking
-set noerrorbells              " No noise.
 set vb t_vb=                  " Disable any beeps or flashes on error
-
-" set laststatus=2            " Always show status line.
-" set shortmess=atI           " Shortens messages
 
 set statusline=%<%f\          " Custom statusline
 set stl+=[%{&ff}]             " Show fileformat
 set stl+=%y%m%r%=
 set stl+=%-14.(%l,%c%V%)\ %P
 
-set foldenable                " Turn on folding
-set foldmethod=marker         " Fold on the marker
-set foldlevel=100             " Don't autofold anything (but still fold manually)
-
-set foldopen=block,hor,tag    " What movements open folds
-set foldopen+=percent,mark
-set foldopen+=quickfix
-
-set virtualedit=block
-
-set splitbelow
-set splitright
-
-" set list                    " Display unprintable characters F12 - switches
-set listchars=tab:\ ·,eol:¬
-set listchars+=trail:·
-set listchars+=extends:»,precedes:«
-map <silent> <F12> :set invlist<CR>
-
-if has('gui_running')
-  set guioptions=cMg " Console dialogs, do not show menu and toolbar
-
-  " Fonts
-  " :set guifont=* " To launch a GUI dialog
-  if has('mac')
-    if has('macligatures')
-      set antialias macligatures guifont=Fira\ Code\ Light:h13 " -> <=
-    else
-      set noantialias guifont=Andale\ Mono:h14
-    end
-  set fuoptions=maxvert,maxhorz ",background:#00AAaaaa
-  else
-  set guifont=Terminus:h16
-  end
-endif
-" "}}}
-
-""" Filetype-Specific Configurations
-
-" CSS, HTML, LUA, JS, TS, XML, Jinja, YAML
-autocmd FileType lua setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType typescript setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType css setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType scss setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType xml setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType xhtml setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType yaml setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType htmldjango setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType htmldjango inoremap {{ {{  }}<left><left><left>
-autocmd FileType htmldjango inoremap {% {%  %}<left><left><left>
-autocmd FileType htmldjango inoremap {# {#  #}<left><left><left>
-
-" Markdown and Journal
-autocmd FileType markdown setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType journal setlocal shiftwidth=2 tabstop=2 softtabstop=2
-
-set completeopt=menu,menuone,noselect
-
-" signify
-let g:signify_sign_add = '│'
-let g:signify_sign_delete = '│'
-let g:signify_sign_change = '│'
-hi DiffDelete guifg=#ff5555 guibg=none
-
-" FixCursorHold for better performance
-let g:updatetime = 200
-
-" context.vim
-let g:context_nvim_no_redraw = 1
-
-" Neovim :Terminal
-"
-" Exit Neovim's terminal emulator (:term) by simply pressing escape
-tmap <Esc> <C-\><C-n>
-tmap <C-w> <Esc><C-w>
-"tmap <C-d> <Esc>:q<CR>
-autocmd BufWinEnter,WinEnter term://* startinsert
-autocmd BufLeave term://* stopinsert
-
-" The Homebrew installation location
-if empty($HOMEBREW_PREFIX)
-  if isdirectory("/home/linuxbrew/.linuxbrew")
-    let g:homebrew_install_dir = "/home/linuxbrew/.linuxbrew"
-  else
-    if isdirectory("/opt/homebrew")
-      let g:homebrew_install_dir = "/opt/homebrew"
-    else
-      if isdirectory("/usr/local")
-        let g:homebrew_install_dir = "/usr/local"
-      else
-        let g:homebrew_install_dir = ""
-      endif
-    endif
-  endif
-else
-  let g:homebrew_install_dir = $HOMEBREW_PREFIX
-endif
-
-" Replace these with actual paths
-if !empty(glob('/path/to/python3'))
-  let g:python3_host_prog = '/path/to/python3'
-endif
-if !empty(glob('/path/to/doq'))
-  let g:pydocstring_doq_path = '/path/to/doq'
-endif
-
-" Need to convifure Neodev prior to LSP
+" Need to configure Neodev prior to LSP
 if exists('g:plugs["neodev.nvim"]')
   if !empty(glob(g:plugs['neodev.nvim'].dir.'/lua/neodev/init.lua'))
     lua require('plugins.neodev')
@@ -722,108 +515,24 @@ if exists('g:plugs["zen-mode.nvim"]')
   endif
 endif
 
-""" Custom Mappings (lua custom mappings are within individual lua config files)
+" Set global variables
+lua require("globals")
+
+" Plugin management via lazy
+" require("lazy-init")
 "
-" Core
-nmap <leader>q :NvimTreeFindFileToggle<CR>
-nmap \ <leader>q
-nmap <leader>r :so ~/.config/nvim/init.vim<CR>
-xmap <leader>a gaip*
-nmap <leader>a gaip*
-nmap <leader>h :RainbowParentheses!!<CR>
-nmap <leader>j :set filetype=journal<CR>
-" nmap <leader>k :ColorToggle<CR>
-nmap <leader>l :Limelight!!<CR>
-xmap <leader>l :Limelight!!<CR>
-nmap <silent> <leader><leader> :noh<CR>
-nmap <Tab> :bnext<CR>
-nmap <S-Tab> :bprevious<CR>
-nmap <leader>$s <C-w>s<C-w>j:terminal<CR>:set nonumber<CR><S-a>
-nmap <leader>$v <C-w>v<C-w>l:terminal<CR>:set number<CR><S-a>
+" Plugin management via Packer
+" require("packer")
+"
+" Global Keymappings
+lua require("mappings")
 
-" Python
-autocmd Filetype python nmap <leader>d <Plug>(pydocstring)
-autocmd FileType python nmap <leader>p :Black<CR>
+" All non plugin related (vim) options
+lua require("options")
 
-" Telescope mappings
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>fh <cmd>Telescope help_tags<cr>
-nnoremap <leader>fc <cmd>Telescope colorscheme<cr>
-nnoremap <leader>f/ <cmd>Telescope current_buffer_fuzzy_find<cr>
-
-" Override those configurations for each project with a local .nvimrc
-set exrc
-
-if has("autocmd")
-  filetype plugin indent on
-  augroup vimrcEx
-  au!
-  autocmd FileType text setlocal textwidth=78
-  autocmd BufReadPost *
-    \ if line("'\"") > 1 && line("'\"") <= line("$") |
-    \   exe "normal! g`\"" |
-    \ endif
-  augroup END
-  autocmd FileType * setlocal formatoptions-=c formatoptions-=r
-else
-  set autoindent    " always set autoindenting on
-endif " has("autocmd")
+" Vim autocommands/autogroups
+lua require("autocmd")
 
 if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
-endif
-
-" If your terminal doesn't handle italics, bold, underline, or undercurl
-" then they can be disabled in the asciiville colorscheme with:
-" let g:asciiville_italic = 0
-" let g:asciiville_bold = 0
-" let g:asciiville_underline = 0
-" let g:asciiville_undercurl = 0
-" Comment out to use everforest or tokyonight below
-" colorscheme asciiville
-let g:asciiville_style = "deep ocean"
-" Asciiville colorscheme commands:
-" :AsciivilleDarkBlueSoft
-" :AsciivilleDarkCyanSoft
-" :AsciivilleDarkCyanHard
-" :AsciivilleNightOrangeSoft
-" :AsciivilleNightOrangeHard
-" :AsciivilleNightRedSoft
-" :AsciivilleNightRedHard
-" :AsciivilleLightSoft
-" :AsciivilleLightHard
-if exists(":AsciivilleDarkBlueHard")
-  AsciivilleDarkBlueHard
-endif
-
-" For dark version.
-set background=dark
-" For light version.
-" set background=light
-
-" Set contrast.
-" This configuration option should be placed before `colorscheme everforest`.
-" Available values: 'hard', 'medium'(default), 'soft'
-let g:everforest_background = 'hard'
-
-" For better performance
-let g:everforest_better_performance = 1
-" For a transparent background, set to 2 for status line transparency as well
-let g:everforest_transparent_background = 1
-" Dim inactive windows
-let g:everforest_dim_inactive_windows = 1
-
-" Uncomment to use the Everforest colorscheme
-colorscheme everforest
-"
-" Uncomment to use the Tokyonight colorscheme
-" colorscheme tokyonight-night
-let g:tokyonight_style = "deep ocean"
-
-let g:syntastic_html_checkers = []
-
-if exists(':GuiFont')
-  GuiFont! JetBrains Mono:h22
 endif

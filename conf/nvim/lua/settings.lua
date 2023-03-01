@@ -10,11 +10,11 @@ M.global_statusline = true
 -- use rg instead of grep
 M.grepprg = "rg --hidden --vimgrep --smart-case --"
 -- set numbered lines
-M.number = true
+M.number = false
 -- enable mouse see :h mouse
 M.mouse = "nv"
 -- set relative numbered lines
-M.relative_number = true
+M.relative_number = false
 -- always show tabs; 0 never, 1 only if at least two tab pages, 2 always
 M.showtabline = 1
 -- enable or disable listchars
@@ -23,6 +23,9 @@ M.list = false
 M.listchars = "eol:¬,tab:>·,trail:~,extends:>,precedes:<"
 -- Noice heavily changes the Neovim UI ...
 M.enable_noice = false
+-- Enable/disable tabline or winbar or both
+-- Disable tabline with nvim-navic location
+M.disable_tabline = false
 -- Disable winbar with nvim-navic location
 M.disable_winbar = true
 -- Number of recent files shown in dashboard
@@ -59,42 +62,12 @@ M.treesitter_ensure_installed = {
   "yaml",
 }
 
--- Tools that should be installed by Mason(-tool-install)
-M.mason_tool_installer_ensure_installed = {
-  -- LSP
-  "bash-language-server",
-  "dockerfile-language-server",
-  "json-lsp",
-  "marksman",
-  "typescript-language-server",
-  "texlab",
-  "ltex-ls",
-  "lua-language-server",
-  "pyright",
-  "terraform-ls",
-  "yaml-language-server",
-  -- Formatter
-  "black",
-  "prettier",
-  "stylua",
-  "shfmt",
-  -- Linter
-  "eslint_d",
-  "shellcheck",
-  "tflint",
-  "yamllint",
-  -- DAP
-  "debugpy",
-}
-
 -- enable greping in hidden files
 M.telescope_grep_hidden = true
 
 -- which patterns to ignore in file switcher
 M.telescope_file_ignore_patterns = {
   "%.7z",
-  "%.JPEG",
-  "%.JPG",
   "%.MOV",
   "%.RAF",
   "%.burp",
@@ -110,23 +83,17 @@ M.telescope_file_ignore_patterns = {
   "%.ico",
   "%.ipynb",
   "%.jar",
-  "%.jpeg",
-  "%.jpg",
   "%.lock",
   "%.mkv",
   "%.mov",
   "%.mp4",
   "%.otf",
   "%.pdb",
-  "%.pdf",
-  "%.png",
   "%.rar",
   "%.sqlite3",
   "%.svg",
   "%.tar",
   "%.tar.gz",
-  "%.ttf",
-  "%.webp",
   "%.zip",
   ".git/",
   ".gradle/",
@@ -143,5 +110,8 @@ M.telescope_file_ignore_patterns = {
   "target/",
   "vendor/*",
 }
+
+-- Enable diagnostics on workspace
+M.workspace_diagnostic = false
 
 return M
