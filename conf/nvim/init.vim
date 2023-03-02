@@ -210,6 +210,8 @@ Plug 'doctorfree/asciiart.nvim'
 Plug 'm00qek/baleia.nvim', { 'tag': 'v1.2.0' }
 Plug 'sainnhe/everforest'
 Plug 'catppuccin/nvim'
+Plug 'rebelot/kanagawa.nvim'
+Plug 'loctvl842/monokai-pro.nvim'
 Plug 'EdenEast/nightfox.nvim'
 Plug 'folke/tokyonight.nvim'
 Plug 'sam4llis/nvim-tundra'
@@ -514,6 +516,9 @@ if exists('g:plugs["zen-mode.nvim"]')
     lua require('plugins.zen-mode')
   endif
 endif
+
+" Perform any necessary colorscheme setup
+lua require("themes.init")
 
 " Set global variables
 lua require("globals")

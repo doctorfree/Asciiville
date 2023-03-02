@@ -70,6 +70,6 @@ vim.g.everforest_dim_inactive_windows = 1
 vim.g.tokyonight_style = "deep ocean"
 
 -- Set colorscheme based on theme in settings
-vim.cmd("colorscheme " .. settings.theme)
+-- vim.cmd("colorscheme " .. settings.theme)
 
 vim.g.syntastic_html_checkers = {}
