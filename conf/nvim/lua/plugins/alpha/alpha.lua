@@ -8,13 +8,6 @@ if not path_ok then
   return
 end
 
--- Number of recent files shown in dashboard
--- 0 disables showing recent files
--- local dashboard_recent_files = 5
--- disable the header of the dashboard
--- local disable_dashboard_header = false
--- disable quick links of the dashboard
--- local disable_dashboard_quick_links = false
 local settings = require('settings')
 
 local dashboard = require("alpha.themes.dashboard")
@@ -155,6 +148,8 @@ local section_mru = {
 }
 
 -- This wouldn't be necessary if we could pass 'opts' in to dashboard.button()
+--
+-- Quick Links
 local new_file_btn = dashboard.button('n', '  New File', ':ene <BAR> startinsert<CR>')
 new_file_btn.opts.hl = 'AlphaShortcut'
 local find_file_btn = dashboard.button('f', '  Find File', ':' .. require('utils.functions').project_files() .. '<CR>')
@@ -176,6 +171,7 @@ git_commit_btn.opts.hl = 'AlphaShortcut'
 local quit_btn = dashboard.button('q', '  Quit', ':qa<CR>')
 quit_btn.opts.hl = 'AlphaShortcut'
 
+-- Neovim Configuration
 local health_btn = dashboard.button('h', '  Neovim Health', ':checkhealth<CR>')
 health_btn.opts.hl = 'AlphaHeader'
 local settings_btn = dashboard.button('s', '  Neovim Settings', ':e ~/.config/nvim/lua/settings.lua<CR>')
@@ -184,6 +180,8 @@ local options_btn = dashboard.button('o', '  Neovim Options', ':e ~/.config/n
 options_btn.opts.hl = 'AlphaHeader'
 local mappings_btn = dashboard.button('m', '  Keyboard Mappings', ':e ~/.config/nvim/lua/mappings.lua<CR>')
 mappings_btn.opts.hl = 'AlphaHeader'
+
+-- Plugin Management
 local status_btn = dashboard.button('S', '  Plugin Status', ':PlugStatus<CR>')
 status_btn.opts.hl = 'AlphaShortcut'
 local clean_btn = dashboard.button('C', '  Clean Plugins', ':PlugClean<CR>')
@@ -196,7 +194,7 @@ update_btn.opts.hl = 'AlphaShortcut'
 local buttons = {
   type = 'group',
   val = {
-    { type = 'text', val = 'Quick links', opts = { hl = 'SpecialComment', position = 'center' } },
+    { type = 'text', val = 'Quick Links', opts = { hl = 'SpecialComment', position = 'center' } },
     new_file_btn,
     find_file_btn,
     file_browser_btn,
