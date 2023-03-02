@@ -147,12 +147,14 @@ require('lspconfig')['lua_ls'].setup{
     lspconfig = false,
   },
 
-  --
   -- Note: These settings will meaningfully increase the time until lua_ls
   -- can service initial requests (completion, location) upon starting as well
   -- as time to first diagnostics. Completion results will include a workspace
   -- indexing progress message until the server has finished indexing.
   --
+  -- Disable workspace diagnostics by setting 'workspace_diagnostic = false'
+  -- in ~/.config/nvim/lua/settings.lua
+
   before_init = require('neodev.lsp').before_init,
   settings = {
     Lua = {
