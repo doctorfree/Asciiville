@@ -3,7 +3,7 @@ local M = {}
 -- theme: monokai-pro, nightfox, tokyonight, kanagawa, catppuccin, everforest
 -- refer to the relevant themes settings file in ~/.config/nvim/lua/themes/
 -- for different styles and settings for your selected theme.
-M.theme = "catppuccin"
+M.theme = "tokyonight"
 -- enable transparency if the theme supports it
 M.enable_transparent = true
 -- Toggle global status line

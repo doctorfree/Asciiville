@@ -39,7 +39,7 @@ require('nvim-tundra').setup({
     lsp = true,
     treesitter = true,
     telescope = false,
-    nvimtree = true,
+    nvimtree = false,
     cmp = true,
     context = true,
     dbui = true,

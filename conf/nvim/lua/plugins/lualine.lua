@@ -16,7 +16,8 @@ if not settings.disable_tabline then
     lualine_c = { require'tabline'.tabline_buffers },
     lualine_x = { require'tabline'.tabline_tabs },
     lualine_y = {},
-    lualine_z = {},
+    -- lualine_z = {},
+    lualine_z = { require('auto-session-library').current_session_name }
   }
 end
 

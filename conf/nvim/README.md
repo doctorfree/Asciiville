@@ -181,7 +181,7 @@ Parser/Features         H L F I J
 Neovim has many built-in
 [key bindings](https://neovim.io/doc/user/map.html#key-mapping).
 In addition to these, many more key mappings are defined in the Asciiville
-Neovim configuration and by plugins.
+Neovim configuration and by the installed Neovim plugins.
 
 Key mapping is used to change the meaning of typed keys. The most common use
 is to define a sequence of commands for a function key. For example:

@@ -1,9 +1,14 @@
 local settings = require("settings")
 
+local bg = "dark"
+if settings.enable_transparent then
+  bg = "transparent"
+end
+
 require("tokyonight").setup({
   -- your configuration comes here
   -- or leave it empty to use the default settings
-  style = "moon", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
+  style = "night", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
   light_style = "day", -- The theme is used when the background is set to light
   transparent_background = settings.enable_transparent,
   terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
@@ -15,8 +20,8 @@ require("tokyonight").setup({
     functions = {},
     variables = {},
     -- Background styles. Can be "dark", "transparent" or "normal"
-    sidebars = "dark", -- style for sidebars, see below
-    floats = "dark", -- style for floating windows
+    sidebars = bg, -- style for sidebars, see below
+    floats = bg, -- style for floating windows
   },
   sidebars = { "qf", "help" }, -- Set a darker background on sidebar-like windows. For example: `["qf", "vista_kind", "terminal", "packer"]`
   day_brightness = 0.3, -- Adjusts the brightness of the colors of the **Day** style. Number between 0 and 1, from dull to vibrant colors
