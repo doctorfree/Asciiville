@@ -371,7 +371,8 @@ install_neovim_head () {
 }
 
 fixup_init_vim () {
-  NVIMCONF="${HOME}/.config/nvim/init.vim"
+  NVIMCONF="${HOME}/.config/nvim/config.vim"
+  PLUGCONF="${HOME}/.config/nvim/plugins.vim"
   NVIMGLOB="${HOME}/.config/nvim/lua/globals.lua"
   [ -f ${NVIMGLOB} ] && {
     python3_path=$(command -v python3)
@@ -387,47 +388,45 @@ fixup_init_vim () {
       rm -f /tmp/nvim$$
     }
   }
-  [ -f ${NVIMCONF} ] && {
-    [ "${OPENAI_API_KEY}" ] || {
-      grep "^Plug 'jackMort/ChatGPT.nvim'" ${NVIMCONF} > /dev/null && {
-        cat ${NVIMCONF} | sed -e "s%Plug 'jackMort/ChatGPT.nvim'%\" Plug 'jackMort/ChatGPT.nvim'%" > /tmp/nvim$$
-        cp /tmp/nvim$$ ${NVIMCONF}
-        rm -f /tmp/nvim$$
-      }
-      grep "\" lua require('chatgpt').setup()" ${NVIMCONF} > /dev/null && {
-        cat ${NVIMCONF} | sed -e "s%\" lua require('chatgpt').setup()%lua require('chatgpt').setup()%" > /tmp/nvim$$
-        cp /tmp/nvim$$ ${NVIMCONF}
-        rm -f /tmp/nvim$$
-      }
+  [ "${OPENAI_API_KEY}" ] || {
+    grep "^Plug 'jackMort/ChatGPT.nvim'" ${PLUGCONF} > /dev/null && {
+      cat ${PLUGCONF} | sed -e "s%Plug 'jackMort/ChatGPT.nvim'%\" Plug 'jackMort/ChatGPT.nvim'%" > /tmp/nvim$$
+      cp /tmp/nvim$$ ${PLUGCONF}
+      rm -f /tmp/nvim$$
     }
-    [ "${BREW_EXE}" ] || BREW_EXE=brew
-    BREW_ROOT="$(${BREW_EXE} --prefix)"
-    [ "${BREW_ROOT}" ] && {
-      if [ -d ${BREW_ROOT}/opt/go/libexec ]
+    grep "\" lua require('chatgpt').setup()" ${NVIMCONF} > /dev/null && {
+      cat ${NVIMCONF} | sed -e "s%\" lua require('chatgpt').setup()%lua require('chatgpt').setup()%" > /tmp/nvim$$
+      cp /tmp/nvim$$ ${NVIMCONF}
+      rm -f /tmp/nvim$$
+    }
+  }
+  [ "${BREW_EXE}" ] || BREW_EXE=brew
+  BREW_ROOT="$(${BREW_EXE} --prefix)"
+  [ "${BREW_ROOT}" ] && {
+    if [ -d ${BREW_ROOT}/opt/go/libexec ]
+    then
+      export GOROOT="${BREW_ROOT}/opt/go/libexec"
+    else
+      if [ -d ${BREW_ROOT}/opt/go ]
       then
-        export GOROOT="${BREW_ROOT}/opt/go/libexec"
+        export GOROOT="${BREW_ROOT}/opt/go"
       else
-        if [ -d ${BREW_ROOT}/opt/go ]
-        then
-          export GOROOT="${BREW_ROOT}/opt/go"
-        else
-          [ -d ${BREW_ROOT}/go ] && export GOROOT="${BREW_ROOT}/go"
-        fi
+        [ -d ${BREW_ROOT}/go ] && export GOROOT="${BREW_ROOT}/go"
       fi
-    }
-    [ "${GOPATH}" ] || export GOPATH="${HOME}/go"
-    for gop in ${GOPATH} ${GOPATH}/src ${GOPATH}/pkg ${GOPATH}/bin
-    do
-      [ -d "${gop}" ] || mkdir -p "${gop}"
-    done
-    have_nvim=`type -p nvim`
-    [ "${have_nvim}" ] && {
-      grep "^Plug " ${NVIMCONF} > /dev/null && {
-        nvim -i NONE -c 'set nomore' -c 'PlugInstall' -c 'qa'
-        nvim -i NONE -c 'set nomore' -c 'UpdateRemotePlugins' -c 'qa'
-        nvim -i NONE -c 'set nomore' -c 'GoInstallBinaries' -c 'qa'
-#       nvim -i NONE -c 'GoUpdateBinaries' -c 'qa'
-      }
+    fi
+  }
+  [ "${GOPATH}" ] || export GOPATH="${HOME}/go"
+  for gop in ${GOPATH} ${GOPATH}/src ${GOPATH}/pkg ${GOPATH}/bin
+  do
+    [ -d "${gop}" ] || mkdir -p "${gop}"
+  done
+  have_nvim=`type -p nvim`
+  [ "${have_nvim}" ] && {
+    grep "^Plug " ${PLUGCONF} > /dev/null && {
+      nvim -i NONE -c 'set nomore' -c 'PlugInstall' -c 'qa'
+      nvim -i NONE -c 'set nomore' -c 'UpdateRemotePlugins' -c 'qa'
+      nvim -i NONE -c 'set nomore' -c 'GoInstallBinaries' -c 'qa'
+#     nvim -i NONE -c 'GoUpdateBinaries' -c 'qa'
     }
   }
 }
