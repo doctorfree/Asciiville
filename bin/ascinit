@@ -2213,7 +2213,7 @@ done
 have_nvim=`type -p nvim`
 [ "${have_nvim}" ] && {
   grep "^Plug " ${PLUGCONF} > /dev/null && {
-    nvim -i NONE -c 'set nomore' -c 'PlugInstall' -c 'qa'
+    nvim -i NONE -u ${PLUGCONF} -c 'set nomore' -c 'PlugInstall' -c 'qa'
     nvim -i NONE -c 'set nomore' -c 'UpdateRemotePlugins' -c 'qa'
     nvim -i NONE -c 'set nomore' -c 'GoInstallBinaries' -c 'qa'
 #   nvim -i NONE -c "GoUpdateBinaries" -c 'qa'

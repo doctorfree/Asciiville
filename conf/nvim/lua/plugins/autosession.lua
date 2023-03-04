@@ -10,7 +10,7 @@ auto_session.setup({
   auto_session_root_dir = vim.fn.stdpath("config") .. "/sessions/",
   auto_session_create_enabled = true,
   auto_session_suppress_dirs = nil,
-  auto_session_use_git_branch = true,
+  auto_session_use_git_branch = false,
   -- the configs below are lua only
   bypass_session_save_file_types = nil,
   cwd_change_handling = {

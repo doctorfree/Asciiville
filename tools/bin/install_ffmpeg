@@ -1,0 +1,24 @@
+#!/bin/bash
+
+have_brew=$(command -v brew)
+[ "${have_brew}" ] || {
+  echo "This ffmpeg installation is performed with Homebrew"
+  echo "in order to provide a fully featured ffmpeg binary."
+  echo ""
+  echo "Could not locate the 'brew' command. Exiting."
+  exit 1
+}
+
+START_SECONDS=$(date +%s)
+printf "\n\nInstalling fully featured ffmpeg."
+printf "\nPlease be patient, this process can be time consuming."
+
+brew uninstall --force --ignore-dependencies ffmpeg > /dev/null 2>&1
+brew install chromaprint > /dev/null 2>&1
+brew tap homebrew-ffmpeg/ffmpeg > /dev/null 2>&1
+brew install homebrew-ffmpeg/ffmpeg/ffmpeg $(brew options homebrew-ffmpeg/ffmpeg/ffmpeg | grep -vE '\s' | grep -- '--with-' | grep -vi chromaprint | grep -vi libzvbi | grep -vi decklink | tr '\n' ' ')
+
+FINISH_SECONDS=$(date +%s)
+ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+printf "\n\nInstall ffmpeg elapsed time = %s${ELAPSED}\n"

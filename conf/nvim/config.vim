@@ -204,6 +204,11 @@ if exists('g:plugs["auto-session"]')
     lua require('plugins.autosession')
   endif
 endif
+if exists('g:plugs["session-lens"]')
+  if !empty(glob(g:plugs['session-lens'].dir.'/lua/session-lens.lua'))
+    lua require('plugins.session-lens')
+  endif
+endif
 if exists('g:plugs["trouble.nvim"]')
   if !empty(glob(g:plugs['trouble.nvim'].dir.'/lua/trouble/init.lua'))
     lua require('plugins.trouble')

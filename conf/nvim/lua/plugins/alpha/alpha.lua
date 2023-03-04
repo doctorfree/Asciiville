@@ -162,6 +162,8 @@ local find_text_btn = dashboard.button('t', '  Find Text', ':Telescope live_g
 find_text_btn.opts.hl = 'AlphaShortcut'
 local search_project_btn = dashboard.button('p', '  Search Projects', ':Telescope projects<CR>')
 search_project_btn.opts.hl = 'AlphaShortcut'
+local session_btn = dashboard.button('k', '  Find Session', ':Telescope session-lens search_session<CR>')
+session_btn.opts.hl = 'AlphaShortcut'
 local search_zoxide_btn = dashboard.button('z', '  Search Zoxide', ':Telescope zoxide list<CR>')
 search_zoxide_btn.opts.hl = 'AlphaShortcut'
 local recent_files_btn = dashboard.button('r', '  Search Recent Files', ':Telescope oldfiles<CR>')
@@ -201,6 +203,7 @@ local buttons = {
     file_tree_btn,
     find_text_btn,
     search_project_btn,
+    session_btn,
     search_zoxide_btn,
     recent_files_btn,
     git_commit_btn,

@@ -238,6 +238,7 @@ Plug 'goolord/alpha-nvim'
 
 " Session management
 Plug 'rmagatti/auto-session'
+Plug 'rmagatti/session-lens'
 
 " Cellular automata animations based on the content of neovim buffer
 " https://github.com/Eandrju/cellular-automaton.nvim

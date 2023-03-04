@@ -7,7 +7,7 @@ vim.g.mycolorschemes = {
   'kanagawa',
   'tokyonight',
   'everforest',
-  'molokai',
+  'monokai-pro',
   'nightfox',
   'tundra',
   'catppuccin'

@@ -17,6 +17,9 @@ LINUX_DISTRIBUTION=""
 # LINUX_HOMEBREW="https://docs.brew.sh/Homebrew-on-Linux"
 DOC_HOMEBREW="https://docs.brew.sh"
 BREW_EXE="brew"
+NVIMCONF="${HOME}/.config/nvim/config.vim"
+PLUGCONF="${HOME}/.config/nvim/plugins.vim"
+NVIMGLOB="${HOME}/.config/nvim/lua/globals.lua"
 
 abort () {
   printf "\nERROR: %s\n" "$@" >&2
@@ -371,9 +374,6 @@ install_neovim_head () {
 }
 
 fixup_init_vim () {
-  NVIMCONF="${HOME}/.config/nvim/config.vim"
-  PLUGCONF="${HOME}/.config/nvim/plugins.vim"
-  NVIMGLOB="${HOME}/.config/nvim/lua/globals.lua"
   [ -f ${NVIMGLOB} ] && {
     python3_path=$(command -v python3)
     grep /usr/bin/python3 ${NVIMGLOB} > /dev/null && {
@@ -423,7 +423,7 @@ fixup_init_vim () {
   have_nvim=`type -p nvim`
   [ "${have_nvim}" ] && {
     grep "^Plug " ${PLUGCONF} > /dev/null && {
-      nvim -i NONE -c 'set nomore' -c 'PlugInstall' -c 'qa'
+      nvim -i NONE -u ${PLUGCONF} -c 'set nomore' -c 'PlugInstall' -c 'qa'
       nvim -i NONE -c 'set nomore' -c 'UpdateRemotePlugins' -c 'qa'
       nvim -i NONE -c 'set nomore' -c 'GoInstallBinaries' -c 'qa'
 #     nvim -i NONE -c 'GoUpdateBinaries' -c 'qa'
@@ -594,25 +594,6 @@ install_tools () {
       cargo install rnix-lsp > /dev/null 2>&1
     fi
   }
-  log "Installing ffmpeg, please be patient ..."
-  if [ "${debug}" ]
-  then
-    START_SECONDS=$(date +%s)
-    ${BREW_EXE} uninstall --force --ignore-dependencies ffmpeg
-    ${BREW_EXE} install chromaprint
-    ${BREW_EXE} tap homebrew-ffmpeg/ffmpeg
-    ${BREW_EXE} install homebrew-ffmpeg/ffmpeg/ffmpeg $(brew options homebrew-ffmpeg/ffmpeg/ffmpeg | grep -vE '\s' | grep -- '--with-' | grep -vi chromaprint | grep -vi libzvbi | grep -vi decklink | tr '\n' ' ')
-    FINISH_SECONDS=$(date +%s)
-    ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
-    ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-    printf "\nInstall ffmpeg elapsed time = %s${ELAPSED}\n"
-  else
-    ${BREW_EXE} uninstall --force --ignore-dependencies ffmpeg > /dev/null 2>&1
-    ${BREW_EXE} install --quiet chromaprint > /dev/null 2>&1
-    ${BREW_EXE} tap homebrew-ffmpeg/ffmpeg > /dev/null 2>&1
-    ${BREW_EXE} install --quiet homebrew-ffmpeg/ffmpeg/ffmpeg $(brew options homebrew-ffmpeg/ffmpeg/ffmpeg | grep -vE '\s' | grep -- '--with-' | grep -vi chromaprint | grep -vi libzvbi | grep -vi decklink | tr '\n' ' ') > /dev/null 2>&1
-  fi
-  printf " done"
 }
 
 install_npm () {

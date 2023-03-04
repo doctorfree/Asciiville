@@ -33,7 +33,7 @@ M.disable_winbar = true
 -- 0 disables showing recent files
 M.dashboard_recent_files = 5
 -- disable the header of the dashboard
-M.disable_dashboard_header = false
+M.disable_dashboard_header = true
 -- disable quick links of the dashboard
 M.disable_dashboard_quick_links = false
 -- treesitter parsers to be installed
