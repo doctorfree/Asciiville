@@ -522,7 +522,9 @@ install_tools () {
     fi
     if [ "${debug}" ]
     then
-      for pkg in golangci-lint jdtls marksman rust-analyzer shellcheck taplo texlab stylua eslint prettier terraform black shfmt yarn
+      for pkg in golangci-lint jdtls marksman rust-analyzer shellcheck \
+		        taplo texlab stylua eslint prettier terraform black shfmt \
+				yarn julia composer php
       do
         START_SECONDS=$(date +%s)
         ${BREW_EXE} install ${pkg}
@@ -546,6 +548,9 @@ install_tools () {
       ${BREW_EXE} install -q black > /dev/null 2>&1
       ${BREW_EXE} install -q shfmt > /dev/null 2>&1
       ${BREW_EXE} install -q yarn > /dev/null 2>&1
+      ${BREW_EXE} install -q julia > /dev/null 2>&1
+      ${BREW_EXE} install -q composer > /dev/null 2>&1
+      ${BREW_EXE} install -q php > /dev/null 2>&1
     fi
     [ "${PYTHON}" ] && {
       ${PYTHON} -m pip install cmake-language-server > /dev/null 2>&1

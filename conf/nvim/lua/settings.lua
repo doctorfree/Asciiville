@@ -38,30 +38,7 @@ M.disable_dashboard_header = true
 M.disable_dashboard_quick_links = false
 -- treesitter parsers to be installed
 -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-M.treesitter_ensure_installed = {
-  "bash",
-  "cmake",
-  "css",
-  "dockerfile",
-  "go",
-  "hcl",
-  "html",
-  "java",
-  "javascript",
-  "json",
-  "kotlin",
-  "ledger",
-  "lua",
-  "markdown",
-  "markdown_inline",
-  "query",
-  "python",
-  "regex",
-  "terraform",
-  "toml",
-  "vim",
-  "yaml",
-}
+M.treesitter_ensure_installed = { "bash", "c", "cpp", "cmake", "comment", "css", "go", "help", "html", "java", "javascript", "typescript", "json", "lua", "markdown", "markdown_inline", "query", "python", "regex", "rust", "toml", "tsx", "vim", "yaml", "vue" }
 
 -- enable greping in hidden files
 M.telescope_grep_hidden = true

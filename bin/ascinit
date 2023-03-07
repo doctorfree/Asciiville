@@ -2219,6 +2219,8 @@ have_nvim=`type -p nvim`
 #   nvim -i NONE -c "GoUpdateBinaries" -c 'qa'
   }
 }
+rm -f ${USERCONF}/nvim/sessions/*figlet-fonts.vim
+
 [ "${quiet}" ] || {
   printf "\n\n\tA Neovim text editor configuration has been created for you in"
   printf "\n\t\t${BOLD}${HOME}/.config/nvim/${NORM}"
