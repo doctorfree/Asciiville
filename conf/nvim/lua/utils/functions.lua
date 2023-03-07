@@ -3,6 +3,24 @@ local fn = vim.fn
 
 local M = {}
 
+--- Check if a file or directory exists in this path
+M.file_or_dir_exists = function(file)
+  local ok, err, code = os.rename(file, file)
+  if not ok then
+    if code == 13 then
+      -- Permission denied, but it exists
+      return true
+    end
+  end
+  return ok, err
+end
+
+--- Check if a directory exists in this path
+M.isdir = function(path)
+  -- "/" works on both Unix and Windows
+  return M.file_or_dir_exists(path.."/")
+end
+
 M.notify = function(message, level, title)
   local notify_options = {
     title = title,
@@ -22,7 +40,7 @@ M.path_exists = function(path)
 end
 
 -- Return telescope files command
-M.telescope_find_files = function()
+M.project_files = function()
   local path = vim.loop.cwd() .. "/.git"
   if M.path_exists(path) then
     return "Telescope git_files"

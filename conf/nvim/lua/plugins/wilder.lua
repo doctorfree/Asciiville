@@ -36,8 +36,8 @@ local popupmenu_renderer = wilder.popupmenu_renderer(
             ' ',
             wilder.popupmenu_devicons(),
             wilder.popupmenu_buffer_flags({
-                flags = ' a + ',
-                icons = { ['+'] = 'Ô£™', a = 'Ôúì', h = 'Ôú£' },
+                flags = ' A + ',
+                icons = { ['+'] = 'modified', a = 'active', h = 'hidden', ['%'] = 'current  ', ['#'] = 'alternate' },
             }),
         },
         right = {

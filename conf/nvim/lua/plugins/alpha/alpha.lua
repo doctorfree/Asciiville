@@ -8,14 +8,7 @@ if not path_ok then
   return
 end
 
--- Number of recent files shown in dashboard
--- 0 disables showing recent files
-local dashboard_recent_files = 5
--- disable the header of the dashboard
-local disable_dashboard_header = false
--- disable quick links of the dashboard
-local disable_dashboard_quick_links = false
-
+local settings = require('settings')
 
 local dashboard = require("alpha.themes.dashboard")
 local nvim_web_devicons = require("nvim-web-devicons")
@@ -39,6 +32,7 @@ end
 local function file_button(fn, sc, short_fn)
   short_fn = short_fn or fn
   local ico_txt
+  -- Could remove some cruft but i'm scared. If it ain't broke don't fix it
   local fb_hl = {}
 
   local ico, hl = icon(fn)
@@ -58,7 +52,7 @@ local function file_button(fn, sc, short_fn)
   if fn_start ~= nil then
     table.insert(fb_hl, { "Comment", #ico_txt - 2, #fn_start + #ico_txt - 2 })
   end
-  file_button_el.opts.hl = fb_hl
+  file_button_el.opts.hl = 'AlphaButtons'
   return file_button_el
 end
 
@@ -146,44 +140,97 @@ local section_mru = {
     {
       type = "group",
       val = function()
-        return { mru(1, cdir, dashboard_recent_files) }
+        return { mru(1, cdir, settings.dashboard_recent_files) }
       end,
       opts = { shrink_margin = false },
     },
   },
 }
 
+-- This wouldn't be necessary if we could pass 'opts' in to dashboard.button()
+--
+-- Quick Links
+local new_file_btn = dashboard.button('n', '  New File', ':ene <BAR> startinsert<CR>')
+new_file_btn.opts.hl = 'AlphaShortcut'
+local find_file_btn = dashboard.button('f', '  Find File', ':' .. require('utils.functions').project_files() .. '<CR>')
+find_file_btn.opts.hl = 'AlphaShortcut'
+local file_browser_btn = dashboard.button('b', '  File Browser', ':Telescope file_browser grouped=true<CR>')
+file_browser_btn.opts.hl = 'AlphaShortcut'
+local file_tree_btn = dashboard.button('e', '  File Tree', ':Neotree<CR>')
+file_tree_btn.opts.hl = 'AlphaShortcut'
+local find_text_btn = dashboard.button('t', '  Find Text', ':Telescope live_grep<CR>')
+find_text_btn.opts.hl = 'AlphaShortcut'
+local search_project_btn = dashboard.button('p', '  Search Projects', ':Telescope projects<CR>')
+search_project_btn.opts.hl = 'AlphaShortcut'
+local session_btn = dashboard.button('k', '  Find Session', ':Telescope session-lens search_session<CR>')
+session_btn.opts.hl = 'AlphaShortcut'
+local search_zoxide_btn = dashboard.button('z', '  Search Zoxide', ':Telescope zoxide list<CR>')
+search_zoxide_btn.opts.hl = 'AlphaShortcut'
+local recent_files_btn = dashboard.button('r', '  Search Recent Files', ':Telescope oldfiles<CR>')
+recent_files_btn.opts.hl = 'AlphaShortcut'
+local git_commit_btn = dashboard.button('g', '  Git Commit History', ':GV<CR>')
+git_commit_btn.opts.hl = 'AlphaShortcut'
+local quit_btn = dashboard.button('q', '  Quit', ':qa<CR>')
+quit_btn.opts.hl = 'AlphaShortcut'
+
+-- Neovim Configuration
+local health_btn = dashboard.button('h', '  Neovim Health', ':checkhealth<CR>')
+health_btn.opts.hl = 'AlphaHeader'
+local settings_btn = dashboard.button('s', '  Neovim Settings', ':e ~/.config/nvim/lua/settings.lua<CR>')
+settings_btn.opts.hl = 'AlphaHeader'
+local options_btn = dashboard.button('o', '  Neovim Options', ':e ~/.config/nvim/lua/options.lua<CR>')
+options_btn.opts.hl = 'AlphaHeader'
+local mappings_btn = dashboard.button('m', '  Keyboard Mappings', ':e ~/.config/nvim/lua/mappings.lua<CR>')
+mappings_btn.opts.hl = 'AlphaHeader'
+
+-- Plugin Management
+local status_btn = dashboard.button('S', '  Plugin Status', ':PlugStatus<CR>')
+status_btn.opts.hl = 'AlphaShortcut'
+local clean_btn = dashboard.button('C', '  Clean Plugins', ':PlugClean<CR>')
+clean_btn.opts.hl = 'AlphaShortcut'
+local install_btn = dashboard.button('I', '  Install Plugins', ':PlugInstall<CR>')
+install_btn.opts.hl = 'AlphaShortcut'
+local update_btn = dashboard.button('U', '  Update Plugins', ':PlugUpdate<CR>')
+update_btn.opts.hl = 'AlphaShortcut'
+
 local buttons = {
-  type = "group",
+  type = 'group',
   val = {
-    { type = "text", val = "Quick links", opts = { hl = "SpecialComment", position = "center" } },
-    dashboard.button("f", "  Find File", ":" .. require("utils.functions").telescope_find_files() .. "<CR>"),
-    dashboard.button("b", "  File Browser", ":Telescope file_browser grouped=true<CR>"),
-    dashboard.button("t", "  Find Text", ":Telescope live_grep<CR>"),
-    dashboard.button("p", "  Search Projects", ":Telescope projects<CR>"),
-    dashboard.button("z", "  Search Zoxide", ":Telescope zoxide list<CR>"),
-    dashboard.button("r", "  Recent Files", ":Telescope oldfiles<CR>"),
-    dashboard.button("e", "  New File", ":ene <BAR> startinsert<CR>"),
-    dashboard.button("h", "  Commit History", ":GV<CR>"),
-    dashboard.button("q", "  Quit", ":qa<CR>"),
-    { type = "padding", val = 1 },
-    { type = "text", val = "Plugin Management", opts = { hl = "SpecialComment", position = "center" } },
-    dashboard.button("h", "  Health", ":checkhealth<CR>"),
-    dashboard.button("s", "  Plugin Status", ":PlugStatus<CR>"),
-    dashboard.button("c", "  Clean Plugins", ":PlugClean<CR>"),
-    dashboard.button("i", "  Install Plugins", ":PlugInstall<CR>"),
-    dashboard.button("u", "  Update Plugins", ":PlugUpdate<CR>"),
+    { type = 'text', val = 'Quick Links', opts = { hl = 'SpecialComment', position = 'center' } },
+    new_file_btn,
+    find_file_btn,
+    file_browser_btn,
+    file_tree_btn,
+    find_text_btn,
+    search_project_btn,
+    session_btn,
+    search_zoxide_btn,
+    recent_files_btn,
+    git_commit_btn,
+    quit_btn,
+    { type = 'padding', val = 1 },
+    { type = 'text', val = 'Neovim Configuration', opts = { hl = 'SpecialComment', position = 'center' } },
+    health_btn,
+    settings_btn,
+    options_btn,
+    mappings_btn,
+    { type = 'padding', val = 1 },
+    { type = 'text', val = 'Plugin Management', opts = { hl = 'SpecialComment', position = 'center' } },
+    status_btn,
+    clean_btn,
+    install_btn,
+    update_btn,
   },
-  position = "center",
+  position = 'center',
 }
 
 local header = {
-  type = "text",
+  type = 'text',
   -- From https://gist.github.com/sRavioli/d6fb0a813b6affc171976b7dd09764d3
-  val = require('config.headers')['random'],
+  val = require('plugins.alpha.headers')['random'],
   opts = {
-    position = "center",
-    hl = "AlphaHeader",
+    position = 'center',
+    hl = 'AlphaHeader',
   },
 }
 
@@ -226,16 +273,16 @@ layout[4] = buttons
 layout[5] = { type = "padding", val = 1 }
 layout[6] = footer
 
-if dashboard_recent_files == 0 then
+if settings.dashboard_recent_files == 0 then
   layout[1] = nil
   layout[2] = nil
 end
 
-if disable_dashboard_header == true then
+if settings.disable_dashboard_header == true then
   layout[0] = nil
 end
 
-if disable_dashboard_quick_links == true then
+if settings.disable_dashboard_quick_links == true then
   layout[3] = nil
   layout[4] = nil
 end
@@ -252,10 +299,10 @@ local opts = {
 --    }
       vim.api.nvim_set_hl(0, "AlphaHeader", { fg = colors.blue })
       vim.api.nvim_set_hl(0, "AlphaHeaderLabel", { fg = colors.orange })
-      vim.api.nvim_set_hl(0, "AlphaButtons", { fg = colors.cyan })
-      vim.api.nvim_set_hl(0, "AlphaShortcut", { fg = colors.orange })
-      vim.api.nvim_set_hl(0, "AlphaFooter", { fg = colors.yellow, italic = true })
-      vim.api.nvim_set_hl(0, "SpecialComment", { fg = colors.yellow, italic = true })
+      vim.api.nvim_set_hl(0, "AlphaButtons", { fg = colors.teal })
+      vim.api.nvim_set_hl(0, "AlphaShortcut", { fg = colors.cyan })
+      vim.api.nvim_set_hl(0, "AlphaFooter", { fg = colors.purple, italic = true })
+      vim.api.nvim_set_hl(0, "SpecialComment", { fg = colors.green, italic = true })
       vim.api.nvim_set_hl(0, "Comment", { fg = colors.yellow })
       vim.api.nvim_set_hl(0, "DashboardHeader", { fg = colors.blue })
       vim.api.nvim_set_hl(0, "DashboardHeaderLabel", { fg = colors.orange })

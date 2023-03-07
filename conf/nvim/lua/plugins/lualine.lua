@@ -6,6 +6,45 @@ local ok, lualine = pcall(require, 'lualine')
 if not ok then return end
 
 local navic = require('nvim-navic')
+local settings = require("settings")
+
+local tabline_cfg = {}
+if not settings.disable_tabline then
+  tabline_cfg = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = { require'tabline'.tabline_buffers },
+    lualine_x = { require'tabline'.tabline_tabs },
+    lualine_y = {},
+    lualine_z = {},
+  }
+end
+
+local winbar_cfg = {}
+local inactive_winbar_cfg = {}
+if not settings.disable_winbar then
+  winbar_cfg = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {
+      { 'filename', path = 3, color = { bg = 'NONE' } },
+      { navic.get_location, cond = navic.is_available },
+    },
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = {}
+  }
+  inactive_winbar_cfg = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {
+      { 'filename', path = 1, color = { bg = 'NONE' } },
+    },
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = {}
+  }
+end
 
 local fmt_stat = function()
     local stat = ''
@@ -18,7 +57,9 @@ lualine.setup {
     globalstatus = true,
     icons_enabled = true,
     -- theme = 'auto',
-    theme = 'tokyonight',
+    -- theme = 'tokyonight',
+    -- theme = 'everforest',
+    theme = settings.theme,
     --component_separators = { left = '', right = '' },
     component_separators = { left = '', right = '' },
     --section_separators = { left = '', right = '' },
@@ -60,16 +101,9 @@ lualine.setup {
     lualine_z = {}
   },
 
-  tabline = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = { require'tabline'.tabline_buffers },
-    lualine_x = { require'tabline'.tabline_tabs },
-    lualine_y = {},
-    lualine_z = {},
-  },
-  winbar = {},
-  inactive_winbar = {},
+  tabline = tabline_cfg,
+  winbar = winbar_cfg,
+  inactive_winbar = inactive_winbar_cfg,
 
   -- Available extensions:
   --   aerial

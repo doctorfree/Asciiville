@@ -28,7 +28,7 @@ function M.on_attach(client, bufnr)
     buf_set_keymap("n", "<Leader>d", "<Cmd>lua vim.lsp.buf.definition()<CR>")
     buf_set_keymap("n", "<Leader>a", "<Cmd>lua vim.lsp.buf.code_action()<CR>")
     buf_set_keymap("n", "<Leader><Leader>", "<Cmd>lua vim.lsp.buf.hover()<CR>")
-    buf_set_keymap("n", "<Leader>r", '<cmd>lua require("utils.core").rename_popup()<CR>')
+    -- buf_set_keymap("n", "<Leader>r", '<cmd>lua require("utils.core").rename_popup()<CR>')
     buf_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
     buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>")
 

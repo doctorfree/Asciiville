@@ -1,14 +1,15 @@
 #!/bin/bash
 #
-# Copyright (C) 2022 Michael Peter <michaeljohannpeter@gmail.com>
 # Copyright (C) 2023 Ronald Record <ronaldrecord@gmail.com>
+# Copyright (C) 2022 Michael Peter <michaeljohannpeter@gmail.com>
 #
 # Install Neovim and all dependencies for the Neovim config at:
 #     https://github.com/doctorfree/Asciiville/conf/nvim/init.vim
 #
 # Adapted for Asciiville from https://github.com/Allaman/nvim.git
 # See https://github.com/doctorfree/nvim
-# shellcheck disable=SC2001,SC2016,SC2006,SC2086,SC2181,SC2129
+#
+# shellcheck disable=SC2001,SC2016,SC2006,SC2086,SC2181,SC2129,SC2059
 
 OS=""
 PYTHON=
@@ -16,6 +17,9 @@ LINUX_DISTRIBUTION=""
 # LINUX_HOMEBREW="https://docs.brew.sh/Homebrew-on-Linux"
 DOC_HOMEBREW="https://docs.brew.sh"
 BREW_EXE="brew"
+NVIMCONF="${HOME}/.config/nvim/config.vim"
+PLUGCONF="${HOME}/.config/nvim/plugins.vim"
+NVIMGLOB="${HOME}/.config/nvim/lua/globals.lua"
 
 abort () {
   printf "\nERROR: %s\n" "$@" >&2
@@ -258,24 +262,15 @@ export PATH'
   log "Installing Homebrew gcc, cmake, and make ..."
   if [ "${debug}" ]
   then
-    START_SECONDS=$(date +%s)
-    ${BREW_EXE} install gcc
-    FINISH_SECONDS=$(date +%s)
-    ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
-    ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-    printf "\nInstall gcc elapsed time = %s${ELAPSED}\n"
-    START_SECONDS=$(date +%s)
-    ${BREW_EXE} install cmake
-    FINISH_SECONDS=$(date +%s)
-    ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
-    ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-    printf "\nInstall cmake elapsed time = %s${ELAPSED}\n"
-    START_SECONDS=$(date +%s)
-    ${BREW_EXE} install make
-    FINISH_SECONDS=$(date +%s)
-    ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
-    ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-    printf "\nInstall make elapsed time = %s${ELAPSED}\n"
+	for tool in gcc cmake make
+	do
+      START_SECONDS=$(date +%s)
+      ${BREW_EXE} install ${tool}
+      FINISH_SECONDS=$(date +%s)
+      ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
+      ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
+      printf "\nInstall ${tool} elapsed time = %s${ELAPSED}\n"
+	done
     START_SECONDS=$(date +%s)
     ${BREW_EXE} uninstall --ignore-dependencies llvm
     ${BREW_EXE} install llvm@14
@@ -379,65 +374,59 @@ install_neovim_head () {
 }
 
 fixup_init_vim () {
-  NVIMCONF="${HOME}/.config/nvim/init.vim"
-  [ -f ${NVIMCONF} ] && {
+  [ -f ${NVIMGLOB} ] && {
     python3_path=$(command -v python3)
-    grep /path/to/python3 ${NVIMCONF} > /dev/null && {
-      cat ${NVIMCONF} | sed -e "s%/path/to/python3%${python3_path}%" > /tmp/nvim$$
-      cp /tmp/nvim$$ ${NVIMCONF}
+    grep /usr/bin/python3 ${NVIMGLOB} > /dev/null && {
+      cat ${NVIMGLOB} | sed -e "s%/usr/bin/python3%${python3_path}%" > /tmp/nvim$$
+      cp /tmp/nvim$$ ${NVIMGLOB}
       rm -f /tmp/nvim$$
     }
     doq_path=$(command -v doq)
-    grep /path/to/doq ${NVIMCONF} > /dev/null && {
-      cat ${NVIMCONF} | sed -e "s%/path/to/doq%${doq_path}%" > /tmp/nvim$$
+    grep /usr/bin/doq ${NVIMGLOB} > /dev/null && {
+      cat ${NVIMGLOB} | sed -e "s%/usr/bin/doq%${doq_path}%" > /tmp/nvim$$
+      cp /tmp/nvim$$ ${NVIMGLOB}
+      rm -f /tmp/nvim$$
+    }
+  }
+  [ "${OPENAI_API_KEY}" ] || {
+    grep "^Plug 'jackMort/ChatGPT.nvim'" ${PLUGCONF} > /dev/null && {
+      cat ${PLUGCONF} | sed -e "s%Plug 'jackMort/ChatGPT.nvim'%\" Plug 'jackMort/ChatGPT.nvim'%" > /tmp/nvim$$
+      cp /tmp/nvim$$ ${PLUGCONF}
+      rm -f /tmp/nvim$$
+    }
+    grep "\" lua require('chatgpt').setup()" ${NVIMCONF} > /dev/null && {
+      cat ${NVIMCONF} | sed -e "s%\" lua require('chatgpt').setup()%lua require('chatgpt').setup()%" > /tmp/nvim$$
       cp /tmp/nvim$$ ${NVIMCONF}
       rm -f /tmp/nvim$$
     }
-    grep '" Replace these with actual paths'  ${NVIMCONF} > /dev/null && {
-      cat ${NVIMCONF} | sed -e "s/\" Replace these with actual paths.*//" > /tmp/nvim$$
-      cp /tmp/nvim$$ ${NVIMCONF}
-      rm -f /tmp/nvim$$
-    }
-    [ "${OPENAI_API_KEY}" ] && {
-      grep "\" Plug 'jackMort/ChatGPT.nvim'" ${NVIMCONF} > /dev/null && {
-        cat ${NVIMCONF} | sed -e "s%\" Plug 'jackMort/ChatGPT.nvim'%Plug 'jackMort/ChatGPT.nvim'%" > /tmp/nvim$$
-        cp /tmp/nvim$$ ${NVIMCONF}
-        rm -f /tmp/nvim$$
-      }
-      grep "\" lua require('chatgpt').setup()" ${NVIMCONF} > /dev/null && {
-        cat ${NVIMCONF} | sed -e "s%\" lua require('chatgpt').setup()%lua require('chatgpt').setup()%" > /tmp/nvim$$
-        cp /tmp/nvim$$ ${NVIMCONF}
-        rm -f /tmp/nvim$$
-      }
-    }
-    [ "${BREW_EXE}" ] || BREW_EXE=brew
-    BREW_ROOT="$(${BREW_EXE} --prefix)"
-    [ "${BREW_ROOT}" ] && {
-      if [ -d ${BREW_ROOT}/opt/go/libexec ]
+  }
+  [ "${BREW_EXE}" ] || BREW_EXE=brew
+  BREW_ROOT="$(${BREW_EXE} --prefix)"
+  [ "${BREW_ROOT}" ] && {
+    if [ -d ${BREW_ROOT}/opt/go/libexec ]
+    then
+      export GOROOT="${BREW_ROOT}/opt/go/libexec"
+    else
+      if [ -d ${BREW_ROOT}/opt/go ]
       then
-        export GOROOT="${BREW_ROOT}/opt/go/libexec"
+        export GOROOT="${BREW_ROOT}/opt/go"
       else
-        if [ -d ${BREW_ROOT}/opt/go ]
-        then
-          export GOROOT="${BREW_ROOT}/opt/go"
-        else
-          [ -d ${BREW_ROOT}/go ] && export GOROOT="${BREW_ROOT}/go"
-        fi
+        [ -d ${BREW_ROOT}/go ] && export GOROOT="${BREW_ROOT}/go"
       fi
-    }
-    [ "${GOPATH}" ] || export GOPATH="${HOME}/go"
-    for gop in ${GOPATH} ${GOPATH}/src ${GOPATH}/pkg ${GOPATH}/bin
-    do
-      [ -d "${gop}" ] || mkdir -p "${gop}"
-    done
-    have_nvim=`type -p nvim`
-    [ "${have_nvim}" ] && {
-      grep "^Plug " ${NVIMCONF} > /dev/null && {
-        nvim -i NONE -c 'set nomore' -c 'PlugInstall' -c 'qa'
-        nvim -i NONE -c 'set nomore' -c 'UpdateRemotePlugins' -c 'qa'
-        nvim -i NONE -c 'set nomore' -c 'GoInstallBinaries' -c 'qa'
-#       nvim -i NONE -c 'GoUpdateBinaries' -c 'qa'
-      }
+    fi
+  }
+  [ "${GOPATH}" ] || export GOPATH="${HOME}/go"
+  for gop in ${GOPATH} ${GOPATH}/src ${GOPATH}/pkg ${GOPATH}/bin
+  do
+    [ -d "${gop}" ] || mkdir -p "${gop}"
+  done
+  have_nvim=`type -p nvim`
+  [ "${have_nvim}" ] && {
+    grep "^Plug " ${PLUGCONF} > /dev/null && {
+      nvim -i NONE -u ${PLUGCONF} -c 'set nomore' -c 'PlugInstall' -c 'qa'
+      nvim -i NONE -c 'set nomore' -c 'UpdateRemotePlugins' -c 'qa'
+      nvim -i NONE -c 'set nomore' -c 'GoInstallBinaries' -c 'qa'
+#     nvim -i NONE -c 'GoUpdateBinaries' -c 'qa'
     }
   }
 }
@@ -533,7 +522,9 @@ install_tools () {
     fi
     if [ "${debug}" ]
     then
-      for pkg in golangci-lint jdtls marksman rust-analyzer shellcheck taplo texlab stylua eslint prettier terraform black shfmt
+      for pkg in golangci-lint jdtls marksman rust-analyzer shellcheck \
+		        taplo texlab stylua eslint prettier terraform black shfmt \
+				yarn julia composer php
       do
         START_SECONDS=$(date +%s)
         ${BREW_EXE} install ${pkg}
@@ -556,6 +547,10 @@ install_tools () {
       ${BREW_EXE} install -q terraform > /dev/null 2>&1
       ${BREW_EXE} install -q black > /dev/null 2>&1
       ${BREW_EXE} install -q shfmt > /dev/null 2>&1
+      ${BREW_EXE} install -q yarn > /dev/null 2>&1
+      ${BREW_EXE} install -q julia > /dev/null 2>&1
+      ${BREW_EXE} install -q composer > /dev/null 2>&1
+      ${BREW_EXE} install -q php > /dev/null 2>&1
     fi
     [ "${PYTHON}" ] && {
       ${PYTHON} -m pip install cmake-language-server > /dev/null 2>&1
@@ -604,25 +599,6 @@ install_tools () {
       cargo install rnix-lsp > /dev/null 2>&1
     fi
   }
-  log "Installing ffmpeg, please be patient ..."
-  if [ "${debug}" ]
-  then
-    START_SECONDS=$(date +%s)
-    ${BREW_EXE} uninstall --force --ignore-dependencies ffmpeg
-    ${BREW_EXE} install chromaprint
-    ${BREW_EXE} tap homebrew-ffmpeg/ffmpeg
-    ${BREW_EXE} install homebrew-ffmpeg/ffmpeg/ffmpeg $(brew options homebrew-ffmpeg/ffmpeg/ffmpeg | grep -vE '\s' | grep -- '--with-' | grep -vi chromaprint | grep -vi libzvbi | grep -vi decklink | tr '\n' ' ')
-    FINISH_SECONDS=$(date +%s)
-    ELAPSECS=$(( FINISH_SECONDS - START_SECONDS ))
-    ELAPSED=`eval "echo $(date -ud "@$ELAPSECS" +'$((%s/3600/24)) days %H hr %M min %S sec')"`
-    printf "\nInstall ffmpeg elapsed time = %s${ELAPSED}\n"
-  else
-    ${BREW_EXE} uninstall --force --ignore-dependencies ffmpeg > /dev/null 2>&1
-    ${BREW_EXE} install --quiet chromaprint > /dev/null 2>&1
-    ${BREW_EXE} tap homebrew-ffmpeg/ffmpeg > /dev/null 2>&1
-    ${BREW_EXE} install --quiet homebrew-ffmpeg/ffmpeg/ffmpeg $(brew options homebrew-ffmpeg/ffmpeg/ffmpeg | grep -vE '\s' | grep -- '--with-' | grep -vi chromaprint | grep -vi libzvbi | grep -vi decklink | tr '\n' ' ') > /dev/null 2>&1
-  fi
-  printf " done"
 }
 
 install_npm () {

@@ -16,7 +16,8 @@ fi
 MUSEDIR="${TOP}/asciiville/music"
 CONFDIR=${TOP}/share/asciiville
 USERCONF="${HOME}/.config"
-NVIMCONF="${USERCONF}/nvim/init.vim"
+NVIMCONF="${USERCONF}/nvim/config.vim"
+PLUGCONF="${USERCONF}/nvim/plugins.vim"
 GHUC="https://raw.githubusercontent.com"
 OWNER=doctorfree
 BOLD=$(tput bold 2>/dev/null)
@@ -1001,16 +1002,13 @@ neovim_install=
   [ "${quiet}" ] || {
     printf "\n\tInstalling Neovim configuration in ${USERCONF}/nvim ..."
   }
-  newnvimconf=
   if [ -d ${USERCONF}/nvim ]
   then
     printf "\n\tBacking up existing Neovim configuration to ~/.config/nvim-bak$$"
     mv ${USERCONF}/nvim ${USERCONF}/nvim-bak$$
     cp -a ${CONFDIR}/nvim ${USERCONF}/nvim
-    newnvimconf=1
   else
     cp -a ${CONFDIR}/nvim ${USERCONF}/nvim
-    newnvimconf=1
   fi
   [ "${quiet}" ] || {
     printf " done"
@@ -2162,87 +2160,77 @@ curl -fsSL "${JETB_URL}" > /tmp/jetb-$$.sh
   [ "${quiet}" ] || printf "done"
 }
 
-[ "${newnvimconf}" ] && {
-  [ -f ${NVIMCONF} ] && {
-    python3_path=$(command -v python3)
-    grep /path/to/python3 ${NVIMCONF} > /dev/null && {
-      cat ${NVIMCONF} | sed -e "s%/path/to/python3%${python3_path}%" > /tmp/nvim$$
-      cp /tmp/nvim$$ ${NVIMCONF}
-      rm -f /tmp/nvim$$
-    }
-    doq_path=$(command -v doq)
-    grep /path/to/doq ${NVIMCONF} > /dev/null && {
-      cat ${NVIMCONF} | sed -e "s%/path/to/doq%${doq_path}%" > /tmp/nvim$$
-      cp /tmp/nvim$$ ${NVIMCONF}
-      rm -f /tmp/nvim$$
-    }
-    grep '" Replace these with actual paths'  ${NVIMCONF} > /dev/null && {
-      cat ${NVIMCONF} | sed -e "s/\" Replace these with actual paths.*//" > /tmp/nvim$$
-      cp /tmp/nvim$$ ${NVIMCONF}
-      rm -f /tmp/nvim$$
-    }
-    [ "${OPENAI_API_KEY}" ] && {
-      grep "\" Plug 'MunifTanjim/nui.nvim'" ${NVIMCONF} > /dev/null && {
-        cat ${NVIMCONF} | sed -e "s%\" Plug 'MunifTanjim/nui.nvim'%Plug 'MunifTanjim/nui.nvim'%" > /tmp/nvim$$
-        cp /tmp/nvim$$ ${NVIMCONF}
-        rm -f /tmp/nvim$$
-      }
-      grep "\" Plug 'jackMort/ChatGPT.nvim'" ${NVIMCONF} > /dev/null && {
-        cat ${NVIMCONF} | sed -e "s%\" Plug 'jackMort/ChatGPT.nvim'%Plug 'jackMort/ChatGPT.nvim'%" > /tmp/nvim$$
-        cp /tmp/nvim$$ ${NVIMCONF}
-        rm -f /tmp/nvim$$
-      }
-      grep "\" lua require('chatgpt').setup()" ${NVIMCONF} > /dev/null && {
-        cat ${NVIMCONF} | sed -e "s%\" lua require('chatgpt').setup()%lua require('chatgpt').setup()%" > /tmp/nvim$$
-        cp /tmp/nvim$$ ${NVIMCONF}
-        rm -f /tmp/nvim$$
-      }
-    }
-    [ "${usebrew}" ] && {
-      [ "${BREW_EXE}" ] || BREW_EXE=brew
-      BREW_ROOT="$(${BREW_EXE} --prefix)"
-    }
-    [ "${BREW_ROOT}" ] && {
-      if [ -d ${BREW_ROOT}/opt/go/libexec ]
-      then
-        export GOROOT="${BREW_ROOT}/opt/go/libexec"
-      else
-        if [ -d ${BREW_ROOT}/opt/go ]
-        then
-          export GOROOT="${BREW_ROOT}/opt/go"
-        else
-          [ -d ${BREW_ROOT}/go ] && export GOROOT="${BREW_ROOT}/go"
-        fi
-      fi
-    }
-    [ "${GOPATH}" ] || export GOPATH="${HOME}/go"
-    for gop in ${GOPATH} ${GOPATH}/src ${GOPATH}/pkg ${GOPATH}/bin
-    do
-      [ -d "${gop}" ] || mkdir -p "${gop}"
-    done
-    have_nvim=`type -p nvim`
-    [ "${have_nvim}" ] && {
-      grep "^Plug " ${NVIMCONF} > /dev/null && {
-        nvim -i NONE -c 'set nomore' -c 'PlugInstall' -c 'qa'
-        nvim -i NONE -c 'set nomore' -c 'UpdateRemotePlugins' -c 'qa'
-        nvim -i NONE -c 'set nomore' -c 'GoInstallBinaries' -c 'qa'
-#       nvim -i NONE -c "GoUpdateBinaries" -c 'qa'
-      }
-    }
+NVIMGLOB="${HOME}/.config/nvim/lua/globals.lua"
+[ -f ${NVIMGLOB} ] && {
+  python3_path=$(command -v python3)
+  grep /usr/bin/python3 ${NVIMGLOB} > /dev/null && {
+    cat ${NVIMGLOB} | sed -e "s%/usr/bin/python3%${python3_path}%" > /tmp/nvim$$
+    cp /tmp/nvim$$ ${NVIMGLOB}
+    rm -f /tmp/nvim$$
   }
-  [ "${quiet}" ] || {
-    printf "\n\n\tA Neovim text editor configuration has been created for you in"
-    printf "\n\t\t${BOLD}${HOME}/.config/nvim/${NORM}"
-    printf "\n\tA good starting point for the Neovim user is the Neovim User Doc at:"
-    printf "\n\t\t${BOLD}https://neovim.io/doc/user/${NORM}"
-    printf "\n\tTry Neovim out by viewing your Neovim configuration:"
-    printf "\n\t\t${BOLD}nvim ~/.config/nvim/init.vim${NORM}"
-    printf "\n\tCheck your configuration with the Neovim command:"
-    printf "\n\t\t${BOLD}:checkhealth${NORM}\n"
+  doq_path=$(command -v doq)
+  grep /usr/bin/doq ${NVIMGLOB} > /dev/null && {
+    cat ${NVIMGLOB} | sed -e "s%/usr/bin/doq%${doq_path}%" > /tmp/nvim$$
+    cp /tmp/nvim$$ ${NVIMGLOB}
+    rm -f /tmp/nvim$$
   }
 }
 
+[ "${OPENAI_API_KEY}" ] && {
+  grep "\" Plug 'jackMort/ChatGPT.nvim'" ${PLUGCONF} > /dev/null && {
+    cat ${PLUGCONF} | sed -e "s%\" Plug 'jackMort/ChatGPT.nvim'%Plug 'jackMort/ChatGPT.nvim'%" > /tmp/nvim$$
+    cp /tmp/nvim$$ ${PLUGCONF}
+    rm -f /tmp/nvim$$
+  }
+  grep "\" lua require('chatgpt').setup()" ${NVIMCONF} > /dev/null && {
+    cat ${NVIMCONF} | sed -e "s%\" lua require('chatgpt').setup()%lua require('chatgpt').setup()%" > /tmp/nvim$$
+    cp /tmp/nvim$$ ${NVIMCONF}
+    rm -f /tmp/nvim$$
+  }
+}
+[ "${usebrew}" ] && {
+  [ "${BREW_EXE}" ] || BREW_EXE=brew
+  BREW_ROOT="$(${BREW_EXE} --prefix)"
+}
+[ "${BREW_ROOT}" ] && {
+  if [ -d ${BREW_ROOT}/opt/go/libexec ]
+  then
+    export GOROOT="${BREW_ROOT}/opt/go/libexec"
+  else
+    if [ -d ${BREW_ROOT}/opt/go ]
+    then
+      export GOROOT="${BREW_ROOT}/opt/go"
+    else
+      [ -d ${BREW_ROOT}/go ] && export GOROOT="${BREW_ROOT}/go"
+    fi
+  fi
+}
+[ "${GOPATH}" ] || export GOPATH="${HOME}/go"
+for gop in ${GOPATH} ${GOPATH}/src ${GOPATH}/pkg ${GOPATH}/bin
+do
+  [ -d "${gop}" ] || mkdir -p "${gop}"
+done
+have_nvim=`type -p nvim`
+[ "${have_nvim}" ] && {
+  grep "^Plug " ${PLUGCONF} > /dev/null && {
+    nvim -i NONE -u ${PLUGCONF} -c 'set nomore' -c 'PlugInstall' -c 'qa'
+    nvim -i NONE -c 'set nomore' -c 'UpdateRemotePlugins' -c 'qa'
+    nvim -i NONE -c 'set nomore' -c 'GoInstallBinaries' -c 'qa'
+#   nvim -i NONE -c "GoUpdateBinaries" -c 'qa'
+  }
+}
+rm -f ${USERCONF}/nvim/sessions/*figlet-fonts.vim
+
 [ "${quiet}" ] || {
+  printf "\n\n\tA Neovim text editor configuration has been created for you in"
+  printf "\n\t\t${BOLD}${HOME}/.config/nvim/${NORM}"
+  printf "\n\tA good starting point for the Neovim user is the Neovim User Doc at:"
+  printf "\n\t\t${BOLD}https://neovim.io/doc/user/${NORM}"
+  printf "\n\tTry Neovim out by viewing your Neovim configuration:"
+  printf "\n\t\t${BOLD}nvim ~/.config/nvim/init.vim${NORM}"
+  printf "\n\tCheck your configuration with the Neovim command:"
+  printf "\n\t\t${BOLD}:checkhealth${NORM}\n"
+
   printf "\n\n${BOLD}Asciiville Initialization Complete${NORM}\n"
   printf "\nLogout, open a new shell, or reinitialize your current shell"
   printf "\nin order to set your execution PATH appropriately\n"

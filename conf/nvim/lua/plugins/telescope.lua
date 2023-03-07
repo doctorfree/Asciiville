@@ -1,3 +1,4 @@
+local settings = require('settings')
 local telescope = require('telescope')
 local actions = require("telescope.actions")
 local action_layout = require("telescope.actions.layout")
@@ -33,6 +34,13 @@ telescope.setup({
         },
       },
     },
+    media = {
+      -- backend = "ueberzug", -- "ueberzug"|"viu"|"chafa"|"jp2a"|catimg
+      backend = "jp2a",
+      -- move = true, -- experimental GIF preview
+      cache_path = "/tmp/tele.media.cache",
+      hidden = false
+    }
   },
   pickers = {
     find_files = {
@@ -44,6 +52,9 @@ telescope.setup({
     },
     -- find_command = { "fd", "--hidden", "--type", "file", "--follow", "--strip-cwd-prefix" },
     -- find_command = { "rg", "--files", "--hidden", "--glob", "!.git/*" },
+    find_command = {
+      'rg', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case'
+    },
   },
 
   defaults = {
@@ -97,14 +108,21 @@ telescope.setup({
       },
     },
     prompt_prefix = table.concat({ icons.arrows.ChevronRight, " " }),
+--  prompt_prefix = "   ",
     selection_caret = icons.arrows.CurvedArrowRight,
+--  selection_caret = "  ",
     entry_prefix = "  ",
+--  entry_prefix = "  ",
     multi_icon = icons.arrows.Diamond,
     initial_mode = "insert",
+--  initial_mode = "insert",
     scroll_strategy = "cycle",
     selection_strategy = "reset",
+--  selection_strategy = "reset",
     sorting_strategy = "descending",
+--  sorting_strategy = "ascending",
     layout_strategy = "vertical",
+--  layout_strategy = "horizontal",
     layout_config = {
       width = 0.95,
       height = 0.85,
@@ -128,13 +146,20 @@ telescope.setup({
     color_devicons = true,
     use_less = true,
     set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
+    file_previewer = require 'telescope.previewers'.vim_buffer_cat.new,
+    grep_previewer = require 'telescope.previewers'.vim_buffer_vimgrep.new,
+    qflist_previewer = require 'telescope.previewers'.vim_buffer_qflist.new,
+    buffer_previewer_maker = require 'telescope.previewers'.buffer_previewer_maker,
   },
 })
 
 telescope.load_extension('fzf')
-telescope.load_extension("projects")
-telescope.load_extension("zoxide")
-telescope.load_extension("heading")
-telescope.load_extension("ui-select")
-telescope.load_extension("make")
--- telescope.load_extension("noice")
+telescope.load_extension('projects')
+telescope.load_extension('zoxide')
+telescope.load_extension('heading')
+telescope.load_extension('ui-select')
+telescope.load_extension('make')
+telescope.load_extension('media')
+if settings.enable_noice then
+  telescope.load_extension('noice')
+end
