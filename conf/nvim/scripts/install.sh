@@ -20,6 +20,9 @@ BREW_EXE="brew"
 NVIMCONF="${HOME}/.config/nvim/config.vim"
 PLUGCONF="${HOME}/.config/nvim/plugins.vim"
 NVIMGLOB="${HOME}/.config/nvim/lua/globals.lua"
+# Neovim 0.9+ honors this
+# Override user's setting to install in standard location
+export NVIM_APPNAME="nvim"
 
 abort () {
   printf "\nERROR: %s\n" "$@" >&2
@@ -524,7 +527,7 @@ install_tools () {
     then
       for pkg in golangci-lint jdtls marksman rust-analyzer shellcheck \
 		        taplo texlab stylua eslint prettier terraform black shfmt \
-				yarn julia composer php
+				yarn julia composer php deno
       do
         START_SECONDS=$(date +%s)
         ${BREW_EXE} install ${pkg}
@@ -551,6 +554,7 @@ install_tools () {
       ${BREW_EXE} install -q julia > /dev/null 2>&1
       ${BREW_EXE} install -q composer > /dev/null 2>&1
       ${BREW_EXE} install -q php > /dev/null 2>&1
+      ${BREW_EXE} install -q deno > /dev/null 2>&1
     fi
     [ "${PYTHON}" ] && {
       ${PYTHON} -m pip install cmake-language-server > /dev/null 2>&1

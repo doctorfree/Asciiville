@@ -23,6 +23,10 @@ OWNER=doctorfree
 BOLD=$(tput bold 2>/dev/null)
 NORM=$(tput sgr0 2>/dev/null)
 
+# Neovim 0.9+ honors this
+# Override user's setting to install in standard location
+export NVIM_APPNAME="nvim"
+
 usage() {
   if [ "${have_rich}" ]
   then
