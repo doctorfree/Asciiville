@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# rps - format ps output with rich
+#
+# written by <ronaldrecord@gmail.com>
+
+have_rich=$(type -p rich)
+
+if [ "${have_rich}" ]
+then
+  ps | sed 's/^[ \t]*//;s/[ \t]*$//' \
+     | tr -s '[:blank:]' ',' \
+     | rich - -c --csv
+else
+  ps
+fi

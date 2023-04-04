@@ -12,6 +12,8 @@ bind pager,attach h exit
 bind pager j next-line
 bind pager k previous-line
 bind pager l view-attachments
+bind index j next-entry
+bind index k previous-entry
 bind index D delete-message
 bind index U undelete-message
 bind index L limit
@@ -21,6 +23,8 @@ bind browser h goto-parent
 bind browser l select-entry
 bind pager,browser gg top-page
 bind pager,browser G bottom-page
+bind attach,index,pager \CD next-page
+bind attach,index,pager \CU previous-page
 bind index,pager,browser d half-down
 bind index,pager,browser u half-up
 bind index,pager R group-reply
@@ -28,8 +32,6 @@ bind index \031 previous-undeleted	# Mouse wheel
 bind index \005 next-undeleted		# Mouse wheel
 bind pager \031 previous-line		# Mouse wheel
 bind pager \005 next-line		# Mouse wheel
-bind editor <Tab> complete-query
-
 
 # sidebar mappings
 bind index,pager \Ck sidebar-prev
@@ -49,8 +51,13 @@ bind index <space> collapse-thread
 bind editor <Tab> complete-query
 bind editor ^T complete
 
-# Press A to add contact to Khard address book
-macro index,pager A \
+# Press A to mark all new emails in the index as read
+macro index A \
+    "<tag-pattern>~N<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" \
+    "mark all new as read"
+
+# Press C to add contact to Khard address book
+macro index,pager C \
     "<pipe-message>khard add-email<return>" \
     "add the sender email address to khard"
 

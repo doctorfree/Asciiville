@@ -1,7 +1,9 @@
 # vim: filetype=muttrc
 #
-# set editor to vim
-set editor = "vim"
+# you may want to change askcc, edit_headers, fast_reply, envelope_from
+#
+# set editor to neovim
+set editor = "nvim"
 
 set my_name = "Firstname Lastname"
 set imap_check_subscribed
@@ -51,6 +53,11 @@ set beep_new             # bell on new mails
 set pipe_decode          # strip headers and eval mimes when piping
 set thorough_search      # strip headers and eval mimes before searching
 set timeout = 0
+set move=no                          # don't move messages when marking as read
+set mail_check = 30                  # check for new mail every 30 seconds
+set imap_keepalive = 900             # 15 minutes
+set sleep_time = 0                   # don't sleep when idle
+set wait_key = no		                 # won't ask "press key to continue"
 
 # status bar, date format, finding stuff etc.
 set status_chars = " *%A"
@@ -58,13 +65,15 @@ set status_format = "[ Folder: %f ] [%r%m messages%?n? (%n new)?%?d? (%d to dele
 set date_format = "%d.%m.%Y %H:%M"
 set sort = threads
 set sort_aux = reverse-last-date-received
+#set sort = reverse-threads
+#set sort_aux = last-date-received
 set uncollapse_jump
 set sort_re
 set reply_regexp = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
 set quote_regexp = "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
 set send_charset = "utf-8:iso-8859-1:us-ascii"
 set charset = "utf-8"
-set arrow_cursor = "no" # Change `color indicator` depending 
+set arrow_cursor = "no" # Change `color indicator` depending
 
 # Pager View Options
 set pager_index_lines = 10  # Shows 10 lines of index when pager is active
@@ -74,6 +83,13 @@ set menu_scroll
 set tilde
 unset markers
 
+# Sidebar
+set sidebar_visible                  # comment to disable sidebar by default
+set sidebar_short_path
+set sidebar_folder_indent
+set sidebar_format = "%B %* [%?N?%N / ?%S]"
+set mail_check_stats
+
 set mailcap_path = ~/.config/neomutt/mailcap:/usr/local/etc/mailcap:/etc/mailcap
 set header_cache = "~/.cache/neomutt"
 set message_cachedir = "~/.cache/neomutt"
@@ -82,4 +98,8 @@ set message_cachedir = "~/.cache/neomutt"
 set certificate_file = ~/.config/neomutt/certificates
 set ssl_ca_certificates_file = /etc/ssl/certs/ca-certificates.crt
 
+# Query
+# On macOS to search contacts use lbdbq
+# set query_command="/opt/homebrew/bin/lbdbq '%s'"
+# On Linux use goobook or khard
 set query_command = "khard email --parsable --search-in-source-files '%s'"
