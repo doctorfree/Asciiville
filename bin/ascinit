@@ -468,14 +468,13 @@ remove_neovim() {
 }
 
 install_neovim() {
-  install_args=
-  [ "${quiet}" ] && install_args="${install_args} -q"
+  install_args="-q -z"
   [ "${debug}" ] && install_args="${install_args} -d"
   [ -x ${CONFDIR}/tools/bin/lazyman ] && {
     if [ -d ${USERCONF}/nvim-Lazyman ]; then
       ${CONFDIR}/tools/bin/lazyman -I ${install_args}
     else
-      ${CONFDIR}/tools/bin/lazyman -z ${install_args}
+      ${CONFDIR}/tools/bin/lazyman ${install_args}
     fi
   }
 }
@@ -1557,8 +1556,7 @@ have_jp2a=$(type -p jp2a)
     install_neovim
   else
     # Perform a minimal installation of required tools
-    install_args="-m"
-    [ "${quiet}" ] && install_args="${install_args} -q"
+    install_args="-q -z"
     [ "${debug}" ] && install_args="${install_args} -d"
     [ -x ${CONFDIR}/tools/bin/lazyman ] && {
       ${CONFDIR}/tools/bin/lazyman -I ${install_args}
