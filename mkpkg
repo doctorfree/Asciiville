@@ -14,7 +14,8 @@ centos=
 debian=
 fedora=
 
-export __ASC_SRC__=`pwd`
+__ASC_SRC__=$(pwd)
+export __ASC_SRC__
 
 [ -f /etc/os-release ] && . /etc/os-release
 [ "${ID_LIKE}" == "debian" ] && debian=1
@@ -23,7 +24,7 @@ export __ASC_SRC__=`pwd`
 [ "${ID}" == "fedora" ] && fedora=1
 [ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
 [ "${arch}" ] || [ "${debian}" ] || [ "${fedora}" ] || [ "${centos}" ] || {
-  echo "${ID_LIKE}" | grep debian > /dev/null && debian=1
+  echo "${ID_LIKE}" | grep debian >/dev/null && debian=1
 }
 
 [ "${arch}" ] && {
@@ -33,7 +34,7 @@ export __ASC_SRC__=`pwd`
   exit 0
 }
 
-platform=`uname -s`
+platform=$(uname -s)
 [ "${platform}" == "Darwin" ] && {
   echo "Invoking pkg/mktgz.sh to create macOS installation archive"
   pkg/mktgz.sh
@@ -41,7 +42,7 @@ platform=`uname -s`
 }
 
 [ "${debian}" ] && {
-  dpkg=`type -p dpkg-deb`
+  dpkg=$(type -p dpkg-deb)
   [ "${dpkg}" ] || {
     echo "Debian packaging tools do not appear to be installed on this system"
     echo "Are you on the appropriate Linux system with packaging requirements ?"
@@ -57,7 +58,7 @@ platform=`uname -s`
   }
   SRC="/builds/doctorfree"
   GCI=1
-# SUDO=
+  # SUDO=
 }
 
 . "${SRC}/${SRC_NAME}/VERSION"
@@ -70,19 +71,19 @@ umask 0022
 OUT_DIR="${SRC}/${SRC_NAME}/dist/${PKG_NAME}_${PKG_VER}"
 
 [ -d "${SRC}/${SRC_NAME}" ] || {
-    echo "$SRC/$SRC_NAME does not exist or is not a directory. Exiting."
-    exit 1
+  echo "$SRC/$SRC_NAME does not exist or is not a directory. Exiting."
+  exit 1
 }
 
-cd "${SRC}/${SRC_NAME}"
+cd "${SRC}/${SRC_NAME}" || exit 1
 
 ${SUDO} rm -rf dist
 mkdir dist
 
-[ -d ${OUT_DIR} ] && rm -rf ${OUT_DIR}
-mkdir ${OUT_DIR}
-cp -a pkg/debian ${OUT_DIR}/DEBIAN
-chmod 755 ${OUT_DIR} ${OUT_DIR}/DEBIAN ${OUT_DIR}/DEBIAN/*
+[ -d "${OUT_DIR}" ] && rm -rf "${OUT_DIR}"
+mkdir "${OUT_DIR}"
+cp -a pkg/debian "${OUT_DIR}/DEBIAN"
+chmod 755 "${OUT_DIR}" "${OUT_DIR}/DEBIAN" "${OUT_DIR}"/DEBIAN/*
 
 echo "Package: ${PKG}
 Version: ${PKG_VER}-${PKG_REL}
@@ -95,23 +96,19 @@ Installed-Size: 192000
 Build-Depends: debhelper (>= 11)
 Suggests: desktop-file-utils
 Homepage: https://github.com/doctorfree/Asciiville
-Description: Console Ascii Art and Utilities" > ${OUT_DIR}/DEBIAN/control
+Description: Console Ascii Art and Utilities" >${OUT_DIR}/DEBIAN/control
 
 chmod 644 ${OUT_DIR}/DEBIAN/control
 
 for dir in "usr" "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
-           "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
-           "${DESTDIR}/share/doc/${PKG}" \
-           "${DESTDIR}/share/${PKG}"
-do
-    [ -d ${OUT_DIR}/${dir} ] || ${SUDO} mkdir ${OUT_DIR}/${dir}
-    ${SUDO} chown root:root ${OUT_DIR}/${dir}
+  "${DESTDIR}/share/applications" "${DESTDIR}/share/doc" \
+  "${DESTDIR}/share/doc/${PKG}" \
+  "${DESTDIR}/share/${PKG}"; do
+  [ -d ${OUT_DIR}/${dir} ] || ${SUDO} mkdir ${OUT_DIR}/${dir}
+  ${SUDO} chown root:root ${OUT_DIR}/${dir}
 done
 
-for dir in bin
-do
-    [ -d ${OUT_DIR}/${DESTDIR}/${dir} ] && ${SUDO} rm -rf ${OUT_DIR}/${DESTDIR}/${dir}
-done
+[ -d "${OUT_DIR}/${DESTDIR}/bin" ] && ${SUDO} rm -rf "${OUT_DIR}/${DESTDIR}/bin"
 
 ${SUDO} cp -a bin ${OUT_DIR}/${DESTDIR}/bin
 
@@ -124,7 +121,6 @@ ${SUDO} cp -a conf/khard ${OUT_DIR}/${DESTDIR}/share/${PKG}/khard
 ${SUDO} cp -a conf/kitty ${OUT_DIR}/${DESTDIR}/share/${PKG}/kitty
 ${SUDO} cp -a conf/mutt ${OUT_DIR}/${DESTDIR}/share/${PKG}/mutt
 ${SUDO} cp -a conf/mutt_multiple ${OUT_DIR}/${DESTDIR}/share/${PKG}/mutt_multiple
-${SUDO} cp -a conf/nvim ${OUT_DIR}/${DESTDIR}/share/${PKG}/nvim
 ${SUDO} cp -a conf/neomutt ${OUT_DIR}/${DESTDIR}/share/${PKG}/neomutt
 ${SUDO} cp -a conf/newsboat ${OUT_DIR}/${DESTDIR}/share/${PKG}/newsboat
 ${SUDO} cp -a conf/w3m ${OUT_DIR}/${DESTDIR}/share/${PKG}/w3m
@@ -141,7 +137,7 @@ ${SUDO} gzip -9 ${OUT_DIR}/${DESTDIR}/share/doc/${PKG}/CHANGELOG.md
 
 ${SUDO} cp -a art "${OUT_DIR}/${DESTDIR}/share/${PKG}/art"
 ${SUDO} mv "${OUT_DIR}/${DESTDIR}/share/${PKG}/art/pics" \
-           "${OUT_DIR}/${DESTDIR}/share/${PKG}/pics"
+  "${OUT_DIR}/${DESTDIR}/share/${PKG}/pics"
 ${SUDO} cp -a music "${OUT_DIR}/${DESTDIR}/share/${PKG}/music"
 ${SUDO} cp -a tools "${OUT_DIR}/${DESTDIR}/share/${PKG}/tools"
 
@@ -156,64 +152,58 @@ ${SUDO} cp -a share/neofetch-themes "${OUT_DIR}/${DESTDIR}/share/neofetch-themes
 ${SUDO} chmod 644 ${OUT_DIR}/${DESTDIR}/share/man/*/*
 ${SUDO} chmod 644 ${OUT_DIR}/${DESTDIR}/share/menu/*
 ${SUDO} chmod 644 ${OUT_DIR}/${DESTDIR}/share/figlet-fonts/*
-find ${OUT_DIR}/${DESTDIR}/share/doc/${PKG} -type d | while read dir
-do
+find ${OUT_DIR}/${DESTDIR}/share/doc/${PKG} -type d | while read dir; do
   ${SUDO} chmod 755 "${dir}"
 done
-find ${OUT_DIR}/${DESTDIR}/share/doc/${PKG} -type f | while read f
-do
+find ${OUT_DIR}/${DESTDIR}/share/doc/${PKG} -type f | while read f; do
   ${SUDO} chmod 644 "${f}"
 done
-find ${OUT_DIR}/${DESTDIR}/share/${PKG} -type d | while read dir
-do
+find ${OUT_DIR}/${DESTDIR}/share/${PKG} -type d | while read dir; do
   ${SUDO} chmod 755 "${dir}"
 done
-find ${OUT_DIR}/${DESTDIR}/share/${PKG} -type f | while read f
-do
+find ${OUT_DIR}/${DESTDIR}/share/${PKG} -type f | while read f; do
   ${SUDO} chmod 644 "${f}"
 done
 ${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/bin/* \
-                  ${OUT_DIR}/${DESTDIR}/bin \
-                  ${OUT_DIR}/${DESTDIR}/share/${PKG}/newsboat/*.sh \
-                  ${OUT_DIR}/${DESTDIR}/share/${PKG}/newsboat/scripts/* \
-                  ${OUT_DIR}/${DESTDIR}/share/${PKG}/newsboat/scripts/*/* \
-                  ${OUT_DIR}/${DESTDIR}/share/${PKG}/nvim/scripts/*.sh \
-                  ${OUT_DIR}/${DESTDIR}/share/menu \
-                  ${OUT_DIR}/${DESTDIR}/share/figlet-fonts \
-                  ${OUT_DIR}/${DESTDIR}/share/man \
-                  ${OUT_DIR}/${DESTDIR}/share/man/*
+  ${OUT_DIR}/${DESTDIR}/bin \
+  ${OUT_DIR}/${DESTDIR}/share/${PKG}/newsboat/*.sh \
+  ${OUT_DIR}/${DESTDIR}/share/${PKG}/newsboat/scripts/* \
+  ${OUT_DIR}/${DESTDIR}/share/${PKG}/newsboat/scripts/*/* \
+  ${OUT_DIR}/${DESTDIR}/share/menu \
+  ${OUT_DIR}/${DESTDIR}/share/figlet-fonts \
+  ${OUT_DIR}/${DESTDIR}/share/man \
+  ${OUT_DIR}/${DESTDIR}/share/man/*
 ${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/share/${PKG}/tools/bin/*
 ${SUDO} chown -R root:root ${OUT_DIR}/${DESTDIR}/share
 ${SUDO} chown -R root:root ${OUT_DIR}/${DESTDIR}/bin
 
-cd dist
+cd dist || exit 1
 
 [ "${debian}" ] && {
   echo "Building ${PKG_NAME}_${PKG_VER} Debian package"
   ${SUDO} dpkg --build ${PKG_NAME}_${PKG_VER} ${PKG_NAME}_${PKG_VER}-${PKG_REL}.deb
 }
-cd ${PKG_NAME}_${PKG_VER}
+cd ${PKG_NAME}_${PKG_VER} || exit 1
 echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
-${SUDO} tar cf - usr/*/* | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.tgz
+${SUDO} tar cf - usr/*/* | gzip -9 >../${PKG_NAME}_${PKG_VER}-${PKG_REL}.tgz
 
 cd ..
 
 [ "${GCI}" ] || {
   [ -d ../releases ] || mkdir ../releases
   [ -d ../releases/${PKG_VER} ] || mkdir ../releases/${PKG_VER}
-  if [ "${debian}" ]
-  then
+  if [ "${debian}" ]; then
     ${SUDO} cp *.deb *.tgz ../releases/${PKG_VER}
   else
     ${SUDO} cp *.tgz ../releases/${PKG_VER}
   fi
 }
 
-cd "${SRC}/${SRC_NAME}"
+cd "${SRC}/${SRC_NAME}" || exit 1
 [ -d pkg/rpm ] && cp -a pkg/rpm ${OUT_DIR}/rpm
 [ -d ${OUT_DIR}/rpm ] || mkdir ${OUT_DIR}/rpm
 
-have_rpm=`type -p rpmbuild`
+have_rpm=$(type -p rpmbuild)
 [ "${have_rpm}" ] || {
   ${SUDO} apt-get update
   export DEBIAN_FRONTEND=noninteractive
@@ -223,20 +213,19 @@ have_rpm=`type -p rpmbuild`
 }
 
 rpmbuild -ba --build-in-place \
-   --define "_topdir ${OUT_DIR}" \
-   --define "_sourcedir ${OUT_DIR}" \
-   --define "_version ${PKG_VER}" \
-   --define "_release ${PKG_REL}" \
-   --buildroot ${OUT_DIR}/BUILDROOT \
-   ${OUT_DIR}/rpm/${PKG_NAME}.spec
+  --define "_topdir ${OUT_DIR}" \
+  --define "_sourcedir ${OUT_DIR}" \
+  --define "_version ${PKG_VER}" \
+  --define "_release ${PKG_REL}" \
+  --buildroot ${OUT_DIR}/BUILDROOT \
+  ${OUT_DIR}/rpm/${PKG_NAME}.spec
 
 # Rename RPMs if necessary
-for rpmfile in ${OUT_DIR}/RPMS/*/*.rpm
-do
+for rpmfile in ${OUT_DIR}/RPMS/*/*.rpm; do
   [ "${rpmfile}" == "${OUT_DIR}/RPMS/*/*.rpm" ] && continue
-  rpmbas=`basename ${rpmfile}`
-  rpmdir=`dirname ${rpmfile}`
-  newnam=`echo ${rpmbas} | sed -e "s/${PKG_NAME}-${PKG_VER}-${PKG_REL}/${PKG_NAME}_${PKG_VER}-${PKG_REL}/" -e "s/noarch.rpm/rpm/"`
+  rpmbas=$(basename ${rpmfile})
+  rpmdir=$(dirname ${rpmfile})
+  newnam=$(echo ${rpmbas} | sed -e "s/${PKG_NAME}-${PKG_VER}-${PKG_REL}/${PKG_NAME}_${PKG_VER}-${PKG_REL}/" -e "s/noarch.rpm/rpm/")
   [ "${rpmbas}" == "${newnam}" ] && continue
   mv ${rpmdir}/${rpmbas} ${rpmdir}/${newnam}
 done
@@ -244,7 +233,7 @@ done
 ${SUDO} cp ${OUT_DIR}/RPMS/*/*.rpm dist
 
 [ "${GCI}" ] || {
-    [ -d releases ] || mkdir releases
-    [ -d releases/${PKG_VER} ] || mkdir releases/${PKG_VER}
-    ${SUDO} cp ${OUT_DIR}/RPMS/*/*.rpm releases/${PKG_VER}
+  [ -d releases ] || mkdir releases
+  [ -d releases/${PKG_VER} ] || mkdir releases/${PKG_VER}
+  ${SUDO} cp ${OUT_DIR}/RPMS/*/*.rpm releases/${PKG_VER}
 }

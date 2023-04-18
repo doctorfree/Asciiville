@@ -624,7 +624,7 @@ Generated configuration files include:
 * `$HOME/.config/got/config.yml` : Got text translation tool
 * `$HOME/.config/neofetch/config.conf` : NeoFetch system info script
 * `$HOME/.config/neomutt/` : NeoMutt email client startup files
-* `$HOME/.config/nvim/` : Neovim text editor configuration and startup files
+* `$HOME/.config/nvim-Lazyman/` : Neovim text editor configuration and startup files
 * `$HOME/.config/jrnl/` : Journal command `jrnl` configuration file
 * `$HOME/.config/khard/khard.conf` : Address book `khard` configuration file
 * `$HOME/.config/ranger/rifle.conf` : Rifle, Ranger's file opener
@@ -669,8 +669,7 @@ color schemes, syntax highlighting, language servers, and settings.
 
 We here in Asciiville are pretty proud of our Neovim setup and we wanted
 to share it with you. The installation and configuration of Neovim is
-entirely automated. If you have a previous `$HOME/.config/nvim/` this is
-backed up and replaced with the Asciiville Neovim configuration.
+entirely automated.
 
 Neovim is not required for most of the use cases Asciiville supports but
 it can prove to be quite useful in a text-based environment. However,
@@ -680,14 +679,14 @@ it out. If later you decide you do not need Neovim then it can be removed
 with the command `ascinit -r neovim`.
 
 The Asciiville configuration of Neovim is quite extensive and fairly complex.
-See the [Asciiville Neovim README](conf/nvim/README.md) for an introductory
-tour of the configuration, plugins, settings, and usage of Neovim.
+See the [Lazyman README](https://github.com/doctorfree/nvim-lazyman#readme)
+for an introductory tour of the configuration, plugins, settings, and usage of Neovim.
 
 After installing and initializing Asciiville with `ascinit`, try out
 Neovim by running the command:
 
 ```shell
-nvim ~/.config/nvim/README.md
+NVIM_APPNAME="nvim-Lazyman" nvim
 ```
 
 While running `nvim` perform a Neovim health check by issuing the Neovim command:
