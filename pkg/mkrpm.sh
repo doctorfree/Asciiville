@@ -64,7 +64,6 @@ ${SUDO} cp -a conf/khard ${OUT_DIR}/${DESTDIR}/share/${PKG}/khard
 ${SUDO} cp -a conf/kitty ${OUT_DIR}/${DESTDIR}/share/${PKG}/kitty
 ${SUDO} cp -a conf/mutt ${OUT_DIR}/${DESTDIR}/share/${PKG}/mutt
 ${SUDO} cp -a conf/mutt_multiple ${OUT_DIR}/${DESTDIR}/share/${PKG}/mutt_multiple
-${SUDO} cp -a conf/nvim ${OUT_DIR}/${DESTDIR}/share/${PKG}/nvim
 ${SUDO} cp -a conf/neomutt ${OUT_DIR}/${DESTDIR}/share/${PKG}/neomutt
 ${SUDO} cp -a conf/newsboat ${OUT_DIR}/${DESTDIR}/share/${PKG}/newsboat
 ${SUDO} cp -a conf/w3m ${OUT_DIR}/${DESTDIR}/share/${PKG}/w3m
@@ -117,7 +116,6 @@ ${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/bin/* \
                   ${OUT_DIR}/${DESTDIR}/share/${PKG}/newsboat/*.sh \
                   ${OUT_DIR}/${DESTDIR}/share/${PKG}/newsboat/scripts/* \
                   ${OUT_DIR}/${DESTDIR}/share/${PKG}/newsboat/scripts/*/* \
-                  ${OUT_DIR}/${DESTDIR}/share/${PKG}/nvim/scripts/*.sh \
                   ${OUT_DIR}/${DESTDIR}/share/menu \
                   ${OUT_DIR}/${DESTDIR}/share/figlet-fonts \
                   ${OUT_DIR}/${DESTDIR}/share/man \

@@ -26,8 +26,6 @@ pkg/dist/mac
 pkg/dist/rpi
 
 conf/cool-retro-term
-conf/nvim-kickstart
-conf/nvim-lazy
 pics
 releases
 tmp
