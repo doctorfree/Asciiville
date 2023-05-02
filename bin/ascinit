@@ -661,7 +661,11 @@ have_mktemp=$(type -p mktemp)
 have_unlink=$(type -p unlink)
 have_unzip=$(type -p unzip)
 
-usebrew=
+if [ "${darwin}" ]; then
+  usebrew=1
+else
+  usebrew=
+fi
 minimal=
 [ "${argument}" == "minimal" ] && minimal=1
 [ "${argument}" == "brew" ] && usebrew=1
