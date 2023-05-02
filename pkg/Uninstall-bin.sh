@@ -1,4 +1,6 @@
 #!/bin/bash
+#
+# shellcheck disable=SC2001
 
 AVILLE_DIRS="/usr/local/share/asciiville
 /usr/local/share/doc/asciiville
@@ -38,7 +40,7 @@ AVILLE_FILES="/usr/local/bin/any2ascii
 /usr/local/share/man/man1/termprofset.1
 /usr/local/share/menu/asciiville"
 
-user=`id -u -n`
+user=$(id -u -n)
 
 [ "${user}" == "root" ] || {
   echo "Uninstall-bin.sh must be run as the root user."
@@ -47,28 +49,27 @@ user=`id -u -n`
   exit 1
 }
 
-rm -f ${AVILLE_FILES}
-rm -rf ${AVILLE_DIRS}
-if [ -f /etc/profile.d/asciiville.sh ]
-then
+rm -f "${AVILLE_FILES}"
+rm -rf "${AVILLE_DIRS}"
+if [ -f /etc/profile.d/asciiville.sh ]; then
   rm -f /etc/profile.d/asciiville.sh
 fi
 
 [ "$1" == "all" ] && {
   ANY_FILES="usr/local/bin/any2a
-             usr/local/bin/jp2a
-             usr/local/share/man/man1/jp2a.1"
+  usr/local/bin/jp2a
+  usr/local/share/man/man1/jp2a.1"
   ANY_DIRS="usr/local/share/any2ascii
-            usr/local/share/doc/any2ascii"
+  usr/local/share/doc/any2ascii"
   AEWAN_FILES="usr/local/bin/aecat
-               usr/local/bin/aemakeflic
-               usr/local/bin/aewan
-               usr/local/share/man/man5/aewan.5
-               usr/local/share/man/man1/aecat.1
-               usr/local/share/man/man1/aemakeflic.1
-               usr/local/share/man/man1/aewan.1"
+  usr/local/bin/aemakeflic
+  usr/local/bin/aewan
+  usr/local/share/man/man5/aewan.5
+  usr/local/share/man/man1/aecat.1
+  usr/local/share/man/man1/aemakeflic.1
+  usr/local/share/man/man1/aewan.1"
   AEWAN_DIRS="usr/local/share/asciiville-aewan
-              usr/local/share/doc/asciiville-aewan"
+  usr/local/share/doc/asciiville-aewan"
   CBTP_DIRS="/usr/local/share/cbftp"
   CBTP_FILES="/usr/local/bin/cbftp \
               /usr/local/bin/cbftp-debug \
@@ -81,6 +82,6 @@ fi
   PROJECTFILES="${ANY_FILES} ${AEWAN_FILES} ${CBTP_FILES} ${ENDO_FILES}"
   PROJECTDIRS="${ANY_DIRS} ${AEWAN_DIRS} ${CBTP_DIRS} ${ENDO_DIRS}"
 
-  rm -f ${PROJECTFILES}
-  rm -rf ${PROJECTDIRS}
+  rm -f "${PROJECTFILES}"
+  rm -rf "${PROJECTDIRS}"
 }

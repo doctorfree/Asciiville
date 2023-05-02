@@ -1,65 +1,58 @@
 #!/bin/bash
+#
+# shellcheck disable=SC2001,SC2181
 
 PKGS="neomutt cmatrix figlet lolcat mplayer neomutt newsboat ranger tmux w3m asciinema speedtest-cli neofetch imagemagick gnupg"
 PYMS="asciimatics ddgr rainbowstream socli future xtermcolor ffmpeg-python pyaudio term-image"
-PROJECTS="asciiville-aewan btop cbftp any2ascii endoh1"
 
 ALL=
 [ "$1" == "all" ] && ALL=1
 
 export PATH=${PATH}:/usr/local/bin:/snap/bin
-plat=`uname -s`
+plat=$(uname -s)
 
-if [ "$plat" == "Darwin" ]
-then
-    sudo pkg/Uninstall-bin.sh $1
+if [ "$plat" == "Darwin" ]; then
+  sudo pkg/Uninstall-bin.sh "$1"
 else
   debian=
-  have_apt=`type -p apt`
-  have_dpkg=`type -p dpkg`
-  have_rpm=`type -p rpm`
-  have_dnf=`type -p dnf`
-  have_pac=`type -p pacman`
+  have_apt=$(type -p apt)
+  have_dpkg=$(type -p dpkg)
+  have_rpm=$(type -p rpm)
+  have_dnf=$(type -p dnf)
+  have_pac=$(type -p pacman)
   [ -f /etc/os-release ] && . /etc/os-release
   [ "${ID}" == "debian" ] || [ "${ID_LIKE}" == "debian" ] && debian=1
   [ "${ID}" == "arch" ] || [ "${ID_LIKE}" == "arch" ] && arch=1
   [ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
   [ "${arch}" ] || [ "${debian}" ] || {
-    echo "${ID_LIKE}" | grep debian > /dev/null && debian=1
+    echo "${ID_LIKE}" | grep debian >/dev/null && debian=1
   }
 
   ASCPKG=asciiville
   [ "${debian}" ] || [ "${arch}" ] || ASCPKG=Asciiville
 
-  if [ "${debian}" ]
-  then
-    if [ "${have_apt}" ]
-    then
+  if [ "${debian}" ]; then
+    if [ "${have_apt}" ]; then
       sudo apt remove "${ASCPKG}" -y
     else
-      if [ "${have_dpkg}" ]
-      then
+      if [ "${have_dpkg}" ]; then
         sudo dpkg -r "${ASCPKG}"
       else
         echo "Cannot locate apt or dpkg to remove. Skipping."
       fi
     fi
   else
-    if [ "${arch}" ]
-    then
-      if [ "${have_pac}" ]
-      then
+    if [ "${arch}" ]; then
+      if [ "${have_pac}" ]; then
         sudo pacman -Rs "${ASCPKG}"
       else
         echo "Cannot locate pacman to remove. Skipping."
       fi
     else
-      if [ "${have_dnf}" ]
-      then
+      if [ "${have_dnf}" ]; then
         sudo dnf remove "${ASCPKG}"
       else
-        if [ "${have_rpm}" ]
-        then
+        if [ "${have_rpm}" ]; then
           sudo rpm -e "${ASCPKG}"
         else
           echo "Cannot locate either dnf or rpm to remove. Skipping."
@@ -83,71 +76,60 @@ fi
   echo "You may have to re-install those packages."
   echo ""
   echo "Do you wish to proceed with removal of these modules and packages?"
-  while true
-  do
-    read -p "Uninstall Asciiville components ? (y/n) " yn
+  while true; do
+    read -r -p "Uninstall Asciiville components ? (y/n) " yn
     case $yn in
-      [Yy]* )
-          break
-          ;;
-      [Nn]* )
-          exit 0
-          ;;
-        * ) echo "Please answer yes or no."
-          ;;
+      [Yy]*)
+        break
+        ;;
+      [Nn]*)
+        exit 0
+        ;;
+      *)
+        echo "Please answer yes or no."
+        ;;
     esac
   done
-  python3_inst=`type -p python3`
-  if [ "${python3_inst}" ]
-  then
+  python3_inst=$(type -p python3)
+  if [ "${python3_inst}" ]; then
     PYTHON="python3"
   else
     PYTHON="python"
   fi
-  if [ "$plat" == "Darwin" ]
-  then
-    have_brew=`type -p brew`
-    if [ "${have_brew}" ]
-    then
+  if [ "$plat" == "Darwin" ]; then
+    have_brew=$(type -p brew)
+    if [ "${have_brew}" ]; then
       PKGS="btop ${PKGS}"
-      for pkg in ${PKGS}
-      do
-        brew list -q ${pkg} > /dev/null 2>&1
-        [ $? -eq 0 ] && brew uninstall -q ${pkg}
+      for pkg in ${PKGS}; do
+        brew list -q "${pkg}" >/dev/null 2>&1
+        [ $? -eq 0 ] && brew uninstall -q "${pkg}"
       done
     else
       echo "Brew not found. Asciiville components not removed."
     fi
   else
-    if [ "${debian}" ]
-    then
-      if [ "${have_apt}" ]
-      then
+    if [ "${debian}" ]; then
+      if [ "${have_apt}" ]; then
         sudo apt remove "${PKGS}" -y
       else
-        if [ "${have_dpkg}" ]
-        then
+        if [ "${have_dpkg}" ]; then
           sudo dpkg -r "${PKGS}"
         else
           echo "Cannot locate apt or dpkg to remove. Skipping."
         fi
       fi
     else
-      if [ "${arch}" ]
-      then
-        if [ "${have_pac}" ]
-        then
+      if [ "${arch}" ]; then
+        if [ "${have_pac}" ]; then
           sudo pacman -Rs "${PKGS}"
         else
           echo "Cannot locate pacman to remove. Skipping."
         fi
       else
-        if [ "${have_dnf}" ]
-        then
+        if [ "${have_dnf}" ]; then
           sudo dnf remove "${PKGS}"
         else
-          if [ "${have_rpm}" ]
-          then
+          if [ "${have_rpm}" ]; then
             sudo rpm -e "${PKGS}"
           else
             echo "Cannot locate either dnf or rpm to remove. Skipping."
@@ -156,10 +138,9 @@ fi
       fi
     fi
   fi
-  for mod in ${PYMS}
-  do
-    pip list 2> /dev/null | grep ${mod} > /dev/null && {
-      ${PYTHON} -m pip uninstall ${mod} -y 2> /dev/null
+  for mod in ${PYMS}; do
+    pip list 2>/dev/null | grep "${mod}" >/dev/null && {
+      ${PYTHON} -m pip uninstall "${mod}" -y 2>/dev/null
     }
   done
 }

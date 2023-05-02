@@ -1,4 +1,6 @@
 #!/bin/bash
+#
+# shellcheck disable=SC2016
 
 usage() {
   echo "Usage: sudo ./Install-bin.sh /path/to/Asciiville_<version>-<release>.<arch>.<suffix>"
@@ -9,7 +11,7 @@ usage() {
   exit 1
 }
 
-user=`id -u -n`
+user=$(id -u -n)
 
 [ "${user}" == "root" ] || {
   echo "Install-bin.sh must be run as the root user."
@@ -33,8 +35,8 @@ user=`id -u -n`
 }
 
 PATH_TO_ARCHIVE="$1"
-ARCHIVE=`basename "${PATH_TO_ARCHIVE}"`
-pkgname=`echo ${ARCHIVE} | awk -F '_' '{ print $1 }'`
+ARCHIVE=$(basename "${PATH_TO_ARCHIVE}")
+pkgname=$(echo "${ARCHIVE}" | awk -F '_' '{ print $1 }')
 
 [ "${pkgname}" == "Asciiville" ] || {
   echo "Distribution archive filename must be of the format:"
@@ -43,12 +45,12 @@ pkgname=`echo ${ARCHIVE} | awk -F '_' '{ print $1 }'`
   usage
 }
 
-pkgvra=`echo ${ARCHIVE} | awk -F '-' '{ print $1 }'`
-pkgver=`echo ${pkgvra} | awk -F '_' '{ print $2 }'`
-pkgrag=`echo ${ARCHIVE} | awk -F '-' '{ print $2 }'`
-pkgrel=`echo ${pkgrag} | awk -F '.' '{ print $1 }'`
-pkgarc=`echo ${pkgrag} | awk -F '.' '{ print $2 }'`
-pkgsuf=`echo ${pkgrag} | awk -F '.' '{ print $3 }'`
+pkgvra=$(echo "${ARCHIVE}" | awk -F '-' '{ print $1 }')
+pkgver=$(echo "${pkgvra}" | awk -F '_' '{ print $2 }')
+pkgrag=$(echo "${ARCHIVE}" | awk -F '-' '{ print $2 }')
+pkgrel=$(echo "${pkgrag}" | awk -F '.' '{ print $1 }')
+pkgarc=$(echo "${pkgrag}" | awk -F '.' '{ print $2 }')
+pkgsuf=$(echo "${pkgrag}" | awk -F '.' '{ print $3 }')
 
 echo "Preparing to install ${pkgname} Version ${pkgver} Release ${pkgrel}"
 echo "for architecture ${pkgarc}"
@@ -57,26 +59,25 @@ echo "This installation method is recommended only if your system is not"
 echo "supported by one of the packaged installation formats (Arch/Debian/RPM)"
 echo "available at https://github.com/doctorfree/Asciiville/releases"
 echo ""
-while true
-do
-  read -p "Proceed with installation? (y/n) " answer
+while true; do
+  read -r -p "Proceed with installation? (y/n) " answer
   case ${answer} in
-    [Yy]* )
+    [Yy]*)
       printf "\nProceeding with installation.\n"
       break
       ;;
-    [Nn]* )
+    [Nn]*)
       printf "\nSkipping installation.\n"
       exit 1
       ;;
-    * ) echo "Please answer 'y' to install, or 'n' to exit."
+    *)
+      echo "Please answer 'y' to install, or 'n' to exit."
       ;;
   esac
 done
 
-if [ "${pkgsuf}" == "tgz" ]
-then
-  tar -mxzf ${PATH_TO_ARCHIVE} -C /
+if [ "${pkgsuf}" == "tgz" ]; then
+  tar -mxzf "${PATH_TO_ARCHIVE}" -C /
 else
   echo "Unrecognized filename suffix '${pkgsuf}'"
   echo "Install-bin.sh requires a filename suffix of 'tgz'"
@@ -84,30 +85,26 @@ else
 fi
 
 # Add /usr/local/bin and /usr/local/games to PATH
-if [ -d /etc/profile.d ]
-then
-  if [ -f /etc/profile.d/asciiville.sh ]
-  then
-    echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >> /etc/profile.d/asciiville.sh
+if [ -d /etc/profile.d ]; then
+  if [ -f /etc/profile.d/asciiville.sh ]; then
+    echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >>/etc/profile.d/asciiville.sh
   else
-    echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' > /etc/profile.d/asciiville.sh
+    echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >/etc/profile.d/asciiville.sh
   fi
 else
   [ -f /etc/profile ] && {
-    echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >> /etc/profile
+    echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >>/etc/profile
   }
 fi
-if [ -d /etc/zsh ]
-then
-  if [ -f /etc/zsh/zshenv ]
-  then
-    echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >> /etc/zsh/zshenv
+if [ -d /etc/zsh ]; then
+  if [ -f /etc/zsh/zshenv ]; then
+    echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >>/etc/zsh/zshenv
   else
-    echo 'export PATH="$PATH:/usr/local/bin:/usr/bin:/bin:/usr/games:/usr/local/games"' > /etc/zsh/zshenv
+    echo 'export PATH="$PATH:/usr/local/bin:/usr/bin:/bin:/usr/games:/usr/local/games"' >/etc/zsh/zshenv
   fi
 else
   [ -f /etc/zshrc ] && {
-    echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >> /etc/zshrc
+    echo 'export PATH="$PATH:/usr/local/bin:/usr/local/games"' >>/etc/zshrc
   }
 fi
 

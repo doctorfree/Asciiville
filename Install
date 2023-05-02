@@ -10,6 +10,8 @@
 #
 # sudo dpkg -i "${PKG}"
 # sudo apt-get install -f
+#
+# shellcheck disable=SC2001
 
 PKG_NAMES="Asciiville asciiville"
 DEB_ARCH=amd64
@@ -42,7 +44,7 @@ platform=$(uname -s)
     # Look for other versions
     for release in releases/*/Asciiville_*-*.Darwin.*; do
       [ "${release}" == "releases/*/Asciiville_*-*.Darwin.*" ] && {
-        ./mkpkg
+        ./mkpkg -i
         for build in releases/*/Asciiville_*-*.Darwin.*; do
           [ "${build}" == "releases/*/Asciiville_*-*.Darwin.*" ] && {
             echo "No Darwin release archives located in ./releases/..."
@@ -140,13 +142,45 @@ else
   fi
 fi
 
-[ -d releases/${PKG_VER} ] || ./mkpkg
+[ -d releases/${PKG_VER} ] || ./mkpkg -i
 
 get_available_packages
 
 [ "${PKG_AVAILABLE}" ] || {
-  echo "No packages for version ${PKG_VER} are currently available. Exiting."
-  exit 1
+  system_archive=
+  if [ -f releases/${PKG_VER}/Asciiville_${PKG_VER}-${PKG_REL}.Linux.tgz ]; then
+    system_archive="releases/${PKG_VER}/Asciiville_${PKG_VER}-${PKG_REL}.Linux.tgz"
+  else
+    # Look for other versions
+    for release in releases/*/Asciiville_*-*.Linux.*; do
+      [ "${release}" == "releases/*/Asciiville_*-*.Linux.*" ] && {
+        ./mkpkg -i
+        for build in releases/*/Asciiville_*-*.Linux.*; do
+          [ "${build}" == "releases/*/Asciiville_*-*.Linux.*" ] && {
+            echo "No Linux release archives located in ./releases/..."
+            echo "Download the latest Asciiville release archive for Linux at"
+            echo "    https://github.com/doctorfree/Asciiville/releases/latest"
+            echo "Exiting"
+            exit 1
+          }
+        done
+        release="${build}"
+        system_archive="${release}"
+      }
+      echo "Located Asciiville release archive for Linux:"
+      echo "    ${release}"
+    done
+  fi
+  if [ "${system_archive}" ]; then
+    sudo pkg/Install-bin.sh "${system_archive}"
+    exit 0
+  else
+    echo "Version and Release in VERSION do not match located release archive(s)"
+    echo "Install one of these located release archives manually with the command:"
+    echo "    sudo pkg/Install-bin.sh releases/.../<archive_name>.Linux.<suffix>"
+    echo "Exiting without installing"
+    exit 1
+  fi
 }
 
 [ "$1" ] && {

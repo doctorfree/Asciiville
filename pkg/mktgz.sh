@@ -1,7 +1,9 @@
 #!/bin/bash
+#
+# shellcheck disable=SC2001
+
 PKG="asciiville"
 PKG_NAME="Asciiville"
-DESTDIR="usr/local"
 ARCH=$(uname -s)
 SUDO=sudo
 HERE=$(pwd)
@@ -18,6 +20,15 @@ USER=$(id -u -n)
   echo "Exiting"
   exit 1
 }
+
+if [ "${ARCH}" == "Darwin" ]; then
+  DESTDIR="usr/local"
+  group="wheel"
+else
+  DESTDIR="usr"
+  ARCH="Linux"
+  group="root"
+fi
 
 . ./VERSION
 PKG_VER=${VERSION}
@@ -39,7 +50,7 @@ for dir in "usr" "${DESTDIR}" "${DESTDIR}/share" "${DESTDIR}/share/man" \
   "${DESTDIR}/share/doc/${PKG}" \
   "${DESTDIR}/share/${PKG}"; do
   [ -d "${OUT_DIR}"/"${dir}" ] || ${SUDO} mkdir "${OUT_DIR}"/"${dir}"
-  ${SUDO} chown root:wheel "${OUT_DIR}"/"${dir}"
+  ${SUDO} chown root:${group} "${OUT_DIR}"/"${dir}"
 done
 
 [ -d "${OUT_DIR}"/"${DESTDIR}"/bin ] && ${SUDO} rm -rf "${OUT_DIR}"/"${DESTDIR}"/bin
