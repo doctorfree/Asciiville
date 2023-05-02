@@ -2,10 +2,10 @@
 
 1. [Overview](#overview)
 1. [Installation](#installation)
-    1. [Arch Linux based installation](#arch-linux-based-installation)
-    1. [Debian based installation](#debian-based-installation)
-    1. [RPM based installation](#rpm-based-installation)
-    1. [Manual installation](#manual-installation)
+   1. [Arch Linux based installation](#arch-linux-based-installation)
+   1. [Debian based installation](#debian-based-installation)
+   1. [RPM based installation](#rpm-based-installation)
+   1. [Manual installation](#manual-installation)
 1. [Configuration](#configuration)
 1. [Usage](#usage)
 1. [Removal](#removal)
@@ -17,7 +17,7 @@ Asciiville provides utilities, tools, applications, games, and scripts to create
 
 Architecture independent native installation packages are provided for Arch Linux, Debian based Linux systems, and RPM based Linux systems. Compressed tar archives and an installation script are provided for all other platforms.
 
-Asciiville 3.0.2 and later utilize [Homebrew](https://brew.sh) to install packages during `ascinit` post installation initialization.
+Asciiville 3.0.2 and later have the option to utilize [Homebrew](https://brew.sh) to install packages during `ascinit` post installation initialization. To use Homebrew, invoke `ascinit brew` on Linux platforms. Homebrew is the default on Apple macOS.
 
 ## Installation
 
@@ -52,6 +52,7 @@ sudo apt install ./Asciiville_3.0.2-1.deb
 ### RPM based installation
 
 Install the package on RPM based systems by executing the command
+
 ```shell
 sudo dnf update -y
 sudo dnf localinstall ./Asciiville-3.0.2-1.rpm
@@ -87,17 +88,17 @@ After successfully installing Asciiville, as a normal user run the `ascinit` com
 
 ## Configuration
 
-* REQUIRED: execute the `ascinit` command to initialize *mutt/neomutt*, *tmux*, *ranger*, *rainbowstream*, and install terminal emulators
-    * The `ascinit` command should be executed as a normal user with sudo privilege
-        * ascinit # (not 'sudo ascinit')
-    * Execute `ascinit -c` rather than `ascinit` if no terminal emulators or graphical utilities are desired
-* OPTIONAL: authorize the command line Twitter client by executing `rainbowstream`
+- REQUIRED: execute the `ascinit` command to initialize _mutt/neomutt_, _tmux_, _ranger_, _rainbowstream_, and install terminal emulators
+  - The `ascinit` command should be executed as a normal user with sudo privilege
+    - ascinit # (not 'sudo ascinit')
+  - Execute `ascinit -c` rather than `ascinit` if no terminal emulators or graphical utilities are desired
+- OPTIONAL: authorize the command line Twitter client by executing `rainbowstream`
 
 See the [Asciiville README](https://github.com/doctorfree/Asciiville#readme) for additional configuration info.
 
 ## Usage
 
-Execute `man asciiville` to view the *asciiville* manual page. Explore the features and capabilities of *asciiville* by running it in interactive menu mode with the command:
+Execute `man asciiville` to view the _asciiville_ manual page. Explore the features and capabilities of _asciiville_ by running it in interactive menu mode with the command:
 
 ```console
 asciiville
@@ -142,23 +143,23 @@ Note that manual removal of Asciiville using the `Uninstall-bin.sh` script will 
 
 Asciiville Version 3 adds support for:
 
-* Automated Neovim installation and configuration
-* Install and use Brew on all platforms
-* Automatic installation of many Ascii games
-* Improved interactive menu system
-* Add `a` to interactive art view mode to auto zoom
-* Add `d` to interactive art view mode to set default art font size
-* Add `f` keyboard control for display of ascii art filename
-* Add `zoom_depth` and `zoom_interval` settings in config and ascii art menu
-* Asciiville is now architecture independent
-* Many installation improvements on Apple macOS
-* Move `btop` to external package install
-* Move `cbftp` to external package install
-* Move `endoh1` to external package install
-* Add `term-image` command - display and browse images in the terminal
-* Move installation location back to `/usr` except macOS to `/usr/local`
-* Improved support for macOS manual installation
-* Moved several package/utility installs from `postinstall` to `ascinit`
-* Several bug fixes
+- Automated Neovim installation and configuration
+- Install and use Brew on all platforms
+- Automatic installation of many Ascii games
+- Improved interactive menu system
+- Add `a` to interactive art view mode to auto zoom
+- Add `d` to interactive art view mode to set default art font size
+- Add `f` keyboard control for display of ascii art filename
+- Add `zoom_depth` and `zoom_interval` settings in config and ascii art menu
+- Asciiville is now architecture independent
+- Many installation improvements on Apple macOS
+- Move `btop` to external package install
+- Move `cbftp` to external package install
+- Move `endoh1` to external package install
+- Add `term-image` command - display and browse images in the terminal
+- Move installation location back to `/usr` except macOS to `/usr/local`
+- Improved support for macOS manual installation
+- Moved several package/utility installs from `postinstall` to `ascinit`
+- Several bug fixes
 
 See [CHANGELOG.md](https://github.com/doctorfree/Asciiville/blob/master/CHANGELOG.md) for a full list of changes in every Asciiville release
