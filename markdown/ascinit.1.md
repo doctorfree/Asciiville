@@ -5,26 +5,30 @@ header: User Manual
 footer: ascinit 3.0.2
 date: May 04, 2022
 ---
+
 ## NAME
+
 ascinit - Asciiville initialization script
 
 ## SYNOPSIS
+
 **ascinit** [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-r] [-t] [-y] [-u] [arg]
 
 ## DESCRIPTION
-The *ascinit* command should be run as a normal user with `sudo` privilege
+
+The _ascinit_ command should be run as a normal user with `sudo` privilege
 after installing Asciiville. It performs several configuration initializations
 for the user. These include:
 
-* The Kitty terminal emulator is installed and configured
-* The Neovim text editor is installed and configured
-* Mutt and/or NeoMutt startup files are customized
-* Tmux configuration is created
-* default Ranger and Rifle configuration files are created
-* Asciimatics and Rainbowstream installation is performed
-* Optionally authorizing the Rainbow Stream app with Twitter
-* Optionally additional terminal emulators can be installed and configured
-* Asciiville profiles in Gnome and Tilix terminals are created, if installed
+- The Kitty terminal emulator is installed and configured
+- The Neovim text editor is installed and configured
+- Mutt and/or NeoMutt startup files are customized
+- Tmux configuration is created
+- default Ranger and Rifle configuration files are created
+- Asciimatics and Rainbowstream installation is performed
+- Optionally authorizing the Rainbow Stream app with Twitter
+- Optionally additional terminal emulators can be installed and configured
+- Asciiville profiles in Gnome and Tilix terminals are created, if installed
 
 Although command line options are provided to control the action(s) of the
 `ascinit` command (see below), the typical invocation will simply be `ascinit`
@@ -41,30 +45,33 @@ rather than `ascinit`. When invoked with the `-c` option the `ascinit`
 command will not install the terminal emulators or create the terminal profiles.
 
 A minimal initialization can be performed with the command:
+
 ```shell
 ascinit minimal
 ```
+
 The "minimal" Asciiville initialization does not install optional components
 like `NeoMutt`, `Neovim`, Ascii games, `cbftp`, and `aewan`. These components
 can be installed subsequently by rerunning `ascinit` without arguments.
 
-Asciiville initialization installs Homebrew and uses Homebrew to install
-many of its dependencies. An initialization can be performed without installing
-or using Homebrew with the command:
+An initialization can be performed using Homebrew rather than the native
+package manager with the command:
+
 ```shell
-ascinit nobrew
+ascinit brew
 ```
-The "nobrew" Asciiville initialization does not install optional components,
-performs a "minimal' initialization, and several features are not supported.
 
 In addition to initialization of Asciiville components, `ascinit` can be used
 to individually install and remove the ASCII games, Kitty terminal emulator,
 and Neovim text editor. To install one of these components, issue the command:
+
 ```shell
 ascinit <component>
 ```
-where *component* is one of *games*, *kitty*, or *neovim*.
+
+where _component_ is one of _games_, _kitty_, or _neovim_.
 To remove one of these componenents, run:
+
 ```shell
 ascinit -r <component>
 ```
@@ -108,23 +115,26 @@ ascinit -r <component>
 : indicates display this usage message and exit
 
 ## AUTHORS
-Written by Ronald Record github@ronrecord.com
+
+Written by Ronald Record <github@ronrecord.com>
 
 ## LICENSING
+
 ASCINIT is distributed under an Open Source license.
 See the file LICENSE in the ASCINIT source distribution
 for information on terms &amp; conditions for accessing and
 otherwise using ASCINIT and for a DISCLAIMER OF ALL WARRANTIES.
 
 ## BUGS
+
 Submit bug reports online at:
 
-https://github.com/doctorfree/Asciiville/issues
+<https://github.com/doctorfree/Asciiville/issues>
 
 ## SEE ALSO
+
 **asciiart**(1), **asciimpplus**(1), **asciiplasma**(1), **asciisplash**(1), **asciisplash-tmux**(1), **asciiville**(1)
 
 Full documentation and sources at:
 
-https://github.com/doctorfree/Asciiville
-
+<https://github.com/doctorfree/Asciiville>

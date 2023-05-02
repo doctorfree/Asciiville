@@ -2,7 +2,7 @@
 #
 # ascinit - initialize Asciiville configuration files, install needed utilities
 #
-# shellcheck disable=SC2001,SC2016,SC2006,SC2086,SC2181,SC2129
+# shellcheck disable=SC2001,SC2002,SC2016,SC2006,SC2059,SC2086,SC2089,SC2181,SC2129
 
 darwin=
 platform=$(uname -s)
@@ -41,7 +41,7 @@ usage() {
     rich "    [cyan]-y[/] indicates [yellow]answer yes at all prompts[/]" --print
     rich "    [cyan]-u[/] indicates [yellow]display this usage message and exit[/]" --print
     rich "    If [cyan]arg[/] is [cyan]minimal[/] [yellow]a minimal initialization is performed[/]" --print
-    rich "    If [cyan]arg[/] is [cyan]nobrew[/] [yellow]Homebrew is not installed or used[/]" --print
+    rich "    If [cyan]arg[/] is [cyan]brew[/] [yellow]Homebrew is installed and used[/]" --print
     rich "    [cyan]arg[/] can also be one of [cyan]games[/], [cyan]kitty[/], or [cyan]neovim[/]" --print
     rich "        indicating [yellow]installation or removal[/] of [cyan]arg[/]" --print
     printf "\n"
@@ -61,7 +61,7 @@ usage() {
     printf "\n\t-y indicates answer yes at all prompts"
     printf "\n\t-u indicates display this usage message and exit"
     printf "\n\tif 'arg' is 'minimal' a minimal initialization is performed"
-    printf "\n\tif 'arg' is 'nobrew' Homebrew is not installed or used"
+    printf "\n\tif 'arg' is 'brew' Homebrew is installed and used"
     printf "\n\targ can also be one of games, kitty, or neovim"
     printf "\n\t\tindicating installation of removal of arg\n"
   fi
@@ -100,7 +100,7 @@ remove_package() {
 
 install_package() {
   PKG="$1"
-  [ "${quiet}" ] || printf "\n\tInstalling ${PKG} ..."
+  [ "${quiet}" ] || printf "\n\tInstalling %s ..." "${PKG}"
   # Try Brew first
   brewed=
   [ "${usebrew}" ] && {
@@ -140,7 +140,7 @@ ask_install() {
     echo "Attempting to configure ${nam} but ${nam} is not installed"
     echo "Would you like to install ${nam} at this time?"
     while true; do
-      read -p "Install ${nam} ? (y/n) " yn
+      read -r -p "Install ${nam} ? (y/n) " yn
       case $yn in
         [Yy]*)
           install_package ${pkg}
@@ -200,7 +200,7 @@ install_external_package() {
                 | grep "\.arm.*\.deb")
             fi
           else
-            printf "\n\tNo ${PROJECT} release asset found for this platform ..."
+            printf "\n\tNo %s release asset found for this platform ..." "${PROJECT}"
           fi
         fi
       fi
@@ -209,7 +209,7 @@ install_external_package() {
 
   [ "${DL_URL}" ] && {
     [ "${quiet}" ] || {
-      printf "\n\tInstalling ${PROJECT} ..."
+      printf "\n\tInstalling %s ..." "${PROJECT}"
     }
     if [ "${debian}" ]; then
       [ "${have_wget}" ] && {
@@ -326,8 +326,10 @@ install_kitty() {
     if [ -s /tmp/kitty-$$.sh ]; then
       if [ "${have_stow}" ]; then
         sh /tmp/kitty-$$.sh launch=n dest=~/.local/stow >/dev/null 2>&1
-        cd ~/.local/stow
-        stow kitty.app
+        [ -d "${HOME}"/.local/stow ] && {
+          cd "${HOME}"/.local/stow || echo "Unable to stow kitty.app"
+          stow kitty.app
+        }
       else
         sh /tmp/kitty-$$.sh launch=n >/dev/null 2>&1
       fi
@@ -393,7 +395,7 @@ install_kitty() {
         }
       }
       # Update the paths to the kitty and its icon in the kitty.desktop file(s)
-      for desktop in "${HOME}/.local/share/applications/kitty*.desktop"; do
+      for desktop in "${HOME}"/.local/share/applications/kitty*.desktop; do
         [ "${desktop}" == "${HOME}/.local/share/applications/kitty*.desktop" ] && continue
         [ -f /home/${MPP_USER}/${LOCAL}/share/icons/hicolor/256x256/apps/kitty.png ] && {
           sed -i "s|Icon=kitty|Icon=/home/${MPP_USER}/${LOCAL}/share/icons/hicolor/256x256/apps/kitty.png|g" "${desktop}"
@@ -523,7 +525,7 @@ case "${mach}" in
     VOPT=
     ;;
   *)
-    VOPT='--install-option="--with-audio"'
+    VOPT="--install-option='--with-audio'"
     ;;
 esac
 
@@ -639,7 +641,7 @@ while getopts "acdmMNnqrtyu" flag; do
     y)
       prompt=
       ;;
-    u)
+    *)
       usage
       ;;
   esac
@@ -659,13 +661,10 @@ have_mktemp=$(type -p mktemp)
 have_unlink=$(type -p unlink)
 have_unzip=$(type -p unzip)
 
-usebrew=1
+usebrew=
 minimal=
 [ "${argument}" == "minimal" ] && minimal=1
-[ "${argument}" == "nobrew" ] && {
-  usebrew=
-  minimal=1
-}
+[ "${argument}" == "brew" ] && usebrew=1
 
 have_kitty=$(type -p kitty)
 [ "${argument}" == "kitty" ] && {
@@ -673,7 +672,7 @@ have_kitty=$(type -p kitty)
     printf "\nRemoving kitty terminal emulator.\n\n"
     if [ "${prompt}" ]; then
       while true; do
-        read -p "Do you wish to continue with kitty removal ? (y/n) " yn
+        read -r -p "Do you wish to continue with kitty removal ? (y/n) " yn
         case $yn in
           [Yy]*)
             break
@@ -699,7 +698,7 @@ have_kitty=$(type -p kitty)
   }
   if [ "${prompt}" ]; then
     while true; do
-      read -p "Do you wish to continue with kitty installation ? (y/n) " yn
+      read -r -p "Do you wish to continue with kitty installation ? (y/n) " yn
       case $yn in
         [Yy]*)
           break
@@ -724,7 +723,7 @@ have_kitty=$(type -p kitty)
     printf "\nRemoving Neovim text editor.\n\n"
     if [ "${prompt}" ]; then
       while true; do
-        read -p "Do you wish to continue with Neovim removal ? (y/n) " yn
+        read -r -p "Do you wish to continue with Neovim removal ? (y/n) " yn
         case $yn in
           [Yy]*)
             break
@@ -754,7 +753,7 @@ have_kitty=$(type -p kitty)
     printf "\nRemoving ASCII games.\n\n"
     if [ "${prompt}" ]; then
       while true; do
-        read -p "Do you wish to continue with Ascii games removal ? (y/n) " yn
+        read -r -p "Do you wish to continue with Ascii games removal ? (y/n) " yn
         case $yn in
           [Yy]*)
             break
@@ -787,7 +786,7 @@ neovim_install=
     printf "\n\n"
     if [ "${prompt}" ]; then
       while true; do
-        read -p "Install Neovim text editor (optional but recommended) ? (y/n) " yn
+        read -r -p "Install Neovim text editor (optional but recommended) ? (y/n) " yn
         case $yn in
           [Yy]*)
             neovim_install=1
@@ -816,7 +815,7 @@ neovim_install=
   games_install=1
   if [ "${prompt}" ]; then
     while true; do
-      read -p "Install ASCII Games ? (y/n) " yn
+      read -r -p "Install ASCII Games ? (y/n) " yn
       case $yn in
         [Yy]*)
           games_install=1
@@ -852,7 +851,9 @@ neovim_install=
 }
 [ "${have_awk}" ] || install_package awk
 [ "${have_fc}" ] || install_package fontconfig
-[ "${have_mktemp}" ] && [ "${have_unlink}" ] || install_package coreutils
+[ "${have_mktemp}" ] && {
+  [ "${have_unlink}" ] || install_package coreutils
+}
 [ "${have_unzip}" ] || install_package unzip
 
 # Mutt configuration user setup
@@ -949,7 +950,7 @@ neovim_install=
 # Custom W3M configuration for this user unless one exists
 [ -d ${CONFDIR}/w3m ] && {
   if [ -d ${HOME}/.w3m ]; then
-    for w3mconf in ${CONFDIR}/w3m/*; do
+    for w3mconf in "${CONFDIR}"/w3m/*; do
       [ "${w3mconf}" == "${CONFDIR}/w3m/*" ] && continue
       bconf=$(basename "${w3mconf}")
       [ -f "${HOME}/.w3m/${bconf}" ] || {
@@ -1150,7 +1151,7 @@ fi
       echo "Answer 'a', 'b', 'o', or 's'"
       echo ""
       while true; do
-        read -p "Append/Backup/Overwrite/Skip tmux configuration? (a/b/o/s) " customize
+        read -r -p "Append/Backup/Overwrite/Skip tmux configuration? (a/b/o/s) " customize
         case $customize in
           [Aa]*)
             cat ${CONFDIR}/tmux.conf >>${HOME}/.tmux.conf
@@ -1231,8 +1232,7 @@ status_dots=
   status_dots=
 }
 
-# Use Brew on all platforms to install some requirements
-# unless invoked with the 'nobrew' argument
+# Use Homebrew only on Darwin unless invoked with the 'brew' argument
 BREW_EXE="brew"
 have_brew=$(type -p brew)
 [ "${usebrew}" ] && {
@@ -1368,32 +1368,13 @@ fi
   }
 }
 
-function check_py_version {
-  # Full version number e.g. 2.7.1
-  python_version="$(echo "$($1 -V 2>&1)" | sed -e "s/^.* \(.*\)$/\\1/g")"
-
-  # Return (the first letter -lt "3")
-  ! [ "$(echo $python_version | head -c 1)" -lt "3" ]
-}
-
-PYTHON=""
-POTENTIAL_BINARIES=("python3" "python")
-PY3_SUPPORT=false
-
-for i in "${POTENTIAL_BINARIES[@]}"; do
-  PYTHON="$i"
-
-  if $(check_py_version ${PYTHON}); then
-    PY3_SUPPORT=true
-    break
-  fi
-done
-
-if [ ! ${PY3_SUPPORT} ]; then
+PYTHON="python3"
+have_python3=$(type -p python3)
+[ "${have_python3}" ] || {
   echo "[ERROR] Could not find python3 binary."
   echo "Please add it to your \$PATH and rerun ascinit."
   exit 1
-fi
+}
 
 have_pip=$(type -p pip3)
 [ "${have_pip}" ] || {
@@ -1504,8 +1485,8 @@ if [ "${zip_inst}" ]; then
     PYFIG=$(command -v pyfiglet)
     ZIP=$(command -v zip)
     if [ -d ${FIGLET_DIR} ]; then
-      cd ${FIGLET_DIR}
-      sudo ${ZIP} -q ${FIGLET_ZIP} *.flf
+      cd ${FIGLET_DIR} || echo "Could not enter ${FIGLET_DIR}"
+      sudo ${ZIP} -q ${FIGLET_ZIP} ./*.flf
       sudo ${PYFIG} -L ${FIGLET_ZIP} >/dev/null 2>&1
       sudo rm -f ${FIGLET_ZIP}
     fi
@@ -1574,11 +1555,11 @@ have_mapscii=$(type -p mapscii)
 
 have_tuir=$(type -p tuir)
 [ "${have_tuir}" ] || {
-  cd ${HOME}
+  cd "${HOME}" || echo "Could not enter $HOME"
   [ -d tuir ] && mv tuir tuir$$
   git clone https://gitlab.com/ajak/tuir.git >/dev/null 2>&1
   [ -d tuir ] && {
-    cd tuir
+    cd tuir || echo "Could not enter tuir"
     cat requirements.txt | sed -e "s/requests=.*/requests>=2.20.0/" >/tmp/tuireq$$
     cp /tmp/tuireq$$ requirements.txt
     rm -f /tmp/tuireq$$
@@ -1592,12 +1573,12 @@ have_tuir=$(type -p tuir)
 
 pkg=video-to-ascii
 if ${PYTHON} -m pip list 2>/dev/null | grep ${pkg} >/dev/null; then
-  ${PYTHON} -m pip install --upgrade ${pkg} ${VOPT} >/dev/null 2>&1
+  ${PYTHON} -m pip install --upgrade ${pkg} "${VOPT}" >/dev/null 2>&1
 else
   [ "${quiet}" ] || {
     printf "\n\tInstalling ${pkg} ..."
   }
-  ${PYTHON} -m pip install ${pkg} ${VOPT} >/dev/null 2>&1
+  ${PYTHON} -m pip install ${pkg} "${VOPT}" >/dev/null 2>&1
   [ "${quiet}" ] || {
     printf " done"
   }
@@ -1631,7 +1612,7 @@ have_googler=$(type -p googler)
 # Custom jrnl configuration for this user unless one exists
 [ -d ${CONFDIR}/jrnl ] && {
   if [ -d ${USERCONF}/jrnl ]; then
-    for jc in ${CONFDIR}/jrnl/*; do
+    for jc in "${CONFDIR}"/jrnl/*; do
       [ "${jc}" == "${CONFDIR}/jrnl/*" ] && continue
       bj=$(basename ${jc})
       [ -f ${USERCONF}/jrnl/${bj} ] || cp ${jc} ${USERCONF}/jrnl/${bj}
