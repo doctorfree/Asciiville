@@ -20,7 +20,7 @@ NORMAL=$(tput sgr0)
 PKG_AVAILABLE=
 PKG_SELECTED=
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 [ -f "${SCRIPT_DIR}/VERSION" ] || {
   echo "Missing VERSION file: ${SCRIPT_DIR}/VERSION"
@@ -32,21 +32,18 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 PKG_VER=${VERSION}
 PKG_REL=${RELEASE}
 
-platform=`uname -s`
+platform=$(uname -s)
 
 [ "${platform}" == "Darwin" ] && {
   darwin_archive=
-  if [ -f releases/${PKG_VER}/Asciiville_${PKG_VER}-${PKG_REL}.Darwin.tgz ]
-  then
+  if [ -f releases/${PKG_VER}/Asciiville_${PKG_VER}-${PKG_REL}.Darwin.tgz ]; then
     darwin_archive="releases/${PKG_VER}/Asciiville_${PKG_VER}-${PKG_REL}.Darwin.tgz"
   else
     # Look for other versions
-    for release in releases/*/Asciiville_*-*.Darwin.*
-    do
+    for release in releases/*/Asciiville_*-*.Darwin.*; do
       [ "${release}" == "releases/*/Asciiville_*-*.Darwin.*" ] && {
         ./mkpkg
-        for build in releases/*/Asciiville_*-*.Darwin.*
-        do
+        for build in releases/*/Asciiville_*-*.Darwin.*; do
           [ "${build}" == "releases/*/Asciiville_*-*.Darwin.*" ] && {
             echo "No Darwin release archives located in ./releases/..."
             echo "Download the latest Asciiville release archive for macOS at"
@@ -62,9 +59,8 @@ platform=`uname -s`
       echo "    ${release}"
     done
   fi
-  if [ "${darwin_archive}" ]
-  then
-    sudo pkg/Install-bin.sh ${darwin_archive}
+  if [ "${darwin_archive}" ]; then
+    sudo pkg/Install-bin.sh "${darwin_archive}"
     exit 0
   else
     echo "Version and Release in VERSION do not match located release archive(s)"
@@ -73,77 +69,69 @@ platform=`uname -s`
     echo "Exiting without installing"
     exit 1
   fi
-  exit 1
 }
 
 get_available_packages() {
-  for pkgs in ${SCRIPT_DIR}/releases/${PKG_VER}/*.${SUF}
-  do
+  for pkgs in "${SCRIPT_DIR}"/releases/"${PKG_VER}"/*."${SUF}"; do
     [ "${pkgs}" == "${SCRIPT_DIR}/releases/${PKG_VER}/*.${SUF}" ] || {
-      for pkg in ${pkgs}
-      do
-        if [ "${arch}" ]
-        then
-          pkgname=`basename ${pkg} | sed -e "s/-v${PKG_VER}r${PKG_REL}-${PACKAGE}-${ARCH}.${SUF}//"` 
+      for pkg in ${pkgs}; do
+        if [ "${arch}" ]; then
+          pkgname=$(basename "${pkg}" | sed -e "s/-v${PKG_VER}r${PKG_REL}-${PACKAGE}-${ARCH}.${SUF}//")
         else
-          pkgname=`basename ${pkg} | sed -e "s/_${PKG_VER}-${PKG_REL}.${SUF}//"` 
+          pkgname=$(basename "${pkg}" | sed -e "s/_${PKG_VER}-${PKG_REL}.${SUF}//")
         fi
         PKG_AVAILABLE="${PKG_AVAILABLE} ${pkgname}"
       done
     }
   done
-  PKG_AVAILABLE=`echo $PKG_AVAILABLE | sed -e "s/^ //"`
+  PKG_AVAILABLE=$(echo "${PKG_AVAILABLE}" | sed -e "s/^ //")
 }
 
 install_selected() {
-  for pkg in ${PKG_AVAILABLE}
-  do
-    while true
-    do
-      read -p "Install ${pkg} ? ('Y'/'N'): " yn
+  for pkg in ${PKG_AVAILABLE}; do
+    while true; do
+      read -r -p "Install ${pkg} ? ('Y'/'N'): " yn
       case $yn in
-          [Yy]*)
-              PKG_SELECTED="${PKG_SELECTED} $pkg"
-              break
-              ;;
-          [Nn]*)
-              break
-              ;;
-          * )
-              echo "Please answer yes or no."
-              ;;
+        [Yy]*)
+          PKG_SELECTED="${PKG_SELECTED} $pkg"
+          break
+          ;;
+        [Nn]*)
+          break
+          ;;
+        *)
+          echo "Please answer yes or no."
+          ;;
       esac
     done
   done
-  PKG_SELECTED=`echo $PKG_SELECTED | sed -e "s/^ //"`
+  PKG_SELECTED=$(echo "${PKG_SELECTED}" | sed -e "s/^ //")
 }
 
 debian=
 arch=
-have_apt=`type -p apt`
-have_dpkg=`type -p dpkg`
-have_rpm=`type -p rpm`
-have_dnf=`type -p dnf`
-have_pac=`type -p pacman`
+have_apt=$(type -p apt)
+have_dpkg=$(type -p dpkg)
+have_rpm=$(type -p rpm)
+have_dnf=$(type -p dnf)
+have_pac=$(type -p pacman)
 [ -f /etc/os-release ] && . /etc/os-release
 [ "${ID_LIKE}" == "debian" ] && debian=1
 [ "${ID}" == "arch" ] || [ "${ID_LIKE}" == "arch" ] && arch=1
 [ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
 [ "${arch}" ] || [ "${debian}" ] || {
-  echo "${ID_LIKE}" | grep debian > /dev/null && debian=1
+  echo "${ID_LIKE}" | grep debian >/dev/null && debian=1
 }
 
-if [ "${debian}" ]
-then
+if [ "${debian}" ]; then
   SUF=deb
   [ "${have_dpkg}" ] && {
-    dpkg_arch=`dpkg --print-architecture`
+    dpkg_arch=$(dpkg --print-architecture)
     [ "${dpkg_arch}" == "${DEB_ARCH}" ] || DEB_ARCH=${dpkg_arch}
   }
   ARCH=${DEB_ARCH}
 else
-  if [ "${arch}" ]
-  then
+  if [ "${arch}" ]; then
     SUF=zst
     ARCH="any"
   else
@@ -156,46 +144,42 @@ fi
 
 get_available_packages
 
-[ "$PKG_AVAILABLE}" ] || {
+[ "${PKG_AVAILABLE}" ] || {
   echo "No packages for version ${PKG_VER} are currently available. Exiting."
   exit 1
 }
 
 [ "$1" ] && {
   # If invoked with -i argument, present a menu of options to select from
-  if [ "$1" == "-i" ]
-  then
+  if [ "$1" == "-i" ]; then
     shift
     PKG_NAMES="$*"
     [ "${PKG_AVAILABLE}" ] && {
       echo "Currently available Asciiville packages:"
       echo ""
-      for avaipkg in ${PKG_AVAILABLE}
-      do
+      for avaipkg in ${PKG_AVAILABLE}; do
         echo "$avaipkg"
       done
       echo ""
     }
-    while true
-    do
+    while true; do
       PS3="${BOLD}Please enter your desire (numeric or text): ${NORMAL}"
       options=("Install All" "Install Selected" "Quit")
-      select opt in "${options[@]}"
-      do
+      select opt in "${options[@]}"; do
         case "$opt,$REPLY" in
-            "Install All",*|*,"Install All")
-                PKG_NAMES="${PKG_AVAILABLE}"
-                break 2
-                ;;
-            "Install Selected",*|*,"Install Selected")
-                install_selected
-                PKG_NAMES="${PKG_SELECTED}"
-                break 2
-                ;;
-            "Quit",*|*,"Quit"|"quit",*|*,"quit")
-                printf "\nExiting\n"
-                exit 0
-                ;;
+          "Install All",* | *,"Install All")
+            PKG_NAMES="${PKG_AVAILABLE}"
+            break 2
+            ;;
+          "Install Selected",* | *,"Install Selected")
+            install_selected
+            PKG_NAMES="${PKG_SELECTED}"
+            break 2
+            ;;
+          "Quit",* | *,"Quit" | "quit",* | *,"quit")
+            printf "\nExiting\n"
+            exit 0
+            ;;
         esac
       done
     done
@@ -209,20 +193,16 @@ get_available_packages
   exit 1
 }
 
-for PKG_NAME in ${PKG_NAMES}
-do
-  if [ "${arch}" ]
-  then
+for PKG_NAME in ${PKG_NAMES}; do
+  if [ "${arch}" ]; then
     PKG="${SCRIPT_DIR}/releases/${PKG_VER}/${PKG_NAME}-v${PKG_VER}r${PKG_REL}-${PACKAGE}-${ARCH}.pkg.tar.${SUF}"
   else
     PKG="${SCRIPT_DIR}/releases/${PKG_VER}/${PKG_NAME}_${PKG_VER}-${PKG_REL}.${SUF}"
   fi
   [ -f "${PKG}" ] || {
-    if [ "${arch}" ]
-    then
+    if [ "${arch}" ]; then
       echo "${PKG_NAME}-v${PKG_VER}r${PKG_REL}-${PACKAGE}-${ARCH}.pkg.tar.${SUF} not found."
-      for pkgs in ${SCRIPT_DIR}/releases/*/${PKG_NAME}-*.${SUF}
-      do
+      for pkgs in "${SCRIPT_DIR}"/releases/*/"${PKG_NAME}"-*."${SUF}"; do
         [ "${pkgs}" == "${SCRIPT_DIR}/releases/*/${PKG_NAME}-*.${SUF}" ] || {
           echo "Found existing packages:"
           echo "${pkgs}"
@@ -230,8 +210,7 @@ do
       done
     else
       echo "${PKG_NAME}_${PKG_VER}-${PKG_REL}.${SUF} not found."
-      for pkgs in ${SCRIPT_DIR}/releases/*/${PKG_NAME}_*.${SUF}
-      do
+      for pkgs in "${SCRIPT_DIR}"/releases/*/"${PKG_NAME}"_*."${SUF}"; do
         [ "${pkgs}" == "${SCRIPT_DIR}/releases/*/${PKG_NAME}_*.${SUF}" ] || {
           echo "Found existing packages:"
           echo "${pkgs}"
@@ -243,37 +222,30 @@ do
   }
 
   echo "Installing ${PKG}"
-  if [ "${debian}" ]
-  then
-    if [ "${have_apt}" ]
-    then
+  if [ "${debian}" ]; then
+    if [ "${have_apt}" ]; then
       sudo apt update -y -qq
       sudo apt install "${PKG}"
     else
-      if [ "${have_dpkg}" ]
-      then
+      if [ "${have_dpkg}" ]; then
         sudo dpkg -i "${PKG}"
       else
         echo "Cannot locate either apt or dpkg to install. Skipping."
       fi
     fi
   else
-    if [ "${arch}" ]
-    then
-      if [ "${have_pac}" ]
-      then
+    if [ "${arch}" ]; then
+      if [ "${have_pac}" ]; then
         sudo pacman -U "${PKG}"
       else
         echo "Cannot locate pacman to install. Skipping."
       fi
     else
-      if [ "${have_dnf}" ]
-      then
+      if [ "${have_dnf}" ]; then
         sudo dnf update -y -q
         sudo dnf localinstall "${PKG}"
       else
-        if [ "${have_rpm}" ]
-        then
+        if [ "${have_rpm}" ]; then
           sudo rpm -i "${PKG}"
         else
           echo "Cannot locate either dnf or rpm to install. Skipping."
