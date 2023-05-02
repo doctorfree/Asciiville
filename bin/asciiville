@@ -2610,6 +2610,11 @@ show_animation_menu() {
       options+=("Terminal          [${use_terminal}]")
     fi
     [ "${have_jrnl}" ] && options+=("Journal Menu")
+    [ "${have_lazyman}" ] && {
+      [ -f ${HOME}/.config/nvim-Lazyman/.initialized ] && {
+        options+=("Lazyman Menu")
+      }
+    }
     [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
     [ "${have_roon}" ] && options+=("RoonCommandLine Menu")
     [ "${have_showascii}" ] && options+=("Ascii Art Menu")
@@ -2850,6 +2855,12 @@ show_animation_menu() {
           else
             remove_fullscreen
           fi
+          skip_it_so=1
+          break
+          ;;
+        "Lazyman"*,* | *,"Lazyman"*)
+          lazyman
+          clear
           skip_it_so=1
           break
           ;;
@@ -3254,6 +3265,11 @@ show_main_menu() {
       options+=("Terminal          [${use_terminal}]")
     fi
     [ "${have_jrnl}" ] && options+=("Journal Menu")
+    [ "${have_lazyman}" ] && {
+      [ -f ${HOME}/.config/nvim-Lazyman/.initialized ] && {
+        options+=("Lazyman Menu")
+      }
+    }
     [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
     [ "${have_roon}" ] && options+=("RoonCommandLine Menu")
     options+=("Quit")
@@ -3430,6 +3446,12 @@ show_main_menu() {
           ;;
         "Mapscii"*,* | *,"Mapscii"*)
           mapscii
+          skip_it_so=1
+          break
+          ;;
+        "Lazyman"*,* | *,"Lazyman"*)
+          lazyman
+          clear
           skip_it_so=1
           break
           ;;
@@ -3940,6 +3962,7 @@ have_got=$(type -p got)
 have_ncdu=$(type -p ncdu)
 have_mapscii=$(type -p mapscii)
 have_mpcplus=$(type -p mpcplus)
+have_lazyman=$(type -p lazyman)
 have_mpplus=$(type -p mpplus)
 have_mplayer=$(type -p mplayer)
 have_neo=$(type -p neofetch)

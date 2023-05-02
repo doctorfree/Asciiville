@@ -470,7 +470,11 @@ remove_neovim() {
 }
 
 install_neovim() {
-  install_args="-q -z"
+  if [ "${usebrew}" ]; then
+    install_args="-h -q -y -z"
+  else
+    install_args="-q -y -z"
+  fi
   [ "${debug}" ] && install_args="${install_args} -d"
   [ -x ${CONFDIR}/tools/bin/lazyman ] && {
     if [ -d ${USERCONF}/nvim-Lazyman ]; then
