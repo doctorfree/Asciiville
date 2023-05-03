@@ -119,7 +119,7 @@ ${SUDO} chmod 755 "${OUT_DIR}"/"${DESTDIR}"/bin/* \
   "${OUT_DIR}"/"${DESTDIR}"/share/man \
   "${OUT_DIR}"/"${DESTDIR}"/share/man/*
 ${SUDO} chmod 755 "${OUT_DIR}"/"${DESTDIR}"/share/"${PKG}"/tools/bin/*
-${SUDO} chown -R root:wheel "${OUT_DIR}"/"${DESTDIR}"
+${SUDO} chown -R root:${group} "${OUT_DIR}"/"${DESTDIR}"
 
 cd "${OUT_DIR}" || echo "Unable to enter ${OUT_DIR}"
 echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"

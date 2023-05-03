@@ -60,6 +60,7 @@ else
       fi
     fi
   fi
+  sudo pkg/Uninstall-bin.sh "$1"
 fi
 
 [ "${ALL}" ] && {

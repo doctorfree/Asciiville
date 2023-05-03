@@ -114,6 +114,6 @@ echo ""
 echo "Initialize the Asciiville environment with 'ascinit':"
 echo ""
 echo "As a normal user with sudo privilege, execute the Asciiville"
-echo "initialization command '/usr/local/bin/ascinit'"
+echo "initialization command 'ascinit'"
 
 exit 0
