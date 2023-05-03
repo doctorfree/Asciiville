@@ -307,7 +307,7 @@ Additional detail and info can be found in the
 
 ## Quickstart
 
-* Install the latest Arch, Debian, macOS, or RPM format installation package from the [Asciiville Releases](https://github.com/doctorfree/Asciiville/releases) page
+* Install the latest Arch, Debian, macOS, RPM, or compressed tar archive format installation package from the [Asciiville Releases](https://github.com/doctorfree/Asciiville/releases) page
 * Run the `ascinit` command
     * Must be done as a normal user with `sudo` privilege
 	* Run `ascinit -c` to perform a console initialization (no graphical utilities)
@@ -330,10 +330,14 @@ This should display a waterfall rendered with characters as ascii art.
 
 Asciiville can be installed on Arch Linux, Debian based Linux systems,
 and RPM based Linux systems using the platform native packaging format.
+
 Apple macOS users can install Asciiville manually using the provided
 installation script and `Darwin` distribution archive.
 
-Installation and initialization require admistrative privilege. The `ascinit`
+If no native packaging format is available, Linux users can install Asciiville
+manually using the provided installation script and `Linux` distribution archive.
+
+Installation and initialization require administrative privilege. The `ascinit`
 command, executed after installing Asciiville, installs several packages
 and therefore requires access to the Internet along with administrative
 privilege (e.g. `sudo` privilege).
@@ -385,22 +389,24 @@ Tools installed during post-installation configuration include:
 ## Installation
 
 Asciiville 3.0.1 and later can be installed on any architecture.
-Asciiville 3.0.2 and later utilize [Homebrew](https://brew.sh) to install
-packages during `ascinit` post installation initialization.
+Asciiville 3.0.2 and later can optionally utilize
+[Homebrew](https://brew.sh) to install packages during `ascinit`
+post installation initialization.
 
 Asciiville can be installed on Linux systems using the Arch Linux
-packaging format, the Debian packaging format, or the Red Hat Package
-Manager (RPM). Currently tested platforms include Arch Linux 2022.07.01,
-Ubuntu Linux 20.04, Fedora Linux 35, and Raspbian Linux Bullseye.
+packaging format, the Debian packaging format, the Red Hat Package
+Manager (RPM), or manually with the Linux compressed tar archive.
+Asciiville can be installed on Apple macOS using the Darwin
+compressed tar archive.
+
+Currently tested platforms include Apple macOS, Arch Linux,
+Ubuntu Linux, Fedora Linux, and Raspbian Linux.
 
 Installation packages are provided in Debian packaging format, Red Hat
 package manager (RPM) format, and Arch Linux packaging format.
 
 See the [Build](#build) section below to compile and build a package on
 an Linux platform other than those for which packages are provided.
-
-Asciiville v2.0.0r2 and later can be installed on Apple macOS systems
-using the provided installation script and `Darwin` distribution archive.
 
 ### Arch Linux package installation
 
