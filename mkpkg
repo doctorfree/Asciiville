@@ -33,6 +33,8 @@ export __ASC_SRC__
 echo "Invoking pkg/mktgz.sh to create compressed tar installation archive"
 pkg/mktgz.sh
 [ "$1" == "-i" ] && exit 0
+platform=$(uname -s)
+[ "${platform}" == "Darwin" ] && exit 0
 
 [ "${arch}" ] && {
   echo "Invoking pkg/mkaur.sh to create Arch Linux installation package"
