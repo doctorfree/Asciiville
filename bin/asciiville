@@ -2612,7 +2612,7 @@ show_animation_menu() {
     [ "${have_jrnl}" ] && options+=("Journal Menu")
     [ "${have_lazyman}" ] && {
       [ -f ${HOME}/.config/nvim-Lazyman/.initialized ] && {
-        options+=("Lazyman Menu")
+        options+=("Neovim Menu")
       }
     }
     [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
@@ -2858,7 +2858,7 @@ show_animation_menu() {
           skip_it_so=1
           break
           ;;
-        "Lazyman"*,* | *,"Lazyman"*)
+        "Neovim"*,* | *,"Neovim"*)
           lazyman
           clear
           skip_it_so=1
@@ -3267,7 +3267,7 @@ show_main_menu() {
     [ "${have_jrnl}" ] && options+=("Journal Menu")
     [ "${have_lazyman}" ] && {
       [ -f ${HOME}/.config/nvim-Lazyman/.initialized ] && {
-        options+=("Lazyman Menu")
+        options+=("Neovim Menu")
       }
     }
     [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
@@ -3449,7 +3449,7 @@ show_main_menu() {
           skip_it_so=1
           break
           ;;
-        "Lazyman"*,* | *,"Lazyman"*)
+        "Neovim"*,* | *,"Neovim"*)
           lazyman
           clear
           skip_it_so=1

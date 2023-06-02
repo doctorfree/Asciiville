@@ -471,9 +471,9 @@ remove_neovim() {
 
 install_neovim() {
   if [ "${usebrew}" ]; then
-    install_args="-h -q -y -z"
+    install_args="-h -q -Q -y -z"
   else
-    install_args="-q -y -z"
+    install_args="-q -Q -y -z"
   fi
   [ "${debug}" ] && install_args="${install_args} -d"
   [ -x ${CONFDIR}/tools/bin/lazyman ] && {
@@ -1541,16 +1541,7 @@ have_jp2a=$(type -p jp2a)
   }
 
   # Install Neovim
-  if [ "${neovim_install}" ]; then
-    install_neovim
-  else
-    # Perform a minimal installation of required tools
-    install_args="-q -z"
-    [ "${debug}" ] && install_args="${install_args} -d"
-    [ -x ${CONFDIR}/tools/bin/lazyman ] && {
-      ${CONFDIR}/tools/bin/lazyman -I ${install_args}
-    }
-  fi
+  [ "${neovim_install}" ] && install_neovim
 
   # Install Ascii Games
   [ "${games_install}" ] && install_games
