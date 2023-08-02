@@ -1,3 +1,21 @@
-remote_theme: pages-themes/midnight@v0.2.0
+remote_theme: doctorfree/jekyll-theme-neoman
 plugins:
-- jekyll-remote-theme # add this line to the plugins list if you already have one
+  - jekyll-remote-theme
+
+title: Asciiville
+email: ronaldrecord@gmail.com
+description: >- # this means to ignore newlines until "baseurl:"
+  Asciiville is where you go for ASCII Art, animations, and utilities.
+  The Asciiville project provides integration and extension of several
+  packages as well as providing convenience commands to invoke a variety
+  of components used to display ASCII Art, animations, and text based
+  utilities to perform common operations in a text-only environment.
+
+  Asciiville includes nearly 1,000 works of ASCII and ANSI Art!
+baseurl: ""
+url: "https://asciiville.neoman.dev"
+twitter_username: ronrecord
+github_username: doctorfree
+
+show_downloads: false
+# google_analytics:
