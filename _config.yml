@@ -4,14 +4,6 @@ plugins:
 
 title: Asciiville
 email: ronaldrecord@gmail.com
-description: >- # this means to ignore newlines until "baseurl:"
-  Asciiville is where you go for ASCII Art, animations, and utilities.
-  The Asciiville project provides integration and extension of several
-  packages as well as providing convenience commands to invoke a variety
-  of components used to display ASCII Art, animations, and text based
-  utilities to perform common operations in a text-only environment.
-
-  Asciiville includes nearly 1,000 works of ASCII and ANSI Art!
 baseurl: ""
 url: "https://asciiville.neoman.dev"
 twitter_username: ronrecord
