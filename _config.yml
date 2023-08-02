@@ -1,8 +1,6 @@
 remote_theme: doctorfree/jekyll-theme-neoman
 plugins:
   - jekyll-remote-theme
-
-title: Asciiville
 email: ronaldrecord@gmail.com
 baseurl: ""
 url: "https://asciiville.neoman.dev"
