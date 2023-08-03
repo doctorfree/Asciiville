@@ -230,6 +230,32 @@ cd /path/to/gallery
 sudo gzip *.asc
 ```
 
+<details><summary>Click here to view a
+
+**Gallery of Ascii Art**
+</summary>
+
+<div align="center"><p>
+  <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/NYT.jpg" style="width:700px;height:450px;">
+  <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/phone.jpg" style="width:300px;height:200px;">
+  <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/george-herbert-easter-wings.jpg" style="width:700px;height:1000px;">
+  <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/hieroglyphics.jpg" style="width:512px;height:336px;">
+  <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/rcanterbury.jpg" style="width:400px;height:512px;">
+  <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/typewriter-art.jpg" style="width:600px;height:800px;">
+  <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/todd.jpg" style="width:800px;height:1000px;">
+  <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/jesus.jpg" style="width:1000px;height:1300px;">
+  <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/jgseagle.jpg" style="width:340px;height:412px;">
+  <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/tux.png" style="width:477px;height:662px;">
+  <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/julia.png" style="width:569px;height:667px;">
+  <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/marilyn.png" style="width:575px;height:674px;">
+  <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/ronandrachel.png" style="width:805px;height:664px;">
+  <img src="pics/computer-nude-artists.png" width="90%">
+  <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/computer-nude-artistss.png" style="width:933px;height:933px;">
+</p></div>
+
+</details>
+
+
 ## Asciiville Commands
 
 Asciiville adds the following commands to your system:
