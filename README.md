@@ -1,11 +1,6 @@
-<pre>
-      _                      _    _           _   __   __
-     / \                    (_)  (_)         (_) [  | [  |
-    / _ \     .--.   .---.  __   __  _   __  __   | |  | | .---.
-   / ___ \   ( (`\] / /'`\][  | [  |[ \ [  ][  |  | |  | |/ /__\\
- _/ /   \ \_  `'.'. | \__.  | |  | | \ \/ /  | |  | |  | || \__.,
-|____| |____|[\__) )'.___.'[___][___] \__/  [___][___][___]'.__.'
-</pre>
+<div align="center"><p>
+  <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/asciiville.png" style="width:800px;height:140px;">
+</p></div>
 
 Asciiville is where you go for ASCII Art, animations, and utilities.
 The Asciiville project provides integration and extension of several
@@ -14,6 +9,13 @@ of components used to display ASCII Art, animations, and text based
 utilities to perform common operations in a text-only environment.
 
 Asciiville includes nearly 1,000 works of ASCII and ANSI Art!
+
+Asciiville is one of the [Neoman](https://neoman.dev) managed projects:
+
+| **Neoman** | **Managed** | **Projects** |
+| ---------- | ----------- | ------------ |
+| [Asciiville](https://asciiville.dev) | [Lazyman](https://lazyman.dev) | [MirrorCommand](https://mirrorcommand.dev) |
+| [MusicPlayerPlus](https://musicplayerplus.dev) | [Neoman](https://neoman.dev) | [RoonCommandLine](https://rooncommand.dev) |
 
 ## Table of Contents
 
