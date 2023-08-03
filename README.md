@@ -237,31 +237,31 @@ sudo gzip *.asc
 
 <div align="center"><p>
   <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/NYT.jpg" style="width:700px;height:450px;">
-
+</p><p>
   <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/phone.jpg" style="width:300px;height:200px;">
-
+</p><p>
   <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/george-herbert-easter-wings.jpg" style="width:700px;height:1000px;">
-
+</p><p>
   <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/hieroglyphics.jpg" style="width:512px;height:336px;">
-
+</p><p>
   <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/rcanterbury.jpg" style="width:400px;height:512px;">
-
+</p><p>
   <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/typewriter-art.jpg" style="width:600px;height:800px;">
-
+</p><p>
   <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/todd.jpg" style="width:800px;height:1000px;">
-
+</p><p>
   <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/jesus.jpg" style="width:1000px;height:1300px;">
-
+</p><p>
   <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/jgseagle.jpg" style="width:340px;height:412px;">
-
+</p><p>
   <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/tux.png" style="width:477px;height:662px;">
-
+</p><p>
   <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/julia.png" style="width:569px;height:667px;">
-
+</p><p>
   <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/marilyn.png" style="width:575px;height:674px;">
-
+</p><p>
   <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/ronandrachel.png" style="width:805px;height:664px;">
-
+</p><p>
   <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/computer-nude-artists.png" style="width:933px;height:933px;">
 </p></div>
 
