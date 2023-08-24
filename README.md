@@ -1,6 +1,6 @@
-<div align="center"><p>
+<div align="center">
   <img src="https://raw.githubusercontent.com/wiki/doctorfree/Asciiville/pics/asciiville.png" style="width:800px;height:140px;">
-</p></div>
+</div>
 
 Asciiville is where you go for ASCII Art, animations, and utilities.
 The Asciiville project provides integration and extension of several
