@@ -1,19 +1,12 @@
 #!/bin/bash
 #
 # ascinit - initialize Asciiville configuration files, install needed utilities
+#           Kasm version used with Docker build, only install user config/packages
 #
 # shellcheck disable=SC2001,SC2002,SC2016,SC2006,SC2059,SC2086,SC2089,SC2181,SC2129
 
-darwin=
-platform=$(uname -s)
-if [ "${platform}" == "Darwin" ]; then
-  TOP="/usr/local"
-  darwin=1
-else
-  TOP="/usr"
-fi
-MUSEDIR="${TOP}/asciiville/music"
-CONFDIR=${TOP}/share/asciiville
+MUSEDIR="/usr/share/asciiville/music"
+CONFDIR="/usr/share/asciiville"
 USERCONF="${HOME}/.config"
 GHUC="https://raw.githubusercontent.com"
 OWNER=doctorfree
@@ -68,95 +61,10 @@ usage() {
   exit 1
 }
 
-remove_package() {
-  PKG="$1"
-  [ "${quiet}" ] || printf "\n\tRemoving %s ..." "${PKG}"
-  # Try Brew first
-  have_brew=$(type -p brew)
-  [ "${have_brew}" ] || usebrew=
-  if [ "${usebrew}" ]; then
-    brew uninstall -q ${PKG} >/dev/null 2>&1
-  else
-    if [ "${debian}" ]; then
-      if [ "${APT}" ]; then
-        sudo ${APT} remove ${PKG} >/dev/null 2>&1
-      else
-        [ "${quiet}" ] || printf "\n\t\tCannot locate apt to remove. Skipping ..."
-      fi
-    else
-      if [ "${fedora}" ]; then
-        if [ "${DNF}" ]; then
-          sudo ${DNF} remove ${PKG} >/dev/null 2>&1
-        else
-          [ "${quiet}" ] || printf "\n\t\tCannot locate dnf to remove. Skipping ..."
-        fi
-      else
-        [ "${arch}" ] && sudo pacman -R --noconfirm ${PKG} >/dev/null 2>&1
-      fi
-    fi
-  fi
-  [ "${quiet}" ] || printf " done"
-}
-
 install_package() {
-  PKG="$1"
-  [ "${quiet}" ] || printf "\n\tInstalling %s ..." "${PKG}"
-  # Try Brew first
-  brewed=
-  [ "${usebrew}" ] && {
-    brew search -q /^${PKG}$/ >/dev/null 2>&1
-    [ $? -eq 0 ] && {
-      brew install --quiet ${PKG} >/dev/null 2>&1
-      [ $? -eq 0 ] || brew link --overwrite --quiet ${PKG} >/dev/null 2>&1
-      brewed=1
-    }
-  }
-  [ "${brewed}" ] || {
-    if [ "${debian}" ]; then
-      if [ "${APT}" ]; then
-        sudo ${APT} install ${PKG} >/dev/null 2>&1
-      else
-        [ "${quiet}" ] || printf "\n\t\tCannot locate apt to install. Skipping ..."
-      fi
-    else
-      if [ "${fedora}" ]; then
-        if [ "${DNF}" ]; then
-          sudo ${DNF} install ${PKG} >/dev/null 2>&1
-        else
-          [ "${quiet}" ] || printf "\n\t\tCannot locate dnf to install. Skipping ..."
-        fi
-      else
-        [ "${arch}" ] && sudo pacman -S --noconfirm ${PKG} >/dev/null 2>&1
-      fi
-    fi
-  }
-  [ "${quiet}" ] || printf " done"
 }
 
 ask_install() {
-  nam="$1"
-  pkg="$2"
-  if [ "${prompt}" ]; then
-    echo "Attempting to configure ${nam} but ${nam} is not installed"
-    echo "Would you like to install ${nam} at this time?"
-    while true; do
-      read -r -p "Install ${nam} ? (y/n) " yn
-      case $yn in
-        [Yy]*)
-          install_package ${pkg}
-          break
-          ;;
-        [Nn]*)
-          break
-          ;;
-        *)
-          echo "Please answer yes or no."
-          ;;
-      esac
-    done
-  else
-    install_package ${pkg}
-  fi
 }
 
 install_pipx() {
@@ -168,107 +76,6 @@ install_pipx() {
   [ "${quiet}" ] || {
     printf " done"
   }
-}
-
-install_external_package() {
-  API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
-  DL_URL=
-  [ "${have_curl}" ] && [ "${have_jq}" ] && {
-    if [ "${darwin}" ]; then
-      DL_URL=$(curl --silent "${API_URL}" \
-          | jq --raw-output '.assets | .[]?.browser_download_url' \
-        | grep "\.Darwin\.tgz")
-    else
-      if [ "${arch}" ]; then
-        DL_URL=$(curl --silent "${API_URL}" \
-            | jq --raw-output '.assets | .[]?.browser_download_url' \
-          | grep "\.pkg\.tar\.zst")
-      else
-        if [ "${centos}" ] || [ "${fedora}" ]; then
-          DL_URL=$(curl --silent "${API_URL}" \
-              | jq --raw-output '.assets | .[]?.browser_download_url' \
-            | grep "x86_64\.rpm")
-        else
-          if [ "${debian}" ]; then
-            if [ "${mach}" == "x86_64" ]; then
-              DL_URL=$(curl --silent "${API_URL}" \
-                  | jq --raw-output '.assets | .[]?.browser_download_url' \
-                | grep "\.amd64\.deb")
-            else
-              DL_URL=$(curl --silent "${API_URL}" \
-                  | jq --raw-output '.assets | .[]?.browser_download_url' \
-                | grep "\.arm.*\.deb")
-            fi
-          else
-            printf "\n\tNo %s release asset found for this platform ..." "${PROJECT}"
-          fi
-        fi
-      fi
-    fi
-  }
-
-  [ "${DL_URL}" ] && {
-    [ "${quiet}" ] || {
-      printf "\n\tInstalling %s ..." "${PROJECT}"
-    }
-    if [ "${debian}" ]; then
-      [ "${have_wget}" ] && {
-        TEMP_DEB="$(mktemp --suffix=.deb)"
-        wget --quiet -O "${TEMP_DEB}" "${DL_URL}" >/dev/null 2>&1
-        chmod 644 "${TEMP_DEB}"
-        [ "${APT}" ] && sudo ${APT} install "${TEMP_DEB}" >/dev/null 2>&1
-        rm -f "${TEMP_DEB}"
-      }
-    else
-      if [ "${centos}" ] || [ "${fedora}" ]; then
-        [ "${DNF}" ] && sudo ${DNF} install ${DL_URL} >/dev/null 2>&1
-      else
-        # Until we sign Arch packages we need to download and install locally
-        if [ "${arch}" ]; then
-          [ "${have_wget}" ] && {
-            TEMP_ARCH="$(mktemp --suffix=.zst)"
-            wget --quiet -O "${TEMP_ARCH}" "${DL_URL}" >/dev/null 2>&1
-            chmod 644 "${TEMP_ARCH}"
-            sudo pacman -U --noconfirm "${TEMP_ARCH}" >/dev/null 2>&1
-            rm -f "${TEMP_ARCH}"
-          }
-        else
-          [ "${darwin}" ] && {
-            [ "${have_wget}" ] && {
-              TEMP_ARCH="$(mktemp --suffix=.tgz)"
-              wget --quiet -O "${TEMP_ARCH}" "${DL_URL}" >/dev/null 2>&1
-              chmod 644 "${TEMP_ARCH}"
-              tar xzf "${TEMP_ARCH}" -C /
-              rm -f "${TEMP_ARCH}"
-            }
-          }
-        fi
-      fi
-    fi
-    [ "${quiet}" ] || {
-      printf " done"
-    }
-  }
-}
-
-install_games() {
-  if [ "${darwin}" ]; then
-    install_package nbsdgames
-    install_package nethack
-    install_package ninvaders
-    install_package c2048
-    install_package greed
-  else
-    PROJECT=asciigames
-    install_external_package
-    if [ "${debian}" ]; then
-      install_package bsdgames
-      install_package greed
-    else
-      install_package bsd-games
-    fi
-  fi
-  install_package nudoku
 }
 
 remove_games() {
@@ -756,36 +563,6 @@ have_kitty=$(type -p kitty)
   exit 0
 }
 
-[ "${argument}" == "games" ] && {
-  [ "${remove}" ] && {
-    printf "\nRemoving ASCII games.\n\n"
-    if [ "${prompt}" ]; then
-      while true; do
-        read -r -p "Do you wish to continue with Ascii games removal ? (y/n) " yn
-        case $yn in
-          [Yy]*)
-            break
-            ;;
-          [Nn]*)
-            printf "\nAscii games removal aborted."
-            printf "\nExiting.\n\n"
-            exit 0
-            ;;
-          *)
-            echo "Please answer yes or no."
-            ;;
-        esac
-      done
-    fi
-    remove_games
-    printf "\n${BOLD}Ascii games removed${NORM}"
-    printf "\nTo re-install Ascii games run ${BOLD}'ascinit games'${NORM}\n\n"
-    exit 0
-  }
-  install_games
-  exit 0
-}
-
 # Prompt for Neovim install
 neovim_install=
 [ "${minimal}" ] || {
@@ -844,25 +621,6 @@ neovim_install=
     games_install=1
   fi
 }
-
-[ "${have_curl}" ] || {
-  install_package curl
-  have_curl=$(type -p curl)
-}
-[ "${have_jq}" ] || {
-  install_package jq
-  have_jq=$(type -p jq)
-}
-[ "${have_wget}" ] || {
-  install_package wget
-  have_wget=$(type -p wget)
-}
-[ "${have_awk}" ] || install_package awk
-[ "${have_fc}" ] || install_package fontconfig
-[ "${have_mktemp}" ] && {
-  [ "${have_unlink}" ] || install_package coreutils
-}
-[ "${have_unzip}" ] || install_package unzip
 
 # Mutt configuration user setup
 [ "${minimal}" ] || {
@@ -1046,12 +804,7 @@ case "${mach}" in
     install_kitty
     ;;
   *)
-    # If none of Gnome, Tilix, or XFCE terminal emulators are installed
-    # then install the Gnome terminal emulator
-    [ "${have_gnome}" ] || [ "${have_tilix}" ] || [ "${have_xfce4}" ] || {
-      install_package gnome-terminal
-      have_gnome=$(type -p gnome-terminal)
-    }
+    true
     ;;
 esac
 KITTYCONFDIR="${USERCONF}/kitty"
@@ -1360,22 +1113,6 @@ fi
   export HOMEBREW_NO_AUTO_UPDATE=1
 }
 
-# Brew doesn't create a python symlink so we do so here
-[ "${usebrew}" ] && {
-  install_package python
-  python3_path=$(command -v python3)
-  [ "${python3_path}" ] && {
-    python_dir=$(dirname ${python3_path})
-    if [ -w ${python_dir} ]; then
-      rm -f ${python_dir}/python
-      ln -s ${python_dir}/python3 ${python_dir}/python
-    else
-      sudo rm -f ${python_dir}/python
-      sudo ln -s ${python_dir}/python3 ${python_dir}/python
-    fi
-  }
-}
-
 PYTHON="python3"
 have_python3=$(type -p python3)
 [ "${have_python3}" ] || {
@@ -1422,129 +1159,14 @@ for pkg in setuptools asciimatics ddgr rainbowstream socli future \
   fi
 done
 
-have_npm=$(type -p npm)
-[ "${have_npm}" ] || install_package node
-have_npm=$(type -p npm)
-have_dialog=$(type -p dialog)
-[ "${have_dialog}" ] || install_package dialog
-have_figlet=$(type -p figlet)
-[ "${have_figlet}" ] || install_package figlet
-have_lolcat=$(type -p lolcat)
-[ "${have_lolcat}" ] || install_package lolcat
-have_mplayer=$(type -p mplayer)
-[ "${have_mplayer}" ] || install_package mplayer
-have_ranger=$(type -p ranger)
-[ "${have_ranger}" ] || install_package ranger
-have_tmux=$(type -p tmux)
-[ "${have_tmux}" ] || install_package tmux
-have_w3m=$(type -p w3m)
-[ "${have_w3m}" ] || install_package w3m
 have_aic=$(type -p ascii-image-converter)
 [ "${have_aic}" ] || {
   [ "${quiet}" ] || printf "\n\tInstalling ascii-image-converter ..."
-  # Try Brew first
-  brewed=
-  [ "${usebrew}" ] && {
-    brew install --quiet \
-      TheZoraiz/ascii-image-converter/ascii-image-converter >/dev/null 2>&1
-    have_aic=$(type -p ascii-image-converter)
-    [ "${have_aic}" ] && brewed=1
-  }
-  [ "${brewed}" ] || {
-    have_go=$(type -p go)
-    [ "${have_go}" ] && {
-      go install github.com/TheZoraiz/ascii-image-converter@latest >/dev/null 2>&1
-    }
+  have_go=$(type -p go)
+  [ "${have_go}" ] && {
+    go install github.com/TheZoraiz/ascii-image-converter@latest >/dev/null 2>&1
   }
   [ "${quiet}" ] || printf " done"
-}
-have_asciinema=$(type -p asciinema)
-[ "${have_asciinema}" ] || install_package asciinema
-have_gnupg=$(type -p gpg)
-[ "${have_gnupg}" ] || install_package gnupg
-have_zip=$(type -p zip)
-[ "${have_zip}" ] || install_package zip
-install_package imagemagick
-[ "${minimal}" ] || {
-  have_cmatrix=$(type -p cmatrix)
-  [ "${have_cmatrix}" ] || install_package cmatrix
-  have_neomutt=$(type -p neomutt)
-  [ "${have_neomutt}" ] || install_package neomutt
-  have_newsboat=$(type -p newsboat)
-  [ "${have_newsboat}" ] || install_package newsboat
-  have_speedtest=$(type -p speedtest-cli)
-  [ "${have_speedtest}" ] || install_package speedtest-cli
-  have_neofetch=$(type -p neofetch)
-  [ "${have_neofetch}" ] || install_package neofetch
-  have_xclip=$(type -p xclip)
-  [ "${have_xclip}" ] || install_package xclip
-}
-
-FIGLET_DIR="/usr/share/figlet-fonts"
-FIGLET_ZIP="figlet-fonts.zip"
-zip_inst=$(type -p zip)
-if [ "${zip_inst}" ]; then
-  pyfig_inst=$(type -p pyfiglet)
-  [ "${pyfig_inst}" ] || {
-    ${PYTHON} -m pip install pyfiglet >/dev/null 2>&1
-    pyfig_inst=$(type -p pyfiglet)
-  }
-  if [ "${pyfig_inst}" ]; then
-    PYFIG=$(command -v pyfiglet)
-    ZIP=$(command -v zip)
-    if [ -d ${FIGLET_DIR} ]; then
-      cd ${FIGLET_DIR} || echo "Could not enter ${FIGLET_DIR}"
-      sudo ${ZIP} -q ${FIGLET_ZIP} ./*.flf
-      sudo ${PYFIG} -L ${FIGLET_ZIP} >/dev/null 2>&1
-      sudo rm -f ${FIGLET_ZIP}
-    fi
-  fi
-fi
-
-# Install btop if not already present
-have_btop=$(type -p btop)
-[ "${have_btop}" ] || {
-  if [ "${platform}" == "Darwin" ]; then
-    install_package btop
-  else
-    PROJECT=btop
-    install_external_package
-  fi
-}
-# Install any2ascii if not already present
-have_jp2a=$(type -p jp2a)
-[ "${have_jp2a}" ] || {
-  PROJECT=any2ascii
-  install_external_package
-}
-# Install endoh1 if not already present
-[ -x /usr/local/bin/show_endo ] || {
-  [ -x /usr/bin/show_endo ] || {
-    PROJECT=endoh1
-    install_external_package
-  }
-}
-[ "${minimal}" ] || {
-  # Install aewan if not already present
-  [ -x /usr/local/bin/aewan ] || {
-    [ -x /usr/bin/aewan ] || {
-      PROJECT=asciiville-aewan
-      install_external_package
-    }
-  }
-  # Install cbftp if not already present
-  [ -x /usr/local/bin/cbftp ] || {
-    [ -x /usr/bin/cbftp ] || {
-      PROJECT=cbftp
-      install_external_package
-    }
-  }
-
-  # Install Neovim
-  [ "${neovim_install}" ] && install_neovim
-
-  # Install Ascii Games
-  [ "${games_install}" ] && install_games
 }
 
 have_mapscii=$(type -p mapscii)
@@ -1808,36 +1430,7 @@ local profile_ids_old="$(dconf read "$dconfdir"/list | tr -d "]")"
   }
 }
 
-[ "${have_go}" ] || {
-  if [ "${darwin}" ]; then
-    install_package go
-  else
-    [ "${quiet}" ] || {
-      printf "\n\tInstalling go ..."
-    }
-    if [ "${debian}" ]; then
-      if [ "${APT}" ]; then
-        sudo ${APT} install golang >/dev/null 2>&1
-      else
-        [ "${quiet}" ] || printf "\n\t\tCannot locate apt to install. Skipping ..."
-      fi
-    else
-      if [ "${fedora}" ]; then
-        if [ "${DNF}" ]; then
-          sudo ${DNF} install golang-bin >/dev/null 2>&1
-        else
-          [ "${quiet}" ] || printf "\n\t\tCannot locate dnf to install. Skipping ..."
-        fi
-      else
-        [ "${arch}" ] && sudo pacman -S --noconfirm go >/dev/null 2>&1
-      fi
-    fi
-    [ "${quiet}" ] || {
-      printf " done"
-    }
-  fi
-  have_go=$(type -p go)
-}
+have_go=$(type -p go)
 [ "${have_go}" ] && {
   # Install GUM
   have_gum=$(type -p gum)
@@ -1909,8 +1502,8 @@ CONF="${USERCONF}/asciiville/config"
     printf "\n\nAsciiville configuration in %s ..." "${CONF}"
   }
   touch ${CONF}
-  echo "ARTDIR=${TOP}/share/asciiville/art" >>${CONF}
-  echo "MUSEDIR=${TOP}/share/asciiville/music" >>${CONF}
+  echo "ARTDIR=/usr/share/asciiville/art" >>${CONF}
+  echo "MUSEDIR=/usr/share/asciiville/music" >>${CONF}
   echo "SONG=\"${MUSEDIR}/Chronos.mp3\"" >>${CONF}
   echo "ALTSONG=\"${MUSEDIR}/Epic_Dramatic-Yuriy_Bespalov.wav\"" >>${CONF}
   echo "" >>${CONF}
@@ -1987,48 +1580,8 @@ CONF="${USERCONF}/asciiville/config"
 }
 touch ${HOME}/.tetris
 
-[ "${usebrew}" ] && {
-  [ "${have_brew}" ] && {
-    [ "${quiet}" ] || {
-      printf "\n\tCleaning up Homebrew ... "
-    }
-    brew cleanup --prune=all --quiet >/dev/null 2>&1
-    [ "${quiet}" ] || {
-      printf "done"
-    }
-  }
-}
 printf "\n"
 
-JETB_URL="${GHUC}/JetBrains/JetBrainsMono/master/install_manual.sh"
-curl -fsSL "${JETB_URL}" >/tmp/jetb-$$.sh
-[ $? -eq 0 ] || {
-  rm -f /tmp/jetb-$$.sh
-  curl -kfsSL "${JETB_URL}" >/tmp/jetb-$$.sh
-}
-[ -f /tmp/jetb-$$.sh ] && {
-  chmod 755 /tmp/jetb-$$.sh
-  [ "${quiet}" ] || printf "\n\tInstalling JetBrains Mono font ... "
-  /bin/bash -c "/tmp/jetb-$$.sh" >/dev/null 2>&1
-  rm -f /tmp/jetb-$$.sh
-  [ "${quiet}" ] || printf "done"
-}
-
-[ "${usebrew}" ] && {
-  [ "${BREW_EXE}" ] || BREW_EXE=brew
-  BREW_ROOT="$(${BREW_EXE} --prefix)"
-}
-[ "${BREW_ROOT}" ] && {
-  if [ -d ${BREW_ROOT}/opt/go/libexec ]; then
-    export GOROOT="${BREW_ROOT}/opt/go/libexec"
-  else
-    if [ -d ${BREW_ROOT}/opt/go ]; then
-      export GOROOT="${BREW_ROOT}/opt/go"
-    else
-      [ -d ${BREW_ROOT}/go ] && export GOROOT="${BREW_ROOT}/go"
-    fi
-  fi
-}
 [ "${GOPATH}" ] || export GOPATH="${HOME}/go"
 for gop in ${GOPATH} ${GOPATH}/src ${GOPATH}/pkg ${GOPATH}/bin; do
   [ -d "${gop}" ] || mkdir -p "${gop}"
