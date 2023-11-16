@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## Asciiville-3.0.2r2 (2023-11-16)
+
+- Use `npm -g` to install `mapscii` in `ascinit`
+- Add collapsed gallery
+- Use PNG image of Asciiville as header
+- Change CNAME to `asciiville.dev`
+- Remove title from Jekyll theme config
+- Remove description from Jekyll theme config
+- Update Jekyll theme config
+- Update `lazyman` to v3 release
+- Expand description of Bob Neovim version manager
+- Rename Lazyman menu entry to Neovim
+- Remove Lazyman tools install if no Neovim install selected
+- Exit after creation of compressed tar archive on macOS
+- Update manual installation instructions in README
+- Install and Uninstall for Linux compressed tar archive
+- Linux compressed tar archive install with `./Install`
+- Get rid of shellcheck warnings in preparation for creating a gzip tar release asset for all platforms
+- Add Lazyman Menu to Asciiville menus if installed
+
 ## Asciiville-3.0.2r1 (2023-02-14)
 
 - Automated Neovim installation and configuration using `lazyman`
