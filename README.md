@@ -10,6 +10,11 @@ utilities to perform common operations in a text-only environment.
 
 Asciiville includes nearly 1,000 works of ASCII and ANSI Art!
 
+**NEWS** Asciiville is now available as a [Kasm Workspace](https://kasmweb.com)
+by adding `https://doctorfree.github.io/kasm-registry/` as a
+[Kasm 3rd party registry](https://www.kasmweb.com/docs/latest/guide/workspace_registry.html)
+and installing the `Asciiville` workspace in your Kasm instance.
+
 Asciiville is one of the [Neoman](https://neoman.dev) managed projects:
 
 | **Neoman** | **Managed** | **Projects** |
