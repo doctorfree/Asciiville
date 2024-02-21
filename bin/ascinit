@@ -859,9 +859,11 @@ neovim_install=
 }
 [ "${have_awk}" ] || install_package awk
 [ "${have_fc}" ] || install_package fontconfig
-[ "${have_mktemp}" ] && {
-  [ "${have_unlink}" ] || install_package coreutils
-}
+# [ "${have_mktemp}" ] && {
+#   [ "${have_unlink}" ] || install_package coreutils
+# }
+# Always attempt to install coreutils package
+install_package coreutils
 [ "${have_unzip}" ] || install_package unzip
 
 # Mutt configuration user setup
