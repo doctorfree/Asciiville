@@ -33,6 +33,15 @@ exit 3 unless feed_text && feed_text.length >= 20
 
 xml = Document.new(feed_text)
 
+def remove_html_comments(input)  
+  previous = nil  
+  while input != previous  
+    previous = input  
+    input = input.gsub!(/<!--[^>]*-->/, "")
+  end  
+  input  
+end
+
 xml.elements.each("//item") do |item|
   # correct entities in title
   title=item.elements['title'].text
@@ -79,7 +88,7 @@ xml.elements.each("//item") do |item|
   article_text << "<div>" << article_xml.search("//div[@class='bodytext']").inner_html << "</div>"
 
   # get rid of comments and other annoying artifacts
-  article_text.gsub!(/<!--[^>]*-->/, "")
+  article_text = remove_html_comments(article_text)
   article_text.gsub!(/\s+/m, " ")
 
   next if article_text.length < 10

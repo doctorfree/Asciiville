@@ -45,6 +45,15 @@ if ARGV.length < 1
   exit
 end
 
+def remove_html_comments(input)
+  previous = nil
+  while input != previous
+    previous = input
+    input = input.gsub!(/<!--[^>]*-->/, "")
+  end
+  input
+end
+
 def shortenArticle(article_text)
   article_text.gsub!(/<!\[CDATA\[/, "")
   article_text.gsub!(/\]\]>/, "")
@@ -72,7 +81,7 @@ def shortenArticle(article_text)
 
   # get rid of comments and other annoying artifacts
   article_text.gsub!(/<!--LINK_ICON--><img[^>]*><!--\/LINK_ICON-->/m, " ")
-  article_text.gsub!(/<!--[^>]*-->/, "")
+  article_text = remove_html_comments(article_text)
   article_text.gsub!(/\s+/m, " ")
   article_text.gsub!(/href=\"\//m, "href=\"http://www.heise.de/")
   article_text.gsub!(/src=\"\//m, "src=\"http://www.heise.de/")
