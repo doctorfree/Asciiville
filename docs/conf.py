@@ -46,4 +46,4 @@ master_doc = "index"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "classic"
-#html_static_path = ['_static']
+html_static_path = ['_static']
