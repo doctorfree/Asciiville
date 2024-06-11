@@ -206,8 +206,8 @@ prompt_height=${PROMPT_HEIGHT:-1}
 print_test() {
 	no_color=$(printf '%b' "${1}" | sed -e 's/\x1B\[[0-9;]*[JKmsu]//g')
 
-	[ "$(printf '%s' "${no_color}" | wc --lines)" -gt $(( terminal_height - prompt_height )) ] && return 1
-	[ "$(printf '%s' "${no_color}" | wc --max-line-length)" -gt "${terminal_width}" ] && return 1
+	[ "$(printf '%s' "${no_color}" | wc -l)" -gt $(( terminal_height - prompt_height )) ] && return 1
+	[ "$(printf '%s' "${no_color}" | wc -L)" -gt "${terminal_width}" ] && return 1
 
 	gum style --align center --width="${terminal_width}" "${1}" ''
 	printf '%b' "[A"

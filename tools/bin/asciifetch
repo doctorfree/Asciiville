@@ -209,10 +209,10 @@ set_term_sizes() {
 print_info() {
   no_color=$(printf '%b' "${1}" | sed -e 's/\x1B\[[0-9;]*[JKmsu]//g')
 
-  [ "$(printf '%s' "${no_color}" | wc --lines)" -gt ${terminal_height} ] && {
+  [ "$(printf '%s' "${no_color}" | wc -l)" -gt ${terminal_height} ] && {
     return 1
   }
-  [ "$(printf '%s' "${no_color}" | wc --max-line-length)" -gt "${terminal_width}" ] && {
+  [ "$(printf '%s' "${no_color}" | wc -L)" -gt "${terminal_width}" ] && {
     return 1
   }
 
