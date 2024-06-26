@@ -2231,7 +2231,10 @@ show_art_menu() {
     else
       options+=("Terminal          [${use_terminal}]")
     fi
-    options+=("Animation Menu" "Applications Menu" "Main Menu" "Quit [q]")
+    options+=("Animation Menu    [A]")
+    options+=("Applications Menu [a]")
+    options+=("Main Menu         [m]")
+    options+=("Quit              [q]")
     select opt in "${options[@]}"; do
       case "$opt,$REPLY" in
         "h",* | *,"h" | "H",* | *,"H" | "help",* | *,"help" | "Help",* | *,"Help")
@@ -2240,15 +2243,15 @@ show_art_menu() {
           show_help_menu
           break
           ;;
-        "Main"*,* | *,"Main"* | "main"*,* | *,"main"* | "Back"*,* | *,"Back"* | "back"*,* | *,"back"*)
+        "Main"*,* | *,"Main"* | "main"*,* | *,"main"* | "Back"*,* | *,"Back"* | "back"*,* | *,"back"* | "m",* | *,"m")
           main_menu=1
           break 2
           ;;
-        "Animation"*,* | *,"Animation"* | "animation"*,* | *,"animation"*)
+        "Animation"*,* | *,"Animation"* | "animation"*,* | *,"animation"* | "A",* | *,"A")
           animation_menu=1
           break 2
           ;;
-        "Application"*,* | *,"Application"* | "application"*,* | *,"application"*)
+        "Application"*,* | *,"Application"* | "application"*,* | *,"application"* | "a",* | *,"a")
           app_menu=1
           break 2
           ;;
@@ -2618,16 +2621,16 @@ show_animation_menu() {
     else
       options+=("Terminal          [${use_terminal}]")
     fi
-    [ "${have_jrnl}" ] && options+=("Journal Menu")
+    [ "${have_jrnl}" ] && options+=("Journal Menu         [j]")
     [ "${have_lazyman}" ] && {
       [ -f ${HOME}/.config/nvim-Lazyman/.initialized ] && {
-        options+=("Neovim Menu")
+        options+=("Neovim Menu          [N]")
       }
     }
-    [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
-    [ "${have_roon}" ] && options+=("RoonCommandLine Menu")
-    [ "${have_showascii}" ] && options+=("Ascii Art Menu")
-    options+=("Applications Menu" "Games Menu" "Main Menu" "Quit [q]")
+    [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu [M]")
+    [ "${have_roon}" ] && options+=("RoonCommandLine Menu [R]")
+    [ "${have_showascii}" ] && options+=("Ascii Art Menu       [A]")
+    options+=("Applications Menu    [a]" "Games Menu           [g]" "Main Menu            [m]" "Quit                 [q]")
     select opt in "${options[@]}"; do
       case "$opt,$REPLY" in
         "h",* | *,"h" | "H",* | *,"H" | "help",* | *,"help" | "Help",* | *,"Help")
@@ -2637,7 +2640,7 @@ show_animation_menu() {
           skip_it_so=1
           break
           ;;
-        "Main"*,* | *,"Main"* | "main"*,* | *,"main"* | "Back"*,* | *,"Back"* | "back"*,* | *,"back"*)
+        "Main"*,* | *,"Main"* | "main"*,* | *,"main"* | "Back"*,* | *,"Back"* | "back"*,* | *,"back"* | "m",* | *,"m")
           main_menu=1
           break 2
           ;;
@@ -2708,19 +2711,19 @@ show_animation_menu() {
           ASCSPLASH_TMUX="${COMMAND_TMUX}"
           break
           ;;
-        "Journal"*,* | *,"Journal"*)
+        "Journal"*,* | *,"Journal"* | "j",* | *,"j")
           journal_menu=1
           break 2
           ;;
-        "Ascii Art"*,* | *,"Ascii Art"*)
+        "Ascii Art"*,* | *,"Ascii Art"* | "A",* | *,"A")
           art_menu=1
           break 2
           ;;
-        "Application"*,* | *,"Application"*)
+        "Application"*,* | *,"Application"* | "a",* | *,"a")
           app_menu=1
           break 2
           ;;
-        "Games"*,* | *,"Games"*)
+        "Games"*,* | *,"Games"* | "g",* | *,"g")
           games_menu=1
           break 2
           ;;
@@ -2867,13 +2870,13 @@ show_animation_menu() {
           skip_it_so=1
           break
           ;;
-        "Neovim"*,* | *,"Neovim"*)
+        "Neovim"*,* | *,"Neovim"* | "N",* | *,"N")
           lazyman
           clear
           skip_it_so=1
           break
           ;;
-        "MusicPlayerPlus"*,* | *,"MusicPlayerPlus"*)
+        "MusicPlayerPlus"*,* | *,"MusicPlayerPlus"* | "M",* | *,"M")
           [ "${use_figlet}" ] && {
             select_font MusicPlayer
             show_figlet
@@ -2883,7 +2886,7 @@ show_animation_menu() {
           skip_it_so=1
           break
           ;;
-        "RoonCommandLine"*,* | *,"RoonCommandLine"*)
+        "RoonCommandLine"*,* | *,"RoonCommandLine"* | "R",* | *,"R")
           [ "${use_figlet}" ] && {
             select_font Roon
             show_figlet
@@ -3240,8 +3243,8 @@ show_main_menu() {
     options=()
     [ "${have_showascii}" ] && options+=("Ascii Art")
     [ "${have_splash}" ] && options+=("ASCII Animations")
-    options+=("Applications")
-    options+=("Games")
+    options+=("Applications         [a]")
+    options+=("Games                [g]")
     [ "${have_bb}" ] && {
       check_display
       [ $? -eq 0 ] && options+=("AAlib Demo (X11 mode)")
@@ -3272,15 +3275,15 @@ show_main_menu() {
     else
       options+=("Terminal          [${use_terminal}]")
     fi
-    [ "${have_jrnl}" ] && options+=("Journal Menu")
+    [ "${have_jrnl}" ] && options+=("Journal Menu         [j]")
     [ "${have_lazyman}" ] && {
       [ -f ${HOME}/.config/nvim-Lazyman/.initialized ] && {
-        options+=("Neovim Menu")
+        options+=("Neovim Menu          [N]")
       }
     }
-    [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu")
-    [ "${have_roon}" ] && options+=("RoonCommandLine Menu")
-    options+=("Quit [q]")
+    [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu [M]")
+    [ "${have_roon}" ] && options+=("RoonCommandLine Menu [R]")
+    options+=("Quit                 [q]")
     select opt in "${options[@]}"; do
       case "$opt,$REPLY" in
         "h",* | *,"h" | "H",* | *,"H" | "help",* | *,"help" | "Help",* | *,"Help")
@@ -3450,13 +3453,13 @@ show_main_menu() {
           skip_it_so=1
           break
           ;;
-        "Neovim"*,* | *,"Neovim"*)
+        "Neovim"*,* | *,"Neovim"* | "N",* | *,"N")
           lazyman
           clear
           skip_it_so=1
           break
           ;;
-        "MusicPlayerPlus"*,* | *,"MusicPlayerPlus"*)
+        "MusicPlayerPlus"*,* | *,"MusicPlayerPlus"* | "M",* | *,"M")
           [ "${use_figlet}" ] && {
             select_font MusicPlayer
             show_figlet
@@ -3466,7 +3469,7 @@ show_main_menu() {
           skip_it_so=1
           break
           ;;
-        "RoonCommandLine"*,* | *,"RoonCommandLine"*)
+        "RoonCommandLine"*,* | *,"RoonCommandLine"* | "R",* | *,"R")
           [ "${use_figlet}" ] && {
             select_font Roon
             show_figlet
@@ -3494,15 +3497,15 @@ show_main_menu() {
           art_menu=1
           break 2
           ;;
-        "Journal"*,* | *,"Journal"*)
+        "Journal"*,* | *,"Journal"* | "j",* | *,"j")
           journal_menu=1
           break 2
           ;;
-        "Applic"*,* | *,"Applic"*)
+        "Applic"*,* | *,"Applic"* | "a",* | *,"a")
           select_app_menu=1
           break 2
           ;;
-        "Game"*,* | *,"Game"*)
+        "Game"*,* | *,"Game"* | "g",* | *,"g")
           select_game_menu=1
           break 2
           ;;
