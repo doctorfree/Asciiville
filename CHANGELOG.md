@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Asciiville-3.0.2r2 (2024-06-26)
 
+- Remove `rainbowstream` twitter client, no longer works
+- Add `Durdraw` to menu system, update `lazyman`
 - Add `Durdraw` ASCII editor installation and configuration
 - Use single dash options to `wc` for portability
 - Add static path to `readthedocs`
