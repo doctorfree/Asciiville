@@ -127,6 +127,9 @@ usage() {
   exit 1
 }
 
+VENV_DIR="${HOME}/.venv"
+[ -f ${VENV_DIR}/bin/activate ] && source ${VENV_DIR}/bin/activate
+
 WITH_AUDIO="--with-audio"
 STRATEGY="ascii-color"
 with_flag=
@@ -322,7 +325,7 @@ have_v2a=`type -p video-to-ascii`
     ${PYTHON} -m pip install --upgrade setuptools > /dev/null 2>&1
     for pkg in future xtermcolor ffmpeg-python pyaudio
     do
-      if pip list | grep ${pkg} > /dev/null
+      if ${PYTHON} -m pip list | grep ${pkg} > /dev/null
       then
         ${PYTHON} -m pip install --upgrade ${pkg} > /dev/null 2>&1
       else
@@ -337,7 +340,7 @@ have_v2a=`type -p video-to-ascii`
     done
 
     pkg=video-to-ascii
-    if pip list | grep ${pkg} > /dev/null
+    if ${PYTHON} -m pip list | grep ${pkg} > /dev/null
     then
       ${PYTHON} -m pip install --upgrade ${pkg} ${VOPT} > /dev/null 2>&1
     else

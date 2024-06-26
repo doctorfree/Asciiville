@@ -88,11 +88,10 @@ After successfully installing Asciiville, as a normal user run the `ascinit` com
 
 ## Configuration
 
-- REQUIRED: execute the `ascinit` command to initialize _mutt/neomutt_, _tmux_, _ranger_, _rainbowstream_, and install terminal emulators
+- REQUIRED: execute the `ascinit` command to initialize _mutt/neomutt_, _tmux_, _ranger_, and install terminal emulators
   - The `ascinit` command should be executed as a normal user with sudo privilege
     - ascinit # (not 'sudo ascinit')
   - Execute `ascinit -c` rather than `ascinit` if no terminal emulators or graphical utilities are desired
-- OPTIONAL: authorize the command line Twitter client by executing `rainbowstream`
 
 See the [Asciiville README](https://github.com/doctorfree/Asciiville#readme) for additional configuration info.
 

@@ -37,7 +37,6 @@ usage() {
     rich "    [cyan]-N[/] indicates [yellow]prompt for installation of additional terminal emulators[/]" --print
     rich "    [cyan]-q[/] indicates [yellow]quiet mode[/]" --print
     rich "    [cyan]-r[/] indicates [yellow]remove service/package[/]" --print
-    rich "    [cyan]-t[/] indicates [yellow]authorize the Rainbow Stream app at Twitter[/]" --print
     rich "    [cyan]-y[/] indicates [yellow]answer yes at all prompts[/]" --print
     rich "    [cyan]-u[/] indicates [yellow]display this usage message and exit[/]" --print
     rich "    If [cyan]arg[/] is [cyan]minimal[/] [yellow]a minimal initialization is performed[/]" --print
@@ -57,7 +56,6 @@ usage() {
     printf "\n\t-N indicates prompt for installation of additional terminal emulators"
     printf "\n\t-q indicates quiet mode"
     printf "\n\t-r indicates remove service/package"
-    printf "\n\t-t indicates authorize the Rainbow Stream app at Twitter"
     printf "\n\t-y indicates answer yes at all prompts"
     printf "\n\t-u indicates display this usage message and exit"
     printf "\n\tif 'arg' is 'minimal' a minimal initialization is performed"
@@ -462,7 +460,7 @@ remove_kitty() {
 
 remove_durdraw() {
   [ -f ${HOME}/.venv/bin/activate ] && source ${HOME}/.venv/bin/activate
-  python3 -m pip uninstall -y durdraw >/dev/null 2>&1
+  ${PYTHON} -m pip uninstall -y durdraw >/dev/null 2>&1
   command -v deactivate && deactivate
   rm -rf ~/.local/share/durdraw
   rm -f ~/.local/bin/durdraw
@@ -613,16 +611,36 @@ fi
   fi
 }
 
+VENV_DIR="${HOME}/.venv"
+[ -f ${VENV_DIR}/bin/activate ] && source ${VENV_DIR}/bin/activate
+
+have_py3=$(type -p python3)
+if [ "${have_py3}" ]; then
+  PYTHON=python3
+else
+  have_py=$(type -p python)
+  if [ "${have_py}" ]; then
+    PYTHON=python
+  else
+    printf "\nWARNING: could not locate Python in PATH.\n"
+  fi
+fi
+
+# Setup Python virtual environment
+[ -f ${VENV_DIR}/bin/activate ] || ${PYTHON} -m venv ${VENV_DIR}
+[ -f ${VENV_DIR}/bin/activate ] && source ${VENV_DIR}/bin/activate
+
+# Upgrade pip, setuptools
+${PYTHON} -m pip install --upgrade setuptools pip >/dev/null 2>&1
+
 ask_anim=
 console=
 debug=
-init_twit=
 inst_terms=
 quiet=
 remove=
 prompt=1
-
-while getopts "acdmMNnqrtyu" flag; do
+while getopts "acdmMNnqryu" flag; do
   case $flag in
     a)
       ask_anim=1
@@ -651,9 +669,6 @@ while getopts "acdmMNnqrtyu" flag; do
       ;;
     r)
       remove=1
-      ;;
-    t)
-      init_twit=1
       ;;
     y)
       prompt=
@@ -1173,19 +1188,6 @@ fi
   }
 }
 
-# Setup default rainbowstream configuration for this user unless one exists
-[ -f ${CONFDIR}/rainbow_config.json ] && {
-  [ -f ${HOME}/.rainbow_config.json ] || {
-    [ "${quiet}" ] || {
-      printf "\n\tSetup rainbowstream configuration as ${HOME}/.rainbow_config.json ..."
-    }
-    cp ${CONFDIR}/rainbow_config.json ${HOME}/.rainbow_config.json
-    [ "${quiet}" ] || {
-      printf " done"
-    }
-  }
-}
-
 # Setup default tuir configuration for this user unless one exists
 [ -d ${CONFDIR}/tuir ] && {
   [ "${quiet}" ] || {
@@ -1479,7 +1481,7 @@ have_pip=$(type -p pip3)
   }
 }
 
-for pkg in setuptools asciimatics ddgr rainbowstream socli future \
+for pkg in setuptools asciimatics ddgr socli future \
   xtermcolor ffmpeg-python pyaudio term-image urlscan openai; do
   if ${PYTHON} -m pip list 2>/dev/null | grep ${pkg} >/dev/null; then
     ${PYTHON} -m pip install --upgrade ${pkg} >/dev/null 2>&1
@@ -1742,8 +1744,6 @@ have_jrnl=$(type -p jrnl)
     printf " done"
   }
 }
-
-[ "${init_twit}" ] && rainbowstream
 
 create_new_profile() {
   local proterm="$1"
@@ -2126,10 +2126,6 @@ done
   printf "\n\n${BOLD}Asciiville Initialization Complete${NORM}\n"
   printf "\nLogout, open a new shell, or reinitialize your current shell"
   printf "\nin order to set your execution PATH appropriately\n"
-  [ "${init_twit}" ] || {
-    printf "\nAuthorize the Rainbow Stream app at Twitter"
-    printf "\nby running the ${BOLD}'rainbowstream'${NORM} command\n"
-  }
   printf "\nVisit the Asciiville Wiki at:"
   printf "\n\t${BOLD}https://github.com/doctorfree/Asciiville/wiki${NORM}\n"
 }

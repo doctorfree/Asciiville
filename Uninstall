@@ -3,7 +3,7 @@
 # shellcheck disable=SC2001,SC2181
 
 PKGS="neomutt cmatrix figlet lolcat mplayer neomutt newsboat ranger tmux w3m asciinema speedtest-cli neofetch imagemagick gnupg"
-PYMS="asciimatics ddgr rainbowstream socli future xtermcolor ffmpeg-python pyaudio term-image"
+PYMS="asciimatics ddgr durdraw socli future xtermcolor ffmpeg-python pyaudio term-image"
 
 ALL=
 [ "$1" == "all" ] && ALL=1
@@ -91,12 +91,6 @@ fi
         ;;
     esac
   done
-  python3_inst=$(type -p python3)
-  if [ "${python3_inst}" ]; then
-    PYTHON="python3"
-  else
-    PYTHON="python"
-  fi
   if [ "$plat" == "Darwin" ]; then
     have_brew=$(type -p brew)
     if [ "${have_brew}" ]; then
@@ -139,9 +133,20 @@ fi
       fi
     fi
   fi
+  VENV_DIR="${HOME}/.venv"
+  [ -f ${VENV_DIR}/bin/activate ] && source ${VENV_DIR}/bin/activate
+  python3_inst=$(type -p python3)
+  if [ "${python3_inst}" ]; then
+    PYTHON="python3"
+  else
+    PYTHON="python"
+  fi
   for mod in ${PYMS}; do
-    pip list 2>/dev/null | grep "${mod}" >/dev/null && {
+    ${PYTHON} -m pip list 2>/dev/null | grep "${mod}" >/dev/null && {
       ${PYTHON} -m pip uninstall "${mod}" -y 2>/dev/null
     }
   done
+  rm -rf ~/.local/share/durdraw
+  rm -f ~/.local/bin/durdraw
+  rm -f ~/.local/share/man/man1/durdraw.1
 }

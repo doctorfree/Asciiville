@@ -57,7 +57,6 @@ package() {
   cp -a conf/tuir ${pkgdir}/${destdir}/share/${pkgname}/tuir
   cp conf/tmux.conf ${pkgdir}/${destdir}/share/${pkgname}
   cp conf/rifle.conf ${pkgdir}/${destdir}/share/${pkgname}
-  cp conf/rainbow_config.json ${pkgdir}/${destdir}/share/${pkgname}
   cp copyright ${pkgdir}/${destdir}/share/doc/${pkgname}
   cp LICENSE ${pkgdir}/${destdir}/share/doc/${pkgname}
   cp CHANGELOG.md ${pkgdir}/${destdir}/share/doc/${pkgname}

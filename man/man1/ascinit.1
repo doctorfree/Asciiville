@@ -21,8 +21,8 @@
 ascinit - Asciiville initialization script
 .SS SYNOPSIS
 .PP
-\f[B]ascinit\f[R] [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-r] [-t] [-y]
-[-u] [arg]
+\f[B]ascinit\f[R] [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-r] [-y] [-u]
+[arg]
 .SS DESCRIPTION
 .PP
 The \f[I]ascinit\f[R] command should be run as a normal user with
@@ -40,9 +40,7 @@ Tmux configuration is created
 .IP \[bu] 2
 default Ranger and Rifle configuration files are created
 .IP \[bu] 2
-Asciimatics and Rainbowstream installation is performed
-.IP \[bu] 2
-Optionally authorizing the Rainbow Stream app with Twitter
+Asciimatics installation is performed
 .IP \[bu] 2
 Optionally additional terminal emulators can be installed and configured
 .IP \[bu] 2
@@ -54,8 +52,7 @@ the \f[V]ascinit\f[R] command (see below), the typical invocation will
 simply be \f[V]ascinit\f[R] with no options.
 This default invocation performs a NeoMutt configuration, does not
 configure Mutt, configures Tmux and Ranger and Rifle, installs
-Asciimatics and Rainbowstream if not already installed, does not
-authorize Rainbow Stream with Twitter, installs the Kitty terminal
+Asciimatics if not already installed, installs the Kitty terminal
 emulator, installs the Neovim text editor, installs ASCII games, and
 creates an Asciiville profile in gnome-terminal and tilix if installed.
 .PP
@@ -139,9 +136,6 @@ In quiet mode initialization all Asciiville components are installed.
 .TP
 \f[B]-r\f[R]
 indicates remove service/package
-.TP
-\f[B]-t\f[R]
-indicates authorize the Rainbow Stream app at Twitter
 .TP
 \f[B]-y\f[R]
 indicates answer yes to all prompts except tmux configuration

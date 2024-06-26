@@ -126,7 +126,6 @@ The `asciiville` command can also be used to invoke commands in a variety of way
 * A tmux session
 * A command line web search
 * A zoomable map of the world
-* Command line character based Twitter client
 * Translate words and phrases from and to a wide variety of languages
 * A network download/upload speed test
 * The AAlib BB demo running in a tmux session (Debian based systems only)
@@ -168,8 +167,6 @@ Integration is provided for:
 * [mplayer](http://mplayerhq.hu/design7/info.html), a media player
 * [asciimatics](https://github.com/peterbrittain/asciimatics) - automatically display a variety of character based animation effects
 * [asciinema](https://asciinema.org/) - automatically create ascii character based video clips
-* [rainbowstream](https://github.com/orakaro/rainbowstream) - command line character based Twitter client
-    * See [the rainbowstream usage manual](https://rainbowstream.readthedocs.io/en/latest/#usage) to get started
 * [endoh1](https://github.com/mame/winner/tree/main/2012/endoh1), ascii fluid dynamics simulation
 * [mapscii](https://github.com/rastapasta/mapscii#readme), zoomable map of the world
 * [cmatrix](https://github.com/abishekvashok/cmatrix), screen from "The Matrix"
@@ -302,7 +299,6 @@ Asciiville adds the following commands to your system:
 * **mapscii** : character based zoomable map of the world
 * **nethack** : character based dungeon game
 * **ninvaders** : classic video game
-* **rainbowstream** : command line Twitter client
 * **set_xfce_font** : sets an xfce4-terminal window's font and font size
 * **set_xfce_trans** : sets an xfce4-terminal window's transparency level
 * **show_ascii_art** : display ascii art, convert images to ascii art
@@ -356,7 +352,6 @@ Additional detail and info can be found in the
 * Run the `ascinit` command
     * Must be done as a normal user with `sudo` privilege
 	* Run `ascinit -c` to perform a console initialization (no graphical utilities)
-* Initialize the command line Twitter client by invoking the `rainbowstream` command and authorizing the app to access your Twitter account
 * Execute the `asciiville` command in interactive menu mode by running `asciiville -i`
 * See the [online asciiville man page](https://github.com/doctorfree/Asciiville/wiki/asciiville.1) or `man asciiville` for different ways to invoke the `asciiville` command
 
@@ -420,6 +415,7 @@ supported by Asciiville available during post-install configuration are:
 Tools installed during post-installation configuration include:
 
 * asciimatics
+* durdraw
 * got
 * gum
 * vhs
@@ -428,7 +424,6 @@ Tools installed during post-installation configuration include:
 * neomutt
 * neovim
 * pipx
-* rainbowstream
 * tdraw
 
 ## Installation
@@ -682,7 +677,6 @@ Generated configuration files include:
 * `$HOME/.config/tuir/` : TUIR terminal UI for Reddit configuration files
 * `$HOME/.mutt/muttrc` : Mutt email client
 * `$HOME/.newsboat/` : Newsboat RSS feed reader configuration files
-* `$HOME/.rainbow_config.json` : Rainbowstream Twitter client
 * `$HOME/.tmux.conf` : Tmux terminal multiplexer
 * `$HOME/.w3m/` : W3M web browser custom configuration
     * W3M web browser configured to act as a Markdown pager
@@ -693,11 +687,6 @@ files, typically installed in `/etc/`. For example, the global configuration
 for the Ranger File Manager can be found in `/etc/ranger/config/`. The W3M
 web browser is configured in `/etc/w3m/`, and the NeoMutt global config is
 `/etc/neomuttrc`.
-
-After installing Asciiville and running the `ascinit` command, initialize the
-the command line Twitter client by invoking the `rainbowstream` command and
-authorizing the app to access your Twitter account.
-
 
 #### Kitty SSH terminfo configuration
 
@@ -763,9 +752,9 @@ The [Newsboat](https://github.com/newsboat/newsboat) character based RSS feed
 reader is a quick and easy way to view configured RSSS feeds. Newsboat is
 very lightweight and displays its list of configured feeds and articles almost
 immediately. It's an excellent way to get a quick glimpse of News, Articles,
-Blog posts, Twitter feeds, and more. Asciiville provides a default initial
+Blog posts, and more. Asciiville provides a default initial
 configuration for Newsboat that includes RSS feeds for News sources, YouTube
-channels, Reddit subreddits, Twitter feeds, Github repositories, Blogs, and
+channels, Reddit subreddits, Github repositories, Blogs, and
 online Comics. To reconfigure Newsboat with the RSS feeds you wish to follow,
 edit the file `$HOME/.newsboat/urls`.
 
@@ -1069,7 +1058,6 @@ Terminal/Command options:
 		If 'command' is keyword 'search' then a web search is performed
 		If 'command' is keyword 'speed' then a speed test is performed
 		If 'command' is keyword 'translate' then the translation tool is run
-		If 'command' is keyword 'twitter' then a Twitter client is run
 		If 'command' is keyword 'weather' then display a weather report
 		Otherwise, 'command' will be executed in a terminal window
 	-d indicates use disk usage analyzer as default command
@@ -1289,10 +1277,6 @@ Display a random Pokemon:
 Run the `ddgr` command line web search in the current terminal window:
 
 `asciiville -c search`
-
-Run the `rainbowstream` command line Twitter client in the current terminal window:
-
-`asciiville -c twitter`
 
 Display a weather report for your IP address location using `wttr.in`:
 

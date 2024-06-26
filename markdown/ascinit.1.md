@@ -12,7 +12,7 @@ ascinit - Asciiville initialization script
 
 ## SYNOPSIS
 
-**ascinit** [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-r] [-t] [-y] [-u] [arg]
+**ascinit** [-a] [-c] [-d] [-m] [-M] [-n] [-N] [-q] [-r] [-y] [-u] [arg]
 
 ## DESCRIPTION
 
@@ -25,8 +25,7 @@ for the user. These include:
 - Mutt and/or NeoMutt startup files are customized
 - Tmux configuration is created
 - default Ranger and Rifle configuration files are created
-- Asciimatics and Rainbowstream installation is performed
-- Optionally authorizing the Rainbow Stream app with Twitter
+- Asciimatics installation is performed
 - Optionally additional terminal emulators can be installed and configured
 - Asciiville profiles in Gnome and Tilix terminals are created, if installed
 
@@ -34,8 +33,7 @@ Although command line options are provided to control the action(s) of the
 `ascinit` command (see below), the typical invocation will simply be `ascinit`
 with no options. This default invocation performs a NeoMutt configuration,
 does not configure Mutt, configures Tmux and Ranger and Rifle, installs
-Asciimatics and Rainbowstream if not already installed, does not authorize
-Rainbow Stream with Twitter, installs the Kitty terminal emulator, installs
+Asciimatics if not already installed, installs the Kitty terminal emulator, installs
 the Neovim text editor, installs ASCII games, and creates an Asciiville profile
 in gnome-terminal and tilix if installed.
 
@@ -104,9 +102,6 @@ ascinit -r <component>
 
 **-r**
 : indicates remove service/package
-
-**-t**
-: indicates authorize the Rainbow Stream app at Twitter
 
 **-y**
 : indicates answer yes to all prompts except tmux configuration

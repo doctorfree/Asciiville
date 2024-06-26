@@ -20,7 +20,6 @@
 #     * A web search
 #     * Character based ASCII art
 #     * Character based world map
-#     * Command line character based Twitter client
 #     * Display system info
 #     * MusicPlayerPlus or RoonCommandLine menus
 #     * Any character based client the user wishes to run
@@ -136,7 +135,6 @@ usage() {
     rich "        If '[bold]command[/]' is keyword '[magenta]speed[/]' then [italic]a speed test is performed[/]" --print
     rich "        If '[bold]command[/]' is keyword '[magenta]splash[/]' then [italic]show Asciiville splash screen[/]" --print
     rich "        If '[bold]command[/]' is keyword '[magenta]translate[/]' then [italic]the translation tool is run[/]" --print
-    rich "        If '[bold]command[/]' is keyword '[magenta]twitter[/]' then [italic]a Twitter client is run[/]" --print
     rich "        If '[bold]command[/]' is keyword '[magenta]weather[/]' then [italic]display a weather report[/]" --print
     rich "        Otherwise, '[bold]command[/]' will be executed in a terminal window" --print
     rich "    [cyan]-d[/] indicates [italic] use disk usage analyzer as default command[/]" --print
@@ -229,7 +227,6 @@ usage() {
     printf "\n\t\tIf 'command' is keyword 'speed' then a speed test is performed"
     printf "\n\t\tIf 'command' is keyword 'splash' then show Asciiville splash screen"
     printf "\n\t\tIf 'command' is keyword 'translate' then the translation tool is run"
-    printf "\n\t\tIf 'command' is keyword 'twitter' then a Twitter client is run"
     printf "\n\t\tIf 'command' is keyword 'weather' then display a weather report"
     printf "\n\t\tOtherwise, 'command' will be executed in a terminal window"
     printf "\n\t-d indicates use disk usage analyzer as default command"
@@ -3259,7 +3256,6 @@ show_main_menu() {
       [ $? -eq 0 ] && options+=("Show a Pokemon")
     }
     [ "${have_speed}" ] && options+=("Speed Test")
-    [ "${have_rainbow}" ] && options+=("Twitter Client")
     [ "${have_curl}" ] && options+=("Weather Report")
     options+=("Generate ASCII Art")
     options+=("Kill Tmux Sessions")
@@ -3441,13 +3437,6 @@ show_main_menu() {
         "Speed"*,* | *,"Speed"*)
           speedtest-cli
           read -p "Press Enter to continue" answer
-          skip_it_so=1
-          break
-          ;;
-        "Twitter"*,* | *,"Twitter"*)
-          # For 24-bit color image support, run with the '-p24' option
-          # rainbowstream -p24
-          rainbowstream
           skip_it_so=1
           break
           ;;
@@ -3938,6 +3927,9 @@ have_tilix=$(type -p tilix)
   done
 }
 
+VENV_DIR="${HOME}/.venv"
+[ -f ${VENV_DIR}/bin/activate ] && source ${VENV_DIR}/bin/activate
+
 FULLSCREEN=
 init_vars
 # Without any arguments, bring up interactive dialog menu
@@ -3987,7 +3979,6 @@ have_lolcat=$(type -p lolcat)
   use_lolcat=
   use_lol=" NO"
 }
-have_rainbow=$(type -p rainbowstream)
 have_rich=$(type -p rich)
 have_roon=$(type -p roon)
 have_speed=$(type -p speedtest-cli)
@@ -4207,10 +4198,6 @@ while getopts "Aabc:CdD:E:fFgGiIjJkKlL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
           ;;
         translate | Translate)
           [ "${have_got}" ] && got
-          exit 0
-          ;;
-        twitter | Twitter)
-          [ "${have_rainbow}" ] && rainbowstream
           exit 0
           ;;
         weather | Weather)
