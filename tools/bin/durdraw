@@ -1,0 +1,61 @@
+#!/bin/bash
+#
+# PYthon virtual environment front-end for Durdraw
+#
+# Written 26-Jun-2024 by Ronald Joe Record <ronaldrecord@gmail.com>
+
+DURD_DIR="${HOME}/.local/share/durdraw"
+VENV_DIR="${HOME}/.venv"
+
+if [ -f ${VENV_DIR}/bin/activate ]; then
+  source ${VENV_DIR}/bin/activate
+else
+  printf "\nERROR: Python virtual environment activate not found."
+  printf "\n\tRun the Durdraw installation script and retry. Exiting.\n"
+  exit 1
+fi
+
+# Override TERM for now
+export TERM=xterm-256color
+
+prompt_continue() {
+  printf "\nPress <Enter> to continue ... "
+  read -r yn
+}
+
+run_draw() {
+  DRAW="$1"
+  if [ "$2" == "examples" ] || [ "$2" == "example" ]; then
+    [ -d ${DURD_DIR}/examples ] || {
+      printf "\n${DURD_DIR}/examples does not exist or is not a directory."
+      printf "\nReinstall durdraw with the 'install_durdraw' script and rerun.\n"
+      exit 1
+    }
+    clear
+    printf "\nViewing the durdraw examples."
+    printf "\nStep through the durdraw examples with <Enter>"
+    printf "\nExit the durdraw examples with 'q'\n"
+    prompt_continue
+    ${DRAW} -p ${DURD_DIR}/examples/*.dur
+  else
+    ${DRAW} $2
+  fi
+}
+
+have_deact=$(type -p deactivate)
+if [ -x ${VENV_DIR}/bin/durdraw ]; then
+  run_draw ${VENV_DIR}/bin/durdraw "$*"
+else
+  have_draw=$(type -p durdraw)
+  if [ "${have_draw}" ]; then
+    run_draw durdraw "$*"
+  else
+    printf "\nERROR: durdraw not found."
+    printf "\n\tRun the Durdraw installation script and retry. Exiting.\n"
+    [ "${have_deact}" ] && deactivate
+    exit 1
+  fi
+fi
+
+[ "${have_deact}" ] && deactivate
+exit 0

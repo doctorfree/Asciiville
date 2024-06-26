@@ -42,7 +42,7 @@ usage() {
     rich "    [cyan]-u[/] indicates [yellow]display this usage message and exit[/]" --print
     rich "    If [cyan]arg[/] is [cyan]minimal[/] [yellow]a minimal initialization is performed[/]" --print
     rich "    If [cyan]arg[/] is [cyan]brew[/] [yellow]Homebrew is installed and used[/]" --print
-    rich "    [cyan]arg[/] can also be one of [cyan]games[/], [cyan]kitty[/], or [cyan]neovim[/]" --print
+    rich "    [cyan]arg[/] can also be one of [cyan]games, kitty, durdraw, or neovim[/]" --print
     rich "        indicating [yellow]installation or removal[/] of [cyan]arg[/]" --print
     printf "\n"
   else
@@ -62,7 +62,7 @@ usage() {
     printf "\n\t-u indicates display this usage message and exit"
     printf "\n\tif 'arg' is 'minimal' a minimal initialization is performed"
     printf "\n\tif 'arg' is 'brew' Homebrew is installed and used"
-    printf "\n\targ can also be one of games, kitty, or neovim"
+    printf "\n\targ can also be one of games, kitty, durdraw, or neovim"
     printf "\n\t\tindicating installation of removal of arg\n"
   fi
   exit 1
@@ -460,6 +460,19 @@ remove_kitty() {
   [ -d /Applications/kitty.app ] && sudo rm -rf /Applications/kitty.app
 }
 
+remove_durdraw() {
+  [ -f ${HOME}/.venv/bin/activate ] && source ${HOME}/.venv/bin/activate
+  python3 -m pip uninstall -y durdraw >/dev/null 2>&1
+  command -v deactivate && deactivate
+  rm -rf ~/.local/share/durdraw
+  rm -f ~/.local/bin/durdraw
+  rm -f ~/.local/share/man/man1/durdraw.1
+}
+
+install_durdraw() {
+  [ -x ${CONFDIR}/tools/bin/install_durdraw ] && ${CONFDIR}/tools/bin/install_durdraw
+}
+
 remove_neovim() {
   have_brew=$(type -p brew)
   if [ "${have_brew}" ]; then
@@ -726,6 +739,36 @@ have_kitty=$(type -p kitty)
   exit 0
 }
 
+[ "${argument}" == "durdraw" ] && {
+  [ "${remove}" ] && {
+    printf "\nRemoving Durdraw ASCII editor.\n\n"
+    if [ "${prompt}" ]; then
+      while true; do
+        read -r -p "Do you wish to continue with Durdraw removal ? (y/n) " yn
+        case $yn in
+          [Yy]*)
+            break
+            ;;
+          [Nn]*)
+            printf "\nDurdraw removal aborted."
+            printf "\nExiting.\n\n"
+            exit 0
+            ;;
+          *)
+            echo "Please answer yes or no."
+            ;;
+        esac
+      done
+    fi
+    remove_durdraw
+    printf "\n${BOLD}Durdraw removed${NORM}"
+    printf "\nTo re-install Durdraw run ${BOLD}'ascinit durdraw'${NORM}\n\n"
+    exit 0
+  }
+  install_durdraw
+  exit 0
+}
+
 [ "${argument}" == "neovim" ] && {
   [ "${remove}" ] && {
     printf "\nRemoving Neovim text editor.\n\n"
@@ -786,8 +829,9 @@ have_kitty=$(type -p kitty)
   exit 0
 }
 
-# Prompt for Neovim install
+# Prompt for Neovim and Durdraw install
 neovim_install=
+durdraw_install=
 [ "${minimal}" ] || {
   [ -x ${CONFDIR}/tools/bin/lazyman ] && {
     neovim_install=1
@@ -813,6 +857,32 @@ neovim_install=
       done
     else
       neovim_install=1
+    fi
+  }
+  [ -x ${CONFDIR}/tools/bin/install_durdraw ] && {
+    durdraw_install=1
+    printf "\n\n"
+    if [ "${prompt}" ]; then
+      while true; do
+        read -r -p "Install Durdraw ASCII editor (optional but recommended) ? (y/n) " yn
+        case $yn in
+          [Yy]*)
+            durdraw_install=1
+            break
+            ;;
+          [Nn]*)
+            printf "\nSkipping Durdraw installation."
+            printf "\nDurdraw can be installed later with the command 'ascinit durdraw'.\n"
+            durdraw_install=
+            break
+            ;;
+          *)
+            echo "Please answer yes or no."
+            ;;
+        esac
+      done
+    else
+      durdraw_install=1
     fi
   }
 }
@@ -1544,6 +1614,9 @@ have_jp2a=$(type -p jp2a)
 
   # Install Neovim
   [ "${neovim_install}" ] && install_neovim
+
+  # Install Durdraw
+  [ "${durdraw_install}" ] && install_durdraw
 
   # Install Ascii Games
   [ "${games_install}" ] && install_games
