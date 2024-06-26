@@ -2,8 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## Asciiville-3.0.2r2 (2023-11-16)
+## Asciiville-3.0.2r2 (2024-06-26)
 
+- Add `Durdraw` ASCII editor installation and configuration
+- Use single dash options to `wc` for portability
+- Add static path to `readthedocs`
+- Add function to remove html comments safely in `newsboat`
+- Add security policy
+- Add `tmux2k` example configuration to `tmux.conf`
+- Attempt to install the `coreutils` package in `ascinit`
 - Use `npm -g` to install `mapscii` in `ascinit`
 - Add collapsed gallery
 - Use PNG image of Asciiville as header
