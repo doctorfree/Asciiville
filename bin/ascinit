@@ -1772,7 +1772,7 @@ create_new_profile() {
     local profile_ids=($(dconf list $dconfdir/ | grep -v ^list \
       | ${SED} 's/\///g' | ${SED} 's/://g'))
   fi
-local profile_ids_old="$(dconf read "$dconfdir"/list | tr -d "]")"
+  local profile_ids_old="$(dconf read "$dconfdir"/list | tr -d "]")"
   local profile_id="$(uuidgen)"
   [ "${debug}" ] && {
     echo "profile_ids_old=${profile_ids_old}"

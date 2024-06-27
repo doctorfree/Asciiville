@@ -30,8 +30,8 @@
 #
 # shellcheck disable=SC2001,SC2002,SC2016,SC2006,SC2086,SC2181,SC2129,SC2059,SC2076
 
-BOLD=$(tput bold 2>/dev/null)
-NORM=$(tput sgr0 2>/dev/null)
+BOLD=$(tput bold 2> /dev/null)
+NORM=$(tput sgr0 2> /dev/null)
 PLEASE="Please enter your"
 COMMAND=btop
 darwin=
@@ -309,8 +309,8 @@ check_display() {
     have_tty=$(type -p tty)
     [ "${have_tty}" ] && {
       tty=$(tty)
-      echo "${tty}" | grep /dev/tty >/dev/null && consolemode=1
-      echo "${tty}" | grep /dev/con >/dev/null && consolemode=1
+      echo "${tty}" | grep /dev/tty > /dev/null && consolemode=1
+      echo "${tty}" | grep /dev/con > /dev/null && consolemode=1
     }
     # Next check if this is an SSH session
     [ ${consolemode} -eq 0 ] && {
@@ -326,13 +326,13 @@ check_display() {
 kill_tmux_sessions() {
   SESSIONS="asciiville asciisplash"
   for session in ${SESSIONS}; do
-    ps -ef | grep tmux | grep ${session} >/dev/null && {
+    ps -ef | grep tmux | grep ${session} > /dev/null && {
       tmux kill-session -t ${session}
     }
   done
   ASCIIS="asciiart asciijulia asciimpplus asciiplasma"
   for ascii in ${ASCIIS}; do
-    ps -ef | grep -v grep | grep ${ascii} >/dev/null && {
+    ps -ef | grep -v grep | grep ${ascii} > /dev/null && {
       ps -ef | grep -v grep | grep ${ascii} | while IFS= read -r line; do
         pid=$(echo "$line" | awk ' { print $2 } ')
         kill ${pid}
@@ -411,40 +411,40 @@ generate_art() {
 
 save_config() {
   [ -f ${CONFIG} ] && {
-    echo "ARTDIR=${ARTDIR}" >${CONFIG}
-    echo "MUSEDIR=${MUSEDIR}" >>${CONFIG}
-    echo "SONG=${SONG}" >>${CONFIG}
-    echo "ALTSONG=${ALTSONG}" >>${CONFIG}
-    echo "" >>${CONFIG}
-    echo "AUDIO=${AUDIO}" >>${CONFIG}
-    echo "BROWSER=${BROWSER}" >>${CONFIG}
-    echo "COMMAND=\"${COMMAND}\"" >>${CONFIG}
-    echo "FULLSCREEN=${FULLSCREEN}" >>${CONFIG}
-    echo "LOLCAT=\"${LOLCAT}\"" >>${CONFIG}
-    echo "MTITLE=\"${MTITLE}\"" >>${CONFIG}
-    echo "CURRENT=${CURRENT}" >>${CONFIG}
-    echo "GNOME=${GNOME}" >>${CONFIG}
-    echo "RETRO=${RETRO}" >>${CONFIG}
-    echo "TILIX=${TILIX}" >>${CONFIG}
-    echo "KITTY=${KITTY}" >>${CONFIG}
-    echo "XFCE4=${XFCE4}" >>${CONFIG}
-    echo "" >>${CONFIG}
-    echo "shuffle=${shuffle}" >>${CONFIG}
-    echo "length=${length}" >>${CONFIG}
-    echo "use_lolcat=${use_lolcat}" >>${CONFIG}
-    echo "use_lol=${use_lol}" >>${CONFIG}
-    echo "journal=\"${journal}\"" >>${CONFIG}
-    echo "style=\"${style}\"" >>${CONFIG}
-    echo "show_interval=${show_interval}" >>${CONFIG}
-    echo "zoom_depth=${zoom_depth}" >>${CONFIG}
-    echo "zoom_interval=${zoom_interval}" >>${CONFIG}
-    echo "art_font_size=${art_font_size}" >>${CONFIG}
-    echo "txt_font_size=${txt_font_size}" >>${CONFIG}
-    echo "" >>${CONFIG}
-    echo "defchars='${defchars}'" >>${CONFIG}
-    echo "revchars='${revchars}'" >>${CONFIG}
-    echo "revlong='${revlong}'" >>${CONFIG}
-    echo "longchars='${longchars}'" >>${CONFIG}
+    echo "ARTDIR=${ARTDIR}" > ${CONFIG}
+    echo "MUSEDIR=${MUSEDIR}" >> ${CONFIG}
+    echo "SONG=${SONG}" >> ${CONFIG}
+    echo "ALTSONG=${ALTSONG}" >> ${CONFIG}
+    echo "" >> ${CONFIG}
+    echo "AUDIO=${AUDIO}" >> ${CONFIG}
+    echo "BROWSER=${BROWSER}" >> ${CONFIG}
+    echo "COMMAND=\"${COMMAND}\"" >> ${CONFIG}
+    echo "FULLSCREEN=${FULLSCREEN}" >> ${CONFIG}
+    echo "LOLCAT=\"${LOLCAT}\"" >> ${CONFIG}
+    echo "MTITLE=\"${MTITLE}\"" >> ${CONFIG}
+    echo "CURRENT=${CURRENT}" >> ${CONFIG}
+    echo "GNOME=${GNOME}" >> ${CONFIG}
+    echo "RETRO=${RETRO}" >> ${CONFIG}
+    echo "TILIX=${TILIX}" >> ${CONFIG}
+    echo "KITTY=${KITTY}" >> ${CONFIG}
+    echo "XFCE4=${XFCE4}" >> ${CONFIG}
+    echo "" >> ${CONFIG}
+    echo "shuffle=${shuffle}" >> ${CONFIG}
+    echo "length=${length}" >> ${CONFIG}
+    echo "use_lolcat=${use_lolcat}" >> ${CONFIG}
+    echo "use_lol=${use_lol}" >> ${CONFIG}
+    echo "journal=\"${journal}\"" >> ${CONFIG}
+    echo "style=\"${style}\"" >> ${CONFIG}
+    echo "show_interval=${show_interval}" >> ${CONFIG}
+    echo "zoom_depth=${zoom_depth}" >> ${CONFIG}
+    echo "zoom_interval=${zoom_interval}" >> ${CONFIG}
+    echo "art_font_size=${art_font_size}" >> ${CONFIG}
+    echo "txt_font_size=${txt_font_size}" >> ${CONFIG}
+    echo "" >> ${CONFIG}
+    echo "defchars='${defchars}'" >> ${CONFIG}
+    echo "revchars='${revchars}'" >> ${CONFIG}
+    echo "revlong='${revlong}'" >> ${CONFIG}
+    echo "longchars='${longchars}'" >> ${CONFIG}
   }
 }
 
@@ -506,9 +506,9 @@ make_it_so() {
   else
     if [ "${RETRO}" ]; then
       if [ "${FULLSCREEN}" ]; then
-        cool-retro-term --fullscreen -e ${AVCOMM} >/dev/null 2>&1 &
+        cool-retro-term --fullscreen -e ${AVCOMM} > /dev/null 2>&1 &
       else
-        cool-retro-term -e ${AVCOMM} >/dev/null 2>&1 &
+        cool-retro-term -e ${AVCOMM} > /dev/null 2>&1 &
       fi
     else
       if [ "${FULLSCREEN}" ]; then
@@ -520,14 +520,14 @@ make_it_so() {
             --override tab_bar_min_tabs=2 \
             --override startup_session=none \
             ${KITTY_QUIT_OPT} \
-            ${AVCOMM} 2>/dev/null &
+            ${AVCOMM} 2> /dev/null &
         else
           if [ "${TILIX}" ]; then
             tilix --title="${MTITLE}" \
               --full-screen \
               --window-style=borderless \
               --profile=Asciiville \
-              --command="${AVCOMM}" 2>/dev/null &
+              --command="${AVCOMM}" 2> /dev/null &
           else
             if [ "${XFCE4}" ]; then
               xfce4-terminal --title "${MTITLE}" \
@@ -542,7 +542,7 @@ make_it_so() {
                 --hide-menubar \
                 --full-screen \
                 --profile=Asciiville \
-                -- ${AVCOMM} &
+                -- ${AVCOMM} 2> /dev/null &
             fi
           fi
         fi
@@ -557,14 +557,14 @@ make_it_so() {
             --override tab_bar_min_tabs=2 \
             --override startup_session=none \
             ${KITTY_QUIT_OPT} \
-            ${AVCOMM} 2>/dev/null &
+            ${AVCOMM} 2> /dev/null &
         else
           if [ "${TILIX}" ]; then
             tilix --title="${MTITLE}" \
               --window-style=borderless \
               --geometry=90x28+150+25 \
               --profile=Asciiville \
-              --command="${AVCOMM}" 2>/dev/null &
+              --command="${AVCOMM}" 2> /dev/null &
           else
             if [ "${XFCE4}" ]; then
               xfce4-terminal --title "${MTITLE}" \
@@ -703,7 +703,7 @@ add_fullscreen() {
     [ "${have_xprop}" ] && {
       # The things a man must do
       win_id=$(wmctrl -lp | grep $(xprop -root | grep _NET_ACTIVE_WINDOW | head -1 | awk '{print $5}' | ${SED} 's/,//' | ${SED} 's/^0x/0x0/') | awk ' { print $1 } ')
-      [ "${win_id}" ] && xprop -id ${win_id} | grep _NET_WM_STATE | grep FULLSCREEN >/dev/null && isfull=1
+      [ "${win_id}" ] && xprop -id ${win_id} | grep _NET_WM_STATE | grep FULLSCREEN > /dev/null && isfull=1
     }
     [ "${isfull}" ] || {
       wmctrl -r ':ACTIVE:' -b add,fullscreen
@@ -732,7 +732,7 @@ wait_for_done() {
     # read line from fifo_name
     [ -p "${fifo_name}" ] || break
     # read -r -u 3 status<${fifo_name}
-    read -r status <${fifo_name}
+    read -r status < ${fifo_name}
     # if status is done, break from loop
     if [ "${status}" = 'done' ]; then
       break
@@ -830,7 +830,7 @@ show_art_file() {
   else
     if [ "${RETRO}" ]; then
       cool-retro-term --fullscreen \
-        -e show_ascii_art ${showargs} -a "${art}" >/dev/null 2>&1
+        -e show_ascii_art ${showargs} -a "${art}" > /dev/null 2>&1
     else
       if [ "${XFCE4}" ]; then
         add_fullscreen
@@ -932,7 +932,7 @@ play_show() {
   else
     if [ "${RETRO}" ]; then
       cool-retro-term --fullscreen \
-        -e show_ascii_art ${showargs} >/dev/null 2>&1
+        -e show_ascii_art ${showargs} > /dev/null 2>&1
     else
       if [ "${XFCE4}" ]; then
         add_fullscreen
@@ -1013,15 +1013,15 @@ play_slide_show() {
 show_figlet() {
   if [ "${use_lolcat}" ]; then
     if [ "${USE_FONT}" == "Lean" ]; then
-      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} 2>/dev/null | tr ' _/' ' ()' | ${LOLCAT}
+      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} 2> /dev/null | tr ' _/' ' ()' | ${LOLCAT}
     else
-      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} 2>/dev/null | ${LOLCAT}
+      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} 2> /dev/null | ${LOLCAT}
     fi
   else
     if [ "${USE_FONT}" == "Lean" ]; then
-      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} 2>/dev/null | tr ' _/' ' ()'
+      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} 2> /dev/null | tr ' _/' ' ()'
     else
-      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} 2>/dev/null
+      figlet -c -d ${FIG_FONTS} -f "${USE_FONT}" -k -t ${FIG_TEXT} 2> /dev/null
     fi
   fi
 }
@@ -1583,13 +1583,13 @@ show_games_menu() {
     [ "${have_worms}" ] && options+=("Worms                [wO]")
     [ "${have_wump}" ] && options+=("Wump                 [wu]")
     [ "${have_nbsdgames}" ] && options+=("BSD Games Menu       [bg]")
-    numspaces=$((14-${#use_terminal}))
-    [ ${numspaces} -lt 0 ] && numspaces=0
+    numspaces=$((14 - ${#use_terminal}))
     spaces=""
-    for i in $(seq ${numspaces})
-    do
-      spaces="${spaces} "
-    done
+    [ ${numspaces} -gt 0 ] && {
+      for i in $(seq ${numspaces}); do
+        spaces="${spaces} "
+      done
+    }
     options+=("Terminal${spaces} [${use_terminal}]")
     options+=("Applications Menu    [a]")
     [ "${have_showascii}" ] && options+=("Ascii Art Menu       [A]")
@@ -2076,13 +2076,13 @@ show_apps_menu() {
     [ "${have_newsboat}" ] && options+=("Newsboat RSS Feeds   [B]")
     [ "${have_ranger}" ] && options+=("Ranger File Manager  [R]")
     [ "${have_tuir}" ] && options+=("Reddit UI            [e]")
-    numspaces=$((13-${#use_terminal}))
-    [ ${numspaces} -lt 0 ] && numspaces=0
+    numspaces=$((13 - ${#use_terminal}))
     spaces=""
-    for i in $(seq ${numspaces})
-    do
-      spaces="${spaces} "
-    done
+    [ ${numspaces} -gt 0 ] && {
+      for i in $(seq ${numspaces}); do
+        spaces="${spaces} "
+      done
+    }
     options+=("Terminal${spaces} [${use_terminal}]")
     options+=("Games Menu           [g]")
     [ "${have_showascii}" ] && options+=("Ascii Art Menu       [r]")
@@ -3120,9 +3120,9 @@ show_journal_menu() {
       jloc=$(echo ${jloc} | ${SED} -e "s/~//")
     }
     if [ "${uses_tilda}" ]; then
-      file ${HOME}${jloc} | grep -i terminator >/dev/null && encrypted=1
+      file ${HOME}${jloc} | grep -i terminator > /dev/null && encrypted=1
     else
-      file ${jloc} | grep -i terminator >/dev/null && encrypted=1
+      file ${jloc} | grep -i terminator > /dev/null && encrypted=1
     fi
     [ "${have_splash}" ] && options+=("Animations Menu   [A]")
     [ "${have_showascii}" ] && options+=("Ascii Art         [r]")
@@ -3150,21 +3150,21 @@ show_journal_menu() {
           break
           ;;
         "Last"*,* | *,"Last"*)
-          jrnl ${journal} ${formatarg} -n 10 | ${journal_pager} 2>/dev/null
+          jrnl ${journal} ${formatarg} -n 10 | ${journal_pager} 2> /dev/null
           [ "${journal_pager}" == "${PAGER}" ] && {
             read -p "Press Enter to continue" answer
           }
           break
           ;;
         "Yesterday"*,* | *,"Yesterday"*)
-          jrnl ${journal} ${formatarg} -on yesterday | ${journal_pager} 2>/dev/null
+          jrnl ${journal} ${formatarg} -on yesterday | ${journal_pager} 2> /dev/null
           [ "${journal_pager}" == "${PAGER}" ] && {
             read -p "Press Enter to continue" answer
           }
           break
           ;;
         "Today"*,* | *,"Today"*)
-          jrnl ${journal} ${formatarg} -on today | ${journal_pager} 2>/dev/null
+          jrnl ${journal} ${formatarg} -on today | ${journal_pager} 2> /dev/null
           [ "${journal_pager}" == "${PAGER}" ] && {
             read -p "Press Enter to continue" answer
           }
@@ -3172,7 +3172,7 @@ show_journal_menu() {
           ;;
         "This Week"*,* | *,"This Week"*)
           day=$(date +%A)
-          jrnl ${journal} ${formatarg} -from "last ${day}" -to today | ${journal_pager} 2>/dev/null
+          jrnl ${journal} ${formatarg} -from "last ${day}" -to today | ${journal_pager} 2> /dev/null
           [ "${journal_pager}" == "${PAGER}" ] && {
             read -p "Press Enter to continue" answer
           }
@@ -3181,7 +3181,7 @@ show_journal_menu() {
         "This Month"*,* | *,"This Month"*)
           month=$(date +%B)
           year=$(date +%Y)
-          jrnl ${journal} ${formatarg} -on "${month} ${year}" | ${journal_pager} 2>/dev/null
+          jrnl ${journal} ${formatarg} -on "${month} ${year}" | ${journal_pager} 2> /dev/null
           [ "${journal_pager}" == "${PAGER}" ] && {
             read -p "Press Enter to continue" answer
           }
@@ -3189,7 +3189,7 @@ show_journal_menu() {
           ;;
         "This Year"*,* | *,"This Year"*)
           year=$(date +%Y)
-          jrnl ${journal} ${formatarg} -on "${year}" | ${journal_pager} 2>/dev/null
+          jrnl ${journal} ${formatarg} -on "${year}" | ${journal_pager} 2> /dev/null
           [ "${journal_pager}" == "${PAGER}" ] && {
             read -p "Press Enter to continue" answer
           }
@@ -3198,14 +3198,14 @@ show_journal_menu() {
         "Last Year"*,* | *,"Last Year"*)
           year=$(date +%Y)
           year=$((year - 1))
-          jrnl ${journal} ${formatarg} -on "${year}" | ${journal_pager} 2>/dev/null
+          jrnl ${journal} ${formatarg} -on "${year}" | ${journal_pager} 2> /dev/null
           [ "${journal_pager}" == "${PAGER}" ] && {
             read -p "Press Enter to continue" answer
           }
           break
           ;;
         "All"*,* | *,"All"*)
-          jrnl ${journal} ${formatarg} -to today | ${journal_pager} 2>/dev/null
+          jrnl ${journal} ${formatarg} -to today | ${journal_pager} 2> /dev/null
           [ "${journal_pager}" == "${PAGER}" ] && {
             read -p "Press Enter to continue" answer
           }
@@ -3379,18 +3379,15 @@ show_main_menu() {
     [ "${have_bb}" ] && options+=("AAlib Demo (Curses)  [c]")
     [ "${have_mapscii}" ] && options+=("Mapscii World Map    [w]")
     [ "${have_curl}" ] && options+=("Phase of the Moon    [p]")
-    numspaces=$((5-${#show_comm}))
-    [ ${numspaces} -lt 0 ] && numspaces=0
+    show_tots=$((${#show_term} + ${#show_comm}))
+    numspaces=$((12 - ${show_tots}))
     spaces=""
-    for i in $(seq ${numspaces})
-    do
-      spaces="${spaces} "
-    done
-    if [ "${show_term}" == "Current" ]; then
-      options+=("Run ${show_comm} in ${show_term} ${spaces}[C]")
-    else
-      options+=("Run ${show_comm} in ${show_term}  ${spaces}[C]")
-    fi
+    [ ${numspaces} -gt 0 ] && {
+      for i in $(seq ${numspaces}); do
+        spaces="${spaces} "
+      done
+    }
+    options+=("Run ${show_comm} in ${show_term} ${spaces}[C]")
     [ "${have_ddgr}" ] && options+=("Search the Web       [s]")
     [ "${have_curl}" ] && [ -f ${TOOLSBIN}/pokefetch ] && {
       check_display
@@ -3552,7 +3549,7 @@ show_main_menu() {
           break
           ;;
         "Phase"*,* | *,"Phase"* | "p",* | *,"p")
-          curl wttr.in/Moon?AF 2>/dev/null
+          curl wttr.in/Moon?AF 2> /dev/null
           read -p "Press Enter to continue" answer
           skip_it_so=1
           break
@@ -3569,7 +3566,7 @@ show_main_menu() {
             ${TOOLSBIN}/weatherfetch
           }
           printf "\n"
-          curl wttr.in?AFQn1 2>/dev/null | tail -n +6
+          curl wttr.in?AFQn1 2> /dev/null | tail -n +6
           printf "\n"
           read -p "Press Enter to continue" answer
           skip_it_so=1
@@ -3587,7 +3584,7 @@ show_main_menu() {
           break
           ;;
         "Mapscii"*,* | *,"Mapscii"* | "w",* | *,"w")
-          mapscii 2>/dev/null
+          mapscii 2> /dev/null
           skip_it_so=1
           break
           ;;
@@ -3895,7 +3892,7 @@ select_input_dir() {
     done
   else
     image_dir=$(dialog --stdout \
-        --title "Please select an image input folder" \
+      --title "Please select an image input folder" \
       --fselect ${HOME}/Pictures/ 14 48)
   fi
 }
@@ -3933,7 +3930,7 @@ select_output_dir() {
     done
   else
     ascii_dir=$(dialog --stdout \
-        --title "Please select an ascii art output folder" \
+      --title "Please select an ascii art output folder" \
       --fselect ${HOME}/Pictures/ 14 48)
   fi
 }
@@ -3944,7 +3941,7 @@ select_ascii() {
     selectedAscii="$(choose_ascii)"
   else
     selectedAscii=$(dialog --stdout \
-        --title "Please select an ascii art file" \
+      --title "Please select an ascii art file" \
       --fselect ${ARTDIR}/ 14 48)
   fi
   [ "${selectedAscii}" ] && show_art_file "${selectedAscii}"
@@ -3955,12 +3952,12 @@ select_song() {
     selectedSong="$(choose_song)"
   else
     selectedSong=$(dialog --stdout \
-        --title "Please select a song" \
+      --title "Please select a song" \
       --fselect ${HOME}/Music/ 14 48)
   fi
   songfile=
-  file "${selectedSong}" | grep -i audio >/dev/null \
-    || file "${selectedSong}" | grep Ogg >/dev/null && songfile=1
+  file "${selectedSong}" | grep -i audio > /dev/null \
+    || file "${selectedSong}" | grep Ogg > /dev/null && songfile=1
   [ "${songfile}" ] && {
     SONG="${selectedSong}"
     songname=$(basename "${SONG}")
@@ -4281,11 +4278,11 @@ while getopts "Aabc:CdD:E:fFgGiIjJkKlL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
           exit 0
           ;;
         maps | Maps)
-          [ "${have_mapscii}" ] && mapscii 2>/dev/null
+          [ "${have_mapscii}" ] && mapscii 2> /dev/null
           exit 0
           ;;
         moon | Moon)
-          [ "${have_curl}" ] && curl wttr.in/Moon?AF 2>/dev/null
+          [ "${have_curl}" ] && curl wttr.in/Moon?AF 2> /dev/null
           exit 0
           ;;
         news | News)
@@ -4355,14 +4352,14 @@ while getopts "Aabc:CdD:E:fFgGiIjJkKlL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
               ${TOOLSBIN}/weatherfetch
             }
             printf "\n"
-            curl wttr.in?AFQn1 2>/dev/null | tail -n +6
+            curl wttr.in?AFQn1 2> /dev/null | tail -n +6
           }
           exit 0
           ;;
         *)
           FIRST=$(echo ${COMMAND} | awk ' { print $1 } ')
           MTITLE="Asciiville ${COMMAND}"
-          type -p "${FIRST}" >/dev/null || {
+          type -p "${FIRST}" > /dev/null || {
             not_in_path ${FIRST} -c
             if [ "${have_btop}" ]; then
               echo "Continuing, using btop rather than ${COMMAND}."
@@ -4922,7 +4919,7 @@ done
   [ "${have_gum}" ] && [ -x ${TOOLSBIN}/asciifetch ] && {
     [ "${show_ascii_fetch}" ] && {
       ${TOOLSBIN}/asciifetch -a -q
-      [ $? -eq 0 ] || tput cup 0 0 2>/dev/null
+      [ $? -eq 0 ] || tput cup 0 0 2> /dev/null
     }
   }
   show_main_menu
