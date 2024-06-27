@@ -24,6 +24,7 @@ pkg/dist/arch
 pkg/dist/fedora
 pkg/dist/mac
 pkg/dist/rpi
+asciiville
 
 conf/cool-retro-term
 pics
