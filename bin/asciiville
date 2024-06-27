@@ -300,6 +300,22 @@ usage() {
   exit 1
 }
 
+# Display a heading with rich-cli or printf
+heading() {
+  tput clear
+  if [ "${have_rich}" ]; then
+    rich "[cyan]$1[/cyan]" -p -a rounded -c -C
+  else
+    printf "\n$1\n"
+  fi
+}
+
+# Successful exit gets a farewell message
+farewell_exit() {
+  heading "$1" "Farewell"
+  exit 0
+}
+
 check_display() {
   # on a Mac we assume this is not the console but a terminal window
   [ "${darwin}" ] && return 0
@@ -579,7 +595,7 @@ make_it_so() {
                 --hide-menubar \
                 --geometry 90x28+150+25 \
                 --profile=Asciiville \
-                -- ${AVCOMM} &
+                -- ${AVCOMM} 2> /dev/null &
             fi
           fi
         fi
@@ -850,7 +866,7 @@ show_art_file() {
           tilix --full-screen \
             --window-style=borderless \
             --profile=Asciiville \
-            --command="show_ascii_art -e tilix ${showargs} -a '${art}'"
+            --command="show_ascii_art -e tilix ${showargs} -a '${art}'" 2> /dev/null
         else
           if [ "${KITTY}" ]; then
             kitty --listen-on unix:${sock_name} \
@@ -868,7 +884,7 @@ show_art_file() {
           else
             gnome-terminal --window --full-screen \
               --profile=Asciiville \
-              -- show_ascii_art -e gnome ${showargs} -a "${art}"
+              -- show_ascii_art -e gnome ${showargs} -a "${art}" 2> /dev/null
           fi
         fi
       fi
@@ -952,7 +968,7 @@ play_show() {
           tilix --full-screen \
             --window-style=borderless \
             --profile=Asciiville \
-            --command="show_ascii_art -e tilix ${showargs}"
+            --command="show_ascii_art -e tilix ${showargs}" 2> /dev/null
         else
           if [ "${KITTY}" ]; then
             kitty --listen-on unix:${sock_name} \
@@ -969,7 +985,7 @@ play_show() {
           else
             gnome-terminal --window --full-screen \
               --profile=Asciiville \
-              -- show_ascii_art -e gnome ${showargs}
+              -- show_ascii_art -e gnome ${showargs} 2> /dev/null
           fi
         fi
       fi
@@ -1206,8 +1222,7 @@ select_terminal() {
           ;;
         "Quit"*,* | *,"Quit"* | "quit",* | *,"quit" | "q",* | *,"q")
           remove_fullscreen
-          printf "\nExiting Asciiville\n"
-          exit 0
+          farewell_exit "Leaving Asciiville"
           ;;
         *,* | *,*)
           printf "\nCould not match '${REPLY}' with a menu entry."
@@ -1496,8 +1511,7 @@ show_help_menu() {
           ;;
         "Quit"*,* | *,"Quit"* | "quit",* | *,"quit" | "q",* | *,"q")
           remove_fullscreen
-          printf "\nExiting Asciiville\n"
-          exit 0
+          farewell_exit "Leaving Asciiville"
           ;;
         *,* | *,*)
           printf "\nCould not match '${REPLY}' with a menu entry."
@@ -2013,8 +2027,7 @@ show_games_menu() {
           ;;
         "Quit"*,* | *,"Quit"* | "quit",* | *,"quit" | "q",* | *,"q")
           remove_fullscreen
-          printf "\nExiting Asciiville\n"
-          exit 0
+          farewell_exit "Leaving Asciiville"
           ;;
         *,* | *,*)
           printf "\nCould not match '${REPLY}' with a menu entry."
@@ -2256,8 +2269,7 @@ show_apps_menu() {
           ;;
         "Quit"*,* | *,"Quit"* | "quit",* | *,"quit" | "q",* | *,"q")
           remove_fullscreen
-          printf "\nExiting Asciiville\n"
-          exit 0
+          farewell_exit "Leaving Asciiville"
           ;;
         *,* | *,*)
           printf "\nCould not match '${REPLY}' with a menu entry."
@@ -2654,8 +2666,7 @@ show_art_menu() {
           ;;
         "Quit"*,* | *,"Quit"* | "quit",* | *,"quit" | "q",* | *,"q")
           remove_fullscreen
-          printf "\nExiting Asciiville\n"
-          exit 0
+          farewell_exit "Leaving Asciiville"
           ;;
         *,* | *,*)
           printf "\nCould not match '${REPLY}' with a menu entry."
@@ -3029,8 +3040,7 @@ show_animation_menu() {
           ;;
         "Quit"*,* | *,"Quit"* | "quit",* | *,"quit" | "q",* | *,"q")
           remove_fullscreen
-          printf "\nExiting Asciiville\n"
-          exit 0
+          farewell_exit "Leaving Asciiville"
           ;;
         *,* | *,*)
           printf "\nCould not match '${REPLY}' with a menu entry."
@@ -3271,8 +3281,7 @@ show_journal_menu() {
           ;;
         "Quit"*,* | *,"Quit"* | "quit",* | *,"quit" | "q",* | *,"q")
           remove_fullscreen
-          printf "\nExiting Asciiville\n"
-          exit 0
+          farewell_exit "Leaving Asciiville"
           ;;
         *,* | *,*)
           printf "\nCould not match '${REPLY}' with a menu entry."
@@ -3783,8 +3792,7 @@ show_main_menu() {
           ;;
         "Quit"*,* | *,"Quit"* | "quit",* | *,"quit" | "q",* | *,"q")
           remove_fullscreen
-          printf "\nExiting Asciiville\n"
-          exit 0
+          farewell_exit "Leaving Asciiville"
           ;;
         *,* | *,*)
           printf "\nCould not match '${REPLY}' with a menu entry."

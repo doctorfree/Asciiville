@@ -1725,6 +1725,7 @@ have_googler=$(type -p googler)
 }
 
 install_pipx
+have_pipx=$(type -p pipx)
 
 # Install the 'jrnl' command if not already installed
 have_jrnl=$(type -p jrnl)
@@ -1732,7 +1733,11 @@ have_jrnl=$(type -p jrnl)
   [ "${quiet}" ] || {
     printf "\n\tInstalling and configuring jrnl ..."
   }
-  pipx install jrnl >/dev/null 2>&1
+  if [ "${have_pipx}" ]; then
+    pipx install jrnl >/dev/null 2>&1
+  else
+    ${PYTHON} -m pip install jrnl >/dev/null 2>&1
+  fi
   echo "Welcome to @jrnl" >/tmp/jrnl$$
   echo "" >>/tmp/jrnl$$
   echo "A simple command line journal application" >>/tmp/jrnl$$
@@ -1752,7 +1757,11 @@ have_jrnl=$(type -p jrnl)
   [ "${quiet}" ] || {
     printf "\n\tInstalling rich-cli ..."
   }
-  pipx install rich-cli >/dev/null 2>&1
+  if [ "${have_pipx}" ]; then
+    pipx install rich-cli >/dev/null 2>&1
+  else
+    ${PYTHON} -m pip install rich-cli >/dev/null 2>&1
+  fi
   [ "${quiet}" ] || {
     printf " done"
   }
