@@ -2060,7 +2060,10 @@ show_apps_menu() {
     PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORM}"
     options=()
     [ "${have_aewan}" ] && options+=("Aewan Art Creation   [A]")
-    [ "${have_durdraw}" ] && options+=("Durdraw ASCII editor [d]")
+    [ "${have_durdraw}" ] && {
+      options+=("Durdraw ASCII Editor [d]")
+      options+=("Durdraw Examples     [e]")
+    }
     [ "${have_btop}" ] && options+=("Btop System Monitor  [b]")
     [ "${have_gdu}" ] && options+=("Disk Usage Analyzer  [D]")
     [ "${have_lynx}" ] && options+=("Lynx Web Browser     [l]")
@@ -2119,8 +2122,14 @@ show_apps_menu() {
           make_it_so
           break
           ;;
+        "Durdraw Examples"*,* | *,"Durdraw Examples"* | "e",* | *,"e")
+          COMMAND="${DURDRAW} examples"
+          MTITLE="Durdraw ASCII Editor"
+          make_it_so
+          break
+          ;;
         "Durdraw"*,* | *,"Durdraw"* | "d",* | *,"d")
-          COMMAND=durdraw
+          COMMAND=${DURDRAW}
           MTITLE="Durdraw ASCII Editor"
           make_it_so
           break
@@ -4050,7 +4059,13 @@ init_vars
 # Without any arguments, bring up interactive dialog menu
 [ $# -eq 0 ] && INTERACTIVE=1
 have_aewan=$(type -p aewan)
-have_durdraw=$(type -p durdraw)
+DURDRAW=$(command -v durdraw)
+[ -x ${HOME}/.local/bin/durdraw ] && DURDRAW=${HOME}/.local/bin/durdraw
+if [ "${DURDRAW}" ]; then
+  have_durdraw=1
+else
+  have_durdraw=
+fi
 have_btop=$(type -p btop)
 if [ -x ${TOP}/share/endoh1/endoh1 ]; then
   have_endo=1
