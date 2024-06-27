@@ -3099,11 +3099,12 @@ show_journal_menu() {
     else
       file ${jloc} | grep -i terminator >/dev/null && encrypted=1
     fi
-    [ "${have_splash}" ] && options+=("Animations Menu")
-    [ "${have_showascii}" ] && options+=("Ascii Art")
-    options+=("Applications Menu")
-    options+=("Games Menu")
-    options+=("Main Menu" "Quit [q]")
+    [ "${have_splash}" ] && options+=("Animations Menu   [A]")
+    [ "${have_showascii}" ] && options+=("Ascii Art         [r]")
+    options+=("Applications Menu [a]")
+    options+=("Games Menu        [g]")
+    options+=("Main Menu         [m]")
+    options+=("Quit              [q]")
     select opt in "${options[@]}"; do
       case "$opt,$REPLY" in
         "h",* | *,"h" | "H",* | *,"H" | "help",* | *,"help" | "Help",* | *,"Help")
@@ -3223,23 +3224,23 @@ show_journal_menu() {
           jrnl ${journal} --encrypt
           break
           ;;
-        "Animation"*,* | *,"Animation"*)
+        "Animation"*,* | *,"Animation"* | "A",* | *,"A")
           animation_menu=1
           break 2
           ;;
-        "Ascii"*,* | *,"Ascii"*)
+        "Ascii"*,* | *,"Ascii"* | "r",* | *,"r")
           art_menu=1
           break 2
           ;;
-        "Application"*,* | *,"Application"*)
+        "Application"*,* | *,"Application"* | "a",* | *,"a")
           app_menu=1
           break 2
           ;;
-        "Games"*,* | *,"Games"*)
+        "Games"*,* | *,"Games"* | "g",* | *,"g")
           games_menu=1
           break 2
           ;;
-        "Main"*,* | *,"Main"* | "main"*,* | *,"main"* | "Back"*,* | *,"Back"* | "back"*,* | *,"back"*)
+        "Main"*,* | *,"Main"* | "main"*,* | *,"main"* | "Back"*,* | *,"Back"* | "back"*,* | *,"back"* | "m",* | *,"m")
           main_menu=1
           break 2
           ;;
@@ -3342,29 +3343,29 @@ show_main_menu() {
     }
     PS3="${BOLD}${PLEASE} choice (numeric or text, 'h' for help): ${NORM}"
     options=()
-    [ "${have_showascii}" ] && options+=("Ascii Art")
-    [ "${have_splash}" ] && options+=("ASCII Animations")
+    [ "${have_showascii}" ] && options+=("Ascii Art            [r]")
+    [ "${have_splash}" ] && options+=("ASCII Animations     [A]")
     options+=("Applications         [a]")
     options+=("Games                [g]")
     [ "${have_bb}" ] && {
       check_display
-      [ $? -eq 0 ] && options+=("AAlib Demo (X11 mode)")
+      [ $? -eq 0 ] && options+=("AAlib Demo (X11)     [x]")
     }
-    [ "${have_bb}" ] && options+=("AAlib Demo (Curses mode)")
-    [ "${have_mapscii}" ] && options+=("Mapscii World Map")
-    [ "${have_curl}" ] && options+=("Phase of the Moon")
-    options+=("Run ${show_comm} in ${show_term}")
-    [ "${have_ddgr}" ] && options+=("Search the Web")
+    [ "${have_bb}" ] && options+=("AAlib Demo (Curses)  [c]")
+    [ "${have_mapscii}" ] && options+=("Mapscii World Map    [w]")
+    [ "${have_curl}" ] && options+=("Phase of the Moon    [p]")
+    options+=("Run ${show_comm} in ${show_term} [C]")
+    [ "${have_ddgr}" ] && options+=("Search the Web       [s]")
     [ "${have_curl}" ] && [ -x ${TOOLSBIN}/pokefetch ] && {
       check_display
-      [ $? -eq 0 ] && options+=("Show a Pokemon")
+      [ $? -eq 0 ] && options+=("Show a Pokemon       [P]")
     }
-    [ "${have_speed}" ] && options+=("Speed Test")
-    [ "${have_curl}" ] && options+=("Weather Report")
-    options+=("Generate ASCII Art")
-    options+=("Kill Tmux Sessions")
-    [ "${have_neofetch}" ] || [ "${have_fastfetch}" ] && options+=("Show System Info")
-    [ "${have_got}" ] && options+=("Text Translation Tool")
+    [ "${have_speed}" ] && options+=("Speed Test           [t]")
+    [ "${have_curl}" ] && options+=("Weather Report       [W]")
+    options+=("Generate ASCII Art   [G]")
+    options+=("Kill Tmux Sessions   [k]")
+    [ "${have_neofetch}" ] || [ "${have_fastfetch}" ] && options+=("Show System Info     [i]")
+    [ "${have_got}" ] && options+=("Text Translation     [T]")
     [ "${have_lolcat}" ] && options+=("Use Lolcat Coloring [${use_lol}]")
     options+=("Use Tmux            [${usetmux}]")
     [ "${have_asciinema}" ] && [ "${TMUX}" ] && options+=("Record Tmux Session [${recordstat}]")
@@ -3401,7 +3402,7 @@ show_main_menu() {
           skip_it_so=1
           break
           ;;
-        "Run ${show_comm} in ${show_term}",* | *,"Run ${show_comm} in ${show_term}")
+        "Run ${show_comm} in ${show_term}",* | *,"Run ${show_comm} in ${show_term}" | "C",* | *,"C")
           break
           ;;
         "Default"*,* | *,"Default"*)
@@ -3493,7 +3494,7 @@ show_main_menu() {
           skip_it_so=1
           break
           ;;
-        "AAlib Demo (Curses mode)",* | *,"AAlib Demo (Curses mode)")
+        "AAlib Demo (Curses)",* | *,"AAlib Demo (Curses)" | "c",* | *,"c")
           SAVED_DISPLAY="${DISPLAY}"
           export DISPLAY=""
           if [ "${AUDIO}" ]; then
@@ -3505,7 +3506,7 @@ show_main_menu() {
           export DISPLAY="${SAVED_DISPLAY}"
           break
           ;;
-        "AAlib Demo (X11 mode)",* | *,"AAlib Demo (X11 mode)")
+        "AAlib Demo (X11)",* | *,"AAlib Demo (X11)" | "x",* | *,"x")
           if [ "${AUDIO}" ]; then
             bash ${TOOLSBIN}/bb-tmux -a
           else
@@ -3514,19 +3515,19 @@ show_main_menu() {
           skip_it_so=1
           break
           ;;
-        "Phase"*,* | *,"Phase"*)
+        "Phase"*,* | *,"Phase"* | "p",* | *,"p")
           curl wttr.in/Moon?AF 2>/dev/null
           read -p "Press Enter to continue" answer
           skip_it_so=1
           break
           ;;
-        "Show a Pok"*,* | *,"Show a Pok"*)
+        "Show a Pok"*,* | *,"Show a Pok"* | "P",* | *,"P")
           ${TOOLSBIN}/pokefetch
           read -p "Press Enter to continue" answer
           skip_it_so=1
           break
           ;;
-        "Weather"*,* | *,"Weather"*)
+        "Weather"*,* | *,"Weather"* | "W",* | *,"W")
           printf "\n"
           [ -x ${TOOLSBIN}/weatherfetch ] && {
             ${TOOLSBIN}/weatherfetch
@@ -3538,18 +3539,18 @@ show_main_menu() {
           skip_it_so=1
           break
           ;;
-        "Speed"*,* | *,"Speed"*)
+        "Speed"*,* | *,"Speed"* | "t",* | *,"t")
           speedtest-cli
           read -p "Press Enter to continue" answer
           skip_it_so=1
           break
           ;;
-        "Search"*,* | *,"Search"*)
+        "Search"*,* | *,"Search"* | "s",* | *,"s")
           ddgr
           skip_it_so=1
           break
           ;;
-        "Mapscii"*,* | *,"Mapscii"*)
+        "Mapscii"*,* | *,"Mapscii"* | "w",* | *,"w")
           mapscii
           skip_it_so=1
           break
@@ -3580,7 +3581,7 @@ show_main_menu() {
           skip_it_so=1
           break
           ;;
-        "Show System"*,* | *,"Show System"*)
+        "Show System"*,* | *,"Show System"* | "i",* | *,"i")
           if [ "${have_fastfetch}" ]; then
             fastfetch
           else
@@ -3590,11 +3591,11 @@ show_main_menu() {
           skip_it_so=1
           break
           ;;
-        "ASCII"*,* | *,"ASCII"*)
+        "ASCII"*,* | *,"ASCII"* | "A",* | *,"A")
           animation_menu=1
           break 2
           ;;
-        "Ascii Art"*,* | *,"Ascii Art"*)
+        "Ascii Art"*,* | *,"Ascii Art"* | "r",* | *,"r")
           art_menu=1
           break 2
           ;;
@@ -3610,17 +3611,17 @@ show_main_menu() {
           select_game_menu=1
           break 2
           ;;
-        "Generate"*,* | *,"Generate"*)
+        "Generate"*,* | *,"Generate"* | "G",* | *,"G")
           generate_art
           skip_it_so=1
           break
           ;;
-        "Text"*,* | *,"Text"*)
+        "Text"*,* | *,"Text"* | "T",* | *,"T")
           got
           skip_it_so=1
           break
           ;;
-        "Kill"*,* | *,"Kill"*)
+        "Kill"*,* | *,"Kill"* | "k",* | *,"k")
           kill_tmux_sessions
           skip_it_so=1
           break
