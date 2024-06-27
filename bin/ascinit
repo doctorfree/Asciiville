@@ -1966,8 +1966,7 @@ create_new_profile() {
     }
   }
   # Install GOT
-  have_got=$(type -p got)
-  [ "${have_got}" ] || {
+  [ "${have_go}" ] && {
     [ "${quiet}" ] || {
       printf "\n\tInstalling got ..."
     }
@@ -1978,17 +1977,15 @@ create_new_profile() {
   }
   # Setup default got configuration for this user unless one exists
   [ -f ${CONFDIR}/got/config.yml ] && {
-    [ -f ${USERCONF}/got/config.yml ] || {
-      [ -d ${USERCONF} ] || mkdir -p ${USERCONF}
-      [ -d ${USERCONF}/got ] || mkdir -p ${USERCONF}/got
-      cp ${CONFDIR}/got/config.yml ${USERCONF}/got/config.yml
-      [ "${LANG}" ] && {
-        lang=$(echo ${LANG} | awk -F '.' '{print $1}' | awk -F '_' '{print $1}')
-        [ "${lang}" == "en" ] || {
-          cat ${USERCONF}/got/config.yml | ${SED} -e "s/source: en/source: ${lang}/" -e "s/target: es/target: en/" >/tmp/gotconf$$
-          cp /tmp/gotconf$$ ${USERCONF}/got/config.yml
-          rm -f /tmp/gotconf$$
-        }
+    [ -d ${USERCONF} ] || mkdir -p ${USERCONF}
+    [ -d ${USERCONF}/got ] || mkdir -p ${USERCONF}/got
+    cp ${CONFDIR}/got/config.yml ${USERCONF}/got/config.yml
+    [ "${LANG}" ] && {
+      lang=$(echo ${LANG} | awk -F '.' '{print $1}' | awk -F '_' '{print $1}')
+      [ "${lang}" == "en" ] || {
+        cat ${USERCONF}/got/config.yml | ${SED} -e "s/source: en/source: ${lang}/" -e "s/target: es/target: en/" >/tmp/gotconf$$
+        cp /tmp/gotconf$$ ${USERCONF}/got/config.yml
+        rm -f /tmp/gotconf$$
       }
     }
   }

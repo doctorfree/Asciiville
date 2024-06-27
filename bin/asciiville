@@ -734,7 +734,7 @@ remove_fullscreen() {
     [ "${isfull}" ] || {
       wmctrl -r ':ACTIVE:' -b remove,fullscreen
       # wmctrl -r ':ACTIVE:' -b remove,maximized_vert,maximized_horz,fullscreen
-      clear
+      tput clear
       sleep 0.2
     }
   }
@@ -788,7 +788,7 @@ show_art_file() {
   showargs="${art_dir} -v -C ${cycarg} -D ${show_interval} ${lolarg} ${audarg}"
   [ "${slideshow}" == "files" ] && showargs="${showargs} -W"
   save_config
-  clear
+  tput clear
   if [ "${CURRENT}" ]; then
     num_exp='^[0-9]+$'
     termname=unknown
@@ -858,7 +858,7 @@ show_art_file() {
           --hide-scrollbar \
           --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs} -a '${art}'" &
         wait_for_done
-        clear
+        tput clear
         sleep 2
         remove_fullscreen
       else
@@ -893,7 +893,7 @@ show_art_file() {
 }
 
 play_show() {
-  clear
+  tput clear
   if [ "${CURRENT}" ]; then
     add_fullscreen
     num_exp='^[0-9]+$'
@@ -960,7 +960,7 @@ play_show() {
           --hide-scrollbar \
           --command="show_ascii_art -e xfce4 -K ${fifo_name} ${showargs}" &
         wait_for_done
-        clear
+        tput clear
         sleep 2
         remove_fullscreen
       else
@@ -1067,6 +1067,8 @@ set_use_terminal() {
 }
 
 select_terminal() {
+  tput clear
+  printf "\n"
   app_menu=
   art_menu=
   games_menu=
@@ -1106,7 +1108,7 @@ select_terminal() {
     else
       use_current="${NO}"
     fi
-    clear
+    tput clear
     set_show_term
     [ "${use_figlet}" ] && {
       select_font Terminal
@@ -1134,8 +1136,6 @@ select_terminal() {
     select opt in "${options[@]}"; do
       case "$opt,$REPLY" in
         "h",* | *,"h" | "H",* | *,"H" | "help",* | *,"help" | "Help",* | *,"Help")
-          clear
-          printf "\n"
           show_help_menu
           break
           ;;
@@ -1237,39 +1237,28 @@ select_terminal() {
     done
   done
   [ "${app_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_apps_menu
   }
   [ "${art_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_art_menu
   }
   [ "${games_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_games_menu
   }
   [ "${journal_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_journal_menu
   }
   [ "${animation_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_animation_menu
   }
   [ "${main_menu}" ] && {
-    clear
-    printf "\n"
-    init_vars
     show_main_menu
   }
 }
 
 show_help_menu() {
+  tput clear
+  printf "\n"
   MTITLE="Asciiville Help"
   while true; do
     [ "${use_figlet}" ] && {
@@ -1525,18 +1514,21 @@ show_help_menu() {
       REPLY=
     done
   done
-  clear
+  tput clear
   printf "\n"
 }
 
 show_games_menu() {
+  tput clear
+  printf "\n\n\n"
   main_menu=
   art_menu=
   while true; do
+    clearscreen=1
     [ "${COMMAND}" ] || COMMAND=tetris
     set_use_terminal
     show_comm=$(echo ${COMMAND} | awk ' { print $1 } ')
-    clear
+    tput clear
     set_show_term
     [ "${use_figlet}" ] && {
       select_font AsciiGameTerm
@@ -1612,8 +1604,6 @@ show_games_menu() {
     select opt in "${options[@]}"; do
       case "$opt,$REPLY" in
         "h",* | *,"h" | "H",* | *,"H" | "help",* | *,"help" | "Help",* | *,"Help")
-          clear
-          printf "\n"
           show_help_menu
           break
           ;;
@@ -1622,8 +1612,6 @@ show_games_menu() {
           break 2
           ;;
         "Terminal"*,* | *,"Terminal"* | "terminal"*,* | *,"terminal"*)
-          clear
-          printf "\n"
           select_terminal
           break
           ;;
@@ -2030,8 +2018,11 @@ show_games_menu() {
           farewell_exit "Leaving Asciiville"
           ;;
         *,* | *,*)
+          clearscreen=
+          tput clear
           printf "\nCould not match '${REPLY}' with a menu entry."
           printf "\nPlease try again with an exact match.\n"
+          printf "\n"
           [ "${use_figlet}" ] && {
             select_font AsciiGameTerm
             show_figlet
@@ -2040,28 +2031,27 @@ show_games_menu() {
       esac
       REPLY=
     done
+    [ "${clearscreen}" ] && tput clear
   done
   [ "${art_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_art_menu
   }
   [ "${main_menu}" ] && {
-    clear
-    printf "\n"
-    init_vars
     show_main_menu
   }
 }
 
 show_apps_menu() {
+  tput clear
+  printf "\n\n\n"
   main_menu=
   art_menu=
   while true; do
+    clearscreen=1
     [ "${COMMAND}" ] || COMMAND=btop
     set_use_terminal
     show_comm=$(echo ${COMMAND} | awk ' { print $1 } ')
-    clear
+    tput clear
     set_show_term
     [ "${use_figlet}" ] && {
       select_font AsciiAppTerm
@@ -2104,8 +2094,6 @@ show_apps_menu() {
     select opt in "${options[@]}"; do
       case "$opt,$REPLY" in
         "h",* | *,"h" | "H",* | *,"H" | "help",* | *,"help" | "Help",* | *,"Help")
-          clear
-          printf "\n"
           show_help_menu
           break
           ;;
@@ -2114,8 +2102,6 @@ show_apps_menu() {
           break 2
           ;;
         "Terminal"*,* | *,"Terminal"* | "terminal"*,* | *,"terminal"*)
-          clear
-          printf "\n"
           select_terminal
           break
           ;;
@@ -2272,8 +2258,11 @@ show_apps_menu() {
           farewell_exit "Leaving Asciiville"
           ;;
         *,* | *,*)
+          clearscreen=
+          tput clear
           printf "\nCould not match '${REPLY}' with a menu entry."
           printf "\nPlease try again with an exact match.\n"
+          printf "\n"
           [ "${use_figlet}" ] && {
             select_font AsciiAppTerm
             show_figlet
@@ -2282,25 +2271,24 @@ show_apps_menu() {
       esac
       REPLY=
     done
+    [ "${clearscreen}" ] && tput clear
   done
   [ "${art_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_art_menu
   }
   [ "${main_menu}" ] && {
-    clear
-    printf "\n"
-    init_vars
     show_main_menu
   }
 }
 
 show_art_menu() {
+  tput clear
+  printf "\n\n\n"
   animation_menu=
   app_menu=
   main_menu=
   while true; do
+    clearscreen=1
     if [ "${AUDIO}" ]; then
       audiostat="YES"
       audarg="-P -S ${SONG}"
@@ -2376,8 +2364,6 @@ show_art_menu() {
     select opt in "${options[@]}"; do
       case "$opt,$REPLY" in
         "h",* | *,"h" | "H",* | *,"H" | "help",* | *,"help" | "Help",* | *,"Help")
-          clear
-          printf "\n"
           show_help_menu
           break
           ;;
@@ -2394,8 +2380,6 @@ show_art_menu() {
           break 2
           ;;
         "Terminal"*,* | *,"Terminal"* | "terminal"*,* | *,"terminal"*)
-          clear
-          printf "\n"
           select_terminal
           break
           ;;
@@ -2669,8 +2653,11 @@ show_art_menu() {
           farewell_exit "Leaving Asciiville"
           ;;
         *,* | *,*)
+          clearscreen=
+          tput clear
           printf "\nCould not match '${REPLY}' with a menu entry."
           printf "\nPlease try again with an exact match.\n"
+          printf "\n"
           [ "${use_figlet}" ] && {
             select_font AsciiArt
             show_figlet
@@ -2679,26 +2666,22 @@ show_art_menu() {
       esac
       REPLY=
     done
+    [ "${clearscreen}" ] && tput clear
   done
   [ "${main_menu}" ] && {
-    clear
-    printf "\n"
-    init_vars
     show_main_menu
   }
   [ "${animation_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_animation_menu
   }
   [ "${app_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_apps_menu
   }
 }
 
 show_animation_menu() {
+  tput clear
+  printf "\n\n\n"
   app_menu=
   art_menu=
   games_menu=
@@ -2706,6 +2689,7 @@ show_animation_menu() {
   main_menu=
   MTITLE="ASCII Animation"
   while true; do
+    clearscreen=1
     DO_SPLASH=1
     if [ "${AUDIO}" ]; then
       audiostat="YES"
@@ -2771,8 +2755,6 @@ show_animation_menu() {
     select opt in "${options[@]}"; do
       case "$opt,$REPLY" in
         "h",* | *,"h" | "H",* | *,"H" | "help",* | *,"help" | "Help",* | *,"Help")
-          clear
-          printf "\n"
           show_help_menu
           skip_it_so=1
           break
@@ -2782,8 +2764,6 @@ show_animation_menu() {
           break 2
           ;;
         "Terminal"*,* | *,"Terminal"* | "terminal"*,* | *,"terminal"*)
-          clear
-          printf "\n"
           select_terminal
           skip_it_so=1
           break
@@ -2794,7 +2774,7 @@ show_animation_menu() {
           break
           ;;
         "Asciiville Splash"*,* | *,"Asciiville Splash"*)
-          clear
+          tput clear
           ${TOOLSBIN}/asciifetch -a -f
           ${TOOLSBIN}/asciifetch -z -f
           skip_it_so=1
@@ -3009,7 +2989,7 @@ show_animation_menu() {
           ;;
         "Neovim"*,* | *,"Neovim"* | "N",* | *,"N")
           lazyman
-          clear
+          tput clear
           skip_it_so=1
           break
           ;;
@@ -3019,7 +2999,7 @@ show_animation_menu() {
             show_figlet
           }
           mpplus -i
-          clear
+          tput clear
           skip_it_so=1
           break
           ;;
@@ -3029,7 +3009,7 @@ show_animation_menu() {
             show_figlet
           }
           roon
-          clear
+          tput clear
           skip_it_so=1
           break
           ;;
@@ -3043,8 +3023,11 @@ show_animation_menu() {
           farewell_exit "Leaving Asciiville"
           ;;
         *,* | *,*)
+          clearscreen=
+          tput clear
           printf "\nCould not match '${REPLY}' with a menu entry."
           printf "\nPlease try again with an exact match.\n"
+          printf "\n"
           [ "${use_figlet}" ] && {
             select_font Asciimatics
             show_figlet
@@ -3061,36 +3044,28 @@ show_animation_menu() {
       # }
       init_vars
     }
+    [ "${clearscreen}" ] && tput clear
   done
   [ "${art_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_art_menu
   }
   [ "${journal_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_journal_menu
   }
   [ "${app_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_apps_menu
   }
   [ "${games_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_games_menu
   }
   [ "${main_menu}" ] && {
-    clear
-    printf "\n"
-    init_vars
     show_main_menu
   }
 }
 
 show_journal_menu() {
+  tput clear
+  printf "\n\n\n"
   app_menu=
   art_menu=
   games_menu=
@@ -3098,6 +3073,7 @@ show_journal_menu() {
   main_menu=
 
   while true; do
+    clearscreen=1
     [ "${use_figlet}" ] && {
       select_font Journal
       show_figlet
@@ -3134,17 +3110,15 @@ show_journal_menu() {
     else
       file ${jloc} | grep -i terminator > /dev/null && encrypted=1
     fi
-    [ "${have_splash}" ] && options+=("Animations Menu   [A]")
-    [ "${have_showascii}" ] && options+=("Ascii Art         [r]")
-    options+=("Applications Menu [a]")
-    options+=("Games Menu        [g]")
-    options+=("Main Menu         [m]")
-    options+=("Quit              [q]")
+    [ "${have_splash}" ] && options+=("Animations Menu       [A]")
+    [ "${have_showascii}" ] && options+=("Ascii Art             [r]")
+    options+=("Applications Menu     [a]")
+    options+=("Games Menu            [g]")
+    options+=("Main Menu             [m]")
+    options+=("Quit                  [q]")
     select opt in "${options[@]}"; do
       case "$opt,$REPLY" in
         "h",* | *,"h" | "H",* | *,"H" | "help",* | *,"help" | "Help",* | *,"Help")
-          clear
-          printf "\n"
           show_help_menu
           break
           ;;
@@ -3284,8 +3258,11 @@ show_journal_menu() {
           farewell_exit "Leaving Asciiville"
           ;;
         *,* | *,*)
+          tput clear
           printf "\nCould not match '${REPLY}' with a menu entry."
           printf "\nPlease try again with an exact match.\n"
+          printf "\n"
+          clearscreen=
           [ "${use_figlet}" ] && {
             select_font Journal
             show_figlet
@@ -3294,42 +3271,36 @@ show_journal_menu() {
       esac
       REPLY=
     done
+    [ "${clearscreen}" ] && tput clear
   done
   [ "${animation_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_animation_menu
   }
   [ "${art_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_art_menu
   }
   [ "${app_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_apps_menu
   }
   [ "${games_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_games_menu
   }
   [ "${main_menu}" ] && {
-    clear
-    printf "\n"
-    init_vars
     show_main_menu
   }
 }
 
 show_main_menu() {
+  tput clear
+  printf "\n"
+  init_vars
   art_menu=
   animation_menu=
   journal_menu=
   select_app_menu=
   select_game_menu=
   while true; do
+    clearscreen=1
     if [ "${AUDIO}" ]; then
       audiostat="YES"
       audarg="-P -S ${SONG}"
@@ -3367,7 +3338,7 @@ show_main_menu() {
     fi
     [ "${COMMAND}" ] || COMMAND=btop
     show_comm=$(echo ${COMMAND} | awk ' { print $1 } ')
-    clear
+    tput clear
     set_use_terminal
     set_show_term
     skip_it_so=
@@ -3431,15 +3402,11 @@ show_main_menu() {
     select opt in "${options[@]}"; do
       case "$opt,$REPLY" in
         "h",* | *,"h" | "H",* | *,"H" | "help",* | *,"help" | "Help",* | *,"Help")
-          clear
-          printf "\n"
           show_help_menu
           skip_it_so=1
           break
           ;;
         "Terminal"*,* | *,"Terminal"* | "terminal"*,* | *,"terminal"*)
-          clear
-          printf "\n"
           select_terminal
           skip_it_so=1
           break
@@ -3599,7 +3566,7 @@ show_main_menu() {
           ;;
         "Neovim"*,* | *,"Neovim"* | "N",* | *,"N")
           lazyman
-          clear
+          tput clear
           skip_it_so=1
           break
           ;;
@@ -3609,7 +3576,7 @@ show_main_menu() {
             show_figlet
           }
           mpplus -i
-          clear
+          tput clear
           skip_it_so=1
           break
           ;;
@@ -3619,7 +3586,7 @@ show_main_menu() {
             show_figlet
           }
           roon
-          clear
+          tput clear
           skip_it_so=1
           break
           ;;
@@ -3795,8 +3762,11 @@ show_main_menu() {
           farewell_exit "Leaving Asciiville"
           ;;
         *,* | *,*)
+          tput clear
           printf "\nCould not match '${REPLY}' with a menu entry."
           printf "\nPlease try again with an exact match.\n"
+          clearscreen=
+          printf "\n"
           [ "${use_figlet}" ] && {
             select_font Asciiville
             show_figlet
@@ -3809,30 +3779,21 @@ show_main_menu() {
       make_it_so
       init_vars
     }
+    [ "${clearscreen}" ] && tput clear
   done
   [ "${art_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_art_menu
   }
   [ "${animation_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_animation_menu
   }
   [ "${journal_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_journal_menu
   }
   [ "${select_app_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_apps_menu
   }
   [ "${select_game_menu}" ] && {
-    clear
-    printf "\n\n\n"
     show_games_menu
   }
 }
@@ -4343,7 +4304,7 @@ while getopts "Aabc:CdD:E:fFgGiIjJkKlL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
         splash | Splash)
           [ "${have_gum}" ] && {
             [ -x ${TOOLSBIN}/asciifetch ] && {
-              clear
+              tput clear
               ${TOOLSBIN}/asciifetch -a -f
               ${TOOLSBIN}/asciifetch -z -f
             }
@@ -4923,7 +4884,7 @@ done
   set_show_term
   [ "${FULLSCREEN}" ] && add_fullscreen
   trap 'set_user_conf' SIGINT SIGTERM SIGHUP EXIT
-  clear
+  tput clear
   [ "${have_gum}" ] && [ -x ${TOOLSBIN}/asciifetch ] && {
     [ "${show_ascii_fetch}" ] && {
       ${TOOLSBIN}/asciifetch -a -q

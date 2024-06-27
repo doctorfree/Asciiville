@@ -1,5 +1,4 @@
-# Translation engines can be one of:
-# google, libre-translate, reverso, or iciba
+backend: lingvatranslate
 engine: google
 source: en
 target: es
