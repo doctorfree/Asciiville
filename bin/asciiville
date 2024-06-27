@@ -112,7 +112,6 @@ pathadd() {
 pathadd "/usr/local/games"
 pathadd "/usr/games"
 pathadd "/usr/local/bin"
-pathadd "${HOME}/.local/bin"
 export PATH
 
 usage() {
@@ -4045,6 +4044,7 @@ have_tilix=$(type -p tilix)
 
 VENV_DIR="${HOME}/.venv"
 [ -f ${VENV_DIR}/bin/activate ] && source ${VENV_DIR}/bin/activate
+export PATH="${HOME}/.local/bin:${PATH}"
 
 BASH=bash
 SED=sed
