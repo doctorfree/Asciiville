@@ -1100,12 +1100,12 @@ select_terminal() {
     options=()
     check_display
     if [ $? -eq 0 ]; then
-      [ "${have_xfce4}" ] && options+=("XFCE4 Terminal        [${use_xfce4}]")
-      [ "${have_gnome}" ] && options+=("Gnome Terminal        [${use_gnome}]")
-      [ "${have_kitty}" ] && options+=("Kitty Terminal        [${use_kitty}]")
-      [ "${have_retro}" ] && options+=("Retro Terminal        [${use_retro}]")
-      [ "${have_tilix}" ] && options+=("Tilix Terminal        [${use_tilix}]")
-      options+=("Current Terminal      [${use_current}]")
+      [ "${have_xfce4}" ] && options+=("XFCE4 Terminal    [${use_xfce4}]")
+      [ "${have_gnome}" ] && options+=("Gnome Terminal    [${use_gnome}]")
+      [ "${have_kitty}" ] && options+=("Kitty Terminal    [${use_kitty}]")
+      [ "${have_retro}" ] && options+=("Retro Terminal    [${use_retro}]")
+      [ "${have_tilix}" ] && options+=("Tilix Terminal    [${use_tilix}]")
+      options+=("Current Terminal  [${use_current}]")
     fi
     [ "${have_showascii}" ] && options+=("Ascii Art Menu    [r]")
     [ "${have_splash}" ] && options+=("Animations Menu   [A]")
@@ -1583,7 +1583,14 @@ show_games_menu() {
     [ "${have_worms}" ] && options+=("Worms                [wO]")
     [ "${have_wump}" ] && options+=("Wump                 [wu]")
     [ "${have_nbsdgames}" ] && options+=("BSD Games Menu       [bg]")
-    options+=("Terminal [${use_terminal}]")
+    numspaces=$((14-${#use_terminal}))
+    [ ${numspaces} -lt 0 ] && numspaces=0
+    spaces=""
+    for i in $(seq ${numspaces})
+    do
+      spaces="${spaces} "
+    done
+    options+=("Terminal${spaces} [${use_terminal}]")
     options+=("Applications Menu    [a]")
     [ "${have_showascii}" ] && options+=("Ascii Art Menu       [A]")
     options+=("Main Menu            [m]")
@@ -1874,9 +1881,20 @@ show_games_menu() {
           break
           ;;
         "Phantasia"*,* | *,"Phantasia"* | "p",* | *,"p")
+          set_kitty=
+          [ "${KITTY}" ] && {
+            set_kitty=1
+            KITTY=
+            CURRENT=1
+          }
+          export TERM="xterm-256color"
           COMMAND=phantasia
           MTITLE="Phantasia"
           make_it_so
+          [ "${set_kitty}" ] && {
+            KITTY=1
+            CURRENT=
+          }
           break
           ;;
         "Rain"*,* | *,"Rain"* | "R",* | *,"R")
@@ -2058,7 +2076,14 @@ show_apps_menu() {
     [ "${have_newsboat}" ] && options+=("Newsboat RSS Feeds   [B]")
     [ "${have_ranger}" ] && options+=("Ranger File Manager  [R]")
     [ "${have_tuir}" ] && options+=("Reddit UI            [e]")
-    options+=("Terminal [${use_terminal}]")
+    numspaces=$((13-${#use_terminal}))
+    [ ${numspaces} -lt 0 ] && numspaces=0
+    spaces=""
+    for i in $(seq ${numspaces})
+    do
+      spaces="${spaces} "
+    done
+    options+=("Terminal${spaces} [${use_terminal}]")
     options+=("Games Menu           [g]")
     [ "${have_showascii}" ] && options+=("Ascii Art Menu       [r]")
     options+=("Main Menu            [m]")
@@ -3354,10 +3379,17 @@ show_main_menu() {
     [ "${have_bb}" ] && options+=("AAlib Demo (Curses)  [c]")
     [ "${have_mapscii}" ] && options+=("Mapscii World Map    [w]")
     [ "${have_curl}" ] && options+=("Phase of the Moon    [p]")
+    numspaces=$((5-${#show_comm}))
+    [ ${numspaces} -lt 0 ] && numspaces=0
+    spaces=""
+    for i in $(seq ${numspaces})
+    do
+      spaces="${spaces} "
+    done
     if [ "${show_term}" == "Current" ]; then
-      options+=("Run ${show_comm} in ${show_term}  [C]")
+      options+=("Run ${show_comm} in ${show_term} ${spaces}[C]")
     else
-      options+=("Run ${show_comm} in ${show_term}    [C]")
+      options+=("Run ${show_comm} in ${show_term}  ${spaces}[C]")
     fi
     [ "${have_ddgr}" ] && options+=("Search the Web       [s]")
     [ "${have_curl}" ] && [ -f ${TOOLSBIN}/pokefetch ] && {
