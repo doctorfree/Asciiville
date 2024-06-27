@@ -2,7 +2,7 @@
 # shellcheck shell=bash disable=SC2034,SC2154
 
 pkgname=asciiville
-pkgver=v3.0.2r1
+pkgver=v3.0.2r2
 pkgrel=1
 pkgdesc="Create and display ASCII Art, animations. Utilities to perform common operations in a character-based environment. Asciiville includes nearly 1,000 works of ASCII Art"
 arch=('any')

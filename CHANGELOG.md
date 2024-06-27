@@ -2,8 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## Asciiville-3.0.2r2 (2024-06-26)
+## Asciiville-3.0.2r2 (2024-06-27)
 
+- Install latest `got` and updated `got` config
+- Install `kitty-control` in `ascinit`
+- Use current terminal for `phantasia` if `Kitty` is set
+- Use Homebrew GNU `bash`, `sed`, `mktemp` on `macOS`
+- Add shortcuts to menu entries
 - Remove `rainbowstream` twitter client, no longer works
 - Add `Durdraw` to menu system, update `lazyman`
 - Add `Durdraw` ASCII editor installation and configuration

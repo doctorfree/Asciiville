@@ -17,6 +17,8 @@ have_makepkg=$(type -p makepkg)
   exit 1
 }
 
+export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu
+
 if [ "${__ASC_SRC__}" ]; then
   SRC="${__ASC_SRC__}"
 else
@@ -61,7 +63,7 @@ mv ${PKG_NAME}-pkgbuild-${PKG_VER}-${PKG_REL}.tar.gz ${PKG}
 
 echo "Building ${PKG_NAME}_${PKG_VER} AUR package"
 cd "${SRC}/${PKG}" || echo "Cannot enter $SRC/$PKG"
-makepkg --force --log --cleanbuild --noconfirm --syncdeps
+makepkg --force --log --cleanbuild --noconfirm --nodeps
 
 # Rename package if necessary
 for zstfile in *.zst; do
