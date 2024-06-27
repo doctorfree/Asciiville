@@ -1767,6 +1767,9 @@ have_jrnl=$(type -p jrnl)
   }
 }
 
+# Install kitty-control
+curl -sL https://raw.githubusercontent.com/doctorfree/kitty-control/main/install | bash /dev/stdin
+
 create_new_profile() {
   local proterm="$1"
   local proname="$2"
