@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Durdraw is an ASCII, Unicode, and ANSI art editor with many interesting features
 
@@ -7,19 +7,41 @@ SHARE_DIR="${HOME}/.local/share"
 DURD_DIR="${SHARE_DIR}/durdraw"
 TOOLS_DIR=/usr/share/asciiville/tools/bin
 
+install_bin() {
+  [ -x ${BIN_DIR}/durdraw ] && {
+    diff ${TOOLS_DIR}/durdraw ${BIN_DIR}/durdraw >/dev/null || {
+      printf "\nINFO: found existing ${BIN_DIR}/durdraw"
+      printf "\n\tMoving previous ${BIN_DIR}/durdraw to ${BIN_DIR}/durdraw.bak"
+      printf "\n\tand updating ${BIN_DIR}/durdraw\n"
+      mv ${BIN_DIR}/durdraw ${BIN_DIR}/durdraw.bak
+    }
+  }
+  cp ${TOOLS_DIR}/durdraw ${BIN_DIR}/durdraw
+  chmod 755 ${BIN_DIR}/durdraw
+  [ "${quiet}" ] || {
+    printf "\nAdd ${BIN_DIR} to your PATH if not already included."
+    printf "\n\tView durdraw usage help with 'durdraw --help'"
+    printf "\n\tView durdraw examples with 'durdraw examples'"
+    printf "\n\tStep through durdraw examples with <Enter>\n"
+  }
+}
+
+quiet=
+[ "$1" == "--quiet" ] && quiet=1
+
 [ -d ${SHARE_DIR} ] || mkdir -p ${SHARE_DIR}
 cd ${SHARE_DIR}
 
 if [ -d durdraw ]; then
   cd durdraw
   if [ -d .git ]; then
-    git pull
+    git pull >/dev/null 2>&1
   else
     printf "\nERROR: found an existing ${SHARE_DIR}/durdraw folder. Exiting without installing.\n"
     exit 1
   fi
 else
-  git clone https://github.com/cmang/durdraw.git
+  git clone https://github.com/cmang/durdraw.git >/dev/null 2>&1
   cd durdraw
 fi
 
@@ -41,34 +63,32 @@ fi
 source ${HOME}/.venv/bin/activate
 
 # Upgrade pip, setuptools
-${PYTHON} -m pip install --upgrade setuptools pip
+${PYTHON} -m pip install --upgrade setuptools pip >/dev/null 2>&1
 
-printf "\nInstalling durdraw in Python virtual environment in ${HOME}/.venv\n"
-${PYTHON} -m pip install --upgrade .
+[ "${quiet}" ] || {
+  printf "\nInstalling durdraw in Python virtual environment in ${HOME}/.venv\n"
+}
+${PYTHON} -m pip install --upgrade . >/dev/null 2>&1
 
-printf "\nInstalling durdraw front-end in ${HOME}/.local/bin/\n"
+[ "${quiet}" ] || {
+  printf "\nInstalling durdraw front-end in ${HOME}/.local/bin/\n"
+}
 [ -d ${BIN_DIR} ] || mkdir -p ${BIN_DIR}
 if [ -f ${TOOLS_DIR}/durdraw ]; then
-  [ -x ${BIN_DIR}/durdraw ] && {
-    diff ${TOOLS_DIR}/durdraw ${BIN_DIR}/durdraw >/dev/null || {
-      printf "\nINFO: found existing ${BIN_DIR}/durdraw"
-      printf "\n\tMoving previous ${BIN_DIR}/durdraw to ${BIN_DIR}/durdraw.bak"
-      printf "\n\tand updating ${BIN_DIR}/durdraw\n"
-      mv ${BIN_DIR}/durdraw ${BIN_DIR}/durdraw.bak
-    }
-  }
-  cp ${TOOLS_DIR}/durdraw ${BIN_DIR}/durdraw
-  chmod 755 ${BIN_DIR}/durdraw
-  printf "\nAdd ${BIN_DIR} to your PATH if not already included."
-  printf "\n\tView durdraw usage help with 'durdraw --help'"
-  printf "\n\tView durdraw examples with 'durdraw examples'"
-  printf "\n\tStep through durdraw examples with <Enter>\n"
+  install_bin
 else
-  printf "\nWARNING: cannot locate Asciiville front-end for durdraw."
-  printf "\n\tUpdate Asciiville and rerun this installation script\n"
+  TOOLS_DIR=/usr/local/share/asciiville/tools/bin
+  if [ -f ${TOOLS_DIR}/durdraw ]; then
+    install_bin
+  else
+    printf "\nWARNING: cannot locate Asciiville front-end for durdraw."
+    printf "\n\tUpdate Asciiville and rerun this installation script\n"
+  fi
 fi
 
-printf "\nInstalling durdraw themes and sample configuration in ${HOME}/.durdraw/\n"
+[ "${quiet}" ] || {
+  printf "\nInstalling durdraw themes and sample configuration in ${HOME}/.durdraw/\n"
+}
 [ -d ${HOME}/.durdraw/themes ] || mkdir -p ${HOME}/.durdraw/themes
 [ -f ${HOME}/.durdraw/durdraw.ini ] || {
   [ -f durdraw.ini ] && cp durdraw.ini ${HOME}/.durdraw/
@@ -76,8 +96,10 @@ printf "\nInstalling durdraw themes and sample configuration in ${HOME}/.durdraw
 cp themes/*.dtheme.ini ${HOME}/.durdraw/themes/
 
 [ -f ${DURD_DIR}/durdraw.1 ] && {
-  printf "\nInstalling durdraw man page in ${HOME}/.local/share/man/man1/"
-  printf "\n\tView durdraw man page with 'man durdraw'\n"
+  [ "${quiet}" ] || {
+    printf "\nInstalling durdraw man page in ${HOME}/.local/share/man/man1/"
+    printf "\n\tView durdraw man page with 'man durdraw'\n"
+  }
   [ -d ${HOME}/.local/share/man/man1 ] || mkdir -p ${HOME}/.local/share/man/man1
   cp ${DURD_DIR}/durdraw.1 ${HOME}/.local/share/man/man1/
 }

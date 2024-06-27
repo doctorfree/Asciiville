@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # make_ascii_art - create ascii art from a folder of images
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # PYthon virtual environment front-end for Durdraw
 #

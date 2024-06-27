@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # nvimcommand - command line tool to perform Neovim commands
 #

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # termprofset - manipulate the profile settings of Gnome and Tilix terminals
 #               or XFCE4 terminal font settings

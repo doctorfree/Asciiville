@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # set_term_trans - set the XFCE4 terminal window transparency
 #

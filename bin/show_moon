@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # show_moon - display the phase of the Moon in ANSI characters
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 have_pandoc=`type -p pandoc`
 [ "${have_pandoc}" ] || {

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 gpg --list-secret-keys ronaldrecord@gmail.com
 

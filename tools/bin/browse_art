@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # browse_art - zoom ascii art from a folder in a Gnome Terminal window
 

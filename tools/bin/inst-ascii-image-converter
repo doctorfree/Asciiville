@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 go install github.com/TheZoraiz/ascii-image-converter@latest
 

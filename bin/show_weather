@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # show_weather - display a weather report in ANSI characters
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # asciibrow - frontend using mpv/socli/w3m for opening urls
 #

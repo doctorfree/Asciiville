@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #       _                      _    _           _   __   __
 #      / \                    (_)  (_)         (_) [  | [  |
 #     / _ \     .--.   .---.  __   __  _   __  __   | |  | | .---.
@@ -93,11 +93,11 @@ CONFIG="${HOME}/.config/asciiville/config"
 
 # Backwards compatibility with older Asciiville config
 [ -d "${ARTDIR}" ] || {
-  LOC_ARTDIR=$(echo "${ARTDIR}" | sed -e "s%/usr/%/usr/local/%")
+  LOC_ARTDIR=$(echo "${ARTDIR}" | ${SED} -e "s%/usr/%/usr/local/%")
   [ -d "${LOC_ARTDIR}" ] && ARTDIR="${LOC_ARTDIR}"
 }
 [ -d "${MUSEDIR}" ] || {
-  LOC_MUSEDIR=$(echo "${MUSEDIR}" | sed -e "s%/usr/%/usr/local/%")
+  LOC_MUSEDIR=$(echo "${MUSEDIR}" | ${SED} -e "s%/usr/%/usr/local/%")
   [ -d "${LOC_MUSEDIR}" ] && MUSEDIR="${LOC_MUSEDIR}"
 }
 saved_art_size=${art_font_size}
@@ -702,7 +702,7 @@ add_fullscreen() {
   [ "${have_wmctrl}" ] && {
     [ "${have_xprop}" ] && {
       # The things a man must do
-      win_id=$(wmctrl -lp | grep $(xprop -root | grep _NET_ACTIVE_WINDOW | head -1 | awk '{print $5}' | sed 's/,//' | sed 's/^0x/0x0/') | awk ' { print $1 } ')
+      win_id=$(wmctrl -lp | grep $(xprop -root | grep _NET_ACTIVE_WINDOW | head -1 | awk '{print $5}' | ${SED} 's/,//' | ${SED} 's/^0x/0x0/') | awk ' { print $1 } ')
       [ "${win_id}" ] && xprop -id ${win_id} | grep _NET_WM_STATE | grep FULLSCREEN >/dev/null && isfull=1
     }
     [ "${isfull}" ] || {
@@ -777,10 +777,10 @@ show_art_file() {
     num_exp='^[0-9]+$'
     termname=unknown
     myppid=$(ps -e | grep ${PPID} | awk ' { print $1 } ')
-    myppid=$(echo ${myppid} | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+    myppid=$(echo ${myppid} | ${SED} -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
     if [[ ${myppid} =~ ${num_exp} ]]; then
       parent=$(ps -o ppid= -p ${myppid})
-      parent=$(echo ${parent} | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+      parent=$(echo ${parent} | ${SED} -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
       if [[ ${parent} =~ ${num_exp} ]]; then
         termname=$(ps -e | grep ${parent} | awk ' { print $4 } ')
       fi
@@ -883,10 +883,10 @@ play_show() {
     num_exp='^[0-9]+$'
     termname=unknown
     myppid=$(ps -e | grep ${PPID} | awk ' { print $1 } ')
-    myppid=$(echo ${myppid} | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+    myppid=$(echo ${myppid} | ${SED} -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
     if [[ ${myppid} =~ ${num_exp} ]]; then
       parent=$(ps -o ppid= -p ${myppid})
-      parent=$(echo ${parent} | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+      parent=$(echo ${parent} | ${SED} -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
       if [[ ${parent} =~ ${num_exp} ]]; then
         termname=$(ps -e | grep ${parent} | awk ' { print $4 } ')
       fi
@@ -2414,7 +2414,7 @@ show_art_menu() {
           break
           ;;
         *"Art Slideshow",* | *,*"Art Slideshow")
-          gallery_name=$(echo ${opt} | sed -e "s/ Art Slideshow//")
+          gallery_name=$(echo ${opt} | ${SED} -e "s/ Art Slideshow//")
           play_slide_show "${gallery_name}"
           break
           ;;
@@ -2488,8 +2488,8 @@ show_art_menu() {
             fi
             audarg="-P -S ${SONG}"
           else
-            ASCSPLASH=$(echo ${ASCSPLASH} | sed -e "s# -a##" -e "s# -s ${SONG}##")
-            ASCSPLASH_TMUX=$(echo ${ASCSPLASH_TMUX} | sed -e "s# -a##" -e "s# -s ${SONG}##")
+            ASCSPLASH=$(echo ${ASCSPLASH} | ${SED} -e "s# -a##" -e "s# -s ${SONG}##")
+            ASCSPLASH_TMUX=$(echo ${ASCSPLASH_TMUX} | ${SED} -e "s# -a##" -e "s# -s ${SONG}##")
             audarg=
           fi
           break
@@ -2540,7 +2540,7 @@ show_art_menu() {
           if [ "${RECORD}" ]; then
             ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -R"
           else
-            ASCSPLASH_TMUX=$(echo ${ASCSPLASH_TMUX} | sed -e "s/ -R//")
+            ASCSPLASH_TMUX=$(echo ${ASCSPLASH_TMUX} | ${SED} -e "s/ -R//")
           fi
           break
           ;;
@@ -2784,20 +2784,20 @@ show_animation_menu() {
           export DISPLAY=""
           if [ "${AUDIO}" ]; then
             if [ "${custom_song}" ]; then
-              bash ${TOOLSBIN}/bb-tmux -a -s "${SONG}"
+              ${BASH} ${TOOLSBIN}/bb-tmux -a -s "${SONG}"
             else
-              bash ${TOOLSBIN}/bb-tmux -a
+              ${BASH} ${TOOLSBIN}/bb-tmux -a
             fi
           else
-            bash ${TOOLSBIN}/bb-tmux
+            ${BASH} ${TOOLSBIN}/bb-tmux
           fi
           skip_it_so=1
           export DISPLAY="${SAVED_DISPLAY}"
           break
           ;;
         "Fluid"*,* | *,"Fluid"*)
-          COMMAND="bash -m ${TOP}/bin/show_endo"
-          COMMAND_TMUX="bash -m ${TOP}/bin/show_endo"
+          COMMAND="${BASH} -m ${TOP}/bin/show_endo"
+          COMMAND_TMUX="${BASH} -m ${TOP}/bin/show_endo"
           ASCSPLASH="${COMMAND}"
           ASCSPLASH_TMUX="${COMMAND_TMUX}"
           # trap -- '' SIGINT
@@ -2925,8 +2925,8 @@ show_animation_menu() {
             fi
             audarg="-P -S ${SONG}"
           else
-            ASCSPLASH=$(echo ${ASCSPLASH} | sed -e "s# -a##" -e "s# -s ${SONG}##")
-            ASCSPLASH_TMUX=$(echo ${ASCSPLASH_TMUX} | sed -e "s# -a##" -e "s# -s ${SONG}##")
+            ASCSPLASH=$(echo ${ASCSPLASH} | ${SED} -e "s# -a##" -e "s# -s ${SONG}##")
+            ASCSPLASH_TMUX=$(echo ${ASCSPLASH_TMUX} | ${SED} -e "s# -a##" -e "s# -s ${SONG}##")
             audarg=
           fi
           skip_it_so=1
@@ -2942,7 +2942,7 @@ show_animation_menu() {
           if [ "${RECORD}" ]; then
             ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -R"
           else
-            ASCSPLASH_TMUX=$(echo ${ASCSPLASH_TMUX} | sed -e "s/ -R//")
+            ASCSPLASH_TMUX=$(echo ${ASCSPLASH_TMUX} | ${SED} -e "s/ -R//")
           fi
           skip_it_so=1
           break
@@ -3092,7 +3092,7 @@ show_journal_menu() {
     uses_tilda=
     [ "${first}" == "~" ] && {
       uses_tilda=1
-      jloc=$(echo ${jloc} | sed -e "s/~//")
+      jloc=$(echo ${jloc} | ${SED} -e "s/~//")
     }
     if [ "${uses_tilda}" ]; then
       file ${HOME}${jloc} | grep -i terminator >/dev/null && encrypted=1
@@ -3354,9 +3354,13 @@ show_main_menu() {
     [ "${have_bb}" ] && options+=("AAlib Demo (Curses)  [c]")
     [ "${have_mapscii}" ] && options+=("Mapscii World Map    [w]")
     [ "${have_curl}" ] && options+=("Phase of the Moon    [p]")
-    options+=("Run ${show_comm} in ${show_term} [C]")
+    if [ "${show_term}" == "Current" ]; then
+      options+=("Run ${show_comm} in ${show_term}  [C]")
+    else
+      options+=("Run ${show_comm} in ${show_term}    [C]")
+    fi
     [ "${have_ddgr}" ] && options+=("Search the Web       [s]")
-    [ "${have_curl}" ] && [ -x ${TOOLSBIN}/pokefetch ] && {
+    [ "${have_curl}" ] && [ -f ${TOOLSBIN}/pokefetch ] && {
       check_display
       [ $? -eq 0 ] && options+=("Show a Pokemon       [P]")
     }
@@ -3498,9 +3502,9 @@ show_main_menu() {
           SAVED_DISPLAY="${DISPLAY}"
           export DISPLAY=""
           if [ "${AUDIO}" ]; then
-            bash ${TOOLSBIN}/bb-tmux -a
+            ${BASH} ${TOOLSBIN}/bb-tmux -a
           else
-            bash ${TOOLSBIN}/bb-tmux
+            ${BASH} ${TOOLSBIN}/bb-tmux
           fi
           skip_it_so=1
           export DISPLAY="${SAVED_DISPLAY}"
@@ -3508,9 +3512,9 @@ show_main_menu() {
           ;;
         "AAlib Demo (X11)",* | *,"AAlib Demo (X11)" | "x",* | *,"x")
           if [ "${AUDIO}" ]; then
-            bash ${TOOLSBIN}/bb-tmux -a
+            ${BASH} ${TOOLSBIN}/bb-tmux -a
           else
-            bash ${TOOLSBIN}/bb-tmux
+            ${BASH} ${TOOLSBIN}/bb-tmux
           fi
           skip_it_so=1
           break
@@ -3522,7 +3526,7 @@ show_main_menu() {
           break
           ;;
         "Show a Pok"*,* | *,"Show a Pok"* | "P",* | *,"P")
-          ${TOOLSBIN}/pokefetch
+          ${BASH} -c ${TOOLSBIN}/pokefetch
           read -p "Press Enter to continue" answer
           skip_it_so=1
           break
@@ -3551,7 +3555,7 @@ show_main_menu() {
           break
           ;;
         "Mapscii"*,* | *,"Mapscii"* | "w",* | *,"w")
-          mapscii
+          mapscii 2>/dev/null
           skip_it_so=1
           break
           ;;
@@ -3646,7 +3650,7 @@ show_main_menu() {
           if [ "${RECORD}" ]; then
             COMMAND_TMUX="${COMMAND_TMUX} -r"
           else
-            COMMAND_TMUX=$(echo ${COMMAND_TMUX} | sed -e "s/ -r//")
+            COMMAND_TMUX=$(echo ${COMMAND_TMUX} | ${SED} -e "s/ -r//")
           fi
           skip_it_so=1
           break
@@ -3667,8 +3671,8 @@ show_main_menu() {
             fi
             audarg="-P -S ${SONG}"
           else
-            ASCSPLASH=$(echo ${ASCSPLASH} | sed -e "s# -a##" -e "s# -s ${SONG}##")
-            ASCSPLASH_TMUX=$(echo ${ASCSPLASH_TMUX} | sed -e "s# -a##" -e "s# -s ${SONG}##")
+            ASCSPLASH=$(echo ${ASCSPLASH} | ${SED} -e "s# -a##" -e "s# -s ${SONG}##")
+            ASCSPLASH_TMUX=$(echo ${ASCSPLASH_TMUX} | ${SED} -e "s# -a##" -e "s# -s ${SONG}##")
             audarg=
           fi
           skip_it_so=1
@@ -3974,9 +3978,9 @@ set_show_term() {
 
 init_vars() {
   MTITLE="Asciiville"
-  COMMAND_TMUX="bash ${TOOLSBIN}/btop-tmux"
+  COMMAND_TMUX="${BASH} ${TOOLSBIN}/btop-tmux"
   ASCSPLASH="asciisplash"
-  ASCSPLASH_TMUX="bash ${TOOLSBIN}/asciisplash-tmux"
+  ASCSPLASH_TMUX="${BASH} ${TOOLSBIN}/asciisplash-tmux"
   [ "${AUDIO}" ] && [ "${have_mplayer}" ] && {
     ASCSPLASH="${ASCSPLASH} -a"
     ASCSPLASH_TMUX="${ASCSPLASH_TMUX} -a"
@@ -4034,6 +4038,14 @@ have_tilix=$(type -p tilix)
 
 VENV_DIR="${HOME}/.venv"
 [ -f ${VENV_DIR}/bin/activate ] && source ${VENV_DIR}/bin/activate
+
+BASH=bash
+SED=sed
+[ "${darwin}" ] && {
+  have_gsed=$(type -p gsed)
+  [ "${have_gsed}" ] && SED=gsed
+  [ -x /opt/homebrew/bin/bash ] && BASH=/opt/homebrew/bin/bash
+}
 
 FULLSCREEN=
 init_vars
@@ -4233,11 +4245,11 @@ while getopts "Aabc:CdD:E:fFgGiIjJkKlL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
       COMMAND="${OPTARG}"
       case "${COMMAND}" in
         endo | Endo)
-          [ "${have_endo}" ] && bash -m ${TOP}/bin/show_endo
+          [ "${have_endo}" ] && ${BASH} -m ${TOP}/bin/show_endo
           exit 0
           ;;
         maps | Maps)
-          [ "${have_mapscii}" ] && mapscii
+          [ "${have_mapscii}" ] && mapscii 2>/dev/null
           exit 0
           ;;
         moon | Moon)
@@ -4271,8 +4283,8 @@ while getopts "Aabc:CdD:E:fFgGiIjJkKlL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
           check_display
           [ $? -eq 0 ] && {
             [ "${have_curl}" ] && {
-              [ -x ${TOOLSBIN}/pokefetch ] && {
-                ${TOOLSBIN}/pokefetch
+              [ -f ${TOOLSBIN}/pokefetch ] && {
+                ${BASH} -c ${TOOLSBIN}/pokefetch
                 exit 0
               }
             }

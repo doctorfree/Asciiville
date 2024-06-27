@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 [ -d ascii ] || mkdir ascii
 for i in *.jpg *.jpeg *.JPG *.png *.PNG

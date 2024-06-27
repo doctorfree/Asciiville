@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # showcolors - display the color palette available in a terminal window
 

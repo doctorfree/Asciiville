@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 sudo add-apt-repository ppa:daniel-milde/gdu
 sudo apt-get update

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # asciisplash-tmux - display ASCIImatics splash screens in a tmux session
 platform=`uname -s`

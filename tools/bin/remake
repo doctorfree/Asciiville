@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ART_DIR=$HOME/src/Asciiville/art
 [ -d ascii ] || mkdir ascii

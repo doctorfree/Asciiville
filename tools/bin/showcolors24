@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # showcolors24 - display a bar of colors supported by a 24 bit terminal display
 

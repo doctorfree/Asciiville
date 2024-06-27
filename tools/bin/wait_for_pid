@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # wait_for_pid - wait for pid provided by first argument to exit
 #                then send signal to parent pid

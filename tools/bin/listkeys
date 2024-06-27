@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Migrate GPG Keys from One Workstation to Another #
 

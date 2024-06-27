@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # chktermcolor - checks a terminal's color support
 #

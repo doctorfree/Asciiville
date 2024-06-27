@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # show_figlet_fonts
 #    Display an example of each of the installed pyfiglet Figlet fonts

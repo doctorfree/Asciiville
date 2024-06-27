@@ -1,10 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # ascinit - initialize Asciiville configuration files, install needed utilities
 #
 # shellcheck disable=SC2001,SC2002,SC2016,SC2006,SC2059,SC2086,SC2089,SC2181,SC2129
 
 darwin=
+SED=sed
+MKTEMP=mktemp
 platform=$(uname -s)
 if [ "${platform}" == "Darwin" ]; then
   TOP="/usr/local"
@@ -211,7 +213,7 @@ install_external_package() {
     }
     if [ "${debian}" ]; then
       [ "${have_wget}" ] && {
-        TEMP_DEB="$(mktemp --suffix=.deb)"
+        TEMP_DEB="$(${MKTEMP} --suffix=.deb)"
         wget --quiet -O "${TEMP_DEB}" "${DL_URL}" >/dev/null 2>&1
         chmod 644 "${TEMP_DEB}"
         [ "${APT}" ] && sudo ${APT} install "${TEMP_DEB}" >/dev/null 2>&1
@@ -224,7 +226,7 @@ install_external_package() {
         # Until we sign Arch packages we need to download and install locally
         if [ "${arch}" ]; then
           [ "${have_wget}" ] && {
-            TEMP_ARCH="$(mktemp --suffix=.zst)"
+            TEMP_ARCH="$(${MKTEMP} --suffix=.zst)"
             wget --quiet -O "${TEMP_ARCH}" "${DL_URL}" >/dev/null 2>&1
             chmod 644 "${TEMP_ARCH}"
             sudo pacman -U --noconfirm "${TEMP_ARCH}" >/dev/null 2>&1
@@ -233,10 +235,10 @@ install_external_package() {
         else
           [ "${darwin}" ] && {
             [ "${have_wget}" ] && {
-              TEMP_ARCH="$(mktemp --suffix=.tgz)"
+              TEMP_ARCH="$(${MKTEMP} --suffix=.tgz)"
               wget --quiet -O "${TEMP_ARCH}" "${DL_URL}" >/dev/null 2>&1
               chmod 644 "${TEMP_ARCH}"
-              tar xzf "${TEMP_ARCH}" -C /
+              sudo tar xzf "${TEMP_ARCH}" -C /
               rm -f "${TEMP_ARCH}"
             }
           }
@@ -317,7 +319,7 @@ install_kitty() {
       rm -f /tmp/kitty-$$.sh
       curl --insecure --silent --location \
         https://sw.kovidgoyal.net/kitty/installer.sh >/tmp/kitty-$$.sh
-      cat /tmp/kitty-$$.sh | sed -e "s/curl -/curl -k/" >/tmp/k$$
+      cat /tmp/kitty-$$.sh | ${SED} -e "s/curl -/curl -k/" >/tmp/k$$
       cp /tmp/k$$ /tmp/kitty-$$.sh
       rm -f /tmp/k$$
     }
@@ -396,10 +398,10 @@ install_kitty() {
       for desktop in "${HOME}"/.local/share/applications/kitty*.desktop; do
         [ "${desktop}" == "${HOME}/.local/share/applications/kitty*.desktop" ] && continue
         [ -f /home/${MPP_USER}/${LOCAL}/share/icons/hicolor/256x256/apps/kitty.png ] && {
-          sed -i "s|Icon=kitty|Icon=/home/${MPP_USER}/${LOCAL}/share/icons/hicolor/256x256/apps/kitty.png|g" "${desktop}"
+          ${SED} -i "s|Icon=kitty|Icon=/home/${MPP_USER}/${LOCAL}/share/icons/hicolor/256x256/apps/kitty.png|g" "${desktop}"
         }
         [ -x /home/${MPP_USER}/${LOCAL}/bin/kitty ] && {
-          sed -i "s|Exec=kitty|Exec=/home/${MPP_USER}/${LOCAL}/bin/kitty|g" "${desktop}"
+          ${SED} -i "s|Exec=kitty|Exec=/home/${MPP_USER}/${LOCAL}/bin/kitty|g" "${desktop}"
         }
       done
       [ "${quiet}" ] || printf " done!\n"
@@ -468,7 +470,10 @@ remove_durdraw() {
 }
 
 install_durdraw() {
-  [ -x ${CONFDIR}/tools/bin/install_durdraw ] && ${CONFDIR}/tools/bin/install_durdraw
+  [ -x ${CONFDIR}/tools/bin/install_durdraw ] && {
+    printf "\nInstalling Durdraw Ascii Editor\n"
+    ${CONFDIR}/tools/bin/install_durdraw --quiet
+  }
 }
 
 remove_neovim() {
@@ -631,7 +636,8 @@ fi
 [ -f ${VENV_DIR}/bin/activate ] && source ${VENV_DIR}/bin/activate
 
 # Upgrade pip, setuptools
-${PYTHON} -m pip install --upgrade setuptools pip >/dev/null 2>&1
+${PYTHON} -m pip install --upgrade pip >/dev/null 2>&1
+${PYTHON} -m pip install --upgrade setuptools wheel >/dev/null 2>&1
 
 ask_anim=
 console=
@@ -689,7 +695,6 @@ have_jq=$(type -p jq)
 have_wget=$(type -p wget)
 have_awk=$(type -p awk)
 have_fc=$(type -p fc-cache)
-have_mktemp=$(type -p mktemp)
 have_unlink=$(type -p unlink)
 have_unzip=$(type -p unzip)
 
@@ -944,12 +949,17 @@ durdraw_install=
 }
 [ "${have_awk}" ] || install_package awk
 [ "${have_fc}" ] || install_package fontconfig
-# [ "${have_mktemp}" ] && {
-#   [ "${have_unlink}" ] || install_package coreutils
-# }
 # Always attempt to install coreutils package
 install_package coreutils
 [ "${have_unzip}" ] || install_package unzip
+
+# On macOS use GNU sed and mktemp from coreutils
+[ "${darwin}" ] && {
+  have_gsed=$(type -p gsed)
+  [ "${have_gsed}" ] && SED=gsed
+  have_gmkt=$(type -p gmktemp)
+  [ "${have_gmkt}" ] && MKTEMP=gmktemp
+}
 
 # Mutt configuration user setup
 [ "${minimal}" ] || {
@@ -1165,7 +1175,7 @@ fi
     BROWSER=default
     have_browser=1
   fi
-  cat "${KITTYCONF}" | sed -e "s%__SET__BROWSER__%${BROWSER}%" >/tmp/browser$$
+  cat "${KITTYCONF}" | ${SED} -e "s%__SET__BROWSER__%${BROWSER}%" >/tmp/browser$$
   cp /tmp/browser$$ "${KITTYCONF}"
   rm -f /tmp/browser$$
 }
@@ -1392,26 +1402,26 @@ export PATH'
 
 if [ -f "${BASHINIT}" ]; then
   grep "export GOROOT" "${BASHINIT}" >/dev/null || {
-    echo "${GOTEXT}" | sed -e "s%__YYY__%${HOMEBREW_HOME}%" >>"${BASHINIT}"
+    echo "${GOTEXT}" | ${SED} -e "s%__YYY__%${HOMEBREW_HOME}%" >>"${BASHINIT}"
   }
   [ "${usebrew}" ] && {
     grep "^eval \"\$(${BREW_EXE} shellenv)\"" "${BASHINIT}" >/dev/null || {
-      echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >>"${BASHINIT}"
+      echo 'eval "$(XXX shellenv)"' | ${SED} -e "s%XXX%${BREW_EXE}%" >>"${BASHINIT}"
     }
   }
 else
-  echo "${GOTEXT}" | sed -e "s%__YYY__%${HOMEBREW_HOME}%" >"${BASHINIT}"
+  echo "${GOTEXT}" | ${SED} -e "s%__YYY__%${HOMEBREW_HOME}%" >"${BASHINIT}"
   [ "${usebrew}" ] && {
-    echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >"${BASHINIT}"
+    echo 'eval "$(XXX shellenv)"' | ${SED} -e "s%XXX%${BREW_EXE}%" >"${BASHINIT}"
   }
 fi
 [ -f "${HOME}/.zshrc" ] && {
   grep "export GOROOT" "${HOME}/.zshrc" >/dev/null || {
-    echo "${GOTEXT}" | sed -e "s%__YYY__%${HOMEBREW_HOME}%" >>"${HOME}/.zshrc"
+    echo "${GOTEXT}" | ${SED} -e "s%__YYY__%${HOMEBREW_HOME}%" >>"${HOME}/.zshrc"
   }
   [ "${usebrew}" ] && {
     grep "^eval \"\$(${BREW_EXE} shellenv)\"" "${HOME}/.zshrc" >/dev/null || {
-      echo 'eval "$(XXX shellenv)"' | sed -e "s%XXX%${BREW_EXE}%" >>"${HOME}/.zshrc"
+      echo 'eval "$(XXX shellenv)"' | ${SED} -e "s%XXX%${BREW_EXE}%" >>"${HOME}/.zshrc"
     }
   }
 }
@@ -1481,7 +1491,7 @@ have_pip=$(type -p pip3)
   }
 }
 
-for pkg in setuptools asciimatics ddgr socli future \
+for pkg in setuptools asciimatics ddgr socli future wheel \
   xtermcolor ffmpeg-python pyaudio term-image urlscan openai; do
   if ${PYTHON} -m pip list 2>/dev/null | grep ${pkg} >/dev/null; then
     ${PYTHON} -m pip install --upgrade ${pkg} >/dev/null 2>&1
@@ -1613,6 +1623,7 @@ have_jp2a=$(type -p jp2a)
       install_external_package
     }
   }
+  printf "\n"
 
   # Install Neovim
   [ "${neovim_install}" ] && install_neovim
@@ -1625,9 +1636,11 @@ have_jp2a=$(type -p jp2a)
 }
 
 have_mapscii=$(type -p mapscii)
-[ "${have_mapscii}" ] || {
+if [ "${have_mapscii}" ]; then
+  [ "${have_npm}" ] && npm update -g mapscii >/dev/null 2>&1
+else
   [ "${have_npm}" ] && npm install -g mapscii >/dev/null 2>&1
-}
+fi
 have_mapscii=$(type -p mapscii)
 [ "${have_mapscii}" ] || {
   [ "${have_npm}" ] && npm install mapscii >/dev/null 2>&1
@@ -1640,7 +1653,7 @@ have_tuir=$(type -p tuir)
   git clone https://gitlab.com/ajak/tuir.git >/dev/null 2>&1
   [ -d tuir ] && {
     cd tuir || echo "Could not enter tuir"
-    cat requirements.txt | sed -e "s/requests=.*/requests>=2.20.0/" >/tmp/tuireq$$
+    cat requirements.txt | ${SED} -e "s/requests=.*/requests>=2.20.0/" >/tmp/tuireq$$
     cp /tmp/tuireq$$ requirements.txt
     rm -f /tmp/tuireq$$
     TUIR_DIR=$(pwd)
@@ -1753,11 +1766,11 @@ create_new_profile() {
   }
   if [ "${proterm}" == "gnome" ]; then
     local profile_ids=($(dconf list $dconfdir/ | grep ^: \
-      | sed 's/\///g' | sed 's/://g'))
+      | ${SED} 's/\///g' | ${SED} 's/://g'))
   fi
   if [ "${proterm}" == "tilix" ]; then
     local profile_ids=($(dconf list $dconfdir/ | grep -v ^list \
-      | sed 's/\///g' | sed 's/://g'))
+      | ${SED} 's/\///g' | ${SED} 's/://g'))
   fi
 local profile_ids_old="$(dconf read "$dconfdir"/list | tr -d "]")"
   local profile_id="$(uuidgen)"
@@ -1960,7 +1973,7 @@ local profile_ids_old="$(dconf read "$dconfdir"/list | tr -d "]")"
       [ "${LANG}" ] && {
         lang=$(echo ${LANG} | awk -F '.' '{print $1}' | awk -F '_' '{print $1}')
         [ "${lang}" == "en" ] || {
-          cat ${USERCONF}/got/config.yml | sed -e "s/source: en/source: ${lang}/" -e "s/target: es/target: en/" >/tmp/gotconf$$
+          cat ${USERCONF}/got/config.yml | ${SED} -e "s/source: en/source: ${lang}/" -e "s/target: es/target: en/" >/tmp/gotconf$$
           cp /tmp/gotconf$$ ${USERCONF}/got/config.yml
           rm -f /tmp/gotconf$$
         }

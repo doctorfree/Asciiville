@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # asciisplash - display Asciiville splash screens using ASCIImatics
 #

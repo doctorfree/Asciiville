@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # del_ascii_art - selectively delete ascii art from a folder
 

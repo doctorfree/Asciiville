@@ -191,7 +191,8 @@ The Asciiville project includes many curated Ascii Art galleries.
 These include hundreds of high resolution Ascii Art files created
 by Asciiville author and artist, Dr. Ronald Joe Record. The Asciiville
 package, when installed, provides the following Ascii Art galleries
-located in the default Ascii Art Gallery folder `/usr/share/asciiville/art/`:
+located in the default Ascii Art Gallery folder `/usr/share/asciiville/art/`
+(`/usr/local/share/asciiville/art/` on `macOS`):
 
 ```
 Art - A collection of fine art transformed into Ascii Art

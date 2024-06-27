@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 ## @file any2ascii
 ## @brief Convert from any audio/video or image format to Ascii

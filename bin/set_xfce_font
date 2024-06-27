@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # set_term_font - set the XFCE4 terminal window font and font size
 #

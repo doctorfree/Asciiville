@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 TMP="$(mktemp)"
 ranger --show-only-dir --choosedir="$TMP" 1>&2
