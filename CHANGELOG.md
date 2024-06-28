@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## Asciiville-3.0.2r3 (2024-06-28)
+
+- Bug fix release
+- Fix Python module installs in `ascinit`
+- Fix `Asciiville` config file syntax error when `lolcat` is disabled
+- Prepend ``~/.local/bin`` to `PATH` after Python virtual environment is activated
+- Add `durdraw` examples to applications menu
+- Update `PKGBUILD`, modify `mkaur.sh` for execution on Ubuntu Linux
+
 ## Asciiville-3.0.2r2 (2024-06-27)
 
 - Install latest `got` and updated `got` config
