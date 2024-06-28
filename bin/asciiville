@@ -1522,6 +1522,7 @@ show_games_menu() {
   printf "\n\n\n"
   main_menu=
   art_menu=
+  animation_menu=
   while true; do
     clearscreen=1
     [ "${COMMAND}" ] || COMMAND=tetris
@@ -1598,6 +1599,7 @@ show_games_menu() {
     options+=("Terminal${spaces} [${use_terminal}]")
     options+=("Applications Menu    [a]")
     [ "${have_showascii}" ] && options+=("Ascii Art Menu       [A]")
+    [ "${have_splash}" ] && options+=("ASCII Animations     [@]")
     options+=("Main Menu            [m]")
     options+=("Quit                 [q]")
     select opt in "${options[@]}"; do
@@ -1616,6 +1618,10 @@ show_games_menu() {
           ;;
         "Ascii Art"*,* | *,"Ascii Art"* | "A",* | *,"A")
           art_menu=1
+          break 2
+          ;;
+        "ASCII Ani"*,* | *,"ASCII Ani"* | "@",* | *,"@")
+          animation_menu=1
           break 2
           ;;
         "Applications Menu"*,* | *,"Applications Menu"* | "a",* | *,"a")
@@ -2035,6 +2041,9 @@ show_games_menu() {
   [ "${art_menu}" ] && {
     show_art_menu
   }
+  [ "${animation_menu}" ] && {
+    show_animation_menu
+  }
   [ "${main_menu}" ] && {
     show_main_menu
   }
@@ -2044,6 +2053,7 @@ show_apps_menu() {
   tput clear
   printf "\n\n\n"
   main_menu=
+  animation_menu=
   art_menu=
   while true; do
     clearscreen=1
@@ -2089,6 +2099,7 @@ show_apps_menu() {
       done
     }
     options+=("Terminal${spaces} [${use_terminal}]")
+    [ "${have_splash}" ] && options+=("ASCII Animations     [v]")
     options+=("Games Menu           [g]")
     [ "${have_showascii}" ] && options+=("Ascii Art Menu       [r]")
     options+=("Main Menu            [m]")
@@ -2111,6 +2122,10 @@ show_apps_menu() {
           art_menu=1
           break 2
           ;;
+        "ASCII Ani"*,* | *,"ASCII Ani"* | "v",* | *,"v")
+          animation_menu=1
+          break 2
+          ;;
         "Games Menu"*,* | *,"Games Menu"* | "g",* | *,"g")
           show_games_menu
           break 2
@@ -2122,13 +2137,13 @@ show_apps_menu() {
           break
           ;;
         "Durdraw Examples"*,* | *,"Durdraw Examples"* | "e",* | *,"e")
-          COMMAND="${DURDRAW} examples"
+          COMMAND="durdraw examples"
           MTITLE="Durdraw ASCII Editor"
           make_it_so
           break
           ;;
         "Durdraw"*,* | *,"Durdraw"* | "d",* | *,"d")
-          COMMAND=${DURDRAW}
+          COMMAND=durdraw
           MTITLE="Durdraw ASCII Editor"
           make_it_so
           break
@@ -2283,6 +2298,9 @@ show_apps_menu() {
   done
   [ "${art_menu}" ] && {
     show_art_menu
+  }
+  [ "${animation_menu}" ] && {
+    show_animation_menu
   }
   [ "${main_menu}" ] && {
     show_main_menu
@@ -4059,13 +4077,7 @@ init_vars
 # Without any arguments, bring up interactive dialog menu
 [ $# -eq 0 ] && INTERACTIVE=1
 have_aewan=$(type -p aewan)
-DURDRAW=$(command -v durdraw)
-[ -x ${HOME}/.local/bin/durdraw ] && DURDRAW=${HOME}/.local/bin/durdraw
-if [ "${DURDRAW}" ]; then
-  have_durdraw=1
-else
-  have_durdraw=
-fi
+have_durdraw=$(type -p durdraw)
 have_btop=$(type -p btop)
 if [ -x ${TOP}/share/endoh1/endoh1 ]; then
   have_endo=1
