@@ -2016,7 +2016,13 @@ create_new_profile() {
 CONF="${USERCONF}/asciiville/config"
 [ -d ${USERCONF} ] || mkdir ${USERCONF}
 [ -d ${USERCONF}/asciiville ] || mkdir ${USERCONF}/asciiville
-[ -f ${CONF} ] || {
+if [ -f ${CONF} ]; then
+  grep '= ' ${CONF} > /dev/null && {
+    cat ${CONF} | ${SED} -e "s/= /=/" > /tmp/ac$$
+    cp /tmp/ac$$ ${CONF}
+    rm -f /tmp/ac$$
+  }
+else
   [ "${quiet}" ] || {
     printf "\n\nAsciiville configuration in %s ..." "${CONF}"
   }
@@ -2096,7 +2102,7 @@ CONF="${USERCONF}/asciiville/config"
   [ "${quiet}" ] || {
     printf " done"
   }
-}
+fi
 touch ${HOME}/.tetris
 
 [ "${usebrew}" ] && {
