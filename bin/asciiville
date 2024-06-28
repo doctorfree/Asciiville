@@ -1076,7 +1076,7 @@ select_terminal() {
 
   while true; do
     YES="YES"
-    NO=" NO"
+    NO="NO "
     if [ "${KITTY}" ]; then
       use_kitty="${YES}"
     else
@@ -2301,29 +2301,29 @@ show_art_menu() {
       audiostat="YES"
       audarg="-P -S ${SONG}"
     else
-      audiostat=" NO"
+      audiostat="NO "
       audarg=
     fi
     if [ "${cycle}" ]; then
       cyclestat="YES"
     else
-      cyclestat=" NO"
+      cyclestat="NO "
     fi
     if [ "${shuffle}" ]; then
       randomize="YES"
     else
-      randomize=" NO"
+      randomize="NO "
     fi
     if [ "${RECORD}" ]; then
       recordstat="YES"
     else
-      recordstat=" NO"
+      recordstat="NO "
     fi
     set_use_terminal
     if [ "${TMUX}" ]; then
       usetmux="YES"
     else
-      usetmux=" NO"
+      usetmux="NO "
     fi
     if [ "${use_lolcat}" ]; then
       lolarg="-l ${use_lolcat}"
@@ -2542,7 +2542,7 @@ show_art_menu() {
         "Use Lolcat"*,* | *,"Use Lolcat"*)
           if [ "${use_lolcat}" == "2" ]; then
             use_lolcat=
-            use_lol=" NO"
+            use_lol="NO "
             lolarg=
           else
             if [ "${use_lolcat}" ]; then
@@ -2703,24 +2703,24 @@ show_animation_menu() {
       audiostat="YES"
       audarg="-P -S ${SONG}"
     else
-      audiostat=" NO"
+      audiostat="NO "
       audarg=
     fi
     set_use_terminal
     if [ "${RECORD}" ]; then
       recordstat="YES"
     else
-      recordstat=" NO"
+      recordstat="NO "
     fi
     if [ "${TMUX}" ]; then
       usetmux="YES"
     else
-      usetmux=" NO"
+      usetmux="NO "
     fi
     if [ "${FULLSCREEN}" ]; then
       fullstat="YES"
     else
-      fullstat=" NO"
+      fullstat="NO "
     fi
     skip_it_so=
     [ "${use_figlet}" ] && {
@@ -2915,7 +2915,7 @@ show_animation_menu() {
         "Use Lolcat"*,* | *,"Use Lolcat"*)
           if [ "${use_lolcat}" == "2" ]; then
             use_lolcat=
-            use_lol=" NO"
+            use_lol="NO "
             lolarg=
           else
             if [ "${use_lolcat}" ]; then
@@ -3313,23 +3313,23 @@ show_main_menu() {
       audiostat="YES"
       audarg="-P -S ${SONG}"
     else
-      audiostat=" NO"
+      audiostat="NO "
       audarg=
     fi
     if [ "${FULLSCREEN}" ]; then
       fullstat="YES"
     else
-      fullstat=" NO"
+      fullstat="NO "
     fi
     if [ "${RECORD}" ]; then
       recordstat="YES"
     else
-      recordstat=" NO"
+      recordstat="NO "
     fi
     if [ "${TMUX}" ]; then
       usetmux="YES"
     else
-      usetmux=" NO"
+      usetmux="NO "
     fi
     if [ "${BROWSER}" == "w3m" ]; then
       default_browser="W3M"
@@ -3496,7 +3496,7 @@ show_main_menu() {
         "Use Lolcat"*,* | *,"Use Lolcat"*)
           if [ "${use_lolcat}" == "2" ]; then
             use_lolcat=
-            use_lol=" NO"
+            use_lol="NO "
           else
             if [ "${use_lolcat}" ]; then
               use_lolcat=2
@@ -4107,7 +4107,7 @@ have_ncftp=$(type -p ncftp)
 have_lolcat=$(type -p lolcat)
 [ "${have_lolcat}" ] || {
   use_lolcat=
-  use_lol=" NO"
+  use_lol="NO "
 }
 have_rich=$(type -p rich)
 have_roon=$(type -p roon)
@@ -4178,7 +4178,7 @@ ascii_dir=
 custom_song=
 [ "${use_lol}" ] || {
   use_lolcat=
-  use_lol=" NO"
+  use_lol="NO "
 }
 if [ "${have_figlet}" ]; then
   use_figlet=1
@@ -4521,12 +4521,12 @@ while getopts "Aabc:CdD:E:fFgGiIjJkKlL:mMn:NpP:rRSs:tTUvV:wWxXyYzZu" flag; do
             LOLCAT="${LOLCAT_NORM}"
           else
             use_lolcat=
-            use_lol=" NO"
+            use_lol="NO "
           fi
         fi
       else
         use_lolcat=
-        use_lol=" NO"
+        use_lol="NO "
       fi
       if [ "${use_lolcat}" ]; then
         lolarg="-l ${use_lolcat}"
