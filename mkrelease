@@ -37,18 +37,26 @@ while getopts "cdpu" flag; do
 done
 shift $(( OPTIND - 1 ))
 
+[ "$PACKAGE" ] && {
+  have_arch=$(type -p makepkg)
+  [ "${have_arch}" ] || {
+    echo "Cannot locate makepkg"
+    echo "Install Arch packaging utilites with tools/install-pacman-debian.sh"
+    echo "Exiting without creating release or tags"
+    exit 1
+  }
+}
+
 [ "$CLEAN" ] && ./clean
+
+ANNO="Asciiville Version ${VERSION} Release ${RELEASE}"
+gittag v${VERSION}r${RELEASE} ${ANNO}
+git fetch --tags origin
+
 [ "$PACKAGE" ] && ./mkpkg
 
 cp pkg/Install-bin.sh releases/${VERSION}/Install-bin.sh
 cp pkg/Uninstall-bin.sh releases/${VERSION}/Uninstall-bin.sh
-
-ANNO="Asciiville Version ${VERSION} Release ${RELEASE}"
-gittag v${VERSION}r${RELEASE} ${ANNO}
-
-echo "Copy RPMs, Arch pkgs, and Raspberry Pi pkgs to releases/${VERSION}"
-
-read -p "Press Enter to continue" answer
 
 echo "Creating release for version ${VERSION} release ${RELEASE}"
 
@@ -56,5 +64,3 @@ gh release create v${VERSION}r${RELEASE} ${DRAFT} \
                   --title "${ANNO}" \
                   --notes-file pkg/release.md \
                   releases/${VERSION}/*
-
-git fetch --tags origin

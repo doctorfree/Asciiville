@@ -63,12 +63,30 @@ mv ${PKG_NAME}-pkgbuild-${PKG_VER}-${PKG_REL}.tar.gz ${PKG}
 
 echo "Building ${PKG_NAME}_${PKG_VER} AUR package"
 cd "${SRC}/${PKG}" || echo "Cannot enter $SRC/$PKG"
-makepkg --force --log --cleanbuild --noconfirm --nodeps
+
+# On Arch invoke with 'mkaur.sh sync'
+dep_arg="--nodeps"
+[ "$1" == "sync" ] && dep_arg="--syncdeps"
+makepkg --force --log --cleanbuild --noconfirm ${dep_arg}
+
+have_zstd=$(type -p zstd)
+if [ "${have_zstd}" ]; then
+  for pkg in *any.pkg.tar.gz
+  do
+    [ "${pkg}" == "*any.pkg.tar.gz" ] && continue
+    gunzip ${pkg}
+    ptar=$(echo "${pkg}" | sed -e "s/.gz//")
+    zstd --rm ${ptar}
+  done
+else
+  echo "ERROR: cannot locate zstd compression utility"
+fi
 
 # Rename package if necessary
 for zstfile in *.zst; do
   [ "${zstfile}" == "*.zst" ] && continue
   newnam=$(echo "${zstfile}" | sed -e "s/${PKG}-${PKG_VER}-${PKG_REL}/${PKG_NAME}_${PKG_VER}-${PKG_REL}/")
+  newnam=$(echo "${newnam}" | sed -e "s/asciiville/Asciiville/")
   [ "${zstfile}" == "${newnam}" ] && continue
   mv "${zstfile}" "${newnam}"
 done

@@ -36,12 +36,19 @@ pkg/mktgz.sh
 platform=$(uname -s)
 [ "${platform}" == "Darwin" ] && exit 0
 
-[ "${arch}" ] && {
+if [ "${arch}" ]; then
   echo "Invoking pkg/mkaur.sh to create Arch Linux installation package"
   sudo pacman -Syy
-  pkg/mkaur.sh
+  pkg/mkaur.sh sync
   exit 0
-}
+else
+  # Build Arch package if makepkg is installed even if not on Arch
+  have_arch=$(type -p makepkg)
+  [ "${have_arch}" ] && {
+    echo "Invoking pkg/mkaur.sh to create Arch Linux installation package"
+    pkg/mkaur.sh
+  }
+fi
 
 [ "${debian}" ] && {
   dpkg=$(type -p dpkg-deb)
