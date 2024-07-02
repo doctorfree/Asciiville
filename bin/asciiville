@@ -682,6 +682,13 @@ select_font() {
         FIG_TEXT="Journal"
       fi
       ;;
+    Kitty)
+      if [ "${goBig}" ]; then
+        FIG_TEXT="Kitty"
+      else
+        FIG_TEXT="Kitty"
+      fi
+      ;;
     MusicPlayer)
       if [ "${goBig}" ]; then
         FIG_TEXT="MusicPlayerPlus"
@@ -2774,6 +2781,7 @@ show_animation_menu() {
         options+=("Neovim Menu          [N]")
       }
     }
+    [ "${have_kc}" ] && options+=("Kitty Control Menu   [K]")
     [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu [M]")
     [ "${have_roon}" ] && options+=("RoonCommandLine Menu [R]")
     [ "${have_showascii}" ] && options+=("Ascii Art Menu       [A]")
@@ -3015,6 +3023,16 @@ show_animation_menu() {
           ;;
         "Neovim"*,* | *,"Neovim"* | "N",* | *,"N")
           lazyman
+          tput clear
+          skip_it_so=1
+          break
+          ;;
+        "Kitty Control"*,* | *,"Kitty Control"* | "K",* | *,"K")
+          [ "${use_figlet}" ] && {
+            select_font Kitty
+            show_figlet
+          }
+          kitty-control
           tput clear
           skip_it_so=1
           break
@@ -3422,6 +3440,7 @@ show_main_menu() {
         options+=("Neovim Menu          [N]")
       }
     }
+    [ "${have_kc}" ] && options+=("Kitty Control Menu   [K]")
     [ "${have_mpplus}" ] && options+=("MusicPlayerPlus Menu [M]")
     [ "${have_roon}" ] && options+=("RoonCommandLine Menu [R]")
     options+=("Quit                 [q]")
@@ -3592,6 +3611,16 @@ show_main_menu() {
           ;;
         "Neovim"*,* | *,"Neovim"* | "N",* | *,"N")
           lazyman
+          tput clear
+          skip_it_so=1
+          break
+          ;;
+        "Kitty Control"*,* | *,"Kitty Control"* | "K",* | *,"K")
+          [ "${use_figlet}" ] && {
+            select_font Kitty
+            show_figlet
+          }
+          kitty-control
           tput clear
           skip_it_so=1
           break
@@ -4122,6 +4151,7 @@ have_lolcat=$(type -p lolcat)
   use_lol="NO "
 }
 have_rich=$(type -p rich)
+have_kc=$(type -p kitty-control)
 have_roon=$(type -p roon)
 have_speed=$(type -p speedtest-cli)
 have_splash=$(type -p asciisplash)
